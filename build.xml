@@ -1,6 +1,10 @@
-<project name="NXP" xmlns:sf="antlib:com.salesforce" basedir=".">
+<project name="NXP" xmlns:sf="antlib:com.salesforce" basedir="." default="deploy">
 
     <property file="build.properties"/>
+	
+	<property name="sf.server" value="https://test.salesforce.com"/>
+	<import file="${basedir}/lib/exec_anon.xml"/> 
+	<import file="${basedir}/lib/undeploy.xml"/>
 
 	<!--  Downloaded from Salesforce Tools page under Setup -->
 	<typedef 
@@ -34,11 +38,13 @@
 	</target> 
 	
 	<!-- Deploy -->
-	<target name="deploy">
-    	<sf:deploy  
-        	username="${sf.username}"  
-        	password="${sf.password}"  
-        	deployRoot="${basedir}/src"/>  		
+	<target name="deploy" depends="undeploy">
+		<sf:deploy 
+	        username="${sf.username}" 
+	        password="${sf.password}" 
+	        serverurl="${sf.serverurl}"
+	        runAllTests="false" 
+	        deployRoot="${basedir}/src"/>
 	</target>
 
 <!--///////////////////////////////////////////////////////////////////////////////////-->
