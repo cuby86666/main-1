@@ -1,0 +1,338 @@
+<!--  
+@Created By :       Nisha Agrawal
+@Created Date:      26 Oct 2012
+@Description:       VF page to Search & Add Products to eRebate
+-->
+
+<apex:page standardController="eRebate_Product__c" recordSetVar="products" extensions="AddERebateProductController">  
+ <apex:form >
+    <apex:outputPanel id="secHeader">
+        <apex:sectionHeader title="{! IF(isStep2 , 'Add Product to ' , 'eRebate ')} {! objERebate.Name}" subtitle="{! IF(isStep2 , '', 'Product Selection' )}"  />
+    </apex:outputPanel>
+    
+    <apex:pageMessages id="pageMsg" />
+     <apex:actionStatus id="status" StartText="Searching..." startStyle="font-color:red;">
+            <apex:facet name="start">
+                <apex:image value="/img/loading.gif" />
+            </apex:facet>
+     </apex:actionStatus>
+    
+     <apex:outputPanel id="pnlContent">     
+        <apex:outputPanel id="step1" rendered="{! IF(isStep2 , false , true)}">
+            <apex:outputPanel style="width:100%; text-align:center; padding: 10px 0px;" layout="block">
+                <apex:commandButton action="{!processSelectedProducts}" value="Select" rerender="pnlContent , pageMsg , secHeader" status="status"/>
+                <apex:commandButton action="{! URLFOR('/' + objERebate.Id , null )}" value="Cancel"  status="status"/>
+            </apex:outputPanel>
+            <apex:pageBlock title="Find Products" mode="edit"   >
+                <apex:pageBlockSection id="filterSection" >             
+                     <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Product Name" />
+                        <apex:inputText value="{! ProductName}" style="width:300px;" />
+                     </apex:pageBlockSectionItem>
+                     <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Product Type" />
+                        <apex:inputText value="{! ProductType}" style="width:300px;" />
+                     </apex:pageBlockSectionItem>
+                     <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Product Code" />
+                        <apex:inputText value="{! ProductCode}" style="width:300px;" />
+                     </apex:pageBlockSectionItem>
+                     <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Sales Item" />
+                        <apex:inputText value="{! SalesItem}" style="width:300px;" />
+                     </apex:pageBlockSectionItem>
+                     <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="MAG" />
+                        <apex:inputText value="{! MAG}" style="width:300px;" />
+                     </apex:pageBlockSectionItem>
+                     <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Unit Price" />
+                        <apex:outputPanel >
+                            <apex:selectList id="filterOptionUnitPrice" value="{!filterId}" size="1" style="width:126px;">
+                                <apex:selectOptions value="{!filterOptions}"/>
+                            </apex:selectList>
+                            <apex:inputText id="filterUnitPrice" value="{! filterPrice}" style="width:170px;" />
+                            <script>
+                                var filterOptionId = '{!$Component.filterOptionUnitPrice}';
+                                var filterPriceId = '{!$Component.filterUnitPrice}';
+                                
+                                //check if input is a valid number
+                                function validateUnitPrice()  
+                                {
+                                    var isValid = true;
+                                    var filterOption = document.getElementById(filterOptionId);
+                                    var filterPrice = document.getElementById(filterPriceId);
+                                    
+                                    if(filterOption.value != '0')
+                                    {
+                                        isValid = isNumber(filterPrice.value);                                      
+                                    }
+                                    if(isValid)
+                                    {
+                                        searchProducts();
+                                    }
+                                    else
+                                    {
+                                        alert('Please enter valid unit price');
+                                    }
+                                    //return isValid;
+                                }
+                                
+                                function isNumber(n) 
+                                {
+                                    return (!isNaN(parseFloat(n))) && isFinite(n);
+                                }                                 
+                            </script>
+                        </apex:outputPanel>                     
+                     </apex:pageBlockSectionItem>       
+                </apex:pageBlockSection>
+                <apex:outputPanel style="width:100%; text-align:center; padding: 10px 0px;" layout="block">
+                    <apex:actionFunction action="{!searchProducts}" name="searchProducts" rerender="pnlResult , pageMsg" status="status" />
+                    
+                    <input type="button" class="btn" id='search' value='Search' onclick="validateUnitPrice()"  />
+                    <apex:commandButton action="{!clearResults}" value="Clear" rerender="pnlResult , pageMsg, filterSection" status="status"/>
+                </apex:outputPanel>      
+            </apex:pageBlock>  
+         <apex:pageBlock >
+            <apex:outputPanel id="pnlResult">
+                <apex:outputPanel id="pnlNoResult" rendered="{! NOT(foundResult) }">
+                        NO Result found. Please change your search criteria.
+                </apex:outputPanel>
+                <apex:outputpanel id="pnlList" rendered="{! foundResult }">
+                    <apex:actionStatus id="resultStatus" StartText="Processing..." startStyle="font-color:red;">
+                        <apex:facet name="start">
+                            <apex:image value="/img/loading.gif" />
+                        </apex:facet>
+                    </apex:actionStatus>
+                    
+                    <!-- Alpha Filter Panel Start -->
+                    <apex:outputPanel id="alphaFilters" style="width:100%; text-align:right; padding: 10px 0px;" layout="block">  
+                        <apex:commandLink action="{!filterByAlphabets}" title="A" value="A"  reRender="lstPanel , pageMsg" status="resultStatus">
+                            <apex:param name="a"  value="a" assignTo="{! alphaFilter}" /> 
+                        </apex:commandLink>
+                        <apex:outputText value=" | " style="color:grey;" />
+                        <apex:commandLink action="{!filterByAlphabets}" title="B" value="B" reRender="lstPanel , pageMsg" status="resultStatus" >
+                            <apex:param name="b"  value="b" assignTo="{! alphaFilter}" />
+                        </apex:commandLink>
+                        <apex:outputText value=" | " style="color:grey;" />        
+                        <apex:commandLink action="{!filterByAlphabets}" title="C" value="C" reRender="lstPanel , pageMsg" status="resultStatus">
+                            <apex:param name="c"  value="c" assignTo="{! alphaFilter}" />
+                        </apex:commandLink>
+                        <apex:outputText value=" | " style="color:grey;" /> 
+                        <apex:commandLink action="{!filterByAlphabets}" title="D" value="D" reRender="lstPanel , pageMsg" status="resultStatus">
+                            <apex:param name="d"  value="d" assignTo="{! alphaFilter}" />
+                        </apex:commandLink>
+                        <apex:outputText value=" | " style="color:grey;" />
+                        <apex:commandLink action="{!filterByAlphabets}" title="E" value="E" reRender="lstPanel , pageMsg" status="resultStatus">
+                            <apex:param name="e"  value="e" assignTo="{! alphaFilter}" />
+                        </apex:commandLink>
+                        <apex:outputText value=" | " style="color:grey;" />
+                        <apex:commandLink action="{!filterByAlphabets}" title="F" value="F" reRender="lstPanel , pageMsg" status="resultStatus">
+                            <apex:param name="f"  value="f" assignTo="{! alphaFilter}" />
+                        </apex:commandLink>
+                        <apex:outputText value=" | " style="color:grey;" />
+                        <apex:commandLink action="{!filterByAlphabets}" title="G" value="G" reRender="lstPanel , pageMsg" status="resultStatus">
+                            <apex:param name="g"  value="g" assignTo="{! alphaFilter}" />
+                        </apex:commandLink>
+                        <apex:outputText value=" | " style="color:grey;" />
+                        <apex:commandLink action="{!filterByAlphabets}" title="H" value="H" reRender="lstPanel , pageMsg" status="resultStatus">
+                            <apex:param name="h"  value="h" assignTo="{! alphaFilter}" />
+                        </apex:commandLink>
+                        <apex:outputText value=" | " style="color:grey;" />
+                        <apex:commandLink action="{!filterByAlphabets}" title="I" value="I" reRender="lstPanel , pageMsg" status="resultStatus">
+                            <apex:param name="i"  value="i" assignTo="{! alphaFilter}" />
+                        </apex:commandLink>
+                        <apex:outputText value=" | " style="color:grey;" />
+                        <apex:commandLink action="{!filterByAlphabets}" title="J" value="J" reRender="lstPanel , pageMsg" status="resultStatus">
+                            <apex:param name="j"  value="j" assignTo="{! alphaFilter}" />
+                        </apex:commandLink>
+                        <apex:outputText value=" | " style="color:grey;" />
+                        <apex:commandLink action="{!filterByAlphabets}" title="K" value="K" reRender="lstPanel , pageMsg" status="resultStatus">
+                            <apex:param name="k"  value="k" assignTo="{! alphaFilter}" />
+                        </apex:commandLink>
+                        <apex:outputText value=" | " style="color:grey;" />
+                        <apex:commandLink action="{!filterByAlphabets}" title="L" value="L" reRender="lstPanel , pageMsg" status="resultStatus">
+                            <apex:param name="l"  value="l" assignTo="{! alphaFilter}" />
+                        </apex:commandLink>
+                        <apex:outputText value=" | " style="color:grey;" />
+                        <apex:commandLink action="{!filterByAlphabets}" title="M" value="M" reRender="lstPanel , pageMsg" status="resultStatus">
+                            <apex:param name="m"  value="m" assignTo="{! alphaFilter}" />
+                        </apex:commandLink>
+                        <apex:outputText value=" | " style="color:grey;" />
+                        <apex:commandLink action="{!filterByAlphabets}" title="N" value="N" reRender="lstPanel , pageMsg" status="resultStatus">
+                            <apex:param name="n"  value="n" assignTo="{! alphaFilter}" />
+                        </apex:commandLink>
+                        <apex:outputText value=" | " style="color:grey;" />
+                        <apex:commandLink action="{!filterByAlphabets}" title="O" value="O" reRender="lstPanel , pageMsg" status="resultStatus">
+                            <apex:param name="o"  value="o" assignTo="{! alphaFilter}" />
+                        </apex:commandLink>
+                        <apex:outputText value=" | " style="color:grey;" />
+                        <apex:commandLink action="{!filterByAlphabets}" title="P" value="P" reRender="lstPanel , pageMsg" status="resultStatus">
+                            <apex:param name="p"  value="p" assignTo="{! alphaFilter}" />
+                        </apex:commandLink>
+                        <apex:outputText value=" | " style="color:grey;" />
+                        <apex:commandLink action="{!filterByAlphabets}" title="Q" value="Q" reRender="lstPanel , pageMsg" status="resultStatus">
+                            <apex:param name="q"  value="q" assignTo="{! alphaFilter}" />
+                        </apex:commandLink>
+                        <apex:outputText value=" | " style="color:grey;" />
+                        <apex:commandLink action="{!filterByAlphabets}" title="R" value="R" reRender="lstPanel , pageMsg" status="resultStatus">
+                            <apex:param name="r"  value="r" assignTo="{! alphaFilter}" />
+                        </apex:commandLink>
+                        <apex:outputText value=" | " style="color:grey;" />
+                        <apex:commandLink action="{!filterByAlphabets}" title="S" value="S" reRender="lstPanel , pageMsg" status="resultStatus">
+                            <apex:param name="s"  value="s" assignTo="{! alphaFilter}" />
+                        </apex:commandLink>
+                        <apex:outputText value=" | " style="color:grey;" />
+                        <apex:commandLink action="{!filterByAlphabets}" title="T" value="T" reRender="lstPanel , pageMsg" status="resultStatus">
+                            <apex:param name="t"  value="t" assignTo="{! alphaFilter}" />
+                        </apex:commandLink>
+                        <apex:outputText value=" | " style="color:grey;" />
+                        <apex:commandLink action="{!filterByAlphabets}" title="U" value="U" reRender="lstPanel , pageMsg" status="resultStatus">
+                            <apex:param name="u"  value="u" assignTo="{! alphaFilter}" />
+                        </apex:commandLink>
+                        <apex:outputText value=" | " style="color:grey;" />
+                        <apex:commandLink action="{!filterByAlphabets}" title="V" value="V" reRender="lstPanel , pageMsg" status="resultStatus">
+                            <apex:param name="v"  value="v" assignTo="{! alphaFilter}" />
+                        </apex:commandLink>
+                        <apex:outputText value=" | " style="color:grey;" />
+                        <apex:commandLink action="{!filterByAlphabets}" title="W" value="W" reRender="lstPanel , pageMsg" status="resultStatus">
+                            <apex:param name="w"  value="w" assignTo="{! alphaFilter}" />
+                        </apex:commandLink>
+                        <apex:outputText value=" | " style="color:grey;" />
+                        <apex:commandLink action="{!filterByAlphabets}" title="X" value="X" reRender="lstPanel , pageMsg" status="resultStatus">
+                            <apex:param name="x"  value="x" assignTo="{! alphaFilter}" />
+                        </apex:commandLink>
+                        <apex:outputText value=" | " style="color:grey;" />
+                        <apex:commandLink action="{!filterByAlphabets}" title="Y" value="Y" reRender="lstPanel , pageMsg" status="resultStatus">
+                            <apex:param name="y"  value="y" assignTo="{! alphaFilter}" />
+                        </apex:commandLink>
+                        <apex:outputText value=" | " style="color:grey;" />
+                        <apex:commandLink action="{!filterByAlphabets}" title="Z" value="Z" reRender="lstPanel , pageMsg" status="resultStatus">
+                            <apex:param name="z"  value="z" assignTo="{! alphaFilter}" />
+                        </apex:commandLink>
+                        <apex:outputText value=" | " style="color:grey;" />
+                        <apex:commandLink action="{!filterByAlphabets}" title="All" value="All" reRender="lstPanel , pageMsg" status="resultStatus">
+                            <apex:param name=" "  value=" " assignTo="{! alphaFilter}" />
+                        </apex:commandLink>             
+                    </apex:outputPanel>  
+                    <!-- Alpha Filter Panel End  -->
+                    <!-- Product List Panel Start -->
+                    <apex:outputPanel id="lstPanel">                
+                        <apex:pageBlockTable id="pbtResult" cellpadding="2" cellspacing="2" border="1" columns="8" value="{!lstResults}" var="objResult">
+                            <apex:facet name="header">Showing Page # {!pageNumber} of {!totalPages} - Total Results : {!total_size}</apex:facet>
+                            <apex:column >
+                                <apex:facet name="header">
+                                     <apex:inputCheckbox id="chkAll" onclick="checkAll(this,'chkSelect')" > 
+                                        <apex:outputLabel value="Select" />
+                                    </apex:inputCheckbox>
+                                </apex:facet>
+                                <apex:inputCheckbox value="{! objResult.IsSelected}" id="chkSelect" onclick="ChildClick(this.value, 'chkSelect', 'chkAll' )" />
+                            </apex:column>                          
+                            <apex:column value="{! objResult.objProduct.Name}" />
+                            <apex:column value="{! objResult.objProduct.Product_Type__c}" />
+                            <apex:column value="{! objResult.objProduct.ProductCode}" />
+                            <apex:column value="{! objResult.objProduct.Sales_Item__c}" />
+                            <apex:column value="{! objERebate.CurrencyIsoCode} {! objResult.unitPrice}" headervalue="Standard Price" />
+                            <apex:column value="{! objResult.objProduct.MAG__c}" />
+                            <apex:column value="{! objResult.objProduct.Family}" />
+                        </apex:pageBlockTable>
+                        <apex:outputPanel id="pagerButtons" style="width:100%; text-align:center; padding: 2px 0px;" layout="block">  
+                            <apex:commandButton action="{!first}" title="First" value="<<" disabled="{!disablePrevious}" reRender="pageMsg, lstPanel , pagerButtons" status="resultStatus" oncomplete="ChildClick(true, 'chkSelect', 'chkAll' )" />
+                            <apex:commandButton action="{!Previous}" title="Previous" value="<" disabled="{!disablePrevious}" reRender="pageMsg, lstPanel, pagerButtons" status="resultStatus" oncomplete="ChildClick(true, 'chkSelect', 'chkAll' )" />        
+                            <apex:commandButton action="{!Next}" title="Next" value=">" disabled="{!disableNext}" reRender="pageMsg, lstPanel , pagerButtons" status="resultStatus" oncomplete="ChildClick(true, 'chkSelect', 'chkAll' )" />
+                            <apex:commandButton action="{!last}" title="Last" value=">>" disabled="{!disableLast}" reRender="pageMsg, lstPanel , pagerButtons" status="resultStatus" oncomplete="ChildClick(true, 'chkSelect', 'chkAll' )" />
+                       </apex:outputPanel>                      
+                    </apex:outputPanel>
+                    <!-- Product List Panel End -->                 
+                </apex:outputpanel>
+            </apex:outputPanel>
+        </apex:pageBlock> 
+     </apex:outputPanel>
+    <!-- Step 2 - Product Add Starts -->
+    <apex:outputPanel id="step2" rendered="{! IF(isStep2 , true , false)}">
+        <apex:pageBlock id="multiProductEdit">
+             <apex:pageBlockButtons location="top">
+                <apex:commandButton action="{!saveProducts}" value="Save" rerender="step2 , pageMsg" status="status"/>
+                <apex:commandButton action="{!saveMoreProducts}" value="Save & More" rerender="pnlContent , pageMsg , secHeader" status="status"/>
+                <apex:commandButton action="{! URLFOR('/' + objERebate.Id , null )}" value="Cancel"  status="status"/>
+            </apex:pageBlockButtons>            
+            
+            <apex:pageBlockTable id="pbtProducts" cellpadding="2" cellspacing="2" border="1" columns="5" value="{!lsteRebateLines}" var="item">
+                <apex:column value="{! item.productName}" headervalue="Product"  />
+                <apex:column headervalue="Price Gap" >
+                    <apex:inputText value="{! item.objLine.Price_Gap__c}" required="true"   /> 
+                </apex:column>
+                <apex:column headervalue="Real Cost in Rebate Currency" >
+                    <apex:inputText value="{! item.objLine.Real_Cost_in_Rebate_Currency__c}" /> 
+                </apex:column>
+                <apex:column headervalue="Line Description" >
+                    <apex:inputText value="{! item.objLine.Line_Description__c}"  />
+                </apex:column>
+                <apex:column headervalue="Quantity"  >
+                    <apex:inputText value="{! item.objLine.Quantity__c}" required="true"   />
+                </apex:column>
+            </apex:pageBlockTable>          
+        </apex:pageBlock>   
+   </apex:outputPanel>
+   <!-- Step 2 - Product Add Ends -->
+   
+   <script type="text/javascript">
+    
+        function checkAll(cb,cbid)
+        {
+            var inputElem = document.getElementsByTagName("input");                     
+            for(var i=0; i<inputElem.length; i++)
+            {             
+                 if(inputElem[i].type == 'checkbox' && inputElem[i].id.indexOf(cbid)!=-1)
+                 {                                        
+                    inputElem[i].checked = cb.checked;
+                }
+            }
+        }
+        
+        function ChildClick(childSelected, childId, headerId)
+        {
+            var chkAll = getHeaderCheckbox(headerId);
+            
+            if(chkAll != null)
+            {
+                if(! childSelected)
+                {
+                    chkAll.checked = false;
+                }
+                else
+                {
+                    chkAll.checked = true;
+                    var inputElem = document.getElementsByTagName("input"); 
+                    //check if all the checkboxes are checked
+                    for(var i=0; i<inputElem.length; i++)
+                    {             
+                         if(inputElem[i].type == 'checkbox' && inputElem[i].id.indexOf(childId)!=-1 && inputElem[i].checked == false)
+                         {
+                            chkAll.checked = false;
+                         }
+                    }
+                }
+            }           
+        }
+        
+        function getHeaderCheckbox(chkId)
+        {
+            var chkAll;
+            
+            var inputElem = document.getElementsByTagName("input"); 
+            for(var i=0; i<inputElem.length; i++)
+            {             
+                 if(inputElem[i].type == 'checkbox' && inputElem[i].id.indexOf(chkId)!=-1)
+                 {
+                    chkAll = inputElem[i];
+                    break;
+                 }
+            }
+            
+            return chkAll;
+        }
+    </script>
+  </apex:outputPanel> 
+ </apex:form>
+</apex:page>

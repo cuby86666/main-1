@@ -1,0 +1,54 @@
+<aura:component description="NXP_Footer" implements="forceCommunity:availableForAllPageTypes" access="global">
+    <aura:attribute name="CopyrightYear" type="String" default="" />
+    <aura:handler name="init" action="{!c.getCopyrightYear}" value="{!this}"/>
+
+    <footer>
+        <div id="footer" class="container">
+            <div class="slds-grid slds-wrap">
+                <div class="slds-col slds-p-horizontal--medium slds-size--1-of-3 slds-medium-size--1-of-3" data-dtmname="About NXP">
+                    <h4>ABOUT NXP</h4>
+                    <ul>
+                        <li><a href="http://investors.nxp.com/phoenix.zhtml?c=209114&amp;p=irol-irhome">Investors</a></li>
+                        <li><a href="http://www.nxp.com/webapp/connect/memberDirSearch.sp">Partners</a></li>
+                        <li><a href="http://www.nxp.com/about/careers-at-nxp:CAREERS">Careers</a></li>
+                    </ul>
+                </div>
+                <div class="slds-col slds-p-horizontal--medium slds-size--2-of-3 slds-medium-size--1-of-3" data-dtmname="Resources">
+                    <h4>RESOURCES</h4>
+                    <ul>
+                        <li><a href="http://www.nxp.com/about/nxp-mobile-applications:MOBILE">Mobile Apps</a></li>
+                        <li><a href="http://media.nxp.com">Press, News, Blogs</a></li>
+                        <li><a href="http://www.nxp.com/pages/contact-us:CONTACTUS">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="slds-col slds-p-horizontal--medium slds-size--1-of-1 slds-medium-size--1-of-3" data-dtmname="Follow Us">
+                    <h4>Follow Us</h4>
+                    <ul id="footer-social">
+                        <li class="twitter"><a data-content-finding="Footer" data-content-subfinding="Footer: FOLLOW US" href="https://twitter.com/NXP" target="_blank" title="Follow NXP on Twitter"><span class="icon-twitter22"></span></a></li>
+                        <li class="linkedin"><a data-content-finding="Footer" data-content-subfinding="Footer: FOLLOW US" href="http://www.linkedin.com/company/nxp-semiconductors" target="_blank" title="Follow NXP on Linked In"><span class="icon-linkedin"></span></a></li>
+                        <li class="facebook"><a data-content-finding="Footer" data-content-subfinding="Footer: FOLLOW US" href="https://www.facebook.com/NXPsemi" target="_blank" title="Follow NXP on Facebook"><span class="icon-facebook"></span></a></li>
+                        <li class="email"><a href="https://contact.nxp.com/Subscription-Center" target="_blank" title="Subscription Center"><span class="icon-mail2"></span></a></li>
+                    </ul>
+                </div>
+                </div>
+        </div>
+
+            <div class="legalContainer">
+                <div class="container slds-grid slds-wrap">
+                    <div class="slds-col dtmFooter slds-size--1-of-1 slds-medium-size--1-of-2 slds-text-align--left slds-p-horizontal--medium" data-dtmname="Privacy">
+                        <ul class="legalLinks">
+                            <li><a href="http://www.nxp.com/about/privacy:PRIVACYPRACTICES" title="Privacy">Privacy</a></li>
+                            <li><a href="http://www.nxp.com/about/terms-of-use:TERMSOFUSE" title="Terms of Use">Terms of Use</a></li>
+                            <li><a href="http://www.nxp.com/about/our-standard-terms-and-conditions-of-sale-counter-offer:TERMSCONDITIONSSALE" title="Terms of Sale">Terms of Sale</a></li>
+                            <li><a href="mailto:direct@nxp.com" id="stay_here" name="stay_here" title="Feedback">Feedback</a></li>
+                        </ul>
+                    </div>
+                    <div class="copyright slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-text-align--right slds-p-horizontal--medium">&copy; 2006-{!v.CopyrightYear}&nbsp; NXP Semiconductors. All rights reserved.</div>
+                </div>
+            </div>
+
+
+
+    </footer>
+    
+</aura:component>

@@ -1,0 +1,2387 @@
+<!--
+@Modified By :       Scarlett Kang
+@Modified Date:      20 Mar 2015
+@Description:        Remove Sub Segment from layout
+-------------------------------------------------------------------------------
+@Modified By :       Scarlett Kang
+@Modified Date:      25 May 2015
+@Description:        Add message/reminder on layout and remoeve edit request selection
+-------------------------------------------------------------------------------
+@Modified By :       Scarlett Kang
+@Modified Date:      15 Jun 2015
+@Description:        Add warning message on layout
+-------------------------------------------------------------------------------
+@Modified By :       Vinanthi Ittigi
+@Modified Date:      21 Apr 2016
+@Description:        Change State/province field from freetext to picklist, removed house no from address
+-------------------------------------------------------------------------------
+@Modified By :       Shridevi Badiger
+@Modified Date:       6 Jun 2016
+@Description:        Remove sales Area from Layout-New SFDC Child Account
+----------------------------------------------------------------------------------->
+<apex:page extensions="CMD_Request_Controller"  standardController="CMD_Request__c" cache="false" standardStylesheets="false" showHeader="false" sidebar="false" 
+    title="NXP CMD Request" applyBodyTag="true" applyHtmlTag="true">
+
+<style>
+    body { font-family:"Arial","Unicode MS",Sans-serif !important; font-size:12px; }
+    table { margin-left: 2%; margin-right: auto; }
+    div.pbSubheader{ text-align:left; margin-left:32px; color:#C6D200; font-size:11px; font-style:italic; } 
+    .subheader{ text-align:right; color:#C6D200; font-size:12px; font-style:italic; margin-left:128px;  } 
+    input { margin-left:8px; padding-left:4px; }
+    .outputField { margin-left:8px; padding-left:8px; }
+    .validationButton { font-weight:bold;font-size:11px;}
+    select { margin-left:8px; min-width:90px;}
+    .labelCol { text-align:right; font-size:10px; font-weight:bold; min-width:100px; max-width:200px; margin-left:8px; }
+    .buttonCol { width:60px;}
+    .required { border-style:inset; border-color:#E63F00;}
+    .requiredSelect { font-weight:bold; border-style:inset; border-color:#E63F00; }
+    .redAsterisk { color:#E63F00; font-weight:bold !important;font-size:16px !important; }
+    .button { font-weight:bold;font-size:11px; margin:8px; }
+    .validationButton { font-weight:bold;font-size:11px; margin-left:8px; margin-top:1px; margin-bottom:1px; }
+    .helpText { color:#8AB1DC; margin-left:8px; font-size:10px; text-align:left; font-weight:normal !important;}
+    .valid { color:#C6D200; margin-left:8px; font-size:10px; text-align:left; }
+    .invalid { color:#E63F00;  margin-left:8px; font-size:10px; text-align:left;}
+</style>
+
+<script type="text/javascript">
+       function lockElement(item) {
+           document.getElementById(item).disabled = true;
+           document.getElementById(item).options.length = 0;
+       }
+       function unlockElement(item) {
+           document.getElementById(item).disabled = false;
+       }
+</script>
+ 
+<apex:form >
+
+    <TABLE BORDER=""><TR>
+    <TD><apex:image url="https://si0.twimg.com/profile_images/2971207948/1676a5783afe796a041aa01ce2a5b9ea_normal.png"/></TD>
+    <TD><apex:outputText value="CMD Request" style="font-weight:bold;"/></TD>
+    <TD><apex:selectList value="{!RequestType}" size="1" rendered="{!AND(NOT(Submitted),NOT(source=='sfdc'))}">
+        <apex:selectOption itemLabel="- What is the purpose of your request ? -" itemValue=""/>
+        <apex:selectOption itemLabel="New Parent Account in Salesforce.com" itemValue="New SFDC Parent Account"/>
+        <apex:selectOption itemLabel="New Child Account in Salesforce.com" itemValue="New SFDC Child Account"/>
+<!--        <apex:selectOption itemLabel="New Funloc in SAP (Under Construction)" itemValue="SAP New"/> -->
+<!--Scarlett on May 25, 2015 - Remove edit request from selection -->
+<!--
+        <apex:selectOption itemLabel="Edit Parent Account in Salesforce.com" itemValue="Edit SFDC Parent Account"/>
+        <apex:selectOption itemLabel="Edit Child Account in Salesforce.com" itemValue="Edit SFDC Child Account"/> 
+-->
+
+        <apex:actionSupport event="onchange" action="{!checkRequestType}" 
+                            reRender="thePage"/>
+    </apex:selectList></TD>
+    </TR>
+<!--    
+    <TR>
+    <TD COLSPAN="3" style="color:#C6D200;">(For Testing Phase Only: "Requester Email" will also receive the CMD Officers confirmation email)</TD>
+    </TR>
+-->    
+    </TABLE>
+    <hr/>
+    
+    <TABLE BORDER=""><TR><TD>
+    <apex:outputPanel layout="none" id="thePage">
+    
+    <apex:pageBlock rendered="{!AND(RequestType='',OR(NOT(Submitted),NOT(InternalUserSubmission)))}">
+        <apex:outputText value="Welcome to Customer Master Data Request Page."/>
+    </apex:pageBlock>
+<!-- -------------------------------------------------------------------------------->
+<!--    <apex:pageBlock rendered="{!AND(RequestType='New SFDC Parent Account',AND(NOT(Submitted),NOT(InternalUserSubmission)))}"> -->
+<!-- Added by Scarlett on May 25, 2015 -->
+    <apex:pageBlock rendered="{!AND(RequestType='New SFDC Parent Account',NOT(Submitted))}">
+        <apex:pageBlockSection columns="1">
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="New Parent Account Request" style="font-size:18px;"/>    
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >                    
+            </apex:pageBlockSectionItem>
+            <b> <font color="red"> Note: For opportunity entries, please raise a New <u>Child</u> Account request.</font> </b> <br></br>
+                <b> <font color="red"> This form is for new Parent account. Please make sure to use the correct request form! </font> </b>  
+            <apex:pageBlockSectionItem >
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+<!-- Added by Scarlett on May 25, 2015 -->
+    <apex:pageBlock rendered="{!AND(RequestType='New SFDC Parent Account',NOT(Submitted))}">
+        <apex:pageBlockButtons >
+            <apex:commandButton action="{!SubmitRequest}" value="Submit Request" styleClass="button"/>
+            <apex:outputText value="*" styleClass="redAsterisk"/>
+            <apex:outputText value=" = Required Field" style="font-size:10px;"/>            
+        </apex:pageBlockButtons>
+
+        <apex:pageBlockSection columns="2">
+
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Requester Name"/> 
+                <apex:outputPanel layout="none">                           
+                    <apex:inputText value="{!Requester_Name}" rendered="{!(source!='sfdc')}"/>
+                    <apex:outputText value="{!Requester_Name}" rendered="{!(source=='sfdc')}" styleClass="outputField"/>
+                </apex:outputPanel>                           
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Requester Email"/>
+                    <apex:outputText value="*" styleClass="redAsterisk"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputPanel layout="none">                           
+                        <apex:inputText value="{!Requester_Email}" rendered="{!AND(RequesterValidation!='invalid',source!='sfdc')}"/>
+                        <apex:inputText value="{!Requester_Email}" rendered="{!AND(RequesterValidation='invalid',source!='sfdc')}" styleClass="required"/>
+                        <apex:outputText value="{!Requester_Email}" rendered="{!(source=='sfdc')}" styleClass="outputField"/>
+                    </apex:outputPanel>                           
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputPanel layout="none" id="RequesterValidation">                
+                    <apex:outputText value="Requester Validated" rendered="{!(RequesterValidation='valid')}" styleClass="valid"/>
+                    <apex:outputText value="Requester Email is invalid" rendered="{!(RequesterValidation='invalid')}" styleClass="invalid"/>
+                </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+  
+        </apex:pageBlockSection>
+
+        <apex:pageBlockSection title="Information" columns="2">
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Account Name" />
+                    <apex:outputText style="font-weight:800" value="*" styleClass="redAsterisk"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:inputText value="{!Account_Name}" rendered="{!NOT(Account_Name_Invalid)}"/>
+                    <apex:inputText value="{!Account_Name}" styleClass="required" rendered="{!Account_Name_Invalid}"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:outputPanel layout="none">           
+                <apex:outputText style="font-weight:800" value="e.g., BMW (max characters:30)" rendered="{!NOT(Account_Name_Invalid)}" styleClass="helpText" />
+                <apex:outputText value="REQUIRED" rendered="{!Account_Name_Invalid}" styleClass="invalid" />
+                <apex:outputText style="font-weight:800" value="CANNOT BE MORE THAN 30 DIGITS" rendered="{!Account_Name_too_Long}" styleClass="invalid" />
+            </apex:outputPanel>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Legal Name"/>
+                <apex:inputText value="{!Legal_Name}"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="e.g., Bayerische Motoren Werke AG" rendered="{!NOT(Legal_Name_Invalid)}" styleClass="helpText" />
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+
+        <apex:pageBlockSection title="Address" columns="1">
+            <!--<apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="House Number"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputPanel layout="none">           
+                        <apex:inputText value="{!House_Number}" rendered="{!NOT(House_Number_too_Long)}"/>
+                        <apex:inputText value="{!House_Number}" rendered="{!House_Number_too_Long}" styleClass="required"/>
+                    </apex:outputPanel>
+                    <apex:outputPanel layout="none">           
+                        <apex:outputText value="(maximum character/digit: 10)" rendered="{!NOT(House_Number_too_Long)}" styleClass="helpText" />
+                        <apex:outputText value="Cannot be more than 10 characters/digits" rendered="{!House_Number_too_Long}" styleClass="invalid" />
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem> -->
+ 
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Street"/>
+                    <apex:outputText value="*" styleClass="redAsterisk"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:pageBlockSectionItem >
+                        <apex:outputPanel layout="none">           
+                            <apex:inputText value="{!Street}" rendered="{!AND(NOT(Street_Empty),NOT(Street_too_Long))}"/>
+                            <apex:inputText value="{!Street}" styleClass="required" rendered="{!Street_Empty}"/>
+                            <apex:inputText value="{!Street}" styleClass="required" rendered="{!Street_too_Long}"/>
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputPanel layout="none">           
+                            <apex:outputText value="REQUIRED" rendered="{!Street_Empty}" styleClass="invalid" />
+                            <apex:outputText value="Cannot be more than 35 characters" rendered="{!Street_too_Long}" styleClass="invalid" />
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+ 
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Street Line 2"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:pageBlockSectionItem >
+                        <apex:outputPanel layout="none">           
+                            <apex:inputText value="{!Street_2}" rendered="{!NOT(Street_2_too_Long)}"/>
+                            <apex:inputText value="{!Street_2}" styleClass="required" rendered="{!Street_2_too_Long}"/>
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputPanel layout="none">           
+                            <apex:outputText value="Cannot be more than 35 characters" rendered="{!Street_2_too_Long}" styleClass="invalid" />
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+ 
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Street Line 3"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:pageBlockSectionItem >
+                        <apex:outputPanel layout="none">           
+                            <apex:inputText value="{!Street_3}" rendered="{!NOT(Street_3_too_Long)}"/>
+                            <apex:inputText value="{!Street_3}" styleClass="required" rendered="{!Street_3_too_Long}"/>
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputPanel layout="none">           
+                            <apex:outputText value="Cannot be more than 35 characters" rendered="{!Street_3_too_Long}" styleClass="invalid" />
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+ 
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="City"/>
+                    <apex:outputText value="*" styleClass="redAsterisk"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:pageBlockSectionItem >
+                        <apex:inputText value="{!City}" rendered="{!NOT(City_Empty)}"/>
+                        <apex:inputText value="{!City}" styleClass="required" rendered="{!City_Empty}"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText value="REQUIRED" rendered="{!City_Empty}" styleClass="invalid" />
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <!--<apex:pageBlockSectionItem >
+                <apex:outputText value="State / Province"/>
+                <apex:inputText value="{!State}"/>
+            </apex:pageBlockSectionItem> -->
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Country"/>
+                    <apex:outputText value="*" styleClass="redAsterisk"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:pageBlockSectionItem >
+                      <apex:inputField value="{!CMD_Request__c.Country__c}"     rendered="{!NOT(Country_Empty)}" /> 
+                      <apex:inputField value="{!CMD_Request__c.Country__c}"    styleClass="required" rendered="{!Country_Empty}" />
+
+                      <!--  <apex:selectList value="{!Country}" size="1" rendered="{!NOT(Country_Empty)}" >
+                            <apex:selectOption itemLabel=""/>
+                            <apex:selectOptions value="{!CountryPicklist}"  />
+                        </apex:selectList>
+                        <apex:selectList value="{!Country}" size="1" rendered="{!Country_Empty}" styleClass="requiredSelect">
+                            <apex:selectOption itemLabel=""/>
+                            <apex:selectOptions value="{!CountryPicklist}"  />
+                        </apex:selectList> -->
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText value="REQUIRED" rendered="{!Country_Empty}" styleClass="invalid" /> 
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <!-- code added by vinanthi -->
+         <!--    <apex:pageBlockSectionItem >
+            <apex:outputText value="country picklist"/>
+             <apex:inputField value="{!CMD_Request__c.Country__c}"    styleclass="btn btn-default dropdown-toggle input-form"/>
+           </apex:pageBlockSectionItem>-->
+            
+            
+            <apex:pageBlockSectionItem >
+            <apex:outputText value="State / Province"/>
+             <apex:inputField value="{!CMD_Request__c.State_Province__c}"   styleclass="btn btn-default dropdown-toggle input-form"/>
+            </apex:pageBlockSectionItem>
+            
+            
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Postal Code"/>
+                <apex:inputText value="{!Postal_Code}"/>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+
+        <apex:pageBlockSection title="Electronic Address" columns="2">
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Website"/>
+                    <apex:outputText value="*" styleClass="redAsterisk"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:inputText value="{!Website}" rendered="{!NOT(Website_Empty)}"/>
+                    <apex:inputText value="{!Website}" rendered="{!Website_Empty}" styleClass="required"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputPanel layout="none">           
+                    <apex:outputText value="e.g., www.nxp.com  (http:// not necessary)"  styleClass="helpText" /> 
+                </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="E-Mail"/>
+                <apex:pageBlockSectionItem >
+                    <apex:inputText value="{!Email}" rendered="{!NOT(Email_Invalid)}"/>
+                    <apex:inputText value="{!Email}" rendered="{!Email_Invalid}" styleClass="required"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputPanel layout="none">           
+                    <apex:outputText value="Email format is invalid." rendered="{!Email_Invalid}" styleClass="invalid" />  
+                </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Telephone"/>
+                <apex:inputText value="{!Telephone}"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputPanel layout="none">           
+                    <apex:outputText value="e.g.New York,  +12121234567"  styleClass="helpText" /> 
+                </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Fax"/>
+                <apex:inputText value="{!Fax}"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputPanel layout="none">           
+                    <apex:outputText value="e.g.Shanghai,  +862187654321"  styleClass="helpText" /> 
+                </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+
+        <apex:pageBlockSection title="Attributes" columns="2">
+
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Fulfillment Channel"/>
+                    <apex:outputText value="*" styleClass="redAsterisk"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:selectList value="{!Fulfillment_Channel}" rendered="{!NOT(Fulfillment_Channel_Empty)}"  size="1" style="width:158px;">
+                        <apex:selectOption itemLabel=""/>
+                        <apex:selectOptions value="{!Fulfillment_ChannelPicklist}"/>
+                    </apex:selectList>
+                    <apex:selectList value="{!Fulfillment_Channel}" rendered="{!Fulfillment_Channel_Empty}" styleClass="required"  size="1" style="width:158px;">
+                        <apex:selectOption itemLabel=""/>
+                        <apex:selectOptions value="{!Fulfillment_ChannelPicklist}"/>
+                    </apex:selectList>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="REQUIRED" rendered="{!Fulfillment_Channel_Empty}" styleClass="invalid" />
+            </apex:pageBlockSectionItem>
+
+        </apex:pageBlockSection>
+
+        <apex:pageBlockSection columns="2">
+
+            <!--<apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Customer Category"/>
+                    <apex:outputText value="*" styleClass="redAsterisk"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem > 
+                    <apex:selectList value="{!Customer_Category}" rendered="{!NOT(Customer_Category_Empty)}" size="1" style="width:158px;">
+                        <apex:selectOption itemLabel=""/>
+                        <apex:selectOptions value="{!Customer_CategoryPicklist}"/>
+                    </apex:selectList>    
+                    <apex:selectList value="{!Customer_Category}" rendered="{!Customer_Category_Empty}" styleClass="required" size="1" style="width:158px;">
+                        <apex:selectOption itemLabel=""/>
+                        <apex:selectOptions value="{!Customer_CategoryPicklist}"/>
+                    </apex:selectList>    
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="REQUIRED" rendered="{!Customer_Category_Empty}" styleClass="invalid" />
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>-->
+
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Role"/>
+                    <apex:outputText value="*" styleClass="redAsterisk"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:selectList value="{!Role}" size="1" rendered="{!NOT(Role_Empty)}" style="width:158px;">
+                        <apex:selectOption itemLabel=""/>
+                        <apex:selectOptions value="{!RolePicklist}"/>
+                    </apex:selectList>
+                    <apex:selectList value="{!Role}" size="1" rendered="{!Role_Empty}" style="width:158px;" styleClass="required">
+                        <apex:selectOption itemLabel=""/>
+                        <apex:selectOptions value="{!RolePicklist}"/>
+                    </apex:selectList>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputPanel layout="none">           
+                    <apex:outputText value="This describes the role of the customer, whom NXP sells to, in the fulfillment channel." rendered="{!NOT(Role_Empty)}" styleClass="helpText" /> 
+                    <apex:outputText value="REQUIRED" rendered="{!Role_Empty}" styleClass="invalid" />
+                </apex:outputPanel> 
+            </apex:pageBlockSectionItem>
+
+        </apex:pageBlockSection>
+
+        <apex:pageBlockSection columns="2">
+            <!--<apex:pageBlockSectionItem >
+                <apex:outputText value="Type"/>
+                <apex:selectList value="{!Type}" size="1" style="width:158px;">
+                    <apex:selectOption itemLabel=""/>
+                    <apex:selectOptions value="{!TypePicklist}"/>
+                </apex:selectList>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+            </apex:pageBlockSectionItem>-->
+
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="CBG"/>
+                    <apex:outputText value="*" styleClass="redAsterisk"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:selectList value="{!Industry_Segment}" size="1" rendered="{!NOT(Industry_Segment_Empty)}">
+                        <apex:selectOption itemLabel=""/>
+                        <apex:selectOptions value="{!Industry_SegmentPicklist}"/>
+                        <apex:actionSupport event="onchange" reRender="SUBnsp"/>
+                    </apex:selectList>
+                    <apex:selectList value="{!Industry_Segment}" size="1" rendered="{!Industry_Segment_Empty}" styleClass="required">
+                        <apex:selectOption itemLabel=""/>
+                        <apex:selectOptions value="{!Industry_SegmentPicklist}"/>
+                        <apex:actionSupport event="onchange" reRender="SUBnsp"/>
+                    </apex:selectList>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputPanel layout="none"> 
+                <apex:outputText value="CBG/sub-CBG – Customer Buying Group of the account is determined by the regional Sales Management Team during the annual CBG review. Approvals from the regional controllers and sales op team are required prior to the update of the CBG/sub-CBG on the account."  styleClass="helpText" />
+                <apex:outputText value="REQUIRED" rendered="{!Industry_Segment_Empty}" styleClass="invalid" />
+                </apex:outputPanel> 
+            </apex:pageBlockSectionItem>
+
+        </apex:pageBlockSection>
+            
+        <apex:pageBlockSection columns="1">
+            <apex:pageBlockSectionItem labelStyle="text-align:left;" >
+                <apex:outputPanel layout="none">
+                    <apex:outputText value="Background of This Request" style="font-weight:bold;"/>
+                    <apex:outputText value="* " styleClass="redAsterisk" style="font-weight:bold;"/>
+                    <apex:outputText value=" REQUIRED" rendered="{!Background_of_This_Request_Empty}" styleClass="invalid" />
+                </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputPanel layout="none">
+                    <apex:inputTextarea rendered="{!NOT(Background_of_This_Request_Empty)}" value="{!Background_of_This_Request}" rows="6" cols="50"/>
+                    <apex:inputTextarea rendered="{!Background_of_This_Request_Empty}" style="border-style:inset; border-color:#FFB500;" value="{!Background_of_This_Request}" rows="6" cols="50"/>
+                </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+
+        <apex:pageBlockSection title="Account Managers" columns="2">
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="AMEC"/>
+                <apex:pageBlockSectionItem >
+                    <apex:inputText value="{!AM_AMEC}" rendered="{!(AM_AMEC_Validation!='invalid')}"/>
+                    <apex:inputText value="{!AM_AMEC}" rendered="{!(AM_AMEC_Validation='invalid')}" styleClass="required"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputPanel layout="none">
+                    <apex:outputText value="Manager's email address" rendered="{!AND(AM_AMEC_Validation!='valid',AM_AMEC_Validation!='invalid')}" styleClass="helpText"/>
+                    <apex:outputText value="Email Validated" rendered="{!(AM_AMEC_Validation='valid')}" styleClass="valid"/>
+                    <apex:outputText value="Email is invalid" rendered="{!(AM_AMEC_Validation='invalid')}" styleClass="invalid"/>
+                </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="EMEA"/>
+                <apex:pageBlockSectionItem >
+                    <apex:inputText value="{!AM_EMEA}" rendered="{!(AM_EMEA_Validation!='invalid')}"/>
+                    <apex:inputText value="{!AM_EMEA}" rendered="{!(AM_EMEA_Validation='invalid')}" styleClass="required"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Email Validated" rendered="{!(AM_EMEA_Validation='valid')}" styleClass="valid"/>
+                <apex:outputText value="Email is invalid" rendered="{!(AM_EMEA_Validation='invalid')}" styleClass="invalid"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="GC"/>
+                <apex:pageBlockSectionItem >
+                    <apex:inputText value="{!AM_GC}" rendered="{!(AM_GC_Validation!='invalid')}"/>
+                    <apex:inputText value="{!AM_GC}" rendered="{!(AM_GC_Validation='invalid')}" styleClass="required"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Email Validated" rendered="{!(AM_GC_Validation='valid')}" styleClass="valid"/>
+                <apex:outputText value="Email is invalid" rendered="{!(AM_GC_Validation='invalid')}" styleClass="invalid"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Japan"/>
+                <apex:pageBlockSectionItem >
+                    <apex:inputText value="{!AM_Japan}" rendered="{!(AM_Japan_Validation!='invalid')}"/>
+                    <apex:inputText value="{!AM_Japan}" rendered="{!(AM_Japan_Validation='invalid')}" styleClass="required"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Email Validated" rendered="{!(AM_Japan_Validation='valid')}" styleClass="valid"/>
+                <apex:outputText value="Email is invalid" rendered="{!(AM_Japan_Validation='invalid')}" styleClass="invalid"/>
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Korea 1"/>
+                <apex:pageBlockSectionItem >
+                    <apex:inputText value="{!AM_Korea}" rendered="{!(AM_Korea_Validation!='invalid')}"/>
+                    <apex:inputText value="{!AM_Korea}" rendered="{!(AM_Korea_Validation='invalid')}" styleClass="required"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Email Validated" rendered="{!(AM_Korea_Validation='valid')}" styleClass="valid"/>
+                <apex:outputText value="Email is invalid" rendered="{!(AM_Korea_Validation='invalid')}" styleClass="invalid"/>
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Korea 2"/>
+                <apex:pageBlockSectionItem >
+                    <apex:inputText value="{!AM_Korea_2}" rendered="{!(AM_Korea_2_Validation!='invalid')}"/>
+                    <apex:inputText value="{!AM_Korea_2}" rendered="{!(AM_Korea_2_Validation='invalid')}" styleClass="required"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Email Validated" rendered="{!(AM_Korea_2_Validation='valid')}" styleClass="valid"/>
+                <apex:outputText value="Email is invalid" rendered="{!(AM_Korea_2_Validation='invalid')}" styleClass="invalid"/>
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="SAP"/>
+                <apex:pageBlockSectionItem >
+                    <apex:inputText value="{!AM_SAP}" rendered="{!(AM_SAP_Validation!='invalid')}"/>
+                    <apex:inputText value="{!AM_SAP}" rendered="{!(AM_SAP_Validation='invalid')}" styleClass="required"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Email Validated" rendered="{!(AM_SAP_Validation='valid')}" styleClass="valid"/>
+                <apex:outputText value="Email is invalid" rendered="{!(AM_SAP_Validation='invalid')}" styleClass="invalid"/>
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="SAP 2"/>
+                <apex:pageBlockSectionItem >
+                    <apex:inputText value="{!AM_SAP_2}" rendered="{!(AM_SAP_2_Validation!='invalid')}"/>
+                    <apex:inputText value="{!AM_SAP_2}" rendered="{!(AM_SAP_2_Validation='invalid')}" styleClass="required"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Email Validated" rendered="{!(AM_SAP_2_Validation='valid')}" styleClass="valid"/>
+                <apex:outputText value="Email is invalid" rendered="{!(AM_SAP_2_Validation='invalid')}" styleClass="invalid"/>
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="SAP 3"/>
+                <apex:pageBlockSectionItem >
+                    <apex:inputText value="{!AM_SAP_3}" rendered="{!(AM_SAP_3_Validation!='invalid')}"/>
+                    <apex:inputText value="{!AM_SAP_3}" rendered="{!(AM_SAP_3_Validation='invalid')}" styleClass="required"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Email Validated" rendered="{!(AM_SAP_3_Validation='valid')}" styleClass="valid"/>
+                <apex:outputText value="Email is invalid" rendered="{!(AM_SAP_3_Validation='invalid')}" styleClass="invalid"/>
+            </apex:pageBlockSectionItem>
+
+        </apex:pageBlockSection>
+
+        <apex:pageBlockSection title="Service Managers" columns="2">
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="AMEC"/>
+                <apex:pageBlockSectionItem >
+                    <apex:inputText value="{!SM_AMEC}" rendered="{!(SM_AMEC_Validation!='invalid')}"/>
+                    <apex:inputText value="{!SM_AMEC}" rendered="{!(SM_AMEC_Validation='invalid')}" styleClass="required"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Email Validated" rendered="{!(SM_AMEC_Validation='valid')}" styleClass="valid"/>
+                <apex:outputText value="Email is invalid" rendered="{!(SM_AMEC_Validation='invalid')}" styleClass="invalid"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="EMEA"/>
+                <apex:pageBlockSectionItem >
+                    <apex:inputText value="{!SM_EMEA}" rendered="{!(SM_EMEA_Validation!='invalid')}"/>
+                    <apex:inputText value="{!SM_EMEA}" rendered="{!(SM_EMEA_Validation='invalid')}" styleClass="required"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Email Validated" rendered="{!(SM_EMEA_Validation='valid')}" styleClass="valid"/>
+                <apex:outputText value="Email is invalid" rendered="{!(SM_EMEA_Validation='invalid')}" styleClass="invalid"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="GC"/>
+                <apex:pageBlockSectionItem >
+                    <apex:inputText value="{!SM_GC}" rendered="{!(SM_GC_Validation!='invalid')}"/>
+                    <apex:inputText value="{!SM_GC}" rendered="{!(SM_GC_Validation='invalid')}" styleClass="required"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Email Validated" rendered="{!(SM_GC_Validation='valid')}" styleClass="valid"/>
+                <apex:outputText value="Email is invalid" rendered="{!(SM_GC_Validation='invalid')}" styleClass="invalid"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Japan"/>
+                <apex:pageBlockSectionItem >
+                    <apex:inputText value="{!SM_Japan}" rendered="{!(SM_Japan_Validation!='invalid')}"/>
+                    <apex:inputText value="{!SM_Japan}" rendered="{!(SM_Japan_Validation='invalid')}" styleClass="required"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Email Validated" rendered="{!(SM_Japan_Validation='valid')}" styleClass="valid"/>
+                <apex:outputText value="Email is invalid" rendered="{!(SM_Japan_Validation='invalid')}" styleClass="invalid"/>
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Korea"/>
+                <apex:pageBlockSectionItem >
+                    <apex:inputText value="{!SM_Korea}" rendered="{!(SM_Korea_Validation!='invalid')}"/>
+                    <apex:inputText value="{!SM_Korea}" rendered="{!(SM_Korea_Validation='invalid')}" styleClass="required"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Email Validated" rendered="{!(SM_Korea_Validation='valid')}" styleClass="valid"/>
+                <apex:outputText value="Email is invalid" rendered="{!(SM_Korea_Validation='invalid')}" styleClass="invalid"/>
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="SAP"/>
+                <apex:pageBlockSectionItem >
+                    <apex:inputText value="{!SM_SAP}" rendered="{!(SM_SAP_Validation!='invalid')}"/>
+                    <apex:inputText value="{!SM_SAP}" rendered="{!(SM_SAP_Validation='invalid')}" styleClass="required"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Email Validated" rendered="{!(SM_SAP_Validation='valid')}" styleClass="valid"/>
+                <apex:outputText value="Email is invalid" rendered="{!(SM_SAP_Validation='invalid')}" styleClass="invalid"/>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+<!-- ------------------------------------------------------------------------------------------------------------------------->
+<!--    <apex:pageBlock rendered="{!AND(RequestType='Edit SFDC Child Account',AND(NOT(Submitted),NOT(InternalUserSubmission)))}"> -->
+    <apex:pageBlock rendered="{!AND(RequestType='Edit SFDC Parent Account',NOT(Submitted))}">
+        <apex:pageBlockButtons >
+            <apex:commandButton action="{!SubmitRequest}" value="Submit Request" styleClass="button"/>
+            <apex:outputText value="*" styleClass="redAsterisk"/>
+            <apex:outputText value=" = Required Field" style="font-size:10px;"/> 
+        </apex:pageBlockButtons>
+
+        <apex:pageBlockSection columns="2">
+
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Requester Name"/>            
+                <apex:outputPanel layout="none">                           
+                    <apex:inputText value="{!Requester_Name}" rendered="{!(source!='sfdc')}"/>
+                    <apex:outputText value="{!Requester_Name}" rendered="{!(source=='sfdc')}" styleClass="outputField"/>
+                </apex:outputPanel>                           
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Requester Email"/>
+                    <apex:outputText value="*" styleClass="redAsterisk"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputPanel layout="none">                           
+                        <apex:inputText value="{!Requester_Email}" rendered="{!AND(RequesterValidation!='invalid',source!='sfdc')}"/>
+                        <apex:inputText value="{!Requester_Email}" rendered="{!AND(RequesterValidation='invalid',source!='sfdc')}" styleClass="required"/>
+                        <apex:outputText value="{!Requester_Email}" rendered="{!(source=='sfdc')}" styleClass="outputField"/>
+                    </apex:outputPanel>                           
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputPanel layout="none" id="RequesterValidation">                
+                    <apex:outputText value="Requester Validated" rendered="{!(RequesterValidation='valid')}" styleClass="valid"/>
+                    <apex:outputText value="Requester Email is invalid" rendered="{!(RequesterValidation='invalid')}" styleClass="invalid"/>
+                </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="New Owner Name"/>            
+                <apex:outputPanel layout="none">                           
+                    <apex:inputText value="{!New_Owner_Name}"/>
+                </apex:outputPanel>                           
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="New Owner Email"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputPanel layout="none">                           
+                        <apex:inputText value="{!New_Owner_Email}" rendered="{!NOT(New_Owner_Validation='invalid')}"/>
+                        <apex:inputText value="{!New_Owner_Email}" rendered="{!New_Owner_Validation='invalid'}" styleClass="required"/>
+                    </apex:outputPanel>                           
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputPanel layout="none" id="RequesterValidation">                
+                    <apex:outputText value="New Owner Validated" rendered="{!New_Owner_Validation='valid'}" styleClass="valid"/>
+                    <apex:outputText value="Owner Email is invalid" rendered="{!New_Owner_Validation='invalid'}" styleClass="invalid"/>
+                </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+
+        </apex:pageBlockSection>
+
+        <apex:pageBlockSection title="Information" columns="2">
+
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="NXP Global ID"/>
+                </apex:pageBlockSectionItem>
+                <apex:outputPanel layout="none">
+                    <apex:inputText value="{!NXP_Global_ID}" rendered="{!(source!='sfdc')}"/>
+                    <apex:outputText value="{!NXP_Global_ID}" rendered="{!(source=='sfdc')}" styleClass="outputField"/>
+                </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Account Name" />
+                    <apex:outputText value="*" styleClass="redAsterisk"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:inputText value="{!Account_Name}" rendered="{!NOT(Account_Name_Invalid)}"/>
+                    <apex:inputText value="{!Account_Name}" styleClass="required" rendered="{!Account_Name_Invalid}"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:outputPanel layout="none">           
+                <apex:outputText value="e.g., BMW (max characters:30)" rendered="{!NOT(Account_Name_Invalid)}" styleClass="helpText" />
+                <apex:outputText value="REQUIRED" rendered="{!Account_Name_Invalid}" styleClass="invalid" />
+                <apex:outputText style="font-weight:800" value="CANNOT BE MORE THAN 30 DIGITS" rendered="{!Account_Name_too_Long}" styleClass="invalid" />
+            </apex:outputPanel>
+
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Legal Name"/>
+                <apex:inputText value="{!Legal_Name}"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="e.g., Bayerische Motoren Werke AG" rendered="{!NOT(Legal_Name_Invalid)}" styleClass="helpText" />
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+
+        <apex:pageBlockSection title="Address" columns="1">
+           <!-- <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="House Number"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputPanel layout="none">           
+                        <apex:inputText value="{!House_Number}" rendered="{!NOT(House_Number_too_Long)}"/>
+                        <apex:inputText value="{!House_Number}" rendered="{!House_Number_too_Long}" styleClass="required"/>
+                    </apex:outputPanel>
+                    <apex:outputPanel layout="none">           
+                        <apex:outputText value="(maximum character/digit: 10)" rendered="{!NOT(House_Number_too_Long)}" styleClass="helpText" />
+                        <apex:outputText value="Cannot be more than 10 characters/digits" rendered="{!House_Number_too_Long}" styleClass="invalid" />
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>-->
+ 
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Street"/>
+                    <apex:outputText value="*" styleClass="redAsterisk"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:pageBlockSectionItem >
+                        <apex:outputPanel layout="none">           
+                            <apex:inputText value="{!Street}" rendered="{!AND(NOT(Street_Empty),NOT(Street_too_Long))}"/>
+                            <apex:inputText value="{!Street}" styleClass="required" rendered="{!Street_Empty}"/>
+                            <apex:inputText value="{!Street}" styleClass="required" rendered="{!Street_too_Long}"/>
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputPanel layout="none">           
+                            <apex:outputText value="REQUIRED" rendered="{!Street_Empty}" styleClass="invalid" />
+                            <apex:outputText value="Cannot be more than 35 characters" rendered="{!Street_too_Long}" styleClass="invalid" />
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+ 
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Street Line 2"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:pageBlockSectionItem >
+                        <apex:outputPanel layout="none">           
+                            <apex:inputText value="{!Street_2}" rendered="{!NOT(Street_2_too_Long)}"/>
+                            <apex:inputText value="{!Street_2}" styleClass="required" rendered="{!Street_2_too_Long}"/>
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputPanel layout="none">           
+                            <apex:outputText value="Cannot be more than 35 characters" rendered="{!Street_2_too_Long}" styleClass="invalid" />
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+ 
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Street Line 3"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:pageBlockSectionItem >
+                        <apex:outputPanel layout="none">           
+                            <apex:inputText value="{!Street_3}" rendered="{!NOT(Street_3_too_Long)}"/>
+                            <apex:inputText value="{!Street_3}" styleClass="required" rendered="{!Street_3_too_Long}"/>
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputPanel layout="none">           
+                            <apex:outputText value="Cannot be more than 35 characters" rendered="{!Street_3_too_Long}" styleClass="invalid" />
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+ 
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="City"/>
+                    <apex:outputText value="*" styleClass="redAsterisk"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:pageBlockSectionItem >
+                        <apex:inputText value="{!City}" rendered="{!NOT(City_Empty)}"/>
+                        <apex:inputText value="{!City}" styleClass="required" rendered="{!City_Empty}"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText value="REQUIRED" rendered="{!City_Empty}" styleClass="invalid" />
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Country"/>
+                    <apex:outputText value="*" styleClass="redAsterisk"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:pageBlockSectionItem >
+                       <apex:inputField value="{!CMD_Request__c.Country__c}"     rendered="{!NOT(Country_Empty)}"/>
+                      <apex:inputField value="{!CMD_Request__c.Country__c}"    styleClass="required" rendered="{!Country_Empty}" />
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText value="REQUIRED" rendered="{!Country_Empty}" styleClass="invalid" />
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="State / Province"/>
+                <apex:inputField value="{!CMD_Request__c.State_Province__c}"  />
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Postal Code"/>
+                <apex:inputText value="{!Postal_Code}"/>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+
+        <apex:pageBlockSection title="Electronic Address" columns="2">
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Website"/>
+                    <apex:outputText value="*" styleClass="redAsterisk"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:inputText value="{!Website}" rendered="{!NOT(Website_Empty)}"/>
+                    <apex:inputText value="{!Website}" rendered="{!Website_Empty}" styleClass="required"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputPanel layout="none">           
+                    <apex:outputText value="e.g., www.nxp.com  (http:// not necessary)"  styleClass="helpText" /> 
+                </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="E-Mail"/>
+                <apex:pageBlockSectionItem >
+                    <apex:inputText value="{!Email}" rendered="{!NOT(Email_Invalid)}"/>
+                    <apex:inputText value="{!Email}" rendered="{!Email_Invalid}" styleClass="required"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputPanel layout="none">           
+                    <apex:outputText value="Email format is invalid." rendered="{!Email_Invalid}" styleClass="invalid" />  
+                </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Telephone"/>
+                <apex:inputText value="{!Telephone}"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputPanel layout="none">           
+                    <apex:outputText value="e.g.New York,  +12121234567"  styleClass="helpText" /> 
+                </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Fax"/>
+                <apex:inputText value="{!Fax}"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputPanel layout="none">           
+                    <apex:outputText value="e.g.Shanghai,  +862187654321"  styleClass="helpText" /> 
+                </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+
+        <apex:pageBlockSection title="Attributes" columns="2">
+
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Fulfillment Channel"/>
+                    <apex:outputText value="*" styleClass="redAsterisk"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:selectList value="{!Fulfillment_Channel}" rendered="{!NOT(Fulfillment_Channel_Empty)}"  size="1" style="width:158px;">
+                        <apex:selectOption itemLabel=""/>
+                        <apex:selectOptions value="{!Fulfillment_ChannelPicklist}"/>
+                    </apex:selectList>
+                    <apex:selectList value="{!Fulfillment_Channel}" rendered="{!Fulfillment_Channel_Empty}" styleClass="required"  size="1" style="width:158px;">
+                        <apex:selectOption itemLabel=""/>
+                        <apex:selectOptions value="{!Fulfillment_ChannelPicklist}"/>
+                    </apex:selectList>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="REQUIRED" rendered="{!Fulfillment_Channel_Empty}" styleClass="invalid" />
+            </apex:pageBlockSectionItem>
+
+        </apex:pageBlockSection>
+
+        <apex:pageBlockSection columns="2">
+
+            <!--<apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Customer Category"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem > 
+                    <apex:selectList value="{!Customer_Category}" rendered="{!NOT(Customer_Category_Empty)}" size="1" style="width:158px;">
+                        <apex:selectOption itemLabel=""/>
+                        <apex:selectOptions value="{!Customer_CategoryPicklist}"/>
+                    </apex:selectList>    
+                    <apex:selectList value="{!Customer_Category}" rendered="{!Customer_Category_Empty}" styleClass="required" size="1" style="width:158px;">
+                        <apex:selectOption itemLabel=""/>
+                        <apex:selectOptions value="{!Customer_CategoryPicklist}"/>
+                    </apex:selectList>    
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="REQUIRED" rendered="{!Customer_Category_Empty}" styleClass="invalid" />
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>-->
+
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Role"/>
+                    <apex:outputText value="*" styleClass="redAsterisk"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:selectList value="{!Role}" size="1" rendered="{!NOT(Role_Empty)}" style="width:158px;">
+                        <apex:selectOption itemLabel=""/>
+                        <apex:selectOptions value="{!RolePicklist}"/>
+                    </apex:selectList>
+                    <apex:selectList value="{!Role}" size="1" rendered="{!Role_Empty}" style="width:158px;" styleClass="required">
+                        <apex:selectOption itemLabel=""/>
+                        <apex:selectOptions value="{!RolePicklist}"/>
+                    </apex:selectList>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputPanel layout="none">           
+                    <apex:outputText value="This describes the role of the customer, whom NXP sells to, in the fulfillment channel." rendered="{!NOT(Role_Empty)}" styleClass="helpText" /> 
+                    <apex:outputText value="REQUIRED" rendered="{!Role_Empty}" styleClass="invalid" />
+                </apex:outputPanel> 
+            </apex:pageBlockSectionItem>
+
+        </apex:pageBlockSection>
+
+        <apex:pageBlockSection >
+            <!--<apex:pageBlockSectionItem >
+                <apex:outputText value="Type"/>
+                <apex:selectList value="{!Type}" size="1" style="width:158px;">
+                    <apex:selectOption itemLabel=""/>
+                    <apex:selectOptions value="{!TypePicklist}"/>
+                </apex:selectList>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+            </apex:pageBlockSectionItem>-->
+
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="CBG"/>
+                    <apex:outputText value="*" styleClass="redAsterisk"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:selectList value="{!Industry_Segment}" size="1" rendered="{!NOT(Industry_Segment_Empty)}">
+                        <apex:selectOption itemLabel=""/>
+                        <apex:selectOptions value="{!Industry_SegmentPicklist}"/>
+                        <apex:actionSupport event="onchange" reRender="SUBnsp"/>
+                    </apex:selectList>
+                    <apex:selectList value="{!Industry_Segment}" size="1" rendered="{!Industry_Segment_Empty}" styleClass="required">
+                        <apex:selectOption itemLabel=""/>
+                        <apex:selectOptions value="{!Industry_SegmentPicklist}"/>
+                        <apex:actionSupport event="onchange" reRender="SUBnsp"/>
+                    </apex:selectList>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputPanel layout="none">
+                <apex:outputText value="CBG/sub-CBG – Customer Buying Group of the account is determined by the regional Sales Management Team during the annual CBG review. Approvals from the regional controllers and sales op team are required prior to the update of the CBG/sub-CBG on the account."  styleClass="helpText" />
+                <apex:outputText value="REQUIRED" rendered="{!Industry_Segment_Empty}" styleClass="invalid" />
+                </apex:outputPanel> 
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+
+        <apex:pageBlockSection columns="1">
+            <apex:pageBlockSectionItem labelStyle="text-align:left;" >
+                <apex:outputPanel layout="none">
+                    <apex:outputText value="Background of This Request" style="font-weight:bold;"/>
+                    <apex:outputText value="* " styleClass="redAsterisk" style="font-weight:bold;"/>
+                    <apex:outputText value=" REQUIRED" rendered="{!Background_of_This_Request_Empty}" styleClass="invalid" />
+                </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputPanel layout="none">
+                    <apex:inputTextarea rendered="{!NOT(Background_of_This_Request_Empty)}" value="{!Background_of_This_Request}" rows="6" cols="50"/>
+                    <apex:inputTextarea rendered="{!Background_of_This_Request_Empty}" style="border-style:inset; border-color:#FFB500;" value="{!Background_of_This_Request}" rows="6" cols="50"/>
+                </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+
+        <apex:pageBlockSection title="Account Managers" columns="2">
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="AMEC"/>
+                <apex:pageBlockSectionItem >
+                    <apex:inputText value="{!AM_AMEC}" rendered="{!(AM_AMEC_Validation!='invalid')}"/>
+                    <apex:inputText value="{!AM_AMEC}" rendered="{!(AM_AMEC_Validation='invalid')}" styleClass="required"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputPanel layout="none">
+                    <apex:outputText value="Manager's email address" rendered="{!AND(AM_AMEC_Validation!='valid',AM_AMEC_Validation!='invalid')}" styleClass="helpText"/>
+                    <apex:outputText value="Email Validated" rendered="{!(AM_AMEC_Validation='valid')}" styleClass="valid"/>
+                    <apex:outputText value="Email is invalid" rendered="{!(AM_AMEC_Validation='invalid')}" styleClass="invalid"/>
+                </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="EMEA"/>
+                <apex:pageBlockSectionItem >
+                    <apex:inputText value="{!AM_EMEA}" rendered="{!(AM_EMEA_Validation!='invalid')}"/>
+                    <apex:inputText value="{!AM_EMEA}" rendered="{!(AM_EMEA_Validation='invalid')}" styleClass="required"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Email Validated" rendered="{!(AM_EMEA_Validation='valid')}" styleClass="valid"/>
+                <apex:outputText value="Email is invalid" rendered="{!(AM_EMEA_Validation='invalid')}" styleClass="invalid"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="GC"/>
+                <apex:pageBlockSectionItem >
+                    <apex:inputText value="{!AM_GC}" rendered="{!(AM_GC_Validation!='invalid')}"/>
+                    <apex:inputText value="{!AM_GC}" rendered="{!(AM_GC_Validation='invalid')}" styleClass="required"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Email Validated" rendered="{!(AM_GC_Validation='valid')}" styleClass="valid"/>
+                <apex:outputText value="Email is invalid" rendered="{!(AM_GC_Validation='invalid')}" styleClass="invalid"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Japan"/>
+                <apex:pageBlockSectionItem >
+                    <apex:inputText value="{!AM_Japan}" rendered="{!(AM_Japan_Validation!='invalid')}"/>
+                    <apex:inputText value="{!AM_Japan}" rendered="{!(AM_Japan_Validation='invalid')}" styleClass="required"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Email Validated" rendered="{!(AM_Japan_Validation='valid')}" styleClass="valid"/>
+                <apex:outputText value="Email is invalid" rendered="{!(AM_Japan_Validation='invalid')}" styleClass="invalid"/>
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Korea 1"/>
+                <apex:pageBlockSectionItem >
+                    <apex:inputText value="{!AM_Korea}" rendered="{!(AM_Korea_Validation!='invalid')}"/>
+                    <apex:inputText value="{!AM_Korea}" rendered="{!(AM_Korea_Validation='invalid')}" styleClass="required"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Email Validated" rendered="{!(AM_Korea_Validation='valid')}" styleClass="valid"/>
+                <apex:outputText value="Email is invalid" rendered="{!(AM_Korea_Validation='invalid')}" styleClass="invalid"/>
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Korea 2"/>
+                <apex:pageBlockSectionItem >
+                    <apex:inputText value="{!AM_Korea_2}" rendered="{!(AM_Korea_2_Validation!='invalid')}"/>
+                    <apex:inputText value="{!AM_Korea_2}" rendered="{!(AM_Korea_2_Validation='invalid')}" styleClass="required"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Email Validated" rendered="{!(AM_Korea_2_Validation='valid')}" styleClass="valid"/>
+                <apex:outputText value="Email is invalid" rendered="{!(AM_Korea_2_Validation='invalid')}" styleClass="invalid"/>
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="SAP"/>
+                <apex:pageBlockSectionItem >
+                    <apex:inputText value="{!AM_SAP}" rendered="{!(AM_SAP_Validation!='invalid')}"/>
+                    <apex:inputText value="{!AM_SAP}" rendered="{!(AM_SAP_Validation='invalid')}" styleClass="required"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Email Validated" rendered="{!(AM_SAP_Validation='valid')}" styleClass="valid"/>
+                <apex:outputText value="Email is invalid" rendered="{!(AM_SAP_Validation='invalid')}" styleClass="invalid"/>
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="SAP 2"/>
+                <apex:pageBlockSectionItem >
+                    <apex:inputText value="{!AM_SAP_2}" rendered="{!(AM_SAP_2_Validation!='invalid')}"/>
+                    <apex:inputText value="{!AM_SAP_2}" rendered="{!(AM_SAP_2_Validation='invalid')}" styleClass="required"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Email Validated" rendered="{!(AM_SAP_2_Validation='valid')}" styleClass="valid"/>
+                <apex:outputText value="Email is invalid" rendered="{!(AM_SAP_2_Validation='invalid')}" styleClass="invalid"/>
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="SAP 3"/>
+                <apex:pageBlockSectionItem >
+                    <apex:inputText value="{!AM_SAP_3}" rendered="{!(AM_SAP_3_Validation!='invalid')}"/>
+                    <apex:inputText value="{!AM_SAP_3}" rendered="{!(AM_SAP_3_Validation='invalid')}" styleClass="required"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Email Validated" rendered="{!(AM_SAP_3_Validation='valid')}" styleClass="valid"/>
+                <apex:outputText value="Email is invalid" rendered="{!(AM_SAP_3_Validation='invalid')}" styleClass="invalid"/>
+            </apex:pageBlockSectionItem>
+
+        </apex:pageBlockSection>
+
+        <apex:pageBlockSection title="Service Managers" columns="2">
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="AMEC"/>
+                <apex:pageBlockSectionItem >
+                    <apex:inputText value="{!SM_AMEC}" rendered="{!(SM_AMEC_Validation!='invalid')}"/>
+                    <apex:inputText value="{!SM_AMEC}" rendered="{!(SM_AMEC_Validation='invalid')}" styleClass="required"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Email Validated" rendered="{!(SM_AMEC_Validation='valid')}" styleClass="valid"/>
+                <apex:outputText value="Email is invalid" rendered="{!(SM_AMEC_Validation='invalid')}" styleClass="invalid"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="EMEA"/>
+                <apex:pageBlockSectionItem >
+                    <apex:inputText value="{!SM_EMEA}" rendered="{!(SM_EMEA_Validation!='invalid')}"/>
+                    <apex:inputText value="{!SM_EMEA}" rendered="{!(SM_EMEA_Validation='invalid')}" styleClass="required"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Email Validated" rendered="{!(SM_EMEA_Validation='valid')}" styleClass="valid"/>
+                <apex:outputText value="Email is invalid" rendered="{!(SM_EMEA_Validation='invalid')}" styleClass="invalid"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="GC"/>
+                <apex:pageBlockSectionItem >
+                    <apex:inputText value="{!SM_GC}" rendered="{!(SM_GC_Validation!='invalid')}"/>
+                    <apex:inputText value="{!SM_GC}" rendered="{!(SM_GC_Validation='invalid')}" styleClass="required"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Email Validated" rendered="{!(SM_GC_Validation='valid')}" styleClass="valid"/>
+                <apex:outputText value="Email is invalid" rendered="{!(SM_GC_Validation='invalid')}" styleClass="invalid"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Japan"/>
+                <apex:pageBlockSectionItem >
+                    <apex:inputText value="{!SM_Japan}" rendered="{!(SM_Japan_Validation!='invalid')}"/>
+                    <apex:inputText value="{!SM_Japan}" rendered="{!(SM_Japan_Validation='invalid')}" styleClass="required"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Email Validated" rendered="{!(SM_Japan_Validation='valid')}" styleClass="valid"/>
+                <apex:outputText value="Email is invalid" rendered="{!(SM_Japan_Validation='invalid')}" styleClass="invalid"/>
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Korea"/>
+                <apex:pageBlockSectionItem >
+                    <apex:inputText value="{!SM_Korea}" rendered="{!(SM_Korea_Validation!='invalid')}"/>
+                    <apex:inputText value="{!SM_Korea}" rendered="{!(SM_Korea_Validation='invalid')}" styleClass="required"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Email Validated" rendered="{!(SM_Korea_Validation='valid')}" styleClass="valid"/>
+                <apex:outputText value="Email is invalid" rendered="{!(SM_Korea_Validation='invalid')}" styleClass="invalid"/>
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="SAP"/>
+                <apex:pageBlockSectionItem >
+                    <apex:inputText value="{!SM_SAP}" rendered="{!(SM_SAP_Validation!='invalid')}"/>
+                    <apex:inputText value="{!SM_SAP}" rendered="{!(SM_SAP_Validation='invalid')}" styleClass="required"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Email Validated" rendered="{!(SM_SAP_Validation='valid')}" styleClass="valid"/>
+                <apex:outputText value="Email is invalid" rendered="{!(SM_SAP_Validation='invalid')}" styleClass="invalid"/>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+
+<!----------------------------------------------------------------------------------->
+
+    <apex:pageBlock rendered="{!AND(RequestType='SAP New',NOT(Submitted))}">
+        <apex:outputText value="Under Construction"/>
+    </apex:pageBlock>
+    
+    <apex:pageBlock rendered="{!AND(RequestType='Update Division',NOT(Submitted))}">
+        <apex:outputText value="Under Construction"/>
+    </apex:pageBlock>
+
+<!----------------------------------------------------------------------------------->
+
+<!--    <apex:pageBlock rendered="{!AND(RequestType='New SFDC Child Account',AND(NOT(Submitted),NOT(InternalUserSubmission)))}"> -->
+<!-- Added by Scarlett on May 25, 2015 -->
+    <apex:pageBlock rendered="{!AND(RequestType='New SFDC Child Account',NOT(Submitted))}">
+        <apex:pageBlockSection columns="1">
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="New Child Account Request" style="font-size:18px;"/>    
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >                    
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+<!-- Added by Scarlett on May 25, 2015 -->
+    <apex:pageBlock rendered="{!AND(RequestType='New SFDC Child Account',NOT(Submitted))}">
+        <apex:pageBlockButtons >
+            <apex:commandButton action="{!SubmitRequest}" value="Submit Request" styleClass="button"/>
+            <apex:outputText value="*" styleClass="redAsterisk"/>
+            <apex:outputText value=" = Required Field" style="font-size:10px;"/>            
+        </apex:pageBlockButtons>
+
+        <apex:pageBlockSection columns="2">
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Requester Name"/>            
+                <apex:outputPanel layout="none">                           
+                    <apex:inputText value="{!Requester_Name}" rendered="{!(source!='sfdc')}"/>
+                    <apex:outputText value="{!Requester_Name}" rendered="{!(source=='sfdc')}" styleClass="outputField"/>
+                </apex:outputPanel>                           
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Requester Email"/>
+                    <apex:outputText value="*" styleClass="redAsterisk"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputPanel layout="none">                           
+                        <apex:inputText value="{!Requester_Email}" rendered="{!AND(RequesterValidation!='invalid',source!='sfdc')}"/>
+                        <apex:inputText value="{!Requester_Email}" rendered="{!AND(RequesterValidation='invalid',source!='sfdc')}" styleClass="required"/>
+                        <apex:outputText value="{!Requester_Email}" rendered="{!(source=='sfdc')}" styleClass="outputField"/>
+                    </apex:outputPanel>                           
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+ <!-- 
+                <apex:commandButton value="Validate My Email" action="{!ValidateRequester}" styleClass="validationButton">
+                    <apex:actionSupport event="onclick"
+                                        immediate="true"
+                                        reRender="RequesterValidation"/>
+                </apex:commandButton>
+ -->
+                <apex:outputPanel layout="none" id="RequesterValidation">                
+                    <apex:outputText value="Requester Validated" rendered="{!(RequesterValidation='valid')}" styleClass="valid"/>
+                    <apex:outputText value="Requester Email is invalid" rendered="{!(RequesterValidation='invalid')}" styleClass="invalid"/>
+                </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+
+        <apex:pageBlockSection title="Information" columns="2">
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Account Name" />
+                    <apex:outputText value="*" styleClass="redAsterisk"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:inputText value="{!Account_Name}" rendered="{!NOT(Account_Name_Invalid)}"/>
+                    <apex:inputText value="{!Account_Name}" styleClass="required" rendered="{!Account_Name_Invalid}"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:outputPanel layout="none">           
+                <apex:outputText value="e.g., BMW (max characters:30)" rendered="{!NOT(Account_Name_Invalid)}" styleClass="helpText" />
+                <apex:outputText value="REQUIRED" rendered="{!Account_Name_Invalid}" styleClass="invalid" />
+                <apex:outputText style="font-weight:800" value="CANNOT BE MORE THAN 30 DIGITS" rendered="{!Account_Name_too_Long}" styleClass="invalid" />
+            </apex:outputPanel>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Legal Name"/>
+                <apex:inputText value="{!Legal_Name}"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="e.g., Bayerische Motoren Werke AG" rendered="{!NOT(Legal_Name_Invalid)}" styleClass="helpText" />
+                <apex:outputText value="Legal Name is required" rendered="{!Legal_Name_Invalid}" styleClass="invalid" />
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+
+        <apex:pageBlockSection title="Parent Account" columns="2">
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Parent Name" />
+                    <apex:outputText value="*" styleClass="redAsterisk"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputPanel layout="none">
+                        <apex:inputText value="{!Parent_Account_Name}" rendered="{!AND(NOT(Parent_Account_Name_Empty),source!='sfdc')}"/>
+                        <apex:inputText value="{!Parent_Account_Name}" styleClass="required" rendered="{!AND(Parent_Account_Name_Empty,source!='sfdc')}"/>
+                        <apex:outputText value="{!Parent_Account_Name}" rendered="{!(source=='sfdc')}" styleClass="outputField"/>
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:outputPanel layout="none">           
+                <apex:outputText value="REQUIRED" rendered="{!Parent_Account_Name_Empty}" styleClass="invalid" />
+            </apex:outputPanel>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Parent GID"/>
+                <apex:outputPanel layout="none">
+                    <apex:inputText value="{!Parent_Account_GID}" rendered="{!(source!='sfdc')}"/>
+                    <apex:outputText value="{!Parent_Account_GID}" rendered="{!(source=='sfdc')}" styleClass="outputField"/>
+                </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="GID format is invalid" rendered="{!Parent_Account_GID_Invalid}" styleClass="invalid" />
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+
+        <apex:pageBlockSection title="Address" columns="1">
+            <!--<apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="House Number"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputPanel layout="none">           
+                        <apex:inputText value="{!House_Number}" rendered="{!NOT(House_Number_too_Long)}"/>
+                        <apex:inputText value="{!House_Number}" rendered="{!House_Number_too_Long}" styleClass="required"/>
+                    </apex:outputPanel>
+                    <apex:outputPanel layout="none">           
+                        <apex:outputText value="(maximum character/digit: 10)" rendered="{!NOT(House_Number_too_Long)}" styleClass="helpText" />
+                        <apex:outputText value="Cannot be more than 10 characters/digits" rendered="{!House_Number_too_Long}" styleClass="invalid" />
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem> -->
+            
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Street"/>
+                    <apex:outputText value="*" styleClass="redAsterisk"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:pageBlockSectionItem >
+                        <apex:outputPanel layout="none">   
+                            <apex:inputText value="{!Street}" rendered="{!AND(NOT(Street_Empty),NOT(Street_too_Long))}"/>
+                            <apex:inputText value="{!Street}" styleClass="required" rendered="{!Street_Empty}"/>
+                            <apex:inputText value="{!Street}" styleClass="required" rendered="{!Street_too_Long}"/>
+                        </apex:outputPanel>   
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText value="REQUIRED" rendered="{!Street_Empty}" styleClass="invalid" />
+                        <apex:outputText value="Cannot be more than 35 characters" rendered="{!Street_too_Long}" styleClass="invalid" />
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+ 
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Street Line 2"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:pageBlockSectionItem >
+                        <apex:outputPanel layout="none">           
+                            <apex:inputText value="{!Street_2}" rendered="{!NOT(Street_2_too_Long)}"/>
+                            <apex:inputText value="{!Street_2}" styleClass="required" rendered="{!Street_2_too_Long}"/>
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputPanel layout="none">           
+                            <apex:outputText value="Cannot be more than 35 characters" rendered="{!Street_2_too_Long}" styleClass="invalid" />
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+ 
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Street Line 3"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:pageBlockSectionItem >
+                        <apex:outputPanel layout="none">           
+                            <apex:inputText value="{!Street_3}" rendered="{!NOT(Street_3_too_Long)}"/>
+                            <apex:inputText value="{!Street_3}" styleClass="required" rendered="{!Street_3_too_Long}"/>
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputPanel layout="none">           
+                            <apex:outputText value="Cannot be more than 35 characters" rendered="{!Street_3_too_Long}" styleClass="invalid" />
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+ 
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="City"/>
+                    <apex:outputText value="*" styleClass="redAsterisk"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:pageBlockSectionItem >
+                        <apex:inputText value="{!City}" rendered="{!NOT(City_Empty)}"/>
+                        <apex:inputText value="{!City}" styleClass="required" rendered="{!City_Empty}"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText value="REQUIRED" rendered="{!City_Empty}" styleClass="invalid" />
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+           
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Country"/>
+                    <apex:outputText value="*" styleClass="redAsterisk"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:pageBlockSectionItem >
+                        <apex:inputField value="{!CMD_Request__c.Country__c}"     rendered="{!NOT(Country_Empty)}"/>
+                      <apex:inputField value="{!CMD_Request__c.Country__c}"    styleClass="required" rendered="{!Country_Empty}" />
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText value="REQUIRED" rendered="{!Country_Empty}" styleClass="invalid" />
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+             <apex:pageBlockSectionItem >
+                <apex:outputText value="State / Province"/>
+                <apex:inputField value="{!CMD_Request__c.State_Province__c}"  />
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Postal Code"/>
+                <apex:inputText value="{!Postal_Code}"/>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+
+        <apex:pageBlockSection title="Electronic Address" columns="2">
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Website"/>
+                    <apex:outputText value="*" styleClass="redAsterisk"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:inputText value="{!Website}" rendered="{!NOT(Website_Empty)}"/>
+                    <apex:inputText value="{!Website}" rendered="{!Website_Empty}" styleClass="required"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputPanel layout="none">           
+                    <apex:outputText value="e.g., www.nxp.com  (http:// not necessary)"  styleClass="helpText" /> 
+                </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="E-Mail"/>
+                <apex:pageBlockSectionItem >
+                    <apex:inputText value="{!Email}" rendered="{!NOT(Email_Invalid)}"/>
+                    <apex:inputText value="{!Email}" rendered="{!Email_Invalid}" styleClass="required"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputPanel layout="none">           
+                    <apex:outputText value="Email format is invalid." rendered="{!Email_Invalid}" styleClass="invalid" />  
+                </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Telephone"/>
+                <apex:inputText value="{!Telephone}"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputPanel layout="none">           
+                    <apex:outputText value="e.g.New York,  +12121234567"  styleClass="helpText" /> 
+                </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Fax"/>
+                <apex:inputText value="{!Fax}"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputPanel layout="none">           
+                    <apex:outputText value="e.g.Shanghai,  +862187654321"  styleClass="helpText" /> 
+                </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+
+        <apex:pageBlockSection title="Attributes" columns="2">
+
+            <!-- Remove filfillment channel field for child account web form
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Fulfillment Channel"/>
+                    <apex:outputText value="*" styleClass="redAsterisk"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:selectList value="{!Fulfillment_Channel}" rendered="{!NOT(Fulfillment_Channel_Empty)}"  size="1" style="width:158px;">
+                        <apex:selectOption itemLabel=""/>
+                        <apex:selectOptions value="{!Fulfillment_ChannelPicklist}"/>
+                    </apex:selectList>
+                    <apex:selectList value="{!Fulfillment_Channel}" rendered="{!Fulfillment_Channel_Empty}" styleClass="required"  size="1" style="width:158px;">
+                        <apex:selectOption itemLabel=""/>
+                        <apex:selectOptions value="{!Fulfillment_ChannelPicklist}"/>
+                    </apex:selectList>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="REQUIRED" rendered="{!Fulfillment_Channel_Empty}" styleClass="invalid" />
+            </apex:pageBlockSectionItem>-->
+
+        </apex:pageBlockSection>
+
+        <apex:pageBlockSection columns="2">
+
+            <!--<apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Customer Category"/>
+                    <apex:outputText value="*" styleClass="redAsterisk"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem > 
+                    <apex:selectList value="{!Customer_Category}" rendered="{!NOT(Customer_Category_Empty)}" size="1" style="width:158px;">
+                        <apex:selectOption itemLabel=""/>
+                        <apex:selectOptions value="{!Customer_CategoryPicklist}"/>
+                    </apex:selectList>    
+                    <apex:selectList value="{!Customer_Category}" rendered="{!Customer_Category_Empty}" styleClass="required" size="1" style="width:158px;">
+                        <apex:selectOption itemLabel=""/>
+                        <apex:selectOptions value="{!Customer_CategoryPicklist}"/>
+                    </apex:selectList>    
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="REQUIRED" rendered="{!Customer_Category_Empty}" styleClass="invalid" />
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>-->
+
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Role"/>
+                    <apex:outputText value="*" styleClass="redAsterisk"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:selectList value="{!Role}" size="1" rendered="{!NOT(Role_Empty)}" style="width:158px;">
+                        <apex:selectOption itemLabel=""/>
+                        <apex:selectOptions value="{!RolePicklist}"/>
+                    </apex:selectList>
+                    <apex:selectList value="{!Role}" size="1" rendered="{!Role_Empty}" style="width:158px;" styleClass="required">
+                        <apex:selectOption itemLabel=""/>
+                        <apex:selectOptions value="{!RolePicklist}"/>
+                    </apex:selectList>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputPanel layout="none">           
+                    <apex:outputText value="This describes the role of the customer, whom NXP sells to, in the fulfillment channel." rendered="{!NOT(Role_Empty)}" styleClass="helpText" /> 
+                    <apex:outputText value="REQUIRED" rendered="{!Role_Empty}" styleClass="invalid" />
+                </apex:outputPanel> 
+            </apex:pageBlockSectionItem>
+
+        </apex:pageBlockSection>
+
+        <apex:pageBlockSection columns="2">
+            <!--<apex:pageBlockSectionItem >
+                <apex:outputText value="Type"/>
+                <apex:selectList value="{!Type}" size="1" style="width:158px;">
+                    <apex:selectOption itemLabel=""/>
+                    <apex:selectOptions value="{!TypePicklist}"/>
+                </apex:selectList>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+            </apex:pageBlockSectionItem>-->
+
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="CBG"/>
+                    <apex:outputText value="*" styleClass="redAsterisk"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:selectList value="{!Industry_Segment}" size="1" rendered="{!NOT(Industry_Segment_Empty)}">
+                        <apex:selectOption itemLabel=""/>
+                        <apex:selectOptions value="{!Industry_SegmentPicklist}"/>
+                        <apex:actionSupport event="onchange" reRender="SUB_NSCA" status="myStatus1"/>
+                    </apex:selectList>
+
+                    <apex:selectList value="{!Industry_Segment}" size="1" rendered="{!Industry_Segment_Empty}" styleClass="required">
+                        <apex:selectOption itemLabel=""/>
+                        <apex:selectOptions value="{!Industry_SegmentPicklist}"/>
+                        <apex:actionSupport event="onchange" reRender="SUB_NSCA2" status="myStatus1"/>
+                    </apex:selectList>
+
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputPanel layout="none">
+                <apex:outputText value="CBG/sub-CBG – Customer Buying Group of the account is determined by the regional Sales Management Team during the annual CBG review. Approvals from the regional controllers and sales op team are required prior to the update of the CBG/sub-CBG on the account."  styleClass="helpText" />
+             <apex:outputText value="REQUIRED" rendered="{!Industry_Segment_Empty}" styleClass="invalid" />
+                </apex:outputPanel> 
+            </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection >
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Sub CBG"/>
+                    <apex:outputText value="*" styleClass="redAsterisk"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputPanel layout="none">
+                        <apex:selectList value="{!Industry_Sub_Segment}" id="SUB_NSCA" rendered="{!NOT(Industry_Sub_Segment_Empty)}"  style="width:280px;" size="1">
+                            <apex:selectOption itemLabel=""/>
+                            <apex:selectOptions value="{!Industry_Sub_SegmentPicklist}"/>
+                        </apex:selectList>
+                        <apex:selectList value="{!Industry_Sub_Segment}" id="SUB_NSCA2" rendered="{!Industry_Sub_Segment_Empty}" style="width:280px;" styleClass="required" size="1">
+                            <apex:selectOption itemLabel=""/>
+                            <apex:selectOptions value="{!Industry_Sub_SegmentPicklist}"/>
+                        </apex:selectList>
+                        <apex:actionStatus id="myStatus1" starttext="Loading Sub Segment data..." stoptext="" onstart="lockSelect1();" onstop="unlockSelect1();"/>
+                    </apex:outputPanel>
+                    <script>
+                    function lockSelect1() {
+                    lockElement('{!$Component.SUB_NSCA}')
+                    lockElement('{!$Component.SUB_NSCA2}');
+                    }
+                    function unlockSelect1() {
+                    unlockElement('{!$Component.SUB_NSCA}')
+                    unlockElement('{!$Component.SUB_NSCA2}');
+                    }
+                    </script>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>          
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="REQUIRED" rendered="{!Industry_Sub_Segment_Empty}" styleClass="invalid" />
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Region"/>
+                    <apex:outputText value="*" styleClass="redAsterisk"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:selectList value="{!Region}" size="1" rendered="{!NOT(Region_Empty)}" style="width:158px;">
+                        <apex:selectOption itemLabel=""/>
+                        <apex:selectOptions value="{!RegionPicklist}"/>
+                        <apex:actionSupport event="onchange" reRender="AREA_NEW" status="myStatus3"/>
+                    </apex:selectList>
+                    <apex:selectList value="{!Region}" size="1" rendered="{!Region_Empty}" style="width:158px;" styleClass="required">
+                        <apex:selectOption itemLabel=""/>
+                        <apex:selectOptions value="{!RegionPicklist}"/>
+                        <apex:actionSupport event="onchange" reRender="AREA_NEW2" status="myStatus3"/>
+                    </apex:selectList>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputPanel layout="none">           
+                    <apex:outputText value="REQUIRED" rendered="{!Region_Empty}" styleClass="invalid" />
+                </apex:outputPanel> 
+            </apex:pageBlockSectionItem>
+           
+           
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Sales Area"/>
+                    <apex:outputText value="*" styleClass="redAsterisk"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputPanel layout="none">
+                    <apex:selectList value="{!Sales_Area}" id="AREA_NEW" size="1" rendered="{!NOT(Sales_Area_Empty)}" style="width:158px;">
+                        <apex:selectOption itemLabel=""/>
+                        <apex:selectOptions value="{!Sales_AreaPicklist}"/>
+                    </apex:selectList>
+                    <apex:selectList value="{!Sales_Area}" id="AREA_NEW2" size="1" rendered="{!Sales_Area_Empty}" style="width:158px;" styleClass="required">
+                        <apex:selectOption itemLabel=""/>
+                        <apex:selectOptions value="{!Sales_AreaPicklist}"/>
+                    </apex:selectList>
+                    <apex:actionStatus id="myStatus3" starttext="Loading Sales Area data..." stoptext="" onstart="lockSelect3();" onstop="unlockSelect3();"/>
+                    </apex:outputPanel>
+                    <script>
+                    function lockSelect3() {
+                    lockElement('{!$Component.AREA_NEW}')
+                    lockElement('{!$Component.AREA_NEW2}');
+                    }
+                    function unlockSelect3() {
+                    unlockElement('{!$Component.AREA_NEW}')
+                    unlockElement('{!$Component.AREA_NEW2}');
+                    }
+                    </script>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem >
+                <apex:outputPanel layout="none">           
+                    <apex:outputText value="REQUIRED" rendered="{!Sales_Area_Empty}" styleClass="invalid" />
+                </apex:outputPanel> 
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Automotive OEM"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputPanel layout="none">
+                    <apex:inputCheckbox value="{!Automotive_OEM}"/>
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>            
+
+        </apex:pageBlockSection>
+
+        <apex:pageBlockSection columns="1">
+            <apex:pageBlockSectionItem labelStyle="text-align:left;" >
+                <apex:outputPanel layout="none">
+                    <apex:outputText value="Background of This Request" style="font-weight:bold;"/>
+                    <apex:outputText value="* " styleClass="redAsterisk" style="font-weight:bold;"/>
+                    <apex:outputText value=" REQUIRED" rendered="{!Background_of_This_Request_Empty}" styleClass="invalid" />
+                </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputPanel layout="none">
+                    <apex:inputTextarea rendered="{!NOT(Background_of_This_Request_Empty)}" value="{!Background_of_This_Request}" rows="6" cols="50"/>
+                    <apex:inputTextarea rendered="{!Background_of_This_Request_Empty}" style="border-style:inset; border-color:#FFB500;" value="{!Background_of_This_Request}" rows="6" cols="50"/>
+                </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+
+    </apex:pageBlock>
+<!----------------------------------------------------------------------------------->
+<!--    <apex:pageBlock rendered="{!AND(RequestType='Edit SFDC Child Account',AND(NOT(Submitted),NOT(InternalUserSubmission)))}"> -->
+    <apex:pageBlock rendered="{!AND(RequestType='Edit SFDC Child Account',NOT(Submitted))}">
+        <apex:pageBlockButtons >
+            <apex:commandButton action="{!SubmitRequest}" value="Submit Request" styleClass="button"/>
+            <apex:outputText value="*" styleClass="redAsterisk"/>
+            <apex:outputText value=" = Required Field" style="font-size:10px;"/>             
+        </apex:pageBlockButtons>
+
+        <apex:pageBlockSection columns="2">
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Requester Name"/>            
+                <apex:outputPanel layout="none">                           
+                    <apex:inputText value="{!Requester_Name}" rendered="{!(source!='sfdc')}"/>
+                    <apex:outputText value="{!Requester_Name}" rendered="{!(source=='sfdc')}" styleClass="outputField"/>
+                </apex:outputPanel>                           
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Requester Email"/>
+                    <apex:outputText value="*" styleClass="redAsterisk"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputPanel layout="none">                           
+                        <apex:inputText value="{!Requester_Email}" rendered="{!AND(RequesterValidation!='invalid',source!='sfdc')}"/>
+                        <apex:inputText value="{!Requester_Email}" rendered="{!AND(RequesterValidation='invalid',source!='sfdc')}" styleClass="required"/>
+                        <apex:outputText value="{!Requester_Email}" rendered="{!(source=='sfdc')}" styleClass="outputField"/>
+                    </apex:outputPanel>                           
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputPanel layout="none" id="RequesterValidation">                
+                    <apex:outputText value="Requester Validated" rendered="{!(RequesterValidation='valid')}" styleClass="valid"/>
+                    <apex:outputText value="Requester Email is invalid" rendered="{!(RequesterValidation='invalid')}" styleClass="invalid"/>
+                </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="New Owner Name"/>            
+                <apex:outputPanel layout="none">                           
+                    <apex:inputText value="{!New_Owner_Name}"/>
+                </apex:outputPanel>                           
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="New Owner Email"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputPanel layout="none">                           
+                        <apex:inputText value="{!New_Owner_Email}" rendered="{!NOT(New_Owner_Validation='invalid')}"/>
+                        <apex:inputText value="{!New_Owner_Email}" rendered="{!New_Owner_Validation='invalid'}" styleClass="required"/>
+                    </apex:outputPanel>                           
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputPanel layout="none" id="RequesterValidation">                
+                    <apex:outputText value="New Owner Validated" rendered="{!New_Owner_Validation='valid'}" styleClass="valid"/>
+                    <apex:outputText value="Owner Email is invalid" rendered="{!New_Owner_Validation='invalid'}" styleClass="invalid"/>
+                </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+ 
+        </apex:pageBlockSection>
+
+        <apex:pageBlockSection title="Information" columns="2">
+
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="NXP Global ID"/>
+                </apex:pageBlockSectionItem>
+                <apex:outputPanel layout="none">
+                    <apex:inputText value="{!NXP_Global_ID}" rendered="{!(source!='sfdc')}"/>
+                    <apex:outputText value="{!NXP_Global_ID}" rendered="{!(source=='sfdc')}" styleClass="outputField"/>
+                </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Account Name" />
+                    <apex:outputText value="*" styleClass="redAsterisk"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:inputText value="{!Account_Name}" rendered="{!NOT(Account_Name_Invalid)}"/>
+                    <apex:inputText value="{!Account_Name}" styleClass="required" rendered="{!Account_Name_Invalid}"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:outputPanel layout="none">           
+                <apex:outputText value="e.g., BMW (max characters:30)" rendered="{!NOT(Account_Name_Invalid)}" styleClass="helpText" />
+                <apex:outputText value="REQUIRED" rendered="{!Account_Name_Invalid}" styleClass="invalid" />
+                <apex:outputText style="font-weight:800" value="CANNOT BE MORE THAN 30 DIGITS" rendered="{!Account_Name_too_Long}" styleClass="invalid" />
+            </apex:outputPanel>
+
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Legal Name"/>
+                <apex:inputText value="{!Legal_Name}"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="e.g., Bayerische Motoren Werke AG" rendered="{!NOT(Legal_Name_Invalid)}" styleClass="helpText" />
+                <apex:outputText value="Legal Name is required" rendered="{!Legal_Name_Invalid}" styleClass="invalid" />
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+
+        <apex:pageBlockSection title="Parent Account" columns="2">
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Parent Name" />
+                    <apex:outputText value="*" styleClass="redAsterisk"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:inputText value="{!Parent_Account_Name}" rendered="{!NOT(Parent_Account_Name_Empty)}"/>
+                    <apex:inputText value="{!Parent_Account_Name}" styleClass="required" rendered="{!Parent_Account_Name_Empty}"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:outputPanel layout="none">           
+                <apex:outputText value="REQUIRED" rendered="{!Parent_Account_Name_Empty}" styleClass="invalid" />
+            </apex:outputPanel>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Parent GID"/>
+                <apex:inputText value="{!Parent_Account_GID}"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="GID format is invalid" rendered="{!Parent_Account_GID_Invalid}" styleClass="invalid" />
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+
+        <apex:pageBlockSection title="Address" columns="1">
+            <!--<apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="House Number"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputPanel layout="none">           
+                        <apex:inputText value="{!House_Number}" rendered="{!NOT(House_Number_too_Long)}"/>
+                        <apex:inputText value="{!House_Number}" rendered="{!House_Number_too_Long}" styleClass="required"/>
+                    </apex:outputPanel>
+                    <apex:outputPanel layout="none">           
+                        <apex:outputText value="(maximum character/digit: 10)" rendered="{!NOT(House_Number_too_Long)}" styleClass="helpText" />
+                        <apex:outputText value="Cannot be more than 10 characters/digits" rendered="{!House_Number_too_Long}" styleClass="invalid" />
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem> -->
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Street"/>
+                    <apex:outputText value="*" styleClass="redAsterisk"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:pageBlockSectionItem >
+                        <apex:outputPanel layout="none">   
+                            <apex:inputText value="{!Street}" rendered="{!AND(NOT(Street_Empty),NOT(Street_too_Long))}"/>
+                            <apex:inputText value="{!Street}" styleClass="required" rendered="{!Street_Empty}"/>
+                            <apex:inputText value="{!Street}" styleClass="required" rendered="{!Street_too_Long}"/>
+                        </apex:outputPanel>   
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputPanel layout="none">   
+                            <apex:outputText value="REQUIRED" rendered="{!Street_Empty}" styleClass="invalid" />
+                            <apex:outputText value="Cannot be more than 35 characters" rendered="{!Street_too_Long}" styleClass="invalid" />
+                        </apex:outputPanel>   
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+ 
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Street Line 2"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:pageBlockSectionItem >
+                        <apex:outputPanel layout="none">           
+                            <apex:inputText value="{!Street_2}" rendered="{!NOT(Street_2_too_Long)}"/>
+                            <apex:inputText value="{!Street_2}" styleClass="required" rendered="{!Street_2_too_Long}"/>
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputPanel layout="none">           
+                            <apex:outputText value="Cannot be more than 35 characters" rendered="{!Street_2_too_Long}" styleClass="invalid" />
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+ 
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Street Line 3"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:pageBlockSectionItem >
+                        <apex:outputPanel layout="none">           
+                            <apex:inputText value="{!Street_3}" rendered="{!NOT(Street_3_too_Long)}"/>
+                            <apex:inputText value="{!Street_3}" styleClass="required" rendered="{!Street_3_too_Long}"/>
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputPanel layout="none">           
+                            <apex:outputText value="Cannot be more than 35 characters" rendered="{!Street_3_too_Long}" styleClass="invalid" />
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+ 
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="City"/>
+                    <apex:outputText value="*" styleClass="redAsterisk"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:pageBlockSectionItem >
+                        <apex:inputText value="{!City}" rendered="{!NOT(City_Empty)}"/>
+                        <apex:inputText value="{!City}" styleClass="required" rendered="{!City_Empty}"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText value="REQUIRED" rendered="{!City_Empty}" styleClass="invalid" />
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Country"/>
+                    <apex:outputText value="*" styleClass="redAsterisk"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:pageBlockSectionItem >
+                        <apex:inputField value="{!CMD_Request__c.Country__c}"     rendered="{!NOT(Country_Empty)}"/>
+                      <apex:inputField value="{!CMD_Request__c.Country__c}"    styleClass="required" rendered="{!Country_Empty}" />
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText value="REQUIRED" rendered="{!Country_Empty}" styleClass="invalid" />
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="State / Province"/>
+                <apex:inputField value="{!CMD_Request__c.State_Province__c}"  />
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Postal Code"/>
+                <apex:inputText value="{!Postal_Code}"/>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+
+        <apex:pageBlockSection title="Electronic Address" columns="2">
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Website"/>
+                    <apex:outputText value="*" styleClass="redAsterisk"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:inputText value="{!Website}" rendered="{!NOT(Website_Empty)}"/>
+                    <apex:inputText value="{!Website}" rendered="{!Website_Empty}" styleClass="required"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputPanel layout="none">           
+                    <apex:outputText value="e.g., www.nxp.com  (http:// not necessary)"  styleClass="helpText" /> 
+                </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="E-Mail"/>
+                <apex:pageBlockSectionItem >
+                    <apex:inputText value="{!Email}" rendered="{!NOT(Email_Invalid)}"/>
+                    <apex:inputText value="{!Email}" rendered="{!Email_Invalid}" styleClass="required"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputPanel layout="none">           
+                    <apex:outputText value="Email format is invalid." rendered="{!Email_Invalid}" styleClass="invalid" />  
+                </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Telephone"/>
+                <apex:inputText value="{!Telephone}"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputPanel layout="none">           
+                    <apex:outputText value="e.g.New York,  +12121234567"  styleClass="helpText" /> 
+                </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Fax"/>
+                <apex:inputText value="{!Fax}"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputPanel layout="none">           
+                    <apex:outputText value="e.g.Shanghai,  +862187654321"  styleClass="helpText" /> 
+                </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+
+        <apex:pageBlockSection title="Attributes" columns="2">
+
+            <!-- Remove filfillment channel field for child account web form
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Fulfillment Channel"/>
+                    <apex:outputText value="*" styleClass="redAsterisk"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:selectList value="{!Fulfillment_Channel}" rendered="{!NOT(Fulfillment_Channel_Empty)}"  size="1" style="width:158px;">
+                        <apex:selectOption itemLabel=""/>
+                        <apex:selectOptions value="{!Fulfillment_ChannelPicklist}"/>
+                    </apex:selectList>
+                    <apex:selectList value="{!Fulfillment_Channel}" rendered="{!Fulfillment_Channel_Empty}" styleClass="required"  size="1" style="width:158px;">
+                        <apex:selectOption itemLabel=""/>
+                        <apex:selectOptions value="{!Fulfillment_ChannelPicklist}"/>
+                    </apex:selectList>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="REQUIRED" rendered="{!Fulfillment_Channel_Empty}" styleClass="invalid" />
+            </apex:pageBlockSectionItem>-->
+
+        </apex:pageBlockSection>
+
+        <apex:pageBlockSection columns="2">
+
+            <!--<apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Customer Category"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem > 
+                    <apex:selectList value="{!Customer_Category}" rendered="{!NOT(Customer_Category_Empty)}" size="1" style="width:158px;">
+                        <apex:selectOption itemLabel=""/>
+                        <apex:selectOptions value="{!Customer_CategoryPicklist}"/>
+                    </apex:selectList>    
+                    <apex:selectList value="{!Customer_Category}" rendered="{!Customer_Category_Empty}" styleClass="required" size="1" style="width:158px;">
+                        <apex:selectOption itemLabel=""/>
+                        <apex:selectOptions value="{!Customer_CategoryPicklist}"/>
+                    </apex:selectList>    
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="REQUIRED" rendered="{!Customer_Category_Empty}" styleClass="invalid" />
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>-->
+
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Role"/>
+                    <apex:outputText value="*" styleClass="redAsterisk"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:selectList value="{!Role}" size="1" rendered="{!NOT(Role_Empty)}" style="width:158px;">
+                        <apex:selectOption itemLabel=""/>
+                        <apex:selectOptions value="{!RolePicklist}"/>
+                    </apex:selectList>
+                    <apex:selectList value="{!Role}" size="1" rendered="{!Role_Empty}" style="width:158px;" styleClass="required">
+                        <apex:selectOption itemLabel=""/>
+                        <apex:selectOptions value="{!RolePicklist}"/>
+                    </apex:selectList>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputPanel layout="none">           
+                    <apex:outputText value="This describes the role of the customer, whom NXP sells to, in the fulfillment channel." rendered="{!NOT(Role_Empty)}" styleClass="helpText" /> 
+                    <apex:outputText value="REQUIRED" rendered="{!Role_Empty}" styleClass="invalid" />
+                </apex:outputPanel> 
+            </apex:pageBlockSectionItem>
+
+        </apex:pageBlockSection>
+
+        <apex:pageBlockSection columns="2">
+            <!--<apex:pageBlockSectionItem >
+                <apex:outputText value="Type"/>
+                <apex:selectList value="{!Type}" size="1" style="width:158px;">
+                    <apex:selectOption itemLabel=""/>
+                    <apex:selectOptions value="{!TypePicklist}"/>
+                </apex:selectList>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+            </apex:pageBlockSectionItem>-->
+
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="CBG"/>
+                    <apex:outputText value="*" styleClass="redAsterisk"/>
+                </apex:pageBlockSectionItem>
+                
+                <apex:pageBlockSectionItem >
+                    <apex:selectList value="{!Industry_Segment}" size="1" rendered="{!NOT(Industry_Segment_Empty)}">
+                        <apex:selectOption itemLabel=""/>
+                        <apex:selectOptions value="{!Industry_SegmentPicklist}"/>
+                        <apex:actionSupport event="onchange" reRender="SUB_ESCA" status="myStatus2"/>
+                    </apex:selectList>
+
+                    <apex:selectList value="{!Industry_Segment}" size="1" rendered="{!Industry_Segment_Empty}" styleClass="required">
+                        <apex:selectOption itemLabel=""/>
+                        <apex:selectOptions value="{!Industry_SegmentPicklist}"/>
+                        <apex:actionSupport event="onchange" reRender="SUB_ESCA2" status="myStatus2"/>
+                    </apex:selectList>
+
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputPanel layout="none">
+                    <apex:outputText value="CBG/sub-CBG – Customer Buying Group of the account is determined by the regional Sales Management Team during the annual CBG review. Approvals from the regional controllers and sales op team are required prior to the update of the CBG/sub-CBG on the account."  styleClass="helpText" />
+                    <apex:outputText value="REQUIRED" rendered="{!Industry_Segment_Empty}" styleClass="invalid" />
+                </apex:outputPanel> 
+            </apex:pageBlockSectionItem>
+           </apex:pageBlockSection>
+        <apex:pageBlockSection >
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Sub CBG"/>
+                    <apex:outputText value="*" styleClass="redAsterisk"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputPanel layout="none">
+                        <apex:selectList value="{!Industry_Sub_Segment}" id="SUB_ESCA" rendered="{!NOT(Industry_Sub_Segment_Empty)}" style="width:280px;" size="1">
+                            <apex:selectOption itemLabel=""/>
+                            <apex:selectOptions value="{!Industry_Sub_SegmentPicklist}"/>
+                        </apex:selectList>
+                        <apex:selectList value="{!Industry_Sub_Segment}" id="SUB_ESCA2" rendered="{!Industry_Sub_Segment_Empty}" style="width:280px;" styleClass="required" size="1">
+                            <apex:selectOption itemLabel=""/>
+                            <apex:selectOptions value="{!Industry_Sub_SegmentPicklist}"/>
+                        </apex:selectList>
+                        <apex:actionStatus id="myStatus2" startText="Loading Sub Segment data..." stopText="" onstart="lockSelect2();" onstop="unlockSelect2();"/>
+                    </apex:outputPanel>
+                    <script>
+                    function lockSelect2() {
+                    lockElement('{!$Component.SUB_ESCA}')
+                    lockElement('{!$Component.SUB_ESCA2}');
+                    }
+                    function unlockSelect2() {
+                    unlockElement('{!$Component.SUB_ESCA}')
+                    unlockElement('{!$Component.SUB_ESCA2}');
+                    }
+                    </script>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="REQUIRED" rendered="{!Industry_Sub_Segment_Empty}" styleClass="invalid" />
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Region"/>
+                    <apex:outputText value="*" styleClass="redAsterisk"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:selectList value="{!Region}" size="1" rendered="{!NOT(Region_Empty)}" style="width:158px;">
+                        <apex:selectOption itemLabel=""/>
+                        <apex:selectOptions value="{!RegionPicklist}"/>
+                        <apex:actionSupport event="onchange" reRender="AREA_ED" status="myStatus4"/>
+                    </apex:selectList>
+                    <apex:selectList value="{!Region}" size="1" rendered="{!Region_Empty}" style="width:158px;" styleClass="required">
+                        <apex:selectOption itemLabel=""/>
+                        <apex:selectOptions value="{!RegionPicklist}"/>
+                        <apex:actionSupport event="onchange" reRender="AREA_ED2" status="myStatus4"/>
+                    </apex:selectList>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputPanel layout="none">           
+                    <apex:outputText value="REQUIRED" rendered="{!Region_Empty}" styleClass="invalid" />
+                </apex:outputPanel> 
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Sales Area"/>
+                    <apex:outputText value="*" styleClass="redAsterisk"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputPanel layout="none">
+                    <apex:selectList value="{!Sales_Area}" id="AREA_ED" size="1" rendered="{!NOT(Sales_Area_Empty)}" style="width:158px;">
+                        <apex:selectOption itemLabel=""/>
+                        <apex:selectOptions value="{!Sales_AreaPicklist}"/>
+                    </apex:selectList>
+                    <apex:selectList value="{!Sales_Area}" id="AREA_ED2" size="1" rendered="{!Sales_Area_Empty}" style="width:158px;" styleClass="required">
+                        <apex:selectOption itemLabel=""/>
+                        <apex:selectOptions value="{!Sales_AreaPicklist}"/>
+                    </apex:selectList>
+                    <apex:actionStatus id="myStatus4" startText="Loading Sales Area data..." stopText="" onstart="lockSelect4();" onstop="unlockSelect4();"/>
+                    <script>
+                        function lockSelect4() {
+                        lockElement('{!$Component.AREA_ED}')
+                        lockElement('{!$Component.AREA_ED2}');
+                        }
+                        function unlockSelect4() {
+                        unlockElement('{!$Component.AREA_ED}')
+                        unlockElement('{!$Component.AREA_ED2}');
+                        }
+                    </script>
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputPanel layout="none">           
+                    <apex:outputText value="REQUIRED" rendered="{!Sales_Area_Empty}" styleClass="invalid" />
+                </apex:outputPanel> 
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Automotive OEM"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputPanel layout="none">
+                    <apex:inputCheckbox value="{!Automotive_OEM}"/>
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            
+        </apex:pageBlockSection>
+        
+        <apex:pageBlockSection columns="1">
+            <apex:pageBlockSectionItem labelStyle="text-align:left;" >
+                <apex:outputPanel layout="none">
+                    <apex:outputText value="Background of This Request" style="font-weight:bold;"/>
+                    <apex:outputText value="* " styleClass="redAsterisk" style="font-weight:bold;"/>
+                    <apex:outputText value=" REQUIRED" rendered="{!Background_of_This_Request_Empty}" styleClass="invalid" />
+                </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputPanel layout="none">
+                    <apex:inputTextarea rendered="{!NOT(Background_of_This_Request_Empty)}" value="{!Background_of_This_Request}" rows="6" cols="50"/>
+                    <apex:inputTextarea rendered="{!Background_of_This_Request_Empty}" style="border-style:inset; border-color:#FFB500;" value="{!Background_of_This_Request}" rows="6" cols="50"/>
+                </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+
+    </apex:pageBlock>
+<!----------------------------------------------------------------------------------->
+<!--     
+    <apex:pageBlock rendered="{!AND( Submitted,NOT(Confirmed))}">
+        <apex:pageBlockSection columns="1">
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Please check your email for verification code."/>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+        <apex:pageBlockSection columns="2">
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:inputText value="{!VerificationCodeInput}" rendered="{!NOT(VerificationCodeInvalid)}"/>
+                    <apex:inputText value="{!VerificationCodeInput}" styleClass="required" rendered="{!VerificationCodeInvalid}"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Verification Code Incorrect" styleClass="invalid" rendered="{!VerificationCodeInvalid}"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+        <apex:pageBlockSection columns="1">
+            <apex:pageBlockSectionItem >
+                <apex:commandButton action="{!ConfirmRequest}" value="Confirm Verification Code"/>  
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+
+    <apex:pageBlock rendered="{!Confirmed}">
+        <apex:pageBlockSection columns="1">
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Your request has been succesfully submitted."/>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+        <apex:pageBlockSection columns="1">
+            <apex:pageBlockSectionItem >
+                <apex:commandButton action="{!Refresh}" value="OK"/>  
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+------------------------------------------------------------->
+    <apex:pageBlock rendered="{!AND(Submitted,NOT(InternalUserSubmission))}">
+        <apex:pageBlockSection columns="1">
+            <apex:pageBlockSectionItem >
+                <apex:outputPanel layout="none">
+                    <apex:outputText value="In order to proceed with your request, "/>
+                    <apex:outputText value="the email verificatipon process is required."/>
+                    <BR/>
+                    <apex:outputText value="Please check your inbox for verification email now."/>
+                    <BR/>
+                </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+        <apex:pageBlockSection columns="1">
+            <apex:pageBlockSectionItem >
+                <apex:commandButton action="{!Refresh}" value="File New Request"/>  
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+ <!-- --------------------------------------------------------------- -->   
+    <apex:pageBlock rendered="{!AND(Submitted,InternalUserSubmission)}">
+        <apex:pageBlockSection columns="1">
+            <apex:pageBlockSectionItem >
+                <apex:outputPanel layout="none">
+                    <apex:outputText value="Your CMD Request has been submitted for approval. "/>
+                    <BR/>
+                </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+<!-- 
+        <apex:pageBlockSection columns="1">
+            <apex:pageBlockSectionItem >
+                <apex:commandButton action="{!Refresh}" value="File New Request"/>  
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+-->
+    </apex:pageBlock>
+ <!-- --------------------------------------------------------------- -->   
+    </apex:outputPanel>
+    </TD></TR></TABLE>
+</apex:form> 
+</apex:page>

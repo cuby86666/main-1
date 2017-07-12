@@ -1,0 +1,5 @@
+<apex:page cache="false"> <!-- controller="TrackingSheetController" action="{!landingPageRegionRedirect}">-->
+    <head>
+        <meta http-equiv="refresh" content="1;url=https://nxp--c.eu1.visual.force.com/apex/TrackingSheet?id=0012000000XkaxJ"/>
+    </head>
+</apex:page>

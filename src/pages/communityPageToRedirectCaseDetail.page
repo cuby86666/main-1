@@ -1,0 +1,6 @@
+<apex:page showHeader="false" Sidebar="false"  standardController="Case">
+    <script>
+        window.top.location.href='/s/case/{!Case.Id}';
+    </script>
+
+</apex:page>

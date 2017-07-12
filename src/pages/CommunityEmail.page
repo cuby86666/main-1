@@ -1,0 +1,50 @@
+<apex:page standardcontroller="Case" showHeader="false" sidebar="false" extensions="CommunityEmailController">
+    <apex:form >
+        <apex:pageBlock >
+            <center>
+                <apex:commandLink styleClass="btn"  style="text-decoration:none;padding:4px;" target="_top" value="Send an Email" action="{!sendAnEmail}"/>
+            </center>
+            
+            <apex:pageBlockTable value="{!sortedEmails}" var="email" rendered="{!hasEmailMessages}" >
+                <apex:column headerValue="Action" width="100px">
+                    <apex:commandLink style="text-decoration: none;" target="_top" action="{!replyEmail}" >
+                        <font color="#0645AD">Reply</font>
+                        <apex:param name="emailId" value="{!email.id}"/>
+                    </apex:commandLink>
+                    <font color="#C0C0C0"> | </font>
+                    <apex:commandLink style="text-decoration: none;" target="_top" action="{!replyAllEmail}" >
+                        <font color="#0645AD">To All </font>
+                        <apex:param name="emailId" value="{!email.id}"/>
+                    </apex:commandLink>
+                    <font color="#C0C0C0">  | </font>
+                    <apex:commandLink style="text-decoration: none;" target="_top" action="{!deleteEmail}" onclick="return confirmDelete();">
+                        <font color="#0645AD">Del </font>
+                        <apex:param name="emailId" value="{!email.id}"/>
+                    </apex:commandLink>
+                </apex:column>
+                <apex:column value="{!email.status}"/>
+                <apex:column >
+                    <apex:outputPanel layout="none" rendered="{!!email.incoming}">
+                        <img src="/img/emailOutbound.gif" alt="Outbound" title="Outbound" height="13" width="16"/>
+                    </apex:outputPanel>
+                    <apex:outputPanel layout="none" rendered="{!email.incoming}">
+                        <img src="/img/emailInbound.gif" alt="Inbound" title="Inbound" height="13" width="16"/>
+                    </apex:outputPanel>
+                </apex:column>
+                <apex:column headervalue="Subject" >
+                    <apex:outputLink target="_top" value="/{!email.id}">{!email.Subject}</apex:outputLink>
+                    <br/>
+                   <i>
+                     <apex:outputText value="{!LEFT(email.TextBody,60)}"/>
+                   </i>
+                </apex:column>
+       
+                      <apex:column value="{!email.FromAddress}" />
+                        <apex:column value="{!email.ToAddress}" /> 
+                        
+                <apex:column value="{!email.MessageDate}"  />
+            </apex:pageBlockTable>
+            <apex:outputLabel value="No Emails Available" rendered="{!!hasEmailMessages}"/>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

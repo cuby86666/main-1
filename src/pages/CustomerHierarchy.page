@@ -1,0 +1,43 @@
+<!--  ----------------------------------------------------------------------------------------------------
+@Created By :       Nisha Agrawal
+@Created Date:      27 May 2013
+@Description:       VF page to Display Customer Hierarchy using jQuery tree view Component - (CMD Hub App)
+					This page will be embedded in section of Customer View Layouts  
+					
+------------------------------------------------------------------------------------------------------------		-->
+<apex:page standardController="Customer__c" extensions="CustomerHierarchyController" showHeader="false" sidebar="false" standardStylesheets="false" >
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <apex:includeScript value="{!URLFOR($Resource.treeview_lib, 'jquery.js')}"  />
+    <apex:includeScript value="{!URLFOR($Resource.treeview_lib, 'jquery.cookie.js')}"  />
+    <apex:includeScript value="{!URLFOR($Resource.treeview_lib, 'jquery.hotkeys.js')}"  />
+    <apex:includeScript value="{!URLFOR($Resource.treeview_lib, 'jquery.jstree.js')}"  />
+    
+    <apex:stylesheet value="{!URLFOR($Resource.treeview_lib, 'style.css')}"  />    
+    
+    <script type="text/javascript"> 
+     
+        $j = jQuery.noConflict();
+
+        $j(function () 
+        {
+            $j("#hierarchy").jstree(
+            { 
+                "themes" : {  "theme" : "classic", "dots" : true, "icons" : false },
+
+                "json_data" : {!strHierarchyJson} ,
+                
+                "plugins" : [ "themes", "json_data", "ui" ]
+        }
+        );
+    });
+</script>
+</head>
+
+<body id="treeview_body">
+	<div style="padding:5px;max-height:130px;">
+		<div id="hierarchy" class="treeview" style="width:100%; height:130px; max-height:130px;"></div>
+	</div>
+</body>
+</apex:page>

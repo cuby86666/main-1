@@ -1,0 +1,328 @@
+<!----------------------------------------------------------------------------------------------------------
+Name        :     UserRegistration
+Author      :     Syed Jameel
+Date        :     17 May,2011
+Description :     To Register a MODELN User
+---------------------------------------------------------------------------------------------------------->
+<apex:page controller="UserRegistrationController" sidebar="false" showHeader="false">
+<head>
+    <style>
+        .startStyle{
+            font-size:12px;
+            font-weight:bold;
+            color:red;
+        }     
+    </style>
+</head>
+<apex:image id="logo" value="{!$Resource.NXP_logo}" style="align: left;" height="100" width="233"/>
+<apex:sectionHeader subtitle="ModelN User Registration Form"/>
+<apex:form id="frm">
+<div id="Message" style="width:710px; padding-left:25%;align:center;font-weight:bold ">
+    <apex:outputLabel rendered="{!changeAcc}" value=" Please Note: For Change Access, please fill in the complete profile which would replace the current profile."/>
+</div>
+
+<div style="width:710px; padding-left:25%; ">
+<apex:pageBlock title="STEP - V : Final Step" rendered="{!success}">
+    <apex:pageMessages escape="true"/>
+   <center><apex:commandButton value="New Registration" action="{!register}" /></center>
+</apex:pageBlock>
+</div>
+<!--- New Page Added To Display A Message -->
+<div style="width:600px; padding-left:25%; ">
+<apex:pageBlock id="pb0" rendered="{!First}" title="Step - I : Access Type">
+    <apex:actionStatus startText="Please Wait..." id="status" startStyleClass="startStyle"/>    
+    <table width = "75%" align = "center">
+        <tr>
+            <td width ="8%" ><b>Access Type </b></td>
+            <td width ="10%" ><apex:selectList value="{!accesstype}" multiselect="false" size="1">
+                    <apex:selectOption itemLabel="New User" itemValue="New User"></apex:selectOption>
+                    <apex:selectOption itemLabel="Change Access" itemValue="Change Access"></apex:selectOption>
+                </apex:selectList></td>
+        </tr>
+    </table>        
+    <center><apex:commandButton value="Next" action="{!nextAType}" reRender="frm" status="status"/></center>
+</apex:pageBlock>
+</div>
+<div style="width:600px; padding-left:25%; ">
+<apex:pageBlock id="pb1" rendered="{!Flag}" title="Step - II : User Type">
+    <apex:actionStatus startText="Please Wait..." id="status" startStyleClass="startStyle"/>    
+    <table width = "75%" align = "center">
+        <tr>
+            <td width ="8%" ><b>User Type </b></td>
+            <td width ="10%" ><apex:selectList value="{!usertype}" multiselect="false" size="1">
+                    <apex:selectOptions value="{!items}"/>
+                </apex:selectList></td>
+        </tr>
+    </table>
+    <br></br>     
+    <center>
+    <apex:commandButton value="Back" action="{!back}"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <apex:commandButton value="Next" action="{!Registration}" reRender="frm" status="status"/>
+    </center>
+</apex:pageBlock>
+</div>
+
+<div style="width:800px; padding-left:25%; ">
+<apex:pageBlock id="nxp" rendered="{!nxp}" title="Step - III : User Registration">
+    <apex:pageMessages escape="false" />    
+    <apex:pageBlockSection id="pbs2" columns="1">    
+        <apex:inputField value="{!modelN.First_Name__c}" required="false"/>
+        <apex:inputField value="{!modelN.Last_Name__c}" required="false"/> 
+        <apex:inputField value="{!modelN.Email_Address__c}" required="false" />
+        <apex:inputField value="{!modelN.Region__c}" required="false"/>
+        <apex:inputField value="{!modelN.Manager_Name__c}" required="false"/>
+        <apex:inputField value="{!modelN.Manager_email_address__c}" required="false"/>
+        <apex:inputField value="{!modelN.Tel_Mobile__c}" required="false"/>
+        <apex:inputField value="{!modelN.Roles_Category__c}" required="false"/>
+        <apex:inputField value="{!modelN.Role_Sub_Category__c}" required="false"/>
+        <apex:inputField value="{!modelN.BU__c}" required="false"/>
+        <apex:inputField value="{!modelN.MAGS__c}" required="false"/>
+        <apex:inputField value="{!modelN.Read_Org__c}" required="false"/>
+        <apex:inputField value="{!modelN.Read_Org_Sub_Category__c}" required="false"/>
+        <apex:inputField value="{!modelN.Edit_Org__c}" required="false"/>
+        <apex:inputField value="{!modelN.Edit_Org_Sub_Category__c}" required="false"/>
+        <!------<apex:inputField value="{!modelN.Role_Hierarchy_Region__c}" required="false" id="RHRN"/>
+                <apex:inputField value="{!modelN.Role_Hierarchy_Sub_Region__c}" required="false" id="RHSN"/>
+                <apex:inputField value="{!modelN.Role_Hierarchy_Country_Region__c}" required="false" id="RHCN"/>
+                <apex:inputField value="{!modelN.Role_Hierarchy_Country_Sub_Region__c}" required="false" id="RHCSN"/>
+        -------->
+        <apex:inputField value="{!modelN.Requester_Email_Address__c}" required="false"/>
+        <apex:pageBlockSectionItem >
+        <apex:outputLabel value="" />
+        <a href="https://nxp.box.net/shared/opdxy0jdh6ium0xd34td" target="_blank">Click here for the Authorized Approvers List</a>
+        </apex:pageBlockSectionItem>
+        <apex:inputField style="width:300px" value="{!modelN.Comments__c}" required="false"/>
+    </apex:pageBlockSection><br/>
+    
+    <center>
+    <apex:commandButton value="Back" action="{!back}"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <apex:commandButton value="Next" action="{!nxtnxp}"/>
+    </center>
+    
+    
+</apex:pageBlock>
+</div>
+<div style="width:800px; padding-left:25%; ">
+<apex:pageBlock id="disti" rendered="{!disti}" title="Step - III : User Registration">
+    <apex:pageMessages escape="false"/>        
+        <apex:pageBlockSection id="pbs2" columns="1"  >
+        <apex:inputField value="{!modelN.First_Name__c}" required="false"/>
+        <apex:inputField value="{!modelN.Last_Name__c}" required="false"/> 
+        <apex:inputField value="{!modelN.Email_Address__c}" required="false" />
+        <apex:inputField value="{!modelN.Company_Name__c}" required="false"/>
+        <apex:inputField value="{!modelN.Company_Address__c}" style="width:300px; height:75px;" required="false"/>
+        <apex:inputField value="{!modelN.Job_Title__c}" required="false"/>
+        <!----------<apex:inputField value="{!modelN.Read_Org__c}" required="false"/> ------>
+        <!----------<apex:inputField value="{!modelN.Edit_Org__c}" required="false"/> ------>
+       <apex:inputField value="{!modelN.Roles_Disti_new__c}" required="false"/>
+        <apex:inputField value="{!modelN.Disti_Role_Hierarchy__c}" required="false"/>
+        <apex:inputField value="{!modelN.Requester_Email_Address__c}" required="false"/>
+        <apex:pageBlockSectionItem >
+        <apex:outputLabel value="" />
+        <a href="https://nxp.box.net/shared/opdxy0jdh6ium0xd34td" target="_blank">Click here for the Authorized Approvers List</a>
+        </apex:pageBlockSectionItem>
+        <apex:inputField style="width:300px" value="{!modelN.Comments__c}" required="false"/>
+
+    </apex:pageBlockSection><br/>
+    <center>
+    <apex:commandButton value="Back" action="{!back}"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <apex:commandButton value="Next" action="{!nxtdisti}"/>
+    </center>
+</apex:pageBlock>
+</div>
+<div style="width:800px; padding-left:25%; ">
+<apex:pageBlock id="Sales" rendered="{!Sales}" title="Step - III : User Registration">
+    <apex:pageMessages escape="false"/>
+        <apex:pageBlockSection id="pbs3" columns="1"  >
+        <apex:inputField value="{!modelN.First_Name__c}" required="false"/>
+        <apex:inputField value="{!modelN.Last_Name__c}" required="false"/> 
+        <apex:inputField value="{!modelN.Email_Address__c}" required="false" />
+        <apex:inputField value="{!modelN.Company_Name__c}" required="false"/>
+        <apex:inputField value="{!modelN.Company_Address__c}" style="width:300px; height:75px;" required="false"/>
+        <apex:inputField value="{!modelN.Job_Title__c}" required="false"/>
+        <apex:inputField value="{!modelN.Manager_Name__c}" required="false"/>
+        <apex:inputField value="{!modelN.Manager_email_address__c}" required="false"/>
+        <apex:inputField value="{!modelN.Tel_Mobile__c}" required="false"/>
+        <apex:inputField value="{!modelN.Read_Org__c}" required="false"/>
+        <apex:inputField value="{!modelN.Edit_Org__c}" required="false"/>
+        <apex:inputField value="{!modelN.Role_Hierarchy_Region__c}" required="false" id="RHRS"/>
+        <apex:inputField value="{!modelN.Role_Hierarchy_Sub_Region__c}" required="false" id="RHSS"/>
+        <apex:inputField value="{!modelN.Role_Hierarchy_Country_Region__c}" required="false" id="RHCS"/>
+        <apex:inputField value="{!modelN.Role_Hierarchy_Country_Sub_Region__c}" required="false" id="RHCSS"/>
+        <apex:inputField value="{!modelN.Requester_Email_Address__c}" required="false"/>
+        <apex:pageBlockSectionItem >
+        <apex:outputLabel value="" />
+        <a href="https://nxp.box.net/shared/opdxy0jdh6ium0xd34td" target="_blank">Click here for the Authorized Approvers List</a>
+        </apex:pageBlockSectionItem>
+        <apex:inputField style="width:300px" value="{!modelN.Comments__c}" required="false"/>
+
+    </apex:pageBlockSection><br/>
+    <center>
+    <apex:commandButton value="Back" action="{!back}" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <apex:commandButton value="Next" action="{!nxtsales}"/>
+    </center>
+</apex:pageBlock>
+</div>
+
+<div style="width:800px; padding-left:25%; ">
+<apex:pageBlock id="Var" rendered="{!var}" title="Step - III : User Registration">
+    <apex:pageMessages escape="false"/>
+        <apex:pageBlockSection id="pbs4" columns="1"  >
+        <apex:inputField value="{!modelN.First_Name__c}" required="false"/>
+        <apex:inputField value="{!modelN.Last_Name__c}" required="false"/> 
+        <apex:inputField value="{!modelN.Email_Address__c}" required="false" />
+        <apex:inputField value="{!modelN.Company_Name__c}" required="false"/>
+        <apex:inputField value="{!modelN.Company_Address__c}" style="width:300px; height:75px;" required="false"/>
+        <apex:inputField value="{!modelN.Job_Title__c}" required="false"/>
+        <apex:inputField value="{!modelN.Tel_Mobile__c}" required="false"/>
+        <apex:inputField value="{!modelN.Assigned_Org_VAR__c}" required="false"/>
+        <!-----
+            <apex:inputField value="{!modelN.Manager_Name__c}" required="false"/>
+            <apex:inputField value="{!modelN.Manager_email_address__c}" required="false"/>
+            <apex:inputField value="{!modelN.Read_Org__c}" required="false"/>
+            <apex:inputField value="{!modelN.Edit_Org__c}" required="false"/>
+            <apex:inputField value="{!modelN.Role_Hierarchy_Region__c}" required="false" id="RHRV"/>
+            <apex:inputField value="{!modelN.Role_Hierarchy_Sub_Region__c}" required="false" id="RHSV"/>
+            <apex:inputField value="{!modelN.Role_Hierarchy_Country_Region__c}" required="false" id="RHCV"/>
+            <apex:inputField value="{!modelN.Role_Hierarchy_Country_Sub_Region__c}" required="false" id="RHCSV"/>
+        ------>
+        <apex:inputField value="{!modelN.Requester_Email_Address__c}" required="false"/>
+        <apex:pageBlockSectionItem >
+        <apex:outputLabel value="" />
+        <a href="https://nxp.box.net/shared/opdxy0jdh6ium0xd34td" target="_blank">Click here for the Authorized Approvers List</a>
+        </apex:pageBlockSectionItem>
+        <apex:inputField style="width:300px" value="{!modelN.Comments__c}" required="false"/>
+
+    </apex:pageBlockSection><br/>
+    <center>
+    <apex:commandButton value="Back" action="{!back}" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <apex:commandButton value="Next" action="{!nxtvar}" reRender="frm"/>
+    </center>
+</apex:pageBlock>
+</div>
+
+<div style="width:800px; padding-left:25%; ">
+<apex:pageBlock id="nxpoutput" title="Step - IV : Confirmation" rendered="{!nextnxp}">
+<apex:pageMessages escape="false"/>    
+    <apex:pageBlockSection id="pbs2" columns="1">    
+        <apex:outputField value="{!modelN.First_Name__c}" />
+        <apex:outputField value="{!modelN.Last_Name__c}" /> 
+        <apex:outputField value="{!modelN.Email_Address__c}" />
+        <apex:outputField value="{!modelN.Region__c}" />
+        <apex:outputField value="{!modelN.Manager_Name__c}"/>
+        <apex:outputField value="{!modelN.Manager_email_address__c}"/>
+        <apex:outputField value="{!modelN.Tel_Mobile__c}"/>
+        <apex:outputField value="{!modelN.Roles_Category__c}"/>
+        <apex:outputField value="{!modelN.Role_Sub_Category__c}"/>
+        <apex:outputField value="{!modelN.BU__c}"/>
+        <apex:outputField value="{!modelN.MAGS__c}" />
+        <apex:outputField value="{!modelN.Read_Org__c}" />
+        <apex:outputField value="{!modelN.Read_Org_Sub_Category__c}"/>
+        <apex:outputField value="{!modelN.Edit_Org__c}" />
+        <apex:outputField value="{!modelN.Edit_Org_Sub_Category__c}"/>
+        <!-----
+            <apex:outputField value="{!modelN.Role_Hierarchy_Region__c}"/>
+            <apex:outputField value="{!modelN.Role_Hierarchy_Sub_Region__c}"/>
+            <apex:outputField value="{!modelN.Role_Hierarchy_Country_Region__c}"/>
+            <apex:outputField value="{!modelN.Role_Hierarchy_Country_Sub_Region__c}"/>
+        ---->
+        <apex:outputField value="{!modelN.Requester_Email_Address__c}" />
+        <apex:outputField style="width:300px" value="{!modelN.Comments__c}" />
+        
+    </apex:pageBlockSection><br/>
+        <center>
+    <apex:commandButton value="Back" action="{!backnxp}"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <apex:commandButton value="Next" action="{!save}" reRender="frm"/>
+    </center>
+</apex:pageBlock>
+</div>
+
+<div style="width:800px; padding-left:25%; ">
+<apex:pageBlock id="distioutput" title="Step - IV : Confirmation" rendered="{!nextdisti}">
+<apex:pageMessages />    
+<apex:pageBlockSection id="pbs2" columns="1">
+        <apex:outputField value="{!modelN.First_Name__c}"/>
+        <apex:outputField value="{!modelN.Last_Name__c}" />
+        <apex:outputField value="{!modelN.Email_Address__c}" /> 
+        <apex:outputField value="{!modelN.Company_Name__c}"/>
+        <apex:outputField value="{!modelN.Company_Address__c}" style="width:300px; height:75px;"/>
+        <apex:outputField value="{!modelN.Job_Title__c}"/>
+        <!----<apex:outputField value="{!modelN.Read_Org__c}" />---->
+        <!----<apex:outputField value="{!modelN.Edit_Org__c}" />---->
+        <apex:outputField value="{!modelN.Roles_Disti_new__c}"/>
+        <apex:outputField value="{!modelN.Disti_Role_Hierarchy__c}"/>
+        <apex:outputField value="{!modelN.Requester_Email_Address__c}" />
+        <apex:outputField style="width:300px" value="{!modelN.Comments__c}" />
+
+    </apex:pageBlockSection><br/>
+    <center>
+    <apex:commandButton value="Back" action="{!backdisti}"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <apex:commandButton value="Next" action="{!save}" reRender="frm"/>
+    </center>
+</apex:pageBlock>
+</div>
+
+<div style="width:800px; padding-left:25%; ">
+<apex:pageBlock id="salesoutput" title="Step - IV : Confirmation" rendered="{!nextsales}">
+<apex:pageMessages />
+<apex:pageBlockSection id="pbs3" columns="1">
+        <apex:outputField value="{!modelN.First_Name__c}"/>
+        <apex:outputField value="{!modelN.Last_Name__c}" />
+        <apex:outputField value="{!modelN.Email_Address__c}" /> 
+        <apex:outputField value="{!modelN.Company_Name__c}"/>
+        <apex:outputField value="{!modelN.Company_Address__c}" style="width:300px; height:75px;"/>
+        <apex:outputField value="{!modelN.Job_Title__c}"/>
+        <apex:outputField value="{!modelN.Manager_Name__c}"/>
+        <apex:outputField value="{!modelN.Manager_email_address__c}"/>
+        <apex:outputField value="{!modelN.Tel_Mobile__c}"/>
+        <apex:outputField value="{!modelN.Read_Org__c}" />
+        <apex:outputField value="{!modelN.Edit_Org__c}" />
+        <apex:outputField value="{!modelN.Role_Hierarchy_Region__c}"/>
+        <apex:outputField value="{!modelN.Role_Hierarchy_Sub_Region__c}"/>
+        <apex:outputField value="{!modelN.Role_Hierarchy_Country_Region__c}"/>
+        <apex:outputField value="{!modelN.Role_Hierarchy_Country_Sub_Region__c}"/>
+        <apex:outputField value="{!modelN.Requester_Email_Address__c}" />
+        <apex:outputField style="width:300px" value="{!modelN.Comments__c}" />
+
+    </apex:pageBlockSection><br/>
+    <center>
+    <apex:commandButton value="Back" action="{!backsales}"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <apex:commandButton value="Next" action="{!save}" reRender="frm"/>
+    </center>
+</apex:pageBlock>
+</div>
+
+<div style="width:800px; padding-left:25%; ">
+<apex:pageBlock id="varoutput" title="Step - IV : Confirmation" rendered="{!nextvar}">
+<apex:pageMessages />
+<apex:pageBlockSection id="pbs4" columns="1">
+        <apex:outputField value="{!modelN.First_Name__c}"/>
+        <apex:outputField value="{!modelN.Last_Name__c}" />
+        <apex:outputField value="{!modelN.Email_Address__c}" /> 
+        <apex:outputField value="{!modelN.Company_Name__c}"/>
+        <apex:outputField value="{!modelN.Company_Address__c}" style="width:300px; height:75px;"/>
+        <apex:outputField value="{!modelN.Job_Title__c}"/>
+        <apex:outputField value="{!modelN.Tel_Mobile__c}"/>
+        <apex:outputField value="{!modelN.Assigned_Org_VAR__c}"/>
+        <apex:outputField value="{!modelN.Requester_Email_Address__c}" />
+        <apex:outputField style="width:300px" value="{!modelN.Comments__c}" />
+        <!----
+            <apex:outputField value="{!modelN.Manager_Name__c}"/>
+            <apex:outputField value="{!modelN.Manager_email_address__c}"/>
+            <apex:outputField value="{!modelN.Read_Org__c}" />
+            <apex:outputField value="{!modelN.Edit_Org__c}" />
+            <apex:outputField value="{!modelN.Role_Hierarchy_Region__c}"/>
+            <apex:outputField value="{!modelN.Role_Hierarchy_Sub_Region__c}"/>
+            <apex:outputField value="{!modelN.Role_Hierarchy_Country_Region__c}"/>
+            <apex:outputField value="{!modelN.Role_Hierarchy_Country_Sub_Region__c}"/>
+        --->
+    </apex:pageBlockSection><br/>
+    <center>
+    <apex:commandButton value="Back" action="{!backvar}"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <apex:commandButton value="Next" action="{!save}" reRender="frm"/>
+    </center>
+
+</apex:pageBlock>
+</div>
+</apex:form>
+</apex:page>

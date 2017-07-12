@@ -1,0 +1,6 @@
+<apex:page StandardController="Opportunity">
+<style>
+  body {}
+</style>
+    <apex:image url="{!$Resource.SystemMaintenance}"/>
+</apex:page>

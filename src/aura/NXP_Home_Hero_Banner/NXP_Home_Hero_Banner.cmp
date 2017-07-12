@@ -1,0 +1,3 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes" description="NXP_Home_Hero_Banner">
+    <img src="{!$Resource.nxpCommunity + '/images/new-nxp-community-banner-1020x150-795134.png'}" style="width:100%" />
+</aura:component>

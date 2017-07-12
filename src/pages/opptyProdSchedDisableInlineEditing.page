@@ -1,0 +1,3 @@
+<apex:page standardController="OpportunityProductSchedule__c">
+    <apex:detail subject="{!OpportunityProductSchedule__c.Id}" inlineEdit="false" />
+</apex:page>

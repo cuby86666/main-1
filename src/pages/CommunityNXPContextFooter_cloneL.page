@@ -1,0 +1,29 @@
+<apex:page showHeader="false" sidebar="false" standardStylesheets="false"  docType="html-5.0" applyBodyTag="false" applyHtmlTag="false">
+    
+    <!-- Added by Rudy START -->
+      <apex:includeScript value="{!URLFOR($Resource.CommunityContextStyles, '/scripts/bootstrap.min.js')}"/> 
+    <apex:includeScript value="{!URLFOR($Resource.CommunityContextStyles, '/scripts/NXP-NEWS-en.js')}"/> 
+      <apex:includeScript value="{!URLFOR($Resource.CommunityContextStyles, '/scripts/jquery.carouFredSel-6.2.1-packed.js')}"/> 
+                <apex:includeScript value="{!URLFOR($Resource.CommunityContextStyles, '/scripts/newco-nav.js')}"/> <!-- footer js -->
+                 <apex:includeScript value="{!URLFOR($Resource.CommunityContextStyles, '/scripts/pbar.js')}"/> 
+          <apex:includeScript value="{!URLFOR($Resource.CommunityContextStyles, '/scripts/nxp-news.js')}"/> 
+         <apex:includeScript value="{!URLFOR($Resource.CommunityContextStyles, '/scripts/gsa_suggestions.js')}"/>
+    
+    <script>
+    $(function() {
+        var pgurl = window.location.href.substr(window.location.href.lastIndexOf("/")+1);
+    
+             $(".tabBar li").each(function() {
+                 alert('here in footer in loop');
+                     if($(this).children('a').attr("href") == pgurl ){
+                         alert('here in footer in if');
+                         $(this).attr('id', 'selectedTab');
+                     }
+                 })
+        });
+    
+              
+    </script>
+    <footer>
+    </footer>
+    </apex:page>

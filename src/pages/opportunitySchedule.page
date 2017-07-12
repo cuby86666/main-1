@@ -1,0 +1,26 @@
+<apex:page Controller="OpportunityScheduleController" >   
+<!--<apex:stylesheet value="{!URLFOR($Resource.SLDSv2, 'assets/styles/salesforce-lightning-design-system-vf.min.css')}" /> -->
+          <apex:pageMessages ></apex:pageMessages>
+  
+   <!-- <apex:includeScript value="/lightning/lightning.out.js"/>     --> 
+   <apex:includeLightning />
+ 
+    <div id="lightning" />  
+
+    <script>        
+    var recordId = "{!$CurrentPage.parameters.id}"; 
+    $Lightning.use("c:opportunitySchedule", function(){     
+        $Lightning.createComponent("c:opportunityScheduleAction",       
+         {"recordId" : recordId
+         },       
+         "lightning",       
+          function(cmp){
+                                      
+           }        
+          );
+  
+                  
+        });     
+    </script>       
+      
+</apex:page>

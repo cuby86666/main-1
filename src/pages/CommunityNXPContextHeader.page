@@ -1,0 +1,149 @@
+<apex:page showHeader="false" sidebar="false" standardStylesheets="false"  docType="html-5.0" applyBodyTag="false" applyHtmlTag="false">
+    <head>
+        <meta charset="UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+        <meta http-equiv="Pragma" content="no-cache"/>
+        <meta http-equiv="Expires" content="0"/>
+        <meta name="viewport" content="width=device-width,initial-scale=1"/>
+        <title>{!$Label.CommunityNXPTitle}</title>
+        <!-- Added by Rudy START -->
+        <!-- BOOTSTRAP -->
+        <apex:includeScript value="{!URLFOR($Resource.CommunityContextStyles, '/scripts/jquery.min.js')}"/>
+        <apex:Stylesheet value="{!URLFOR($Resource.CommunityContextStyles, '/styles/bootstrap.min.css')}"/>
+        <apex:Stylesheet value="{!URLFOR($Resource.Bootstrap)}"/>
+        <apex:Stylesheet value="{!URLFOR($Resource.CommunityContextStyles, '/styles/fontawesome.css')}"/>
+        <apex:Stylesheet value="{!URLFOR($Resource.CommunityContextStyles, '/styles/nxp-common.css')}"/>
+        <apex:Stylesheet value="{!URLFOR($Resource.CommunityContextStyles, '/styles/main.css')}"/>
+    </head>
+    <body>
+        <header>
+            <div id="header" class="nxp-nav">
+                <div class="container-fluid">
+                    <div class="row" id="top">
+                        <div class="col-sm-1">
+                            <div id="fsl-logo">
+                                <a href="http://www.nxp.com" title="{!$Label.CommunitySemiconductorTitle}">
+                                <img src="img/nxp-logo.svg" onerror="this.src='//image.nxp.com/files/graphic/logo_external/NXP_logo.png'" alt="NXP logo"/></a>
+                            </div>
+                        </div>
+                        <div class="col-sm-8 pull-right">
+                            <ul class="list-inline pull-right" id="top-nav">
+                                <li>
+                                    <span class="icon-user nxp-orange-text">
+                                    </span> Hello {!$User.Title} {!$User.FirstName}
+                                    <!--  logout button --->
+                                    <!-- <div class="dropdown" id="login-block">
+                                        <a href="https://www.nxp.com/security/public/login.LoginActionController.sp" onclick="call_pbar_metrics(\'pb_login\')"><span class="icon-user nxp-orange-text"></span>Sign In / Register</a>
+                                        </div>-->
+                                </li>
+                                <li>
+                                    <apex:outputPanel layout="none" rendered="{!$User.ContactId== null}">
+                                    <a href="{!$Page.CommunityNXPLogout}" title="Logout"> <span>Logout </span></a>
+                                    </apex:outputPanel>
+                                       <apex:outputPanel layout="none" rendered="{!$User.ContactId!= null}">
+                                    <a href="{!$Site.Prefix}/secur/logout.jsp?retURL=www.google.com" title="Logout"> <span>Logout </span></a>
+                                    </apex:outputPanel>
+                                </li>
+                                <li>
+                                    <!-- <div class="dropdown" id="languages">
+                                        <a href="#" id="languageDropdownMenu" data-toggle="dropdown"><span class="icon-globe2 nxp-blue-text"></span><span class="currentSiteLang"><span>English</span></span><span class="icon-arrow-down2"></span></a>
+                                        <ul id="language-actions" class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="languageDropdownMenu">
+                                          <li role="presentation" class="select-lang">Select language</li>
+                                          <li role="presentation"><a role="menuitem" class="lang-en selected"><span class="icon-earth2 pull-left"></span><span class="icon-checkmark3 fsl-orange-text pull-right"></span>English</a></li>
+                                          <li role="presentation"><a role="menuitem" class="lang-zh" href="http://www.nxp.com/zh-Hans"><span class="flag flag-zh pull-left"></span>中文</a></li>
+                                          <li role="presentation"><a role="menuitem" class="lang-ja" href="http://www.nxp.com/ja"><span class="flag flag-ja pull-left"></span>日本語</a></li>
+                                          <li role="presentation"><a role="menuitem" class="lang-ko" href="http://www.freescale.co.kr/"><span class="flag flag-ko pull-left"></span>한국어</a></li>
+                                        </ul>
+                                        </div>-->
+                                </li>
+                                <li>
+                                    <!--  <div id="shopping-cart" class="shoppingCartNav">
+                                        <a href="https://www.nxp.com/webapp/ecommerce.show_cart.framework"><span class="icon-cart nxp-green-text"></span><span class="shoppingCartNav-label">Cart</span></a>
+                                        </div> -->
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-8 pull-right" id="search-block">
+                            <!-- <div class="input-group pull-right" id="search-input">
+                                <form id="search" class="search-form" name="gs" method="GET" action="http://www.nxp.com/search" onSubmit="return validateSubmitQuery(this);">
+                                  <div class="sf-row">
+                                    <div class="input-group-btn zIndex5" id="search-all">
+                                      <button type="button" class="btn btn-default dropdown-toggle everything" data-toggle="dropdown" tabindex="-1"><span id="Default-choice-list">ALL  </span><span class="icon-arrow-down2"></span></button>
+                                      <ul id="search-choices" class="dropdown-menu" role="menu">
+                                        <li id="All" name="search_all_results" style="display: none;"><a><span class="icon-globe"></span>  All</a></li>
+                                        <li id="Products" name="search_products"><a><span class="icon-part"></span>  Products</a></li>
+                                        <li id="Documents" name="search_documents"><a><span class="icon-document"></span>  Documents</a></li>
+                                        <li id="SoftwareTools" name="search_sw_tools"><a><span class="icon-tools"></span>  Software &amp; Tools</a></li>
+                                        <li id="Support" name="search_support"><a><span class="icon-question6"></span>  Support</a></li>
+                                        <li id="Applications" name="search_applications"><a><span class="icon-tree3"></span>  Applications</a></li>
+                                        <li id="Videos" name="search_videos"><a><span class="icon-film"></span>  Videos</a></li>
+                                        <li id="Trainings" name="search_training"><a><span class="icon-graduation"></span>  Training</a></li>
+                                        <li id="Community" name="search_community"><a><span class="icon-bubbles"></span>  Community</a></li>
+                                        <li id="Blogs" name="search_blogs"><a><span class="icon-bubble11"></span>  Blogs</a></li>
+                                        <li id="Partners" name="search_partner"><a><span class="icon-user7"></span>  Partners</a></li>
+                                        <li id="CrossReference" name="CrossReference"><a><span class="icon-shuffle2"></span>  MCU Cross Reference</a></li>
+                                        <li id="ProductSelector" name="ProductSelector"><a><span class="icon-equalizer"></span>  Product Selector</a></li>
+                                      </ul>
+                                    </div>
+                                    <input type="text" value="" autocomplete="off" onkeyup=" searchTop(event)" id="parts" name="q" placeholder="Search..." class="form-control" />
+                                    <div class="input-group-btn " id="keyword-button-div">
+                                      <button style="cursor:pointer" type="submit" class="btn btn-default search-submit"><span class="icon-search2 fsl-gray-text"></span></button>
+                                      <table style="visibility: hidden;" id="result_suggest" cellpadding="0" cellspacing="0" class="ss-gac-m"></table>
+                                      <input id="client" name="client" value="search_all_results" type="hidden"/>
+                                      <input id="site" name="site" value="nxp_en" type="hidden"/>
+                                      <input id="proxystylesheet" name="proxystylesheet" value="search_style_fe" type="hidden"/>
+                                      <input id="sort" name="sort" value="date:D:L:d1" type="hidden"/>
+                                      <input id="oe" name="oe" value="UTF-8" type="hidden"/>
+                                      <input id="ie" name="ie" value="UTF-8" type="hidden"/>
+                                      <input id="ud" name="ud" value="1" type="hidden"/>
+                                      <input id="output" name="output" value="xml_no_dtd" type="hidden"/>
+                                      <input id="exclude_apps" name="exclude_apps" value="1" type="hidden"/>
+                                      <input id="callback" name="callback" value="ss_show" type="hidden"/>
+                                      <input id="lang_cd" name="lang_cd" value="en" type="hidden"/>
+                                      <input id="filter" name="filter" value="0" type="hidden"/>
+                                      <input id="getfields" name="getfields" value="*" type="hidden"/>
+                                      <input type="hidden" name="baseUrl" value="http://www.nxp.com/webapp"/>
+                                      <input type="hidden" name="SEARCH_OPERATOR" value="Contains"/>
+                                      <input type="hidden" name="attempt" value="-1"/>
+                                      <input type="hidden" name="rc" value="1"/>
+                                      <input type="hidden" name="hl" value="en"/>
+                                      <input id="dnavs" name="dnavs" type="hidden"/>
+                                    </div>
+                                  </div>
+                                </form>
+                                </div>-->
+                        </div>
+                    </div>
+                    <div class="navbar navbar-default megamenu">
+                        <div class="navbar-header">
+                            <a href="#nogo" data-toggle="collapse" data-target="#navbar-collapse-fsl" class="navbar-toggle"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a>
+                        </div>
+                        <div class="container">
+                            <!-- //* Nav menu */  -->
+                            <div id="navbar-collapse-fsl" class="navbar-collapse collapse">
+                                <div class="navbar-center">
+                                    <ul class="nav navbar-nav">
+                                        <li class="dropdown  megamenu-fw">
+                                            <a class="dropdown-toggle" data-toggle="dropdown" href="http://www.nxp.com/webapp/sps/library/prod_lib.jsp">{!$Label.CommunityProducts}</a>
+                                        </li>
+                                        <li class="dropdown megamenu-hw">
+                                            <a class="dropdown-toggle" data-toggle="dropdown" href="http://www.nxp.com/webapp/sps/site/homepage.jsp?code=IFINDSTRYFCS">{!$Label.CommunityApplications}</a>
+                                        </li>
+                                        <li class="dropdown">
+                                            <a class="dropdown-toggle" data-toggle="dropdown" href="http://www.nxp.com/webapp/sps/site/homepage.jsp?code=TRAINING_HOME">{!$Label.CommunitySupport}</a>
+                                        </li>
+                                        <li class="dropdown">
+                                            <a class="dropdown-toggle" data-toggle="dropdown" href="http://www.nxp.com/webapp/sps/site/homepage.jsp?code=COMPANY_INFO_HOME">{!$Label.CommunityAbout}</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+    </body>
+</apex:page>

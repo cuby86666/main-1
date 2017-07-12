@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <enableActivities>false</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableChangeDataCapture>false</enableChangeDataCapture>
+    <enableEnhancedLookup>true</enableEnhancedLookup>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>false</enableHistory>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <fields>
+        <fullName>Account_Group__c</fullName>
+        <externalId>false</externalId>
+        <formula>SAP_CMD__r.RecordType.Name</formula>
+        <label>Account Group</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Approval_Status_Formula__c</fullName>
+        <externalId>false</externalId>
+        <formula>TEXT( SAP_CMD__r.Status__c )</formula>
+        <label>Approval Status (Formula)</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Approval_Status__c</fullName>
+        <externalId>false</externalId>
+        <label>Approval Status</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Draft</fullName>
+                    <default>false</default>
+                    <label>Draft</label>
+                </value>
+                <value>
+                    <fullName>Ready to Submit</fullName>
+                    <default>false</default>
+                    <label>Ready to Submit</label>
+                </value>
+                <value>
+                    <fullName>Pending Approval</fullName>
+                    <default>false</default>
+                    <label>Pending Approval</label>
+                </value>
+                <value>
+                    <fullName>Rejected</fullName>
+                    <default>false</default>
+                    <label>Rejected</label>
+                </value>
+                <value>
+                    <fullName>Approved</fullName>
+                    <default>false</default>
+                    <label>Approved</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>CMD_Request_Owner__c</fullName>
+        <externalId>false</externalId>
+        <formula>CMD_Request__r.Owner:User.FirstName + &apos;&apos; + CMD_Request__r.Owner:User.LastName</formula>
+        <label>CMD Request Owner</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CMD_Request_Status_Formula__c</fullName>
+        <externalId>false</externalId>
+        <formula>TEXT( CMD_Request__r.Status__c )</formula>
+        <label>CMD Request Status (Formula)</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CMD_Request_Status__c</fullName>
+        <externalId>false</externalId>
+        <formula>TEXT( CMD_Request__r.Status__c )</formula>
+        <label>CMD Request Status</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CMD_Request_Type__c</fullName>
+        <externalId>false</externalId>
+        <formula>CMD_Request__r.RecordType.Name</formula>
+        <label>CMD Request Type</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CMD_Request__c</fullName>
+        <externalId>false</externalId>
+        <label>CMD Request</label>
+        <lookupFilter>
+            <active>true</active>
+            <filterItems>
+                <field>CMD_Request__c.RecordType.Name</field>
+                <operation>contains</operation>
+                <value>SAP</value>
+            </filterItems>
+            <isOptional>false</isOptional>
+        </lookupFilter>
+        <referenceTo>CMD_Request__c</referenceTo>
+        <relationshipLabel>SAP CMD</relationshipLabel>
+        <relationshipName>SAP_CMD_Requests</relationshipName>
+        <relationshipOrder>0</relationshipOrder>
+        <reparentableMasterDetail>true</reparentableMasterDetail>
+        <trackTrending>false</trackTrending>
+        <type>MasterDetail</type>
+        <writeRequiresMasterRead>false</writeRequiresMasterRead>
+    </fields>
+    <fields>
+        <fullName>Pending_Approval_Since_Formula__c</fullName>
+        <externalId>false</externalId>
+        <formula>SAP_CMD__r.Pending_Approval_Since__c</formula>
+        <label>Pending Approval Since (Formula)</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Pending_Approval_Since__c</fullName>
+        <externalId>false</externalId>
+        <label>Pending Approval Since</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Pending_Approver_Formula__c</fullName>
+        <externalId>false</externalId>
+        <formula>TEXT( SAP_CMD__r.Pending_Approver__c )</formula>
+        <label>Pending Approver (Formula)</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Pending_Approver__c</fullName>
+        <externalId>false</externalId>
+        <label>Pending Approver</label>
+        <length>32</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Requester__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Requester</label>
+        <referenceTo>User</referenceTo>
+        <relationshipName>SAP_CMD_Requests</relationshipName>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>SAP_CMD_Approval_Status__c</fullName>
+        <externalId>false</externalId>
+        <formula>TEXT( SAP_CMD__r.Status__c )</formula>
+        <label>SAP CMD Approval Status</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>SAP_CMD_Pending_Approval_Since__c</fullName>
+        <externalId>false</externalId>
+        <formula>SAP_CMD__r.Pending_Approval_Since__c</formula>
+        <label>SAP CMD Pending Approval Since</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>SAP_CMD_Pending_Approver__c</fullName>
+        <externalId>false</externalId>
+        <formula>TEXT( SAP_CMD__r.Pending_Approver__c )</formula>
+        <label>SAP CMD Pending Approver</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>SAP_CMD__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>SAP CMD</label>
+        <referenceTo>SAP_CMD__c</referenceTo>
+        <relationshipLabel>CMD Requests</relationshipLabel>
+        <relationshipName>SAP_CMD_Requests</relationshipName>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <label>SAP CMD Request</label>
+    <nameField>
+        <displayFormat>SAPCMDR{0000000000}</displayFormat>
+        <label>SAP CMD Request Number</label>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>SAP CMD Requests</pluralLabel>
+    <searchLayouts/>
+    <sharingModel>ControlledByParent</sharingModel>
+    <visibility>Public</visibility>
+</CustomObject>

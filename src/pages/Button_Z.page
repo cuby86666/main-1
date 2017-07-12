@@ -1,0 +1,231 @@
+<!-- 
+@Modified By :     Scarlett Kang
+@Modified Date :   May 19, 2015
+@Description :     Remove mandatory for Funloc Number & non sold-to GID
+------------------------------------------------------------------------
+@Modified By :     Scarlett Kang
+@Modified Date :   Mar 25, 2016
+@Description :     1604 Release SIR 706 - SAP CMD - allow ZORG funloc to flow from SFDC to SAP
+-->
+<apex:page standardController="CMD_Request__c" extensions="CMD_Request_Controller_SAP_Extension" cache="false" showHeader="false" sidebar="false">
+<script type="text/javascript"> 
+    var previousOnload = window.onload;        
+    window.onload = function() { 
+        if( previousOnload ){ 
+            previousOnload();
+        }
+        if( {!$CurrentPage.parameters.ag == 'Z001'} ){
+            if( {!NOT(CMD_Request__c.SP__c)} ){
+                alert('Please double check Sold-To address.');
+                window.history.back();
+            } 
+            /*  Remove mandatory for Funloc Number
+            else if( {!CMD_Request__c.SP_CustomerID__c == null}
+                && {!CMD_Request__c.SP_Funloc_Id__c == null} 
+            ) {
+                alert('SP GID & Funloc cannot both be blank');
+                window.history.back();
+            } 
+            */
+            else if( {!CMD_Request__c.SP_CustomerID__c == null} ){
+                alert('SP GID cannot be blank');
+               window.history.back();
+            } 
+            else {
+                window.location.href="/apex/Button_CMD_Request_to_SAP_CMD?id={!CMD_Request__c.Id}&ag=Z001";
+            }
+        }
+        if( {!$CurrentPage.parameters.ag == 'Z002'} ){
+            if( {!NOT(CMD_Request__c.SH__c)} 
+                && {!NOT(CMD_Request__c.SH_Same_as_SP__c)} 
+            ){
+                alert('Please double check Ship-To address.');
+                window.history.back();
+            }
+            /* Remove mandatory for Funloc Number */
+            /* Remove GID checking for non-sold-to */
+            /*
+            else if( {!CMD_Request__c.SH_CustomerID__c == null}
+                && {!CMD_Request__c.SH_Funloc_Id__c == null}
+            ){
+                alert('SH GID & Funloc cannot both be blank');
+                window.history.back();
+            } 
+            */
+            else {
+                window.location.href="/apex/Button_CMD_Request_to_SAP_CMD?id={!CMD_Request__c.Id}&ag=Z002";
+            }
+        }
+        if( {!$CurrentPage.parameters.ag == 'Z003'} ){
+            if( {!NOT(CMD_Request__c.PY__c)} 
+                && {!NOT(CMD_Request__c.PY_Same_as_SP__c)} 
+            ){
+                alert('Please double check Payer address.');
+                window.history.back();
+            } 
+            /* Remove mandatory for Funloc Number */
+            /* Remove GID checking for non-sold-to */
+            /*
+            else if( {!CMD_Request__c.PY_CustomerID__c == null} 
+                 && {!CMD_Request__c.PY_Funloc_Id__c == null} 
+            ){
+                alert('PY GID & Funloc cannot both be blank');
+                window.history.back();
+            } 
+            */
+            else {
+                window.location.href="/apex/Button_CMD_Request_to_SAP_CMD?id={!CMD_Request__c.Id}&ag=Z003";
+            }
+        }
+        if( {!$CurrentPage.parameters.ag == 'Z004'} ){
+            if( {!NOT(CMD_Request__c.BP__c)} 
+                && {!NOT(CMD_Request__c.BP_Same_as_SP__c)} 
+                && (
+                    {!NOT(CMD_Request__c.BP_Same_as_PY__c)}
+                    ||
+                    (
+                        {!CMD_Request__c.BP_Same_as_PY__c}
+                        && {!NOT(CMD_Request__c.PY__c)} 
+                        && {!NOT(CMD_Request__c.PY_Same_as_SP__c)}
+                    )
+                )
+            ){
+                alert('Please double check Bill-To address.');
+                window.history.back();
+            } 
+            /* Remove mandatory for Funloc Number */
+            /* Remove GID checking for non-sold-to */
+            /*
+            else if( {!CMD_Request__c.BP_CustomerID__c == null} 
+                 && {!CMD_Request__c.BP_Funloc_Id__c == null} 
+            ){
+                alert('BP GID & Funloc cannot both be blank');
+                window.history.back();
+            } 
+            */
+            else {
+                window.location.href="/apex/Button_CMD_Request_to_SAP_CMD?id={!CMD_Request__c.Id}&ag=Z004";
+            }
+        }
+        if( {!$CurrentPage.parameters.ag == 'Z005'} ){
+            if( {!NOT(CMD_Request__c.SP__c)} ){
+                alert('Please double check Sold-To address.');
+                window.history.back();
+            } 
+            /* Remove mandatory for Funloc Number */
+            /*
+            else if( {!CMD_Request__c.SP_CustomerID__c == null} 
+                && {!CMD_Request__c.SP_Funloc_Id__c == null}
+            ){
+                alert('SP GID & Funloc cannot both be blank');
+                window.history.back();
+            } 
+            */
+            else if( {!CMD_Request__c.SP_CustomerID__c == null} ){
+                alert('SP GID cannot be blank');
+               window.history.back();
+            } 
+            else {
+                window.location.href="/apex/Button_CMD_Request_to_SAP_CMD?id={!CMD_Request__c.Id}&ag=Z005";
+            }
+        }
+        if( {!$CurrentPage.parameters.ag == 'Z010'} ){
+            if( {!NOT(CMD_Request__c.ZI__c)} ){
+                alert('Please double check Intermediate Consignee address.');
+                window.history.back();
+            } 
+            /* Remove mandatory for Funloc Number */
+            /* Remove GID checking for non-sold-to */
+            /*
+            else if( {!CMD_Request__c.ZI_CustomerID__c == null} 
+                 && {!CMD_Request__c.ZI_Funloc_Id__c == null} 
+            ){
+                alert('ZI GID & Funloc cannot both be blank');
+                window.history.back();
+            } 
+            */
+            else {
+                window.location.href="/apex/Button_CMD_Request_to_SAP_CMD?id={!CMD_Request__c.Id}&ag=Z010";
+            }
+        }
+        if( {!$CurrentPage.parameters.ag == 'Z011'} ){
+            if( {!NOT(CMD_Request__c.SP__c)} ){
+                alert('Please double check Sold-To address.');
+                window.history.back();
+            } 
+            /* Remove mandatory for Funloc Number */
+            /*
+            else if( {!CMD_Request__c.SP_CustomerID__c == null} 
+                && {!CMD_Request__c.SP_Funloc_Id__c == null} 
+            ){
+                alert('SP GID & Funloc cannot both be blank');
+                window.history.back();
+            } 
+            */
+            else if( {!CMD_Request__c.SP_CustomerID__c == null} ){
+                alert('SP GID cannot be blank');
+               window.history.back();
+            } 
+            else {
+                window.location.href="/apex/Button_CMD_Request_to_SAP_CMD?id={!CMD_Request__c.Id}&ag=Z011";
+            }
+        }
+        if( {!$CurrentPage.parameters.ag == 'Z012'} ){
+            if( {!NOT(CMD_Request__c.SP__c)} ){
+                alert('Please double check Sold-To address.');
+                window.history.back();
+            } 
+            /* Remove mandatory for Funloc Number */
+            /*
+            else if( {!CMD_Request__c.SP_CustomerID__c == null} 
+                && {!CMD_Request__c.SP_Funloc_Id__c == null} 
+            ){
+                alert('SP GID & Funloc cannot both be blank');
+                window.history.back();
+            } 
+            */
+            else if( {!CMD_Request__c.SP_CustomerID__c == null} ){
+                alert('SP GID cannot be blank');
+               window.history.back();
+            } 
+            else {
+                window.location.href="/apex/Button_CMD_Request_to_SAP_CMD?id={!CMD_Request__c.Id}&ag=Z012";
+            }
+        }
+        if( {!$CurrentPage.parameters.ag == 'Z013'} ){
+            if( {!NOT(CMD_Request__c.PY__c)} 
+                && {!NOT(CMD_Request__c.PY_Same_as_SP__c)} 
+            ){
+                alert('Please double check Payer address.');
+                window.history.back();
+            } 
+            /* Remove mandatory for Funloc Number */
+            /* Remove GID checking for non-sold-to */
+            /*
+            else if( {!CMD_Request__c.PY_CustomerID__c == null} 
+                 && {!CMD_Request__c.PY_Funloc_Id__c == null} 
+            ){
+                alert('PY GID & Funloc cannot both be blank');
+                window.history.back();
+            } 
+            */
+            else {
+                window.location.href="/apex/Button_CMD_Request_to_SAP_CMD?id={!CMD_Request__c.Id}&ag=Z013";
+            }
+        }
+        /***1604 Release SIR 706 - Added by Scarlett - START***/
+        if( {!$CurrentPage.parameters.ag == 'ZORG'} ){
+            if( {!NOT(CMD_Request__c.ZORG_2__c)} 
+                && {!NOT(CMD_Request__c.ZORG_Same_as_SH__c)} 
+            ){
+                alert('Please double check ZORG address.');
+                window.history.back();
+            } 
+            else {
+                window.location.href="/apex/Button_CMD_Request_to_SAP_CMD?id={!CMD_Request__c.Id}&ag=ZORG";
+            }
+        }
+		/***1604 Release SIR 706 - Added by Scarlett - END***/
+    }
+</script>
+</apex:page>

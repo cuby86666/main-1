@@ -1,0 +1,2 @@
+<apex:page standardController="Approvers_Matrix__c" extensions="Approver_Matrix_Extension_Controller" action="{!Approvers}" >
+</apex:page>

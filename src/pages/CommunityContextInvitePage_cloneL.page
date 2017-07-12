@@ -1,0 +1,52 @@
+<!--
+
+CLONE OF CommunityContextInvitePage for use in the NXP Lightning community while the original file is still being used in the legacy NXP Community.
+Modifications have been made to load a template without a header and footer, as well as link to other cloned files that have the header and footer removed. No other
+business logic changes should be made in this file.
+
+PRIOR TO FINAL PRODUCTION GO LAUNCH, COMPARE TO PRODUCTION VERSION OF ORIGINAL FILE TO DETERMINE IF CHANGES TO BUSINESS LOGIC HAVE BEEN MADE THAT WILL NEED TO BE
+INCORPORATED BACK INTO THIS FILE.
+
+-->
+
+<apex:page sidebar="false" standardStylesheets="false" showChat="false" showHeader="false" applyBodyTag="false" applyHtmlTag="false">
+    <html lang="en">
+    <!--
+            <div style="margin:5px;">
+                <h4 style="color:#cc3333;margin-bottom:5px;">Your Browser Is Not Supported!</h4><br/>
+                <p>Please upgrade to the latest version of <a href='http://getfirefox.com' style='text-decoration:underline;'>FireFox</a>,
+                    <a href='https://www.google.com/chrome/browser/' style='text-decoration:underline;'>Chrome</a> or <a
+                            href='http://windows.microsoft.com/en-us/internet-explorer/download-ie'
+                            style='text-decoration:underline;'>Internet Explorer</a>.</p>
+            </div>-->
+
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+        <meta http-equiv="Pragma" content="no-cache" />
+        <meta http-equiv="Expires" content="0" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <title>{!$Label.CommunityNXPTitle}</title>
+    </head>
+    <apex:composition template="CommunityNXPContextTemplate_cloneL">
+        <apex:define name="body">
+
+            <body>
+            <c:CommunityContextInviteComponent noContext="false" entitlement="{!$CurrentPage.Parameters.entitlementId}" />
+            <!-- /#nxp-wrapper -->
+            <!-- Added by Rudy START -->
+            <!-- <script type="text/javascript" src="http://style.nxp.com/docs/headlines/NXP-NEWS-en.js"></script>
+                    <script type="text/javascript" src="http://cache.nxp.com/files/js/jquery.carouFredSel-6.2.1-packed.js"></script>
+                    <script type="text/javascript" src="http://cache.nxp.com/files/header/newco-nav.js"></script>
+                    <script type="text/javascript" src="http://cache.nxp.com/files/header/nxp-news.js"></script>
+                    <script type="text/javascript" src="http://cache.nxp.com/shared/js/pbar.js"></script>
+                    <script type="text/javascript" src="http://cache.nxp.com/search/javascript/gsa_suggestions.js"></script> -->
+
+            <!-- Added by Rudy END -->
+            </body>
+        </apex:define>
+    </apex:composition>
+
+    </html>
+</apex:page>

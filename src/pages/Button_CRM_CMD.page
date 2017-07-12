@@ -1,0 +1,26 @@
+<!-- 
+@Created By :     Scarlett Kang
+@Created Date :   Sep 30, 2015
+@Description :     SIR 342 - CRM Request - a button to change status to Complete (Run as super user)
+-->
+<apex:page standardController="CMD_Request__c" extensions="CMD_Request_Controller_Ext_Status_Update" cache="false" showHeader="false" sidebar="false">
+<script type="text/javascript"> 
+    var previousOnload = window.onload;        
+    window.onload = function() { 
+        if( previousOnload ){ 
+            previousOnload();
+        }
+        if( {!CMD_Request__c.Request_Status__c != 'Approved'} && {!CMD_Request__c.Request_Status__c != 'Request Completed'} ){
+            alert('Request has not been approved. Please double check before you change Status to "Request completed".');
+            window.history.back();
+        }        
+        else if( {!CMD_Request__c.Request_Status__c == 'Request Completed'} ){
+            alert('Request is completed. No change with this request.');
+            window.history.back();
+        } 
+        else if( {!CMD_Request__c.Request_Status__c == 'Approved'} ){
+            window.location.href="/apex/Button_CRMCMD_UpdateRequestStatus?id={!CMD_Request__c.Id}";
+        }
+    }
+</script>
+</apex:page>

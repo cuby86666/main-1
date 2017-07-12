@@ -1,0 +1,48 @@
+<apex:page controller="ProductThrustUpdateController" readOnly="true">
+    <script type="text/javascript">
+    	function checkParentAccount(objId) {
+            if (document.getElementById(objId).value == '')
+                alert('Approval Date cannot be empty.');
+        }
+    </script>
+
+  <apex:form id="OppFunlocForm">
+  <apex:pagemessages />
+  <b>Product Thrust Update Utility</b><br />
+  <p>template CSV:
+  <apex:inputFile value="{!contentFile}" filename="{!nameFile}" /></p>
+  <apex:commandButton value="Load data" action="{!getResults}" id="LoadButton"/>
+  <apex:commandButton value="Process Thrust and Non-Thrust data" action="{!ProcessData}" id="ProcessButton"/>
+  <apex:commandButton value="Show Thrust Product List" action="{!showThrustProduct}" id="ProcessButton3"/>
+  <apex:commandButton value="Clear Screen" action="{!clearScreen}" id="ClearScreen"/>
+      <hr />
+  <apex:commandButton value="Save Product Thrust Change" action="{!SaveThrustChange}" id="SaveThrustChange"/>
+  <apex:commandButton value="Load Product Thrust Change" action="{!LoadThrustChange}" id="LoadThrustChange"/>
+      <hr />
+  <apex:commandButton value="Show non-Thrust to Thrust Product" action="{!showNonThrustToThrust}" id="ProcessButton4"/>
+  <apex:commandButton value="Show Thrust to non-Thrust Product" action="{!showThrustToNonThrust}" id="ProcessButton5"/>
+      <hr />
+  <apex:outputText value="Opportunity Approval Date (yyyy-mm-dd):" style="font-weight:bold;" />
+  <apex:inputText size="10" value="{!approvalDate}" id="ApprovalDate" onkeydown="if(event.keyCode==13){this.blur();}"/><br />
+  <apex:commandButton value="Create Oppty Product Change data" action="{!ProcessOpptyData}" id="ProcessButton1" onclick="checkParentAccount('{!$Component.ApprovalDate}');"/><br />
+  <apex:commandButton value="Show non-Thrust to Thrust Opportunity" action="{!showNonThrustToThrustOppty}" id="ProcessButton6" onclick="checkParentAccount('{!$Component.ApprovalDate}');"/>
+  <apex:commandButton value="Show Thrust to non-Thrust Opportunity" action="{!showThrustToNonThrustOppty}" id="ProcessButton7" onclick="checkParentAccount('{!$Component.ApprovalDate}');"/>
+      
+  <!--<apex:commandButton value="EMail test" action="{!SendEMail}" id="SendEMail"/><br />-->
+  </apex:form>
+  <hr />
+  <apex:outputPanel id="results">
+  <p>nameFile: {!nameFile}</p>
+  <p>rowCount: {!rowCount}</p>
+  <p>Status: {!currentStatus}</p>
+    <table title="CSV Output" border="1" width="100%">
+       <apex:repeat value="{!parsedCSV}" var="row">
+           <tr>
+               <apex:repeat value="{!row}" var="cell">
+                   <td contenteditable="false"> {!cell} </td>
+               </apex:repeat>
+           </tr>
+       </apex:repeat>
+     </table>
+  </apex:outputPanel>
+</apex:page>

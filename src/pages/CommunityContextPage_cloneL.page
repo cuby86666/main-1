@@ -1,0 +1,463 @@
+<!--
+
+CLONE OF CommunityContextPage for use in the NXP Lightning community while the original file is still being used in the legacy NXP Community.
+Modifications have been made to load a template without a header and footer, as well as link to other cloned files that have the header and footer removed. No other
+business logic changes should be made in this file.
+
+PRIOR TO FINAL PRODUCTION GO LAUNCH, COMPARE TO PRODUCTION VERSION OF ORIGINAL FILE TO DETERMINE IF CHANGES TO BUSINESS LOGIC HAVE BEEN MADE THAT WILL NEED TO BE
+INCORPORATED BACK INTO THIS FILE.
+
+-->
+        
+<apex:page sidebar="false" standardStylesheets="false" showChat="false" showHeader="false" applyBodyTag="false" applyHtmlTag="false" controller="CommunityContextController" action="{!getPageReference1}">
+    <html lang="en">
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+    <meta http-equiv="Pragma" content="no-cache"/>
+    <meta http-equiv="Expires" content="0"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>NXP Support Request</title>
+    <!--[if lte IE 9]>
+        <div style="margin:5px;">
+            <h4 style="color:#cc3333;margin-bottom:5px;">Your Browser Is Not Supported!</h4>
+            <br/>
+            <p>Please upgrade to the latest version of <a href='http://getfirefox.com' style='text-decoration:underline;'>FireFox</a>,
+                <a href='https://www.google.com/chrome/browser/' style='text-decoration:underline;'>Chrome</a> or <a
+                    href='http://windows.microsoft.com/en-us/internet-explorer/download-ie'
+                    style='text-decoration:underline;'>Internet Explorer</a>.
+            </p>
+        </div>
+        <![endif]-->
+
+    <body>
+        <div id="nxp-wrapper">
+            <!-- START OF HEADER -->
+            <apex:composition template="CommunityNXPContextTemplate_cloneL">
+                <apex:define name="body">
+                    <div class="container">
+                        <div class="context-intro row">
+                            <div class="col-xs-12 col-lg-10 col-lg-offset-1">
+                                <h1>{!$Label.CommunityViewCasesTitle}</h1>
+                                <!-- <p class="lead">{!$Label.CommunityCaseText}</p> -->
+
+                                <!--   <p class="lead"><strong>{!$Label.CommunityGroup}</strong> {!$Label.CommunityCaseText}<br/>
+                            <strong>{!$Label.CommunityShare}</strong> {!$Label.CommunityContextText}<br/>
+                            <strong>{!$Label.CommunityAsk}</strong> {!$Label.CommunityQuestion}
+                        </p>  -->
+                                <br/>
+                            </div>
+                        </div>
+                        <!-- /.row -->
+                        <!-- Two column instructions -->
+                        <!--  <div class="context-instructions row">
+                                <div class="col-xs-12 col-sm-6 col-lg-5 col-lg-offset-1">
+                                    <h4>{!$Label.CommunityViewcases}</h4>
+                                    <p>{!$Label.CommunityUnfold} <strong>{!$Label.CommunityContext}</strong>.</p>
+                                </div>
+                                <div class="col-xs-12 col-sm-6 col-lg-5">
+                                    <h4>{!$Label.CommunityNewCaseText}</h4>
+                                    <p>{!$Label.CommunitySelectMessage} <strong>{!$Label.CommunityContext}</strong> {!$Label.CommunityNewContext}</p>
+                                </div>
+                            </div> -->
+                        <!-- /.row -->
+                        <!-- Three column instructions -->
+                        <div class="context-instructions row">
+                            <!-- <div class="col-xs-12 col-lg-10 col-lg-offset-1">
+                                    <h3>{!$Label.CommunityThreeExample}</h3>
+                                </div>-->
+                            <div class="col-xs-12 col-sm-4 col-lg-3 col-lg-offset-1">
+                                <h2>{!$Label.CommunityViewcases}</h2>
+                                <!--  <p>{!$Label.CommunityUnfold} <strong>{!$Label.CommunityContext}</strong>.</p> -->
+
+                                <ul class="boxes">
+                                    <li>
+                                        <apex:outputText escape="false" value="{!$Label.CommunityNewProject}" />&nbsp;
+                                        <!--   <img src="{!URLFOR($Resource.CommunityContextStyles,'/images/addFolder.png')}" height="50px" width="150px"/>-->
+                                        {!$Label.CommunityCreateContext}
+                                    </li>
+                                    <!--   <ul class="boxes2">
+                                <li>{!$Label.CommunityAddNewContext}</li>
+                                <li>{!$Label.CommunityMeaningfulName}</li>
+                                <li>{!$Label.CommunitySelectContext}</li>
+                            </ul> 
+                            <p></p>
+                                <li>{!$Label.CommunityQuestionContext}<strong>{!$Label.CommunityContextGo}</strong></li>
+                            -->
+
+                                </ul>
+                            </div>
+                            <div class="col-xs-12 col-sm-4 col-lg-4">
+                                <h2>{!$Label.CommunityNewCaseText}</h2>
+                                <!-- <p>{!$Label.CommunitySelectMessage} <strong>{!$Label.CommunityContext}</strong> {!$Label.CommunityNewContext}</p>-->
+                                <ul class="boxes">
+                                    <li>{!$Label.CommunityShareContext}
+                                        <!-- <img src="{!URLFOR($Resource.CommunityContextStyles,'/images/addCase.png')}" height="35px" width="120px"/> -->
+                                        {!$Label.CommunityCaseSubmit}</li>
+                                    <!--    <li>{!$Label.CommunityContextNotified}</li>
+                            <li>
+                                {!$Label.CommunityInviteContext}
+                                <ul class="boxes2">
+                                    <li>{!$Label.CommunityInviteObservers}</li>
+                                    <li>{!$Label.CommunityInviteParticipants}</li>
+                                </ul>
+                            </li> -->
+                                </ul>
+
+                            </div>
+                            <div class="col-xs-12 col-sm-4 col-lg-3">
+                                <h2>{!$Label.CommunityThirdCaseText}</h2>
+                                <!--  <p>{!$Label.CommunityGoMessage} <strong>{!$Label.CommunityContext}</strong> {!$Label.CommunityNewContext}</p>-->
+
+                                <ul class="boxes">
+                                    <li>{!$Label.CommunitySelectContextMessage}
+                                        <!--  <img src="{!URLFOR($Resource.CommunityContextStyles,'/images/invitePeople.png')}" height="35px" width="120px"/> -->
+                                        {!$Label.Communitybutton}
+                                    </li>
+                                    <!--  <li>{!$Label.CommunityAddNewCase}</li>
+                            <li>{!$Label.CommunityFillForm}</li>  -->
+
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- <div class="row addContext">
+                                     <div class="col-xs-12 col-lg-10 col-lg-offset-1">
+                                    {!$Label.CommunityPleaseNoteMessage}
+                                </div>
+                                </div>-->
+                        <!-- /.row -->
+                        <div class="row addContext">
+                            <div class="col-lg-6 col-lg-offset-1">
+                                <ul class="color-key-list">
+                                    <li class="item"><span class="owner-block"></span>{!$Label.CommunityOwner}</li>
+                                    <li class="item"><span class="participant-block"></span>{!$Label.CommunityParticipant}</li>
+                                    <li class="item"><span class="observer-block"></span>{!$Label.CommunityObserver}</li>
+                                </ul>
+                            </div>
+
+                            <div class="col-lg-4 text-right">
+
+                                <a class="addContext-link" style="{!if($Label.CommunityShowCreateContext=='Yes', 'visibility:visible', 'visibility:hidden')}" href="{!URLFOR($Page.CommunityNXPCreateContext_cloneL)}">{!$Label.CommunityNewContextButtonTitle} <span class="icon icon-plus"></span></a>
+                            </div>
+
+                        </div>
+                        <div class="row addContext">
+                            <div class="col-lg-6 col-lg-offset-1">
+                            </div>
+
+                            <apex:outputPanel layout="none" rendered="{!if(entitlementContactsList.size ==1, true, false)}">
+                                <div class="col-lg-4 text-right">
+                                    <a class="btn btn-lg btn-orange" href="{!URLFOR($Page.CommunityNXPCreateCaseWizard_cloneL)}"><span class="icon-plus"></span> {!$Label.CommunityNewCaseButton}</a>
+                                </div>
+                            </apex:outputPanel>
+                        </div>
+                        <!-- /.row addContext-->
+                        <!-- ===== ===== =====  Start First Context ===== ===== ===== -->
+                        <!--Panel Content-->
+                        <apex:outputPanel layout="none" id="mainPage">
+                            <div id="mainPanel">
+                                <apex:outputPanel layout="none" rendered="{!if(entitlementContactsList.size ==0, true, false)}">
+                                    <div class="panel-custom color1-border">
+                                        <div class="panel-heading color3-head col-xs-12">
+                                            <div class="col-xs-6">
+                                                {!$Label.CommunityNoEntitlementMessage}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </apex:outputpanel>
+                                <apex:form >
+                                    <apex:actionFunction action="{!removeEntitlementContact}" name="removeContact" rerender="">
+                                        <apex:param name="econtactId" value="" />
+                                    </apex:actionFunction>
+                                    <apex:actionFunction action="{!acceptEntitlement}" name="acceptContext" rerender="">
+                                        <apex:param name="econtactId" value="" />
+                                    </apex:actionFunction>
+                                    <apex:actionFunction action="{!rejectEntitlement}" name="rejectContext" rerender="">
+                                        <apex:param name="econtactId" value="" />
+                                    </apex:actionFunction>
+                                </apex:form>
+                                <apex:variable var="counter" value="{!1}" />
+                                <apex:repeat value="{!entitlementContactsList }" var="ent" id="loadData">
+                                    <!-- First Context--->
+                                    <apex:outputPanel layout="none" rendered="{!if(OR(ent.Entitlement__r.name!=$Label.CommunityOthersname, AND(ent.Entitlement__r.name==$Label.CommunityOthersname, showOthersSection) ), true, false)}">
+
+                                        <div class="row panel-container">
+                                            <div class="col-lg-10 col-lg-offset-1">
+                                                <!-- Set Owner, Participant, or Observer here -->
+                                                <div class="{!if( OR(ent.type__c=='Owner', ent['entitlement__r.type']=='Paid'),'panel-custom owner', if(ent.type__c =='Participant', 'panel-custom participant','panel-custom observer'))}">
+                                                    <div class="{! if( ent.type__c=='Owner','panel-heading owner', if(ent.type__c =='Participant', 'panel-heading participant',if(OR(ent.type__c =='Observer',ent['entitlement__r.Name']==$Label.CommunityOthersname), 'panel-heading observer', 'panel-heading')))}">
+                                                        <h2 class="context-header">{!ent.Entitlement__r.Name} 
+
+                                                            <span class="panel-head-count"></span>
+                                                            <a style="{!if(AND(ent.type__c=='Owner',casesPresenceMap[ent.entitlement__c]==0),'display:block', 'display:none')}" href="{!URLFOR($Page.CommunityNXPUpdateDeleteContext)}?entitlementId={!ent.Entitlement__c}" >Edit</a>
+                                                            
+                                                           <!---------added by shridevi as part of SIR 270-----------------------------------------------------> 
+                                                           <br/> <apex:outputPanel layout="none" rendered="{!if(ent.Entitlement__r.Additional_Description__c!=null, true, false)}">
+                                                              <div style="display: inline-block;position: relative;min-width: 300px;">
+                                                                <a class="dropdown-toggle" type="button" style="font-size:14px" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" >{!$Label.AdditionalDescription}<span class="caret"></span></a>
+                                                                  <ul  class="dropdown-menu invitee-list" aria-labelledby="dropdownMenu1">
+                                                                      <div style=" white-space:pre-wrap;">{!ent.Entitlement__r.Additional_Description__c}</div>
+                                                                 </ul>
+                                                              </div>
+                                                             </apex:outputPanel>
+                                                            <!-----------------------------------------------------------------------------------------------> 
+                                                        </h2>
+
+                                                        <div class="dropdown invitees">
+                                                            <apex:outputPanel layout="none" rendered="{!if(ent.Entitlement__r.name!=$Label.CommunityOthersname, true, false)}">
+                                                                <a class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">{!$Label.CommunityShowinvitees}<span class="caret"></span></a>
+                                                            </apex:outputPanel>
+                                                            <ul class="dropdown-menu invitee-list" aria-labelledby="dropdownMenu1">
+                                                                <li>
+                                                                    <ul>
+                                                                        <li class="invitee-list-title observer">{!$Label.CommunityParticipant}</li>
+                                                                        <apex:repeat value="{!participantEntitlementContacts[ent.Entitlement__c]}" var="cont" rendered="{!!participantinviteSizeEmptyMap[ent.Entitlement__c]}">
+                                                                            <li class="invitee">
+                                                                                <div class="name-invitee">{!cont.Contact__r.Name} </div>
+                                                                              <!--  <div class="{!if( cont.Status__c == 'Accepted', 'status-invitee accepted', if( cont.status__c == 'Pending', 'status-invitee pending', 'status-invitee rejected'))}"> {!cont.Status__c}
+                                                                                    <a href="#" class="remove" onclick="if(confirm('{!$Label.CommunityDeleteContextConfirmation}')){removeContact('{!cont.id}');}" style="{!if(OR(cont.status__c == 'Accepted', cont.Status__c=='Pending'), 'display:block', 'display:none')}">
+                                                                                        <span class="icon icon-close"></span>
+                                                                                    </a>
+                                                                                </div>
+                                                                                -->
+                                                                            </li>
+                                                                        </apex:repeat>
+
+                                                                    </ul>
+                                                                </li>
+                                                                <apex:outputPanel layout="none" rendered="{!participantinviteSizeEmptyMap[ent.Entitlement__c]}">
+                                                                    <li>
+                                                                        <div class="name-invitee">
+                                                                            {!$Label.CommunityNoParticipantsMessage}
+                                                                        </div>
+                                                                    </li>
+                                                                </apex:outputPanel>
+                                                                <li>
+                                                                    <ul>
+                                                                        <li class="invitee-list-title observer">{!$Label.CommunityObserver}</li>
+                                                                        <apex:repeat value="{!observerEntitlementContacts[ent.Entitlement__c]}" var="cont" rendered="{!!observerinviteSizeEmptyMap[ent.Entitlement__c]}">
+                                                                            <li class="invitee">
+                                                                                <div class="name-invitee">{!cont.Contact__r.Name} </div>
+                                                                                <div class="{!if( cont.Status__c == 'Accepted', 'status-invitee accepted', if( cont.status__c == 'Pending', 'status-invitee pending', 'status-invitee rejected'))}">{!cont.status__c}
+                                                                                    <a href="#" class="remove" onclick="if(confirm('{!$Label.CommunityDeleteContextConfirmation}')){removeContact('{!cont.id}');}" style="{!if(OR(cont.status__c == 'Accepted', cont.Status__c=='Pending'), 'display:block', 'display:none')}"><span class="icon icon-close"></span></a>
+                                                                                </div>
+                                                                            </li>
+                                                                        </apex:repeat>
+                                                                        <!-- <li class="invitee">
+                                                                            <div class="name-invitee">Jean Ball</div>
+                                                                            <div class="status-invitee pending">Pending</div>
+                                                                            </li>
+                                                                            <li class="invitee">
+                                                                            <div class="name-invitee">Perry Wells</div>
+                                                                            <div class="status-invitee rejected">Rejected</div>
+                                                                            </li> -->
+                                                                    </ul>
+                                                                </li>
+                                                                <apex:outputPanel layout="none" rendered="{!observerinviteSizeEmptyMap[ent.Entitlement__c]}">
+                                                                    <li>
+                                                                        <div class="name-invitee">
+                                                                            {!$Label.CommunityNoObserversMessage}
+                                                                        </div>
+                                                                    </li>
+                                                                </apex:outputPanel>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                    <div class="panel-custom-body row">
+                                                        <div>
+                                                            <h2 style='margin-left: 15px;'> <font color='grey'>{!$Label.Reference_Id}:</font> {!ent.Entitlement__r.Entitlement_Pattern__c} </h2>
+                                                        </div>                                                        
+                                                        <div class="hours-span col-md-6 col-sm-4 clearfix">
+                                                            <apex:outputPanel layout="none" rendered="{!if( AND(ent.Entitlement__r.Name!=$Label.CommunityOthersname, ent.Entitlement__r.Type !='Free'),true, false)}">
+                                                                <a href="#" class="hours-inner">
+                                                                    <span class="hours-min">{!ent.Entitlement__r.Used_number_of_Hours__c}</span>
+                                                                    <!-- span class="hours-max">/</span -->
+                                                                    <span class="hours-max">{!ent.Entitlement__r.Total_Number_of_Hours__c}</span> {!$Label.CommunityHours}
+                                                                </a>
+                                                                <a class="info-tooltip" ref="#" data-toggle="tooltip" data-placement="bottom" title="{!$Label.CommunityPaidHoursHelpText}">&#63;</a>
+                                                            </apex:outputPanel>
+                                                        </div>
+                                                        <!-- /.hours-span -->
+                                                        <!--Buttons-->
+                                                        <div class="col-sm-7 col-md-5 panel-btn-group">
+                                                            <!--button type="button" class="btn btn-lg btn-orange hours-btn"><span class="icon-clock"></span> Buy more Hours</button-->
+
+                                                            <apex:outputPanel layout="none" rendered="{!if(AND(ent.Entitlement__r.Name!=$Label.CommunityOthersname, ent.Entitlement__r.Status!='Inactive',ent.Entitlement__r.Status!='Expired', ent.Status__c !='Pending', ent.Type__c !='Observer'),true, false)}">
+
+                                                                <a class="btn btn-lg btn-orange" href="{!URLFOR($Page.CommunityNXPCreateCase_cloneL)}?entitlementId={!ent.Entitlement__C}"><span class="icon-plus"></span> {!$Label.CommunityNewCaseButton}</a>
+
+                                                            </apex:outputPanel>
+                                                            <!--button type="button" class="btn btn-lg invite-btn"><span class="icon-plus"></span> Invite people</button-->
+                                                            <apex:outputPanel layout="none" rendered="{!if( AND($Label.CommunityShowBuyMoreButton=='Yes', ent.Entitlement__r.Name!=$Label.CommunityOthersname, ent.Entitlement__r.Type !='Free'),true, false)}">
+                                                                <a href="#" class="btn btn-lg btn-orange hours-btn"><span class="icon-clock"></span> {!$Label.CommunityBuymorehoursLabel}</a>
+                                                            </apeX:outputPanel>
+                                                            <apex:outputPanel layout="none" rendered="{!if(AND(ent.Entitlement__r.Name!=$Label.CommunityOthersname, ent.Status__c!= 'Pending', ent.Type__c !='Observer'), true, false)}">
+                                                                <a class="btn btn-lg invite-btn" href="{!URLFOR($Page.CommunityContextInvitePage_cloneL)}?entitlementId={!ent.Entitlement__c}"><span class="icon-plus"></span> {!$Label.CommunityInvitePeopleButton}</a>
+                                                            </apex:outputPanel>
+                                                            <apex:outputPanel layout="none" rendered="{!if(AND(ent.Type__c !='Owner', ent.Entitlement__r.Name!=$Label.CommunityOthersname, ent.Status__c =='Pending'), true, false)}">
+                                                                <a onclick="acceptContext('{!ent.id}')"> <font color="orange">  {!$Label.CommunityAccept}</font> </a>
+                                                                {!$Label.CommunitySlash}
+                                                                <a onclick="rejectContext('{!ent.id}')"> <font color="#808080">{!$Label.CommunityReject}</font></a>
+                                                            </apex:outputPanel>
+                                                        </div>
+                                                        <!--Expand Arrow Button-->
+                                                        <div class="col-sm-1 reveal-arrow">
+                                                            <a href="#" style="{!if(counter!=1,'display:block', 'display:none')}"><span class="icon icon-arrow-down"></span></a>
+                                                            <a href="#" style="{!if(counter==1,'display:block', 'display:none')}"><span class="icon icon-arrow-up"></span></a>
+
+                                                        </div>
+                                                        <!-- /.reveal-arrow -->
+                                                    </div>
+                                                    <!-- Hidden Panel -->
+                                                   <!-- <div class="hidden-panel clearfix" style="{!if(counter==1,'display:block', 'display:none')}">
+                                                        <apex:outputPanel layout="none" rendered="{! ent.Entitlement__r.Additional_description__c != null}">
+                                                            {!$Label.CommunityAdditonalDescription}- {!ent.Entitlement__r.Additional_Description__c}
+                                                        </apex:outputPanel>
+                                                    </div>-->
+                                                    <!-- case list-->
+                                                    <apex:repeat value="{!entitlementCases[ent.Entitlement__c]}" var="cse">
+                                                        <div class="hidden-panel clearfix" style="{!if(counter==1,'display:block', 'display:none')}">
+                                                            <div class="case col-xs-12 clearfix">
+                                                                <div class="col-xs-8">
+                                                                    <a onclick="window.location.href='{!URLFOR($Page.CommunityNXPCaseDetail_cloneL)}?caseId={!cse.Id}'" class="case-name">
+                                                                    {!$Label.CommunityCase} {!cse.CaseNumber}</a>
+                                                                </div>
+                                                                <!-- <span class="col-xs-4 text-right plus1">
+                                                                <span class="icon icon-plus"></span>
+                                                                </span>-->
+                                                            </div>
+                                                            <div class="col-xs-12">
+                                                                <!-- <div class="col-sm-4 col-md-3">
+                                                                    <p class="sub-panel-info">{!cse.Subject}</p>
+                                                                </div>
+                                                                <div class="col-sm-4 col-md-3">
+                                                                    <p class="sub-panel-info">{!cse.Status}</p>
+                                                                </div>
+                                                                <div class="col-sm-4 col-md-3">
+                                                                    <p class="sub-panel-info">{!cse.createdDate}</p>
+                                                                </div> -->
+                                                                <div class="col-sm-4 col-md-3">
+                                                                    <h4 class="sub-panel-title">{!$Label.CommunitySubject}</h4>
+                                                                    <p class="sub-panel-info">{!cse.Subject}</p>
+                                                                </div>
+                                                                <div class="col-sm-4 col-md-3">
+                                                                    <h4 class="sub-panel-title">{!$Label.CommunityStatus}</h4>
+                                                                    <p class="sub-panel-info">{!cse.Status}</p>
+                                                                </div>
+                                                                <div class="col-sm-4 col-md-3">
+                                                                    <h4 class="sub-panel-title">{!$Label.CommunityCreatedDateTitle}</h4>
+                                                                    <p class="sub-panel-info">{!cse.createdDate}</p>
+                                                                </div>
+                                                                <div class="col-xs-12 col-md-3 contact clearfix">
+                                                                    <apex:outputPanel layout="none" rendered="{!cse.Hours_spent_by_Support_person__c!= 0 && cse.Hours_spent_by_Support_person__c!=null}">
+
+                                                                        <h4 class="sub-panel-title">{!$Label.CommunityHoursSpent}</h4>
+                                                                        <p class="sub-panel-info">{!cse.Hours_spent_by_Support_person__c}</p>
+                                                                    </apex:outputPanel>
+
+                                                                </div>
+
+                                                            </div>
+                                                            <!-- Sub Panel list-->
+                                                            <div class="sub-panel col-xs-12">
+                                                                <div class="col-sm-4 col-md-3">
+                                                                    <h4 class="sub-panel-title">{!$Label.CommunitySubject}</h4>
+                                                                    <p class="sub-panel-info">{!cse.Subject}</p>
+                                                                </div>
+                                                                <div class="col-sm-4 col-md-3">
+                                                                    <h4 class="sub-panel-title">{!$Label.CommunityStatus}</h4>
+                                                                    <p class="sub-panel-info">{!cse.Status}</p>
+                                                                </div>
+                                                                <div class="col-sm-4 col-md-3">
+                                                                    <h4 class="sub-panel-title">{!$Label.CommunityCreatedDateTitle}</h4>
+                                                                    <p class="sub-panel-info">{!cse.createdDate}</p>
+                                                                </div>
+                                                                <div class="col-xs-12 col-md-3 contact clearfix">
+                                                                    <apex:outputPanel layout="none" rendered="{!cse.Hours_spent_by_Support_person__c!= 0 && cse.Hours_spent_by_Support_person__c!=null}">
+
+                                                                        <h4 class="sub-panel-title">{!$Label.CommunityHoursSpent}</h4>
+                                                                        <p class="sub-panel-info">{!cse.Hours_spent_by_Support_person__c}</p>
+                                                                    </apex:outputPanel>
+
+                                                                </div>
+
+                                                                <!-- <div class="col-xs-12 col-md-3 contact clearfix">
+                                                                    <button type="button" class="btn"><span class="icon-phone2"></span> Contact support</button>
+                                                                    </div> -->
+                                                            </div>
+                                                            <!-- /.sub-panel -->
+                                                            <!-- {!casesPresenceMap[ent.entitlement__c]}-->
+
+                                                        </div>
+                                                        <!-- /.hidden-panel -->
+                                                    </apex:repeat>
+                                                    <apex:outputPanel rendered="{!casesPresenceMap[ent.Entitlement__c] > contextSize}">
+                                                        <div class="hidden-panel clearfix" style="{!if(counter==1,'display:block', 'display:none')}">
+                                                            <div class="case col-xs-12 clearfix">
+                                                                <div class="col-xs-8">
+
+                                                                </div>
+                                                                <span class="col-xs-4 text-right plus1">
+                                                              <a onclick="window.location.href='{!URLFOR($Page.CommunityContextIndividual)}?entitlementId={!ent.Entitlement__c}'">{!$Label.CommunityViewMore}</a>
+                                                                </span>
+                                                            </div>
+
+                                                        </div>
+                                                    </apex:outputPanel>
+                                                </div>
+                                                <!-- /.panel-custom -->
+                                            </div>
+                                            <!-- /.col-lg-10 -->
+                                        </div>
+                                        <!-- /.head -->
+                                        <apex:variable var="counter" value="{!counter+1}" />
+                                    </apex:outputPanel>
+                                </apex:repeat>
+                                <!-- ===== ===== =====  End First Context ===== ===== ===== -->
+                            </div>
+                        </apex:outputpanel>
+                    </div>
+                    <!-- /.contianer -->
+                </apex:define>
+            </apex:composition>
+        </div>
+        <!-- /#nxp-wrapper -->
+        <!-- JS added -->
+        <script></script>
+        <script>
+            $(document).ready(function() {
+                // Displays Hidden Panel when down arrow is clicked
+                $(".reveal-arrow").click(function(event) {
+                    event.preventDefault();
+                    $(this).find(".icon").toggleClass("icon-arrow-down icon-arrow-up");
+                    $(this).parents(".panel-container").find(".hidden-panel").slideToggle('5000');
+                    event.stopPropagation();
+                });
+
+                // Displays Cases when + is clicked
+                $(".plus1").click(function(event) {
+                    event.preventDefault();
+                    $(this).find(".icon").toggleClass("icon-plus icon-minus");
+                    $(this).parents(".hidden-panel").find(".sub-panel").slideToggle('2000');
+                    event.stopPropagation();
+                });
+            });
+        </script>
+        <script type="text/javascript">
+            $(function() {
+                var pgurl = window.location.href.substr(window.location.href.lastIndexOf("/") + 1);
+                $(".tabBar li").each(function() {
+                    if ($(this).children('a').attr("href") == pgurl)
+                        $(this).attr('id', 'selectedTab');
+                })
+            });
+
+            $(function() {
+                $('[data-toggle="tooltip"]').tooltip()
+            });
+        </script>
+        <!-- Added by Rudy END -->
+    </body>
+
+    </html>
+</apex:page>

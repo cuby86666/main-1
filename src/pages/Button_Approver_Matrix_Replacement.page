@@ -1,0 +1,23 @@
+<apex:page standardController="Approvers_Matrix__c" extensions="Approver_Matrix_Extension_Controller" cache="false" showHeader="false" sidebar="false">
+<script type="text/javascript"> 
+    var previousOnload = window.onload;        
+    window.onload = function() { 
+        if( previousOnload ){ 
+            previousOnload();
+        }
+        
+        if( {!Approvers_Matrix__c.Approver__c == null} ){
+            alert('Please double check Approver. Approver cannot be blank.');
+            window.history.back();
+        } 
+        else if( {!Approvers_Matrix__c.Former_Approver__c == null}) {
+            alert('Please double check Former Approver. Former approver cannot be blank.');
+            window.history.back();
+        } 
+        else {
+        	alert('Updating Opportunities...');
+             window.location.href="/apex/Button_Approver_Matrix?id={!Approvers_Matrix__c.Id}";
+        }
+    }
+</script>
+</apex:page>

@@ -1,0 +1,7 @@
+<apex:page standardController="Case" extensions="communityController" action="{!redirectToCommunityDetailView}">
+
+<style type="text/css">
+    div.knowledgeBlock input {display: none}
+</style>
+    <apex:detail />
+</apex:page>

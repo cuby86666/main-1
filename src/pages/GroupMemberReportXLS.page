@@ -1,0 +1,20 @@
+<!----
+    @Name : Group Member Report
+    @Date : 11 Nov 2011
+    @Created By : Syed Jameel
+    @Description : Show Group and Related Users.
+ --->
+<apex:page contentType="application/vnd.ms-excel#GroupMembers.xls" controller="GroupMemberController" showHeader="false" sideBar="false">
+    <apex:form >
+        <apex:pageBlock >
+            <apex:repeat value="{!modelgulist}" var="rec">
+                <apex:pageBlockSection title="{!rec.groupName}">
+                    <apex:pageBlockTable value="{!rec.usrList}" var="childrec">
+                        <apex:column value="{!childrec.name}"/>
+                        <apex:column value="{!childrec.email}"/>
+                    </apex:pageBlockTable>
+                </apex:pageBlockSection>
+            </apex:repeat>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

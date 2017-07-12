@@ -1,0 +1,23 @@
+<apex:page sidebar="false" showHeader="false">
+<head>
+    <style>
+        .startStyle{
+            font-size:12px;
+            font-weight:bold;
+            color:red;
+        }           
+    </style>
+</head>
+
+<apex:image id="logo" value="{!$Resource.Apttus}" style="align: left;" height="100" width="233"/>
+<apex:form id="frm">
+<div style="width:800px; padding-left:15%; ">
+<apex:pageBlock id="nxp" title="Thanks for submitting the form">
+<apex:pageMessage detail="Thank you for completing the form and the Admin Team would be notified of your submission." severity="INFO"></apex:pageMessage>
+<center>
+    <apex:commandButton value="New Agreement" onclick="javascript:window.location.href='/apttusnda'; return false;"/>
+    </center>
+</apex:pageBlock>
+</div>
+</apex:form>
+</apex:page>

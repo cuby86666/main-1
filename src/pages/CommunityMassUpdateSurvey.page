@@ -1,0 +1,32 @@
+<!-- 
+Created By: Vinanthi
+Created Date:29th July 2016
+Description:This page is used to mark survey answers of case as non personal
+--------------------------------- -->
+<apex:page standardController="Survey_Answer__c" extensions="CommunityCaseSurveyController"
+   recordSetVar="TestRecords" >
+   <apex:form >
+   <apex:pageBlock >
+   <apex:pageBlockButtons >
+
+        <apex:commandButton value="Save"
+
+            action="{!updateSurvey}"/>
+
+        <apex:commandButton value="Cancel"
+
+            action="{!cancel}"/>
+
+      </apex:pageBlockButtons>
+      
+      <apex:pageBlockSection title="Status Update"
+
+          collapsible="false" >
+
+       <apex:inputField value="{!Survey_Answer__c.Non_Personal__c}"/> 
+    </apex:pageBlockSection>
+   
+
+</apex:pageBlock>
+      </apex:form>
+</apex:page>

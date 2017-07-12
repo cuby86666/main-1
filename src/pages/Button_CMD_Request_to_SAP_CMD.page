@@ -1,0 +1,2 @@
+<apex:page standardController="CMD_Request__c" extensions="CMD_Request_Controller_SAP_Extension" action="{!New_SAP_CMD}" >
+</apex:page>

@@ -1,0 +1,10 @@
+<apex:page standardController="Approver_History__c" extensions="PendingDaysClsController"><apex:form >
+<apex:pageBlock title="Approver Performance Management">
+    <apex:pageBlockSection columns="1">
+        <apex:pageBlockSection title="Calculate Approvers Pending Days" columns="1">
+            <h1>It will take 10 to 30 minutes to complete calculation</h1>
+            <apex:commandButton value="Run Refresh" action="{!Run_Calculate_Approver_Pending_Days}" />
+        </apex:pageBlockSection>
+    </apex:pageBlockSection>
+</apex:pageBlock>
+</apex:form></apex:page>

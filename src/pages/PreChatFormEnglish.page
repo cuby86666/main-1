@@ -1,0 +1,423 @@
+<apex:page showHeader="false" >
+
+<apex:image url="{!$Resource.NXPLogo}"  style="centre" /><br></br>
+
+
+<script type="text/javascript">
+(function() {
+function handlePageLoad() {
+var endpointMatcher = new RegExp("[\\?\\&]endpoint=([^&#]*)");
+document.getElementById('prechatForm').setAttribute('action',
+decodeURIComponent(endpointMatcher.exec(document.location.search)[1]));
+} if (window.addEventListener) {
+window.addEventListener('load', handlePageLoad, false);
+} else { window.attachEvent('onload', handlePageLoad, false);
+}})();
+</script>
+<script type="text/javascript">
+function validateForm(){
+ var x=document.forms["prechatForm"]["liveagent.prechat:ContactEmail"].value;
+ var y=document.forms["prechatForm"]["liveagent.prechat:ContactFirstName"].value;
+ var ln=document.forms["prechatForm"]["liveagent.prechat:ContactLastName"].value;
+ var com=document.forms["prechatForm"]["liveagent.prechat:ContactCompany"].value;
+ var con=document.forms["prechatForm"]["liveagent.prechat:ContactCountry"].value;
+ var answer=document.getElementById("mySelect");
+
+ var filter = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+ var filter1 = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+  var str='None';
+   
+ if ((x==null || x=="")&&(y==null||y=="")&&(ln==null||ln=="")&&(com==null||com=="")&&(con==null||con==""))
+   {
+   alert("Please fill the fields that are mandatory");
+   return false;
+   }
+ 
+ if (y==null || y=="")
+   {
+   alert("First Name Field is mandatory");
+   return false;
+   }  
+   
+    if (ln==null || ln=="")
+   {
+   alert("Last Name Field is mandatory");
+   return false;
+   }  
+   
+ else if(x==null || x=="")
+   {
+   alert("Email Field is mandatory");
+   return false;
+   }
+ else if(y==null || y=="")
+   {
+   alert("Name Field is mandatory");
+   return false;
+   }   
+ else if((x!=null||x!="")&&(y!=null||y!=""))
+    {
+     if (!filter1.test(x))  
+      {  
+         alert("Please enter valid e-mail address")
+         return false;
+      }
+ }        
+     
+    if (com==null || com=="")
+   {
+   alert("Company Field is mandatory");
+   return false;
+   }  
+      
+   if(answer[answer.selectedIndex].value=="None"){
+   alert("Country value cannot be None");
+   return false;
+ }
+   
+ }  
+ 
+ 
+ 
+</script>
+<style type="text/css">
+h1{font-size:100%;font-weight: bold;text-indent:1px;text-align:center}
+h2{font-size:80%;text-indent:0px;text-align:center;color:#D71629}
+body{ font-weight: bold;text-indent:0px;text-align:left;font-size:100%;border-style:solid;
+ border-width:1px;}
+legend {font-size:150%}
+fieldset {border: 1px solid;padding: 1em;font:80%/1 sans-serif}
+label {float:left;width:25%;margin-right:2.5em;padding-top:0.2em;text-align:left;font-weight:bold;font-size:100%}
+#prechat_submit {border-top:        2px solid #a3ceda;
+    border-left:        4px solid #000000;
+    border-right:       4px solid #000000;
+    border-bottom:      4px solid #000000;
+    padding:        10px 20px !important;
+    font-size:      14px !important;
+    background-color:   #DCDCDC;
+    font-weight:        bold;
+    color:          #000000;
+}
+</style>
+
+<h1>Please fill below details </h1><br></br>
+
+<h2>(All fields marked * are compulsory)</h2>
+
+<form method='post' id='prechatForm' name="prechatForm" onsubmit="return validateForm();">
+<fieldset id ="Personal information">
+<legend>Personal information</legend>
+
+ <input type="hidden" name="liveagent.prechat.name" id="prechat_field_name" />
+
+ <!-- <label for="Name">First Name:*</label><input type='text' name='liveagent.prechat:First Name' id='firstName' style="width:175px"/><br />
+<input type="hidden" name="liveagent.prechat.save:First Name" value="First_Name__c" />
+
+<label for="Name">Last Name:*</label><input type='text' name='liveagent.prechat:Last Name' id='lastName' style="width:175px"/><br />
+<input type="hidden" name="liveagent.prechat.save:Last Name" value="Last_Name__c" />
+
+<label for="email">Email Address:*</label><input type='text' name='liveagent.prechat:Email' style="width:175px"/><br />
+<input type="hidden" name="liveagent.prechat.save:Email" value="Email__c" />
+
+<label for="email">Company:*</label><input type='text' name='liveagent.prechat:Company' style="width:175px"/><br />
+<input type="hidden" name="liveagent.prechat.save:Company" value="Company__c" /> -->
+
+<label for="Name">First Name:*</label><input type='text' name='liveagent.prechat:ContactFirstName' id='firstName' style="width:175px"/><br />
+<input type="hidden" name="liveagent.prechat.save:ContactFirstName" value="First_Name__c" />
+
+<label for="Name">Last Name:*</label><input type='text' name='liveagent.prechat:ContactLastName' id='lastName' style="width:175px"/><br />
+<input type="hidden" name="liveagent.prechat.save:ContactLastName" value="Last_Name__c" />
+
+<label for="email">Email Address:*</label><input type='text' name='liveagent.prechat:ContactEmail' style="width:175px"/><br />
+<input type="hidden" name="liveagent.prechat.save:ContactEmail" value="Email__c" />
+
+<label for="email">Company:*</label><input type='text' name='liveagent.prechat:ContactCompany' style="width:175px"/><br />
+<input type="hidden" name="liveagent.prechat.save:ContactCompany" value="Company__c" /> 
+
+
+<label for="country">Country:*</label><select name='liveagent.prechat:ContactCountry' id="mySelect" style="width:180px">
+ <option>None</option>
+ <option>  AFGHANISTAN  </option>
+ <option>   ALBANIA  </option>
+ <option>   ALGERIA  </option>
+ <option>   AMERICAN SAMOA   </option>
+ <option>   ANDORA   </option>
+ <option>   ANGOLA   </option>
+ <option>   ANTARTICA    </option>
+ <option>   ANTIGUA  </option>
+ <option>   ARGENTINA    </option>
+ <option>   ARMENIA  </option>
+ <option>   ASIA PACIFIC     </option>
+ <option>   AUSTRALIA    </option>
+ <option>   AUSTRIA  </option>
+ <option>   BAHAMAS  </option>
+ <option>   BAHRAIN  </option>
+ <option>   BANGLADESH   </option>
+ <option>   BARBADOS     </option>
+ <option>   BELARUS  </option>
+ <option>   BELGIUM  </option>
+ <option>   BELIZE   </option>
+ <option>   BERMUDA  </option>
+ <option>   BHUTAN   </option>
+ <option>   BOLIVIA  </option>
+ <option>   BOSNIA-HERZEGOVINA   </option>
+ <option>   BOTSWANA     </option>
+ <option>   BOUVET ISLAND    </option>
+ <option>   BRAZIL   </option>
+ <option>   BRITISH ANTARTIC     </option>
+ <option>   BRITISH INDIAN OCEAN TER     </option>
+ <option>   BRITISH VIRGIN ISLANDS   </option>
+ <option>   BRUNEI   </option>
+ <option>   BULGARIA     </option>
+ <option>   BURKINA FASO     </option>
+ <option>   BURMA    </option>
+ <option>   BURUNDI  </option>
+ <option>   CAMBODIA     </option>
+ <option>   CAMEROON     </option>
+ <option>   CANADA   </option>
+ <option>   CANAL ZONE   </option>
+ <option>   CANTON &amp; ENDERBURY ISLANDS   </option>
+ <option>   CAPE VERDE, TERITORY OF  </option>
+ <option>   CAYMAN ISLANDS   </option>
+ <option>   CENTRAL AFRICAN REPUBLIC     </option>
+ <option>   CHAD     </option>
+ <option>   CHILE    </option>
+ <option>   CHINA    </option>
+ <option>   CHRISTMAS ISLAND     </option>
+ <option>   COCOS (KEELING) ISLANDS  </option>
+ <option>   COLOMBIA     </option>
+ <option>   COMORO ISLANDS   </option>
+ <option>   CONGO    </option>
+ <option>   COOK ISLANDS     </option>
+ <option>   COSTA RICA   </option>
+ <option>   CROATIA  </option>
+ <option>   CYPRUS   </option>
+ <option>   CZECH REPUBLIC   </option>
+ <option>   DAHOMEY  </option>
+ <option>   DENMARK  </option>
+ <option>   DOMINICA     </option>
+ <option>   DOMINICAN REPUBLIC   </option>
+ <option>   DRONNING MAUD LAND   </option>
+ <option>   ECUADOR  </option>
+ <option>   EGYPT    </option>
+ <option>   EL SALVADORE     </option>
+ <option>   EQUATORIAL GUINEA    </option>
+ <option>   ESTONIA REPUBLIC     </option>
+ <option>   ETHIOPIA     </option>
+ <option>   EUR ECONOMIC COMMTY ECU  </option>
+ <option>   FAEROE ISLANDS   </option>
+ <option>   FALKLAND ISLANDS(MALVINAS)   </option>
+ <option>   FIJI     </option>
+ <option>   FINLAND  </option>
+ <option>   FRANCE   </option>
+ <option>   FRENCH GUIANA    </option>
+ <option>   FRENCH POLYNESIA     </option>
+ <option>   FRENCH SOUTH &amp; ANTARTIC LD   </option>
+ <option>   GABON    </option>
+ <option>   GAMBIA   </option>
+ <option>   GEORGIA  </option>
+ <option>   GERMANY  </option>
+ <option>   GHANA    </option>
+ <option>   GIBRALTER    </option>
+ <option>   GILBERT &amp; ELLICE ISLANDS     </option>
+ <option>   GREECE   </option>
+ <option>   GREENLAND    </option>
+ <option>   GRENADA  </option>
+ <option>   GUADELOUPE   </option>
+ <option>   GUAM     </option>
+ <option>   GUATEMALA    </option>
+ <option>   GUINEA   </option>
+ <option>   GUINEA-BISSAU    </option>
+ <option>   GUYANA   </option>
+ <option>   HAITI    </option>
+ <option>   HEARD &amp; MCDONALD ISLANDS     </option>
+ <option>   HONDURAS     </option>
+ <option>   HONG KONG    </option>
+ <option>   HUNGARY  </option>
+ <option>   ICELAND  </option>
+ <option>   INDIA    </option>
+ <option>   INDONESIA    </option>
+ <option>   IRAQ     </option>
+ <option>   IRAQ-SAUDIA ARABIA (NEUT)    </option>
+ <option>   IRELAND  </option>
+ <option>   ISRAEL   </option>
+ <option>   ITALY    </option>
+ <option>   IVORY COAST  </option>
+ <option>   JAMAICA  </option>
+ <option>   JAPAN    </option>
+ <option>   JOHNSON ATOLL (ISLAND)   </option>
+ <option>   JORDAN   </option>
+ <option>   KAZAKHTAZAN  </option>
+ <option>   KENYA    </option>
+ <option>   KUWAIT   </option>
+ <option>   Korea (Republic - South)     </option>
+ <option>   LAM EXPORT   </option>
+ <option>   LAOS     </option>
+ <option>   LATVIA   </option>
+ <option>   LEBANON  </option>
+ <option>   LESOTHO  </option>
+ <option>   LIBERIA  </option>
+ <option>   LIBYA    </option>
+ <option>   LIECHTENSTEIN    </option>
+ <option>   LITHUANIA    </option>
+ <option>   LUXEMBOURG   </option>
+ <option>   MACAU    </option>
+ <option>   MACEDONIA    </option>
+ <option>   MADAGASCAR   </option>
+ <option>   MALAWI   </option>
+ <option>   MALAYSIA     </option>
+ <option>   MALDIVES     </option>
+ <option>   MALI     </option>
+ <option>   MALTA    </option>
+ <option>   MARTINIQUE   </option>
+ <option>   MAURITANIA   </option>
+ <option>   MAURITIUS    </option>
+ <option>   MEXICO   </option>
+ <option>   MIDWAY ISLANDS   </option>
+ <option>   MOLDAVIA     </option>
+ <option>   MONACO   </option>
+ <option>   MONGOLIA     </option>
+ <option>   MONTENEGRO   </option>
+ <option>   MONTSERRAT   </option>
+ <option>   MOROCCO  </option>
+ <option>   MOZAMBIQUE   </option>
+ <option>   NAURU    </option>
+ <option>   NAVASSA ISLAND   </option>
+ <option>   NEPAL    </option>
+ <option>   NETHERLANDS  </option>
+ <option>   NETHERLANDS ANTILLES     </option>
+ <option>   NEW CALEDONIA    </option>
+ <option>   NEW HEBRIDES     </option>
+ <option>   NEW ZEALAND  </option>
+ <option>   NICARAGUA    </option>
+ <option>   NIGER    </option>
+ <option>   NIGERIA  </option>
+ <option>   NIUE ISLANDS     </option>
+ <option>   NORFOLK ISLAND   </option>
+ <option>   NORWAY   </option>
+ <option>   OMAN     </option>
+ <option>   PACIFIC ISLNDS (TRUST TER)   </option>
+ <option>   PAKISTAN     </option>
+ <option>   PANAMA   </option>
+ <option>   PAPUA NEW GUINEA     </option>
+ <option>   PARACEL ISLANDS  </option>
+ <option>   PARAGUAY     </option>
+ <option>   PERU     </option>
+ <option>   PHILIPPINES  </option>
+ <option>   PITCAIRN ISLAND  </option>
+ <option>   POLAND   </option>
+ <option>   PORTUGAL     </option>
+ <option>   PORTUGUESE TIMOR     </option>
+ <option>   PUERTO RICO  </option>
+ <option>   QATAR    </option>
+ <option>   REUNION  </option>
+ <option>   ROMANIA  </option>
+ <option>   RUSSIA   </option>
+ <option>   RWANDA   </option>
+ <option>   SAN MARINO   </option>
+ <option>   SAO TOME AND PRINCIPE    </option>
+ <option>   SAUDIA ARABIA    </option>
+ <option>   SENEGAL  </option>
+ <option>   SERBIA   </option>
+ <option>   SEYCHELLES   </option>
+ <option>   SIERRA LEONE     </option>
+ <option>   SIKKIM   </option>
+ <option>   SINGAPORE    </option>
+ <option>   SLOVAKIA     </option>
+ <option>   SLOVENIA     </option>
+ <option>   SOLOMON ISLANDS  </option>
+ <option>   SOMOLIA  </option>
+ <option>   SOUTH AFRICA     </option>
+ <option>   SOUTH-WEST AFRICA    </option>
+ <option>   SPAIN    </option>
+ <option>   SPANISH SAHARA   </option>
+ <option>   SPRATLY ISLANDS  </option>
+ <option>   SRI LANKA    </option>
+ <option>   ST CHRISTOPHER-NEVIS-ANG.    </option>
+ <option>   ST HELENA    </option>
+ <option>   ST LUCIA     </option>
+ <option>   ST PIERRE AND MIQUELON   </option>
+ <option>   ST VINCENT   </option>
+ <option>   SURINAM  </option>
+ <option>   SVALBARD &amp;JAN MAYAN     </option>
+ <option>   SWAZILAND    </option>
+ <option>   SWEDEN   </option>
+ <option>   SWITZERLAND  </option>
+ <option>   TAIWAN   </option>
+ <option>   TANZANIA, UNITED REPUBLIC    </option>
+ <option>   TER OF AFARS &amp; ISSAS FRNCH   </option>
+ <option>   THAILAND     </option>
+ <option>   TOGO     </option>
+ <option>   TOKELAU ISLANDS  </option>
+ <option>   TONGA    </option>
+ <option>   TRINIDAD &amp; TOBAGO    </option>
+ <option>   TUNISIA  </option>
+ <option>   TURKEY   </option>
+ <option>   TURKMENISTAN     </option>
+ <option>   TURKS &amp; CAICOS ISLANDS   </option>
+ <option>   U.S. MISC PACIFIC ISLANDS    </option>
+ <option>   UGANDA   </option>
+ <option>   UKRAINE  </option>
+ <option>   UNITED ARAB EMIRATES     </option>
+ <option>   UNITED KINGDOM   </option>
+ <option>   UNITED STATES    </option>
+ <option>   UPPER VOLTA  </option>
+ <option>   URUGUAY  </option>
+ <option>   VATICAN CITY     </option>
+ <option>   VENEZUELA    </option>
+ <option>   VIETNAM  </option>
+ <option>   VIRGIN ISLANDS OF THE U.S.   </option>
+ <option>   WAKE ISLAND  </option>
+ <option>   WALLIS AND FUTUNA    </option>
+ <option>   WESTERN SAMOA    </option>
+ <option>   YEMEN    </option>
+ <option>   YEMEN (ADEN)     </option>
+ <option>   ZAIRE    </option>
+ <option>   ZAMBIA   </option>
+ <option>   ZIMBABWE     </option>
+
+</select>
+<br/>
+
+
+<input type='hidden' name='liveagent.prechat:ContactCountry' />
+                        <input type="hidden" name="liveagent.prechat.save:ContactCountry" value="Country__c" />
+<input type="hidden" name="liveagent.prechat.query:Email"
+value="Contact,Contact.Email" />
+<input type="hidden" name="liveagent.prechat.save:Email" value="Email__c" size="40" />
+
+<!-- find contact and save to trenscript -->
+
+<!-- <input type="hidden" name="liveagent.prechat.findorcreate.map:Contact" value="FirstName,First Name;LastName,Last Name;Company,Company;Country,Country;Email,Email" /> -->
+
+<input type="hidden" name="liveagent.prechat.findorcreate.map:Contact" value="FirstName,ContactFirstName;LastName,ContactLastName;Company,ContactCompany;Country,ContactCountry;Email,ContactEmail" /> 
+<!-- <input type="hidden" name="liveagent.prechat.findorcreate.map:Contact" value="FirstName,ContactFirstName;LastName,ContactLastName;Company,ContactCompany__c;Country,ContactCommunity_web_country__c;Email,ContactEmail" /> -->
+
+ 
+
+<input type="hidden" name="liveagent.prechat.findorcreate.map.doFind:Contact" value="Email,true" />
+
+<input type="hidden" name="liveagent.prechat.findorcreate.map.isExactMatch:Contact" value="Email,true" />
+<input type="hidden" name="liveagent.prechat.findorcreate.saveToTranscript:Contact" value="ContactId" />
+
+<input type="hidden" name="liveagent.prechat.findorcreate.showOnCreate:Contact" value="true" />
+
+
+<input type='submit' value='Request Chat' id='prechat_submit' align="center" onclick="setName()"/>
+
+<!-- Set the visitor's name for the agent in the Console to first and last name provided by the customer -->
+
+<script type="text/javascript">
+
+   function setName() {
+
+    document.getElementById("prechat_field_name").value = 
+
+        document.getElementById("firstName").value + " " + document.getElementById("lastName").value;
+
+    }
+
+</script>
+</fieldset>
+</form>
+</apex:page>

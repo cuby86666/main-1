@@ -1,0 +1,65 @@
+<!------------------------------------------------------------------------------
+@LastModified By :  Stan Hsu
+@Modified For :   Release 2015.08 SIR#268
+@Description :    Fix the issue where user re-click the verification email
+@                   may cause the approved request to go into approval again
+---------------------------------------------------------------------------------->
+<apex:page controller="CMD_Request_Controller" cache="false" standardStylesheets="false" showHeader="false" sidebar="false" 
+    title="NXP CMD Request" applyBodyTag="true" applyHtmlTag="true"
+    action="{!ConfirmRequest}">
+
+<style>
+    body { font-family:"Arial","Unicode MS",Sans-serif !important; font-size:12px; }
+    table { margin-left: 2%; margin-right: auto; }
+    div.pbSubheader{ text-align:left; margin-left:32px; color:#C6D200; font-size:11px; font-style:italic; } 
+    .subheader{ text-align:right; color:#C6D200; font-size:12px; font-style:italic;  } 
+    input { margin-left:8px; padding-left:4px; }
+    .validationButton { font-weight:bold;font-size:11px;}
+    select { margin-left:8px; min-width:90px;}
+    .labelCol { text-align:right; font-size:10px; font-weight:bold; min-width:100px; max-width:200px; margin-left:8px; }
+    .buttonCol { width:60px;}
+    .required { border-style:inset; border-color:#FFB500;}
+    .requiredSelect { border-style:inset; border-color:#FFB500; }
+    .redAsterisk { color:#FFB500; font-weight:bold !important;font-size:16px !important; }
+    .button { font-weight:bold;font-size:11px; margin:8px; }
+    .validationButton { font-weight:bold;font-size:11px; margin-left:8px; margin-top:1px; margin-bottom:1px; }
+    .helpText { color:#8AB1DC; margin-left:8px; font-size:10px; text-align:left; font-weight:normal !important;}
+    .valid { color:#C6D200; margin-left:8px; font-size:10px; text-align:left; }
+    .invalid { color:#FFB500;  margin-left:8px; font-size:10px; text-align:left;}
+</style>
+ 
+
+    <TABLE><TR>
+    <TD><apex:image url="{!URLFOR($Resource.CMD_Logo)}"/></TD>
+    <TD><apex:outputText value="CMD Request" style="font-weight:bold;"/></TD>
+    </TR></TABLE>
+
+    <hr/>
+
+    <TABLE><TR><TD>
+    <apex:outputPanel layout="none" id="thePage">
+    
+    <apex:pageBlock rendered="{!(Verified=true)}">
+        <apex:outputText value="Your email has been verified,"/>
+        <BR/>
+        <apex:outputText value="and your CMD request has been submitted for approval."/>
+<!---- 2015.08 SIR#268 ----------- Code Block BEGIN ------------------------------------>
+        <BR/>
+<!--        
+        <apex:outputLink value="https://nxp.my.salesforce.com/{!CMD.Id}">
+            <apex:outputText value="https://nxp.my.salesforce.com/{!CMD.Id}"/>
+        </apex:outputLink>            
+-->
+  <!--      <apex:outputLink value="https://nxp--full.cs23.my.salesforce.com/{!CMD.Id}">
+            <apex:outputText value="https://nxp--full.cs23.my.salesforce.com/{!CMD.Id}"/>
+        </apex:outputLink>    -->        
+<!---- 2015.08 SIR#268 ----------- Code Block END ------------------------------------>
+    </apex:pageBlock>
+
+    <apex:pageBlock rendered="{!(Verified=false)}">
+        <apex:outputText value="Email Verification Failed."/>
+    </apex:pageBlock>
+
+    </apex:outputPanel>
+    </TD></TR></TABLE>
+</apex:page>

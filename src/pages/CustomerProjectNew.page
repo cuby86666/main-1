@@ -1,0 +1,1 @@
+<apex:page standardController="Customer_Project__c" action="{!URLFOR($Action.Customer_Project__c.New, null, ['Name'='AUTO-GENERATED'], true)}"/>

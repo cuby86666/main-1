@@ -1,0 +1,39 @@
+<!--  
+@Created By :       Nisha Agrawal
+@Created Date:      01 Nov 2012
+@Description:       VF page to edit all eRebate Products
+-->
+
+<apex:page standardController="eRebate_Product__c" recordSetVar="products" extensions="EditAllERebateProductsController">
+  <apex:form >      
+    <apex:sectionHeader title="Edit Product for {!objERebate.Name}"   />
+    <apex:pageMessages id="pageMsg" />
+    <apex:actionStatus id="status" StartText="Searching..." startStyle="font-color:red;">
+            <apex:facet name="start">
+                <apex:image value="/img/loading.gif" />
+            </apex:facet>
+    </apex:actionStatus>    
+    <apex:pageBlock id="multiProductEdit">
+         <apex:pageBlockButtons location="top">
+            <apex:commandButton action="{!saveProducts}" value="Save" rerender="pageMsg" status="status"/>
+            <apex:commandButton action="{! URLFOR('/' + objERebate.Id , null )}" value="Cancel"  status="status"/>
+        </apex:pageBlockButtons>            
+        
+        <apex:pageBlockTable id="pbtProducts" cellpadding="2" cellspacing="2" border="1" columns="5" value="{!lsteRebateLines}" var="item">
+            <apex:column value="{! item.Product__r.Name}" headervalue="Product"  />
+           <apex:column headervalue="Price Gap" >
+                    <apex:inputText value="{! item.Price_Gap__c}" required="true" />
+            </apex:column>
+            <apex:column headervalue="Real Cost in Rebate Currency" >
+                    <apex:inputText value="{! item.Real_Cost_in_Rebate_Currency__c}" /> 
+            </apex:column>
+            <apex:column headervalue="Line Description" >
+                <apex:inputText value="{! item.Line_Description__c}"   />
+            </apex:column>
+            <apex:column headervalue="Quantity"  >
+                <apex:inputText value="{! item.Quantity__c}" required="true"   />
+            </apex:column>
+        </apex:pageBlockTable>          
+    </apex:pageBlock>  
+  </apex:form>  
+</apex:page>

@@ -1,0 +1,623 @@
+<!--<apex:page standardController="Account" extensions="TrackingSheetController"-->
+<!--<apex:page controller="TrackingSheetController" -->
+<apex:page standardController="Account" extensions="TrackingSheetController"
+tabStyle="Opportunity" 
+  standardStylesheets="true" sidebar="false" id="thePage" cache="false" readOnly="true">
+
+  <script src=
+  "https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"
+  type="text/javascript">
+</script>
+
+<style>
+.AOPtable {
+    table-layout:auto;
+    border:0px solid white;
+}
+.AOPtrHeader {
+    font-weight:bold;
+    background-color:#1798C1; 
+    vertical-align:bottom;
+}    
+.AOPtdHeader {
+    text-align:center;
+    padding:3px;
+}    
+.AOPtdSide {
+    text-align:right;
+    font-weight:bold;
+    background-color:#7ec5dc; 
+    padding:3px;
+    white-space:nowrap;
+}    
+.DWtdSide {
+    text-align:right;
+    font-weight:normal;
+    background-color:#b1dcea; 
+    padding:3px;
+    white-space:nowrap;
+}    
+.AOPtr {
+}    
+.AOPtd {
+    text-align:right;
+    background-color:#cbe8f1; 
+    font-weight:bold;
+    padding:3px;
+    white-space:nowrap;
+}    
+.DWtd {
+    text-align:right;
+    background-color:#e5f3f8; 
+    font-weight:normal;
+    padding:3px;
+    white-space:nowrap;
+}    
+.tableClass {
+    border:1px solid white;
+    border-collapse:collapse;
+	width : 1680px; }
+.tableHeader { 
+    color:White; 
+    font-weight:bold;
+    background-color:#1798C1; 
+    vertical-align:bottom;
+    text-align:center;
+    width : 1680px; 
+}
+<!-- Added by GHANALINGAMURTHY for Floating header-->
+    
+.tableHeader th:nth-child(6)
+{ 
+    padding-left: 50px;
+    padding-right: 65px;
+}
+
+.tableHeader th:nth-child(5)
+{ 
+    padding-left: 10px; 
+}
+.tableHeader th:nth-child(4)
+{
+    padding-left: 15px;    
+}
+<!-- till here -->
+    
+.indexColumn { 
+    font-weight:bold; 
+    color:#1798C1; 
+    align:right; 
+}    
+.lightRow { 
+    background-color:#e5f3f8; 
+    border:0; 
+} 
+.darkRow { 
+    background-color:#cbe8f1; 
+    border:0; 
+}
+.lightColumn { 
+    background-color:#b1dcea; 
+    border:0; 
+}
+.darkColumn {
+    background-color:#7ec5dc; 
+    border:0; 
+} 
+.inputText { 
+    border:0; 
+    background-color:#E5F3F8; 
+}    
+.inputSelectList { 
+    border:0; 
+    background-color:#E5F3F8; 
+}    
+.tableFooter { background-color:#CBE8F1; }    
+
+/* define height and width of scrollable area. Add 16px to width for scrollbar          */
+div.pbBody {
+  clear: both;
+  overflow: scroll
+}
+
+/* Reset overflow value to hidden for all non-IE browsers. */
+html>body div.pbBody {
+  overflow: visible
+}
+
+/* define width of table. IE browsers only                 */
+div.pbBody table {
+  float: left;
+  vertical-align:top;  
+}
+
+/* define width of table. Add 16px to width for scrollbar.           */
+/* All other non-IE browsers.                                        */
+html>body div.pbBody table {
+}
+    
+/* set table header to a fixed position. WinIE 6.x only                                       */
+/* In WinIE 6.x, any element with a position property set to relative and is a child of       */
+/* an element that has an overflow property set, the relative value translates into fixed.    */
+/* Ex: parent element DIV with a class of tableContainer has an overflow property set to auto */
+thead.tr {
+  position: relative
+}
+
+/* set THEAD element to have block level attributes. All other non-IE browsers            */
+/* this enables overflow to work on TBODY element. All other non-IE, non-Mozilla browsers */
+html>body thead.tr {
+  display: block
+}
+
+/* define the table content to be scrollable                                              */
+/* set TBODY element to have block level attributes. All other non-IE browsers            */
+/* this enables overflow to work on TBODY element. All other non-IE, non-Mozilla browsers */
+/* induced side effect is that child TDs no longer accept width: auto                     */
+html>body tbody.thePage:j_id1:pageBlockEditLegalName:detailTable:tb {
+  display: block;
+  overflow: scroll;
+  width: 100%
+}
+</style>   
+<!------------------------------------------------------------------------------------>
+<chatter:feed entityId="0F9L00000003VZp" rendered="{!($CurrentPage.parameters.Id!=null)}"/>
+<apex:form >
+<apex:pagemessages />
+<apex:pageBlock id="thePageBlock" mode="edit">
+    <apex:actionRegion >
+        <apex:pageBlockSection columns="1" rendered="{!($CurrentPage.parameters.Id!=null)}">
+        <apex:pageBlockSection id="accountInfo" title="Please Select an Account" rendered="{!($CurrentPage.parameters.Id!=null)}">
+            <apex:inputField value="{!objAcc.Account_Lookup__c}">
+                <apex:actionSupport event="onchange" action="{!switchAccount}" reRender="thePageBlock" status="status" />
+            </apex:inputField>
+        </apex:pageBlockSection>
+        </apex:pageBlockSection>
+        <apex:actionStatus id="status" StartText="Searching..." startStyle="font-color:red;">
+            <apex:facet name="start">
+                <apex:image value="/img/loading.gif" />
+            </apex:facet>
+    	</apex:actionStatus>
+        
+        <apex:pageBlockSection >
+            <apex:pageBlockSectionItem >
+                <apex:outputPanel layout="none">
+                <div id="stickyheader">
+                <TABLE class="AOPtable">
+                    <TR class="AOPtrHeader">
+                        <TD class="AOPtdHeader" style="color:White;white-space:nowrap;">
+                            &nbsp;
+                        </TD>
+                        <TD class="AOPtdHeader" style="color:White;white-space:nowrap;">
+                            &nbsp;&nbsp;1H {!YEAR(TODAY())}&nbsp;&nbsp;
+                        </TD>
+                        <TD class="AOPtdHeader" style="color:White;white-space:nowrap;">
+                            &nbsp;&nbsp;2H {!YEAR(TODAY())}&nbsp;&nbsp;
+                        </TD>
+                        <TD class="AOPtdHeader" style="color:White;white-space:nowrap;">
+                            &nbsp;&nbsp;1H {!(YEAR(TODAY())+1)}&nbsp;&nbsp;
+                        </TD>
+                        <TD class="AOPtdHeader" style="color:White;white-space:nowrap;">
+                            &nbsp;&nbsp;2H {!(YEAR(TODAY())+1)}&nbsp;&nbsp;
+                        </TD>
+                    </TR>
+                    <TR class="AOPtr">
+                        <TD class="AOPtdSide" style="white-space:nowrap;background-color:#7ec5dc;">
+                            AOP
+                        </TD>
+                        <TD class="AOPtd">
+                            <apex:outputText value="{0,number,###,###,##0}">
+                                <apex:param value="{!AOP1HY1}"/>
+                            </apex:outputText>
+                        </TD>
+                        <TD class="AOPtd">
+                            <apex:outputText value="{0,number,###,###,##0}">
+                                <apex:param value="{!AOP2HY1}"/>
+                            </apex:outputText>
+                        </TD>
+                        <TD class="AOPtd">
+                            <apex:outputText value="{0,number,###,###,##0}">
+                                <apex:param value="{!AOP1HY2}"/>
+                            </apex:outputText>
+                        </TD>
+                        <TD class="AOPtd">
+                            <apex:outputText value="{0,number,###,###,##0}">
+                                <apex:param value="{!AOP2HY2}"/>
+                            </apex:outputText>
+                        </TD>
+                    </TR>
+                    <TR class="AOPtr">
+                        <TD class="AOPtdSide">
+                            120% AOP
+                        </TD>
+                        <TD class="AOPtd">
+                            <apex:outputText value="{0,number,###,###,##0}">
+                                <apex:param value="{!((AOP1HY1)*1.2)}"/>
+                            </apex:outputText>
+                        </TD>
+                        <TD class="AOPtd">
+                            <apex:outputText value="{0,number,###,###,##0}">
+                                <apex:param value="{!((AOP2HY1)*1.2)}"/>
+                            </apex:outputText>
+                        </TD>
+                        <TD class="AOPtd">
+                            <apex:outputText value="{0,number,###,###,##0}">
+                                <apex:param value="{!((AOP1HY2)*1.2)}"/>
+                            </apex:outputText>
+                        </TD>
+                        <TD class="AOPtd">
+                            <apex:outputText value="{0,number,###,###,##0}">
+                                <apex:param value="{!((AOP2HY2)*1.2)}"/>
+                            </apex:outputText>
+                        </TD>
+                    </TR>
+                    <TR class="AOPtr">
+                        <TD class="AOPtdSide">
+                            Total View
+                        </TD>
+                        <TD class="AOPtd">
+                            <apex:outputText value="{0,number,###,###,##0}">
+                                <apex:param value="{!DW1HY1}"/>
+                            </apex:outputText>
+                        </TD>
+                        <TD class="AOPtd">
+                            <apex:outputText value="{0,number,###,###,##0}">
+                                <apex:param value="{!DW2HY1}"/>
+                            </apex:outputText>
+                        </TD>
+                        <TD class="AOPtd">
+                            <apex:outputText value="{0,number,###,###,##0}">
+                                <apex:param value="{!DW1HY2}"/>
+                            </apex:outputText>
+                        </TD>
+                        <TD class="AOPtd">
+                            <apex:outputText value="{0,number,###,###,##0}">
+                                <apex:param value="{!DW2HY2}"/>
+                            </apex:outputText>
+                        </TD>
+                    </TR>
+                    <TR class="AOPtr">
+                        <TD class="DWtdSide">
+                            Commitment
+                        </TD>
+                        <TD class="DWtd">
+                            <apex:outputText value="{0,number,###,###,##0}">
+                                <apex:param value="{!Com1HY1}"/>
+                            </apex:outputText>
+                        </TD>
+                        <TD class="DWtd">
+                            <apex:outputText value="{0,number,###,###,##0}">
+                                <apex:param value="{!Com2HY1}"/>
+                            </apex:outputText>
+                        </TD>
+                        <TD class="DWtd">
+                            <apex:outputText value="{0,number,###,###,##0}">
+                                <apex:param value="{!Com1HY2}"/>
+                            </apex:outputText>
+                        </TD>
+                        <TD class="DWtd">
+                            <apex:outputText value="{0,number,###,###,##0}">
+                                <apex:param value="{!Com2HY2}"/>
+                            </apex:outputText>
+                        </TD>
+                    </TR>
+                    <TR class="AOPtr">
+                        <TD class="DWtdSide">
+                            Decision
+                        </TD>
+                        <TD class="DWtd">
+                            <apex:outputText value="{0,number,###,###,##0}">
+                                <apex:param value="{!Dec1HY1}"/>
+                            </apex:outputText>
+                        </TD>
+                        <TD class="DWtd">
+                            <apex:outputText value="{0,number,###,###,##0}">
+                                <apex:param value="{!Dec2HY1}"/>
+                            </apex:outputText>
+                        </TD>
+                        <TD class="DWtd">
+                            <apex:outputText value="{0,number,###,###,##0}">
+                                <apex:param value="{!Dec1HY2}"/>
+                            </apex:outputText>
+                        </TD>
+                        <TD class="DWtd">
+                            <apex:outputText value="{0,number,###,###,##0}">
+                                <apex:param value="{!Dec2HY2}"/>
+                            </apex:outputText>
+                        </TD>
+                    </TR>
+                    <TR class="AOPtr">
+                        <TD class="DWtdSide">
+                            Recommendation
+                        </TD>
+                        <TD class="DWtd">
+                            <apex:outputText value="{0,number,###,###,##0}">
+                                <apex:param value="{!Rec1HY1}"/>
+                            </apex:outputText>
+                        </TD>
+                        <TD class="DWtd">
+                            <apex:outputText value="{0,number,###,###,##0}">
+                                <apex:param value="{!Rec2HY1}"/>
+                            </apex:outputText>
+                        </TD>
+                        <TD class="DWtd">
+                            <apex:outputText value="{0,number,###,###,##0}">
+                                <apex:param value="{!Rec1HY2}"/>
+                            </apex:outputText>
+                        </TD>
+                        <TD class="DWtd">
+                            <apex:outputText value="{0,number,###,###,##0}">
+                                <apex:param value="{!Rec2HY2}"/>
+                            </apex:outputText>
+                        </TD>
+                    </TR>
+                    <TR class="AOPtr">
+                        <TD class="DWtdSide">
+                            Assessment
+                        </TD>
+                        <TD class="DWtd">
+                            <apex:outputText value="{0,number,###,###,##0}">
+                                <apex:param value="{!Ass1HY1}"/>
+                            </apex:outputText>
+                        </TD>
+                        <TD class="DWtd">
+                            <apex:outputText value="{0,number,###,###,##0}">
+                                <apex:param value="{!Ass2HY1}"/>
+                            </apex:outputText>
+                        </TD>
+                        <TD class="DWtd">
+                            <apex:outputText value="{0,number,###,###,##0}">
+                                <apex:param value="{!Ass1HY2}"/>
+                            </apex:outputText>
+                        </TD>
+                        <TD class="DWtd">
+                            <apex:outputText value="{0,number,###,###,##0}">
+                                <apex:param value="{!Ass2HY2}"/>
+                            </apex:outputText>
+                        </TD>
+                    </TR>
+                    <TR class="AOPtr">
+                        <TD class="DWtdSide">
+                            Discovery
+                        </TD>
+                        <TD class="DWtd">
+                            <apex:outputText value="{0,number,###,###,##0}">
+                                <apex:param value="{!Dis1HY1}"/>
+                            </apex:outputText>
+                        </TD>
+                        <TD class="DWtd">
+                            <apex:outputText value="{0,number,###,###,##0}">
+                                <apex:param value="{!Dis2HY1}"/>
+                            </apex:outputText>
+                        </TD>
+                        <TD class="DWtd">
+                            <apex:outputText value="{0,number,###,###,##0}">
+                                <apex:param value="{!Dis1HY2}"/>
+                            </apex:outputText>
+                        </TD>
+                        <TD class="DWtd">
+                            <apex:outputText value="{0,number,###,###,##0}">
+                                <apex:param value="{!Dis2HY2}"/>
+                            </apex:outputText>
+                        </TD>
+                    </TR>
+                    <TR class="AOPtr">
+                        <TD class="DWtdSide">
+                            Initial Engagement
+                        </TD>
+                        <TD class="DWtd">
+                            <apex:outputText value="{0,number,###,###,##0}">
+                                <apex:param value="{!Eng1HY1}"/>
+                            </apex:outputText>
+                        </TD>
+                        <TD class="DWtd">
+                            <apex:outputText value="{0,number,###,###,##0}">
+                                <apex:param value="{!Eng2HY1}"/>
+                            </apex:outputText>
+                        </TD>
+                        <TD class="DWtd">
+                            <apex:outputText value="{0,number,###,###,##0}">
+                                <apex:param value="{!Eng1HY2}"/>
+                            </apex:outputText>
+                        </TD>
+                        <TD class="DWtd">
+                            <apex:outputText value="{0,number,###,###,##0}">
+                                <apex:param value="{!Eng2HY2}"/>
+                            </apex:outputText>
+                        </TD>
+                    </TR>
+                </TABLE> 
+                </div>
+                </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockSection columns="2">
+                    <apex:pageBlockSectionItem rendered="{!($CurrentPage.parameters.Id!=null)}">
+                        <apex:outputLabel value="Account Name" style="font-weight:bold;white-space:nowrap;"/>   
+                        <apex:outputLink value="/{!objAcc.Id}" target="_blank">
+                            <apex:outputText value="{!objAcc.Name}"/> 
+                        </apex:outputLink> 
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Region" style="font-weight:bold;white-space:nowrap;"/>   
+                        <apex:outputField value="{!objAcc.Region__c}"/> 
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem rendered="{!($CurrentPage.parameters.Id!=null)}">
+                        <apex:outputLabel value="Parent Account" style="font-weight:bold;white-space:nowrap;"/>   
+                        <apex:outputField value="{!objAcc.ParentId}"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem rendered="{!($CurrentPage.parameters.Id!=null)}">
+                        <apex:outputLabel value="Sales Area" style="font-weight:bold;white-space:nowrap;"/>   
+                        <apex:outputField value="{!objAcc.Sales_Area__c}" style="white-space:nowrap;"/> 
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem rendered="{!($CurrentPage.parameters.Id!=null)}">
+                        <apex:outputLabel value="Account Owner" style="font-weight:bold;white-space:nowrap;"/>   
+                        <apex:outputField value="{!objAcc.OwnerId}"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem rendered="{!($CurrentPage.parameters.Id!=null)}">
+                        <apex:outputLabel value="Industry Segment" style="font-weight:bold;white-space:nowrap;"/>   
+                        <apex:outputField value="{!objAcc.Industry_Segment__c}"/> 
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSection>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>    
+        <apex:dataTable value="{!listDWwrapper}" var="dw" id="dwTable" 
+                        cellspacing="0" cellpadding="3" styleClass="tableClass"
+                        headerClass="tableHeader" footerClass="tableFooter"  rowClasses="darkRow,lightRow">
+<!--
+            <apex:column styleClass="{!dw.zoneStyleClass}"
+                        style="vertical-align:top;text-align:center;white-space:nowrap;font-weight:bold;"
+                        onmousemove="this.parentNode.style.backgroundColor='#E5C130'" 
+                        onmouseout="this.parentNode.style.backgroundColor =''" >
+                <apex:facet name="header"> </apex:facet>
+                <apex:outputText value="{!dw.dwHalf}H {!dw.dwYear}" rendered="{!dw.zoneCenter}" />
+                <apex:facet name="footer">  </apex:facet>
+            </apex:column>
+-->
+            <apex:column onmousemove="this.parentNode.style.backgroundColor='#E5C130'" onmouseout="this.parentNode.style.backgroundColor =''" style="vertical-align:top;text-align:center;width:6%;">
+                <div id="stickyheader">
+                <apex:facet name="header">DW<br/>Close</apex:facet>
+                </div>
+                <apex:outputText value="Q{!dw.dwQuarter} {!dw.dwYear}"/>
+                <apex:facet name="footer">  </apex:facet>
+            </apex:column>
+
+            <apex:column rendered="{!($CurrentPage.parameters.rgn!=null)}" onmousemove="this.parentNode.style.backgroundColor='#E5C130'" onmouseout="this.parentNode.style.backgroundColor =''" style="vertical-align:top;width:7%;">
+                <apex:facet name="header">Account</apex:facet> 
+                <apex:outputLink value="/{!dw.dwAccount.Id}" target="_blank">
+                    <apex:outputText value="{!dw.dwAccount.Name}"/>
+                </apex:outputLink>                                                                                     
+                <apex:facet name="footer">  </apex:facet>
+            </apex:column>
+
+            <apex:column onmousemove="this.parentNode.style.backgroundColor='#E5C130'" onmouseout="this.parentNode.style.backgroundColor =''" style="vertical-align:top;width:7%;">
+                <apex:facet name="header">Program</apex:facet>
+                <apex:outputLink value="/{!dw.DW.Id}" target="_blank">
+                    <apex:outputText value="{!dw.DW.Name}"/>
+                </apex:outputLink>                                                                                     
+                <apex:facet name="footer">  </apex:facet>
+            </apex:column>
+
+            <apex:column onmousemove="this.parentNode.style.backgroundColor='#E5C130'" onmouseout="this.parentNode.style.backgroundColor =''" style="vertical-align:top;width:9%;">
+                <apex:facet name="header">SFDC<br/>Status</apex:facet>
+                <apex:outputField value="{!dw.DW.StageName}"/>
+                <apex:facet name="footer">  </apex:facet>
+            </apex:column>
+
+            <apex:column onmousemove="this.parentNode.style.backgroundColor='#E5C130'" onmouseout="this.parentNode.style.backgroundColor =''" style="vertical-align:top;text-align:left;width:7%;">
+                <apex:facet name="header">Status<br/>Date</apex:facet>
+                <apex:outputPanel >
+                    <apex:outputField value="{!dw.DW.Design_Win_Submission_Date__c}"
+                                      rendered="{!(dw.DW.StageName!='Lost')}" />
+                    <apex:outputField value="{!dw.DW.Lost_Date__c}"
+                                      rendered="{!(dw.DW.StageName=='Lost')}" />
+                </apex:outputPanel>
+                <apex:facet name="footer">  </apex:facet>
+            </apex:column>
+
+            <apex:column onmousemove="this.parentNode.style.backgroundColor='#E5C130'" onmouseout="this.parentNode.style.backgroundColor =''" style="vertical-align:top;width:4%;">
+                <apex:facet name="header">DRI</apex:facet>
+                <apex:outputField value="{!dw.DW.OwnerId}"/>
+                <apex:facet name="footer">  </apex:facet>
+            </apex:column>
+
+            <apex:column onmousemove="this.parentNode.style.backgroundColor='#E5C130'" onmouseout="this.parentNode.style.backgroundColor =''" style="vertical-align:top;width:13%;">
+                <apex:facet name="header">BOM</apex:facet>
+                <apex:dataList value="{!dw.listLineItems}" var="LI" style="list-style-type:none; padding:0px; margin:0px;">
+                    <apex:outputLink value="/{!LI.Id}" target="_blank">
+                        <apex:outputText value="{!LI.Product2.Basic_Type__c}"/>
+                    </apex:outputLink>                                                                                     
+                </apex:dataList>
+                <apex:facet name="footer">  </apex:facet>
+            </apex:column>
+
+            <apex:column onmousemove="this.parentNode.style.backgroundColor='#E5C130'" onmouseout="this.parentNode.style.backgroundColor =''" style="vertical-align:top;text-align:center;width:8%;">
+                <apex:facet name="header">% to DW<br/>Completion -<br/>Current</apex:facet>
+                <apex:outputField value="{!dw.DW.Percentage_to_DW_Completion__c}"/>
+                <apex:facet name="footer">  </apex:facet>
+            </apex:column>
+
+            <apex:column onmousemove="this.parentNode.style.backgroundColor='#E5C130'" onmouseout="this.parentNode.style.backgroundColor =''" style="vertical-align:top;text-align:center;Width:8%;">
+                <apex:facet name="header">% to DW<br/>Completion -<br/>Previous Week</apex:facet>
+                <apex:outputText value="{!dw.Percentage_to_DW_Completion_Prior_Week}"/>
+                <apex:facet name="footer">  </apex:facet>
+            </apex:column>
+
+            <apex:column onmousemove="this.parentNode.style.backgroundColor='#E5C130'" onmouseout="this.parentNode.style.backgroundColor =''" style="vertical-align:top;text-align:center;Width:5%;">
+                <apex:facet name="header"># Tasks<br/>Open</apex:facet>
+                <apex:outputText value="{!dw.tasksOpen}"/>
+                <apex:facet name="footer">  </apex:facet>
+            </apex:column>
+
+            <apex:column onmousemove="this.parentNode.style.backgroundColor='#E5C130'" onmouseout="this.parentNode.style.backgroundColor =''" style="vertical-align:top;text-align:center;Width:6%;">
+                <apex:facet name="header"># Task<br/>Closed<br/>This week</apex:facet>
+                <apex:outputText value="{!dw.tasksClosedThisWeek}"/>
+                <apex:facet name="footer">  </apex:facet>
+            </apex:column>
+
+            <apex:column onmousemove="this.parentNode.style.backgroundColor='#E5C130'" onmouseout="this.parentNode.style.backgroundColor =''" style="vertical-align:top;text-align:center;Width:7%;">
+                <apex:facet name="header"># Tasks<br/>Created<br/>This Week</apex:facet>
+                <apex:outputText value="{!dw.tasksCreatedThisWeek}"/>
+                <apex:facet name="footer">  </apex:facet>
+            </apex:column>
+
+            <apex:column onmousemove="this.parentNode.style.backgroundColor='#E5C130'" onmouseout="this.parentNode.style.backgroundColor =''" style="vertical-align:top;text-align:right;Width:7%;">
+                <apex:facet name="header">$/Program</apex:facet>
+                <apex:outputText value="${!dw.pricePerProgram}"/>
+                <apex:facet name="footer">  </apex:facet>
+            </apex:column>
+
+            <apex:column onmousemove="this.parentNode.style.backgroundColor='#E5C130'" onmouseout="this.parentNode.style.backgroundColor =''" style="vertical-align:top;text-align:right;Width:7%;">
+                <apex:facet name="header">Entry<br/>Volume</apex:facet>
+                <apex:outputText value="{0,number,###,###,##0}">
+                    <apex:param value="{!dw.entryVolume}"/>
+                </apex:outputText>
+                <apex:facet name="footer">  </apex:facet>
+            </apex:column>
+
+            <apex:column onmousemove="this.parentNode.style.backgroundColor='#E5C130'" onmouseout="this.parentNode.style.backgroundColor =''" style="vertical-align:top;text-align:right;Width:7%;">
+                <apex:facet name="header">Total $$</apex:facet>
+                <apex:outputText value="{0,number,$###,###,##0}">
+                    <apex:param value="{!dw.totalValue}"/>
+                </apex:outputText>
+                <apex:facet name="footer">  </apex:facet>
+            </apex:column>
+<!-- 
+            <apex:column styleClass="{!dw.zoneStyleClass}"
+                        style="vertical-align:top;text-align:right;white-space:nowrap;font-weight:bold;"
+                        onmousemove="this.parentNode.style.backgroundColor='#E5C130'" 
+                        onmouseout="this.parentNode.style.backgroundColor =''" >
+                <apex:facet name="header">Current View</apex:facet>
+                <apex:outputText value="{0,number,$###,###,##0}" rendered="{!dw.zoneCenter}" >
+                    <apex:param value="{!dw.currentView}"/>
+                </apex:outputText>
+                <apex:facet name="footer">  </apex:facet>
+            </apex:column>
+
+            <apex:column styleClass="{!IF(dw.zoneStyleClass='darkColumn','lightColumn','darkColumn')}"
+                        style="vertical-align:top;text-align:right;white-space:nowrap;font-weight:bold;"
+                        onmousemove="this.parentNode.style.backgroundColor='#E5C130'" 
+                        onmouseout="this.parentNode.style.backgroundColor =''" >
+                <apex:facet name="header">&nbsp;&nbsp;&nbsp;AOP&nbsp;&nbsp;&nbsp;</apex:facet>
+                <apex:outputText value="{0,number,$###,###,##0}" rendered="{!dw.zoneCenter}" >
+                    <apex:param value="{!dw.AOP}"/>
+                </apex:outputText>
+                <apex:facet name="footer">  </apex:facet>
+            </apex:column>
+
+            <apex:column styleClass="{!dw.zoneStyleClass}"
+                        style="vertical-align:top;text-align:right;white-space:nowrap;font-weight:bold;"
+                        onmousemove="this.parentNode.style.backgroundColor='#E5C130'" 
+                        onmouseout="this.parentNode.style.backgroundColor =''" >
+                <apex:facet name="header">AOP 120%</apex:facet>
+                <apex:outputText value="{0,number,$###,###,##0}" rendered="{!dw.zoneCenter}" >
+                    <apex:param value="{!((dw.AOP)*1.2)}"/>
+                </apex:outputText>
+                <apex:facet name="footer">  </apex:facet>
+            </apex:column>
+-->            
+        </apex:dataTable>       
+    </apex:actionRegion>    
+    </apex:pageBlock>
+</apex:form>
+</apex:page>

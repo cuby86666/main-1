@@ -1,0 +1,21 @@
+<apex:page standardController="Account" cache="false" showHeader="true" sidebar="true">
+<script type="text/javascript"> 
+    var previousOnload = window.onload;        
+    window.onload = function() { 
+        if (previousOnload) { 
+            previousOnload();
+        }
+        if ({!Account.IsInActive__c}) {
+            alert('New Child Account Creation Is Not Allowed.');
+            window.history.back();
+        } else {
+            document.getElementById("iframe1").src="https://nxp.my.salesforce.com/apex/CMD?src=sfdc&rt=New%20SFDC%20Child%20Account&uid={!$User.Id}&rn={!$User.FirstName}%20{!$User.LastName}&re={!$User.Email}&pn={!Account.Name}&pgid={!Account.NXP_GID__c}&pid={!Account.Id}&00ND0000004e9Ma={!Account.Customer_Category__c}";
+        }
+    }
+</script>
+<body>
+  <iframe id="iframe1" width="100%" height="1000" marginwidth="0" marginheight="0" frameborder="0" scrolling="auto"
+  src="">
+  </iframe>
+</body>
+</apex:page>

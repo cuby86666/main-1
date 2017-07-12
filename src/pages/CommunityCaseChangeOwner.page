@@ -1,0 +1,112 @@
+<!--***************************************************************************************************
+@Modified By :      Vinanthi
+@Modified Date:     27 oct 2016
+@Description:       Changed code for SIR 1263.
+*******************************************************************************************************-->
+
+<apex:page standardController="Case" extensions="CommunityCaseChangeOwnerController"  id="casePage" sidebar="false" showHeader="false">
+   <apex:includescript value="{!URLFOR($Resource.jQuery)}"/>
+   <apex:includeScript value="/support/console/35.0/integration.js"/>
+   
+    <apex:form id="f1">
+        <apex:actionFunction name="refresh" rerender="f1"/>
+        <apex:pageMessages id="msgs"/>
+        <apex:pageBlock id="caseBlock" title="Change Case Owner">
+            <div id="notifications">
+            </div>
+            <table id="data">
+                <tr>
+                    <td>
+                        <b>
+                            <apex:outputLabel value="{!$Label.CommunityCaseChangeOwner}"/>
+                        </b>
+                    </td>
+                    <td>
+                        <apex:inputField id="owner" value="{!caseRecord.OwnerId}" required="false" onkeydown="if(event.keyCode == 13){refresh();return false;}" >
+                            <apex:actionSupport event="onchange"  rerender="f1"/>
+                        </apex:inputField>
+                    </td>
+                </tr>
+                <tr>
+                <td>
+                    <b>
+                        <apex:outputLabel value="{!$Label.CommunityAssignedTo}"/>
+                       
+                    </b>
+                </td>
+                <td>
+                    <apex:inputField value="{!caseRecord.Assigned_to__c}" onkeydown="if(event.keyCode == 13){refresh();return false;}" >
+                         <apex:actionSupport event="onchange"  rerender="f1"/>
+                     </apex:inputField>
+                </td>
+                </tr>
+                    <tr>
+                <td>
+                    <b>
+                        <apex:outputLabel value="{!$ObjectType.Case.fields.Status.Label}"/>
+                    </b>
+                </td>
+                <td>
+                    <apex:inputField value="{!caseRecord.Status}" />
+                </td>
+                </tr>    
+                <tr>
+                    <td>
+                        <b>
+                            <apex:outputLabel value=" {!$ObjectType.Case.fields.Reason_for_Case_Reassignment__c.Label}"/>
+                             <sub>optional</sub>
+                        </b>
+                    </td>
+                    <td>
+                        <apex:inputText id="assignment" value="{!reasssignmentReason}" style="width:400px;height:20px"/>
+                    </td>
+                </tr>
+              
+            </table>
+            <br/>
+            
+            <apex:outputLabel value="{!$Label.CommunityCaseReasonNote}"/>
+            <br/>
+
+                
+            <center>
+                <apex:commandButton value="Save" action="{!saveRecord}" onclick="refresh();" oncomplete="validate();" immediate="false" rerender="f1"/>
+                <apex:commandButton value="Cancel"     action="{!cancel}"  rerender="f1"/>
+            </center>
+        </apex:pageBlock>
+        <apex:outputPanel rendered="true">
+            <script type="javascript">
+            
+                function validate(){
+                if(sforce.console.isInConsole())
+                {
+                sforce.console.getEnclosingPrimaryTabId(showTabId);
+                }
+               else if(document.getElementById('casePage:f1:msgs').textContent == null || document.getElementById('casePage:f1:msgs').textContent == ''){
+                location.replace("/{!caseRecord.id}");
+                }
+                }
+                
+                
+                var showTabId = function showTabId(result) {
+            var tabId = result.id;
+            //Display the primary tab IDs
+            
+            sforce.console.openPrimaryTab(result.id, '/{!caseRecord.id}', true);
+            
+            
+            };
+           </script>
+            
+        </apex:outPutPanel>
+    </apex:form>
+    <script>
+        $(document).ready(function(){
+        
+           document.getElementById('casePage:f1:caseBlock:owner_mlktp').value = 'case_queue';
+           document.getElementById('casePage:f1:caseBlock:owner_lktp').value = 'case_queue'; 
+          // document.getElementById('casePage:f1:caseBlock:owner').value = '';
+        
+        });
+    </script> 
+</apex:page>

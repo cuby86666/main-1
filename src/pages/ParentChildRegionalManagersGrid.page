@@ -1,0 +1,211 @@
+<!------------------------------------------------
+@Modified By :       Balaji Gunasekaran
+@Modified Date:      22 May 2015
+@Description:       As Part of CACC code impact analysis LineItem#29 
+                    - Commenting the whole page as this page and related controller class are not used anymore (confirmed with GSAS). 
+--------------------------------------------------->                    
+                    
+<apex:page >
+<!---------------------------------------- standardController="Account" extensions="parentChildAccountsController"  action="{!autoRunGrid}" showheader="false" sidebar="false" cache="false">
+<style>
+    .border-bottom { border-bottom: solid 10px black; }
+</style>
+<apex:outputPanel layout="none" id="theGrid">
+<VIEW>
+<apex:outputPanel layout="none" rendered="{!NOT(EditMode)}">
+<apex:form > 
+    <table bordercolor="white" width="740px" cellspacing ="3" cellpadding="2"  style="background:#ffffff" >
+        <tr>
+            <td width="90px"> </td>
+            <td width="90px" bgcolor="#6986C2" align="center" > <font style="color:cyan; font-weight:bold; ">Global</font> </td>
+            <td width="90px" bgcolor="#6986C2" align="center" > <font color ="lime"><strong> Americas </strong></font> </td>
+            <td width="90px" bgcolor="#6986C2" align="center" > <font color ="yellow"><strong> EMEA </strong></font> </td>
+            <td width="90px" bgcolor="#6986C2" align="center" > <font color ="orange"><strong> SAP </strong></font> </td>
+            <td width="90px" bgcolor="#6986C2" align="center" > <font color ="red"><strong> GC </strong></font> </td>
+            <td width="90px" bgcolor="#6986C2" align="center" > <font color ="magenta"><strong> Japan </strong></font> </td>
+            <td width="90px" bgcolor="#6986C2" align="center" > <font color ="blue"><strong> Korea </strong></font> </td>
+        </tr>
+        <tr>
+            <td colspan="8">&nbsp;</td>
+        </tr>
+        <tr>
+            <td align="right" class="labelCol">  <apex:outputText value="Account Mgr" style="font-size:95%; font-weight:bold;"/></td>
+            <td align="center" > 
+                <apex:outputLink value="/_ui/core/userprofile/UserProfilePage?u={!ARMs.Account_Manager__c}" target="_parent">
+                    <apex:outputText value="{!ARMs.Account_Manager__r.Name}"/>
+                </apex:outputLink>
+            </td>
+            <td align="center" > 
+                <apex:outputLink value="/_ui/core/userprofile/UserProfilePage?u={!ARMs.Account_Manager_Americas__c}" target="_parent">
+                    <apex:outputText value="{!ARMs.Account_Manager_Americas__r.Name}"/>
+                </apex:outputLink>
+            </td>
+            <td align="center" > 
+                <apex:outputLink value="/_ui/core/userprofile/UserProfilePage?u={!ARMs.Account_Manager_EMEA__c}" target="_parent">
+                    <apex:outputText value="{!ARMs.Account_Manager_EMEA__r.Name}"/>
+                </apex:outputLink>
+            </td>
+            <td align="center" > 
+                <apex:outputLink value="/_ui/core/userprofile/UserProfilePage?u={!ARMs.Account_Manager_SAP__c}" target="_parent">
+                    <apex:outputText value="{!ARMs.Account_Manager_SAP__r.Name}"/>
+                </apex:outputLink>
+            </td>
+            <td align="center" > 
+                <apex:outputLink value="/_ui/core/userprofile/UserProfilePage?u={!ARMs.Account_Manager_GC__c}" target="_parent">
+                    <apex:outputText value="{!ARMs.Account_Manager_GC__r.Name}"/>
+                </apex:outputLink>
+            </td>
+            <td align="center" >
+                <apex:outputLink value="/_ui/core/userprofile/UserProfilePage?u={!ARMs.Account_Manager_Japan__c}" target="_parent">
+                    <apex:outputText value="{!ARMs.Account_Manager_Japan__r.Name}"/>
+                </apex:outputLink>
+            </td>
+            <td align="center" > 
+                <apex:outputLink value="/_ui/core/userprofile/UserProfilePage?u={!ARMs.Account_Manager_Korea__c}" target="_parent">
+                    <apex:outputText value="{!ARMs.Account_Manager_Korea__r.Name}"/>
+                </apex:outputLink>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="8">&nbsp; </td>
+        </tr>
+        <tr>
+            <td align="right" class="labelCol">  <apex:outputText value="Service Mgr" style="font-size:95%; font-weight:bold;"/> </td>
+            <td align="center" > </td>
+            <td align="center" > 
+                <apex:outputLink value="/_ui/core/userprofile/UserProfilePage?u={!ARMs.Service_Manager_Americas__c}" target="_parent">
+                    <apex:outputText value="{!ARMs.Service_Manager_Americas__r.Name}"/>
+                </apex:outputLink>
+            </td>
+            <td align="center" > 
+                <apex:outputLink value="/_ui/core/userprofile/UserProfilePage?u={!ARMs.Service_Manager_EMEA__c}" target="_parent">
+                    <apex:outputText value="{!ARMs.Service_Manager_EMEA__r.Name}"/>
+                </apex:outputLink>
+            </td>
+            <td align="center" > 
+                <apex:outputLink value="/_ui/core/userprofile/UserProfilePage?u={!ARMs.Service_Manager_SAP__c}" target="_parent">
+                    <apex:outputText value="{!ARMs.Service_Manager_SAP__r.Name}"/>
+                </apex:outputLink>
+            </td>
+            <td align="center" > 
+                <apex:outputLink value="/_ui/core/userprofile/UserProfilePage?u={!ARMs.Service_Manager_GC__c}" target="_parent">
+                    <apex:outputText value="{!ARMs.Service_Manager_GC__r.Name}"/>
+                </apex:outputLink>
+            </td>
+            <td align="center" >
+                <apex:outputLink value="/_ui/core/userprofile/UserProfilePage?u={!ARMs.Service_Manager_Japan__c}" target="_parent">
+                    <apex:outputText value="{!ARMs.Service_Manager_Japan__r.Name}"/>
+                </apex:outputLink>
+            </td>
+            <td align="center" > 
+                <apex:outputLink value="/_ui/core/userprofile/UserProfilePage?u={!ARMs.Service_Manager_Korea__c}" target="_parent">
+                    <apex:outputText value="{!ARMs.Service_Manager_Korea__r.Name}"/>
+                </apex:outputLink>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="8">&nbsp; </td>
+        </tr>
+        <tr>
+            <td colspan="3"></td>
+            <td align="right" > 
+                <apex:commandButton action="{!Edit}" value="Edit Managers" 
+                rendered="{!OR((CONTAINS($User.Id, ARMs.AccountManagerId__c)),(CONTAINS($Profile.Name, 'System Administrator')))}">
+                <apex:actionSupport event="onclick" rerender="theGrid"/>
+                </apex:commandButton>
+            </td>
+            <td colspan="4"></td>
+        </tr>
+    </table>
+</apex:form>  
+</apex:outputPanel>
+<Edit>
+<apex:outputPanel layout="none" rendered="{!EditMode}">
+<apex:form > 
+    <table bordercolor="white" cellspacing ="3" cellpadding="2"  style="background:#ffffff" >
+        <tr>
+            <td colspan="2" ></td>
+            <td align="right" > 
+                <apex:commandLink action="{!Save}" target="_parent">
+                    <apex:commandButton value="Save"/>
+                </apex:commandLink> 
+            </td>
+            <td align="left" > 
+                <apex:commandButton action="{!Cancel}" value="Cancel">
+                <apex:actionSupport event="onclick" rerender="theGrid"/>
+                </apex:commandButton>   
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td bgcolor="#6986C2" align="center" > <font color ="lime"><strong> Americas </strong></font> </td>
+            <td align="right" class="labelCol">  <apex:outputText value="AM" style="font-size:95%; font-weight:bold;"/></td>
+            <td align="center" > 
+                <apex:inputField value="{!ARMs.Account_Manager_Americas__c}"/>
+            </td>
+            <td align="right" class="labelCol">  <apex:outputText value="SM" style="font-size:95%; font-weight:bold;"/></td>
+            <td align="center" > 
+                <apex:inputField value="{!ARMs.Service_Manager_Americas__c}"/>
+            </td>
+        </tr>
+        <tr>
+            <td bgcolor="#6986C2" align="center" > <font color ="yellow"><strong> EMEA </strong></font> </td>
+            <td align="right" class="labelCol">  <apex:outputText value="AM" style="font-size:95%; font-weight:bold;"/></td>
+            <td align="center" > 
+                <apex:inputField value="{!ARMs.Account_Manager_EMEA__c}"/>
+            </td>
+            <td align="right" class="labelCol">  <apex:outputText value="SM" style="font-size:95%; font-weight:bold;"/></td>
+            <td align="center" > 
+                <apex:inputField value="{!ARMs.Service_Manager_EMEA__c}"/>
+            </td>
+        </tr>
+        <tr>
+            <td bgcolor="#6986C2" align="center" > <font color ="orange"><strong> SAP </strong></font> </td>
+            <td align="right" class="labelCol">  <apex:outputText value="AM" style="font-size:95%; font-weight:bold;"/></td>
+            <td align="center" > 
+                <apex:inputField value="{!ARMs.Account_Manager_SAP__c}"/>
+            </td>
+            <td align="right" class="labelCol">  <apex:outputText value="SM" style="font-size:95%; font-weight:bold;"/></td>
+            <td align="center" > 
+                <apex:inputField value="{!ARMs.Service_Manager_SAP__c}"/>
+            </td>
+        </tr>
+        <tr>
+            <td bgcolor="#6986C2" align="center" > <font color ="red"><strong> GC </strong></font> </td>
+            <td align="right" class="labelCol">  <apex:outputText value="AM" style="font-size:95%; font-weight:bold;"/></td>
+            <td align="center" > 
+                <apex:inputField value="{!ARMs.Account_Manager_GC__c}"/>
+            </td>
+            <td align="right" class="labelCol">  <apex:outputText value="SM" style="font-size:95%; font-weight:bold;"/></td>
+            <td align="center" > 
+                <apex:inputField value="{!ARMs.Service_Manager_GC__c}"/>
+            </td>
+        </tr>
+        <tr>
+            <td bgcolor="#6986C2" align="center" > <font color ="magenta"><strong> Japan </strong></font> </td>
+            <td align="right" class="labelCol">  <apex:outputText value="AM" style="font-size:95%; font-weight:bold;"/></td>
+            <td align="center" > 
+                <apex:inputField value="{!ARMs.Account_Manager_Japan__c}"/>
+            </td>
+            <td align="right" class="labelCol">  <apex:outputText value="SM" style="font-size:95%; font-weight:bold;"/></td>
+            <td align="center" > 
+                <apex:inputField value="{!ARMs.Service_Manager_Japan__c}"/>
+            </td>
+        </tr>
+        <tr>
+            <td bgcolor="#6986C2" align="center" > <font color ="blue"><strong> Korea </strong></font> </td>
+            <td align="right" class="labelCol">  <apex:outputText value="AM" style="font-size:95%; font-weight:bold;"/></td>
+            <td align="center" > 
+                <apex:inputField value="{!ARMs.Account_Manager_Korea__c}"/>
+            </td>
+            <td align="right" class="labelCol">  <apex:outputText value="SM" style="font-size:95%; font-weight:bold;"/></td>
+            <td align="center" > 
+                <apex:inputField value="{!ARMs.Service_Manager_Korea__c}"/>
+            </td>
+        </tr>
+    </table>
+</apex:form>  
+</apex:outputPanel>
+</apex:outputPanel>
+----------------------------------------------------------------->
+</apex:page>

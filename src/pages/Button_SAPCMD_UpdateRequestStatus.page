@@ -1,0 +1,7 @@
+<!-- 
+@Created By :     Scarlett Kang
+@Created Date :   Oct 05, 2015
+@Description :    1510 Release - SIR 356. CMD Request - Create a button to changed status to Complete for CMD officer
+-->
+<apex:page standardController="CMD_Request__c" extensions="CMD_Request_Controller_Ext_Status_Update" action="{!updateFunlocRequestStatus}" >
+</apex:page>

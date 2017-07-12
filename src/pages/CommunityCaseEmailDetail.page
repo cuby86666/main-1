@@ -1,0 +1,246 @@
+<!--*********************************************************************************************
+@Created By :      Amrutha R
+@CreatedDate :     25 Jan 2016
+Description :      New page for user to view email details
+****************************************************************************************************-->
+<!--***************************************************************************************************
+@ Modified By :      Amrutha
+@Modified Date:      24 feb 2016
+@Description:        Commented tabs and breadcrumb except contact support 
+*******************************************************************************************************-->
+
+<apex:page standardStylesheets="false" title="NXP TechSupport Community" cache="True" showHeader="false" sidebar="false" Controller="communityCaseController"  action="{!getEmailDetails}" extensions="CommunityTabsController" >
+
+ <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <title>Contact Support - NXP TechSupport Community</title>
+    <apex:stylesheet value="{!URLFOR($Resource.Forum_Community_3, 'NXP-community/css/jasny-bootstrap.css')}" ></apex:stylesheet>  
+    <apex:stylesheet value="{!URLFOR($Resource.Forum_Community_3, 'NXP-community/css/font-awesome.css')}" ></apex:stylesheet>      
+    <apex:stylesheet value="{!URLFOR($Resource.Forum_Community_3, 'NXP-community/css/hover.css')}" ></apex:stylesheet>
+    <apex:stylesheet value="{!URLFOR($Resource.Forum_Community_3, 'NXP-community/css/main.css')}" ></apex:stylesheet>
+</head>
+
+<body class="new-case" style=" background-color:white;">
+    <c:CommunityHeaderComponent ></c:CommunityHeaderComponent>
+    <!-- Breadcrumbs 
+    <div class="breadcrumb-bar">
+        <div class="container">
+            <ul class="breadcrumb">
+                <li><a href="/community/CommunityOverview">{!$label.Community_breadcrumb_Home}</a></li>
+                <li><a href="/community/CommunityOverview">{!$label.Community_breadcrumb_Community}</a></li>
+                <li class="active"><a href="/community/CommunityCaseList">Contact Support</a></li>
+            </ul>
+        </div>
+    </div>
+-->
+    <!-- Community Navigtion -->
+    <div class="container h-spacer navigation">
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12">
+                        <div class="navbar-header">
+                            <a class="navbar-brand" href="#">NXP Community</a>
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                                <span class="sr-only">Toggle navigation</span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                        </div>
+                        <div id="navbar" class="navbar-collapse collapse">
+                            <ul class="nav navbar-nav">
+                               <!-- <li ><a href="/community/CommunityOverview">{!$label.Community_tab_Overview}</a></li>
+                                <li ><a href="/community/CommunityForum">{!$label.Community_breadcrumb_Forum}</a></li>
+                                <li><a href="/community/CommunityFAQ">{!$label.Community_tab_FAQ}</a></li>-->
+                                <li class="active"><apex:outputLink rendered="{!If(($Profile.Name='NXP Community Profile'),false,true)}" value="/community/CommunityCaseList">{!$Label.Community_tab_Contactsupport}</apex:outputLink></li>
+                                <!--<li><a href="/community/CommunityStories">{!$Label.Community_tab_Stories}</a></li>
+                                <li ><apex:outputLink rendered="{!InternalExternalUser}" value="/community/CommunityProjectIssueList">{!$Label.Community_tab_Project}</apex:outputLink></li> 
+								-->
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- login container -->
+                    <apex:outputPanel rendered="{!If(($Profile.Name='NXP Community Profile'),true,false)}">
+                    <div class="nav navbar-nav navbar-right">
+                         <div class="login-holder" style="width:331px;">
+                            <img class="hvr-grow" id="logo" src="/community/resource/1441788430000/Forum_Community_3/NXP-community/img/community-logo_small.png" />
+                            <a href="/community/communityLogin?pagename=CommunityForum">Login / </a>
+                            <a href="/community/communityRegistration">Register</a>
+                            <a href="http://www.nxp.com/support/communities:COMMUNITIES">| Communities </a>
+
+                        </div>
+                    </div>
+                    </apex:outputPanel>
+       
+                    <apex:outputPanel rendered="{!If(($Profile.Name='NXP Community Profile'),false,true)}">
+                    <div class="nav navbar-nav navbar-right">
+                        <span>
+                            <!--  <img src="{!URLFOR($Resource.Forum_Community_3,'NXP-community/img/avatar_round.png')}" class="avatar" alt="" />  -->
+                          <img src="{!largePhotoUrl}" height="42" width="42" />
+                     &nbsp;<a title="" data-toggle="popover" href="#" data-original-title="Profile properties">
+                    {!$User.firstName}&nbsp;{!$User.Lastname} <i class="fa fa-gear"></i>
+                    </a>
+                  </span>|
+                         <a href="http://www.nxp.com/support/communities:COMMUNITIES"> Communities </a>
+                    </div>
+                    </apex:outputPanel>
+
+                </div>
+            </div>
+        </nav>
+    </div>
+
+            <!-------------------------------chatter answers---------------------------->
+                      
+<div class="container">                                
+            
+                           <apex:form styleclass="form-horizontal">
+       
+        
+        <div class="back-link-cases"><a href="/community/CommunitiesCaseDetailView?id={!objCase.id}"><span class="glyphicon glyphicon-menu-left" aria-hidden="true"><span>{!objCase.CaseNumber}</span></span></a></div>
+        
+        
+        <apex:pageMessages ></apex:pageMessages>
+        <div class="h-spacer">&nbsp;</div>
+        <div class="row">
+            <div class="col-md-12 col-xs-12 bg-color-bar padding-left-10">
+                <h5>Email Message Detail</h5></div>
+        </div>
+         <br/>
+            <div class="row">
+                <div class="col-md-6 col-xs-6">
+                    <div class="form-group">
+                        <label class="control-label col-md-4" for="dropdown-caseNumber"> Message Date </label>
+                        <div class="control-label col-md-8">
+                            <apex:outputField value="{!objEmailMsg.messagedate}"  styleclass="btn btn-default dropdown-toggle input-form" id="dropdown-msgdate" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4" for="dropdown-product">Created By</label>
+                        <div class="control-label col-md-8">
+                            <apex:outputField value="{!objEmailMsg.createdby.name}"  styleclass="btn btn-default dropdown-toggle input-form" id="dropdown-msgcreatedbyname"/>
+                        	,&nbsp;<apex:outputField value="{!objEmailMsg.createddate}"  styleclass="btn btn-default dropdown-toggle input-form" id="dropdown-msgcreatedbydate"/>
+
+                        </div>
+                    </div>
+                    
+                    
+                </div>
+                <div class="col-md-6 col-xs-6">
+                    <div class="form-group">
+                        <label class="control-label col-md-4" for="dropdown-category">Status</label>
+                        <div class="control-label col-md-8">
+                            <apex:outputField value="{!objEmailMsg.status}"  styleclass="btn btn-default dropdown-toggle input-form" id="dropdown-status"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4" for="dropdown-sub-category">Modified By</label>
+                        <div class="control-label col-md-8" id="selectList">
+							<apex:outputField value="{!objEmailMsg.lastmodifiedby.name} "  styleclass="btn btn-default dropdown-toggle input-form" id="dropdown-msgmodifiedbyname"/>
+                        	,&nbsp;<apex:outputField value="{!objEmailMsg.lastmodifieddate}"  styleclass="btn btn-default dropdown-toggle input-form" id="dropdown-msgmodifiedbydate"/>
+                        </div>
+                    </div>
+                   
+                </div>
+            </div>
+                               
+            <div class="h-spacer">&nbsp;</div>
+        <div class="row">
+            <div class="col-md-12 col-xs-12 bg-color-bar padding-left-10">
+                <h5>Address Information</h5></div>
+        </div>
+         <br/>
+            <div class="row">
+                <div class="col-md-6 col-xs-6">
+                    <div class="form-group">
+                        <label class="control-label col-md-4" for="dropdown-fromaddress"> From Address </label>
+                        <div class="control-label col-md-8">
+                            <apex:outputField value="{!objEmailMsg.fromaddress}"  styleclass="btn btn-default dropdown-toggle input-form" id="dropdown-msgfrom" />
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="control-label col-md-4" for="dropdown-toaddress">To Address</label>
+                        <div class="control-label col-md-8">
+                            <apex:outputField value="{!objEmailMsg.toaddress}"  styleclass="btn btn-default dropdown-toggle input-form" id="dropdown-msgtoaddress"/>
+
+                        </div>
+                    </div><div class="form-group">
+                        <label class="control-label col-md-4" for="dropdown-ccaddress">CC Address</label>
+                        <div class="control-label col-md-8">
+                            <apex:outputField value="{!objEmailMsg.ccaddress}"  styleclass="btn btn-default dropdown-toggle input-form" id="dropdown-msgccaddress"/>
+
+                        </div>
+                    </div>
+                    
+                </div>
+               
+            </div>
+                               
+            <div class="h-spacer">&nbsp;</div>
+            <div class="row">
+                <div class="col-md-12 col-xs-12 bg-color-bar padding-left-10">
+                    <h5>Problem description</h5>
+                </div>
+            </div>
+            <div class="row h-spacer">
+                <div class="col-md-6 col-xs-6">
+                    <div class="form-group">
+                        <label class="control-label col-md-4" for="subject">Subject</label>
+                        <div class="control-label col-md-8">
+                            <apex:outputField value="{!objEmailMsg.Subject}"  styleclass="form-control input-form" id="subject"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-12 col-xs-12">
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="description">Description</label>
+                        <div class="control-label col-md-7">
+                            <apex:outputtext escape="false" rendered="{!istextBody}" value="{!objEmailMsg.TextBody}" styleclass="form-control input-form" style="height:auto;" id="description" />
+
+                            <apex:outputtext escape="false" rendered="{!ishtmlBody}" value="{!objEmailMsg.HtmlBody}" styleclass="form-control input-form" style="height:auto;" id="description1" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+         
+    
+      </apex:form>
+      
+                                
+ 
+                            </div> 
+                       <br/><br/>     
+<c:CommunityFooterComponent ></c:CommunityFooterComponent>
+    <!-- Menu for user configuration -->
+<div id="user-config-popover" style="display:none">
+        <ul class='nav nav-pills nav-stacked'>
+            <li><apex:outputlink style="width:179px; margin-left: 0px;" value="/community/CommunitiesEditUserProfile" rendered="{!If(($Profile.Name='NXP Customer Community Login User'),true,false)}" > Edit profile</apex:outputlink></li>
+			<li ><apex:outputlink style="width:179px; margin-left: 0px;" value="/secur/logout.jsp?retUrl=https%3A%2F%2Fnxpcommunity.force.com%2Fcommunity%2FCommunityOverview">Logout</apex:outputlink></li>
+        </ul>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+         ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="{!URLFOR($Resource.Forum_Community_3,'NXP-community/js/bootstrap.js')}"></script>
+    <script src="{!URLFOR($Resource.Forum_Community_3,'NXP-community/js/collapse.js')}"></script>
+    <script src="{!URLFOR($Resource.Forum_Community_3,'NXP-community/js/nxp-community.js')}"></script>
+    <script src="{!URLFOR($Resource.Forum_Community_3,'NXP-community/js/jasny-bootstrap.min.js')}"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <!-- <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script> -->
+    
+
+</body>
+
+</apex:page>

@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <description>This object will keep track of Approvers for Rebate records.</description>
+    <enableActivities>false</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableChangeDataCapture>false</enableChangeDataCapture>
+    <enableEnhancedLookup>true</enableEnhancedLookup>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>false</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <fields>
+        <fullName>Approver__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Approver</label>
+        <referenceTo>User</referenceTo>
+        <relationshipName>Rebate_Approver_Matrix</relationshipName>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Comment__c</fullName>
+        <externalId>false</externalId>
+        <label>Comment</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>MAG__c</fullName>
+        <externalId>false</externalId>
+        <label>MAG</label>
+        <length>3</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Region__c</fullName>
+        <externalId>false</externalId>
+        <label>Region</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Americas</fullName>
+                    <default>false</default>
+                    <label>Americas</label>
+                </value>
+                <value>
+                    <fullName>EMEA</fullName>
+                    <default>false</default>
+                    <label>EMEA</label>
+                </value>
+                <value>
+                    <fullName>Japan</fullName>
+                    <default>false</default>
+                    <label>Japan</label>
+                </value>
+                <value>
+                    <fullName>Korea</fullName>
+                    <default>false</default>
+                    <label>Korea</label>
+                </value>
+                <value>
+                    <fullName>South Asia Pacific</fullName>
+                    <default>false</default>
+                    <label>South Asia Pacific</label>
+                </value>
+                <value>
+                    <fullName>Greater China</fullName>
+                    <default>false</default>
+                    <label>Greater China</label>
+                </value>
+                <value>
+                    <fullName>Global</fullName>
+                    <default>false</default>
+                    <label>Global</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Role__c</fullName>
+        <externalId>false</externalId>
+        <label>Role</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Apttus Aggrement Checker</fullName>
+                    <default>false</default>
+                    <label>Apttus Aggrement Checker</label>
+                </value>
+                <value>
+                    <fullName>Legal</fullName>
+                    <default>false</default>
+                    <label>Legal</label>
+                </value>
+                <value>
+                    <fullName>Corporate Control</fullName>
+                    <default>false</default>
+                    <label>Corporate Control</label>
+                </value>
+                <value>
+                    <fullName>Regional Controller</fullName>
+                    <default>false</default>
+                    <label>Regional Controller</label>
+                </value>
+                <value>
+                    <fullName>Regional Channel Controller</fullName>
+                    <default>false</default>
+                    <label>Regional Channel Controller</label>
+                </value>
+                <value>
+                    <fullName>Global Channel Controller</fullName>
+                    <default>false</default>
+                    <label>Global Channel Controller</label>
+                </value>
+                <value>
+                    <fullName>BL Marketing Manager</fullName>
+                    <default>false</default>
+                    <label>BL Marketing Manager</label>
+                </value>
+                <value>
+                    <fullName>Regional Sales Manager</fullName>
+                    <default>false</default>
+                    <label>Regional Sales Manager</label>
+                </value>
+                <value>
+                    <fullName>GSM Controller</fullName>
+                    <default>false</default>
+                    <label>GSM Controller</label>
+                </value>
+                <value>
+                    <fullName>Global Sales &amp; OPS Manager</fullName>
+                    <default>false</default>
+                    <label>Global Sales &amp; OPS Manager</label>
+                </value>
+                <value>
+                    <fullName>Regional Disti Manager</fullName>
+                    <default>false</default>
+                    <label>Regional Disti Manager</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <label>Rebate Approver Matrix</label>
+    <listViews>
+        <fullName>All</fullName>
+        <columns>NAME</columns>
+        <columns>Role__c</columns>
+        <columns>Approver__c</columns>
+        <columns>Region__c</columns>
+        <columns>MAG__c</columns>
+        <filterScope>Everything</filterScope>
+        <label>All</label>
+    </listViews>
+    <listViews>
+        <fullName>BL_Marketing_Manager</fullName>
+        <columns>NAME</columns>
+        <columns>Role__c</columns>
+        <columns>Approver__c</columns>
+        <columns>MAG__c</columns>
+        <columns>Region__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>MAG__c</field>
+            <operation>contains</operation>
+            <value>RBM</value>
+        </filters>
+        <label>BL Marketing Manager</label>
+    </listViews>
+    <listViews>
+        <fullName>BL_Marketing_Manager_AMEC</fullName>
+        <columns>Role__c</columns>
+        <columns>Approver__c</columns>
+        <columns>MAG__c</columns>
+        <columns>Region__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>MAG__c</field>
+            <operation>contains</operation>
+            <value>RBM</value>
+        </filters>
+        <label>BL Marketing Manager_AMEC</label>
+    </listViews>
+    <listViews>
+        <fullName>BL_Marketing_Manager_EMEA</fullName>
+        <columns>NAME</columns>
+        <columns>Role__c</columns>
+        <columns>Approver__c</columns>
+        <columns>MAG__c</columns>
+        <columns>Region__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>Role__c</field>
+            <operation>equals</operation>
+            <value>BL Marketing Manager</value>
+        </filters>
+        <filters>
+            <field>Region__c</field>
+            <operation>equals</operation>
+            <value>EMEA,Global</value>
+        </filters>
+        <filters>
+            <field>MAG__c</field>
+            <operation>equals</operation>
+            <value>R33,R34,R71,RC5</value>
+        </filters>
+        <label>BL Marketing Manager_EMEA</label>
+    </listViews>
+    <listViews>
+        <fullName>BL_Marketing_Manager_South_AP</fullName>
+        <columns>Role__c</columns>
+        <columns>Approver__c</columns>
+        <columns>MAG__c</columns>
+        <columns>Region__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>Role__c</field>
+            <operation>equals</operation>
+            <value>BL Marketing Manager</value>
+        </filters>
+        <filters>
+            <field>Region__c</field>
+            <operation>equals</operation>
+            <value>South Asia Pacific</value>
+        </filters>
+        <label>BL Marketing Manager_South AP</label>
+    </listViews>
+    <listViews>
+        <fullName>Regional_Sales_Manager</fullName>
+        <columns>Role__c</columns>
+        <columns>Approver__c</columns>
+        <columns>MAG__c</columns>
+        <columns>Region__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>Role__c</field>
+            <operation>equals</operation>
+            <value>Regional Sales Manager</value>
+        </filters>
+        <label>Regional Sales Manager</label>
+    </listViews>
+    <nameField>
+        <displayFormat>RA-{0000}</displayFormat>
+        <label>Rebate Approver Name</label>
+        <trackHistory>false</trackHistory>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Rebate Approver Matrix</pluralLabel>
+    <searchLayouts>
+        <customTabListAdditionalFields>Role__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Approver__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Region__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>MAG__c</customTabListAdditionalFields>
+    </searchLayouts>
+    <sharingModel>Read</sharingModel>
+    <validationRules>
+        <fullName>Approver_is_Required</fullName>
+        <active>true</active>
+        <errorConditionFormula>ISBLANK( Approver__c )</errorConditionFormula>
+        <errorDisplayField>Approver__c</errorDisplayField>
+        <errorMessage>Approver is a required field, please select an approver.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>BL_Marketing_Manager_requires_MAG</fullName>
+        <active>true</active>
+        <errorConditionFormula>ISPICKVAL(Role__c , &apos;BL Marketing Manager&apos; )  &amp;&amp; ISBLANK( MAG__c )</errorConditionFormula>
+        <errorDisplayField>MAG__c</errorDisplayField>
+        <errorMessage>MAG is a required field when the Role is &apos;BL Marketing Manager&apos;.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>Region_is_required</fullName>
+        <active>true</active>
+        <errorConditionFormula>ISBLANK( TEXT( Region__c ))</errorConditionFormula>
+        <errorDisplayField>Region__c</errorDisplayField>
+        <errorMessage>Region is a required field, Please select a region.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>Role_is_required</fullName>
+        <active>true</active>
+        <errorConditionFormula>ISBLANK( TEXT(  Role__c  ) )</errorConditionFormula>
+        <errorDisplayField>Role__c</errorDisplayField>
+        <errorMessage>Role is a required field, please select a role.</errorMessage>
+    </validationRules>
+    <visibility>Public</visibility>
+</CustomObject>

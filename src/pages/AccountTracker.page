@@ -1,0 +1,26 @@
+<!--  ---------------------------------------------------------------------------------
+@Created By :       Balaji Gunasekaran
+@Created Date:      28 June 2016
+@Description:       VF page to launch Tracker for Top 30 Accounts
+---------------------------------------------------------------------------------------     -->
+
+<apex:page controller="AccountTrackerController">
+<!--standardController="Account" recordSetVar="Accounts" extensions="AccountTrackerController">   -->
+  <apex:form >      
+    <apex:sectionHeader title="Top 30 Accounts List"  />
+     <apex:pageBlock mode="edit">
+         <apex:pageBlockButtons location="bottom">
+                <apex:commandButton action="{!launchTracker}" value="Launch Tracker" id="launchbutton" />
+         </apex:pageBlockButtons> 
+         <apex:pageBlockSection title="Top 30 Accounts" id="AccountList" >
+             
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Account Name" />
+                    <apex:selectList value="{!selectedAccountName}" size="1" style="width:306px;">
+                        <apex:selectOptions value="{!lstAccountName}"/>
+                    </apex:selectList>
+                </apex:pageBlockSectionItem>
+         </apex:pageBlockSection>   
+      </apex:pageBlock>
+  </apex:form>
+</apex:page>

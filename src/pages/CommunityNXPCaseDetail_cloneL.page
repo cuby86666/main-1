@@ -1,0 +1,248 @@
+<apex:page sidebar="false" standardStylesheets="false"  showChat="false" showHeader="false" applyBodyTag="false" applyHtmlTag="false" controller="CommunityNXPCaseDetailController" action="{!assignCaseRecord}">
+    <html lang="en">
+    <!--[if lte IE 9]>
+    <div style="margin:5px;">
+        <h4 style="color:#cc3333;margin-bottom:5px;">Your Browser Is Not Supported!</h4>
+        <br/>
+        <p>Please upgrade to the latest version of <a href='http://getfirefox.com' style='text-decoration:underline;'>FireFox</a>,
+            <a href='https://www.google.com/chrome/browser/' style='text-decoration:underline;'>Chrome</a> or <a
+                    href='http://windows.microsoft.com/en-us/internet-explorer/download-ie'
+                    style='text-decoration:underline;'>Internet Explorer</a>.
+        </p>
+    </div>
+    <![endif]-->
+    <apex:composition template="CommunityNXPContextTemplate_cloneL" >
+        <apex:define name="body" >
+            <body>
+            <div id="nxp-wrapper">
+                <div class="container">
+                    <!-- ===== ===== =====  Start Main ===== ===== ===== -->
+                    <div class="row case-document">
+                        <div class="col-lg-10 col-lg-offset-1">
+                            <!-- Owner Panel -->
+                            <div class="panel panel-default">
+                                <div class="panel-heading owner">
+                                    <h1 class="panel-title">{!$Label.CommunityCase} {!caseRecord.CaseNumber}</h1>
+                                </div>
+                                <!-- Case Information -->
+                                <div class="panel-body case-info">
+                                    <div class="col-xs-12">
+                                        <h2 class="panel-body-title">{!$label.CommunityCaseInformationLabel}</h2>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <dl class="panel-info">
+                                            <dt class="panel-title">{!$Label.CommunityCaseNumber}</dt>
+                                            <dd class="panel-info-content" id="">{!caseRecord.CaseNumber}</dd>
+                                            <dt class="panel-title">{!$Label.CommunityStatus}</dt>
+                                            <dd class="panel-info-content" id="">{!caseRecord.Status}</dd>
+                                            <dt class="panel-title">{!$Label.CommunityOpenedDate}</dt>
+                                            <dd class="panel-info-content" id="">{!caseRecord.createdDate}</dd>
+                                        </dl>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <dl class="panel-info">
+                                            <dt class="panel-title">{!$Label.CommunityEntitlementName}</dt>
+                                            <dd class="panel-info-content" id="">{!caseRecord.Entitlement.Name}</dd>
+                                            <dt class="panel-title">{!$label.CommunityPriority}</dt>
+                                            <dd class="panel-info-content" id="">{!caseRecord.Priority}</dd>
+                                            <dt class="panel-title">{!$Label.CommunityClosedDate}</dt>
+                                            <dd class="panel-info-content" id="">{!caseRecord.ClosedDate}</dd>
+                                        </dl>
+                                    </div>
+                                    <!-- End Case Info -->
+                                    <div class="col-xs-12">
+                                        <h2 class="panel-body-title">{!$Label.CommunitySubjectInformation}</h2>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <dl class="panel-info">
+                                            <dt class="panel-title">{!$Label.CommunitySubject}</dt>
+                                            <dd class="panel-info-content" id="">{!caseRecord.Subject}</dd>
+                                            <dt class="panel-title">{!$Label.CommunityDescription}</dt>
+                                            <dd class="panel-info-content" id="">{!caseRecord.Description}</dd>
+                                        </dl>
+                                    </div>
+                                </div>
+                                <!-- /.panel-body -->
+                                <!-- Additional Information -->
+                                <div class="panel-body additional-info">
+                                    <div class="col-xs-12">
+                                        <h2 class="panel-body-title">{!$Label.CommunityDescriptionInformation}</h2>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <dl class="panel-info">
+                                            <dt class="panel-title">{!$Label.CommunityTopic}</dt>
+                                            <dd class="panel-info-content" id="">{!caseRecord.My_Question_is_Related__c}</dd>
+                                            <dt class="panel-title">{!$Label.CommunitySubTopic}</dt>
+                                            <dd class="panel-info-content" id="">{!caseRecord.Sub_Topic__c}</dd>
+                                            <dt class="panel-title">{!$Label.CommunityProductTypeNumber}</dt>
+                                            <dd class="panel-info-content" id="">{!caseRecord.Product_Type_Number__c}</dd>
+                                            <apex:outputPanel layout="none" rendered="{!caseRecord.Hours_spent_by_Support_person__c!=null && caseRecord.Hours_spent_by_Support_person__c!=0}">
+                                                <dt class="panel-title">{!$Label.CommunityHoursSpent}</dt>
+                                                <dd class="panel-info-content" id="">{!caseRecord.Hours_spent_by_Support_person__c}</dd>
+                                            </apex:outputPanel>
+                                        </dl>
+                                    </div>
+                                    <!-- End Case Info -->
+                                    <div class="col-sm-6">
+                                        <dl class="panel-info">
+                                            <dt class="panel-title">{!$Label.CommunityProductLevel}</dt>
+                                            <dd class="panel-info-content" id="">{!caseRecord.Product__c}</dd>
+                                            <dt class="panel-title">{!$Label.CommunityProductLevel2}</dt>
+                                            <dd class="panel-info-content" id="">{!caseRecord.Product_Category__c}</dd>
+                                            <dt class="panel-title">{!$Label.CommunityProductLevel3}</dt>
+                                            <dd class="panel-info-content" id="">{!caseRecord.Product_sub__c}</dd>
+                                        </dl>
+                                    </div>
+                                </div>
+                                <div class="panel-body additional-info">
+                                    <div class="col-xs-12">
+                                        <h2 class="panel-body-title">{!$Label.CommunityEmailInformation}</h2>
+                                    </div>
+                                    <apex:repeat value="{!lstEmailMsgs}" var="emailMsg" >
+                                        <!-- First Context--->
+                                        <div class="row panel-container">
+                                            <div class="col-lg-10 col-lg-offset-1">
+                                                <div class="panel-custom owner" >
+                                                    <div class="panel-heading owner" >
+                                                        <div class="panel-custom-body row">
+                                                            <h2 class="context-header">{!emailMsg.subject}
+                                                                <span class="panel-head-count"></span>
+                                                            </h2>
+                                                            <div class="dropdown invitees">
+                                                                <div class="col-sm-1 reveal-arrow">
+                                                                    <a href="#"><span class="icon icon-arrow-down"></span></a>
+                                                                </div>
+                                                                <!-- /.reveal-arrow -->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- Hidden Panel -->
+                                                    <div class="hidden-panel clearfix">
+                                                        <div class="col-sm-4 col-md-3">
+                                                            <dt class="panel-title">
+                                                                    {!$Label.CommunityEmailAddressTitle}
+                                                            </dt>
+                                                            <p class="sub-panel-info">{!emailMsg.toaddress}</p>
+                                                        </div>
+                                                        <div class="col-sm-4 col-md-3">
+                                                            <dt class="panel-title">
+                                                                    {!$Label.CommunityCreatedDateTitle}
+                                                            </dt>
+                                                            <p class="sub-panel-info">{!emailMsg.createdDate}</p>
+                                                        </div>
+                                                        <div class="case col-xs-12 clearfix">
+                                                                {!emailMsg.TextBody}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- /.panel-custom -->
+                                            </div>
+                                            <!-- /.col-lg-10 -->
+                                        </div>
+                                        <!-- /.head -->
+                                    </apex:repeat>
+                                    <!--    <apex:repeat value="{!lstEmailMsgs}" var="emailMsg">
+                                                <div class="col-sm-4 col-md-3">
+
+                                                    <p class="sub-panel-info">{!emailMsg.subject}</p>
+                                                </div>
+                                                <div class="col-sm-4 col-md-3">
+
+                                                    <p class="sub-panel-info">{!emailMsg.toaddress}</p>
+                                                </div>
+                                                <div class="col-sm-4 col-md-3">
+
+                                                    <p class="sub-panel-info">{!emailMsg.createdDate}</p>
+                                                </div>
+
+                                                </apex:repeat> -->
+                                </div>
+                                <apex:outputPanel rendered="{!if(lstAttachment.size >0 , true, false)}" layout="none">
+                                    <div class="panel-body additional-info">
+                                        <div class="col-xs-12">
+                                            <h2 class="panel-body-title">{!$Label.CommunityAttachmentInformation}</h2>
+                                        </div>
+                                        <apex:repeat var="rec" value="{!lstAttachment}" >
+                                            <br/>
+                                            <div class="col-md-12 col-xs-12">
+                                                <div class="form-group">
+                                                    <div class="col-md-6 col-xs-6">
+                                                                <span class="pull-left">
+                                                                    <apex:outputLink value="{!URLFOR($Action.Attachment.Download, rec.id)}" target="popup" onclick="window.open('{!URLFOR($Action.Attachment.Download, rec.id)}','popup','width=1000,height=300'); return false;">{!rec.name}</apex:outputLink>
+                                                                </span>
+                                                    </div>
+                                                    <div class="col-md-3 col-xs-3">
+                                                                <span class="pull-left">
+                                                                    <apex:outputfield value="{!rec.createddate}" id="emailtoaddress"/>
+                                                                </span>
+                                                    </div>
+                                                    <div class="col-md-3 col-xs-3"><span class="pull-left">{!ROUND(rec.bodylength/1024,2)} KB</span></div>
+                                                </div>
+                                            </div>
+                                        </apex:repeat>
+                                    </div>
+                                </apex:outputPanel>
+                                <!-- Footer -->
+                                <div class="panel-footer">
+                                    <div class="text-right">
+                                        <a href="{!URLFOR($Page.CommunityContextPage_cloneL)}"><span class="icon-arrow-left3"></span> Back to Case List</a>
+                                        <script>
+                                            $(document).ready(function() {
+                                                // Displays Hidden Panel when down arrow is clicked
+                                                $(".reveal-arrow").click(function(event) {
+                                                    event.preventDefault();
+                                                    $(this).find(".icon").toggleClass("icon-arrow-down icon-arrow-up");
+                                                    $(this).parents(".panel-container").find(".hidden-panel").slideToggle('5000');
+                                                    event.stopPropagation();
+                                                });
+
+                                                // Displays Cases when + is clicked
+                                                $(".plus1").click(function(event) {
+                                                    event.preventDefault();
+                                                    $(this).find(".icon").toggleClass("icon-plus icon-minus");
+                                                    $(this).parents(".hidden-panel").find(".sub-panel").slideToggle('2000');
+                                                    event.stopPropagation();
+                                                });
+                                            });
+                                        </script>
+                                        <script type="text/javascript">
+                                            $(function() {
+                                                var pgurl = window.location.href.substr(window.location.href.lastIndexOf("/")+1);
+                                                $(".tabBar li").each(function() {
+                                                    if($(this).children('a').attr("href") == pgurl )
+                                                        $(this).attr('id', 'selectedTab');
+                                                })
+                                            });
+
+                                            $(function () {
+                                                $('[data-toggle="tooltip"]').tooltip()
+                                            });
+                                        </script>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.panel -->
+                        </div>
+                        <!-- /.col-lg10 offset -->
+                    </div>
+                    <!-- /.row -->
+                    <!-- ===== ===== =====  End Main    ===== ===== ===== -->
+                </div>
+                <!-- /.contianer -->
+            </div>
+            <!-- /#nxp-wrapper -->
+            <script type="text/javascript">
+                $(function() {
+                    var pgurl = window.location.href.substr(window.location.href.lastIndexOf("/")+1);
+                    $(".tabBar li").each(function() {
+                        if($(this).children('a').attr("href") == pgurl )
+                            $(this).attr('id', 'selectedTab');
+                    })
+                });
+            </script>
+            <!-- Added by Rudy END -->
+            </body>
+        </apex:define>
+    </apex:composition>
+    </html>
+</apex:page>

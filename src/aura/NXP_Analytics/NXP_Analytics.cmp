@@ -1,0 +1,5 @@
+<aura:component description="NXP_Analytics" implements="forceCommunity:availableForAllPageTypes" access="global">
+
+    <aura:handler event="forceCommunity:routeChange" action="{!c.onRouteChange}" />
+
+</aura:component>

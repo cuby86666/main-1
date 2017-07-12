@@ -1,0 +1,31 @@
+<apex:page showHeader="false" standardStyleSheets="false" id="template" sidebar="false" showChat="false" docType="html-5.0" applyHtmlTag="false">
+    <div >
+        <!-- HEADER STARTS-->
+        <apex:includeScript value="{!URLFOR($Resource.CommunityContextStyles, '/scripts/jquery.min.js')}"/>
+        <apex:Stylesheet value="{!URLFOR($Resource.CommunityContextStyles, '/styles/bootstrap.min.css')}"/>
+        <apex:Stylesheet value="{!URLFOR($Resource.Bootstrap)}"/>
+        <apex:Stylesheet value="{!URLFOR($Resource.CommunityContextStyles, '/styles/fontawesome.css')}"/>
+        <apex:Stylesheet value="{!URLFOR($Resource.CommunityContextStyles, '/styles/nxp-common.css')}"/>
+        <apex:Stylesheet value="{!URLFOR($Resource.CommunityContextStyles, '/styles/main.css')}"/>
+        <apex:includeScript value="{!URLFOR($Resource.CommunityContextStyles, '/scripts/bootstrap.min.js')}"/>
+
+        <!-- HEADER ENDS-->
+        <!-- Main content starts--> 
+        <apex:insert name="body"/>
+        <!-- Main content ends-->
+        <!-- WRAPPER ENDS-->
+        <!-- FOOTER STARTS-->
+    </div>
+    <script>
+        $(function() {
+            var pgurl = window.location.href.substr(window.location.href.lastIndexOf("/")+1);
+            $(".tabBar li").each(function() {
+                if($(this).children('a').attr("href") == pgurl )
+                    $(this).attr('id', 'selectedTab');
+            })
+        });
+
+
+    </script>
+    <!-- FOOTER ENDS-->
+</apex:page>

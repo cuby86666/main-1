@@ -1,0 +1,604 @@
+<!-- Modified By Baji on March 03, 2017 to add information message for user all the time on page -->
+<apex:page standardController="CMD_Request__c" extensions="SAPCMDMassUpdateController" tabStyle="CMD_Request__c" 
+  standardStylesheets="true" sidebar="false" id="thePage">
+<!--
+<apex:pageBlock id="pageBlockView" mode="maindetail" >
+  <apex:detail relatedList="true" title="true" inlineEdit="true" />
+</apex:pageBlock>
+-->
+<style>
+.tableHeader { color:White; background-color:#1798C1; }
+.indexColumn { font-weight:bold; color:#1798C1; align=right; }    
+.oddRow { background-color:#E5F3F8; border:0; }
+.evenRow { background-color:#CBE8F1; border:0; } 
+.inputText { border:0; background-color:#E5F3F8; }    
+.inputSelectList { border:0; background-color:#E5F3F8; }    
+.tableFooter { background-color:#CBE8F1; }    
+
+/* define height and width of scrollable area. Add 16px to width for scrollbar          */
+div.pbBody {
+  clear: both;
+  overflow: scroll
+}
+
+/* Reset overflow value to hidden for all non-IE browsers. */
+html>body div.pbBody {
+  overflow: visible
+}
+
+/* define width of table. IE browsers only                 */
+div.pbBody table {
+  float: left
+}
+
+/* define width of table. Add 16px to width for scrollbar.           */
+/* All other non-IE browsers.                                        */
+html>body div.pbBody table {
+}
+    
+/* set table header to a fixed position. WinIE 6.x only                                       */
+/* In WinIE 6.x, any element with a position property set to relative and is a child of       */
+/* an element that has an overflow property set, the relative value translates into fixed.    */
+/* Ex: parent element DIV with a class of tableContainer has an overflow property set to auto */
+thead.tr {
+  position: relative
+}
+
+/* set THEAD element to have block level attributes. All other non-IE browsers            */
+/* this enables overflow to work on TBODY element. All other non-IE, non-Mozilla browsers */
+html>body thead.tr {
+  display: block
+}
+
+/* define the table content to be scrollable                                              */
+/* set TBODY element to have block level attributes. All other non-IE browsers            */
+/* this enables overflow to work on TBODY element. All other non-IE, non-Mozilla browsers */
+/* induced side effect is that child TDs no longer accept width: auto                     */
+html>body tbody.thePage:j_id1:pageBlockEditLegalName:detailTable:tb {
+  display: block;
+  overflow: scroll;
+  width: 100%
+}
+    
+</style>  
+ 
+<script>
+    function pageReload()
+    {
+     window.top.location.href = '/{!requestId}'; 
+    }  
+</script>
+
+<apex:form >
+
+<apex:pageMessage summary="Note: For a funloc without SAP CMD, that specific record will not be saved. Please use Edit request for funloc without SAP CMD." severity="INFO" strength="2" />
+<apex:pageMessages />
+
+ <apex:outputText value="{!actor}" escape="false"></apex:outputText>
+<!--ZA----------------------------->    
+<apex:pageBlock id="pageBlockEditZA" mode="edit" rendered="{!(CMD_Request__c.Mass_Update_Type__c=='ZA')}"> 
+<apex:pageBlockButtons >
+        <apex:commandButton value="SAP CMD Funloc Lookup" action="{!refresh}"/>
+        <apex:inputFile value="{!contentFile}" filename="{!nameFile}"/>
+        <apex:commandButton action="{!uploadCSV}" value="Upload" id="theUploadButton">
+          <apex:param name="CSV" 
+                        value="{!contentFile}" 
+                        assignTo="{!CSV}"/> 
+        </apex:commandButton>
+      <apex:commandButton action="{!save}" value="Save Funloc's"/>
+    </apex:pageBlockButtons>
+    <apex:pageBlockSection rendered="{!showTextbox}">
+      TEST
+    </apex:pageBlockSection>
+    <apex:actionRegion >
+        <apex:dataTable value="{!listFunlocWrapper}" var="funloc" id="detailTable" rowClasses="oddRow,evenRow"
+                        border="0" cellspacing="1" cellpadding="3" headerClass="tableHeader" footerClass="tableFooter">
+            <apex:column rendered="{!blEnableEdit}" onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
+                <apex:facet name="header">
+                    <apex:outputText style="font-size:33%">
+                        del.<br/>row
+                    </apex:outputText>
+                </apex:facet>
+                <apex:commandLink rendered="{!blEnableEdit}" action="{!removeRow}" reRender="detailTable" style="color:Blue;">
+                    <apex:param name="rowToBeRemoved" 
+                                value="{!funloc.index}" 
+                                assignTo="{!rowToBeRemoved}"/>
+                    <apex:image url="{!URLFOR($Resource.SAPCMDMassUpdate,'delete.png')}"
+                                height="16"/>
+                </apex:commandLink>
+            </apex:column>
+            <apex:column rendered="{!blEnableEdit}" onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
+                <apex:outputText value="{!funloc.index}" styleClass="indexColumn"/>
+                <apex:facet name="footer">
+                    <apex:outputText style="font-size:33%; font-weight:bold; color:#1798C1;">
+                        add<br/>row
+                    </apex:outputText>
+                </apex:facet>
+            </apex:column>
+            <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
+                <apex:facet name="header">Funloc</apex:facet>
+                <apex:inputText value="{!funloc.funloc}" size="6" 
+                                style="{!IF(AND(ISBLANK(funloc.sapCMD),(funloc.funloc!='')),
+                                       'color:Red;',
+                                       '')}
+                                       {!IF(funloc.isDupe,'color:Red;','')}
+                                       "
+                                styleClass="{!funloc.rowStyleClass}"
+                                tabindex="{!funloc.index}">
+<!--                  <apex:actionSupport event="onblur" action="{!refresh}" reRender="detailTable"/> -->
+                </apex:inputText>
+                <apex:facet name="footer">
+                    <apex:commandLink rendered="{!blEnableEdit}" action="{!addRow}" reRender="detailTable" style="text-decoration:none;">
+                        <apex:image url="{!URLFOR($Resource.SAPCMDMassUpdate,'insert.jpg')}"
+                                    height="16"/>
+                    </apex:commandLink>
+                </apex:facet>
+            </apex:column>   
+            <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
+                <apex:facet name="header">SAP CMD</apex:facet>
+                <apex:outputLink value="https://nxp.my.salesforce.com/{!funloc.sapCMD}"
+                                 target="_blank">
+                    <apex:outputText value="{!funloc.sapCMDName}" 
+                                     style="{!IF(funloc.isDupe,'color:Red;','')}"/>
+                </apex:outputLink>
+                <apex:facet name="footer">
+                    <apex:commandLink rendered="{!blEnableEdit}" action="{!add5Rows}" reRender="detailTable" style="text-decoration:none;">
+                        <apex:image url="{!URLFOR($Resource.SAPCMDMassUpdate,'insert.jpg')}"
+                                    height="16"/>
+                        <apex:outputText value="x5" styleClass="indexColumn"/>
+                    </apex:commandLink>
+                </apex:facet>
+            </apex:column> 
+  <!------------------------------ Added by Shridevi, as part of SIR 215-------------------------------------------------------->     
+            <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
+                <apex:facet name="header">SAP CMD Record Type</apex:facet>
+                <apex:outputText value="{!funloc.SapCMDRecordType}" style="{!IF(funloc.isDupe,'color:Red;','')}"/>
+            </apex:column>   
+ <!----------------------------------------------------------------------------------------------------------------------------->           
+       
+<!--
+            <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
+                <apex:facet name="header">Account Name</apex:facet>
+                <apex:outputText value="{!funloc.accountName}" 
+                                 style="{!IF(funloc.isDupe,'color:Red;','')}"/>
+                <apex:outputText value="(SAP CMD not found)"
+                                 style="color:Red;"
+                                 rendered="{!AND(ISBLANK(funloc.sapCMD),(funloc.funloc!=''))}"/>
+            </apex:column>    
+-->
+            <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
+                <apex:facet name="header">Legal Name</apex:facet>
+                <apex:outputText value="{!funloc.oldLegalName}" style="{!IF(funloc.isDupe,'color:Red;','')}"/>
+            </apex:column>    
+<!--
+            <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
+                <apex:facet name="header">City</apex:facet>
+                <apex:outputText value="{!funloc.oldCity}" style="{!IF(funloc.isDupe,'color:Red;','')}"/>
+            </apex:column>    
+            <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
+                <apex:facet name="header">Country</apex:facet>
+                <apex:outputText value="{!funloc.oldCountry}" style="{!IF(funloc.isDupe,'color:Red;','')}"/>
+            </apex:column>   SAP_CMD_Account_Group__c 
+-->
+          <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
+                <apex:facet name="header">ZA Person (Existing)</apex:facet>
+                <apex:outputText value="{!funloc.oldZA}" style="{!IF(funloc.isDupe,'color:Red;','')}"/>
+            </apex:column>    
+            <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
+                <apex:facet name="header">ZA Person (New)</apex:facet>
+                <apex:selectList value="{!funloc.newZA}" size="1" 
+                                 styleClass="{!funloc.rowStyleClass}" 
+                                 style="{!IF(funloc.isDupe,'color:Red;','')}">
+                                 <!--rendered="{!(funloc.sapCMD!='')}">-->
+                    <apex:selectOption itemLabel="" itemValue=""/>
+                    <apex:selectOptions value="{!ZAOptions}"/>
+              </apex:selectList>
+            </apex:column>   
+            <apex:column rendered="{!blEnableEdit}" onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
+                <apex:facet name="header">
+                    <apex:outputText style="font-size:33%">
+                        copy<br/>col.
+                    </apex:outputText>
+                </apex:facet>
+                <apex:commandLink action="{!replicateColumn}" 
+                reRender="detailTable" 
+                style="color:Blue;">
+                <!--rendered="{!(funloc.sapCMD!='')}">-->
+                    <apex:param name="rowToBeReplicated" 
+                                value="{!funloc.index}" 
+                                assignTo="{!rowToBeReplicated}"/>
+                    <apex:param name="columnToBeReplicated" 
+                                value="ZA" 
+                                assignTo="{!columnToBeReplicated}"/>
+                    <apex:image url="{!URLFOR($Resource.SAPCMDMassUpdate,'update.png')}"
+                                height="16"/>
+                </apex:commandLink>
+            </apex:column>
+        </apex:dataTable>
+    </apex:actionRegion>
+</apex:pageBlock>    
+<!--ZA----------------------------->    
+<!---ZS---------------------------------------->
+<apex:pageBlock id="pageBlockEditZS" mode="edit" rendered="{!(CMD_Request__c.Mass_Update_Type__c=='ZS')}"> 
+    <apex:pageBlockButtons >
+        <apex:commandButton value="SAP CMD Funloc Lookup" action="{!refresh}"/>
+        <apex:inputFile value="{!contentFile}" filename="{!nameFile}"/>
+        <apex:commandButton action="{!uploadCSV}" value="Upload" id="theUploadButton">
+          <apex:param name="CSV" 
+                        value="{!contentFile}" 
+                        assignTo="{!CSV}"/> 
+        </apex:commandButton>
+      <apex:commandButton action="{!save}" value="Save Funloc's"/>
+    </apex:pageBlockButtons>
+    <apex:pageBlockSection rendered="{!showTextbox}">
+      TEST
+    </apex:pageBlockSection>
+    <apex:actionRegion >
+        <apex:dataTable value="{!listFunlocWrapper}" var="funloc" id="detailTable" rowClasses="oddRow,evenRow"
+                        border="0" cellspacing="1" cellpadding="3" headerClass="tableHeader" footerClass="tableFooter">
+            <apex:column rendered="{!blEnableEdit}" onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
+                <apex:facet name="header">
+                    <apex:outputText style="font-size:33%">
+                        del.<br/>row
+                    </apex:outputText>
+                </apex:facet>
+                <apex:commandLink action="{!removeRow}" reRender="detailTable" style="color:Blue;">
+                    <apex:param name="rowToBeRemoved" 
+                                value="{!funloc.index}" 
+                                assignTo="{!rowToBeRemoved}"/>
+                    <apex:image url="{!URLFOR($Resource.SAPCMDMassUpdate,'delete.png')}"
+                                height="16"/>
+                </apex:commandLink>
+            </apex:column>
+            <apex:column rendered="{!blEnableEdit}" onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
+                <apex:outputText value="{!funloc.index}" styleClass="indexColumn"/>
+                <apex:facet name="footer">
+                    <apex:outputText style="font-size:33%; font-weight:bold; color:#1798C1;">
+                        add<br/>row
+                    </apex:outputText>
+                </apex:facet>
+            </apex:column>
+            <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
+                <apex:facet name="header">Funloc</apex:facet>
+                <apex:inputText value="{!funloc.funloc}" size="6" 
+                                style="{!IF(AND(ISBLANK(funloc.sapCMD),(funloc.funloc!='')),
+                                       'color:Red;',
+                                       '')}
+                                       {!IF(funloc.isDupe,'color:Red;','')}
+                                       "
+                                styleClass="{!funloc.rowStyleClass}"
+                                tabindex="{!funloc.index}">
+<!--                  <apex:actionSupport event="onblur" action="{!refresh}" reRender="detailTable"/> -->
+                </apex:inputText>
+                <apex:facet name="footer">
+                    <apex:commandLink rendered="{!blEnableEdit}" action="{!addRow}" reRender="detailTable" style="text-decoration:none;">
+                        <apex:image url="{!URLFOR($Resource.SAPCMDMassUpdate,'insert.jpg')}"
+                                    height="16"/>
+                    </apex:commandLink>
+                </apex:facet>
+            </apex:column>   
+            <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
+                <apex:facet name="header">SAP CMD</apex:facet>
+                <apex:outputLink value="https://nxp.my.salesforce.com/{!funloc.sapCMD}"
+                                 target="_blank">
+                    <apex:outputText value="{!funloc.sapCMDName}" 
+                                     style="{!IF(funloc.isDupe,'color:Red;','')}"/>
+                </apex:outputLink>
+                <apex:facet name="footer">
+                    <apex:commandLink rendered="{!blEnableEdit}" action="{!add5Rows}" reRender="detailTable" style="text-decoration:none;">
+                        <apex:image url="{!URLFOR($Resource.SAPCMDMassUpdate,'insert.jpg')}"
+                                    height="16"/>
+                        <apex:outputText value="x5" styleClass="indexColumn"/>
+                    </apex:commandLink>
+                </apex:facet>
+            </apex:column>   
+  <!------------------------------ Added by Shridevi as part of SIR 215-------------------------------------------------------->     
+            <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
+                <apex:facet name="header">SAP CMD Record Type</apex:facet>
+                <apex:outputText value="{!funloc.SapCMDRecordType }" style="{!IF(funloc.isDupe,'color:Red;','')}"/>
+            </apex:column>   
+ <!----------------------------------------------------------------------------------------------------------------------------->           
+    
+<!--
+            <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
+                <apex:facet name="header">Account Name</apex:facet>
+                <apex:outputText value="{!funloc.accountName}" 
+                                 style="{!IF(funloc.isDupe,'color:Red;','')}"/>
+                <apex:outputText value="(SAP CMD not found)"
+                                 style="color:Red;"
+                                 rendered="{!AND(ISBLANK(funloc.sapCMD),(funloc.funloc!=''))}"/>
+            </apex:column>    
+-->
+            <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
+                <apex:facet name="header">Legal Name</apex:facet>
+                <apex:outputText value="{!funloc.oldLegalName}" style="{!IF(funloc.isDupe,'color:Red;','')}"/>
+            </apex:column> 
+    
+<!--
+            <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
+                <apex:facet name="header">City</apex:facet>
+                <apex:outputText value="{!funloc.oldCity}" style="{!IF(funloc.isDupe,'color:Red;','')}"/>
+            </apex:column>    
+            <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
+                <apex:facet name="header">Country</apex:facet>
+                <apex:outputText value="{!funloc.oldCountry}" style="{!IF(funloc.isDupe,'color:Red;','')}"/>
+            </apex:column>    
+-->
+            <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
+                <apex:facet name="header">ZS Person (Existing)</apex:facet>
+                <apex:outputText value="{!funloc.oldZS}" style="{!IF(funloc.isDupe,'color:Red;','')}"/>
+            </apex:column>    
+            <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
+                <apex:facet name="header">ZS Person (New)</apex:facet>
+                <apex:selectList value="{!funloc.newZS}" size="1" 
+                                 styleClass="{!funloc.rowStyleClass}" 
+                                 style="{!IF(funloc.isDupe,'color:Red;','')}">
+                                 <!--rendered="{!(funloc.sapCMD!='')}">-->
+                    <apex:selectOption itemLabel="" itemValue=""/>
+                    <apex:selectOptions value="{!ZSOptions}"/>
+              </apex:selectList>
+            </apex:column>   
+            <apex:column rendered="{!blEnableEdit}" onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
+                <apex:facet name="header">
+                    <apex:outputText style="font-size:33%">
+                        copy<br/>col.
+                    </apex:outputText>
+                </apex:facet>
+                <apex:commandLink action="{!replicateColumn}" 
+                reRender="detailTable" 
+                style="color:Blue;">
+                <!--rendered="{!(funloc.sapCMD!='')}">-->
+                    <apex:param name="rowToBeReplicated" 
+                                value="{!funloc.index}" 
+                                assignTo="{!rowToBeReplicated}"/>
+                    <apex:param name="columnToBeReplicated" 
+                                value="ZS" 
+                                assignTo="{!columnToBeReplicated}"/>
+                    <apex:image url="{!URLFOR($Resource.SAPCMDMassUpdate,'update.png')}"
+                                height="16"/>
+                </apex:commandLink>
+            </apex:column>
+        </apex:dataTable>
+    </apex:actionRegion>
+</apex:pageBlock>       
+<!--ZS---------------------------------------->
+<!--Address---------------------------->    
+<apex:pageBlock id="pageBlockEditLegalName" mode="edit" rendered="{!(CMD_Request__c.Mass_Update_Type__c=='Address')}"> 
+
+    <apex:pageBlockButtons >
+        <apex:commandButton value="SAP CMD Funloc Lookup" action="{!refresh}"/>
+        <apex:inputFile value="{!contentFile}" filename="{!nameFile}"/>
+        <apex:commandButton action="{!uploadCSV}" value="Upload" id="theUploadButton">
+          <apex:param name="CSV" 
+                        value="{!contentFile}" 
+                        assignTo="{!CSV}"/> 
+        </apex:commandButton>
+      <apex:commandButton action="{!save}" value="Save Funloc's"/>
+    </apex:pageBlockButtons>
+    
+ 
+    <apex:pageBlockSection rendered="{!showTextbox}">
+      TEST
+    </apex:pageBlockSection>
+    <apex:actionRegion >
+        <apex:dataTable value="{!listFunlocWrapper}" var="funloc" id="detailTable" rowClasses="oddRow,evenRow"
+                        border="0" cellspacing="1" cellpadding="3" headerClass="tableHeader" footerClass="tableFooter">
+            <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
+               <apex:facet name="header">
+                   <apex:outputText style="font-size:33%">
+                       del.<br/>row
+                   </apex:outputText>
+               </apex:facet>
+               <apex:commandLink action="{!removeRow}" reRender="detailTable" style="color:Blue;">
+                    <apex:param name="rowToBeRemoved" 
+                                value="{!funloc.index}" 
+                                assignTo="{!rowToBeRemoved}"/>
+                    <apex:image url="{!URLFOR($Resource.SAPCMDMassUpdate,'delete.png')}"
+                                height="16"/>
+                </apex:commandLink>
+            </apex:column>
+            <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
+                <apex:outputText value="{!funloc.index}" styleClass="indexColumn"/>
+                <apex:facet name="footer">
+                    <apex:outputText style="font-size:33%; font-weight:bold; color:#1798C1;">
+                        add<br/>row
+                    </apex:outputText>
+                </apex:facet>
+            </apex:column>
+            <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
+                <apex:facet name="header">Funloc</apex:facet>
+                <apex:inputText value="{!funloc.funloc}" size="6" 
+                                style="{!IF(AND(ISBLANK(funloc.sapCMD),(funloc.funloc!='')),
+                                       'color:Red;',
+                                       '')}
+                                       {!IF(funloc.isDupe,'color:Red;','')}
+                                       "
+                                styleClass="{!funloc.rowStyleClass}"
+                                tabindex="{!funloc.index}">
+<!--                  <apex:actionSupport event="onblur" action="{!refresh}" reRender="detailTable"/> -->
+                </apex:inputText>
+                <apex:facet name="footer">
+                    <apex:commandLink action="{!addRow}" reRender="detailTable" style="text-decoration:none;">
+                        <apex:image url="{!URLFOR($Resource.SAPCMDMassUpdate,'insert.jpg')}"
+                                    height="16"/>
+                    </apex:commandLink>
+                </apex:facet>
+            </apex:column>   
+<!--                
+            <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
+                <apex:facet name="header">Account Name</apex:facet>
+                <apex:outputText value="{!funloc.accountName}" 
+                                 style="{!IF(funloc.isDupe,'color:Red;','')}"/>
+                <apex:outputText value="(SAP CMD not found)"
+                                 style="color:Red;"
+                                 rendered="{!AND(ISBLANK(funloc.sapCMD),(funloc.funloc!=''))}"/>
+            </apex:column>
+-->
+            <div style="overflow: scroll;">
+            <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
+                <apex:facet name="header">SAP CMD</apex:facet>
+                <apex:outputLink value="https://nxp.my.salesforce.com/{!funloc.sapCMD}"
+                                 target="_blank">
+                    <apex:outputText value="{!funloc.sapCMDName}" 
+                                     style="{!IF(funloc.isDupe,'color:Red;','')}"/>
+                </apex:outputLink>
+                <apex:facet name="footer">
+                    <apex:commandLink action="{!add5Rows}" reRender="detailTable" style="text-decoration:none;">
+                        <apex:image url="{!URLFOR($Resource.SAPCMDMassUpdate,'insert.jpg')}"
+                                    height="16"/>
+                        <apex:outputText value="x5" styleClass="indexColumn"/>
+                    </apex:commandLink>
+                </apex:facet>
+            </apex:column>
+  <!------------------------------ Added by Shridevi as part of SIR 215-------------------------------------------------------->     
+            <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
+                <apex:facet name="header">SAP CMD Record Type</apex:facet>
+                <apex:outputText value="{!funloc.SapCMDRecordType }" style="{!IF(funloc.isDupe,'color:Red;','')}"/>
+            </apex:column>   
+ <!----------------------------------------------------------------------------------------------------------------------------->           
+     
+<!--                
+            <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
+                <apex:facet name="header">Legal Name</apex:facet>
+                <apex:outputText value="{!funloc.oldLegalName}" style="{!IF(funloc.isDupe,'color:Red;','')}"/>
+            </apex:column>    
+            <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
+                <apex:facet name="header">Street</apex:facet>
+                <apex:outputText value="{!funloc.oldStreet}" style="{!IF(funloc.isDupe,'color:Red;','')}"/>
+            </apex:column>    
+-->
+ <!--
+            <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
+                <apex:facet name="header">City</apex:facet>
+                <apex:outputText value="{!funloc.oldCity}" style="{!IF(funloc.isDupe,'color:Red;','')}"/>
+            </apex:column>    
+            <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
+                <apex:facet name="header">Country</apex:facet>
+                <apex:outputText value="{!funloc.oldCountry}" style="{!IF(funloc.isDupe,'color:Red;','')}"/>
+            </apex:column>  
+-->
+            <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
+                <apex:facet name="header">Legal Name (New)</apex:facet>
+                <apex:inputText value="{!funloc.newLegalName}" 
+                                 styleClass="{!funloc.rowStyleClass}" 
+                                style="{!IF(funloc.isDupe,'color:Red;','')}"/>
+                                 <!--rendered="{!(funloc.sapCMD!='')}"/>-->
+            </apex:column>
+          <!------------------------------ Added by Shridevi as part of SIR 215-------------------------------------------------------->     
+              
+              <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
+                <apex:facet name="header">Name 1 (Service Provider)</apex:facet>
+                <apex:inputText value="{!funloc.Name1ServiceProvider}" 
+                                 styleClass="{!funloc.rowStyleClass}" 
+                                style="{!IF(funloc.isDupe,'color:Red;','')}"/>
+                                 <!--rendered="{!(funloc.sapCMD!='')}"/>-->
+            </apex:column>    
+           <!----------------------------------------------------------------------------------------------------------------------------->           
+ 
+            <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
+                <apex:facet name="header">Name 2 (New)</apex:facet>
+                <apex:inputText value="{!funloc.newName2}" 
+                                 styleClass="{!funloc.rowStyleClass}" 
+                                style="{!IF(funloc.isDupe,'color:Red;','')}"/>
+                                 <!--rendered="{!(funloc.sapCMD!='')}"/>-->
+            </apex:column>   
+            <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
+                <apex:facet name="header">Name 3 (New)</apex:facet>
+                <apex:inputText value="{!funloc.newName3}" 
+                                 styleClass="{!funloc.rowStyleClass}" 
+                                style="{!IF(funloc.isDupe,'color:Red;','')}"/>
+                                 <!--rendered="{!(funloc.sapCMD!='')}"/>-->
+            </apex:column>   
+            <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
+                <apex:facet name="header">Name 4 (New)</apex:facet>
+                <apex:inputText value="{!funloc.newName4}" 
+                                 styleClass="{!funloc.rowStyleClass}" 
+                                style="{!IF(funloc.isDupe,'color:Red;','')}"/>
+                                 <!--rendered="{!(funloc.sapCMD!='')}"/>-->
+            </apex:column>   
+            <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
+                <apex:facet name="header">Street (New)</apex:facet>
+                <apex:inputText value="{!funloc.newStreet}" 
+                                 styleClass="{!funloc.rowStyleClass}" 
+                                style="{!IF(funloc.isDupe,'color:Red;','')}"/>
+                                 <!--rendered="{!(funloc.sapCMD!='')}"/>-->
+            </apex:column>   
+              
+            <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
+                <apex:facet name="header">City (New)</apex:facet>
+                <apex:inputText value="{!funloc.newCity}" 
+                                 styleClass="{!funloc.rowStyleClass}" 
+                                style="{!IF(funloc.isDupe,'color:Red;','')}"/>
+                                 <!--rendered="{!(funloc.sapCMD!='')}"/>-->
+            </apex:column>   
+            <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
+                <apex:facet name="header">State/Province (New)</apex:facet>
+                <apex:inputText value="{!funloc.newStateProvince}" 
+                                 styleClass="{!funloc.rowStyleClass}" 
+                                style="{!IF(funloc.isDupe,'color:Red;','')}"/>
+                                 <!--rendered="{!(funloc.sapCMD!='')}"/>-->
+            </apex:column>   
+            <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
+                <apex:facet name="header">Country (New)</apex:facet>
+                <apex:selectList value="{!funloc.newCountry}" size="1" 
+                                 styleClass="{!funloc.rowStyleClass}" 
+                                 style="{!IF(funloc.isDupe,'color:Red;','')}">
+                                 <!--rendered="{!(funloc.sapCMD!='')}">-->
+                    <apex:selectOption itemLabel="" itemValue=""/>
+                    <apex:selectOptions value="{!CountryOptions}"/>
+              </apex:selectList>
+            </apex:column>   
+            <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
+                <apex:facet name="header">Zip/Postal Code (New)</apex:facet>
+                <apex:inputText value="{!funloc.newZip}" 
+                                 styleClass="{!funloc.rowStyleClass}" 
+                                style="{!IF(funloc.isDupe,'color:Red;','')}"/>
+                                 <!--rendered="{!(funloc.sapCMD!='')}"/>-->
+            </apex:column>   
+            <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
+                <apex:facet name="header">
+                    <apex:outputText style="font-size:33%">
+                        copy<br/>col.
+                    </apex:outputText>
+                </apex:facet>
+                <apex:commandLink action="{!replicateColumn}" 
+                reRender="detailTable" 
+                style="color:Blue;">
+                <!--rendered="{!(funloc.sapCMD!='')}">-->
+                    <apex:param name="rowToBeReplicated" 
+                                value="{!funloc.index}" 
+                                assignTo="{!rowToBeReplicated}"/>
+                    <apex:param name="columnToBeReplicated" 
+                                value="Address" 
+                                assignTo="{!columnToBeReplicated}"/>
+                    <apex:image url="{!URLFOR($Resource.SAPCMDMassUpdate,'update.png')}"
+                                height="16"/>
+                </apex:commandLink>
+            </apex:column>
+            </div>    
+        </apex:dataTable>
+    </apex:actionRegion>
+</apex:pageBlock>    
+<!---Address------------------------------>
+</apex:form>
+<!--
+ <script type="text/javascript">      
+        function resizeParentIFrame(){
+            var h = document.body.scrollHeight;
+            //TODO - replace with the relevant page name.
+            var iframename = 'SAPCMDMassUpdate';
+            //TODO - replace with the relevant base url - page runs on the VF domain so functions return the VF domain. 
+            var baseUrlForInstance = 'https://nxp--full.cs7.my.salesforce.com';
+            document.getElementById('helpframe').src = baseUrlForInstance+'{!$Resource.iFrameHelper}?height='+h+'&iframename='+iframename+'&cacheb='+Math.random();
+        }
+         
+        function forceParentIFrameResize(){
+            document.getElementById('helpframe').src=document.getElementById('helpframe').src;
+        }
+         
+        window.onload=function(){
+            resizeParentIFrame();
+        }
+  </script>  
+ -->
+</apex:page>

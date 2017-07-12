@@ -1,0 +1,3 @@
+<aura:event type="APPLICATION" description="Analytics Interaction Event - Used by Adobe Handler">
+    <aura:attribute name="tags" type="Object" description="Map of tags and it's values"/>
+</aura:event>

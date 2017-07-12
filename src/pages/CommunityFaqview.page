@@ -1,0 +1,192 @@
+<!--  
+@Created By :       Avichal Kumar
+@Created Date:      25 Aug 2015
+@Description:       VF page to Disply Faq in single view 
+-->
+
+<!--  
+@Modified By :       Avichal Kumar
+@Modified Date:      3 Aug 2015
+@Description:        Modified Page For pop up implementation 
+-->
+<apex:page sidebar="false" showHeader="false" standardStylesheets="false" controller="CommunityFAQviewController" extensions="CommunityTabsController">
+
+
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <title>FAQ - NXP TechSupport Community</title>
+    <apex:stylesheet value="{!URLFOR($Resource.Forum_Community_3, 'NXP-community/css/font-awesome.css')}" ></apex:stylesheet>      
+    <apex:stylesheet value="{!URLFOR($Resource.Forum_Community_3, 'NXP-community/css/hover.css')}" ></apex:stylesheet>
+    <apex:stylesheet value="{!URLFOR($Resource.Forum_Community_3, 'NXP-community/css/main.css')}" ></apex:stylesheet>
+  </head>
+    
+<!--script for redirection as this page is not used for now-->
+<script type="text/javascript">
+    var thecookie = readCookie('doRedirect');
+    if(!thecookie) {
+       createCookie('doRedirect','true','1');
+        window.location = 'http://www.nxp.com/404_Page_not_Found';
+    };
+    function createCookie(name,value,days){
+      // do work
+    }
+    function readCookie(name){
+      // do work
+    }
+</script>
+    
+<body>
+  <!-- Code For Future Reference -->
+  <!--  <c:CommunityHeaderComponent ></c:CommunityHeaderComponent>
+ <apex:form styleclass="form-horizontal">  -->
+  <!-- Breadcrumbs 
+  <div class="breadcrumb-bar">
+    <div class="container">
+        <ul class="breadcrumb">
+          <li><a href="/community/CommunityOverview">{!$label.Community_breadcrumb_Home}</a></li>
+          <li><a href="/community/CommunityOverview">{!$label.Community_breadcrumb_Community}</a></li>
+          <li><a href="/community/CommunityForum">{!$label.Community_breadcrumb_Forum}</a></li>
+          <li class="active"><a href="/community/CommunityFAQ">{!$label.Community_tab_FAQ}</a></li>
+        </ul>
+    </div>
+  </div> -->
+
+    <!-- Community Navigtion 
+    <div class="container h-spacer navigation">
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-10 col-sm-10">
+                        <div class="navbar-header">
+                            <a class="navbar-brand" href="#">NXP Community</a>
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                                <span class="sr-only">Toggle navigation</span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                        </div>
+                        <div id="navbar" class="navbar-collapse collapse">
+                            <ul class="nav navbar-nav">
+                                <li ><a href="/community/CommunityOverview">{!$label.Community_tab_Overview}</a></li>
+                                <li ><a href="/community/CommunityForum">{!$label.Community_breadcrumb_Forum}</a></li>
+                                <li class="active"><a href="/community/CommunityFAQ">{!$label.Community_tab_FAQ}</a></li>
+                                <li ><apex:outputLink rendered="{!If(($Profile.Name='NXP Community Profile'|| publicDomain==true),false,true)}" value="/community/CommunityCaseList">{!$Label.Community_tab_Contactsupport}</apex:outputLink></li>
+                                <li><a href="/community/CommunityStories">{!$Label.Community_tab_Stories}</a></li>
+                            </ul>
+                        </div>
+                    </div>  -->
+                    <!-- login container
+                    <apex:outputPanel rendered="{!If(($Profile.Name='NXP Community Profile'),true,false)}">
+                    <div class="nav navbar-nav navbar-right">
+                        <div class="login-holder">
+                            <img class="hvr-grow" id="logo" src="{!URLFOR($Resource.Forum_Community_3,'NXP-community/img/community-logo_small.png')}"/>
+                            <a href="/community/communityLogin">Login / </a>
+                            <a href="/community/communityRegistration">Register</a>
+                        </div>
+                    </div>
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!If(($Profile.Name='NXP Community Profile'),false,true)}">
+                    <div class="nav navbar-nav navbar-right">
+                        <span>
+                            <img src="{!URLFOR($Resource.Forum_Community_3,'NXP-community/img/avatar_round.png')}" class="avatar" alt="" />
+                     &nbsp;<a title="" data-toggle="popover" href="#" data-original-title="Profile properties">
+                    {!$User.firstName}&nbsp;{!$User.Lastname} <i class="fa fa-gear"></i>
+                    </a>
+                  </span>
+                    </div>
+                    </apex:outputPanel>
+                </div>
+            </div>
+        </nav>
+    </div> -->
+    <!-- Searchbar -->
+    
+    <!-- Code For future Referenece Ends
+   
+    
+    <!-- Question list -->
+     
+    <div class="container list-faq-container">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="panel-title">
+                    <div class="col-md-8 col-xs-8"><span class="pull-left">Question</span></div>
+                    <div class="col-md-2 col-xs-2"><span class="pull-left">Category</span></div>
+                    <div class="col-md-2 col-xs-2"><span class="pull-left">Rating</span></div>
+                </div>
+            </div>
+            <apex:outputPanel id="details">
+            <apex:variable var="index" value="{!0}"/>
+            <apex:repeat var="rec1" value="{!lstFaq}">
+            <div class="panel-body">
+    
+                <div>
+             
+                    <div class="row">
+      
+                         <apex:variable var="index" value="{!index+1}"/>
+                        <div class="col-md-8 col-xs-8"><a href="#">{!rec1.Question}</a></div>
+                        <div class="col-md-2 col-xs-2"><a href="#">{!rec1.category}</a></div>
+                        <div class="col-md-2 col-xs-2"><a href="#">{!rec1.rating}/5</a><a role="button" data-toggle="collapse" href="#collapsed-content{!index}" aria-expanded="true" aria-controls="collapseExample" class="collapse-trigger-open"><span class="pull-right fa fa-angle-right arrow-right"></span></a></div>
+       
+                    </div>
+                    
+                    <div class="collapse" id="collapsed-content{!index}">
+                        <div class="collapse-content">
+                           {!rec1.Answer}
+                            <br/>
+                        <br/>
+                        <br/>
+                            <span>Please rate this answer
+                                <span class="star-rating"> 
+                                  <span class="fa fa-star-o" data-rating="1"></span>
+                            <span class="fa fa-star-o" data-rating="2"></span>
+                            <span class="fa fa-star-o" data-rating="3"></span>
+                            <span class="fa fa-star-o" data-rating="4"></span>
+                            <span class="fa fa-star-o" data-rating="5"></span>
+                               <!--     <input type="hidden" name="whatever" class="rating-value" value="1"/>  -->
+                            </span>
+                            </span>
+                        </div>
+                    </div>
+                  
+                </div>
+                
+                   
+              </div>
+            </apex:Repeat>   
+            </apex:outputPanel>
+            
+          <nav>
+             
+                </nav>
+            
+        </div>
+    </div>
+    
+    
+     <c:CommunityFooterComponent ></c:CommunityFooterComponent>
+    <!--Menu for user configuration-->
+    <div id="user-config-popover" style="display:none">
+        <ul class='nav nav-pills nav-stacked'>
+            <li><apex:outputlink style="width:179px; margin-left: 0px;" value="/community/CommunitiesEditUserProfile" rendered="{!If(($Profile.Name='NXP Customer Community Login User'),true,false)}" > Edit profile</apex:outputlink></li>
+            <li ><apex:outputlink style="width:179px; margin-left: 0px;" value="/secur/logout.jsp?retUrl=https%3A%2F%2Fnxpcommunity.force.com%2Fcommunity%2FCommunityOverview">Logout</apex:outputlink></li>
+        </ul>
+    </div>
+    <!-- Bootstrap core JavaScript
+         ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="{!URLFOR($Resource.Forum_Community_3,'NXP-community/js/bootstrap.js')}"></script>
+    <script src="{!URLFOR($Resource.Forum_Community_3,'NXP-community/js/collapse.js')}"></script>
+    <script src="{!URLFOR($Resource.Forum_Community_3,'NXP-community/js/nxp-community.js')}"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <!-- <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script> -->
+</body>
+
+</apex:page>

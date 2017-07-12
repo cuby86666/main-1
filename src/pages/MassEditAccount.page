@@ -1,0 +1,33 @@
+<!--
+@Modified By :       Vinanthi Ittigi
+@Modified Date:      15 Jul 2016
+@Description:        SIR#977. Removed NER related script from this page.
+-------------------------------------------------------------------------------
+@Modified By :       Baji
+@Modified Date:      10 Apr 2017
+@Description:        commented few lines as part of SFDC-38 to delete the Account.Account_Family__c field
+-->
+<apex:page standardController="Account" recordSetVar="unused" sidebar="false">
+
+<apex:includeScript value="{!$Resource.UtilJS}" />
+<apex:form >
+<apex:pageBlock >
+<apex:pageMessages />
+<apex:pageBlock >
+Note: All modifications made on the page will be lost if Return button is clicked without clicking the Save button first. 
+</apex:pageBlock>
+<apex:pageBlockButtons >
+<apex:commandButton value="Save" action="{!save}"/>
+<apex:commandButton value="Return" action="{!cancel}"/>
+</apex:pageBlockButtons>
+<apex:pageBlockTable value="{!selected}" var="acc" id="table">
+<apex:column headerValue="Name">
+<apex:outputField value="{!acc.name}"/>
+</apex:column>
+<!--<apex:column headerValue="Account Plan">
+<apex:inputField value="{!acc.Account_Family__c}"/>
+</apex:column>--> <!-- commented as part of SFDC-38 to delete the Account.Account_Family__c field -->
+</apex:pageBlockTable>
+</apex:pageBlock>
+</apex:form>
+</apex:page>

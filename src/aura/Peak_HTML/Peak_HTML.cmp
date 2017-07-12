@@ -1,0 +1,6 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+	<aura:attribute name="html" type="String" default="Hello, world!" />
+	<aura:unescapedHtml value="{!v.html}" />
+
+
+</aura:component>

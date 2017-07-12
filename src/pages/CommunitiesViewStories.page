@@ -1,0 +1,299 @@
+<!--*********************************************************************************************
+@Created By :      Amrutha R
+@CreatedDate :     22 April 2015
+Description :      VF page for NXP community users to view stories
+***************************************************************************************************-->
+
+<apex:page standardStylesheets="false" title="NXP TechSupport Community" cache="True" showHeader="false" sidebar="false"  controller="CommunitiesSuccessStoriesController" >    
+<style>
+    .listHeader .btn 
+    {
+    visibility: hidden;
+    }
+    
+    .pbSubheader 
+    {
+    background-color: #C0BE72;
+    font-weight: bold;
+    font-size: 91%;
+    padding: 2px 2px 2px 5px;
+    margin-top: 15px;
+    overflow: hidden;
+    margin-bottom: 2px;
+    }
+
+                         
+.centerContent {
+padding-left:10px;
+}
+.threecolumn{
+margin-right: 10px;
+margin-left: -10px;
+}
+
+.bigdisplay{                          
+     border: 1px solid black;                             
+     height: 480px; 
+     width: 600px;                             
+}
+.display{                          
+     border-radius: 3px;
+-webkit-box-shadow: 0 0 10px #bdbdbd;                           
+     width: 630px;
+     height:relative;  
+     margin-right: 10px;
+margin-top:2px;  
+    table-layout: fixed; 
+}
+.display2{                          
+     border-radius: 3px;
+-webkit-box-shadow: 0 0 10px #bdbdbd;                           
+     width: 630px;
+     height: 50px;  
+  margin-top:3px; 
+  margin-left:2px;
+  margin-bottom:3px; 
+    table-layout: fixed; 
+}                                
+
+ .textar {
+    width: 450px;
+    height: 26px;
+    
+    border: 1px solid #c0c0c0;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+}                          
+.submit-btn input {
+
+    background-image: linear-gradient(to bottom,  0%,  50%,  100%);
+    width:100px;height:30px;
+    color: black;
+    }
+    .submit-btn input:hover {
+     
+    background-image: linear-gradient(to bottom,  0%,  50%,  100%);
+    width:100px;height:30px;
+    color: black;
+    } 
+td {
+    overflow: hidden;
+}
+blockquote {
+    background: #efefef;
+    display: block;
+  border: 1px solid #ccc;
+}
+blockquote p {margin-left: 15px; margin-top: 15px; margin-right:15px; margin-bottom: 5px; }    
+</style>
+    
+    <apex:stylesheet value="{!URLFOR($Resource.CommunityUIComopnent, 'CommunityUIComopnent/css/stylesheet.css')}" />    
+    <apex:stylesheet value="{!URLFOR($Resource.dropdownjs, 'dropdownjs.js')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.CommunityUIComopnent, 'CommunityUIComopnent/css/reset.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.CommunityUIComopnent, 'CommunityUIComopnent/css/tree.css')}" />
+    <apex:includeScript value="{!URLFOR($Resource.jquery171min, '/jquery-1.7.1.min.js')}" />
+    <apex:includeScript value="{!URLFOR($Resource.jquery171min, '/jquery-ui-1.8.17.custom.min.js')}" />
+    <apex:includeScript value="{!URLFOR($Resource.CommunityUIComopnent, 'CommunityUIComopnent/js/jquery-1.7.2.js')}" />
+    <apex:includeScript value="{!URLFOR($Resource.CommunityUIComopnent, 'CommunityUIComopnent/js/tree.js')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.CommunityUIComopnent, 'CommunityUIComopnent/css/Casestylesheet.css')}" />
+    <script>
+
+$(document).ready(function(){
+
+            var editorNo=0;
+            var noOfEditorsOnAPage=1;
+        CKEDITOR.on('instanceReady', function(e) {
+            
+            if(editorNo>=noOfEditorsOnAPage){
+
+            return;
+
+            }else{
+
+            editorNo++;
+
+            }
+
+            var target = e.editor.config.bodyId;
+            var name = e.editor.name;
+            e.editor.destroy();
+
+            CKEDITOR.editorConfig = function( config ) { config.magic = true; }
+            CKEDITOR.replace(name, {
+                        height : 200, width: 500,
+                        bodyId : target
+            });
+        });
+    });
+</script>
+    <body>
+    <div id="fb-root">
+    </div>
+    <div>
+        <div id="page" style="background:white;width: 1030px; position: relative;top: 0px;">  
+            <c:headercommunity >
+            </c:headercommunity>  
+            <apex:includeScript value="{!URLFOR($Resource.NXPJs, '/jquery-1.7.2.js')}" />
+            <apex:includeScript value="{!URLFOR($Resource.NXPJs, '/jquery.hoverIntent.js')}" />
+            <apex:includeScript value="{!URLFOR($Resource.NXPJs, '/header.js')}" />
+            <apex:stylesheet value="{!URLFOR($Resource.NXPCss, '/reset.css')}" />
+            <apex:stylesheet value="{!URLFOR($Resource.NXPCss, '/basic.css')}" />
+            <apex:stylesheet value="{!URLFOR($Resource.NXPCss, '/header.css')}" /> 
+            <apex:stylesheet value="{!URLFOR($Resource.NXPCss, '/tabs.css')}" /> 
+            
+            <c:menuxp1 >
+            </c:menuxp1>  
+        </div>        
+        <br/><br/>
+        <div style="width:980px; float:left; margin-left:20px; margin-bottom:-5px; " class="hoverAnchor">
+            <apex:outputLink id="HomePage" value="/community/CommunitiesHomePage" >Home
+            </apex:outputLink>&nbsp;
+            <apex:image value="{!$Resource.arrow}" style="test-align: bottom;"/>
+            Success Stories &nbsp;
+        </div><br/><br/><br/>
+        <div id="Chatteranswer" style="background-color: white;top:20px; left:0px; float:left;position:relative;width:980px;">
+            <div style="float:left;position:relative;">
+        <div class="tabs-container clearfix tabsMargin">
+            <ul class="tabs">
+                <c:CommunitiesSuccessStoriesTabSection ></c:CommunitiesSuccessStoriesTabSection>
+            </ul>
+            <div class="tab-container">
+                <div class="top-left">
+                    <div class="top-right">
+                        <div class="top-middle"><!--_--></div>
+                    </div>
+                </div>
+                <div class="middle-left">
+                    <div class="middle-right">
+                        <div class="middle panes">
+                            <div id="section_products1" class="noborder top">
+                                <div class="article-header">
+                                   <!-- <h2 class="nxp-darkgreen">Title tab content</h2>-->
+                                   <span ><br/></span>
+                                </div>
+                                <div class="article-content">
+                                     <div class="threecolumn" style="background-color: white;float:left;position:relative;width:910px;">
+                
+                  
+
+            <!-------------------------------chatter answers---------------------------->
+                        
+                             <c:socialmediacommunity_test ></c:socialmediacommunity_test>
+
+                        <div id="centerContent" class="centerContent">
+                             <div style="position: relative; background-color:white; width: 600px; ">
+                                <apex:form id="tabs">
+                                    
+                                                <apex:pageMessages id="error"/>
+                                    <apex:pageBlock rendered="{!isViewIdea}" id="ideaSection">
+                                                <div style=" height:relative; width: 595px;" > 
+                                                    <apex:pageBlock id="ideas" title="Story Details">
+                                                        <br/>
+                                                        <center><apex:outputLabel value="Your comment has been posted successfully! " style="color: red;text-align: left;margin-left: 5px;" rendered="{!isCommentPosted}"/></center>&nbsp; 
+                                                        <table class="display"> 
+                                                            <tr>
+                                                                <td width="20%" >
+                                                                    <table style="text-align:center;">  
+                                                                                <tr >
+                                                                                    <td style="padding-top: 20px;padding-left:15px;padding-right: 20px;">
+                                                                                        <apex:vote objectId="{!objIdeaComments.id}"  rerender="ideas"/>                                                                                
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </table>
+                                                                </td>
+                                                                <td  width="70%" style="overflow: auto;">
+                                                                    <table>
+                                                                                <tr>
+                                                                                    <td  style="padding-top: 20px;font-weight: bold;font-size: 15px;padding-right: 20px;">{!objIdeaComments.title}</td> 
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td style="padding-top: 28px;padding-right: 20px;"> <apex:outputText value="{!objIdeaComments.body}" escape="false" /></td>   
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td style="padding-top: 35px;padding-bottom: 1px;padding-right: 20px;">{!objIdeaComments.numComments} Comment , Posted by {!objIdeaComments.CreatorName} on {!objIdeaComments.CreatedDate}</td>   
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td style="padding-bottom:20px;padding-right: 20px;">Categories: {!objIdeaComments.categories}</td>
+                                                                                </tr>
+                                                                            </table>  
+                                                                </td> 
+                                                            </tr>
+                                                        </table>   </apex:pageBlock></div><br/><br/>
+                                                
+                                                
+                                                <apex:pageBlock title="Add Comment" id="comment"><br/>
+                                                    <div  >
+                                                        <apex:pageBlockSection >
+                                                            <apex:pageBlockSectionItem id="commentSection"> 
+                                                                <apex:outputPanel styleClass="requiredInput" >
+                                                                    <div style="border-left: 3px solid red; padding-left: 2px;">
+                                                                        <div style="width:630px;"><apex:inputTextarea richtext="true" value="{!strCommentBody}"/></div></div>
+                                                                </apex:outputPanel>
+                                                            </apex:pageBlockSectionItem>
+                                                        </apex:pageBlockSection><br/>
+                                                    </div>
+                                                    <div class="controls submit-btn">
+                                                    <center>     
+                                                        <apex:commandButton value="Add Comment" action="{!addComment}" style="margin-left:-20px;"/>
+                                                    </center>
+                                                    </div>
+                                                </apex:pageBlock><br/>
+                                                <apex:pageBlock id="comments" title="Comments "> <br/>
+                                                    <div style=" height: 400px; width: 650px; overflow: auto;margin-bottom: 30px;" >
+                                                        <apex:dataList var="a" value="{!lstComments}" id="list">
+                                                            <table class="display2">
+                                                                <tr>
+                                                                    <td width="50%">
+                                                                        <table style="margin-left: 10px;">
+                                                                            <tr>
+                                                                                 
+                                                                                <td style="padding-top: 10px;font-size: 15px;padding-left:15px;padding-right: 20px;"><apex:outputText value="{!a.commentBody}" escape="false" /></td>   
+                                                                            </tr>
+                                                                            
+                                                                            <tr>
+                                                                                <td style="padding-top: 26px;font-size: 12px;padding-bottom: 10px;padding-left:15px;padding-right: 20px;">Comment by {!a.CreatorName} on {!a.CreatedDate}</td>
+                                                                            </tr></table>
+                                                                    </td>
+                                                                </tr>
+                                                            </table><br/>
+                                                        </apex:dataList> </div>
+                                                </apex:pageBlock>
+                                            </apex:pageBlock>
+                   
+                                 </apex:form>
+                            </div>
+                                         </div>
+                                    </div> 
+                                </div> 
+                            </div>
+                            <br style="clear:both"/>
+                        </div>              
+                    </div>
+                    <!--  <br style="clear:both"/>-->
+                    <div class="bottom-left">
+                        
+                        <div class="bottom-right">
+                            <div class="bottom-middle">
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                
+            </div>
+                </div>    
+            </div>
+            
+        </div>
+        <c:footercommunity />  
+        <!----============================ FOOTER ======================------->
+        </div> 
+        
+        <script type="text/javascript" src="/community/resource/1412757333000/CommunityOmnitureScript/s_code.js">
+      
+        </script>
+        
+        </body>
+</apex:page>

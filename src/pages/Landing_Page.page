@@ -1,0 +1,764 @@
+<!--**********************************************************************************************************************
+Modified By     :    Shridevi Badiger
+Modified Date   :    23 June 2016
+Description     :    SIR-848-To add URLs for the New Registration page.
+--------------------------------------------------------------------------------------------------------
+Modified By     :    Nisha Agrawal
+Modified Date   :    02 Dec 2016
+Description     :    SFDC-44-To replace hard coded URLs with generic URLs for CMD/User Registration
+**********************************************************************************************************************-->
+<apex:page id="thePage" sidebar="false" showHeader="false"  standardStylesheets="false" cache="false" controller="CaseControllerAttachment">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="description" content="NXP is a leading semiconductor company founded by Philips more than 50 years ago. NXP creates semiconductors, system solutions and software that deliver better sensory experiences in TVs, set-top boxes, identification applications, mobile phones, cars and a wide range of other electronic devices" />
+<meta name="keywords" content="NXP Semiconductors" />
+<title>NXP GSM Page</title>
+
+<link rel="shortcut icon" href="{!URLFOR($Resource.LandingPageStyle, 'img/apple-touch-icon.png')}" />
+<link rel="apple-touch-icon" href="{!URLFOR($Resource.LandingPageStyle, 'img/apple-touch-icon.png')}" />
+
+<apex:stylesheet value="{!URLFOR($Resource.LandingPageStyle, 'css/reset.css')}"  />
+<apex:stylesheet value="{!URLFOR($Resource.LandingPageStyle, 'css/main.css')}"  />
+<apex:stylesheet value="{!URLFOR($Resource.LandingPageStyle, 'css/layout.css')}"  />
+<!--[if lte IE 6]><apex:stylesheet value="{!URLFOR($Resource.LandingPageStyle, 'css/ie6.css')}"  /><![endif]-->
+</head>
+<body>
+<div id="wrapper">
+    <div id="header" class="solrNoIndex">
+        <div id="header-top" >
+            <div class="logo" style="width:82%;">
+                <a shape="rect" href="http://www.nxp.com" title="NXP Semiconductors homepage">
+                    <img src="{!URLFOR($Resource.LandingPageStyle, 'img/NXP_logo.png')}" alt="NXP Semiconductors" height="32" width="85" />
+                </a>
+            </div>
+            <div class="right" style="width:8%;">
+                <table cellpadding="0" cellspacing="0" align="center" width="98%">
+                    <tr>
+                        <td>
+                            <div id="SF_Answer">
+                                <a shape="rect" href="https://nxp.my.salesforce.com/answers/answersHome.apexp?tsid=02u20000000PTAi" title="Salesforce Answers" target="blank">
+                                    <img src="{!URLFOR($Resource.LandingPageStyle, 'img/Answer.JPG')}" alt="Salesforce Answers" />
+                                </a>
+                            </div> 
+                        </td>
+                        <td>
+                            <div id="SF_Idea">
+                                <a shape="rect" href="https://nxp.my.salesforce.com/ideas/ideaList.apexp" title="Salesforce Ideas" target="blank">
+                                    <img src="{!URLFOR($Resource.LandingPageStyle, 'img/SF_Idea.jpg')}" alt="Salesforce Ideas" />
+                                </a>
+                            </div>
+                        </td>
+                        <td>
+                            <div id="SF_Chatter">
+                                <a shape="rect" href="https://nxp.my.salesforce.com/_ui/core/chatter/groups/GroupProfilePage?g=0F9D00000004y9K" title="SalesForce Chatter" target="blank">
+                                    <img src="{!URLFOR($Resource.LandingPageStyle, 'img/chatter.jpg')}" alt="Salesforce Chatter"  />
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div> 
+        </div>
+    </div>
+    <!-- Content Block Starts Here -->
+    <div id="content">
+        <table cellpadding="0" cellspacing="0" align="center" width="98%">
+            <tr>            
+                <td valign="top" colspan="8">                    
+                    <div id="LogOn" class="box-1" style="width:100%">
+                        <div class="noborder top">                            
+                            <h2 class="nxp-darkblue" >Log On</h2>
+                            <span class="bottom-dotted"><!--_--></span>
+                        </div>
+                    </div>
+                   </td>
+            </tr>
+            <tr>            
+                <td valign="top" id="app1">
+                    <!-- Box 1 Starts here  -->
+                    <div class="box-1">
+                       <div class="grey-2">
+                           <div>
+                                <div>
+                                    <div>
+                                        <h3 class="nxp-darkorange" style="text-align:center;">Salesforce</h3>
+                                         <a href="https://nxp.my.salesforce.com" title="Salesforce" target="blank">
+                                            <div style="text-align:center;"> 
+                                                <img src="{!URLFOR($Resource.LandingPageStyle, 'img/salesforce.jpg')}" width="80" />
+                                            </div>
+                                        </a>
+                                    </div>               
+                                </div>                
+                            </div>                
+                        </div>
+                    </div>
+                    <!-- Box 1 Ends here  -->
+                </td>
+               <!-- <td valign="top" id="app2">
+                    <!-- Box 2 Starts here  -->
+                   <!-- <div class="box-1">                        
+                        <div class="grey-2">
+                            <div>
+                                <div>
+                                    <div>
+                                        <h3 class="nxp-darkorange" style="text-align:center;">Box.Net</h3>
+                                        <a href="https://nxp.box.net" title="Box.net"  target="blank">
+                                            <div style="text-align:center;">
+                                                <img src="{!URLFOR($Resource.LandingPageStyle, 'img/Box.jpg')}" alt="Register with Box.Net" width="80"  />
+                                            </div>
+                                        </a>                                                                          
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>-->
+                    <!-- Box 2 Ends here  -->
+               <!-- </td>-->
+                <td valign="top" id="app3">
+                    <!-- Box 3 Starts here  -->
+                    <div class="box-1">                        
+                        <div class="grey-2">
+                            <div>
+                                <div>
+                                    <div>
+                                        <h3 class="nxp-darkorange" style="text-align:center;">Brainshark</h3>
+                                        <a href="http://www.brainshark.com/nxp" title="Brainshark" target="blank">
+                                            <div style="text-align:center;">
+                                                <img src="{!URLFOR($Resource.LandingPageStyle, 'img/brainshark.jpg')}" alt="Register with BrainShark" width="80" />
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>                        
+                    </div>
+                    <!-- Box 3 Ends here  -->
+                </td>
+                <td valign="top" id="app4">
+                    <!-- Box 4 Starts here  -->
+                    <div class="box-1">
+                        <div class="grey-2">
+                            <div>
+                                <div>
+                                    <div>
+                                        <h3 class="nxp-darkorange" style="text-align:center;vertical-align: middle;">Customer Master Data</h3>
+                                        <a href="/cmd" title="CMD" target="blank"> 
+                                            <div style="text-align:center;vertical-align: middle;">
+<!--                                                <img src="{!URLFOR($Resource.LandingPageStyle, 'img/NXP_logo.jpg')}" alt="Register with Extranet" width="80"  />  -->
+                                                <img src="{!URLFOR($Resource.CMD_Logo)}" alt="Make CMD Request" width="80"  /> 
+                                            </div>
+                                        </a> 
+                                    </div>                
+                                </div>                
+                            </div>                
+                        </div>
+                    </div>  
+                    <!-- Box 4 Ends here  -->
+                </td>
+                <td valign="top" id="app5">
+                    <!-- Box 5 Starts here  -->
+                    <div class="box-1">
+                        <div class="grey-2">
+                            <div>
+                                <div>
+                                    <div>
+                                        <h3 class="nxp-darkorange" style="text-align:center;">Go To Meeting</h3>
+                                        <a href="https://www4.gotomeeting.com/island/login.tmpl?Portal=www.gotomeeting.com" title="GoToMeeting"  target="blank">
+                                            <div style="text-align:center;">
+                                              <img src="{!URLFOR($Resource.LandingPageStyle, 'img/gotomeeting.jpg')}" alt="Register with GoToMeeting" width="80" />
+                                            </div>
+                                        </a>
+                                    </div>                
+                                </div>                
+                            </div>                
+                        </div>
+                    </div>  
+                    <!-- Box 5 Ends here  -->
+                </td>
+                <td valign="top" id="app6">
+                    <!-- Box 6 Starts here  -->
+                    <div class="box-1">                       
+                        <div class="grey-2">
+                            <div>
+                                <div>
+                                    <div>
+                                        <h3 class="nxp-darkorange" style="text-align:center;">Model N</h3>
+                                        <a href="https://nww.mn.nxp.com/" title="ModelN"  target="blank">
+                                            <div style="text-align:center;">
+                                                <img src="{!URLFOR($Resource.LandingPageStyle, 'img/ModelN.jpg')}" alt="Register with ModeIN" width="80" />
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>      
+                    <!-- Box 6 Ends here  -->
+                </td>
+               
+                <td valign="top" id="app8">
+                    <!-- Box 8 Starts here  -->
+                   <!-- <div class="box-1">
+                        <div class="grey-2">
+                            <div>
+                                <div>
+                                    <div>
+                                        <h3 class="nxp-darkorange" style="text-align:center;">Training App</h3>
+                                        <a href="https://nxp.my.salesforce.com/a0l/o" title="Training App"  target="blank">
+                                            <div style="text-align:center;">
+                                                <img src="{!URLFOR($Resource.LandingPageStyle, 'img/servlet.jpg')}" alt="Register with Training App" width="80" />
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>                        
+                    </div>   -->   
+                    <!-- Box 8 Ends here  -->
+                </td>
+            </tr>
+            <!--  Register block STARTS here -->
+            <tr>            
+                <td valign="top" colspan="8">
+                    <div id="Registration" class="box-1" style="width:100%">
+                        <div class="noborder top">                            
+                            <h2 class="nxp-darkblue" >Registration</h2>
+                            <span class="bottom-dotted"><!--_--></span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td valign="top" id="trng1">
+                   <div class="sub-container">
+                        <ul class="bullet-green-list">
+                            <li>
+                               <p><a href="/newuser2" title="Salesforce" target="blank">Click here to register</a></p>                       
+                            </li>
+                        </ul>
+                    </div>                    
+                </td>
+              <!--  <td valign="top" id="trng2">
+                    <div class="sub-container">
+                        <ul class="bullet-orange-list">
+                            <li>
+                               <p><a href="/newuser/NewUserRegisteration?userRequestparam=Box" title="Box.net" target="blank">Click here to register</a></p>
+                            </li>
+                        </ul>
+                    </div>
+                </td>-->
+                <td valign="top" id="trng3">
+                   <div class="sub-container">
+                        <ul class="bullet-green-list">
+                            <li>
+                               <p><a href="/newuser/NewUserRegisteration?userRequestparam=Brainshark" title="Brainshark" target="blank">Click here to register</a></p>                      
+                            </li>
+                        </ul>
+                    </div>                    
+                </td>
+                <td valign="top" id="trng4">
+                    <div class="sub-container">
+                        <ul class="bullet-orange-list">
+                            <li>
+                               <p><a href="/newuser2" title="CMD" target="blank">Click here to register</a></p>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+                <td valign="top" id="trng5">
+                   <div class="sub-container">
+                        <ul class="bullet-green-list">
+                            <li>
+                               <p><a href="/newuser/NewUserRegisteration?userRequestparam=GoToMeeting" title="GoToMeeting" target="blank">Click here to register</a></p>                     
+                            </li>
+                        </ul>
+                    </div>                    
+                </td>
+<!--               <td valign="top" id="trng6">
+                    <div class="sub-container">
+                        <ul class="bullet-orange-list">
+                            <li>
+                               <p><a href="/modeln" title="ModelN" target="blank">Click here to register</a></p>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+               <td valign="top" id="trng8">
+                    <div class="sub-container">
+                        <ul class="bullet-orange-list">
+                            <li>
+                               <p><a href="/newuser/NewUserRegisteration?userRequestparam=Training%20App" title="Training App" target="blank">Click here to register</a></p>
+                            </li>
+                        </ul>
+                    </div>
+                </td>                  
+-->          </tr>
+            <!--  Training block STARTS here -->
+            <tr>            
+                <td valign="top" colspan="8">
+                    <div id="Training" class="box-1" style="width:100%">
+                        <div class="noborder top">                            
+                            <h2 class="nxp-darkblue" >Trainings</h2>
+                            <span class="bottom-dotted"><!--_--></span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td valign="top" id="trng1">
+                   <div class="sub-container">
+                        <ul class="bullet-green-list">
+                            <li>
+<!--                                <a href="https://nxp.box.net/shared/q39rni68yb0sxkvug5k1" target="blank">SFDC User Guide</a>                        
+--><!--                                <a href="https://nxp.box.com/s/vp611zwpkngp8sugjhui" target="blank">SFDC User Guide</a> 
+--><!--                                <a href="https://nxp.my.salesforce.com/sfc/p/20000000NBgb/a/D0000000PY2q/awXQOvdUFdsqAki75mYK4q6SQrvkJzWwBVL5g2dyqFU=" target="blank">SFDC User Guide</a>                                        
+-->
+                                    <a href="https://nxp.app.box.com/s/ne9s2mxndk4gr146iqce9fqrqc2mu91l" target="blank">SFDC Opportunity Management</a>
+                            </li>
+                            <li>
+<!--                                <a href="https://nxp.box.net/shared/9lalcp5v7cm3msh8tixq" target="blank">SFDC Reporting</a>
+--><!--                                <a href="https://nxp.box.com/s/kpkekueosohklsfchepr" target="blank">SFDC Reporting</a>
+--><!--                                <a href="https://nxp.my.salesforce.com/sfc/p/20000000NBgb/a/D0000000PY2l/92rt9WFe8g4osFLPVm1XkL4Japna_j0JIXrHeNWh_Pk=" target="blank">SFDC Reporting</a>
+-->                                 <a href="https://nxp.box.com/s/zg0xln8redf2jdrvq8n7uukn0pwsv2oy" target="blank">SFDC Account Management</a>
+                            </li>
+                            <li>
+<!--                                <a href="https://nxp.box.com/s/dd08fe7e9c6d5a819968" target="blank">Mobile Setup</a>
+--><!--                                <a href="https://nxp.my.salesforce.com/sfc/p/20000000NBgb/a/D0000000PY2v/63mIbPEiqV3FlWmW4c_zge5jXFdbd92R6.E1pU6fBwY=" target="blank">Mobile Setup</a>
+-->                                 <a href="https://nxp.box.com/s/5f489eb0dxdscs1fe87escuahwkaq7gi" target="blank">SalesForce 1 Mobile</a>
+                            </li>
+                            <li>
+<!--                                <a href="https://nxp.box.com/s/f81142c3a321bc9bc1d7" target="blank">More</a>
+-->                                <a href="https://nxp.box.com/shared/q42192z074" target="blank">More</a>
+                            </li>
+                        </ul>
+                    </div>                    
+                </td>
+                <!--<td valign="top" id="trng2">
+                    <div class="sub-container">
+                        <ul class="bullet-orange-list">
+                            <li>-->
+<!--                                <a href="https://nxp.box.com/shared/g6xzqltq3a5" target="blank">NXP User Guide</a>
+-->                          <!--      <a href="https://nxp.box.com/s/0ffl9wdhgrmoyjvvewxn" target="blank">NXP User Guide</a>
+                            </li>
+                            <li>-->
+<!--                                <a href="https://nxp.box.com/shared/bupac7peo8" target="blank">Box Sync Guide</a>
+-->                          <!--      <a href="https://nxp.box.com/s/bf11a86eb9d328be1ac2" target="blank">Box Sync Guide</a>
+                            </li>
+                            <li>
+                                <a href="https://nxp.box.com/s/z4s5tdufo5dulptjujw1" target="blank">Mobile Setup</a>
+                            </li>
+                            <li>
+                                <a href="https://nxp.box.com/shared/81ajk3vq05" target="blank">More</a>
+                            </li>
+                        </ul>
+                    </div>
+                </td>-->
+                <td valign="top" id="trng3">
+                    <div class="sub-container">
+                        <ul class="bullet-green-list">
+                            <li>
+                                <a href="https://nxp.box.com/s/dy7vnghjc9ue840ev4t3" target="blank">Brainshark FAQ</a>
+                            </li>
+                            <li>
+                                <a href="http://www.brainshark.com/campaigns/bsk-on-demand.aspx?pi=zDZzTnDkwz0z0&tx=HnT" target="blank">Brainshark How To</a>
+                            </li>
+                            <li>
+                                <a href="http://www.brainshark.com/what-is-brainshark/brainshark-mobile.aspx" target="blank">Mobile Setup</a>
+                            </li>
+                            <li>
+                                <a href="http://www.brainshark.com/help-and-training/self-paced-learning/brainshark-presentations/new-author-learning-series.aspx" target="blank">More</a>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+                <td valign="top" id="trng4">
+                    <div class="sub-container">
+                        <ul class="bullet-orange-list">
+                            <li>
+                                <a href="https://nxp.box.com/s/zg0xln8redf2jdrvq8n7uukn0pwsv2oy" target="blank">Account Management</a>
+                            </li>
+                            <!-- uncomment this section to add training                            
+                            <li>
+                                <a href="#" target="blank">T2</a>
+                            </li>
+                            <li>
+                                <a href="#" target="blank">more</a>
+                            </li> 
+                            -->
+                        </ul>
+                    </div>
+                </td>
+                <td valign="top" id="trng5">
+                    <div class="sub-container">
+                        <ul class="bullet-green-list">
+                            <li>
+                                <a href="https://nxp.box.com/s/g9zcteoc9qr2s3degvj9" target="blank">GoToMeeting FAQ</a>
+                            </li>
+                            <li>
+                                <a href="http://support.citrixonline.com/en_US/GoToMeeting/video/GTMV00001" target="blank">GoToMeeting How To</a>
+                            </li>
+                            <li>
+                                <a href="http://support.citrixonline.com/en_US/gotomeeting/all_files/GTM040001" target="blank">Mobile Setup</a>
+                            </li>
+                            <!-- uncomment this section to add training
+                            <li>
+                                <a href="#" target="blank">more</a>
+                            </li> 
+                            -->
+                        </ul>
+                    </div>
+                </td>
+                <td valign="top" id="trng6">
+                    <div class="sub-container">
+                        <ul class="bullet-orange-list">                            
+                            <li>
+                                <a href="https://nxp.box.com/s/09a3ef81c66782e20505" target="blank">ModelN User Guide</a>                        
+                            </li>
+                            <!-- uncomment this section to add training
+                            <li>
+                                <a href="#" target="blank">T2</a>
+                            </li>
+                            <li>
+                                <a href="#" target="blank">more</a>
+                            </li> 
+                            -->
+                        </ul>
+                    </div>
+                </td>
+ <!--               <td valign="top" id="trng8">
+                    <div class="sub-container">
+                        <ul class="bullet-orange-list">
+                            <li>
+                                <a href="http://www.brainshark.com/nxp/vu?pi=zFqzKMc10z4LoXz0&intk=793047191" target="blank">Training App Demo</a>                        
+                            </li>-->
+                            <!-- uncomment this section to add training
+                            <li>
+                                <a href="#" target="blank">T2</a>
+                            </li>
+                            <li>
+                                <a href="#" target="blank">more</a>
+                            </li> 
+                            -->
+<!--                      </ul>
+                    </div>
+                </td>
+-->           </tr>
+            <!--  Training block ENDS here -->
+            <!--  Support block STARTS here --> 
+            <tr>            
+                <td valign="top" colspan="8">
+                    <div id="Support" class="box-1" style="width:100%">
+                        <div class="noborder top">                            
+                            <h2 class="nxp-darkblue" >Support</h2>
+                            <span class="bottom-dotted"><!--_--></span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>            
+                <td valign="top" id="support1">
+                    <div class="sub-container">
+                        <ul class="bullet-grey-list">
+<!--                            <li><a href="mailto:support@salesforce.com" title="globalsales.appsupport@nxp.com">Email</a></li>
+-->
+                            <li><a href="https://nxp.box.com/s/v96u10fksmarqecyleea" target="blank" title="Salesforce Support">Support Site</a></li>
+                            <li><a href="https://nxp.my.salesforce.com/_ui/core/chatter/groups/GroupProfilePage?g=0F9D00000004y9K" title="User Support Chatter Group">User Support Chatter Group</a></li>
+                        </ul>
+                    </div>
+                </td>
+              
+              <!--  <td valign="top" id="support2">
+                    <div class="sub-container">
+                        <ul class="bullet-grey-list">-->
+<!--                            <li><a href="mailto:business-support@box.com" title="business-support@box.com">Email</a></li>
+-->
+                       <!--      <li><a href="https://support.box.com/home" target="blank" title="Box.Net Support">Support Site</a></li>
+                        </ul>
+                    </div>
+                </td>-->
+                <td valign="t op" id="support3">
+                    <div class="sub-container">
+                        <ul class="bullet-grey-list">
+<!--                            <li><a href="mailto:support@brainshark.com" title="support@brainshark.com">Email</a></li>
+-->
+                            <li><a href="http://www.brainshark.com/help-and-training/support.aspx" target="blank" title="Brainshark Support">Support Site</a></li>
+                        </ul>
+                    </div>
+                </td>
+                <td valign="top" id="support4">
+                   <div class="sub-container">
+                        <ul class="bullet-grey-list">
+<!--                            <li><a href="mailto:globalsales.appsupport@nxp.com" title="globalsales.appsupport@nxp.com">Email</a></li>
+-->
+                            <li><a href="https://nxp.box.com/s/v96u10fksmarqecyleea" target="blank" title="Salesforce Support">Support Site</a></li>
+                        </ul>
+                    </div>
+                </td>
+                <td valign="top" id="support5">
+                    <div class="sub-container">
+                        <ul class="bullet-grey-list">
+<!--                            <li><a href="http://support.citrixonline.com/en_US/gotomeeting/case" target="blank" title="GoToMeeting">Email</a></li>
+-->
+                            <li><a href="http://support.citrixonline.com/en_US/gotomeeting/contact?question=help" target="blank" title="GoToMeetSupport">Support Site - English</a></li>
+                            <li><a href="http://support.citrixonline.com/zh_CN/Meeting" target="blank" title="GoToMeetSupport">Support Site - Chinese</a></li>
+                        </ul>
+                    </div>
+                </td>
+                <td valign="top" id="support6">
+                    <div class="sub-container">
+                        <ul class="bullet-grey-list">
+<!--                            <li><a href="mailto:modeln.functionalsupport@nxp.com" title="modeln.functionalsupport@nxp.com">Email</a></li>
+-->
+                            <li><a href="https://nxp.box.com/s/f6ruv42yknnbycfbsspw" target="blank" title="Model N Support">Support Site</a></li>
+                        </ul>
+                    </div>
+                </td>
+<!--                 <td valign="top" id="support8">
+                    <div class="sub-container">
+                        <ul class="bullet-grey-list">
+--><!--                            <li><a href="mailto:globalsales.appsupport@nxp.com" title="globalsales.appsupport@nxp.com">Email</a></li>
+--><!--
+                            <li><a href="https://nxp.box.com/s/v96u10fksmarqecyleea" target="blank" title="Training App Support">Support Site</a></li>
+                        </ul>
+                    </div>
+                </td>
+-->             </tr>
+           <!--  Support block ENDS here -->
+            <!--  Help block STARTS here --> 
+            <tr>            
+                <td valign="top" colspan="8">
+                    <div id="Help" class="box-1" style="width:100%">
+                        <div class="noborder top">                            
+                            <h2 class="nxp-darkblue" >Help</h2>
+                            <span class="bottom-dotted"><!--_--></span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>            
+                <td valign="top" colspan="8">
+                    <script language="javascript" type="text/javascript">
+                        
+                        function validateForm()
+                        {
+                            var errorMessage='';
+                                                        
+                            //check for name 
+                            var name = document.getElementById('name');
+                            if(name != null && (name.value == null || name.value == ''))
+                            {
+                                errorMessage = 'Please enter your Name. ' + '\n' ;
+                            }
+                            
+                            //check for email 
+                            var email = document.getElementById('email');
+                            if(email != null && (email.value == null || email.value == ''))
+                            {
+                                errorMessage = errorMessage + 'Please enter your Email. ' + '\n' ;
+                            }
+                            else
+                            {
+                                //check for valid email format
+                                
+                                var regxMail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+                                if(! email.value.match(regxMail))  
+                                {  
+                                  errorMessage = errorMessage + 'Please enter valid Email. ' + '\n' ;
+                                } 
+                            }
+                            
+                            //check for phone no. format
+                            var phone = document.getElementById('phone');
+                            if(phone!= null && (phone.value != null && phone.value != ''))
+                            {
+                                var regxPhone = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+                                if(! phone.value.match(regxPhone))  
+                                {  
+                                  errorMessage = errorMessage + 'Please enter valid Phone No. ' + '\n' ;
+                                } 
+                            }
+                            
+                            //check for application
+                            var application = document.getElementById('00ND0000005KJr5');
+                                                        
+                            if(application != null && (application.value == null || application.value == '0'))
+                            {
+                                errorMessage = errorMessage + 'Please select Application. ' + '\n' ;
+                            }
+/**1601 Release - SIR 566, Modified by Scarlett**/
+                            var service_category = document.getElementById('00N4E000000FoeA'); 
+                            
+                            if(service_category != null && (service_category.value == null || service_categoy.value == '0')){
+                                errorMessage = errorMessage + 'Please select Service Category. ' + '\n' ;
+                            }
+/**1601 Release - SIR 566, Modified by Scarlett - END**/
+                            
+                            //check for subject
+                            var description= document.getElementById('description');
+                            
+                            if(description != null && (description.value == null || description.value == ''))
+                            {
+                                errorMessage = errorMessage + 'Please enter the Subject.';
+                            }
+
+                            if(errorMessage != '')
+                            {
+                                errorMessage = 'Please correct the following entries:\n\n' + errorMessage;
+                                alert(errorMessage);
+                                return false;
+                            }
+                            else
+                            {
+                                return true;
+                            }
+                        }
+                    </script>
+                    <apex:form onSubmit="return validateForm();">
+<!--                    <form action="https://www.salesforce.com/servlet/servlet.WebToCase?encoding=UTF-8" method="POST" onSubmit="return validateForm();">                    -->
+<!--                        <input type="hidden" name="orgid" value="00D20000000NBgb"  />
+                        <input type="hidden" name="retURL" value="http://nxpsemiconductors.force.com/welcome" />
+-->                        
+                        <!--  ----------------------------------------------------------------------  -->
+                        <!--  NOTE: These fields are optional debugging elements. Please uncomment    -->
+                        <!--  these lines if you wish to test in debug mode.                          -->
+                        <!--  <input type="hidden" name="debug" value=1 />                            -->
+                        <!--  <input type="hidden" name="debugEmail" value="syed.jameel@nxp.com" />   -->
+                        <!--  ----------------------------------------------------------------------  -->
+                        
+                        <table cellspacing="0" cellpadding="0" width="90%" border="0">
+                            <tr>
+                                <td style="width:10%"><label for="name">Name : <font style="color:red">*</font> </label></td>
+                                <td><apex:inputText value="{!theCase.Case_Owner_Name__c}" size="20" maxlength="80" id="name"/></td>
+                                <!--<td><input  id="name" maxlength="80" name="name" size="20" type="text" /></td>-->
+                                <td><label for="email">Email : <font style="color:red">*</font></label></td>
+                                <td><apex:inputText value="{!theCase.Email__c}" size="20" maxlength="80" id="email"/></td>
+                                <!--<td><input  id="email" maxlength="80" name="email" size="20" type="text"  /></td>-->
+                                <td>Phone :</td>
+                                <td><apex:inputText value="{!theCase.Phone_Number__c}" size="20" maxlength="30" /></td>
+                                <!--<td><input  id="00ND0000003Xsp5" maxlength="30" name="00ND0000003Xsp5" size="20" type="text" /></td>-->                                
+                            </tr>
+                            <tr>
+                                <td colspan="6" style="height:1px;">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td><label for="00ND0000005KJr5">Application : <font style="color:red">*</font> </label></td>
+                                <td colspan="4">
+<!-- 1601 Release - SIR566, Modified by Scarlett -->
+<!--Hide - Modified by Scalrett on Jan 06 2016
+<apex:selectList value="{!theCase.Application__c}" id="applications" multiselect="false" title="Application" style="width:155px;" size="1">
+Hide - Modified by Scalrett on Jan 06 2016 -->
+                                        <apex:inputField value="{!theCase.Application__c}" id="application"></apex:inputField>       
+                                        <!--<apex:selectOption itemValue="0" itemLabel="--None--"/>-->
+<!--Hide - Modified by Scalrett on Jan 06 2016
+                                        <apex:selectOption itemValue="Apttus" itemLabel="Apttus"/>
+                                        <apex:selectOption itemValue="Box.net" itemLabel="Box.net"/>
+                                        <apex:selectOption itemValue="BrainShark" itemLabel="BrainShark"/>
+                                        <apex:selectOption itemValue="eSample/eDemoboard" itemLabel="eSample/eDemoboard"/>
+                                        <apex:selectOption itemValue="Extranet" itemLabel="Extranet"/>
+                                        <apex:selectOption itemValue="GoToMeeting" itemLabel="GoToMeeting"/>
+                                        <apex:selectOption itemValue="ModelN" itemLabel="ModelN"/>
+                                        <apex:selectOption itemValue="Salesforce.com" itemLabel="Salesforce.com"/>
+Hide - Modified by Scalrett on Jan 06 2016-->
+                                        <!--<apex:selectOption itemValue="SAP BW" itemLabel="SAP BW"/>-->
+<!--Hide - Modified by Scalrett on Jan 06 2016
+                                        <apex:selectOption itemValue="Training App" itemLabel="Training App"/>
+-->
+                                    <!--Hide - Modified by Scalrett on Jan 06 2016
+                                    </apex:selectList>
+Hide - Modified by Scalrett on Jan 06 2016-->
+                                    
+<!--                                <select  id="00ND0000005KJr5" name="00ND0000005KJr5" title="Application" style="width:155px;">
+                                    <option value="0">--None--</option>
+                                    <option value="Apttus">Apttus</option>
+                                    <option value="Box.net">Box.net</option>
+                                    <option value="BrainShark">BrainShark</option>
+                                    <option value="BW Centric">BW</option>
+                                    <option value="eSample/eDemoboard">eSample/eDemoboard</option>
+                                    <option value="Extranet">Extranet</option>
+                                    <option value="GoToMeeting">GoToMeeting</option>
+                                    <option value="ModelN">ModelN</option>                                   
+                                    <option value="Salesforce.com">Salesforce.com</option>
+                                    <option value="Training App">Training App</option>
+                                    <option value="Xactly">Xactly</option>
+                                    </select>
+-->                                </td>
+                             </tr>
+                             <tr>
+                                <td colspan="6" style="height:1px;">&nbsp;</td>
+                            </tr>
+<!-- 1601 Release - SIR566, Modified by Scarlett -->
+                            <tr>
+                                <td><label for="00N4E000000FoeA">Service Category : <font style="color:red">*</font> </label></td>
+                                <td colspan="4">
+                                    <!--<apex:selectList value="{!theCase.Service_Category__c}" id="service_categories" multiselect="false" title="Service Category" style="width:155px;" size="1">                                                                      
+
+                                    </apex:selectList>-->
+                                    <apex:inputField value="{!theCase.Service_Category__c}" id="sc">
+                                    </apex:inputField>
+                                </td>
+                            </tr>                          
+                            <tr>
+                                <td colspan="6" style="height:1px;">&nbsp;</td>
+                            </tr>           
+<!-- 1601 Release - SIR566, Modified by Scarlett - END -->
+                             <tr>
+                                <td><label for="subject">Subject : <font style="color:red">*</font></label></td>
+                                <td colspan="4">
+                                    <apex:inputTextarea rows="3" value="{!theCase.Subject}" cols="100" title="Please enter the subject here." id="subject" />
+                                    <!--<textarea id="subject" name="subject" rows="1" cols="100" title="Please enter the subject here." />                                -->
+                                </td>
+                                <td style="font-style:italic; font-size:8pt;"></td>                               
+                            </tr>
+                             <tr>
+                                <td colspan="6" style="height:1px;">&nbsp;</td>
+                            </tr>
+                             <tr>
+                                <td><label for="description">Description: <font style="color:red">*</font></label></td>
+                                <td colspan="4">
+                                    <apex:inputTextarea value="{!theCase.Description}" rows="3" cols="100" title="Please enter your problem description here." id="description"/>
+                                    <!--<textarea id="description" name="description" rows="3" cols="100" title="Please enter your problem description here." />-->                                
+                                </td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td colspan="4" style="font-style:italic; font-size:8pt;">(Please enter your problem description here.)</td>
+                                <td></td>
+                            </tr>
+                             <tr>
+                                <td><label for="description">Attachment: </label></td>
+                                <td colspan="4">
+                                    <apex:inputFile value="{!theAttachment.body}" filename="{!theAttachment.name}" id="file"/>
+                                </td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td colspan="6" style="height:1px;">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td><!--<input type="hidden"  id="recordType" name="recordType" value="012D0000000gXOP" />--></td>
+                                <td colspan="4" style="text-align:center;">
+                                    <apex:commandButton action="{!Submit}" value="Submit"/>                                 
+                                    <!--<input type="submit" name="submit" value="Submit" />-->
+                               </td>
+                               <td></td>
+                            </tr>
+                            <tr>
+                                <td><!--<input type="hidden"  id="recordType" name="recordType" value="012D0000000gXOP" />--></td>
+                                <td colspan="4" style="text-align:center;">
+                                    <apex:outputText style="color: orange;" value="{!strMessage}"/>
+                               </td>
+                               <td></td>
+                            </tr>
+                        </table>
+                    </apex:form>                        
+<!--                    </form>-->
+                </td>
+            </tr>            
+            <!--  Help block ENDS here -->
+        </table>
+   </div>   
+</div>
+</body>
+</apex:page>

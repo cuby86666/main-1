@@ -1,0 +1,6 @@
+<apex:page standardController="Account" extensions="PreAccountController" action="{!makeParentAccount}" >
+  <apex:sectionHeader title="Auto-Running Apex Code"/>
+  <apex:outputPanel >
+      Processing......
+  </apex:outputPanel>
+</apex:page>

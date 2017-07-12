@@ -1,0 +1,11 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes" description="NXP_Header_Nav">
+   <div class="container">
+    <div class="nxpheader slds-grid slds-wrap slds-grid--align-end">
+            <div class="slds-col"><a href="http://www.nxp.com" title="NXP.com">NXP.com</a></div>
+            <div class="slds-col"><a href="http://www.nxp.com/products/products:PCPRODCAT" title="Products">Products</a></div>
+            <div class="slds-col"><a href="http://www.nxp.com/applications/solutions-for-the-iot-and-adas:IFINDSTRYFCS" title="Applications">Applications</a></div>
+            <div class="slds-col"><a href="http://www.nxp.com/training/sales-and-support:SUPPORTHOME" title="Support">Support</a></div>
+            <div class="slds-col"><a href="http://www.nxp.com/about/about-nxp:COMPANY_INFO_HOME" title="About">About</a></div>
+    </div>
+   </div>
+</aura:component>

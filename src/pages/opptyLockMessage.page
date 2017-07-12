@@ -1,0 +1,6 @@
+<apex:page standardController="Opportunity">
+<apex:pageMessage summary="Opportunity is at Commitment stage. Design Win Revenue Schedule can be changed via [Maintain Oppty Sched]"
+                  severity="info" 
+                  strength="3"
+                  rendered="{!(Opportunity.StageName = 'Commitment')}" />    
+</apex:page>

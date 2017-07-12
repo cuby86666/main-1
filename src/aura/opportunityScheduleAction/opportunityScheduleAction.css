@@ -1,0 +1,69 @@
+.THIS .uiInputDate .datePicker-openIcon {
+position: absolute;
+left: 95%;
+top: 50%;
+}
+.THIS .uiInputDateTime .timePicker-openIcon {
+position: absolute;
+left: 95%;
+top: 70%;
+}
+
+
+.THIS .uiInputDefaultError li {
+list-style: none;
+}
+
+.THIS .slds-input::-ms-clear {
+    display: none; 
+    width:0; 
+    height:0;
+}
+
+
+/* DivTable.com */
+.THIS .divTable{
+    border-top: 1px solid #D3D3D3;
+    border-color: #D3D3D3;
+	display: table;
+	width: 100%;
+}
+.THIS .divTableRow {
+	display: table-row;
+}
+.THIS .divTableHeading {
+	display: table-header-group;
+    text-align:center;
+}
+.THIS .divTableCell{
+    border-bottom: 1px solid #D3D3D3;
+    border-color: #D3D3D3;
+	display: table-cell;
+	padding: 3px 10px;
+    text-align:center;
+}
+.THIS .divTableHead {
+	border-bottom: 1px solid #D3D3D3;
+	display: table-cell;
+	padding: 3px 10px;
+}
+
+.THIS .divTableHeading {
+	display: table-header-group;
+}
+.THIS .divTableFoot {
+	background-color: #EEE;
+	display: table-footer-group;
+	font-weight: bold;
+}
+.THIS .divTableBody {
+	display: table-row-group;
+}
+
+.THIS .divTableBody > div:nth-of-type(even) {
+    background: #F5F6FA;
+}
+
+.THIS .divTableBody > div:hover {
+    background: #EBF4FA;
+}

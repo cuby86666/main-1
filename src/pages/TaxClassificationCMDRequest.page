@@ -1,0 +1,42 @@
+<!--  ----------------------------------------------------------------------------------------------------
+@Created By :       Scarlett Kang
+@Created Date:      21 Nov 2014
+@Description:       VF page to add all Tax Classification records in one step - (CMD Request tool)
+                    This page will be launched by custom button.
+------------------------------------------------------------------------------------------------------------        -->
+
+<apex:page standardController="Tax_Classification__c" recordSetVar="taxs" extensions="TaxClassificationCMDRequestController">
+<apex:sectionHeader title="Tax Classification" subtitle="Edit Tax Classification CMD Request" />
+<apex:messages />
+ <apex:form >
+  <apex:pageBlock mode="edit">
+  <apex:pageBlockSection title="CMD Request Details">
+        <apex:pageBlockSectionItem >
+            <apex:outputLabel value="{!$ObjectType.CMD_Request__c.Fields.Global_Customer_ID__c.Label}" />
+            <apex:outputField value="{! objCMDRequest.Global_Customer_ID__c}" style="width:300px;" />
+        </apex:pageBlockSectionItem>
+        
+        <apex:pageBlockSectionItem >
+            <apex:outputLabel value="{!$ObjectType.CMD_Request__c.Fields.Sales_Organisation__c.Label}" />
+            <apex:outputField value="{! objCMDRequest.Sales_Organisation__c}" style="width:300px;" />
+        </apex:pageBlockSectionItem>        
+  </apex:pageBlockSection>
+  
+  <apex:pageBlockSection title="Tax Classifications" columns="1">
+   <apex:pageblocktable value="{!lstTaxClassifications}"
+                    var="taxclassification"
+                    cellPadding="4" border="1">
+    <apex:column headervalue="Country" value="{!taxclassification.Country__c}" /> 
+     <apex:column headervalue="Category" value="{!taxclassification.Tax_Category__c}"/ >
+      <apex:column headervalue="Tax Classification">
+       <apex:inputtext value="{!taxclassification.Tax_Classification__c}"/>       
+        </apex:column>      
+   </apex:pageblocktable>
+    </apex:pageBlockSection> 
+   <apex:pageBlockButtons >
+              <apex:commandButton value="Save" action="{!saveTaxClassification}"/> 
+               <apex:commandButton value="Cancel" action="{!cancel}" />
+      </apex:pageBlockButtons>
+  </apex:pageBlock> 
+   </apex:form>
+</apex:page>

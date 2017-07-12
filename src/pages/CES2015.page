@@ -1,0 +1,355 @@
+<apex:page sidebar="false" showHeader="false"  standardStylesheets="false">
+
+<html>
+<head>
+<title>Preparing for CES2015 - Secure Connections for a Smarter World</title>
+<meta name="keywords" content="" />
+
+<style>
+
+body 
+{
+    font-family: Verdana,Arial,Helvetica,Geneva,sans-serif;
+    color: rgb(0, 0, 0) !important;
+    font-size: 75%;
+}
+
+ .p-pagetitle
+{
+    height:25px; padding:4px 0 0 17px; 
+    font:bold 14px Verdana, Geneva, Arial, Helvetica, sans-serif; 
+    margin-bottom:10px; color: #FFF; 
+    background-color: #749AC2;
+    position:relative;
+}
+
+.auto-style23 
+{
+    text-decoration: underline;
+}
+
+.auto-style17 {
+    font-size: small;
+}
+ 
+.auto-style18 {
+    background-color: #FFFF00;
+}
+
+.auto-style24 {
+    color: #FF0000;
+    background-color: #FFFF00;
+}
+
+.auto-style25 {
+    text-decoration: underline;
+} 
+
+.auto-style19 {
+    color: #FF0000;
+}    
+
+.bullet, ul.bullet-list li, .aop ul li, .aip ul li {
+    padding: 0 0 0 12px;
+}
+
+</style>
+</head>
+<body>
+<a name="top"></a>
+
+
+<!-- begin content area -->      
+
+<div style="padding: 10px 20px;">
+<div class="p-pagetitle">Preparing for CES2015 - Secure Connections for a Smarter World</div>
+
+<div>
+<p>CES takes place again in early 2015 - January 6 - 9 - and our preparations for CES 2015 are well underway.</p>
+<p>Same as last year, we have secured an amazing location in the outside pavilion area of the Las Vegas Convention Center (LVCC) - Central Plaza (booth #CP9). This enables us to have direct access to the CES attendees and makes meeting with NXP easier for our customers.</p>
+<p>Being an official exhibitor at the show presents a great opportunity for us to present our ground-breaking solutions - to show the electronics industry at large how NXP technology can be used to enhance and improve the world around us... and how we interact with it. It also allows us to show the end application side of our business which is important for a show like CES.</p>
+<p>You can find all relevant information on this website - please keep checking this site as new information is posted regularly.</p>
+</div>
+
+<DIV  align="left">
+<TABLE id="table1" border="1" width="63%" height="113">
+<TBODY>
+<TR>
+<TD height="19" width="47%"><FONT size="2" face="Verdana"><A href="#Customer Invitation">Customer Invitation</A> &nbsp;</FONT></TD>
+<TD height="16" width="50%"><FONT size="2" face="Verdana"><A href="#International Visitors">International Visitors</A></FONT></TD></TR>
+<TR>
+<TD height="16" width="47%"><FONT size="2" face="Verdana"><A href="#Customer Meetings">Customer Meetings</A></FONT> </TD>
+<TD height="16" width="50%"><FONT size="2" face="Verdana"><A href="#NXP Show Hours">NXP Show Hours</A> </FONT></TD></TR>
+<TR>
+<TD height="16" width="47%"><FONT size="2" face="Verdana"><A href="#Demonstrations">Demonstrations</A></FONT></TD>
+<TD height="16" width="50%"><FONT size="2" face="Verdana"><A href="#Shipping Instructions">Shipping instructions</A></FONT></TD></TR>
+<TR>
+<TD height="16" width="47%"><FONT size="2" face="Verdana"><a href="#Exhibitor badge registration">Exhibitor badge registration</a></FONT></TD>
+<TD height="16" width="50%"><FONT size="2" face="Verdana"><a href="#Show guide">Show Guide</a></FONT></TD>
+</TR>
+<TR>
+<TD height="16" width="47%"><FONT size="2" face="Verdana"><a href="#Hotel registration">Hotel registration</a></FONT></TD>
+<TD height="16" width="50%"><FONT size="2" face="Verdana"><a href="#Team &amp; Responsibilities">Team &amp; Responsibilities</a></FONT></TD>
+</TR>
+</TBODY></TABLE></DIV>
+<BR /> <BR />
+
+<div id="orange-divider" style="background-color:#FF9933; width:100%">&nbsp;</div>
+<br />
+<P><U><B><FONT face="Verdana"><A class="anchorGlyph" name="Customer Invitation"></A>CUSTOMER INVITATION</FONT></B></U><FONT size="2" face="Verdana"><BR /><BR />
+An <a href="{!URLFOR($Resource.CES2015_customer_invite_final)}" target="blank">invitation letter</a> is available for sales managers to customize and send to their customers.
+</FONT>
+<br /><BR /></P>
+
+<P><FONT face="Verdana"><FONT size="2"><BR /><A class="anchorGlyph" name="Customer Meetings"></A></FONT><B><U>CUSTOMER MEETINGS<BR /><BR /></U></B></FONT><FONT size="2" face="Verdana">
+<ul class="bullet-list">
+<li>A major benefit to being an official exhibitor is closer access to customers and potential customers.</li>
+<li>Although the booth is open to anyone, we encourage you to schedule meetings with customers. This ensures that you have a private space for your discussions and can secure MT attendance when needed.</li>
+</ul>
+</FONT></P>
+
+<P><FONT face="Verdana"><FONT size="2"><BR /><A class="anchorGlyph" name="Booking a meeting room"></A></FONT><B><U>Booking a meeting room<BR /><BR /></U></B></FONT><FONT size="2" face="Verdana">
+<ul class="bullet-list">
+<li>The NXP booth will have 4 dedicated meeting rooms (3 x 8 pax and 1 x 10 pax) and one executive meeting lounge.</li>
+<li>To schedule a meeting, please complete the <a href="{!URLFOR($Resource.CES2015_MeetingRequestForm)}" target="blank">meeting request form</a> (link to attached excel sheet) and send it to <a href="mailto:ces.2015@nxp.com">ces.2015@nxp.com</a>.</li>
+<li>You will receive a confirmation within 24 hours.</li>
+<li>For <B><U>ALL</U></B> customer meetings please be sure to fill out this <a href="{!URLFOR($Resource.NXP_Customer_Briefing)}" target="blank">customer profile document</a> and send it to <a href="mailto:tamara.bouwmans@nxp.com">tamara.bouwmans@nxp.com</a> (for meetings involving an MT member) and for all other meetings to <a href="mailto:yasmin.bowens@nxp.com">yasmin.bowens@nxp.com</a>.</li>
+</ul>
+</FONT></P>
+
+<P><FONT face="Verdana"><FONT size="2"><BR /><A class="anchorGlyph" name="Demonstrations"></A></FONT><B><U>PROPOSED DEMONSTRATIONS<BR /><BR /></U></B></FONT><FONT size="2" face="Verdana">
+<BR />
+The booth will incorporate 4 main areas supported with demos:
+<ul class="bullet-list">
+<li class="auto-style17">Connected Car</li>
+<li class="auto-style17">Internet of Things</li>
+<li class="auto-style17">Portable &amp; Wearable</li>
+<li class="auto-style17">Secure Connections</li>
+</ul>
+<BR />
+Click <a href="{!URLFOR($Resource.CES2015_Demos_9Dec2014)}" target="blank">here</a> to download the current list of demos.
+</FONT></P>
+
+<P><FONT face="Verdana"><FONT size="2"><BR /><A class="anchorGlyph" name="Video content for your demos"></A></FONT><B><U>Video content for your demos<BR /><BR /></U></B></FONT><FONT size="2" face="Verdana">
+To purchase video content for your demos you can send an email to Peer Ebbighausen at NBC Universal - <a href="mailto:peer.ubbighausen@nbcuni.com">peer.ubbighausen@nbcuni.com</a>. Make sure to include all the required specifications in your email. CES is an open show so all video content needs to have the appropriate licenses.
+</FONT></P>
+
+<br />
+<div id="blue-divider" style="background-color:#99CCFF; width:100%">&nbsp;</div>
+<br />
+
+<U><B><FONT face="Verdana"><A class="anchorGlyph" name="Exhibitor badge registration"></A>EXHIBITOR BADGE REGISTRATION<BR /></FONT></B></U>
+<FONT size="2" face="Verdana">All NXP employees will be registered with an exhibitor badge. The CES event team will pre-order your badges. More information on how to collect your badge will follow in due course.</FONT>
+<br />
+<br />
+
+<U><B><FONT face="Verdana"><A class="anchorGlyph" name="Hotel registration"></A>HOTEL REGISTRATION<BR /></FONT></B></U>
+<FONT size="2" face="Verdana">
+<P>Please confirm that you are approved to travel and attend CES <span class="auto-style18">BEFORE</span> making your hotel reservation - this is your responsibility! If your trip is cancelled due to non-approval then you may still be charged for your hotel room reservation. We will review the hotel list with management prior to final confirmations.</P>
+<P>We have secured enough rooms at The Paris Hotel to accommodate NXP employees attending CES; however, once the room block is full employees will be responsible for booking their own accommodations. We will not sign any additional contracts for hotel accommodation.</P>
+
+<P><a href="https://www.regonline.com/nxp-ces2015" target="_blank">Hotel registration link</a></P>
+<P>You can make, and also update, your reservation details on the hotel registration website. <span class="auto-style18">Registration deadline: November 26, 2014</span></P>
+<P><U><B><FONT color="#ff0000">
+All reservations must be made via the CES Hotel process - due to the contract we have with The Paris Hotel we cannot authorize any employees to stay in another hotel until all rooms under the NXP contract are filled.
+</FONT>
+</B></U></P>
+</FONT>
+<br />
+
+<U><B><FONT face="Verdana"><A class="anchorGlyph" name="International Visitors"></A>INTERNATIONAL VISITORS<BR /></FONT></B></U>
+<FONT size="2" face="Verdana">
+<P>Please click <a href="http://www.cesweb.org/For-International-Visitors.aspx">here</a> to find additional information for international visitors attending CES2015, including information on Visa application.</P>
+<P><I>YOU MUST COMPLETE THIS FORM PRIOR TO YOUR DEPARTURE!</I></P>
+</FONT>
+<br />
+
+<U><B><FONT face="Verdana"><A class="anchorGlyph" name="NXP Show Hours"></A>NXP SHOW HOURS<BR /></FONT></B></U>
+<br />
+<table border="0" width="39%">
+<tbody>
+<tr>
+<td style="width: 49%"><font face="Verdana" size="2">Tuesday January 6th</font></td>
+<td class="auto-style2" width="54%"><font size="2">09:00am - 06:00pm</font></td></tr>
+<tr>
+<td style="width: 49%"><font face="Verdana" size="2">Wednesday January 7th</font></td>
+<td class="auto-style2" width="54%"><font size="2">09:00am - 06:00pm</font></td></tr>
+<tr>
+<td style="width: 49%"><font face="Verdana" size="2">Thursday January 8th</font></td>
+<td class="auto-style2" width="54%"><font size="2">09:00am - 06:00pm</font>
+</td>
+</tr>
+<tr>
+<td style="width: 49%"><font face="Verdana" size="2">Friday, January 9th</font></td>
+<td class="auto-style2" width="54%"><font size="2">09:00am - 04:00pm</font>
+</td>
+</tr>
+</tbody></table>
+<br />
+<P>Official CES show opening is Tuesday at 10am. Note that we - NXP - will start the Tuesday at 8am with a 
+mandatory preshow walkthrough with the MT. Followed by an Investors booth tour from 9am-10.30am.</P>
+<P>Scheduling of customer meetings can start as of 10.30am on Tuesday morning.</P>
+<!--<FONT size="2" face="Verdana">-->
+NXP will provide food and drinks at the booth. You will need to schedule your own dinner plans by making a reservation at opentable.com or check out the hotel's website directly. Most restaurants require a credit card to guarantee a reservation and we do not want to be responsible for no-shows, change of plans, or cancel reservation.
+<!--</FONT>-->
+<br />
+
+<br />
+<div id="green-divider" style="background-color:#99CC00; width:100%">&nbsp;</div>
+<br />
+
+<P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px" class="MsoNormal" ><FONT face="Verdana"><U><B><A class="anchorGlyph" name="Shipping Instructions"></A>
+SHIPPING INSTRUCTIONS<BR /><BR /></B></U></FONT></P>
+<P>
+PLEASE MAKE SURE TO INFORM <a href="mailto:wayne.dixon@enigmacs.com">wayne.dixon@enigmacs.com</a>, <a href="impex.nam@nxp.com">impex.nam@nxp.com</a>, 
+<a href="ann.wong@nxp.com">ann.wong@nxp.com</a> and <a href="Helga.de.ruijter@nxp.com">Helga.de.ruijter@nxp.com</a> of all your shipments.</P>    
+
+<B><U>Domestic Shipping:</U></B>
+<BR />
+<P>All shipments should arrive to site between January 2nd - January 5th, 2015.</P>
+<BR />
+<P>All direct shipments must check in at the Freeman Marshalling Yard. The address for the Freeman Marshalling Yard is 8801 Las Vegas Blvd., Las Vegas, NV 89123.</P>
+    
+<P>Direct crated shipments to the LVCC will be charged $43.35 per cwt ($43.35, 100 lb. minimum).</P>
+<P>Direct uncrated shipments will be charged $53.00 per cwt ($53.00, 100 lb. minimum).</P>
+<P>Direct shipping labels are located here – </P>
+<P><a href="http://www.freemanco.com/forms/303567/shipping_labels_showsite.pdf">http://www.freemanco.com/forms/303567/shipping_labels_showsite.pdf</a></P>
+<P>Copy the required number of labels to adequately label your shipment then place a label on each individual box/crate, even if they are going to be shrink-wrapped together.</P>
+<BR />
+Direct shipping address:
+<BR />
+<P>
+<font color="gray">
+Exhibitor Name<BR />
+Booth Number/Meeting Room Name and Number<BR />
+2015 International CES - LVCC<BR />
+c/o Freeman<BR />
+Las Vegas Convention Center<BR />
+3150 Paradise Road<BR />
+Las Vegas, NV 89109<BR />
+</font>
+</P>
+
+    
+<B><U>International Shipping:</U></B>
+    <BR />
+Documentation required for international shipping:
+<BR />
+<ul class="bullet-list">
+<li class="auto-style17">Commercial invoice</li>
+<li class="auto-style17">Airway bill or tracking number</li>
+</ul>    
+
+<P>Freeman will accept crated, boxed or skidded materials beginning November 10, 2014 at the below address. Materials arriving after December 17, 
+2014 will be received at the warehouse with an additional after deadline charge. The Freeman warehouse will be closed on November 27-28, December 24-25 and 
+on January 1. Warehouse freight will be delivered prior to exhibitor set up. Warehouse receiving hours are 8 AM-3:30 PM, Monday-Friday.</P>
+    <BR />
+<P>Freight sent in advance to the Freeman warehouse must be crated and should not include any product. Uncrated shipments must be sent direct to show site. 
+For security purposes on the exhibit floor, we recommend that you ship product direct to show site on Saturday, January 3 or later.</P>    
+
+    <BR />
+<P>Advance freight will be charged $57.40 per cwt ($57.40, 100 lb. minimum).</P>
+
+    <BR />
+<P>It should be addressed as indicated below, no additional name is needed. Just company name and booth number (CP9).</P>
+    
+Delivery Address:
+<BR />
+<P>
+<font color="gray">
+Shipments to the Advance Warehouse may be consigned to:<BR /><BR />
+
+Exhibitor Name<BR />
+Booth Number/Meeting Room Name and Number<BR />
+2015 International CES - LVCC<BR />
+c/o Freeman<BR />
+6675 West Sunset Road<BR />
+Las Vegas, NV 89118<BR />
+702-579-1700<BR />
+</font>
+</P>
+
+<P>Download Advanced Warehouse labels here<BR />
+<a href="http://www.freemanco.com/forms/303567/shipping_labels_warehouse.pdf">http://www.freemanco.com/forms/303567/shipping_labels_warehouse.pdf</a></P>
+    
+Invoice to:
+<BR />
+<P>
+NXP Semiconductors<BR /> 
+Shipper’s address<BR />
+</P>
+
+<P>Please send a copy of commercial invoice and tracking number to <a href="mailto:Impex.nam@nxp.com">Impex.nam@nxp.com</a> to clear Customs.</P>
+<BR />
+
+If shipping with ATA Carnet – Please provide the following:
+<BR />
+<ul class="bullet-list">
+<li class="auto-style17">Is the shipment hand carry or courier service?</li>
+<li class="auto-style17">If shipping via courier service – need advance coordination to ensure Carnet is sign off by Customs – Please send email to: <a href="mailto:Impex.nam@nxp.com">Impex.nam@nxp.com</a> with copy of commercial invoice and a copy of Carnet.</li>
+<li class="auto-style17">If is hand carry shipment – need a copy of the passport, itinerary, port of arrival, cell phone number, and commercial invoice. Please send email notice to <a href="mailto:Impex.nam@nxp.com">Impex.nam@nxp.com</a> to make arrangement with Customs broker to file entry.</li>
+</ul>
+<BR />
+
+Return Shipments:
+<BR /><BR />
+
+<U>Post show DOMESTIC/INTERNATIONAL shipping</U>
+<BR />
+<P>You can arrange your own collection via courier or you may wish to use the onsite handlers Freeman:</P>
+<BR />
+<a href="http://www.freemanco.com/forms/303564/outbound_shipping.pdf">http://www.freemanco.com/forms/303564/outbound_shipping.pdf</a>
+<BR /><BR />
+<span class="auto-style18">Please have following documents filled out and ready for your return shipment.</span><BR />
+<ul class="bullet-list">
+<li class="auto-style17"><span class="auto-style18"><a href="{!URLFOR($Resource.Shipping_FormCES)}" target="blank">Shipping Form</a></span></li>
+<li class="auto-style17"><span class="auto-style18">Provide your shipping account number/courier</span></li>
+</ul>
+
+
+<div id="orange-divider" style="background-color:#FF9933; width:100%">&nbsp;</div>
+<br />
+
+<P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px" class="MsoNormal" ><FONT face="Verdana"><U><B><A class="anchorGlyph" name="Show guide"></A>
+<a href="{!URLFOR($Resource.ShowGuide_CES2015)}" target="blank">SHOW GUIDE</a></B></U></FONT><BR /><BR />
+<FONT size="2" face="Verdana">
+<span class="auto-style18">MANDATORY PRESHOW WALKTHROUGH - Tuesday January 6, 2015 at 08.00am</span><BR /><BR />
+
+
+<B>Demo set-up schedule</B><U><BR /></U><BR />
+<P>Monday January 5, 2015 - as of 9:00am - 4.30pm</P>
+<P><B>*Be sure to label your empties so that you may use the empty boxes to pack your demos when the show is over. DO NOT throw away your boxes!</B></P>
+<BR /><I>(All demos must be set-up and working properly by 4.30pm January 5!)<BR /><BR /></I><B>Demo tear down schedule<BR /></B><U><BR /></U>
+Friday January 9, 2015 after 4:00pm or when we close our booth
+<FONT color="#ff0000"> <BR /><BR /><B>*Clearly mark the number of boxes you're shipping back with name and phone number of who they are going to</B></FONT></FONT></P>
+<br />
+
+<P style="MARGIN-TOP: -10px; MARGIN-BOTTOM: 0px">
+<U><FONT size="2" face="Verdana"></FONT></U><B><FONT size="2" face="Verdana"><U><A class="anchorGlyph" name="Team &amp; Responsibilities"></A></U></FONT>
+
+<U><FONT face="Verdana">TEAM &amp; RESPONSIBILITIES<BR /></FONT></U></B></P>
+<br />
+
+<TABLE border="1" height="161" style="width: 83%">
+<TBODY>
+<TR>
+<TD width="34%" height="7" class="auto-style2"><font size="2" face="Verdana">Helga de Ruijter</font></TD>
+<TD height="7" class="auto-style2" style="width: 83%"><font size="2" face="Verdana">Overall Event Manager</font></TD></TR>
+<tr>
+<TD width="34%" height="9" class="auto-style2"><font size="2" face="Verdana">Hillary Cain</font></TD>
+<TD height="9" style="width: 83%" class="auto-style2"><font size="2" face="Verdana">Director Corporate Communications Americas</font></TD>
+</tr>
+<TR>
+<TD width="34%" height="11"><font size="2" face="Verdana">Gary Sugita</font></TD>
+<TD height="11" style="width: 83%"><font size="2" face="Verdana">Overall Demo Coordinator</font></TD></TR>
+<TR>
+<TD width="34%" height="11" class="auto-style2"><font size="2" face="Verdana">Drue Freeman</font></TD>
+<TD height="11" style="width: 83%"><font size="2" face="Verdana">Customer Meetings/Invitation process</font></TD></TR>
+<TR>
+<TD width="34%" height="11" class="auto-style2"><font size="2" face="Verdana">Yasmin Bowens / Tamara Bouwmans</font></TD>
+<TD height="11" style="width: 83%" class="auto-style5"><font size="2" face="Verdana">Customer Meetings arrangements &amp; Event Support</font></TD></TR></TBODY></TABLE>
+<P><FONT size="2" face="Verdana"><BR />Don't hesitate to contact us if you have any feedback, questions or comments.<BR /><BR /></FONT></P>
+ </div>
+</body>
+</html>
+</apex:page>

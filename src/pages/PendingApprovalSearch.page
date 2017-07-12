@@ -1,0 +1,5 @@
+<apex:page controller="PendingApprovalsSearch" cache="true">
+<apex:form >
+    <apex:commandButton action="{!Search}" value="Search Pending Approvals"/>
+</apex:form>
+</apex:page>

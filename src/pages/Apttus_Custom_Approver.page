@@ -1,0 +1,180 @@
+<!--
+@Modified By :  Scarlett Kang
+@Modified Date: 25 July 2016
+@Description:   1608 Release SIR 1084 - Legal Approver's Notes editable
+-->
+<apex:page standardController="Apttus__APTS_Agreement__c" extensions="Apttus_Custom_Approver_Controller" cache="false" showHeader="false" sidebar="false">
+<script type="text/javascript">
+       function lockElement(item) {
+           document.getElementById(item).disabled = true;
+       }
+       function unlockElement(item) {
+           document.getElementById(item).disabled = false;
+       }
+       
+       function disableForm(theform) {
+        if (document.all || document.getElementById) {
+            for (i = 0; i < theform.length; i++) {
+            var formElement = theform.elements[i];
+                if (true) {
+                    formElement.disabled = true;
+                }
+            }
+        }
+    }
+
+</script>
+<apex:pageBlock >
+    <apex:form id="theForm">
+        <apex:pagemessages />
+        <apex:panelGrid columns="2" id="theLegalGrid">
+            <apex:outputlabel value="{!$ObjectType.Apttus__APTS_Agreement__c.Fields.Legal__c.Label}" style="font-weight: bold;"/>
+            <!--<apex:inputField value="{!Apttus__APTS_Agreement__c.Legal__c}" />-->
+            <apex:selectList value="{!Apttus__APTS_Agreement__c.Legal__c}" size="1">
+                <apex:selectOptions value="{!Legal_Picklist}"/>
+            </apex:selectList>
+<!--Modified by Scarlett - 1608 Release SIR 1084 - START
+            <apex:outputlabel value="{!$ObjectType.Apttus__APTS_Agreement__c.Fields.Legal_Approver_s_Notes__c.Label}" style="color:#DC0300; font-weight: bold;"/>
+            <apex:inputTextarea value="{!Apttus__APTS_Agreement__c.Legal_Approver_s_Notes__c}" cols="50"/> 
+            <apex:outputlabel value="{!$ObjectType.Apttus__APTS_Agreement__c.Fields.nxp_Approver_Notes__c.Label}" style="font-weight: bold;"/>
+            <apex:inputTextarea value="{!Apttus__APTS_Agreement__c.nxp_Approver_Notes__c}" cols="50"/>      
+Modified by Scarlett - 1608 Release SIR 1084 - END-->
+            
+        </apex:panelGrid>
+
+    <apex:panelGrid columns="2" id="theGrid" width="100%">
+        <apex:panelGrid columns="2" id="theRoleGrid" style="{!IF($Profile.Name != 'System Administrator','opacity: .5; pointer-events: none; ','')}">
+            <apex:outputlabel value="{!$ObjectType.Apttus__APTS_Agreement__c.Fields.Approver_1_Role__c.Label}" style="font-weight: bold;"/>
+            <apex:inputField value="{!Apttus__APTS_Agreement__c.Approver_1_Role__c}" id="ApproverRole1">
+                <apex:actionSupport event="onchange" reRender="Approver1" />
+            </apex:inputField>
+            
+            <apex:outputlabel value="{!$ObjectType.Apttus__APTS_Agreement__c.Fields.Approver_2_Role__c.Label}" style="font-weight: bold;"/>
+            <apex:inputField value="{!Apttus__APTS_Agreement__c.Approver_2_Role__c}">
+                <apex:actionSupport event="onchange" reRender="Approver2" />
+            </apex:inputField>
+            
+            <apex:outputlabel value="{!$ObjectType.Apttus__APTS_Agreement__c.Fields.Approver_3_Role__c.Label}" style="font-weight: bold;"/>
+            <apex:inputField value="{!Apttus__APTS_Agreement__c.Approver_3_Role__c}">
+                <apex:actionSupport event="onchange" reRender="Approver3" />
+            </apex:inputField>
+            
+            <apex:outputlabel value="{!$ObjectType.Apttus__APTS_Agreement__c.Fields.Approver_4_Role__c.Label}" style="font-weight: bold;"/>
+            <apex:inputField value="{!Apttus__APTS_Agreement__c.Approver_4_Role__c}">
+                <apex:actionSupport event="onchange" reRender="Approver4" />            
+            </apex:inputField>
+            
+            <apex:outputlabel value="{!$ObjectType.Apttus__APTS_Agreement__c.Fields.Approver_5_Role__c.Label}" style="font-weight: bold;"/>
+            <apex:inputField value="{!Apttus__APTS_Agreement__c.Approver_5_Role__c}">
+                <apex:actionSupport event="onchange" reRender="Approver5" />
+            </apex:inputField>
+            
+            <apex:outputlabel value="{!$ObjectType.Apttus__APTS_Agreement__c.Fields.Approver_6_Role__c.Label}" style="font-weight: bold;"/>
+            <apex:inputField value="{!Apttus__APTS_Agreement__c.Approver_6_Role__c}">
+                <apex:actionSupport event="onchange" reRender="Approver6" />
+            </apex:inputField>
+            
+            <apex:outputlabel value="{!$ObjectType.Apttus__APTS_Agreement__c.Fields.Approver_7_Role__c.Label}" style="font-weight: bold;"/>
+            <apex:inputField value="{!Apttus__APTS_Agreement__c.Approver_7_Role__c}">
+                <apex:actionSupport event="onchange" reRender="Approver7" />            
+            </apex:inputField>
+            
+            <apex:outputlabel value="{!$ObjectType.Apttus__APTS_Agreement__c.Fields.Approver_8_Role__c.Label}" style="font-weight: bold;"/>
+            <apex:inputField value="{!Apttus__APTS_Agreement__c.Approver_8_Role__c}">
+                <apex:actionSupport event="onchange" reRender="Approver8" />    
+            </apex:inputField>
+            
+<!--Modified by Scarlett Kang, 2014-09-10--> 
+            <apex:outputlabel value="{!$ObjectType.Apttus__APTS_Agreement__c.Fields.Approver_9_Role__c.Label}" style="font-weight: bold;"/>
+            <apex:inputField value="{!Apttus__APTS_Agreement__c.Approver_9_Role__c}">
+                <apex:actionSupport event="onchange" reRender="Approver9" />    
+            </apex:inputField>
+            
+            <apex:outputlabel value="{!$ObjectType.Apttus__APTS_Agreement__c.Fields.MT_Approver_Role__c.Label}" style="font-weight: bold;"/>
+            <apex:inputField value="{!Apttus__APTS_Agreement__c.MT_Approver_Role__c}">
+                <apex:actionSupport event="onchange" reRender="MT_Approver" />
+            </apex:inputField>
+            
+            <script>document.getElementById('{!$Component.theRoleGrid}').disabled = {!($Profile.Name != 'System Administrator')}; </script>
+        </apex:panelGrid>
+        
+        <apex:panelGrid columns="2" id="theApproverGrid">
+            <apex:outputlabel value="{!$ObjectType.Apttus__APTS_Agreement__c.Fields.Approver1__c.Label}" style="font-weight: bold;padding-left:50px;"/>
+            <!--<apex:inputField value="{!Apttus__APTS_Agreement__c.Approver1__c}" />-->
+            <apex:selectList id="Approver1" value="{!Apttus__APTS_Agreement__c.Approver1__c}" style="width:200px;" size="1">
+                <apex:selectOptions value="{!Approver1_Picklist}"/>
+            </apex:selectList>
+
+            <apex:outputlabel value="{!$ObjectType.Apttus__APTS_Agreement__c.Fields.Approver2__c.Label}" style="font-weight: bold;padding-left:50px;"/>
+            <!--<apex:inputField value="{!Apttus__APTS_Agreement__c.Approver2__c}" />-->
+            <apex:selectList id="Approver2" value="{!Apttus__APTS_Agreement__c.Approver2__c}" style="width:200px;" size="1">
+                <apex:selectOptions value="{!Approver2_Picklist}"/>
+            </apex:selectList>
+            
+            <apex:outputlabel value="{!$ObjectType.Apttus__APTS_Agreement__c.Fields.Approver3__c.Label}" style="font-weight: bold;padding-left:50px;"/>
+            <!--<apex:inputField value="{!Apttus__APTS_Agreement__c.Approver3__c}" />-->
+            <apex:selectList id="Approver3" value="{!Apttus__APTS_Agreement__c.Approver3__c}" style="width:200px;" size="1">
+                <apex:selectOptions value="{!Approver3_Picklist}"/>
+            </apex:selectList>
+
+            <apex:outputlabel value="{!$ObjectType.Apttus__APTS_Agreement__c.Fields.Approver4__c.Label}" style="font-weight: bold;padding-left:50px;"/>
+            <!--<apex:inputField value="{!Apttus__APTS_Agreement__c.Approver4__c}" />-->
+            <apex:selectList id="Approver4" value="{!Apttus__APTS_Agreement__c.Approver4__c}" style="width:200px;" size="1">
+                <apex:selectOptions value="{!Approver4_Picklist}"/>
+            </apex:selectList>
+            
+            <apex:outputlabel value="{!$ObjectType.Apttus__APTS_Agreement__c.Fields.Approver5__c.Label}" style="font-weight: bold;padding-left:50px;"/>
+            <!--<apex:inputField value="{!Apttus__APTS_Agreement__c.Approver5__c}" />-->
+            <apex:selectList id="Approver5" value="{!Apttus__APTS_Agreement__c.Approver5__c}" style="width:200px;" size="1">
+                <apex:selectOptions value="{!Approver5_Picklist}"/>
+            </apex:selectList>
+            
+            <apex:outputlabel value="{!$ObjectType.Apttus__APTS_Agreement__c.Fields.Approver6__c.Label}" style="font-weight: bold;padding-left:50px;"/>
+            <!--<apex:inputField value="{!Apttus__APTS_Agreement__c.Approver6__c}" />-->
+            <apex:selectList id="Approver6" value="{!Apttus__APTS_Agreement__c.Approver6__c}" style="width:200px;" size="1">
+                <apex:selectOptions value="{!Approver6_Picklist}"/>
+            </apex:selectList>
+            
+            <apex:outputlabel value="{!$ObjectType.Apttus__APTS_Agreement__c.Fields.Approver_7__c.Label}" style="font-weight: bold;padding-left:50px;"/>
+            <!--<apex:inputField value="{!Apttus__APTS_Agreement__c.Approver_7__c}" />-->
+            <apex:selectList id="Approver7" value="{!Apttus__APTS_Agreement__c.Approver_7__c}" style="width:200px;" size="1">
+                <apex:selectOptions value="{!Approver7_Picklist}"/>
+            </apex:selectList>
+            
+            <apex:outputlabel value="{!$ObjectType.Apttus__APTS_Agreement__c.Fields.Approver8__c.Label}" style="font-weight: bold;padding-left:50px;"/>
+            <!--<apex:inputField value="{!Apttus__APTS_Agreement__c.Approver8__c}" />-->
+            <apex:selectList id="Approver8" value="{!Apttus__APTS_Agreement__c.Approver8__c}" style="width:200px;" size="1">
+                <apex:selectOptions value="{!Approver8_Picklist}"/>
+            </apex:selectList>
+            
+<!--Modified by Scarlett Kang, 2014-09-10--> 
+            <apex:outputlabel value="{!$ObjectType.Apttus__APTS_Agreement__c.Fields.Approver_9__c.Label}" style="font-weight: bold;padding-left:50px;"/>
+            <apex:selectList id="Approver9" value="{!Apttus__APTS_Agreement__c.Approver_9__c}" style="width:200px;" size="1">
+                <apex:selectOptions value="{!Approver9_Picklist}"/>
+            </apex:selectList>
+            
+            <apex:outputlabel value="{!$ObjectType.Apttus__APTS_Agreement__c.Fields.MT_Approver__c.Label}" style="font-weight: bold;padding-left:50px;"/>
+            <apex:selectList id="MT_Approver" value="{!Apttus__APTS_Agreement__c.MT_Approver__c}" style="width:200px;" size="1">
+                <apex:selectOptions value="{!MTApprover_Picklist}"/>
+            </apex:selectList>
+                        
+        </apex:panelGrid>
+        <apex:panelGrid columns="2" id="theEmptyGrid" />
+        <apex:panelGrid columns="2" id="theAdditionalApproverGrid">
+            <apex:outputlabel value="{!$ObjectType.Apttus__APTS_Agreement__c.Fields.nxp_Additional_Approver__c.Label}" style="font-weight: bold;"/>
+            <apex:inputField value="{!Apttus__APTS_Agreement__c.nxp_Additional_Approver__c}" />
+        </apex:panelGrid>
+
+    </apex:panelGrid>
+    <div style="padding-left:300px;">
+    <apex:commandButton value="Please Select Approvers And Click This Button To Save" action="{!SubmitApprovers}" styleClass="buttonStyle" style="background:red;font-size:150%;"/>
+    </div>
+    </apex:form>
+    <script>
+            if ({!$Profile.Name != 'System Administrator'}) {
+                if ({!AND(Apttus__APTS_Agreement__c.Apttus__Status__c != 'Request', Apttus__APTS_Agreement__c.Apttus__Status__c != 'Validated')})
+                disableForm(document.getElementById('{!$Component.theForm}'));
+            }
+    </script>
+</apex:pageBlock>
+</apex:page>

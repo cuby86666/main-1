@@ -1,0 +1,406 @@
+<apex:page id="thePage" sidebar="false" showHeader="false"  standardStylesheets="false">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="description" content="NXP is a leading semiconductor company founded by Philips more than 50 years ago. NXP creates semiconductors, system solutions and software that deliver better sensory experiences in TVs, set-top boxes, identification applications, mobile phones, cars and a wide range of other electronic devices" />
+<meta name="keywords" content="NXP Semiconductors" />
+<title>Preparing for CES2013 - Secure Connections for a Smarter World</title>
+
+<apex:stylesheet value="{!URLFOR($Resource.CES2013_Styles, 'css/reset.css')}"  />
+<apex:stylesheet value="{!URLFOR($Resource.CES2013_Styles, 'css/main.css')}"  />
+
+<style>
+
+.p-pagetitle
+{
+    height:25px; padding:4px 0 0 17px; 
+    font:bold 14px Verdana, Geneva, Arial, Helvetica, sans-serif; 
+    margin-bottom:10px; color: #FFF; 
+    background-color: #749AC2;
+    position:relative;
+} 
+.section-title
+{
+    font-weight: bold; 
+    text-decoration:underline; 
+    font-size:10pt;
+}
+
+.text-highlight 
+{
+    background-color: #FFFF00;
+}
+
+.text-red-underline 
+{
+    color: #FF0000;
+    text-decoration: underline;
+}
+
+.text-underline 
+{
+    text-decoration: underline;
+}
+
+.text-red-bold
+{
+    color: #FF0000;
+    font-weight: bold;
+}
+
+.auto-style18 {
+    
+    border-right-style: solid;
+    border-right-width: 1px;
+    border-top-style: solid;
+    border-top-width: 1px;
+}
+.auto-style19 {
+
+    border-left-style: solid;
+    border-left-width: 1px;
+    border-top-style: solid;
+    border-top-width: 1px;
+}
+.auto-style20 {
+
+    border-right-style: solid;
+    border-right-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+}
+.auto-style21 {
+
+    border-left-style: solid;
+    border-left-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+}
+.auto-style22 {
+
+    border-right-style: solid;
+    border-right-width: 1px;
+    border-top-style: solid;
+    border-top-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+}
+.auto-style23 {
+
+    border-left-style: solid;
+    border-left-width: 1px;
+    border-top-style: solid;
+    border-top-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+}
+.auto-style24 {
+
+    border-right-style: solid;
+    border-right-width: 1px;
+    border-top-style: solid;
+    border-top-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+}
+</style>
+
+</head>
+
+<body>
+<div id="wrapper">
+    <div id="header" class="solrNoIndex">
+        <div id="header-top" >
+            <div class="logo" style="width:82%;">
+                <a shape="rect" href="http://www.nxp.com" title="NXP Semiconductors homepage">
+                    <img src="{!URLFOR($Resource.CES2013_Styles, 'img/NXP_logo.png')}" alt="NXP Semiconductors" height="32" width="85" />
+                </a>
+            </div>
+        </div>
+    </div>
+    <!-- Content Block Starts Here -->
+     <div id="content">
+         <div class="p-pagetitle">CES 2013, January 8-11 Las Vegas, USA</div>
+         <p><b>Preparing for CES2013 - Secure Connections for a Smarter World</b></p>
+
+         <div id="intro">
+            <p>CES takes place again in early 2013 - January 8 - 11 - and our preparations for CES 2013 are well underway.</p>
+            <p>Same as last year's, we have secured an amazing spot in the outside pavilion area of the Las Vegas Convention Center (LVCC) - Central Plaza (booth #CP8). This enables us to have direct access to the CES attendees and makes meeting with NXP easier for our customers.</p>
+            <p>Being an official exhibitor at the show presents a great opportunity for us to present our ground-breaking solutions - to show the electronics industry at large how NXP technology can be used to enhance and improve the world around us... and how we interact with it. It also allows us to show the end application side of our business which is important for a show like CES.</p>            
+        </div>        
+        <div id="cust-invitation">
+             <div class="section-title">
+                CUSTOMER INVITATION
+            </div>
+            <br />
+            <p>
+               An <a href="{!URLFOR($Resource.CES2013_Customer_Invitation_Letter)}" target="blank">invitation letter</a> is available for sales managers to customize and send to their customers. You can either send it as an attachment to an email, or copy/paste the content in an email.
+            </p>
+        </div>
+        <div id="cust-meetings">
+             <div class="section-title">
+                CUSTOMER MEETINGS
+            </div>
+            <br />
+            <ul class="bullet-blue-list">
+                <li>
+                    A major benefit to being an official exhibitor is closer access to customers and potential customers.                        
+                </li>
+                <li>
+                    Although the booth is open to anyone, we encourage you to schedule meetings with customers. This ensures that you have a private space for your discussions and can secure MT attendance when needed.
+                </li>
+            </ul>
+        </div>
+        <div id="booking-meeting-room">
+             <div class="section-title">
+                BOOKING A MEETING ROOM
+            </div>
+            <br />
+            <ul class="bullet-blue-list">
+                <li>
+                    The NXP booth will have 4 dedicated meeting rooms, one executive meeting lounge and some informal meeting space.
+                </li>
+                <li>
+                    To schedule a meeting, please complete the meeting <a href="{!URLFOR($Resource.CES2013_Meeting_Request_Form)}" target="blank">request form</a> and send it to both <a href="mailto:yasmin.bowens@nxp.com" title="yasmin.bowens@nxp.com">yasmin.bowens@nxp.com</a> and <a href="mailto:lisa.schaefer@nxp.com" title="lisa.schaefer@nxp.com">lisa.schaefer@nxp.com</a>  
+                </li>
+                <li>
+                    You will receive a confirmation within 24 hours.
+                </li>
+            </ul>
+            <p>
+                Click <a href="{!URLFOR($Resource.CES2013_Customer_Meeting_Schedule)}" target="blank">here</a> for an update of the customer meeting schedule as per January 3rd.
+            </p>
+        </div>
+        <div id="proposed-demonstration">
+             <div class="section-title">
+                PROPOSED DEMONSTRATIONS 
+            </div>
+            <br />
+            <p>The booth will incorporate 4 main areas supported with demos:</p>
+            <ul class="bullet-blue-list">
+                <li>
+                    In the home
+                </li>
+                <li>
+                    In the car  
+                </li>
+                <li>
+                    On the move (in the city)
+                </li>
+                <li>
+                    In the future
+                </li>
+            </ul>
+            <p>Please find latest <a href="{!URLFOR($Resource.CES2013_Demo_Overview)}" target="blank">demo overview</a>.</p>
+        </div>
+        <div id="video-content">
+             <div class="section-title">
+                VIDEO CONTENT FOR YOUR DEMOS
+            </div>
+            <br />
+            <p>
+               To purchase video content for your demos you can send an email to Peer Ebbighausen at NBC Universal - <a href="mailto:peer.ubbighausen@nbcuni.com" title="peer.ubbighausen@nbcuni.com">peer.ubbighausen@nbcuni.com</a>. Make sure to include all the required specifications in your email. CES is an open show so all video content needs to have the appropriate licenses.
+            </p>
+        </div>
+        <div id="blue-divider" style="background-color:#99CCFF; width:100%">
+                &nbsp;
+         </div>
+         <br />   
+         <div id="exhibitor-badge">
+             <div class="section-title">
+                EXHIBITOR BADGE REGISTRATION
+            </div>
+            <br />
+            <p>
+               All NXP employees will be registered with an exhibitor badge. The CES event team will pre-order your badges and they will be delivered to your room after you check-in at the Bellagio Hotel. For those who are not staying at the Bellagio Hotel, please contact  <a href="mailto:jeanny.ho@nxp.com" title="jeanny.ho@nxp.com">jeanny.ho@nxp.com</a> before <span class="text-red-bold">December 5th</span>.
+            </p>
+        </div>        
+        <div id="hotel-registration">
+             <div class="section-title">
+               HOTEL REGISTRATION
+            </div>
+            <br />
+            <p>
+               Please confirm that you are approved to travel and attend CES <span class="text-highlight">BEFORE</span> making your hotel reservation - this is your responsibility! If your trip is cancelled due to non-approval then you may still be charged for your hotel room reservation. We will review the hotel list with management prior to final confirmations.
+            </p>
+             <p>
+               We have secured enough rooms at The Bellagio to accommodate NXP employees attending CES; however, once the room block is full employees will be responsible for booking their own accommodations. We will not sign any additional contracts for hotel accommodation.
+            </p>
+            <p>
+                <a href="http://ap.seeuthere.com/nxp/ces2013">http://ap.seeuthere.com/nxp/ces2013</a>
+            </p>
+            <p>
+                You can make, and also update, your reservation details on the hotel registration website. <span class="text-highlight">Registration deadline: <span class="text-red-bold"> December 04, 2012</span></span>
+            </p>
+            <p>
+               <span class="text-red-underline">All reservations must be made via the CES Hotel process - due to the contract we have with The Bellagio Hotel we cannot authorize any employees to stay in another hotel until all rooms under the NXP contract are filled.</span> 
+            </p>
+        </div>
+        <div id="international-visitor">
+             <div class="section-title">
+               INTERNATIONAL VISITORS
+            </div>
+            <br />
+            <p>
+               Please click <a href="http://www.cesweb.org/For-International-Visitors.aspx">here</a> to find additional information for international visitors attending CES2013, including information on Visa application.
+            </p>
+            <p>
+                <em>YOU MUST COMPLETE THIS FORM PRIOR TO YOUR DEPARTURE!</em>
+            </p>            
+        </div>
+        <div id="nxp-show-hours">
+             <div class="section-title">
+               NXP SHOW HOURS
+            </div>
+            <br />
+            <p>
+               Tuesday January 8th &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 09:00am - 06:00pm
+            </p>
+            <p>
+               Wednesday January 9th &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 09:00am - 06:00pm
+            </p>
+            <p>
+               Thursday January 10th &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 09:00am - 06:00pm
+            </p>
+            <p>
+               Friday January 11th &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 09:00am - 04:00pm
+            </p>
+            <p>
+                NXP will provide food and drinks at the booth. You will need to schedule your own dinner plan by making a reservation at opentable.com or check out the hotel’s website directly. Most restaurants require a credit card to guarantee a reservation and we do not want to be responsible for no-shows, change of plans, or cancel reservation.
+            </p>
+            <p class="text-underline">Monday January 7th</p>
+            <p>9:30am - juices, coffee, pastries</p>
+            <p class="text-underline">Tuesday January 8th </p>
+            <p>9:30am - juices, coffee, pastries </p>
+            <p>12:30pm - juices, drinks, assorted wraps </p>
+            <p>3:00pm - fresh fruits, dessert bars </p>
+            <p class="text-underline">Wednesday January 9th </p>
+            <p>8:30am - juices, coffee, pastries </p>
+            <p>12:30pm - juices, drinks, assorted boxed lunches  </p>
+            <p>3:00pm - fresh fruits, dessert bars </p> 
+            <p class="text-underline">Thursday January 10th </p>
+            <p>8:30am - juices, coffee, pastries </p>
+            <p>12:30pm - juices, drinks, assorted sandwiches </p>
+            <p>3:00pm - fresh fruits, dessert bars </p>
+            <p class="text-underline">Friday, January 11th </p>
+            <p>9:00am - juices, coffee, pastries </p>               
+        </div>
+        <div id="green-divider" style="background-color:#99CC00; width:100%">
+                &nbsp;
+        </div>
+        <br />
+        <div id="shipping-instructions">
+             <div class="section-title">
+               SHIPPING INSTRUCTIONS  
+            </div>
+            <p class="text-underline">Deadline</p>
+            <p>All shipments need to arrive at Sparks Warehouse, US, by Friday December 14th!! This is a strict and firm deadline.</p>  
+            <p>If you cannot make this deadline you will need to inform Jeanny Ho ASAP - <a href="mailto:jeanny.ho@nxp.com">jeanny.ho@nxp.com</a></p>  
+            <p class="text-underline">Shipping address</p>
+            <p>
+                Sparks <br />
+                C/O: NXP Semiconductors (Hold for CES2013)<br />
+                4700 Engineers Way, Ste. 101<br />
+                North Las Vegas, NV89081<br />
+                U.S.A.<br />
+                Attn: Michael Johnson / Phone number: +1-702-738.9500<br />
+                Demo owner name:
+            </p>
+            <div class="section-title">
+              INSTRUCTIONS  
+            </div>
+            <ul class="bullet-blue-list">
+              <li> Send an email to Michael Johnson (<a href="mailto:mjohnson@SparksOnline.com">mjohnson@SparksOnline.com</a>) and Breana Dang (<a href="mailto:bdang@sparksonline.com">bdang@sparksonline.com</a>) providing the following details:
+                  <ul class="bullet-orange-list">
+                      <li>your name </li>
+                      <li>telephone number &amp; email address</li>
+                      <li>the value of the demo</li>
+                      <li>date when the demo is shipped</li>
+                      <li>tracking number, courier that's used </li>
+                      <li>a list of the items you've shipped</li>
+                      <li>and number of boxes/crates per shipment</li>
+                  </ul>
+              </li>
+              <li> If they come with ATA Carnet papers, please include those papers with the shipment</li>
+              <li><span class="text-red-bold">All demos that are being shipped to the Sparks facility need to arrive on Friday, December 14 (NO LATER)</span>. </li>
+              <li> If you prefer to hand-carry your demo, please email <a href="mailto:jeanny.ho@nxp.com">jeanny.ho@nxp.com</a> .</li>
+            </ul>
+            <div class="section-title">
+                 INSTRUCTIONS FOR INTERNATIONAL SHIPPING 
+            </div>
+            <br />
+            <ul class="bullet-blue-list">
+                <li>Please read the &quot;<a href="{!URLFOR($Resource.CES2013_Shipping_Guidelines)}" target="blank">International Shipping Guidelines</a>&quot; for step by step instructions.</li>
+                <li>Please be sure to follow the instructions carefully.</li>
+                <li>Any missing information will cause a delay in shipping/receiving your demos to/from CES. </li>
+            </ul>
+            <p class="text-underline">No direct to show site shipments will be accepted after the deadline</p>
+            <p>If you need to ship something direct to the show after the deadline date, please send it to your hotel room or hand carry it to the show. Contact Jeanny Ho at <a href="mailto:jeanny.ho@nxp.com">jeanny.ho@nxp.com</a> or +1-408-219-7778 if you have questions.</p>
+            <p class="text-underline">Post show DOMESTIC shipping</p>
+            <p>At the show you will need to provide the onsite supervisor (Michael Johnson) with the following information before you leave the show floor if you want your package shipped directly back to you:</p>
+            <p>
+                1) Shipping address and contact name<br />
+                2) Commercial invoice/shipping form (Sparks will provide, but you will have to fill out the form completely)<br />
+                3) Number of boxes (i.e., box 1of2, box 2of2, etc)<br />
+                4) Make sure you tape your business card to the boxes <br />
+                5) Cost Center 
+            </p>
+            <p>All other equipment that is not labeled or brought to the attention of the tradeshow team will be left at the show and will be unrecoverable after the show closes.</p>
+        </div>
+        <div id="orange-divider" style="background-color:#FF9933; width:100%">
+                &nbsp;
+        </div>
+        <br />
+        <div id="show-guide">
+            <div class="section-title">
+                 SHOW GUIDE 
+            </div>
+            <p>Click <a href="{!URLFOR($Resource.CES2013_Show_Guide)}" target="blank">here</a> to download Show Guide. [When you print it, make sure you choose double sided printing and short edge and fold it into a threefold.]</p>
+            <p><span class="text-highlight">ALL DEMO OWNERS - MANDATORY PRE-SHOW MEETING IN THE MAIN DEMO AREA</span></p>
+            <ul class="bullet-blue-list">
+              <li>4:30pm Monday January 7th General Briefing </li>
+              <li>5:00pm Monday January 7th Booth tour</li>
+             </ul>            
+            <p><strong>Demo set-up schedule</strong></p>
+            <p>Monday January 7, 2013 - all day starting at 9:00am</p>
+            <p class="text-red-bold">*Be sure to label your empties so that you may use the empty boxes to pack your demos when the show is over. DO NOT throw away your boxes!</p>
+            <p><i>(All demos must be set-up and working properly by 5pm January 7!)</i></p>
+            
+            <p><strong>Demo tear down schedule</strong></p>
+            <p>Friday January 11, 2013 after 4:00pm or when we close our booth</p>
+            <p>Saturday January 12, 2013 8:00am - 5:00pm</p>
+            <p class="text-red-bold">*Clearly mark the number of boxes you're shipping back with name and phone number of who they are going to</p>
+        </div>
+        <div id="team-responsibility">
+            <div class="section-title">
+                 TEAM &amp; RESPONSIBILITIES 
+            </div>
+            <br />
+            <table cellspacing="2" cellpadding="0" style="font-size:10pt; border:2px solid #C0C0C0; width: 100%;">
+                <tr>
+                    <td class="auto-style20">Jeanny Ho</td>
+                    <td class="auto-style21">Marketing Program Manager</td>
+                </tr>
+                <tr>
+                    <td class="auto-style22">Helga de Ruijter</td>
+                    <td class="auto-style23">Overall Event Manager</td>
+                </tr>
+                <tr>
+                    <td class="auto-style24">Lieke de Jong-Tops</td>
+                    <td class="auto-style23">Director Corporate Communications</td>
+                </tr>
+                <tr>
+                    <td class="auto-style22">Gary Sugita</td>
+                    <td class="auto-style23">Overall Demo Coordinator</td>
+                </tr>
+                <tr>
+                    <td class="auto-style18">Mark Lunsford</td>
+                    <td class="auto-style19">Customer Meetings / Invitation process</td>
+                </tr>
+             </table>
+            <p>Don't hesitate to contact us if you have any feedback, questions or comments.</p>
+        </div>        
+     </div>
+ </div> 
+</body>
+</apex:page>

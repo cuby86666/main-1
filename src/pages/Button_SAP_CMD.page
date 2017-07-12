@@ -1,0 +1,30 @@
+<!-- 
+@Created By :     Scarlett Kang
+@Created Date :   Oct 05, 2015
+@Description :    1510 Release - SIR 356. CMD Request - Create a button to changed status to Complete for CMD officer
+-->
+<apex:page standardController="CMD_Request__c" extensions="CMD_Request_Controller_Ext_Status_Update" cache="false" showHeader="false" sidebar="false">
+<script type="text/javascript"> 
+    var previousOnload = window.onload;        
+    window.onload = function() { 
+        if( previousOnload ){ 
+            previousOnload();
+        }
+        if( {!CMD_Request__c.Funloc_SAP_CMD__c != ''} && {!CMD_Request__c.Funloc_SAP_CMD__c != null} ){
+            alert('Do not need to manually update Request Status to Completed. Request will be automatically updated when the status of related SAP CMD is changed to "Approved and Distributed".');
+            window.history.back();
+        }
+        else if( {!CMD_Request__c.Request_Status__c != 'Approved'} && {!CMD_Request__c.Request_Status__c != 'Completed'} ){
+            alert('Request has not been approved. Please double check before you change Status to "Completed".');
+            window.history.back();
+        }        
+        else if( {!CMD_Request__c.Request_Status__c == 'Completed'} ){
+            alert('Request is completed. No change with this request.');
+            window.history.back();
+        } 
+        else if( {!CMD_Request__c.Request_Status__c == 'Approved'} ){
+            window.location.href="/apex/Button_SAPCMD_UpdateRequestStatus?id={!CMD_Request__c.Id}";
+        }
+    }
+</script>
+</apex:page>

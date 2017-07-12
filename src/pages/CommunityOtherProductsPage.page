@@ -1,0 +1,165 @@
+<apex:page id="pg" showHeader="false" sidebar="false">
+    <apex:includeScript value="{!URLFOR($Resource.jquery171min, '/jquery-1.7.1.min.js')}" />
+    <apex:includeScript value="{!URLFOR($Resource.jquery171min, '/jquery-ui-1.8.17.custom.min.js')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.CommunityStyleSheet, 'CommunityStyleSheet.css')}" />
+<style>
+body {
+    background-color: white !important;
+}
+  a {color:black;}
+  .leftnavigation{
+   padding: 5px; 
+   border-bottom-color: #E4E4E4; 
+   border-bottom-width: 1px; 
+   height: 20px; 
+   vertical-align: middle;
+   border-bottom-style: solid;"}
+.threecolumn
+{
+    position: relative;
+    margin: 0px;
+    background:white;
+}
+#cs\:footer a{
+visibility:hidden;
+}
+.threecolumn .centerContent {
+padding-left: 10px;
+}
+  </style>
+ 
+   
+    <script>
+    
+    
+  jQuery("document").ready(function() {
+    /*var pathname = window.location.pathname.split("/");
+    var tabname = pathname[pathname.length-1]; 
+    console.log('tabname'+tabname);
+   window.open( '#!/feedtype=RECENT&dc='+tabname+'&criteria=ALLQUESTIONS','_parent' );*/
+   
+    if(location.href.indexOf('&')== -1){
+        window.location.href=window.location.href+'#!/feedtype=RECENT&dc=All&criteria=ALLQUESTIONS';
+    }
+    });
+    </script>
+   
+
+    <!-- ================================================ HEADER ====================================================== -->
+    <div style="float:left;position:relative;width:1349px;">
+    <c:CommunityHeader ></c:CommunityHeader>
+    <!--Login and Registeration------------------------------------------------------------------------------------------->
+    <c:CommunityLogin ></c:CommunityLogin>
+   
+
+    <div id="chantteranswer" style="background-color: white;top:52px; left:-200px;float:left;position:relative;">
+
+        <div style="float:left;position:relative;">
+            <div class="threecolumn" style="background-color: white;float:left;position:relative;">
+                <div class="leftContent" style="height: 500px; background-color: white;padding-top:10px;" >
+                    <table>
+                        <tr>
+                            <td class="leftnavigation">
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a
+                                href="/community"><b>Community</b>
+                            </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td class="leftnavigation">
+                                &nbsp;&nbsp;&nbsp;&nbsp; <a
+                                href="/community/apex/CommunityAutomotivePage">Automotive</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="leftnavigation">
+                                &nbsp;&nbsp;&nbsp;&nbsp; <a
+                                href="/community/apex/CommunityI2CPage">I2C</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </td>
+                        </tr>
+                        <tr>
+                             <td class="leftnavigation">
+                                &nbsp;&nbsp;&nbsp;&nbsp; <a
+                                href="/community/apex/CommunityIdentificationAndSecurityPage">Identification And Security</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <td class="leftnavigation">
+                                &nbsp;&nbsp;&nbsp;&nbsp; <a
+                                href="/community/apex/CommunityInterfaceProductsPage">Interface Products</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </td>
+                        </tr>
+                         
+                        
+                         <tr>
+                            <td class="leftnavigation">
+                                &nbsp;&nbsp;&nbsp;&nbsp; <a
+                                href="/community/apex/CommunityLogicPage">Logic</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </td>
+                        </tr>
+                         <tr>
+                            <td class="leftnavigation">
+                                &nbsp;&nbsp;&nbsp;&nbsp; <a
+                                href="community/apex/CommunityMicrocontroller">Microcontrollers</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </td>
+                        </tr>
+                         <tr>
+                            <td class="leftnavigation" style="background-color: lightgray;">
+                                &nbsp;&nbsp;&nbsp;&nbsp; <a
+                                href="/community/apex/CommunityOtherProductsPage">Other Products</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </td>
+                        </tr>
+                         <tr>
+                            <td class="leftnavigation" >
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/community/apex/CommunityRFPage">RF
+                                    Small Signal</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </td>
+                        </tr>
+                         <tr>
+                            <td class="leftnavigation" >
+                                &nbsp;&nbsp;&nbsp;&nbsp; <a
+                                href="/community/apex/CommunityStandardProductsPage">Standard Products</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="mainContent" style="background-color: white;">
+                    <div class="lowerMainContent" id="lowerMainContent"
+                        style="background-color: white;">
+                        <div id="rightContent" class="rightContent"
+                            style="background-color: white;"></div>
+                        <div id="centerContent" class="centerContent"
+                            style="background-color: white; border-left-color: #E4E4E4; border-left-width: 1px; border-left-style: solid;">
+                            <div style="padding-top: 0px; background-color: white;">
+
+                                <div
+                                    style="position: relative; padding-left: 10px; background-color: white; width: 771px;">
+                                    <h1
+                                        style="color: black; position: relative; center: -216px; font-size: 18px;">Welcome to Other Products Community</h1>
+
+                                    <p
+                                        style="position: relative; text-align: justify; font-size: 13px; color: #313233;">
+                                        Find answers to your support questions in our frequently-asked
+                                        questions (FAQ) data base or simply post your question. Your
+                                        questions will be answered by our application engineers.</p>
+                                        
+                                    <chatteranswers:searchask communityId="09aD0000000PVFN" />
+                                    <chatteranswers:feedfilter />
+                                    <chatteranswers:feeds communityId="09aD0000000PVFN"  /> 
+                                   
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearingBox"></div>
+            </div>
+        </div>
+
+    </div>
+    <c:CommunityFooter ></c:CommunityFooter>
+    </div>
+    <!----============================ FOOTER ======================------->
+
+   
+</apex:page>

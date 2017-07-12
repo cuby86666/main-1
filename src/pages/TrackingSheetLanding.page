@@ -1,0 +1,7 @@
+<!--@Modified By: Balaji Gunasekaran @Modified Date:   August 1, 2016 
+Description:     Made changes to redirect to STAR Tracker based on Parent Id -->
+<apex:page cache="false" > <!--controller="TrackingSheetController" action="{!landingPageRedirect}">-->
+<head>
+<meta http-equiv="refresh" content="0; url={!LEFT($CurrentPage.URL,FIND('/',$CurrentPage.URL,9))}apex/TrackingSheet?id=0012000000XkZDp" />
+</head>
+</apex:page>

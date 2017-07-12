@@ -1,0 +1,4 @@
+<apex:page standardController="MN_Corp_Id_Request__c">
+<div style="border:4px"><h1 style="color:red;margin-left:50px;">Information :</h1>
+Please Select Customer GID before approving this record</div>
+</apex:page>

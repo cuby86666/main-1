@@ -1,0 +1,311 @@
+<!--*********************************************************************************************
+@Created By :      Amrutha R
+@CreatedDate :     29 July 2015
+Description :      Page for guest community users to register to nxp community
+****************************************************************************************************-->
+<!--***************************************************************************************************
+@ Modified By :      Amrutha
+@Modified Date:      24 feb 2016
+@Description:        Commented tabs and breadcrumb except contact support 
+*******************************************************************************************************-->
+
+<apex:page id="Registration" cache="True" showHeader="false" sidebar="false" controller="CommunitiesSelfRegController"
+    title="NXP TechSupport Community" standardStylesheets="false" > 
+    
+    <style>
+    .capcha{
+            margin-left:1px;
+            background-color: #E8E8E8;
+            border-style: solid;
+            border-width:1px;
+            width: 180px;
+            height: 33px;
+            text-align: center;
+        }
+    .redChar{
+            color: #C30000;
+            font-size: 24px;
+            padding:5px;
+        }
+    .blackChar{
+            color: black;
+            font-weight: bold;
+            font-size: 24px;
+            padding:5px;
+        }
+    </style>
+    <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <title>Registration - NXP TechSupport Community</title>
+    <apex:stylesheet value="{!URLFOR($Resource.Forum_Community_3, 'NXP-community/css/jasny-bootstrap.css')}" ></apex:stylesheet>  
+    <apex:stylesheet value="{!URLFOR($Resource.Forum_Community_3, 'NXP-community/css/font-awesome.css')}" ></apex:stylesheet>      
+    <apex:stylesheet value="{!URLFOR($Resource.Forum_Community_3, 'NXP-community/css/hover.css')}" ></apex:stylesheet>
+    <apex:stylesheet value="{!URLFOR($Resource.Forum_Community_3, 'NXP-community/css/main.css')}" ></apex:stylesheet>
+</head>
+
+<body class="new-case">
+    <c:CommunityHeaderComponent ></c:CommunityHeaderComponent>
+    <!-- Breadcrumbs 
+    <div class="breadcrumb-bar">
+        <div class="container">
+            <ul class="breadcrumb">
+                <li><a href="/community/CommunityOverview">{!$label.Community_breadcrumb_Home}</a></li>
+                 <li><a href="/community/CommunityOverview">{!$label.Community_breadcrumb_Community}</a></li>
+                <li class="active"><a href="/community/communityRegistration">Register</a></li>
+            </ul>
+        </div>
+    </div>-->
+    <!-- Community Navigtion 
+    <div class="container h-spacer navigation">
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-10 col-sm-10">
+                        <div class="navbar-header">
+                            <a class="navbar-brand" href="#">NXP Community</a>
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                                <span class="sr-only">Toggle navigation</span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                        </div>
+                        
+                        <div id="navbar" class="navbar-collapse collapse">
+                            <ul class="nav navbar-nav">
+                             <li class="active"><a href="/community/CommunityOverview">{!$label.Community_tab_Overview}</a></li>
+                             <li ><a href="/community/CommunityForum">{!$label.Community_breadcrumb_Forum}</a></li>
+                             <li><a href="/community/CommunityFAQ">{!$label.Community_tab_FAQ}</a></li>
+                             <li><apex:outputLink rendered="{!If(($Profile.Name='NXP Community Profile'),false,true)}" value="/community/CommunityCaseList">{!$Label.Community_tab_Contactsupport}</apex:outputLink></li>
+                             <li><a href="/community/CommunityStories">{!$Label.Community_tab_Stories}</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-2">
+                        <div class="login-holder">
+                            <img class="hvr-grow" id="logo" src="{!URLFOR($Resource.Forum_Community_3,'NXP-community/img/community-logo_small.png')}"/>
+                            <a href="/community/communityLogin">Login / </a>
+                            <a href="/community/communityRegistration">Register</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+    -->
+    <br/><br/>
+    <apex:form styleclass="form-horizontal" forceSSL="true" id="form">
+       
+    <div class="container">
+      
+        <h4>Register to NXP community</h4>
+        <apex:pageMessages ></apex:pageMessages>
+        <div class="h-spacer">&nbsp;</div>
+        <div class="row">
+            <div class="col-md-12 col-xs-12 bg-color-bar padding-left-10">
+                <h5>Contact Details</h5></div>
+        </div>
+         <br/>
+            <div class="row">
+                <div class="col-md-6 col-xs-6">
+                    <div class="form-group" >
+                        <label class="control-label col-md-4" for="firstname">First name</label>
+                        <div class="col-md-8">
+                            <apex:inputText value="{!strFirstName}" required="true" styleclass="btn btn-default dropdown-toggle input-form" id="firstname"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4" for="Lastname">Last name</label>
+                        <div class="col-md-8" id="selectList">
+                            <apex:inputText value="{!strLastName}" id="Lastname" required="true" styleclass="btn btn-default dropdown-toggle input-form"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4" for="Email">Email (UserName) </label>
+                        <div class="col-md-8">
+                           <apex:inputText value="{!strEmail}" id="Email" required="true" styleclass="btn btn-default dropdown-toggle input-form"/>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4" for="CommunityNickname">Community Nickname </label>
+                        <div class="col-md-8">
+                            <apex:inputText styleClass="btn btn-default dropdown-toggle input-form" required="true" id="communityNickname" value="{!strCommunityNickname}"/>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="control-label col-md-4" for="Facebook">Facebook <span class="lighten">(optional)</span></label>
+                        <div class="col-md-8">
+                            <apex:inputText value="{!strFacebook}" styleclass="form-control input-form" id="facebook"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4" for="Twitter">Twitter <span class="lighten">(optional)</span></label>
+                        <div class="col-md-8">
+                            <apex:inputText value="{!strTwitter}" styleclass="form-control input-form" id="twitter"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4" for="LinkedIn">LinkedIn <span class="lighten">(optional)</span></label>
+                        <div class="col-md-8">
+                            <apex:inputText value="{!strLinkedIn}" styleclass="form-control input-form" id="linkedin"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-xs-6">
+                    <div class="form-group">
+                        <label class="control-label col-md-4" for="Company">Company </label>
+                        <div class="col-md-8">
+                            <apex:inputText value="{!strCompany}" required="true" id="Company" styleclass="btn btn-default dropdown-toggle input-form"/>                        
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4" for="Phonenumber">Phone number</label>
+                        <div class="col-md-8">
+                            <apex:inputText value="{!strPhone}" required="true" styleclass="btn btn-default dropdown-toggle input-form" id="Phonenumber" />
+                        </div>
+                    </div>
+                     <div class="form-group">
+                        <label class="control-label col-md-4" for="Jobtitle">Job title</label>
+                        <div class="col-md-8">
+                            <apex:selectList size="1" value="{!strJobTitle}" required="true" styleclass="btn btn-default dropdown-toggle input-form" id="Jobtitle">
+                                                                    <apex:selectOptions value="{!jobTitles}" />
+                                                                </apex:selectList>
+                         </div>
+                    </div>
+                     <div class="form-group">
+                        <label class="control-label col-md-4" for="Country">Country</label>
+                        <div class="col-md-8">
+                        <apex:selectList size="1" value="{!strCountry}" required="true" styleclass="btn btn-default dropdown-toggle input-form" id="Country">                    
+                                                                        <apex:selectOptions value="{!countries}"/>
+                                                                    </apex:selectList>
+                         </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="control-label col-md-4" for="State">State/province <span class="lighten">(optional)</span></label>
+                        <div class="col-md-8">
+                            <apex:inputText value="{!strState}"  styleclass="btn btn-default dropdown-toggle input-form" id="State"/> 
+                        </div>
+                    </div>
+                   <div class="form-group">
+                        <label class="control-label col-md-4" for="Region">Region<span class="lighten">(optional)</span></label>
+                        <div class="col-md-8">
+                        <apex:selectList size="1" value="{!strWebRegion}" styleclass="btn btn-default dropdown-toggle input-form" id="Region">                    
+                                                                        <apex:selectOptions value="{!webRegions}"/>
+                                                                    </apex:selectList>
+                         </div>
+                    </div>
+                </div>
+            </div>
+            <div class="h-spacer">&nbsp;</div>
+            <div class="row">
+                <div class="col-md-12 col-xs-12 bg-color-bar padding-left-10">
+                    <h5>My account</h5>
+                </div>
+            </div>
+            <div class="row h-spacer">
+                <div class="col-md-6 col-xs-6">
+                    <div class="form-group">
+                        <label class="control-label col-md-4" for="Password">Password</label>
+                        <div class="col-md-8">
+                            <apex:inputSecret value="{!strPassword}" required="true" styleclass="form-control input-form" id="Password"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row h-spacer">
+                <div class="col-md-6 col-xs-6">
+                    <div class="form-group">
+                        <label class="control-label col-md-4" for="Repeatpassword">Repeat password</label>
+                        <div class="col-md-8">
+                            <apex:inputSecret value="{!strConfirmPassword}" required="true" styleclass="form-control input-form" id="Repeatpassword"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row h-spacer">
+                <div class="col-md-6 col-xs-6">
+                    <div class="form-group">
+                        <label class="control-label col-md-4" for="attachment">Enter the above characters</label>
+                        <div class="col-md-8">
+                                   <apex:outputPanel styleClass="capcha" layout="block" id="code">
+                                       <apex:outputText value="{!char1}" styleClass="blackChar"/>
+                                       <apex:outputText value="{!char2}" styleClass="redChar"/>
+                                       <apex:outputText value="{!char3}" styleClass="blackChar"/>
+                                       <apex:outputText value="{!char4}" styleClass="redChar"/>
+                                       <apex:outputText value="{!char5}" styleClass="blackChar"/>
+                                       <apex:outputText value="{!char6}" styleClass="redChar"/>
+                                       
+                            </apex:outputPanel>
+                            <apex:outputPanel >
+                                <apex:inputText value="{!input}"/>
+                                <apex:commandButton value="Reset" rerender="code"/>
+                            </apex:outputPanel><br/>
+                        </div>
+                        <div>
+                         <apex:panelGroup >
+                              <apex:inputCheckbox value="{!isCheck}" id="checkbx" required="true">
+                             </apex:inputCheckbox>&nbsp;&nbsp;I have read and accept the  <a href="http://www.nxp.com/about/about-nxp/terms-of-use:TERMSOFUSE?tid=redTERMSOFUSE">Terms of Use</a> and <a href="http://www.nxp.com/about/about-nxp/privacy:PRIVACYPRACTICES?tid=redPRIVACYPRACTICES"> Privacy Policy </a>
+                         </apex:panelGroup>
+                    </div>
+                     </div>
+                </div>
+            </div>
+            
+            
+        <apex:commandButton value="REGISTER" styleclass="btn btn-default submit" action="{!registerUser}"/>
+        
+    </div>
+      </apex:form>
+     
+<br/>   
+    <c:CommunityFooterComponent ></c:CommunityFooterComponent>
+    <!-- Menu for user configuration -->
+    <div id="user-config-popover" style="display:none">
+        <ul class='nav nav-pills nav-stacked'>
+            <li><apex:outputlink style="width:179px; margin-left: 0px;" value="/community/CommunitiesEditUserProfile" rendered="{!If(($Profile.Name='NXP Customer Community Login User'),true,false)}" > Edit profile</apex:outputlink></li>
+            <li ><apex:outputlink style="width:179px; margin-left: 0px;" value="/secur/logout.jsp?retUrl=https%3A%2F%2Fnxpcommunity.force.com%2Fcommunity%2FCommunityOverview">Logout</apex:outputlink></li>
+        </ul>
+    </div>
+    <!-- Bootstrap core JavaScript
+         ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="{!URLFOR($Resource.Forum_Community_3,'NXP-community/js/bootstrap.js')}"></script>
+    <script src="{!URLFOR($Resource.Forum_Community_3,'NXP-community/js/collapse.js')}"></script>
+    <script src="{!URLFOR($Resource.Forum_Community_3,'NXP-community/js/nxp-community.js')}"></script>
+    <script src="{!URLFOR($Resource.Forum_Community_3,'NXP-community/js/jasny-bootstrap.min.js')}"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <!-- <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script> -->
+    
+<script>
+// Mutation object
+var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
+
+// Defining observer 
+var observer = new MutationObserver(function(mutations) { 
+    // If the 'btn btn-default dropdown-toggle btn-lg' was removed from the list - re-assign it
+    if(!jQuery('#selectList select').first().hasClass('btn btn-default dropdown-toggle input-form')){
+        jQuery('#selectList select').first().addClass('btn btn-default dropdown-toggle input-form');
+    }
+});
+
+// A target object fot the observer
+var myNode = document.querySelector('#selectList'); 
+
+// Assigning observer to the dependent picklist
+observer.observe(myNode, {
+    childList: true,
+    subtree: true,
+    attributes: true
+});
+</script>
+</body>
+  
+</apex:page>

@@ -1,0 +1,647 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <description>It will store eRebate Products(Line Items).</description>
+    <enableActivities>false</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableChangeDataCapture>false</enableChangeDataCapture>
+    <enableEnhancedLookup>true</enableEnhancedLookup>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>false</enableHistory>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <fields>
+        <fullName>Actual_Cost_Text__c</fullName>
+        <description>1511 Release - SIR 483. To represent the real number of Actual Cost.</description>
+        <externalId>false</externalId>
+        <formula>IF( 
+Actual_Cost__c &lt; 1, 
+&quot;0&quot;+TEXT(Actual_Cost__c), 
+TEXT(Actual_Cost__c) 
+)</formula>
+        <label>Actual Cost</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Actual_Cost__c</fullName>
+        <description>1508 Release. Request by Pauline Ng. It&apos;s used to capturing more Rebate information.</description>
+        <externalId>false</externalId>
+        <label>Actual Cost (R)</label>
+        <precision>17</precision>
+        <required>false</required>
+        <scale>5</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>BU__c</fullName>
+        <externalId>false</externalId>
+        <formula>Product__r.BU__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>BU</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Booking_Cost_Text__c</fullName>
+        <description>1511 Release - SIR 483. To represent the real number of Booking Cost.</description>
+        <externalId>false</externalId>
+        <formula>IF( 
+Booking_Cost__c &lt; 1, 
+&quot;0&quot;+TEXT(Booking_Cost__c), 
+TEXT(Booking_Cost__c) 
+)</formula>
+        <label>Booking Cost</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Booking_Cost__c</fullName>
+        <description>1508 Release. Request by Pauline Ng. It&apos;s used to capturing more Rebate information.</description>
+        <externalId>false</externalId>
+        <label>Booking Cost (R)</label>
+        <precision>17</precision>
+        <required>false</required>
+        <scale>5</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Capped_Payout__c</fullName>
+        <description>1508 Release. Request by Pauline Ng. It&apos;s used for capturing more Rebate information.</description>
+        <externalId>false</externalId>
+        <label>Capped Payout</label>
+        <precision>17</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Disti_Margin__c</fullName>
+        <description>1508 Release. Request by Paulein Ng. It&apos;s used for capturing more Rebate information.</description>
+        <externalId>false</externalId>
+        <formula>IF(
+Resale_Price__c &gt; 0, 
+(Resale_Price__c  - Actual_Cost__c ) / Resale_Price__c,
+0
+)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Disti Margin (%)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>1</scale>
+        <trackTrending>false</trackTrending>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>End_Customer__c</fullName>
+        <description>1508 Release. Request by Pauline Ng. It&apos;s used for capturing more Rebate information.</description>
+        <externalId>false</externalId>
+        <label>End Customer</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Est_Accrual_to_be_set_per_Rebate_Period__c</fullName>
+        <description>1508 Release. Request by Pauline Ng. It&apos;s used for capturing more Rebate information.</description>
+        <externalId>false</externalId>
+        <formula>IF(
+ eRebate__r.RecordType.Name = &quot;Incentive / T&amp;Cs&quot; &amp;&amp; Estimated_POA_net_net_per_MAG_Level__c   &gt; 0,
+ Capped_Payout__c  / Estimated_POA_net_net_per_MAG_Level__c,
+0
+)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>%Est Accrual to be set per Rebate Period</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>Estimated_POA_net_net_per_MAG_Level__c</fullName>
+        <description>1508 Release. Request by Pauline Ng. It&apos;s used for capturing more Rebate information.</description>
+        <externalId>false</externalId>
+        <label>Estimated POA net net per MAG Level</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Estimated_Rebate_Amount__c</fullName>
+        <description>1508 Release. It&apos;s auto calculated field with ODM Fullfillment Rebate &amp; OEM / EMS Rebate. For Incentive Rebate, it&apos;s free text.</description>
+        <externalId>false</externalId>
+        <label>Estimated Rebate Amount</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>4</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Line_Description__c</fullName>
+        <externalId>false</externalId>
+        <label>Line Description</label>
+        <length>50</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Local_Rep_Country__c</fullName>
+        <description>1508 Release. Request by Pauline Ng. It&apos;s used for capturing more Rebate information.</description>
+        <externalId>false</externalId>
+        <label>Local Rep Country</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>AMEC</fullName>
+                    <default>false</default>
+                    <label>AMEC</label>
+                </value>
+                <value>
+                    <fullName>China</fullName>
+                    <default>false</default>
+                    <label>China</label>
+                </value>
+                <value>
+                    <fullName>EMEA</fullName>
+                    <default>false</default>
+                    <label>EMEA</label>
+                </value>
+                <value>
+                    <fullName>India</fullName>
+                    <default>false</default>
+                    <label>India</label>
+                </value>
+                <value>
+                    <fullName>Japan</fullName>
+                    <default>false</default>
+                    <label>Japan</label>
+                </value>
+                <value>
+                    <fullName>Korea (South)</fullName>
+                    <default>false</default>
+                    <label>Korea (South)</label>
+                </value>
+                <value>
+                    <fullName>Singapore</fullName>
+                    <default>false</default>
+                    <label>Singapore</label>
+                </value>
+                <value>
+                    <fullName>Taiwan</fullName>
+                    <default>false</default>
+                    <label>Taiwan</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>MAG__c</fullName>
+        <externalId>false</externalId>
+        <formula>Product__r.MAG__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>MAG</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Price_Gap__c</fullName>
+        <externalId>false</externalId>
+        <label>Price Gap</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>4</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Product_Type__c</fullName>
+        <description>1508 Release. Request by Pauline Ng.</description>
+        <externalId>false</externalId>
+        <formula>Product__r.Product_Type__c</formula>
+        <label>Product Type</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Product__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Product</label>
+        <referenceTo>Product2</referenceTo>
+        <relationshipName>eRebate_Products</relationshipName>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Quantity__c</fullName>
+        <defaultValue>1</defaultValue>
+        <externalId>false</externalId>
+        <label>Quantity</label>
+        <precision>10</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Real_Cost_in_Rebate_Currency__c</fullName>
+        <externalId>false</externalId>
+        <label>Real Cost in Rebate Currency</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>4</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Rebate_Record_Type__c</fullName>
+        <description>1508 Release. Technical use only.</description>
+        <externalId>false</externalId>
+        <formula>eRebate__r.RecordType.Name</formula>
+        <label>Rebate Record Type</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Resale_Price_Text__c</fullName>
+        <description>1511 Release - SIR 483. To represent the real number of Resale Price.</description>
+        <externalId>false</externalId>
+        <formula>IF( 
+ Resale_Price__c &lt; 1, 
+&quot;0&quot;+TEXT(Resale_Price__c ), 
+TEXT(Resale_Price__c ) 
+)</formula>
+        <label>Resale Price</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Resale_Price__c</fullName>
+        <description>1508 Release. Request by Pauline Ng. It&apos;s used to capturing more Rebate information.</description>
+        <externalId>false</externalId>
+        <label>Resale Price (R)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>5</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Sub_Total_USD__c</fullName>
+        <externalId>false</externalId>
+        <formula>Sub_Total__c /   IF( ISBLANK(eRebate__r.Locked_Exchange_Rate__c ) ,  1 , eRebate__r.Locked_Exchange_Rate__c )</formula>
+        <label>Sub Total (USD)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Sub_Total__c</fullName>
+        <externalId>false</externalId>
+        <formula>Quantity__c * Price_Gap__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Sub Total</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>X12NC__c</fullName>
+        <externalId>false</externalId>
+        <formula>Product__r.Sales_Item__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>12NC</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>eRebate__c</fullName>
+        <externalId>false</externalId>
+        <label>eRebate</label>
+        <referenceTo>eRebate__c</referenceTo>
+        <relationshipName>eRebate_Products</relationshipName>
+        <relationshipOrder>0</relationshipOrder>
+        <reparentableMasterDetail>false</reparentableMasterDetail>
+        <trackTrending>false</trackTrending>
+        <type>MasterDetail</type>
+        <writeRequiresMasterRead>false</writeRequiresMasterRead>
+    </fields>
+    <label>Rebate Product</label>
+    <nameField>
+        <displayFormat>eRP-{0000}</displayFormat>
+        <label>eRebate Product Name</label>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Rebate Products</pluralLabel>
+    <recordTypes>
+        <fullName>Distribution_ODM_Fullfillment_Rebate_Product</fullName>
+        <active>true</active>
+        <description>Rebate Product for Distribution ODM Fullfillment Rebate</description>
+        <label>Distribution ODM Fullfillment Rebate Product</label>
+        <picklistValues>
+            <picklist>Local_Rep_Country__c</picklist>
+            <values>
+                <fullName>AMEC</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>China</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>EMEA</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>India</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Japan</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Korea %28South%29</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Singapore</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Taiwan</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Incentive_T_Cs_Contractual_Rebate_Product</fullName>
+        <active>true</active>
+        <description>Rebate Product for Incentive / T&amp;Cs / Contractual Rebate</description>
+        <label>Incentive / T&amp;Cs / Contractual Rebate Product</label>
+        <picklistValues>
+            <picklist>Local_Rep_Country__c</picklist>
+            <values>
+                <fullName>AMEC</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>China</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>EMEA</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>India</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Japan</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Korea %28South%29</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Singapore</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Taiwan</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>OEM_EMS_Rebate_Product</fullName>
+        <active>true</active>
+        <description>Rebate Product for OEM / EMS Rebate</description>
+        <label>OEM / EMS Rebate Product</label>
+        <picklistValues>
+            <picklist>Local_Rep_Country__c</picklist>
+            <values>
+                <fullName>AMEC</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>China</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>EMEA</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>India</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Japan</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Korea %28South%29</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Singapore</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Taiwan</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <searchLayouts/>
+    <sharingModel>ControlledByParent</sharingModel>
+    <validationRules>
+        <fullName>CappedPayout_more_than_Estimated_Rebate</fullName>
+        <active>true</active>
+        <description>1508 Release. Capped Payout (USD) should be more than Estimated Rebate Amount</description>
+        <errorConditionFormula>Capped_Payout__c &lt;  Estimated_Rebate_Amount__c</errorConditionFormula>
+        <errorDisplayField>Capped_Payout__c</errorDisplayField>
+        <errorMessage>Capped Payout should be more than Estimated Rebate Amount</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>Rebate_Product_record_type_not_aligned</fullName>
+        <active>true</active>
+        <description>1508 Release. Rebate Product record type does not align with Rebate Program Type.</description>
+        <errorConditionFormula>OR(
+AND(
+ eRebate__r.RecordType.Name = &quot;Distribution ODM Fullfillment&quot;,
+ RecordType.Name &lt;&gt; &quot;Distribution ODM Fullfillment Rebate Product&quot;
+),
+AND(
+ eRebate__r.RecordType.Name = &quot;Incentive / T&amp;Cs&quot;,
+ RecordType.Name &lt;&gt; &quot;Incentive / T&amp;Cs / Contractual Rebate Product&quot;
+),
+AND(
+ eRebate__r.RecordType.Name = &quot;OEM / EMS&quot;,
+ RecordType.Name &lt;&gt; &quot;OEM / EMS Rebate Product&quot;
+)
+)</errorConditionFormula>
+        <errorMessage>Rebate Product record type does not align with Rebate Program Type. Please click &quot;cancel&quot; and go back to the original Rebate to re-create Rebate Product(s).</errorMessage>
+    </validationRules>
+    <visibility>Public</visibility>
+    <webLinks>
+        <fullName>Add_Product</fullName>
+        <availability>online</availability>
+        <displayType>massActionButton</displayType>
+        <height>600</height>
+        <linkType>page</linkType>
+        <masterLabel>Add Product</masterLabel>
+        <openType>sidebar</openType>
+        <page>AddERebateProduct</page>
+        <protected>false</protected>
+        <requireRowSelection>false</requireRowSelection>
+    </webLinks>
+    <webLinks>
+        <fullName>Edit_All</fullName>
+        <availability>online</availability>
+        <displayType>massActionButton</displayType>
+        <height>600</height>
+        <linkType>page</linkType>
+        <masterLabel>Edit All</masterLabel>
+        <openType>sidebar</openType>
+        <page>EditAllERebateProducts</page>
+        <protected>false</protected>
+        <requireRowSelection>false</requireRowSelection>
+    </webLinks>
+    <webLinks>
+        <fullName>New_Incentive_T_Cs_Contractual_Rebate_Product</fullName>
+        <availability>online</availability>
+        <displayType>massActionButton</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <linkType>url</linkType>
+        <masterLabel>New Rebate Product</masterLabel>
+        <openType>replace</openType>
+        <protected>false</protected>
+        <requireRowSelection>false</requireRowSelection>
+        <url>/a19/e?CF00ND0000005WGnT={!eRebate__c.Name} 
+&amp;CF00ND0000005WGnT_lkid={!eRebate__c.Id} 
+&amp;retURL=%2Fa1A18000000Asg7
+&amp;RecordType=012570000007Q9R
+&amp;ent=01ID0000000zTkP</url>
+    </webLinks>
+    <webLinks>
+        <fullName>New_ODM_Rebate_Product</fullName>
+        <availability>online</availability>
+        <displayType>massActionButton</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <linkType>url</linkType>
+        <masterLabel>New Rebate Product</masterLabel>
+        <openType>replace</openType>
+        <protected>false</protected>
+        <requireRowSelection>false</requireRowSelection>
+        <url>/a19/e?CF00ND0000005WGnT={!eRebate__c.Name} 
+&amp;CF00ND0000005WGnT_lkid={!eRebate__c.Id} 
+&amp;retURL=%2Fa1A18000000Asg7 
+&amp;RecordType=012570000007Q9Q
+&amp;ent=01ID0000000zTkP</url>
+    </webLinks>
+    <webLinks>
+        <fullName>New_OEM_EMS_Rebate_Product</fullName>
+        <availability>online</availability>
+        <displayType>massActionButton</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <linkType>url</linkType>
+        <masterLabel>New Rebate Product</masterLabel>
+        <openType>replace</openType>
+        <protected>false</protected>
+        <requireRowSelection>false</requireRowSelection>
+        <url>/a19/e?CF00ND0000005WGnT={!eRebate__c.Name} 
+&amp;CF00ND0000005WGnT_lkid={!eRebate__c.Id} 
+&amp;retURL=%2Fa1A18000000Asg7
+&amp;RecordType=012570000007Q9S
+&amp;ent=01ID0000000zTkP</url>
+    </webLinks>
+</CustomObject>

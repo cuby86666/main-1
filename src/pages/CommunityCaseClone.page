@@ -1,0 +1,52 @@
+<!--******************************************************************************************************
+@Created By :      Amrutha R
+@CreatedDate :     20 Jul 2016
+Description :      Custom clone page to display clone case details and custom save and cancel button
+************************************************************************************************************-->
+
+<apex:page standardController="case" extensions="CommunityCaseCloneController" standardStylesheets="true" id="page">
+    <br/>&nbsp;&nbsp;&nbsp;&nbsp;<h5>Case Edit</h5> <br/>
+    &nbsp;&nbsp;&nbsp;&nbsp;{!case.casenumber} 
+    <apex:pageMessages id="Error"></apex:pageMessages>
+	<apex:form id="pageForm" ><br/> 
+    <apex:pageBlock mode="edit" id="pageBlock">
+        <apex:pageBlockButtons id="pageButton">
+            <apex:commandButton value="Save" action="{!saveClonedCase}" id="buttonSave"/>
+        	<apex:commandButton value="Cancel" action="{!cancelClone}" id="buttonCancel" immediate="true"/>
+        </apex:pageBlockButtons>
+        <apex:pageBlockSection columns="2" id="pageBlockSection">
+    		<apex:outputField value="{!case.casenumber}" id="caseNumber"/>
+            <apex:inputField value="{!case.priority}" required="true" id="casePriority"/>
+            <apex:outputField value="{!case.owner.name}" label="Case Owner" id="caseOwner"/>
+            <apex:inputField value="{!case.status}" required="true" id="caseStatus"/>
+            <apex:inputField value="{!case.Assigned_to__c}" id="caseAssignedTo"/>&nbsp;
+            <apex:inputField value="{!case.subject}" required="true" style="width:510px;" id="caseSubject"/>&nbsp;
+            <apex:inputField value="{!case.description}" required="true" style="width:510px;height:120px;" id="caseDescription"/>&nbsp;
+            <apex:inputField value="{!case.Resolution__c}" id="caseResolution"/>&nbsp;
+            <apex:inputField value="{!case.Reference__c}" style="width:510px;height:80px;" id="caseReference"/>&nbsp;
+        </apex:pageBlockSection>
+        <apex:pageBlockSection title="Description Information">
+        	<apex:inputField value="{!case.contactID}" label="Contact Name" id="caseContact"/>
+            <apex:inputField value="{!case.origin}"  id="caseOrigin"/>
+            <apex:inputField value="{!case.JobTitle__c}" label="Contact Title" id="caseJobtitle"/>
+            <apex:inputField value="{!case.Product_Type_Number__c}" id="caseProductType"/>
+            <apex:inputField value="{!case.Community_Web_Country__c}" required="true" id="caseCountry"/>
+            <apex:inputField value="{!case.Product__c}" id="caseProduct"/>
+            <apex:inputField value="{!case.State_Province__c}" id="caseState"/>
+            <apex:inputField value="{!case.Product_Category__c}" id="caseProductcategory"/>
+            <apex:inputField value="{!case.AccountId}" label="Account Name" id="caseAccount"/>
+            <apex:inputField value="{!case.Product_Sub__c}" id="caseProductSubcategory"/>
+            <apex:inputField value="{!case.Company__c}" required="true" id="caseCompany"/>
+            <apex:inputField value="{!case.My_Question_is_Related__c}" required="true" id="caseTopic"/>
+            <apex:inputField value="{!case.Reason_for_Case_Reassignment__c}" id="caseReason"/>
+            <apex:inputField value="{!case.Sub_Topic__c}" id="caseSubTopic"/>
+            <apex:inputField value="{!case.Product_Name__c}" id="caseProductname"/>
+            <apex:inputField value="{!case.Product_application__c}" id="caseProductApplication"/>
+            <apex:inputField value="{!case.Pricebook_Cost_Entry__c}" id="caseCost"/>
+            <apex:inputField value="{!case.Project_Stage__c}" id="caseProjectStage"/>
+            <apex:inputField value="{!case.SuppliedEmail}" id="caseEmail"/>
+            <apex:inputField value="{!case.Expected_annual_unit_volume__c}" id="caseUnitVolume"/>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+    </apex:form>
+</apex:page>

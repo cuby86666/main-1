@@ -1,0 +1,66 @@
+<apex:page standardController="Account" extensions="AccountControllerExtensionDnB" cache="false">
+    <apex:outputPanel layout="none" id="theButtons">
+    <apex:form > 
+        <TABLE WIDTH="100%">
+        <TR>
+            <TD WIDTH="45%" ALIGN="RIGHT">
+                <apex:commandLink action="{!Accept}" target="_parent" style="text-decoration: none;"
+                    rendered="{!
+                        AND(
+                            OR(
+                                (CONTAINS($User.Id, Account.OwnerId)) ,
+                                (CONTAINS($Profile.Name, 'System Administrator')) ,
+                                (CONTAINS($Profile.Name, 'CMD Officer'))
+                            ) , 
+                            OR(
+                                (Account.Status_of_D_B_Cleansing__c == 'D&B Rejected: Poor Match') ,
+                                (Account.Status_of_D_B_Cleansing__c == NULL ) ,
+                                (Account.Status_of_D_B_Cleansing__c == '') 
+                            ) , 
+                            (Account.D_B_Rating__c == 'High') 
+                        )
+                    }"  >
+                    <apex:commandButton value="Accept D&B Address"/>
+                </apex:commandLink>
+            </TD>
+            <TD WIDTH="5%"></TD>
+            <TD WIDTH="40%" ALIGN="LEFT">
+                <apex:commandLink action="{!Reject}" target="_parent" style="text-decoration: none;"
+                    rendered="{!
+                        AND(
+                            OR(
+                                (CONTAINS($User.Id, Account.OwnerId)) ,
+                                (CONTAINS($Profile.Name, 'System Administrator')) ,
+                                (CONTAINS($Profile.Name, 'CMD Officer'))
+                            ) , 
+                            OR(
+                                (Account.Status_of_D_B_Cleansing__c == 'D&B Rejected: Poor Match') ,
+                                (Account.Status_of_D_B_Cleansing__c == NULL ) ,
+                                (Account.Status_of_D_B_Cleansing__c == '') 
+                            ) , 
+                            (Account.D_B_Rating__c == 'High') 
+                        )
+                    }"  >
+                    <apex:commandButton value="Reject D&B and Retain My Address"/>
+                </apex:commandLink>
+            </TD>
+            <TD WIDTH="10%" ALIGN="LEFT">
+            </TD>
+        </TR>
+        </TABLE>
+    <apex:outputPanel layout="none" rendered="false">
+    {!Account.Status_of_D_B_Cleansing__c}
+    {!Account.D_B_Number__c}
+    {!Account.D_B_SIC_Code__c}
+    {!Account.D_B_SIC_Code_Description__c}
+    {!Account.D_B_NAICS_Code__c}
+    {!Account.D_B_NAICS_code_Description__c}
+    {!Account.D_B_Country__c}
+    {!Account.D_B_State_Province__c}
+    {!Account.D_B_City__c}
+    {!Account.D_B_Street__c}
+    {!Account.D_B_ZIP_Postal_Code__c}
+    </apex:outputPanel>
+    </apex:form>  
+    </apex:outputPanel>
+</apex:page>

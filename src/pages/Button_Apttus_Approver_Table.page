@@ -1,0 +1,7 @@
+<!--
+@Created By :   Scarlett Kang
+@Created Date:  May 27, 2015
+@Description:   Replace button on Apttus Approver Table to update Agreement records when system admin change approver 
+-->
+<apex:page standardController="Apttus_Approver_Table__c" extensions="Apttus_Approver_Table_Ext_Controller" action="{!Approvers}" >
+</apex:page>

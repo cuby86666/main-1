@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customSettingsType>List</customSettingsType>
+    <description>Consists of Community related URLS</description>
+    <enableFeeds>false</enableFeeds>
+    <fields>
+        <fullName>Answer_Like__c</fullName>
+        <description>The points for answer like.</description>
+        <externalId>false</externalId>
+        <label>Answer Like</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Answer_Post__c</fullName>
+        <description>The points For answer post</description>
+        <externalId>false</externalId>
+        <label>Answer Post</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CommuityMicrocontrollerZoneId__c</fullName>
+        <description>Micro controller Zone Id</description>
+        <externalId>false</externalId>
+        <label>CommuityMicrocontrollerZoneId</label>
+        <length>18</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CommunitiesStoryZoneId__c</fullName>
+        <description>Success story zone id</description>
+        <externalId>false</externalId>
+        <label>CommunitiesStoryZoneId</label>
+        <length>200</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CommunityEmployeeProfileId__c</fullName>
+        <externalId>false</externalId>
+        <label>CommunityEmployeeProfileId</label>
+        <length>18</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CommunityLoginUrl__c</fullName>
+        <description>Community Login Url</description>
+        <externalId>false</externalId>
+        <label>CommunityLoginUrl</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Url</type>
+    </fields>
+    <fields>
+        <fullName>CommunityRFZoneId__c</fullName>
+        <description>Community RF Zone Id</description>
+        <externalId>false</externalId>
+        <label>CommunityRFZoneId</label>
+        <length>18</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CommunitySignUpUrl__c</fullName>
+        <description>CommunitySignUpUrl</description>
+        <externalId>false</externalId>
+        <label>CommunitySignUpUrl</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Url</type>
+    </fields>
+    <fields>
+        <fullName>CommunityUserAccountId__c</fullName>
+        <description>This field captures the account Id to be used during registration process for Community Users.</description>
+        <externalId>false</externalId>
+        <label>CommunityUserAccountId</label>
+        <length>18</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CommunityUserProfileId__c</fullName>
+        <description>This field captures the profile Id to be used during registration process</description>
+        <externalId>false</externalId>
+        <label>CommunityUserProfileId</label>
+        <length>18</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>EmailVerficationLink__c</fullName>
+        <externalId>false</externalId>
+        <label>EmailVerficationLink</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Url</type>
+    </fields>
+    <fields>
+        <fullName>Idea_Post__c</fullName>
+        <description>the points for idea post</description>
+        <externalId>false</externalId>
+        <label>Idea Post</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>InternalUserSignInUrl__c</fullName>
+        <externalId>false</externalId>
+        <label>InternalUserSignInUrl</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Url</type>
+    </fields>
+    <fields>
+        <fullName>InternalUserSignUpUrl__c</fullName>
+        <externalId>false</externalId>
+        <label>InternalUserSignUpUrl</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Url</type>
+    </fields>
+    <fields>
+        <fullName>Project_Issue_CRM_link__c</fullName>
+        <description>CRM link for project issue.</description>
+        <externalId>false</externalId>
+        <label>Project Issue CRM link</label>
+        <length>200</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Question_BestReply__c</fullName>
+        <description>The points For question best Reply</description>
+        <externalId>false</externalId>
+        <label>Question BestReply</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Question_Like__c</fullName>
+        <description>The points For question like</description>
+        <externalId>false</externalId>
+        <label>Question Like</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Question_Limit__c</fullName>
+        <description>Field to dynamically change questions limit for commmunityForumQuestionListController</description>
+        <externalId>false</externalId>
+        <label>Question Limit</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Question_post__c</fullName>
+        <description>The points For question Post</description>
+        <externalId>false</externalId>
+        <label>Question post</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <label>CommunitySettings</label>
+    <visibility>Public</visibility>
+</CustomObject>

@@ -1,0 +1,16 @@
+/**
+ * NXP_Community - Generates the assets used for the NXP Community
+ * @version 1.0.0
+ * @author 7Summits
+ *
+ * COMPILED FILE DO NOT DIRECTLY EDIT
+ */
+.THIS a {
+  color: token(colorTextLink);
+  border-left: 1px;
+}
+.THIS a:first {
+  border: none;
+}
+
+/*# sourceMappingURL=Peak_HTML.css.map */

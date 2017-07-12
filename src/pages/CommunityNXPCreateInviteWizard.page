@@ -1,0 +1,67 @@
+<apex:page sidebar="false" standardStylesheets="false" showChat="false" showHeader="false" applyBodyTag="false" applyHtmlTag="false">
+    <html lang="en">
+    <!--[if lte IE 9]>
+        <div style="margin:5px;">
+            <h4 style="color:#cc3333;margin-bottom:5px;">Your Browser Is Not Supported!</h4>
+            <br/>
+            <p>Please upgrade to the latest version of <a href='http://getfirefox.com' style='text-decoration:underline;'>FireFox</a>,
+                <a href='https://www.google.com/chrome/browser/' style='text-decoration:underline;'>Chrome</a> or <a
+                    href='http://windows.microsoft.com/en-us/internet-explorer/download-ie'
+                    style='text-decoration:underline;'>Internet Explorer</a>.
+            </p>
+        </div>
+        <![endif]-->
+
+    <head>
+    </head>
+    <!-- START OF HEADER -->
+    <apex:composition template="CommunityNXPContextTemplate">
+        <apex:define name="body">
+
+            <body>
+                <apex:outputPanel id="refresh">
+                    <div class="container">
+
+                        <c:CommunityWizardHeader currentStep="step3" />
+
+                        <div class="row setup-content" id="step-1">
+
+                            <div class="col-xs-12">
+                                <div class="col-md-12">
+
+                                    <!-- <c:CommunityCaseComponent pController="{!parentController}" noContext="true" /> -->
+                                    <!--  <button class="btn btn-primary nextBtn btn-lg pull-right" type="button" >Next</button>-->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row setup-content" id="step-2">
+                            <div class="col-xs-12">
+                                <div class="col-md-12">
+                                    <!--<h3> Step 2</h3>-->
+                                    <!--   <c:CommunityContextComponent caseRecord="{!caseRecord.id}" mainController="{!parentController}" noContext="true"/>-->
+                                    <!-- <button class="btn btn-primary nextBtn btn-lg pull-right" type="button" >Next</button> -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row setup-content" id="step-3">
+                            <div class="col-xs-12">
+                                <div class="col-md-12">
+                                    <!-- <h3> Step 3</h3> -->
+                                    <c:CommunityContextInviteComponent entitlement="{!$CurrentPage.parameters.entitlementId}" noContext="true" />
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </apex:outputPanel>
+
+            </body>
+        </apex:define>
+    </apex:composition>
+
+    </html>
+</apex:page>

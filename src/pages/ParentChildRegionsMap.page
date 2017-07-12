@@ -1,0 +1,49 @@
+<!------------------------------------------------
+@Modified By :       Balaji Gunasekaran
+@Modified Date:      22 May 2015
+@Description:       As Part of CACC code impact analysis LineItem#29 
+                    - Commenting the whole page as this page and related controller class are not used anymore (confirmed with GSAS). 
+--------------------------------------------------->     
+<apex:page >
+<!------------------------------------------------ standardController="Account" extensions="parentChildAccountsController"  action="{!autoRunMap}" cache="false" showHeader="false" sidebar="false">
+    <table class="world_bg" width="100%" height="100%"><tr><td>
+  <apex:outputPanel layout="block" style="background:#ffffff url({!$Resource.World_Map}); width:640px; height:500px; background-repeat:no-repeat;background-position:top left; ">
+    <strong> 
+    <font color="cyan"> Total: {!TotalChildren} </font>
+
+    <apex:outputPanel layout="block" style="position: absolute; top: 65px; left: 340px; z-index: 2;">
+    <font color="yellow">EMEA: {!EMEA} </font>
+    </apex:outputPanel>
+
+    <apex:outputPanel layout="block" style="position: absolute; top: 65px; left: 120px; z-index: 2;">
+    <font color="lime"> Americas: {!Americas} </font>
+    </apex:outputPanel>
+
+    <apex:outputPanel layout="block" style="position: absolute; top: 110px; left: 480px; z-index: 2;">
+    <font color="red"> Greater China: {!GC} </font>
+    </apex:outputPanel>
+
+    <apex:outputPanel layout="block" style="position: absolute; top: 105px; left: 585px; z-index: 2;">
+    <font color="magenta"> Japan: {!Japan} </font>
+    </apex:outputPanel>
+
+    <apex:outputPanel layout="block" style="position: absolute; top: 85px; left: 530px; z-index: 2;">
+    <font color="blue"> Korea: {!Korea} </font>
+    </apex:outputPanel>
+
+    <apex:outputPanel layout="block" style="position: absolute; top: 145px; left: 470px; z-index: 2;">
+    <font color="orange"> South Asia Pacific: {!SAP} </font>
+    </apex:outputPanel>
+
+    </strong>
+  </apex:outputPanel>
+  <apex:outputPanel >
+  <table border="0">
+  <tr>
+  <td></td>
+  </tr>
+  </table>
+  </apex:outputPanel>
+    </td></tr></table> 
+--------------------------------------------------->     
+</apex:page>

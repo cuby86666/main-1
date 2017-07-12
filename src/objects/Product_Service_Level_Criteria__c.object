@@ -1,0 +1,3165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <allowInChatterGroups>true</allowInChatterGroups>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <description>Created as part of SIR 1331(2016.11): This object contains the fields required for identifying the product service level.</description>
+    <enableActivities>true</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableChangeDataCapture>false</enableChangeDataCapture>
+    <enableEnhancedLookup>true</enableEnhancedLookup>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <fields>
+        <fullName>Description__c</fullName>
+        <description>Created as part of SIR 1331(2016.11): This field contains the description for each rule record.</description>
+        <externalId>false</externalId>
+        <label>Description</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Product_Category__c</fullName>
+        <description>Created as part of SIR 1331(2016.11): This field is used for storing Product categories</description>
+        <externalId>false</externalId>
+        <label>Product Level 2</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <controllingField>Product__c</controllingField>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Amplifiers</fullName>
+                    <default>false</default>
+                    <label>Amplifiers</label>
+                </value>
+                <value>
+                    <fullName>Automotive</fullName>
+                    <default>false</default>
+                    <label>Automotive</label>
+                </value>
+                <value>
+                    <fullName>Data converters</fullName>
+                    <default>false</default>
+                    <label>Data converters</label>
+                </value>
+                <value>
+                    <fullName>Display drivers</fullName>
+                    <default>false</default>
+                    <label>Display drivers</label>
+                </value>
+                <value>
+                    <fullName>ESD, EMI and signal conditioning</fullName>
+                    <default>false</default>
+                    <label>ESD, EMI and signal conditioning</label>
+                </value>
+                <value>
+                    <fullName>Lighting driver and controller ICs</fullName>
+                    <default>false</default>
+                    <label>Lighting driver and controller ICs</label>
+                </value>
+                <value>
+                    <fullName>Media processors</fullName>
+                    <default>false</default>
+                    <label>Media processors</label>
+                </value>
+                <value>
+                    <fullName>MOSFETs</fullName>
+                    <default>false</default>
+                    <label>MOSFETs</label>
+                </value>
+                <value>
+                    <fullName>AM/FM Radio and Audio</fullName>
+                    <default>false</default>
+                    <label>AM/FM Radio and Audio</label>
+                </value>
+                <value>
+                    <fullName>Audio Amplifiers</fullName>
+                    <default>false</default>
+                    <label>Audio Amplifiers</label>
+                </value>
+                <value>
+                    <fullName>Multi Standard Digital Radio</fullName>
+                    <default>false</default>
+                    <label>Multi Standard Digital Radio</label>
+                </value>
+                <value>
+                    <fullName>Silicon Tuners</fullName>
+                    <default>false</default>
+                    <label>Silicon Tuners</label>
+                </value>
+                <value>
+                    <fullName>ESD Protection</fullName>
+                    <default>false</default>
+                    <label>ESD Protection</label>
+                </value>
+                <value>
+                    <fullName>Car Access and Immobilizers</fullName>
+                    <default>false</default>
+                    <label>Car Access and Immobilizers</label>
+                </value>
+                <value>
+                    <fullName>NFC and Reader ICs</fullName>
+                    <default>false</default>
+                    <label>NFC and Reader ICs</label>
+                </value>
+                <value>
+                    <fullName>Smart Label and Tag ICs</fullName>
+                    <default>false</default>
+                    <label>Smart Label and Tag ICs</label>
+                </value>
+                <value>
+                    <fullName>Interface and System Management</fullName>
+                    <default>false</default>
+                    <label>Interface and System Management</label>
+                </value>
+                <value>
+                    <fullName>ARM Processors</fullName>
+                    <default>false</default>
+                    <label>ARM Processors</label>
+                </value>
+                <value>
+                    <fullName>Wireless Power Receivers</fullName>
+                    <default>false</default>
+                    <label>Wireless Power Receivers</label>
+                </value>
+                <value>
+                    <fullName>Wireless Power Transmitters</fullName>
+                    <default>false</default>
+                    <label>Wireless Power Transmitters</label>
+                </value>
+                <value>
+                    <fullName>AC-to-DC Solutions</fullName>
+                    <default>false</default>
+                    <label>AC-to-DC Solutions</label>
+                </value>
+                <value>
+                    <fullName>Energy Measurement ICs</fullName>
+                    <default>false</default>
+                    <label>Energy Measurement ICs</label>
+                </value>
+                <value>
+                    <fullName>Linear Voltage Regulators</fullName>
+                    <default>false</default>
+                    <label>Linear Voltage Regulators</label>
+                </value>
+                <value>
+                    <fullName>Motor Drive ICs</fullName>
+                    <default>false</default>
+                    <label>Motor Drive ICs</label>
+                </value>
+                <value>
+                    <fullName>RF Power Transistors</fullName>
+                    <default>false</default>
+                    <label>RF Power Transistors</label>
+                </value>
+                <value>
+                    <fullName>RF Amplifiers - Low / Medium power</fullName>
+                    <default>false</default>
+                    <label>RF Amplifiers - Low / Medium power</label>
+                </value>
+                <value>
+                    <fullName>Control Circuits</fullName>
+                    <default>false</default>
+                    <label>Control Circuits</label>
+                </value>
+                <value>
+                    <fullName>Mixers</fullName>
+                    <default>false</default>
+                    <label>Mixers</label>
+                </value>
+                <value>
+                    <fullName>PLLs and Oscillators</fullName>
+                    <default>false</default>
+                    <label>PLLs and Oscillators</label>
+                </value>
+                <value>
+                    <fullName>Transistors</fullName>
+                    <default>false</default>
+                    <label>Transistors</label>
+                </value>
+                <value>
+                    <fullName>Angular Sensors</fullName>
+                    <default>false</default>
+                    <label>Angular Sensors</label>
+                </value>
+                <value>
+                    <fullName>Capacitive Sensors</fullName>
+                    <default>false</default>
+                    <label>Capacitive Sensors</label>
+                </value>
+                <value>
+                    <fullName>Rotational Sensors</fullName>
+                    <default>false</default>
+                    <label>Rotational Sensors</label>
+                </value>
+                <value>
+                    <fullName>Temperature Sensors</fullName>
+                    <default>false</default>
+                    <label>Temperature Sensors</label>
+                </value>
+                <value>
+                    <fullName>Wireless Connectivity</fullName>
+                    <default>false</default>
+                    <label>Wireless Connectivity</label>
+                </value>
+                <value>
+                    <fullName>Power Architecture</fullName>
+                    <default>false</default>
+                    <label>Power Architecture</label>
+                </value>
+                <value>
+                    <fullName>Wireless Charging ICs</fullName>
+                    <default>false</default>
+                    <label>Wireless Charging ICs</label>
+                </value>
+                <value>
+                    <fullName>Battery Management</fullName>
+                    <default>false</default>
+                    <label>Battery Management</label>
+                </value>
+                <value>
+                    <fullName>PMICs</fullName>
+                    <default>false</default>
+                    <label>PMICs</label>
+                </value>
+                <value>
+                    <fullName>Power over Ethernet (PoE)</fullName>
+                    <default>false</default>
+                    <label>Power over Ethernet (PoE)</label>
+                </value>
+                <value>
+                    <fullName>Switching Regulator</fullName>
+                    <default>false</default>
+                    <label>Switching Regulator</label>
+                </value>
+                <value>
+                    <fullName>Automotive Radar</fullName>
+                    <default>false</default>
+                    <label>Automotive Radar</label>
+                </value>
+                <value>
+                    <fullName>6-Axis Sensors</fullName>
+                    <default>false</default>
+                    <label>6-Axis Sensors</label>
+                </value>
+                <value>
+                    <fullName>Accelerometers</fullName>
+                    <default>false</default>
+                    <label>Accelerometers</label>
+                </value>
+                <value>
+                    <fullName>Gyroscopes</fullName>
+                    <default>false</default>
+                    <label>Gyroscopes</label>
+                </value>
+                <value>
+                    <fullName>Intelligent Sensors and Sensor Hubs</fullName>
+                    <default>false</default>
+                    <label>Intelligent Sensors and Sensor Hubs</label>
+                </value>
+                <value>
+                    <fullName>Magnetometers</fullName>
+                    <default>false</default>
+                    <label>Magnetometers</label>
+                </value>
+                <value>
+                    <fullName>Touch Sensors</fullName>
+                    <default>false</default>
+                    <label>Touch Sensors</label>
+                </value>
+                <value>
+                    <fullName>pressure sensors</fullName>
+                    <default>false</default>
+                    <label>pressure sensors</label>
+                </value>
+                <value>
+                    <fullName>Surveillance IP Camera</fullName>
+                    <default>false</default>
+                    <label>Surveillance IP Camera</label>
+                </value>
+                <value>
+                    <fullName>Network Security Technology</fullName>
+                    <default>false</default>
+                    <label>Network Security Technology</label>
+                </value>
+                <value>
+                    <fullName>Secure Authentication and Anti-Counterfeit Technology</fullName>
+                    <default>false</default>
+                    <label>Secure Authentication and Anti-Counterfeit Technology</label>
+                </value>
+                <value>
+                    <fullName>Security Controller ICs</fullName>
+                    <default>false</default>
+                    <label>Security Controller ICs</label>
+                </value>
+                <value>
+                    <fullName>I2C-Bus Portfolio</fullName>
+                    <default>false</default>
+                    <label>I2C-Bus Portfolio</label>
+                </value>
+                <value>
+                    <fullName>Comparators</fullName>
+                    <default>false</default>
+                    <label>Comparators</label>
+                </value>
+                <value>
+                    <fullName>High-Speed Multiplexer</fullName>
+                    <default>false</default>
+                    <label>High-Speed Multiplexer</label>
+                </value>
+                <value>
+                    <fullName>Memory Data Switches</fullName>
+                    <default>false</default>
+                    <label>Memory Data Switches</label>
+                </value>
+                <value>
+                    <fullName>Analog Switches</fullName>
+                    <default>false</default>
+                    <label>Analog Switches</label>
+                </value>
+                <value>
+                    <fullName>Analog Watch Motor Drivers</fullName>
+                    <default>false</default>
+                    <label>Analog Watch Motor Drivers</label>
+                </value>
+                <value>
+                    <fullName>Automotive Breaking Systems</fullName>
+                    <default>false</default>
+                    <label>Automotive Breaking Systems</label>
+                </value>
+                <value>
+                    <fullName>Bridges</fullName>
+                    <default>false</default>
+                    <label>Bridges</label>
+                </value>
+                <value>
+                    <fullName>Car Radio On-Off Logic</fullName>
+                    <default>false</default>
+                    <label>Car Radio On-Off Logic</label>
+                </value>
+                <value>
+                    <fullName>Clock distribution</fullName>
+                    <default>false</default>
+                    <label>Clock distribution</label>
+                </value>
+                <value>
+                    <fullName>DSI and PSI5 Components</fullName>
+                    <default>false</default>
+                    <label>DSI and PSI5 Components</label>
+                </value>
+                <value>
+                    <fullName>Voltage Level Translators</fullName>
+                    <default>false</default>
+                    <label>Voltage Level Translators</label>
+                </value>
+                <value>
+                    <fullName>Real-Time Clocks</fullName>
+                    <default>false</default>
+                    <label>Real-Time Clocks</label>
+                </value>
+                <value>
+                    <fullName>Switch Monitoring ICs</fullName>
+                    <default>false</default>
+                    <label>Switch Monitoring ICs</label>
+                </value>
+                <value>
+                    <fullName>LCD Drivers</fullName>
+                    <default>false</default>
+                    <label>LCD Drivers</label>
+                </value>
+                <value>
+                    <fullName>Modems</fullName>
+                    <default>false</default>
+                    <label>Modems</label>
+                </value>
+                <value>
+                    <fullName>ISO K Line</fullName>
+                    <default>false</default>
+                    <label>ISO K Line</label>
+                </value>
+                <value>
+                    <fullName>IO-Link Serial Communication</fullName>
+                    <default>false</default>
+                    <label>IO-Link Serial Communication</label>
+                </value>
+                <value>
+                    <fullName>Isolated Communications Devices</fullName>
+                    <default>false</default>
+                    <label>Isolated Communications Devices</label>
+                </value>
+                <value>
+                    <fullName>Video SERDES</fullName>
+                    <default>false</default>
+                    <label>Video SERDES</label>
+                </value>
+                <value>
+                    <fullName>PCI/PCI Express</fullName>
+                    <default>false</default>
+                    <label>PCI/PCI Express</label>
+                </value>
+                <value>
+                    <fullName>Signal Conditioners</fullName>
+                    <default>false</default>
+                    <label>Signal Conditioners</label>
+                </value>
+                <value>
+                    <fullName>UARTs</fullName>
+                    <default>false</default>
+                    <label>UARTs</label>
+                </value>
+                <value>
+                    <fullName>USB Interfaces</fullName>
+                    <default>false</default>
+                    <label>USB Interfaces</label>
+                </value>
+                <value>
+                    <fullName>CAN Protocol Controllers</fullName>
+                    <default>false</default>
+                    <label>CAN Protocol Controllers</label>
+                </value>
+                <value>
+                    <fullName>CAN/LIN/FlexRay Transceivers</fullName>
+                    <default>false</default>
+                    <label>CAN/LIN/FlexRay Transceivers</label>
+                </value>
+                <value>
+                    <fullName>Ethernet</fullName>
+                    <default>false</default>
+                    <label>Ethernet</label>
+                </value>
+                <value>
+                    <fullName>Demodulators</fullName>
+                    <default>false</default>
+                    <label>Demodulators</label>
+                </value>
+                <value>
+                    <fullName>16-bit S12(X) &amp; Magni V</fullName>
+                    <default>false</default>
+                    <label>16-bit S12(X) &amp; Magni V</label>
+                </value>
+                <value>
+                    <fullName>8-bit S08</fullName>
+                    <default>false</default>
+                    <label>8-bit S08</label>
+                </value>
+                <value>
+                    <fullName>C29x Family of Crypto Coprocessors</fullName>
+                    <default>false</default>
+                    <label>C29x Family of Crypto Coprocessors</label>
+                </value>
+                <value>
+                    <fullName>ColdFire+/ColdFire MCUs/MPUs</fullName>
+                    <default>false</default>
+                    <label>ColdFire+/ColdFire MCUs/MPUs</label>
+                </value>
+                <value>
+                    <fullName>Digital Signal Processors/Controllers</fullName>
+                    <default>false</default>
+                    <label>Digital Signal Processors/Controllers</label>
+                </value>
+                <value>
+                    <fullName>System Basis Chips</fullName>
+                    <default>false</default>
+                    <label>System Basis Chips</label>
+                </value>
+                <value>
+                    <fullName>Pre-Drivers/Squib-Drivers</fullName>
+                    <default>false</default>
+                    <label>Pre-Drivers/Squib-Drivers</label>
+                </value>
+                <value>
+                    <fullName>DC-to-DC Solutions</fullName>
+                    <default>false</default>
+                    <label>DC-to-DC Solutions</label>
+                </value>
+                <value>
+                    <fullName>El. Motor Control</fullName>
+                    <default>false</default>
+                    <label>El. Motor Control</label>
+                </value>
+                <value>
+                    <fullName>Engine Control</fullName>
+                    <default>false</default>
+                    <label>Engine Control</label>
+                </value>
+                <value>
+                    <fullName>Load Switches</fullName>
+                    <default>false</default>
+                    <label>Load Switches</label>
+                </value>
+                <value>
+                    <fullName>RF Transistors - Low Power</fullName>
+                    <default>false</default>
+                    <label>RF Transistors - Low Power</label>
+                </value>
+                <value>
+                    <fullName>RF Transistors - Power</fullName>
+                    <default>false</default>
+                    <label>RF Transistors - Power</label>
+                </value>
+                <value>
+                    <fullName>RF Tuners</fullName>
+                    <default>false</default>
+                    <label>RF Tuners</label>
+                </value>
+                <value>
+                    <fullName>RF Control Circuits</fullName>
+                    <default>false</default>
+                    <label>RF Control Circuits</label>
+                </value>
+                <value>
+                    <fullName>RF Digital Front End Processors</fullName>
+                    <default>false</default>
+                    <label>RF Digital Front End Processors</label>
+                </value>
+                <value>
+                    <fullName>RF Low Power Tx / Rx ICs</fullName>
+                    <default>false</default>
+                    <label>RF Low Power Tx / Rx ICs</label>
+                </value>
+                <value>
+                    <fullName>RF Millimeter-Wave Solutions</fullName>
+                    <default>false</default>
+                    <label>RF Millimeter-Wave Solutions</label>
+                </value>
+                <value>
+                    <fullName>RF Mixers</fullName>
+                    <default>false</default>
+                    <label>RF Mixers</label>
+                </value>
+                <value>
+                    <fullName>RF PLLs and Oscillators</fullName>
+                    <default>false</default>
+                    <label>RF PLLs and Oscillators</label>
+                </value>
+                <value>
+                    <fullName>Voltage Monitors</fullName>
+                    <default>false</default>
+                    <label>Voltage Monitors</label>
+                </value>
+                <value>
+                    <fullName>SCM-i.MX</fullName>
+                    <default>false</default>
+                    <label>SCM-i.MX</label>
+                </value>
+                <value>
+                    <fullName>Hardware Development Tools</fullName>
+                    <default>false</default>
+                    <label>Hardware Development Tools</label>
+                </value>
+                <value>
+                    <fullName>Models and test data</fullName>
+                    <default>false</default>
+                    <label>Models and test data</label>
+                </value>
+                <value>
+                    <fullName>Run-time Software</fullName>
+                    <default>false</default>
+                    <label>Run-time Software</label>
+                </value>
+                <value>
+                    <fullName>Sensor Toolbox</fullName>
+                    <default>false</default>
+                    <label>Sensor Toolbox</label>
+                </value>
+                <value>
+                    <fullName>Software Development Tools</fullName>
+                    <default>false</default>
+                    <label>Software Development Tools</label>
+                </value>
+                <value>
+                    <fullName>2.4 GHz Wireless Solutions</fullName>
+                    <default>false</default>
+                    <label>2.4 GHz Wireless Solutions</label>
+                </value>
+                <value>
+                    <fullName>MiGLO™ Hearables Solutions</fullName>
+                    <default>false</default>
+                    <label>MiGLO™ Hearables Solutions</label>
+                </value>
+                <value>
+                    <fullName>Sub-1 GHz Wireless Solutions (UHF)</fullName>
+                    <default>false</default>
+                    <label>Sub-1 GHz Wireless Solutions (UHF)</label>
+                </value>
+                <value>
+                    <fullName>AISG transceivers and controllers</fullName>
+                    <default>false</default>
+                    <label>AISG transceivers and controllers</label>
+                </value>
+                <value>
+                    <fullName>NFMI Radio Solutions</fullName>
+                    <default>false</default>
+                    <label>NFMI Radio Solutions</label>
+                </value>
+                <value>
+                    <fullName>Other</fullName>
+                    <default>false</default>
+                    <label>Other</label>
+                </value>
+                <value>
+                    <fullName>Amplifiers for Portable Devices</fullName>
+                    <default>false</default>
+                    <isActive>false</isActive>
+                    <label>Amplifiers for Portable Devices</label>
+                </value>
+                <value>
+                    <fullName>Analog Signal Processors</fullName>
+                    <default>false</default>
+                    <isActive>false</isActive>
+                    <label>Analog Signal Processors</label>
+                </value>
+                <value>
+                    <fullName>Audio / video</fullName>
+                    <default>false</default>
+                    <isActive>false</isActive>
+                    <label>Audio / video</label>
+                </value>
+                <value>
+                    <fullName>Audio/radio</fullName>
+                    <default>false</default>
+                    <isActive>false</isActive>
+                    <label>Audio/radio</label>
+                </value>
+                <value>
+                    <fullName>Authentication</fullName>
+                    <default>false</default>
+                    <isActive>false</isActive>
+                    <label>Authentication</label>
+                </value>
+                <value>
+                    <fullName>Bipolar transistors</fullName>
+                    <default>false</default>
+                    <isActive>false</isActive>
+                    <label>Bipolar transistors</label>
+                </value>
+                <value>
+                    <fullName>Car Radio &amp; Audio DSP Solutions</fullName>
+                    <default>false</default>
+                    <isActive>false</isActive>
+                    <label>Car Radio &amp; Audio DSP Solutions</label>
+                </value>
+                <value>
+                    <fullName>Digital Demodulators</fullName>
+                    <default>false</default>
+                    <isActive>false</isActive>
+                    <label>Digital Demodulators</label>
+                </value>
+                <value>
+                    <fullName>Digital Front End Processors</fullName>
+                    <default>false</default>
+                    <isActive>false</isActive>
+                    <label>Digital Front End Processors</label>
+                </value>
+                <value>
+                    <fullName>Diodes</fullName>
+                    <default>false</default>
+                    <isActive>false</isActive>
+                    <label>Diodes</label>
+                </value>
+                <value>
+                    <fullName>Engine and DC Motor Control</fullName>
+                    <default>false</default>
+                    <isActive>false</isActive>
+                    <label>Engine and DC Motor Control</label>
+                </value>
+                <value>
+                    <fullName>General Products</fullName>
+                    <default>false</default>
+                    <isActive>false</isActive>
+                    <label>General Products</label>
+                </value>
+                <value>
+                    <fullName>Human Resources</fullName>
+                    <default>false</default>
+                    <isActive>false</isActive>
+                    <label>Human Resources</label>
+                </value>
+                <value>
+                    <fullName>I2C Temperature &amp; Voltage Monitors</fullName>
+                    <default>false</default>
+                    <isActive>false</isActive>
+                    <label>I2C Temperature &amp; Voltage Monitors</label>
+                </value>
+                <value>
+                    <fullName>IF Demodulators</fullName>
+                    <default>false</default>
+                    <isActive>false</isActive>
+                    <label>IF Demodulators</label>
+                </value>
+                <value>
+                    <fullName>Identification and Security and Surveillance IP Camera</fullName>
+                    <default>false</default>
+                    <isActive>false</isActive>
+                    <label>Identification and Security and Surveillance IP Camera</label>
+                </value>
+                <value>
+                    <fullName>Identification and security</fullName>
+                    <default>false</default>
+                    <isActive>false</isActive>
+                    <label>Identification and security</label>
+                </value>
+                <value>
+                    <fullName>Interface and connectivity</fullName>
+                    <default>false</default>
+                    <isActive>false</isActive>
+                    <label>Interface and connectivity</label>
+                </value>
+                <value>
+                    <fullName>Linear Regulators</fullName>
+                    <default>false</default>
+                    <isActive>false</isActive>
+                    <label>Linear Regulators</label>
+                </value>
+                <value>
+                    <fullName>Logic</fullName>
+                    <default>false</default>
+                    <isActive>false</isActive>
+                    <label>Logic</label>
+                </value>
+                <value>
+                    <fullName>Logistics</fullName>
+                    <default>false</default>
+                    <isActive>false</isActive>
+                    <label>Logistics</label>
+                </value>
+                <value>
+                    <fullName>Low Power Tx / Rx</fullName>
+                    <default>false</default>
+                    <isActive>false</isActive>
+                    <label>Low Power Tx / Rx</label>
+                </value>
+                <value>
+                    <fullName>Microcontrollers</fullName>
+                    <default>false</default>
+                    <isActive>false</isActive>
+                    <label>Microcontrollers</label>
+                </value>
+                <value>
+                    <fullName>More Processors</fullName>
+                    <default>false</default>
+                    <isActive>false</isActive>
+                    <label>More Processors</label>
+                </value>
+                <value>
+                    <fullName>No Specific Category</fullName>
+                    <default>false</default>
+                    <isActive>false</isActive>
+                    <label>No Specific Category</label>
+                </value>
+                <value>
+                    <fullName>One-Chip Radio</fullName>
+                    <default>false</default>
+                    <isActive>false</isActive>
+                    <label>One-Chip Radio</label>
+                </value>
+                <value>
+                    <fullName>Power management ICs</fullName>
+                    <default>false</default>
+                    <isActive>false</isActive>
+                    <label>Power management ICs</label>
+                </value>
+                <value>
+                    <fullName>Public Relations</fullName>
+                    <default>false</default>
+                    <isActive>false</isActive>
+                    <label>Public Relations</label>
+                </value>
+                <value>
+                    <fullName>RF</fullName>
+                    <default>false</default>
+                    <isActive>false</isActive>
+                    <label>RF</label>
+                </value>
+                <value>
+                    <fullName>Sensors</fullName>
+                    <default>false</default>
+                    <isActive>false</isActive>
+                    <label>Sensors</label>
+                </value>
+                <value>
+                    <fullName>Single-Chip Tuner/ASP (car radio)</fullName>
+                    <default>false</default>
+                    <isActive>false</isActive>
+                    <label>Single-Chip Tuner/ASP (car radio)</label>
+                </value>
+                <value>
+                    <fullName>Smart Card ICs</fullName>
+                    <default>false</default>
+                    <isActive>false</isActive>
+                    <label>Smart Card ICs</label>
+                </value>
+                <value>
+                    <fullName>TV and STB front ends</fullName>
+                    <default>false</default>
+                    <isActive>false</isActive>
+                    <label>TV and STB front ends</label>
+                </value>
+                <value>
+                    <fullName>Thyristors</fullName>
+                    <default>false</default>
+                    <isActive>false</isActive>
+                    <label>Thyristors</label>
+                </value>
+                <value>
+                    <fullName>Tuners</fullName>
+                    <default>false</default>
+                    <isActive>false</isActive>
+                    <label>Tuners</label>
+                </value>
+                <value>
+                    <fullName>Wired Connectivity</fullName>
+                    <default>false</default>
+                    <isActive>false</isActive>
+                    <label>Wired Connectivity</label>
+                </value>
+            </valueSetDefinition>
+            <valueSettings>
+                <controllingFieldValue>Software and HW Development Tools</controllingFieldValue>
+                <valueName>Hardware Development Tools</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Software and HW Development Tools</controllingFieldValue>
+                <valueName>Models and test data</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Software and HW Development Tools</controllingFieldValue>
+                <valueName>Run-time Software</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Software and HW Development Tools</controllingFieldValue>
+                <valueName>Sensor Toolbox</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Software and HW Development Tools</controllingFieldValue>
+                <valueName>Software Development Tools</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Software and HW Development Tools</controllingFieldValue>
+                <controllingFieldValue>Audio and Media Processing</controllingFieldValue>
+                <controllingFieldValue>Wireless Connectivity</controllingFieldValue>
+                <controllingFieldValue>Identification and Security</controllingFieldValue>
+                <controllingFieldValue>Interface and Connectivity</controllingFieldValue>
+                <controllingFieldValue>Microcontrollers and Processors</controllingFieldValue>
+                <controllingFieldValue>Power Management</controllingFieldValue>
+                <controllingFieldValue>RF</controllingFieldValue>
+                <controllingFieldValue>Sensors</controllingFieldValue>
+                <controllingFieldValue>Other</controllingFieldValue>
+                <valueName>Other</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Audio and Media Processing</controllingFieldValue>
+                <valueName>Data converters</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Audio and Media Processing</controllingFieldValue>
+                <valueName>Media processors</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Audio and Media Processing</controllingFieldValue>
+                <valueName>AM/FM Radio and Audio</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Audio and Media Processing</controllingFieldValue>
+                <valueName>Audio Amplifiers</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Audio and Media Processing</controllingFieldValue>
+                <valueName>Multi Standard Digital Radio</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Audio and Media Processing</controllingFieldValue>
+                <valueName>Silicon Tuners</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Audio and Media Processing</controllingFieldValue>
+                <valueName>Demodulators</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Wireless Connectivity</controllingFieldValue>
+                <controllingFieldValue>Identification and Security</controllingFieldValue>
+                <valueName>NFC and Reader ICs</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Wireless Connectivity</controllingFieldValue>
+                <valueName>2.4 GHz Wireless Solutions</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Wireless Connectivity</controllingFieldValue>
+                <valueName>MiGLO™ Hearables Solutions</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Wireless Connectivity</controllingFieldValue>
+                <valueName>Sub-1 GHz Wireless Solutions (UHF)</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Wireless Connectivity</controllingFieldValue>
+                <valueName>AISG transceivers and controllers</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Wireless Connectivity</controllingFieldValue>
+                <valueName>NFMI Radio Solutions</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Identification and Security</controllingFieldValue>
+                <valueName>Car Access and Immobilizers</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Identification and Security</controllingFieldValue>
+                <valueName>Smart Label and Tag ICs</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Identification and Security</controllingFieldValue>
+                <valueName>Surveillance IP Camera</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Identification and Security</controllingFieldValue>
+                <valueName>Network Security Technology</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Identification and Security</controllingFieldValue>
+                <valueName>Secure Authentication and Anti-Counterfeit Technology</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Identification and Security</controllingFieldValue>
+                <valueName>Security Controller ICs</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Interface and Connectivity</controllingFieldValue>
+                <valueName>I2C-Bus Portfolio</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Interface and Connectivity</controllingFieldValue>
+                <valueName>Comparators</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Interface and Connectivity</controllingFieldValue>
+                <valueName>High-Speed Multiplexer</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Interface and Connectivity</controllingFieldValue>
+                <valueName>Memory Data Switches</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Interface and Connectivity</controllingFieldValue>
+                <valueName>Analog Switches</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Interface and Connectivity</controllingFieldValue>
+                <valueName>Analog Watch Motor Drivers</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Interface and Connectivity</controllingFieldValue>
+                <valueName>Automotive Breaking Systems</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Interface and Connectivity</controllingFieldValue>
+                <valueName>Bridges</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Interface and Connectivity</controllingFieldValue>
+                <valueName>Car Radio On-Off Logic</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Interface and Connectivity</controllingFieldValue>
+                <valueName>Clock distribution</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Interface and Connectivity</controllingFieldValue>
+                <valueName>DSI and PSI5 Components</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Interface and Connectivity</controllingFieldValue>
+                <valueName>Voltage Level Translators</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Interface and Connectivity</controllingFieldValue>
+                <valueName>Real-Time Clocks</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Interface and Connectivity</controllingFieldValue>
+                <valueName>Switch Monitoring ICs</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Interface and Connectivity</controllingFieldValue>
+                <valueName>LCD Drivers</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Interface and Connectivity</controllingFieldValue>
+                <valueName>Modems</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Interface and Connectivity</controllingFieldValue>
+                <valueName>ISO K Line</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Interface and Connectivity</controllingFieldValue>
+                <valueName>IO-Link Serial Communication</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Interface and Connectivity</controllingFieldValue>
+                <valueName>Isolated Communications Devices</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Interface and Connectivity</controllingFieldValue>
+                <valueName>Video SERDES</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Interface and Connectivity</controllingFieldValue>
+                <valueName>PCI/PCI Express</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Interface and Connectivity</controllingFieldValue>
+                <valueName>Signal Conditioners</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Interface and Connectivity</controllingFieldValue>
+                <valueName>UARTs</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Interface and Connectivity</controllingFieldValue>
+                <valueName>USB Interfaces</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Interface and Connectivity</controllingFieldValue>
+                <valueName>CAN Protocol Controllers</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Interface and Connectivity</controllingFieldValue>
+                <valueName>CAN/LIN/FlexRay Transceivers</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Interface and Connectivity</controllingFieldValue>
+                <valueName>Ethernet</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Microcontrollers and Processors</controllingFieldValue>
+                <valueName>ARM Processors</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Microcontrollers and Processors</controllingFieldValue>
+                <valueName>Power Architecture</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Microcontrollers and Processors</controllingFieldValue>
+                <valueName>16-bit S12(X) &amp; Magni V</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Microcontrollers and Processors</controllingFieldValue>
+                <valueName>8-bit S08</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Microcontrollers and Processors</controllingFieldValue>
+                <valueName>C29x Family of Crypto Coprocessors</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Microcontrollers and Processors</controllingFieldValue>
+                <valueName>ColdFire+/ColdFire MCUs/MPUs</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Microcontrollers and Processors</controllingFieldValue>
+                <valueName>Digital Signal Processors/Controllers</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Power Management</controllingFieldValue>
+                <valueName>Lighting driver and controller ICs</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Power Management</controllingFieldValue>
+                <valueName>MOSFETs</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Power Management</controllingFieldValue>
+                <valueName>Wireless Power Receivers</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Power Management</controllingFieldValue>
+                <valueName>Wireless Power Transmitters</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Power Management</controllingFieldValue>
+                <valueName>AC-to-DC Solutions</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Power Management</controllingFieldValue>
+                <valueName>Energy Measurement ICs</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Power Management</controllingFieldValue>
+                <valueName>Linear Voltage Regulators</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Power Management</controllingFieldValue>
+                <valueName>Wireless Charging ICs</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Power Management</controllingFieldValue>
+                <valueName>Battery Management</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Power Management</controllingFieldValue>
+                <valueName>PMICs</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Power Management</controllingFieldValue>
+                <valueName>Power over Ethernet (PoE)</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Power Management</controllingFieldValue>
+                <valueName>Switching Regulator</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Power Management</controllingFieldValue>
+                <valueName>System Basis Chips</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Power Management</controllingFieldValue>
+                <valueName>Pre-Drivers/Squib-Drivers</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Power Management</controllingFieldValue>
+                <valueName>DC-to-DC Solutions</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Power Management</controllingFieldValue>
+                <valueName>El. Motor Control</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Power Management</controllingFieldValue>
+                <valueName>Engine Control</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Power Management</controllingFieldValue>
+                <valueName>Load Switches</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>RF</controllingFieldValue>
+                <valueName>RF Amplifiers - Low / Medium power</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>RF</controllingFieldValue>
+                <valueName>RF Transistors - Low Power</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>RF</controllingFieldValue>
+                <valueName>RF Transistors - Power</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>RF</controllingFieldValue>
+                <valueName>RF Tuners</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>RF</controllingFieldValue>
+                <valueName>RF Control Circuits</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>RF</controllingFieldValue>
+                <valueName>RF Digital Front End Processors</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>RF</controllingFieldValue>
+                <valueName>RF Low Power Tx / Rx ICs</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>RF</controllingFieldValue>
+                <valueName>RF Millimeter-Wave Solutions</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>RF</controllingFieldValue>
+                <valueName>RF Mixers</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>RF</controllingFieldValue>
+                <valueName>RF PLLs and Oscillators</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Sensors</controllingFieldValue>
+                <valueName>Angular Sensors</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Sensors</controllingFieldValue>
+                <valueName>Capacitive Sensors</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Sensors</controllingFieldValue>
+                <valueName>Rotational Sensors</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Sensors</controllingFieldValue>
+                <valueName>Temperature Sensors</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Sensors</controllingFieldValue>
+                <valueName>6-Axis Sensors</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Sensors</controllingFieldValue>
+                <valueName>Accelerometers</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Sensors</controllingFieldValue>
+                <valueName>Gyroscopes</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Sensors</controllingFieldValue>
+                <valueName>Intelligent Sensors and Sensor Hubs</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Sensors</controllingFieldValue>
+                <valueName>Magnetometers</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Sensors</controllingFieldValue>
+                <valueName>Touch Sensors</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Sensors</controllingFieldValue>
+                <valueName>pressure sensors</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Sensors</controllingFieldValue>
+                <valueName>Voltage Monitors</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Single Chip Modules</controllingFieldValue>
+                <valueName>SCM-i.MX</valueName>
+            </valueSettings>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Product_Service_Level__c</fullName>
+        <description>Created as part of SIR 1331(2016.11): This field contains the product service level value</description>
+        <externalId>false</externalId>
+        <label>Product Service Level</label>
+        <length>20</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Product_Sub__c</fullName>
+        <description>Created as part of SIR 1331(2016.11): This field contains values of product sub category.</description>
+        <externalId>false</externalId>
+        <label>Product Level 3</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <controllingField>Product_Category__c</controllingField>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>1-Axis Accelerometers</fullName>
+                    <default>false</default>
+                    <label>1-Axis Accelerometers</label>
+                </value>
+                <value>
+                    <fullName>2-Axis Accelerometers</fullName>
+                    <default>false</default>
+                    <label>2-Axis Accelerometers</label>
+                </value>
+                <value>
+                    <fullName>3-Axis Accelerometers</fullName>
+                    <default>false</default>
+                    <label>3-Axis Accelerometers</label>
+                </value>
+                <value>
+                    <fullName>AC-DC Controllers</fullName>
+                    <default>false</default>
+                    <label>AC-DC Controllers</label>
+                </value>
+                <value>
+                    <fullName>AC-DC Controllers with Integrated PFC</fullName>
+                    <default>false</default>
+                    <label>AC-DC Controllers with Integrated PFC</label>
+                </value>
+                <value>
+                    <fullName>AC-DC Controllers with Integrated Power Switch</fullName>
+                    <default>false</default>
+                    <label>AC-DC Controllers with Integrated Power Switch</label>
+                </value>
+                <value>
+                    <fullName>AC LED Driver ICs, Dimmable</fullName>
+                    <default>false</default>
+                    <label>AC LED Driver ICs, Dimmable</label>
+                </value>
+                <value>
+                    <fullName>AC-to-DC solutions</fullName>
+                    <default>false</default>
+                    <label>AC-to-DC solutions</label>
+                </value>
+                <value>
+                    <fullName>Analog Expert Software and Tools</fullName>
+                    <default>false</default>
+                    <label>Analog Expert Software and Tools</label>
+                </value>
+                <value>
+                    <fullName>Analog Toolbox</fullName>
+                    <default>false</default>
+                    <label>Analog Toolbox</label>
+                </value>
+                <value>
+                    <fullName>ASK</fullName>
+                    <default>false</default>
+                    <label>ASK</label>
+                </value>
+                <value>
+                    <fullName>Audio Amplifiers for Portable Devices</fullName>
+                    <default>false</default>
+                    <label>Audio Amplifiers for Portable Devices</label>
+                </value>
+                <value>
+                    <fullName>Audio converters</fullName>
+                    <default>false</default>
+                    <label>Audio converters</label>
+                </value>
+                <value>
+                    <fullName>Automotive NFC</fullName>
+                    <default>false</default>
+                    <label>Automotive NFC</label>
+                </value>
+                <value>
+                    <fullName>Barometric Pressure 15 to 115 kPa</fullName>
+                    <default>false</default>
+                    <label>Barometric Pressure 15 to 115 kPa</label>
+                </value>
+                <value>
+                    <fullName>Battery Cell Controllers</fullName>
+                    <default>false</default>
+                    <label>Battery Cell Controllers</label>
+                </value>
+                <value>
+                    <fullName>Battery Chargers</fullName>
+                    <default>false</default>
+                    <label>Battery Chargers</label>
+                </value>
+                <value>
+                    <fullName>Battery Sensors</fullName>
+                    <default>false</default>
+                    <label>Battery Sensors</label>
+                </value>
+                <value>
+                    <fullName>Bluetooth Low Energy (BLE)</fullName>
+                    <default>false</default>
+                    <label>Bluetooth Low Energy (BLE)</label>
+                </value>
+                <value>
+                    <fullName>Cable and terrestrial silicon tuners</fullName>
+                    <default>false</default>
+                    <label>Cable and terrestrial silicon tuners</label>
+                </value>
+                <value>
+                    <fullName>CAN Protocol Controllers</fullName>
+                    <default>false</default>
+                    <label>CAN Protocol Controllers</label>
+                </value>
+                <value>
+                    <fullName>Car radio &amp; audio DSP solutions</fullName>
+                    <default>false</default>
+                    <label>Car radio &amp; audio DSP solutions</label>
+                </value>
+                <value>
+                    <fullName>CFL and HF-TL Drivers - Dimmable</fullName>
+                    <default>false</default>
+                    <label>CFL and HF-TL Drivers - Dimmable</label>
+                </value>
+                <value>
+                    <fullName>CFL and HF-TL Drivers - Fixed Output</fullName>
+                    <default>false</default>
+                    <label>CFL and HF-TL Drivers - Fixed Output</label>
+                </value>
+                <value>
+                    <fullName>Class-AB</fullName>
+                    <default>false</default>
+                    <label>Class-AB</label>
+                </value>
+                <value>
+                    <fullName>Class-AB (car radio)</fullName>
+                    <default>false</default>
+                    <label>Class-AB (car radio)</label>
+                </value>
+                <value>
+                    <fullName>Class-D</fullName>
+                    <default>false</default>
+                    <label>Class-D</label>
+                </value>
+                <value>
+                    <fullName>Class-D (car radio)</fullName>
+                    <default>false</default>
+                    <label>Class-D (car radio)</label>
+                </value>
+                <value>
+                    <fullName>CodeWarrior Development Tools</fullName>
+                    <default>false</default>
+                    <label>CodeWarrior Development Tools</label>
+                </value>
+                <value>
+                    <fullName>Community Boards</fullName>
+                    <default>false</default>
+                    <label>Community Boards</label>
+                </value>
+                <value>
+                    <fullName>Compact Models (SiMKit)</fullName>
+                    <default>false</default>
+                    <label>Compact Models (SiMKit)</label>
+                </value>
+                <value>
+                    <fullName>Configurable PMICs (PF Series)</fullName>
+                    <default>false</default>
+                    <label>Configurable PMICs (PF Series)</label>
+                </value>
+                <value>
+                    <fullName>Connected tag solutions</fullName>
+                    <default>false</default>
+                    <label>Connected tag solutions</label>
+                </value>
+                <value>
+                    <fullName>Contact smart card reader ICs</fullName>
+                    <default>false</default>
+                    <label>Contact smart card reader ICs</label>
+                </value>
+                <value>
+                    <fullName>Cryptographic Acceleration Technology</fullName>
+                    <default>false</default>
+                    <label>Cryptographic Acceleration Technology</label>
+                </value>
+                <value>
+                    <fullName>Cryptography Export Control</fullName>
+                    <default>false</default>
+                    <label>Cryptography Export Control</label>
+                </value>
+                <value>
+                    <fullName>DDR Bus Termination Regulator</fullName>
+                    <default>false</default>
+                    <label>DDR Bus Termination Regulator</label>
+                </value>
+                <value>
+                    <fullName>Differential/Gauge up to 1000 kPa</fullName>
+                    <default>false</default>
+                    <label>Differential/Gauge up to 1000 kPa</label>
+                </value>
+                <value>
+                    <fullName>Differential/Gauge up to 10 kPa</fullName>
+                    <default>false</default>
+                    <label>Differential/Gauge up to 10 kPa</label>
+                </value>
+                <value>
+                    <fullName>Differential/Gauge up to 115 kPa</fullName>
+                    <default>false</default>
+                    <label>Differential/Gauge up to 115 kPa</label>
+                </value>
+                <value>
+                    <fullName>Digital demodulators</fullName>
+                    <default>false</default>
+                    <label>Digital demodulators</label>
+                </value>
+                <value>
+                    <fullName>Digital PC-camera signal processor</fullName>
+                    <default>false</default>
+                    <label>Digital PC-camera signal processor</label>
+                </value>
+                <value>
+                    <fullName>Digital radio processors</fullName>
+                    <default>false</default>
+                    <label>Digital radio processors</label>
+                </value>
+                <value>
+                    <fullName>DOCSIS</fullName>
+                    <default>false</default>
+                    <label>DOCSIS</label>
+                </value>
+                <value>
+                    <fullName>Embedded Software Framework</fullName>
+                    <default>false</default>
+                    <label>Embedded Software Framework</label>
+                </value>
+                <value>
+                    <fullName>Evaluation and Visualization SW</fullName>
+                    <default>false</default>
+                    <label>Evaluation and Visualization SW</label>
+                </value>
+                <value>
+                    <fullName>Evaluation Boards</fullName>
+                    <default>false</default>
+                    <label>Evaluation Boards</label>
+                </value>
+                <value>
+                    <fullName>Freedom Development Boards</fullName>
+                    <default>false</default>
+                    <label>Freedom Development Boards</label>
+                </value>
+                <value>
+                    <fullName>H-Bridges</fullName>
+                    <default>false</default>
+                    <label>H-Bridges</label>
+                </value>
+                <value>
+                    <fullName>Healthcare Solutions ICs</fullName>
+                    <default>false</default>
+                    <label>Healthcare Solutions ICs</label>
+                </value>
+                <value>
+                    <fullName>HID Controllers</fullName>
+                    <default>false</default>
+                    <label>HID Controllers</label>
+                </value>
+                <value>
+                    <fullName>High-Current Motor Control</fullName>
+                    <default>false</default>
+                    <label>High-Current Motor Control</label>
+                </value>
+                <value>
+                    <fullName>High Side Switches</fullName>
+                    <default>false</default>
+                    <label>High Side Switches</label>
+                </value>
+                <value>
+                    <fullName>HITAG</fullName>
+                    <default>false</default>
+                    <label>HITAG</label>
+                </value>
+                <value>
+                    <fullName>HITAG reader ICs</fullName>
+                    <default>false</default>
+                    <label>HITAG reader ICs</label>
+                </value>
+                <value>
+                    <fullName>i.MX 6 Series Software</fullName>
+                    <default>false</default>
+                    <label>i.MX 6 Series Software</label>
+                </value>
+                <value>
+                    <fullName>i.MX Applications Processors</fullName>
+                    <default>false</default>
+                    <label>i.MX Applications Processors</label>
+                </value>
+                <value>
+                    <fullName>i.MX Software and Tools</fullName>
+                    <default>false</default>
+                    <label>i.MX Software and Tools</label>
+                </value>
+                <value>
+                    <fullName>I2C / SPI Slave to UART / IrDA / GPIO Bridges</fullName>
+                    <default>false</default>
+                    <label>I2C / SPI Slave to UART / IrDA / GPIO Bridges</label>
+                </value>
+                <value>
+                    <fullName>I2C Bus Controller and Bridge ICs</fullName>
+                    <default>false</default>
+                    <label>I2C Bus Controller and Bridge ICs</label>
+                </value>
+                <value>
+                    <fullName>I2C Bus Repeaters/Hubs/Extenders</fullName>
+                    <default>false</default>
+                    <label>I2C Bus Repeaters/Hubs/Extenders</label>
+                </value>
+                <value>
+                    <fullName>I2C DACs and ADCs</fullName>
+                    <default>false</default>
+                    <label>I2C DACs and ADCs</label>
+                </value>
+                <value>
+                    <fullName>I2C DIP Switch</fullName>
+                    <default>false</default>
+                    <label>I2C DIP Switch</label>
+                </value>
+                <value>
+                    <fullName>I2C Fast-Mode Plus</fullName>
+                    <default>false</default>
+                    <label>I2C Fast-Mode Plus</label>
+                </value>
+                <value>
+                    <fullName>I2C General Purpose I/O</fullName>
+                    <default>false</default>
+                    <label>I2C General Purpose I/O</label>
+                </value>
+                <value>
+                    <fullName>I2C Serial EEPROM/RAM</fullName>
+                    <default>false</default>
+                    <label>I2C Serial EEPROM/RAM</label>
+                </value>
+                <value>
+                    <fullName>ICODE</fullName>
+                    <default>false</default>
+                    <label>ICODE</label>
+                </value>
+                <value>
+                    <fullName>IEEE 802.15.4 + BLE</fullName>
+                    <default>false</default>
+                    <label>IEEE 802.15.4 + BLE</label>
+                </value>
+                <value>
+                    <fullName>IEEE 802.15.4 Wireless MCUs</fullName>
+                    <default>false</default>
+                    <label>IEEE 802.15.4 Wireless MCUs</label>
+                </value>
+                <value>
+                    <fullName>IF demodulators</fullName>
+                    <default>false</default>
+                    <label>IF demodulators</label>
+                </value>
+                <value>
+                    <fullName>Immobilizer</fullName>
+                    <default>false</default>
+                    <label>Immobilizer</label>
+                </value>
+                <value>
+                    <fullName>Intelligent Sensing Framework</fullName>
+                    <default>false</default>
+                    <label>Intelligent Sensing Framework</label>
+                </value>
+                <value>
+                    <fullName>I²C LED Display Control</fullName>
+                    <default>false</default>
+                    <label>I²C LED Display Control</label>
+                </value>
+                <value>
+                    <fullName>Kinetis ARM Cortex-M MCUs</fullName>
+                    <default>false</default>
+                    <label>Kinetis ARM Cortex-M MCUs</label>
+                </value>
+                <value>
+                    <fullName>Kinetis Software and Tools</fullName>
+                    <default>false</default>
+                    <label>Kinetis Software and Tools</label>
+                </value>
+                <value>
+                    <fullName>LCD character drivers</fullName>
+                    <default>false</default>
+                    <label>LCD character drivers</label>
+                </value>
+                <value>
+                    <fullName>LCD graphic drivers</fullName>
+                    <default>false</default>
+                    <label>LCD graphic drivers</label>
+                </value>
+                <value>
+                    <fullName>LCD segment drivers</fullName>
+                    <default>false</default>
+                    <label>LCD segment drivers</label>
+                </value>
+                <value>
+                    <fullName>LDO Low Voltage</fullName>
+                    <default>false</default>
+                    <label>LDO Low Voltage</label>
+                </value>
+                <value>
+                    <fullName>LED Controllers</fullName>
+                    <default>false</default>
+                    <label>LED Controllers</label>
+                </value>
+                <value>
+                    <fullName>LED Drivers</fullName>
+                    <default>false</default>
+                    <label>LED Drivers</label>
+                </value>
+                <value>
+                    <fullName>LED Flash Driver ICs</fullName>
+                    <default>false</default>
+                    <label>LED Flash Driver ICs</label>
+                </value>
+                <value>
+                    <fullName>LifeVibes Speech &amp; Sensing</fullName>
+                    <default>false</default>
+                    <label>LifeVibes Speech &amp; Sensing</label>
+                </value>
+                <value>
+                    <fullName>Light position controllers</fullName>
+                    <default>false</default>
+                    <label>Light position controllers</label>
+                </value>
+                <value>
+                    <fullName>Linux® SDK</fullName>
+                    <default>false</default>
+                    <label>Linux® SDK</label>
+                </value>
+                <value>
+                    <fullName>Linux Software and Development Tools</fullName>
+                    <default>false</default>
+                    <label>Linux Software and Development Tools</label>
+                </value>
+                <value>
+                    <fullName>Low Side Switches</fullName>
+                    <default>false</default>
+                    <label>Low Side Switches</label>
+                </value>
+                <value>
+                    <fullName>LPC ARM MCUs</fullName>
+                    <default>false</default>
+                    <label>LPC ARM MCUs</label>
+                </value>
+                <value>
+                    <fullName>LPCXpresso Boards</fullName>
+                    <default>false</default>
+                    <label>LPCXpresso Boards</label>
+                </value>
+                <value>
+                    <fullName>LPG and CNG Gas 15 to 400 kPa</fullName>
+                    <default>false</default>
+                    <label>LPG and CNG Gas 15 to 400 kPa</label>
+                </value>
+                <value>
+                    <fullName>MAC57Dxxx ARM MCUs</fullName>
+                    <default>false</default>
+                    <label>MAC57Dxxx ARM MCUs</label>
+                </value>
+                <value>
+                    <fullName>MAC7100</fullName>
+                    <default>false</default>
+                    <label>MAC7100</label>
+                </value>
+                <value>
+                    <fullName>MagniV</fullName>
+                    <default>false</default>
+                    <label>MagniV</label>
+                </value>
+                <value>
+                    <fullName>MCUXpresso Software and Tools</fullName>
+                    <default>false</default>
+                    <label>MCUXpresso Software and Tools</label>
+                </value>
+                <value>
+                    <fullName>Memory address latches</fullName>
+                    <default>false</default>
+                    <label>Memory address latches</label>
+                </value>
+                <value>
+                    <fullName>Microcontroller and Injection Driver</fullName>
+                    <default>false</default>
+                    <label>Microcontroller and Injection Driver</label>
+                </value>
+                <value>
+                    <fullName>Micro-USB Interface</fullName>
+                    <default>false</default>
+                    <label>Micro-USB Interface</label>
+                </value>
+                <value>
+                    <fullName>MIFARE</fullName>
+                    <default>false</default>
+                    <label>MIFARE</label>
+                </value>
+                <value>
+                    <fullName>MIFARE SAMs for reader systems</fullName>
+                    <default>false</default>
+                    <label>MIFARE SAMs for reader systems</label>
+                </value>
+                <value>
+                    <fullName>MPC51xx, MPC52xx mobileGT</fullName>
+                    <default>false</default>
+                    <label>MPC51xx, MPC52xx mobileGT</label>
+                </value>
+                <value>
+                    <fullName>MPC55xx MCUs</fullName>
+                    <default>false</default>
+                    <label>MPC55xx MCUs</label>
+                </value>
+                <value>
+                    <fullName>MPC56xx MCUs</fullName>
+                    <default>false</default>
+                    <label>MPC56xx MCUs</label>
+                </value>
+                <value>
+                    <fullName>MPC57xx MCUs</fullName>
+                    <default>false</default>
+                    <label>MPC57xx MCUs</label>
+                </value>
+                <value>
+                    <fullName>MPC8xxx,MPC7xxx,MPC7xx,MPC6xx Host and Integrated Host Processors</fullName>
+                    <default>false</default>
+                    <label>MPC8xxx,MPC7xxx,MPC7xx,MPC6xx Host and Integrated Host Processors</label>
+                </value>
+                <value>
+                    <fullName>MQX™ Software Solutions</fullName>
+                    <default>false</default>
+                    <label>MQX™ Software Solutions</label>
+                </value>
+                <value>
+                    <fullName>Multimedia processors</fullName>
+                    <default>false</default>
+                    <label>Multimedia processors</label>
+                </value>
+                <value>
+                    <fullName>Multiple Output Regulators</fullName>
+                    <default>false</default>
+                    <label>Multiple Output Regulators</label>
+                </value>
+                <value>
+                    <fullName>NFC controller solutions</fullName>
+                    <default>false</default>
+                    <label>NFC controller solutions</label>
+                </value>
+                <value>
+                    <fullName>NFC frontend solutions</fullName>
+                    <default>false</default>
+                    <label>NFC frontend solutions</label>
+                </value>
+                <value>
+                    <fullName>NFC Technology Hub</fullName>
+                    <default>false</default>
+                    <label>NFC Technology Hub</label>
+                </value>
+                <value>
+                    <fullName>NIST Certifications</fullName>
+                    <default>false</default>
+                    <label>NIST Certifications</label>
+                </value>
+                <value>
+                    <fullName>NTAG</fullName>
+                    <default>false</default>
+                    <label>NTAG</label>
+                </value>
+                <value>
+                    <fullName>One-chip radio</fullName>
+                    <default>false</default>
+                    <label>One-chip radio</label>
+                </value>
+                <value>
+                    <fullName>Passive keyless entry</fullName>
+                    <default>false</default>
+                    <label>Passive keyless entry</label>
+                </value>
+                <value>
+                    <fullName>PCIe Channel Switches</fullName>
+                    <default>false</default>
+                    <label>PCIe Channel Switches</label>
+                </value>
+                <value>
+                    <fullName>PCIe Physical Layer (PHY) Devices</fullName>
+                    <default>false</default>
+                    <label>PCIe Physical Layer (PHY) Devices</label>
+                </value>
+                <value>
+                    <fullName>PEG® Graphics Software</fullName>
+                    <default>false</default>
+                    <label>PEG® Graphics Software</label>
+                </value>
+                <value>
+                    <fullName>PMIC for Networking Processors</fullName>
+                    <default>false</default>
+                    <label>PMIC for Networking Processors</label>
+                </value>
+                <value>
+                    <fullName>PMICs for i.MX Processors</fullName>
+                    <default>false</default>
+                    <label>PMICs for i.MX Processors</label>
+                </value>
+                <value>
+                    <fullName>PowerQUICC Communications Processors</fullName>
+                    <default>false</default>
+                    <label>PowerQUICC Communications Processors</label>
+                </value>
+                <value>
+                    <fullName>Powertrain/Engine Control</fullName>
+                    <default>false</default>
+                    <label>Powertrain/Engine Control</label>
+                </value>
+                <value>
+                    <fullName>pre-drivers</fullName>
+                    <default>false</default>
+                    <label>pre-drivers</label>
+                </value>
+                <value>
+                    <fullName>Processor Expert and Embedded Components</fullName>
+                    <default>false</default>
+                    <label>Processor Expert and Embedded Components</label>
+                </value>
+                <value>
+                    <fullName>Processor Expert Embedded Components</fullName>
+                    <default>false</default>
+                    <label>Processor Expert Embedded Components</label>
+                </value>
+                <value>
+                    <fullName>Professional Services Software Technology</fullName>
+                    <default>false</default>
+                    <label>Professional Services Software Technology</label>
+                </value>
+                <value>
+                    <fullName>QorIQ Layerscape ARM Processors</fullName>
+                    <default>false</default>
+                    <label>QorIQ Layerscape ARM Processors</label>
+                </value>
+                <value>
+                    <fullName>QorIQ Power Processors</fullName>
+                    <default>false</default>
+                    <label>QorIQ Power Processors</label>
+                </value>
+                <value>
+                    <fullName>Remote keyless entry</fullName>
+                    <default>false</default>
+                    <label>Remote keyless entry</label>
+                </value>
+                <value>
+                    <fullName>RF Advanced Doherty Alignment Module (ADAM)</fullName>
+                    <default>false</default>
+                    <label>RF Advanced Doherty Alignment Module (ADAM)</label>
+                </value>
+                <value>
+                    <fullName>RF Attenuators</fullName>
+                    <default>false</default>
+                    <label>RF Attenuators</label>
+                </value>
+                <value>
+                    <fullName>RF Bipolar</fullName>
+                    <default>false</default>
+                    <label>RF Bipolar</label>
+                </value>
+                <value>
+                    <fullName>RF Broadcast and Industrial, Scientific and Medical (ISM)</fullName>
+                    <default>false</default>
+                    <label>RF Broadcast and Industrial, Scientific and Medical (ISM)</label>
+                </value>
+                <value>
+                    <fullName>RF Car Radio Tuners - Analog IF</fullName>
+                    <default>false</default>
+                    <label>RF Car Radio Tuners - Analog IF</label>
+                </value>
+                <value>
+                    <fullName>RF Car Radio Tuners - Digital IF</fullName>
+                    <default>false</default>
+                    <label>RF Car Radio Tuners - Digital IF</label>
+                </value>
+                <value>
+                    <fullName>RF Cellular Infrastructure</fullName>
+                    <default>false</default>
+                    <label>RF Cellular Infrastructure</label>
+                </value>
+                <value>
+                    <fullName>RF Commercial Aerospace</fullName>
+                    <default>false</default>
+                    <label>RF Commercial Aerospace</label>
+                </value>
+                <value>
+                    <fullName>RF Cooking</fullName>
+                    <default>false</default>
+                    <label>RF Cooking</label>
+                </value>
+                <value>
+                    <fullName>RF GaAs Linear Power Transistors</fullName>
+                    <default>false</default>
+                    <label>RF GaAs Linear Power Transistors</label>
+                </value>
+                <value>
+                    <fullName>RFID</fullName>
+                    <default>false</default>
+                    <label>RFID</label>
+                </value>
+                <value>
+                    <fullName>RF Integrated PLL VCOs</fullName>
+                    <default>false</default>
+                    <label>RF Integrated PLL VCOs</label>
+                </value>
+                <value>
+                    <fullName>RF JFETs</fullName>
+                    <default>false</default>
+                    <label>RF JFETs</label>
+                </value>
+                <value>
+                    <fullName>RF Link</fullName>
+                    <default>false</default>
+                    <label>RF Link</label>
+                </value>
+                <value>
+                    <fullName>RF Low Noise Amplifiers (LNAs)</fullName>
+                    <default>false</default>
+                    <label>RF Low Noise Amplifiers (LNAs)</label>
+                </value>
+                <value>
+                    <fullName>RF Low Power FM IF Systems</fullName>
+                    <default>false</default>
+                    <label>RF Low Power FM IF Systems</label>
+                </value>
+                <value>
+                    <fullName>RF Medium Power Amplifiers</fullName>
+                    <default>false</default>
+                    <label>RF Medium Power Amplifiers</label>
+                </value>
+                <value>
+                    <fullName>RF Microwave LO Generators</fullName>
+                    <default>false</default>
+                    <label>RF Microwave LO Generators</label>
+                </value>
+                <value>
+                    <fullName>RF Military</fullName>
+                    <default>false</default>
+                    <label>RF Military</label>
+                </value>
+                <value>
+                    <fullName>RF Mixer with Integrated LO</fullName>
+                    <default>false</default>
+                    <label>RF Mixer with Integrated LO</label>
+                </value>
+                <value>
+                    <fullName>RF Mixer without Integrated LO</fullName>
+                    <default>false</default>
+                    <label>RF Mixer without Integrated LO</label>
+                </value>
+                <value>
+                    <fullName>RF Mobile Radio</fullName>
+                    <default>false</default>
+                    <label>RF Mobile Radio</label>
+                </value>
+                <value>
+                    <fullName>RF Modulators</fullName>
+                    <default>false</default>
+                    <label>RF Modulators</label>
+                </value>
+                <value>
+                    <fullName>RF MOSFETs</fullName>
+                    <default>false</default>
+                    <label>RF MOSFETs</label>
+                </value>
+                <value>
+                    <fullName>RF Sub-GHz RF</fullName>
+                    <default>false</default>
+                    <label>RF Sub-GHz RF</label>
+                </value>
+                <value>
+                    <fullName>RF Switches</fullName>
+                    <default>false</default>
+                    <label>RF Switches</label>
+                </value>
+                <value>
+                    <fullName>RF Transmitters</fullName>
+                    <default>false</default>
+                    <label>RF Transmitters</label>
+                </value>
+                <value>
+                    <fullName>RF Variable Gain Amplifiers</fullName>
+                    <default>false</default>
+                    <label>RF Variable Gain Amplifiers</label>
+                </value>
+                <value>
+                    <fullName>RF Wideband Amplifiers</fullName>
+                    <default>false</default>
+                    <label>RF Wideband Amplifiers</label>
+                </value>
+                <value>
+                    <fullName>S12(X)</fullName>
+                    <default>false</default>
+                    <label>S12(X)</label>
+                </value>
+                <value>
+                    <fullName>S32 ARM Processors &amp; Microcontrollers</fullName>
+                    <default>false</default>
+                    <label>S32 ARM Processors &amp; Microcontrollers</label>
+                </value>
+                <value>
+                    <fullName>S32 Design Studio</fullName>
+                    <default>false</default>
+                    <label>S32 Design Studio</label>
+                </value>
+                <value>
+                    <fullName>S32 Power</fullName>
+                    <default>false</default>
+                    <label>S32 Power</label>
+                </value>
+                <value>
+                    <fullName>SABRE Development System</fullName>
+                    <default>false</default>
+                    <label>SABRE Development System</label>
+                </value>
+                <value>
+                    <fullName>Secondary Side Controllers</fullName>
+                    <default>false</default>
+                    <label>Secondary Side Controllers</label>
+                </value>
+                <value>
+                    <fullName>Shunt Regulators</fullName>
+                    <default>false</default>
+                    <label>Shunt Regulators</label>
+                </value>
+                <value>
+                    <fullName>Signature Detection Technology</fullName>
+                    <default>false</default>
+                    <label>Signature Detection Technology</label>
+                </value>
+                <value>
+                    <fullName>Single satellite silicon tuners</fullName>
+                    <default>false</default>
+                    <label>Single satellite silicon tuners</label>
+                </value>
+                <value>
+                    <fullName>SmartMX Controllers</fullName>
+                    <default>false</default>
+                    <label>SmartMX Controllers</label>
+                </value>
+                <value>
+                    <fullName>Software &amp; Tools</fullName>
+                    <default>false</default>
+                    <label>Software &amp; Tools</label>
+                </value>
+                <value>
+                    <fullName>Software-defined-radio Technology</fullName>
+                    <default>false</default>
+                    <label>Software-defined-radio Technology</label>
+                </value>
+                <value>
+                    <fullName>SPI slave to I2C master / GPIO Bridges</fullName>
+                    <default>false</default>
+                    <label>SPI slave to I2C master / GPIO Bridges</label>
+                </value>
+                <value>
+                    <fullName>StarterTRAK Development Boards</fullName>
+                    <default>false</default>
+                    <label>StarterTRAK Development Boards</label>
+                </value>
+                <value>
+                    <fullName>Thread Networking Protocol</fullName>
+                    <default>false</default>
+                    <label>Thread Networking Protocol</label>
+                </value>
+                <value>
+                    <fullName>Tire Pressure Monitoring Sensors</fullName>
+                    <default>false</default>
+                    <label>Tire Pressure Monitoring Sensors</label>
+                </value>
+                <value>
+                    <fullName>Tower Development Boards</fullName>
+                    <default>false</default>
+                    <label>Tower Development Boards</label>
+                </value>
+                <value>
+                    <fullName>Trusted Systems Technology</fullName>
+                    <default>false</default>
+                    <label>Trusted Systems Technology</label>
+                </value>
+                <value>
+                    <fullName>UART to I2C Master / GPIO Bridges</fullName>
+                    <default>false</default>
+                    <label>UART to I2C Master / GPIO Bridges</label>
+                </value>
+                <value>
+                    <fullName>UCODE</fullName>
+                    <default>false</default>
+                    <label>UCODE</label>
+                </value>
+                <value>
+                    <fullName>UCODE DNA</fullName>
+                    <default>false</default>
+                    <label>UCODE DNA</label>
+                </value>
+                <value>
+                    <fullName>Ultra-Reliable MCUs Development Platform</fullName>
+                    <default>false</default>
+                    <label>Ultra-Reliable MCUs Development Platform</label>
+                </value>
+                <value>
+                    <fullName>USB host controllers</fullName>
+                    <default>false</default>
+                    <label>USB host controllers</label>
+                </value>
+                <value>
+                    <fullName>USB Type-C: True Plug&apos;n Play</fullName>
+                    <default>false</default>
+                    <label>USB Type-C: True Plug&apos;n Play</label>
+                </value>
+                <value>
+                    <fullName>USB Type-C authentication family</fullName>
+                    <default>false</default>
+                    <label>USB Type-C authentication family</label>
+                </value>
+                <value>
+                    <fullName>Vacuum Sensors -50 to -115 kPa</fullName>
+                    <default>false</default>
+                    <label>Vacuum Sensors -50 to -115 kPa</label>
+                </value>
+                <value>
+                    <fullName>VFxxx Controller Solutions based on ARM Cores</fullName>
+                    <default>false</default>
+                    <label>VFxxx Controller Solutions based on ARM Cores</label>
+                </value>
+                <value>
+                    <fullName>VortiQa® Software for Networking</fullName>
+                    <default>false</default>
+                    <label>VortiQa® Software for Networking</label>
+                </value>
+                <value>
+                    <fullName>Zero IF Down Converters</fullName>
+                    <default>false</default>
+                    <label>Zero IF Down Converters</label>
+                </value>
+                <value>
+                    <fullName>Other</fullName>
+                    <default>false</default>
+                    <label>Other</label>
+                </value>
+                <value>
+                    <fullName>Single-Chip Tuner/ASP (car radio)</fullName>
+                    <default>false</default>
+                    <label>Single-Chip Tuner/ASP (car radio)</label>
+                </value>
+            </valueSetDefinition>
+            <valueSettings>
+                <controllingFieldValue>Network Security Technology</controllingFieldValue>
+                <valueName>Cryptographic Acceleration Technology</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Network Security Technology</controllingFieldValue>
+                <valueName>Cryptography Export Control</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Network Security Technology</controllingFieldValue>
+                <valueName>NIST Certifications</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Network Security Technology</controllingFieldValue>
+                <valueName>Signature Detection Technology</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Network Security Technology</controllingFieldValue>
+                <valueName>Trusted Systems Technology</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Network Security Technology</controllingFieldValue>
+                <controllingFieldValue>Secure Authentication and Anti-Counterfeit Technology</controllingFieldValue>
+                <controllingFieldValue>Video SERDES</controllingFieldValue>
+                <controllingFieldValue>PCI/PCI Express</controllingFieldValue>
+                <controllingFieldValue>Signal Conditioners</controllingFieldValue>
+                <controllingFieldValue>UARTs</controllingFieldValue>
+                <controllingFieldValue>USB Interfaces</controllingFieldValue>
+                <controllingFieldValue>CAN Protocol Controllers</controllingFieldValue>
+                <controllingFieldValue>CAN/LIN/FlexRay Transceivers</controllingFieldValue>
+                <controllingFieldValue>Security Controller ICs</controllingFieldValue>
+                <controllingFieldValue>Ethernet</controllingFieldValue>
+                <controllingFieldValue>I2C-Bus Portfolio</controllingFieldValue>
+                <controllingFieldValue>Demodulators</controllingFieldValue>
+                <controllingFieldValue>Comparators</controllingFieldValue>
+                <controllingFieldValue>16-bit S12(X) &amp; Magni V</controllingFieldValue>
+                <controllingFieldValue>High-Speed Multiplexer</controllingFieldValue>
+                <controllingFieldValue>Memory Data Switches</controllingFieldValue>
+                <controllingFieldValue>Analog Switches</controllingFieldValue>
+                <controllingFieldValue>Analog Watch Motor Drivers</controllingFieldValue>
+                <controllingFieldValue>Automotive Breaking Systems</controllingFieldValue>
+                <controllingFieldValue>Bridges</controllingFieldValue>
+                <controllingFieldValue>Car Radio On-Off Logic</controllingFieldValue>
+                <controllingFieldValue>Lighting driver and controller ICs</controllingFieldValue>
+                <controllingFieldValue>Media processors</controllingFieldValue>
+                <controllingFieldValue>MOSFETs</controllingFieldValue>
+                <controllingFieldValue>Other</controllingFieldValue>
+                <controllingFieldValue>C29x Family of Crypto Coprocessors</controllingFieldValue>
+                <controllingFieldValue>ColdFire+/ColdFire MCUs/MPUs</controllingFieldValue>
+                <controllingFieldValue>Digital Signal Processors/Controllers</controllingFieldValue>
+                <controllingFieldValue>Pre-Drivers/Squib-Drivers</controllingFieldValue>
+                <controllingFieldValue>DC-to-DC Solutions</controllingFieldValue>
+                <controllingFieldValue>Data converters</controllingFieldValue>
+                <controllingFieldValue>El. Motor Control</controllingFieldValue>
+                <controllingFieldValue>Engine Control</controllingFieldValue>
+                <controllingFieldValue>Load Switches</controllingFieldValue>
+                <controllingFieldValue>AM/FM Radio and Audio</controllingFieldValue>
+                <controllingFieldValue>RF Transistors - Low Power</controllingFieldValue>
+                <controllingFieldValue>RF Transistors - Power</controllingFieldValue>
+                <controllingFieldValue>RF Tuners</controllingFieldValue>
+                <controllingFieldValue>RF Control Circuits</controllingFieldValue>
+                <controllingFieldValue>RF Low Power Tx / Rx ICs</controllingFieldValue>
+                <controllingFieldValue>RF Mixers</controllingFieldValue>
+                <controllingFieldValue>RF PLLs and Oscillators</controllingFieldValue>
+                <controllingFieldValue>Audio Amplifiers</controllingFieldValue>
+                <controllingFieldValue>Multi Standard Digital Radio</controllingFieldValue>
+                <controllingFieldValue>Silicon Tuners</controllingFieldValue>
+                <controllingFieldValue>Hardware Development Tools</controllingFieldValue>
+                <controllingFieldValue>Run-time Software</controllingFieldValue>
+                <controllingFieldValue>Sensor Toolbox</controllingFieldValue>
+                <controllingFieldValue>Software Development Tools</controllingFieldValue>
+                <controllingFieldValue>2.4 GHz Wireless Solutions</controllingFieldValue>
+                <controllingFieldValue>MiGLO™ Hearables Solutions</controllingFieldValue>
+                <controllingFieldValue>Sub-1 GHz Wireless Solutions (UHF)</controllingFieldValue>
+                <controllingFieldValue>AISG transceivers and controllers</controllingFieldValue>
+                <controllingFieldValue>Car Access and Immobilizers</controllingFieldValue>
+                <controllingFieldValue>NFC and Reader ICs</controllingFieldValue>
+                <controllingFieldValue>Smart Label and Tag ICs</controllingFieldValue>
+                <controllingFieldValue>ARM Processors</controllingFieldValue>
+                <controllingFieldValue>Wireless Power Receivers</controllingFieldValue>
+                <controllingFieldValue>NFMI Radio Solutions</controllingFieldValue>
+                <controllingFieldValue>Wireless Power Transmitters</controllingFieldValue>
+                <controllingFieldValue>AC-to-DC Solutions</controllingFieldValue>
+                <controllingFieldValue>Linear Voltage Regulators</controllingFieldValue>
+                <controllingFieldValue>RF Amplifiers - Low / Medium power</controllingFieldValue>
+                <controllingFieldValue>Wireless Connectivity</controllingFieldValue>
+                <controllingFieldValue>Power Architecture</controllingFieldValue>
+                <controllingFieldValue>Wireless Charging ICs</controllingFieldValue>
+                <controllingFieldValue>Battery Management</controllingFieldValue>
+                <controllingFieldValue>PMICs</controllingFieldValue>
+                <controllingFieldValue>Power over Ethernet (PoE)</controllingFieldValue>
+                <controllingFieldValue>Switching Regulator</controllingFieldValue>
+                <controllingFieldValue>Clock distribution</controllingFieldValue>
+                <controllingFieldValue>DSI and PSI5 Components</controllingFieldValue>
+                <controllingFieldValue>Voltage Level Translators</controllingFieldValue>
+                <controllingFieldValue>Real-Time Clocks</controllingFieldValue>
+                <controllingFieldValue>Switch Monitoring ICs</controllingFieldValue>
+                <controllingFieldValue>LCD Drivers</controllingFieldValue>
+                <controllingFieldValue>Modems</controllingFieldValue>
+                <controllingFieldValue>ISO K Line</controllingFieldValue>
+                <controllingFieldValue>Accelerometers</controllingFieldValue>
+                <controllingFieldValue>IO-Link Serial Communication</controllingFieldValue>
+                <controllingFieldValue>Isolated Communications Devices</controllingFieldValue>
+                <controllingFieldValue>pressure sensors</controllingFieldValue>
+                <controllingFieldValue>Surveillance IP Camera</controllingFieldValue>
+                <valueName>Other</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Secure Authentication and Anti-Counterfeit Technology</controllingFieldValue>
+                <valueName>USB Type-C authentication family</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>PCI/PCI Express</controllingFieldValue>
+                <valueName>PCIe Channel Switches</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>PCI/PCI Express</controllingFieldValue>
+                <valueName>PCIe Physical Layer (PHY) Devices</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>USB Interfaces</controllingFieldValue>
+                <valueName>Micro-USB Interface</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>USB Interfaces</controllingFieldValue>
+                <valueName>USB host controllers</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>USB Interfaces</controllingFieldValue>
+                <valueName>USB Type-C: True Plug&apos;n Play</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Security Controller ICs</controllingFieldValue>
+                <valueName>SmartMX Controllers</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>I2C-Bus Portfolio</controllingFieldValue>
+                <valueName>I2C Bus Controller and Bridge ICs</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>I2C-Bus Portfolio</controllingFieldValue>
+                <valueName>I2C Bus Repeaters/Hubs/Extenders</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>I2C-Bus Portfolio</controllingFieldValue>
+                <valueName>I2C DACs and ADCs</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>I2C-Bus Portfolio</controllingFieldValue>
+                <valueName>I2C DIP Switch</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>I2C-Bus Portfolio</controllingFieldValue>
+                <valueName>I2C Fast-Mode Plus</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>I2C-Bus Portfolio</controllingFieldValue>
+                <valueName>I2C General Purpose I/O</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>I2C-Bus Portfolio</controllingFieldValue>
+                <valueName>I2C Serial EEPROM/RAM</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>I2C-Bus Portfolio</controllingFieldValue>
+                <valueName>I²C LED Display Control</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Demodulators</controllingFieldValue>
+                <valueName>Digital demodulators</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Demodulators</controllingFieldValue>
+                <valueName>IF demodulators</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>16-bit S12(X) &amp; Magni V</controllingFieldValue>
+                <valueName>MagniV</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>16-bit S12(X) &amp; Magni V</controllingFieldValue>
+                <valueName>S12(X)</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Bridges</controllingFieldValue>
+                <valueName>I2C / SPI Slave to UART / IrDA / GPIO Bridges</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Bridges</controllingFieldValue>
+                <valueName>SPI slave to I2C master / GPIO Bridges</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Bridges</controllingFieldValue>
+                <valueName>UART to I2C Master / GPIO Bridges</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Lighting driver and controller ICs</controllingFieldValue>
+                <valueName>CFL and HF-TL Drivers - Dimmable</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Lighting driver and controller ICs</controllingFieldValue>
+                <valueName>CFL and HF-TL Drivers - Fixed Output</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Lighting driver and controller ICs</controllingFieldValue>
+                <valueName>HID Controllers</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Lighting driver and controller ICs</controllingFieldValue>
+                <valueName>LED Controllers</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Lighting driver and controller ICs</controllingFieldValue>
+                <valueName>LED Drivers</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Lighting driver and controller ICs</controllingFieldValue>
+                <valueName>LED Flash Driver ICs</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Lighting driver and controller ICs</controllingFieldValue>
+                <valueName>Light position controllers</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Media processors</controllingFieldValue>
+                <valueName>Digital radio processors</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Media processors</controllingFieldValue>
+                <valueName>Multimedia processors</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Media processors</controllingFieldValue>
+                <valueName>Zero IF Down Converters</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>MOSFETs</controllingFieldValue>
+                <valueName>High Side Switches</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>MOSFETs</controllingFieldValue>
+                <valueName>Low Side Switches</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Pre-Drivers/Squib-Drivers</controllingFieldValue>
+                <valueName>pre-drivers</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Data converters</controllingFieldValue>
+                <valueName>Audio converters</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>El. Motor Control</controllingFieldValue>
+                <valueName>H-Bridges</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>El. Motor Control</controllingFieldValue>
+                <valueName>High-Current Motor Control</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Engine Control</controllingFieldValue>
+                <valueName>Microcontroller and Injection Driver</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Engine Control</controllingFieldValue>
+                <valueName>Powertrain/Engine Control</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>AM/FM Radio and Audio</controllingFieldValue>
+                <valueName>Car radio &amp; audio DSP solutions</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>AM/FM Radio and Audio</controllingFieldValue>
+                <valueName>One-chip radio</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>AM/FM Radio and Audio</controllingFieldValue>
+                <valueName>Single-Chip Tuner/ASP (car radio)</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>RF Transistors - Low Power</controllingFieldValue>
+                <valueName>RF Bipolar</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>RF Transistors - Low Power</controllingFieldValue>
+                <valueName>RF JFETs</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>RF Transistors - Low Power</controllingFieldValue>
+                <valueName>RF MOSFETs</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>RF Transistors - Power</controllingFieldValue>
+                <valueName>RF Broadcast and Industrial, Scientific and Medical (ISM)</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>RF Transistors - Power</controllingFieldValue>
+                <valueName>RF Cellular Infrastructure</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>RF Transistors - Power</controllingFieldValue>
+                <valueName>RF Commercial Aerospace</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>RF Transistors - Power</controllingFieldValue>
+                <valueName>RF Cooking</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>RF Transistors - Power</controllingFieldValue>
+                <valueName>RF Military</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>RF Transistors - Power</controllingFieldValue>
+                <valueName>RF Mobile Radio</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>RF Tuners</controllingFieldValue>
+                <valueName>RF Car Radio Tuners - Analog IF</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>RF Tuners</controllingFieldValue>
+                <valueName>RF Car Radio Tuners - Digital IF</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>RF Control Circuits</controllingFieldValue>
+                <valueName>RF Advanced Doherty Alignment Module (ADAM)</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>RF Control Circuits</controllingFieldValue>
+                <valueName>RF Attenuators</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>RF Control Circuits</controllingFieldValue>
+                <valueName>RF Switches</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>RF Low Power Tx / Rx ICs</controllingFieldValue>
+                <valueName>RF Modulators</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>RF Low Power Tx / Rx ICs</controllingFieldValue>
+                <valueName>RF Sub-GHz RF</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>RF Low Power Tx / Rx ICs</controllingFieldValue>
+                <valueName>RF Transmitters</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>RF Mixers</controllingFieldValue>
+                <valueName>RF Low Power FM IF Systems</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>RF Mixers</controllingFieldValue>
+                <valueName>RF Mixer with Integrated LO</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>RF Mixers</controllingFieldValue>
+                <valueName>RF Mixer without Integrated LO</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>RF PLLs and Oscillators</controllingFieldValue>
+                <valueName>RF Integrated PLL VCOs</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>RF PLLs and Oscillators</controllingFieldValue>
+                <valueName>RF Microwave LO Generators</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Audio Amplifiers</controllingFieldValue>
+                <valueName>Audio Amplifiers for Portable Devices</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Audio Amplifiers</controllingFieldValue>
+                <valueName>Class-AB</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Audio Amplifiers</controllingFieldValue>
+                <valueName>Class-AB (car radio)</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Audio Amplifiers</controllingFieldValue>
+                <valueName>Class-D</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Audio Amplifiers</controllingFieldValue>
+                <valueName>Class-D (car radio)</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Multi Standard Digital Radio</controllingFieldValue>
+                <valueName>Software-defined-radio Technology</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Silicon Tuners</controllingFieldValue>
+                <valueName>Cable and terrestrial silicon tuners</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Silicon Tuners</controllingFieldValue>
+                <valueName>Single satellite silicon tuners</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Hardware Development Tools</controllingFieldValue>
+                <valueName>Analog Toolbox</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Hardware Development Tools</controllingFieldValue>
+                <valueName>Community Boards</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Hardware Development Tools</controllingFieldValue>
+                <valueName>Freedom Development Boards</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Hardware Development Tools</controllingFieldValue>
+                <valueName>LPCXpresso Boards</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Hardware Development Tools</controllingFieldValue>
+                <valueName>SABRE Development System</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Hardware Development Tools</controllingFieldValue>
+                <valueName>StarterTRAK Development Boards</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Hardware Development Tools</controllingFieldValue>
+                <valueName>Tower Development Boards</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Hardware Development Tools</controllingFieldValue>
+                <valueName>Ultra-Reliable MCUs Development Platform</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Models and test data</controllingFieldValue>
+                <valueName>Compact Models (SiMKit)</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Run-time Software</controllingFieldValue>
+                <valueName>Analog Expert Software and Tools</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Run-time Software</controllingFieldValue>
+                <valueName>i.MX 6 Series Software</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Run-time Software</controllingFieldValue>
+                <valueName>Intelligent Sensing Framework</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Run-time Software</controllingFieldValue>
+                <controllingFieldValue>Software Development Tools</controllingFieldValue>
+                <valueName>Kinetis Software and Tools</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Run-time Software</controllingFieldValue>
+                <valueName>LifeVibes Speech &amp; Sensing</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Run-time Software</controllingFieldValue>
+                <valueName>Linux® SDK</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Run-time Software</controllingFieldValue>
+                <valueName>Linux Software and Development Tools</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Run-time Software</controllingFieldValue>
+                <controllingFieldValue>Software Development Tools</controllingFieldValue>
+                <valueName>MCUXpresso Software and Tools</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Run-time Software</controllingFieldValue>
+                <valueName>MQX™ Software Solutions</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Run-time Software</controllingFieldValue>
+                <valueName>PEG® Graphics Software</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Run-time Software</controllingFieldValue>
+                <valueName>Processor Expert Embedded Components</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Run-time Software</controllingFieldValue>
+                <valueName>Professional Services Software Technology</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Run-time Software</controllingFieldValue>
+                <controllingFieldValue>Software Development Tools</controllingFieldValue>
+                <valueName>VortiQa® Software for Networking</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Sensor Toolbox</controllingFieldValue>
+                <valueName>Embedded Software Framework</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Sensor Toolbox</controllingFieldValue>
+                <valueName>Evaluation and Visualization SW</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Sensor Toolbox</controllingFieldValue>
+                <valueName>Evaluation Boards</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Software Development Tools</controllingFieldValue>
+                <valueName>CodeWarrior Development Tools</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Software Development Tools</controllingFieldValue>
+                <valueName>i.MX Software and Tools</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Software Development Tools</controllingFieldValue>
+                <valueName>Processor Expert and Embedded Components</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Software Development Tools</controllingFieldValue>
+                <valueName>S32 Design Studio</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Software Development Tools</controllingFieldValue>
+                <valueName>Software &amp; Tools</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>2.4 GHz Wireless Solutions</controllingFieldValue>
+                <valueName>Bluetooth Low Energy (BLE)</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>2.4 GHz Wireless Solutions</controllingFieldValue>
+                <valueName>IEEE 802.15.4 + BLE</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>2.4 GHz Wireless Solutions</controllingFieldValue>
+                <valueName>IEEE 802.15.4 Wireless MCUs</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>2.4 GHz Wireless Solutions</controllingFieldValue>
+                <valueName>Thread Networking Protocol</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Car Access and Immobilizers</controllingFieldValue>
+                <valueName>Automotive NFC</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Car Access and Immobilizers</controllingFieldValue>
+                <valueName>Immobilizer</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Car Access and Immobilizers</controllingFieldValue>
+                <valueName>Passive keyless entry</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Car Access and Immobilizers</controllingFieldValue>
+                <valueName>Remote keyless entry</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Car Access and Immobilizers</controllingFieldValue>
+                <valueName>RF Link</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>NFC and Reader ICs</controllingFieldValue>
+                <controllingFieldValue>Smart Label and Tag ICs</controllingFieldValue>
+                <valueName>Connected tag solutions</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>NFC and Reader ICs</controllingFieldValue>
+                <valueName>Contact smart card reader ICs</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>NFC and Reader ICs</controllingFieldValue>
+                <valueName>Healthcare Solutions ICs</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>NFC and Reader ICs</controllingFieldValue>
+                <valueName>HITAG reader ICs</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>NFC and Reader ICs</controllingFieldValue>
+                <valueName>MIFARE</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>NFC and Reader ICs</controllingFieldValue>
+                <valueName>MIFARE SAMs for reader systems</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>NFC and Reader ICs</controllingFieldValue>
+                <valueName>NFC controller solutions</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>NFC and Reader ICs</controllingFieldValue>
+                <valueName>NFC frontend solutions</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>NFC and Reader ICs</controllingFieldValue>
+                <valueName>NFC Technology Hub</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Smart Label and Tag ICs</controllingFieldValue>
+                <valueName>HITAG</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Smart Label and Tag ICs</controllingFieldValue>
+                <valueName>ICODE</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Smart Label and Tag ICs</controllingFieldValue>
+                <valueName>NTAG</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Smart Label and Tag ICs</controllingFieldValue>
+                <valueName>RFID</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Smart Label and Tag ICs</controllingFieldValue>
+                <valueName>UCODE</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Smart Label and Tag ICs</controllingFieldValue>
+                <valueName>UCODE DNA</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>ARM Processors</controllingFieldValue>
+                <valueName>i.MX Applications Processors</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>ARM Processors</controllingFieldValue>
+                <valueName>Kinetis ARM Cortex-M MCUs</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>ARM Processors</controllingFieldValue>
+                <valueName>LPC ARM MCUs</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>ARM Processors</controllingFieldValue>
+                <valueName>MAC57Dxxx ARM MCUs</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>ARM Processors</controllingFieldValue>
+                <valueName>MAC7100</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>ARM Processors</controllingFieldValue>
+                <valueName>QorIQ Layerscape ARM Processors</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>ARM Processors</controllingFieldValue>
+                <valueName>S32 ARM Processors &amp; Microcontrollers</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>ARM Processors</controllingFieldValue>
+                <valueName>VFxxx Controller Solutions based on ARM Cores</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>AC-to-DC Solutions</controllingFieldValue>
+                <valueName>AC-DC Controllers</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>AC-to-DC Solutions</controllingFieldValue>
+                <valueName>AC-DC Controllers with Integrated PFC</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>AC-to-DC Solutions</controllingFieldValue>
+                <valueName>AC-DC Controllers with Integrated Power Switch</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>AC-to-DC Solutions</controllingFieldValue>
+                <valueName>Secondary Side Controllers</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Linear Voltage Regulators</controllingFieldValue>
+                <valueName>DDR Bus Termination Regulator</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Linear Voltage Regulators</controllingFieldValue>
+                <valueName>LDO Low Voltage</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Linear Voltage Regulators</controllingFieldValue>
+                <valueName>Multiple Output Regulators</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Linear Voltage Regulators</controllingFieldValue>
+                <valueName>Shunt Regulators</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>RF Amplifiers - Low / Medium power</controllingFieldValue>
+                <valueName>RF GaAs Linear Power Transistors</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>RF Amplifiers - Low / Medium power</controllingFieldValue>
+                <valueName>RF Low Noise Amplifiers (LNAs)</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>RF Amplifiers - Low / Medium power</controllingFieldValue>
+                <valueName>RF Medium Power Amplifiers</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>RF Amplifiers - Low / Medium power</controllingFieldValue>
+                <valueName>RF Variable Gain Amplifiers</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>RF Amplifiers - Low / Medium power</controllingFieldValue>
+                <valueName>RF Wideband Amplifiers</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Power Architecture</controllingFieldValue>
+                <valueName>MPC51xx, MPC52xx mobileGT</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Power Architecture</controllingFieldValue>
+                <valueName>MPC55xx MCUs</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Power Architecture</controllingFieldValue>
+                <valueName>MPC56xx MCUs</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Power Architecture</controllingFieldValue>
+                <valueName>MPC57xx MCUs</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Power Architecture</controllingFieldValue>
+                <valueName>MPC8xxx,MPC7xxx,MPC7xx,MPC6xx Host and Integrated Host Processors</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Power Architecture</controllingFieldValue>
+                <valueName>PowerQUICC Communications Processors</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Power Architecture</controllingFieldValue>
+                <valueName>QorIQ Power Processors</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Power Architecture</controllingFieldValue>
+                <valueName>S32 Power</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Battery Management</controllingFieldValue>
+                <valueName>Battery Cell Controllers</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Battery Management</controllingFieldValue>
+                <valueName>Battery Chargers</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Battery Management</controllingFieldValue>
+                <valueName>Battery Sensors</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>PMICs</controllingFieldValue>
+                <valueName>Configurable PMICs (PF Series)</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>PMICs</controllingFieldValue>
+                <valueName>PMIC for Networking Processors</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>PMICs</controllingFieldValue>
+                <valueName>PMICs for i.MX Processors</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>LCD Drivers</controllingFieldValue>
+                <valueName>LCD character drivers</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>LCD Drivers</controllingFieldValue>
+                <valueName>LCD graphic drivers</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>LCD Drivers</controllingFieldValue>
+                <valueName>LCD segment drivers</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Modems</controllingFieldValue>
+                <valueName>ASK</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Modems</controllingFieldValue>
+                <valueName>DOCSIS</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Accelerometers</controllingFieldValue>
+                <valueName>1-Axis Accelerometers</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Accelerometers</controllingFieldValue>
+                <valueName>2-Axis Accelerometers</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Accelerometers</controllingFieldValue>
+                <valueName>3-Axis Accelerometers</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>pressure sensors</controllingFieldValue>
+                <valueName>Barometric Pressure 15 to 115 kPa</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>pressure sensors</controllingFieldValue>
+                <valueName>Differential/Gauge up to 1000 kPa</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>pressure sensors</controllingFieldValue>
+                <valueName>Differential/Gauge up to 10 kPa</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>pressure sensors</controllingFieldValue>
+                <valueName>Differential/Gauge up to 115 kPa</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>pressure sensors</controllingFieldValue>
+                <valueName>LPG and CNG Gas 15 to 400 kPa</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>pressure sensors</controllingFieldValue>
+                <valueName>Tire Pressure Monitoring Sensors</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>pressure sensors</controllingFieldValue>
+                <valueName>Vacuum Sensors -50 to -115 kPa</valueName>
+            </valueSettings>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Product__c</fullName>
+        <description>Created as part of SIR 1331(2016.11):To display products.</description>
+        <externalId>false</externalId>
+        <label>Product Level 1</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Audio and Media Processing</fullName>
+                    <default>false</default>
+                    <label>Audio and Media Processing</label>
+                </value>
+                <value>
+                    <fullName>Identification and Security</fullName>
+                    <default>false</default>
+                    <label>Identification and Security</label>
+                </value>
+                <value>
+                    <fullName>Interface and Connectivity</fullName>
+                    <default>false</default>
+                    <label>Interface and Connectivity</label>
+                </value>
+                <value>
+                    <fullName>Microcontrollers and Processors</fullName>
+                    <default>false</default>
+                    <label>Microcontrollers and Processors</label>
+                </value>
+                <value>
+                    <fullName>Power Management</fullName>
+                    <default>false</default>
+                    <label>Power Management</label>
+                </value>
+                <value>
+                    <fullName>RF</fullName>
+                    <default>false</default>
+                    <label>RF</label>
+                </value>
+                <value>
+                    <fullName>Sensors</fullName>
+                    <default>false</default>
+                    <label>Sensors</label>
+                </value>
+                <value>
+                    <fullName>Other</fullName>
+                    <default>false</default>
+                    <label>Other</label>
+                </value>
+                <value>
+                    <fullName>Single Chip Modules</fullName>
+                    <default>false</default>
+                    <label>Single Chip Modules</label>
+                </value>
+                <value>
+                    <fullName>Software and HW Development Tools</fullName>
+                    <default>false</default>
+                    <label>Software and HW Development Tools</label>
+                </value>
+                <value>
+                    <fullName>Wireless Connectivity</fullName>
+                    <default>false</default>
+                    <label>Wireless Connectivity</label>
+                </value>
+                <value>
+                    <fullName>Discretes and Logic</fullName>
+                    <default>false</default>
+                    <isActive>false</isActive>
+                    <label>Discretes and Logic</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <label>Product Service Level Criteria</label>
+    <listViews>
+        <fullName>All</fullName>
+        <columns>NAME</columns>
+        <columns>Product__c</columns>
+        <columns>Product_Category__c</columns>
+        <columns>Product_Sub__c</columns>
+        <columns>Product_Service_Level__c</columns>
+        <filterScope>Everything</filterScope>
+        <label>All</label>
+    </listViews>
+    <nameField>
+        <displayFormat>PSL-{000000}</displayFormat>
+        <label>PSL Id</label>
+        <trackHistory>false</trackHistory>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Product Service Level Criteria</pluralLabel>
+    <searchLayouts/>
+    <sharingModel>ReadWrite</sharingModel>
+    <visibility>Public</visibility>
+</CustomObject>

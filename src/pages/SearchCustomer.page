@@ -1,0 +1,105 @@
+<!--  ---------------------------------------------------------------------------------
+@Created By :       Nisha Agrawal
+@Created Date:      23 May 2013
+@Description:       VF page to Search Customers - (CMD Hub App)
+---------------------------------------------------------------------------------------     -->
+
+<apex:page standardController="Customer__c" recordSetVar="customers" extensions="SearchCustomerController">  
+  <apex:form >      
+    <apex:sectionHeader title="Search Customer"  />
+    <apex:pageMessages id="pageMsg" />
+     <apex:actionStatus id="status" StartText="Searching..." startStyle="font-color:red;">
+            <apex:facet name="start">
+                <apex:image value="/img/loading.gif" />
+            </apex:facet>
+     </apex:actionStatus>    
+     <apex:pageBlock mode="edit">
+         <apex:pageBlockButtons location="top">
+                <apex:commandButton action="{!searchCustomers}" value="Search" rerender="pnlResult , pageMsg" status="status"/>
+                <apex:commandButton action="{!clearResults}" value="Clear" rerender="pnlResult , pageMsg, pnlCustomers" status="status"/>
+         </apex:pageBlockButtons> 
+         <apex:pageBlockSection title="Search Customers" id="pnlCustomers" >
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$ObjectType.Customer__c.Fields.Legal_Name__c.Label}" />
+                    <apex:inputText value="{! filterCustomer.Legal_Name__c}" style="width:300px;" />
+                </apex:pageBlockSectionItem>
+                
+                 <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$ObjectType.Customer__c.Fields.DUNS__c.Label}" />
+                    <apex:inputText value="{!filterCustomer.DUNS__c}" style="width:300px;" />
+                </apex:pageBlockSectionItem>
+                
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$ObjectType.Customer__c.Fields.Name.Label}" />
+                    <apex:inputText value="{!strGlobalId}" style="width:300px;" /> 
+                </apex:pageBlockSectionItem>
+                
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Customer Type" />
+                    <apex:selectList value="{!customerTypeId}" size="1" style="width:306px;">
+                        <apex:selectOptions value="{!lstCustomerType}"/>
+                    </apex:selectList>
+            	</apex:pageBlockSectionItem>
+            	
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$ObjectType.Customer__c.Fields.Country__c.Label}" />
+                    <apex:selectList value="{!strCountry}" size="1" style="width:306px;">
+                        <apex:selectOptions value="{!lstCountry}"/>
+                    </apex:selectList>                     
+                </apex:pageBlockSectionItem>
+                
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$ObjectType.Customer__c.Fields.City__c.Label}" />
+                    <apex:inputText value="{!filterCustomer.City__c}" style="width:300px;" />
+                </apex:pageBlockSectionItem>
+                
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$ObjectType.Customer__c.Fields.Street__c.Label}" />
+                    <apex:inputText value="{!filterCustomer.Street__c}" style="width:300px;" />
+                </apex:pageBlockSectionItem>
+                
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$ObjectType.Customer__c.Fields.Postal_Code__c.Label}" />
+                    <apex:inputText value="{!filterCustomer.Postal_Code__c}" style="width:300px;" />
+                </apex:pageBlockSectionItem>
+                
+                 <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$ObjectType.Customer__c.Fields.Global_Enterprise__c.Label}" />
+                    <apex:inputField value="{!filterCustomer.Global_Enterprise__c}" style="width:300px;" />
+                </apex:pageBlockSectionItem>
+                
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$ObjectType.Customer__c.Fields.Parent_Division__c.Label}" />
+                    <apex:inputField value="{!filterCustomer.Parent_Division__c}" style="width:300px;" />
+                </apex:pageBlockSectionItem>                                    
+            </apex:pageBlockSection>     
+      
+          <apex:pageBlockSection id="pbsResult" columns="1" title="Search Results">
+            <apex:outputPanel id="pnlResult">
+                 <apex:outputPanel id="pnlNoResult" rendered="{! NOT(foundResult) }">
+                            NO Result found. Please change your search criteria.
+                 </apex:outputPanel>
+                 <apex:outputpanel id="pnlList" rendered="{! foundResult }">
+                        
+                        <apex:outputPanel id="lstPanel"> 
+                            <apex:pageBlockTable id="pbtResult" cellpadding="2" cellspacing="2" border="1" columns="10" value="{!lstResults}" var="objResult">
+                                <apex:column headerValue="NXP Global Id" width="8%">
+                                    <apex:outputLink target="_blank" value="{! URLFOR('/' + objResult.Id , null )}">{! objResult.Name}</apex:outputLink>
+                                </apex:column>
+                                <apex:column value="{! objResult.Legal_Name__c}" width="15%" />
+                                <apex:column value="{! objResult.DUNS__c}" width="10%" />
+                                <apex:column headerValue="Customer Type" value="{! objResult.RecordType.Name}" width="10%" />
+                                <apex:column value="{! objResult.Country__c}" width="10%" />
+                                <apex:column value="{! objResult.City__c}" width="10%" />
+                                <apex:column value="{! objResult.Street__c}" width="10%" />
+                                <apex:column value="{! objResult.Postal_Code__c}" width="7%" />
+                                <apex:column headerValue="Global Enterprise" value="{! objResult.Global_Enterprise__r.Legal_Name__c}" width="10%" />
+                                <apex:column headerValue="Division" value="{! objResult.Parent_Division__r.Legal_Name__c}" width="10%" />
+                            </apex:pageBlockTable> 
+                        </apex:outputPanel>
+                 </apex:outputpanel>
+            </apex:outputPanel>
+          </apex:pageBlockSection>
+      </apex:pageBlock>
+  </apex:form>
+</apex:page>

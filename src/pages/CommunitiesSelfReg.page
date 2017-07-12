@@ -1,0 +1,480 @@
+<!--***************************************************************************************************
+@ Modified By :      Amrutha
+@Modified Date:      02 Feb 2015
+@Description:        Changes according to new requirement- add more fields to registration form 
+and new registration flow
+*******************************************************************************************************-->
+
+<!--***************************************************************************************************
+@ Modified By :      Amrutha
+@Modified Date:      29 April 2015
+@Description:        Changes according to new requirement- Captcha implementation
+*******************************************************************************************************-->
+
+<apex:page id="communitiesSelfRegPage" cache="True" showHeader="false"
+           sidebar="false" controller="CommunitiesSelfRegController"
+           title="NXP TechSupport Community"> 
+    <style>
+        .footer_gradient { /* IE10 Consumer Preview */
+        background-image: -ms-linear-gradient(bottom, #FFFFFF 0%, #859199 250%);
+        /* Mozilla Firefox */
+        background-image: -moz-linear-gradient(bottom, #FFFFFF 0%, #859199 250%);
+        /* Opera */
+        background-image: -o-linear-gradient(bottom, #FFFFFF 0%, #859199 250%);
+        /* Webkit (Safari/Chrome 10) */
+        background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #FFFFFF),
+        color-stop(2, #859199) );
+        /* Webkit (Chrome 11+) */
+        background-image: -webkit-linear-gradient(bottom, #FFFFFF 0%, #859199 250%);
+        /* W3C Markup, IE10 Release Preview */
+        background-image: linear-gradient(to top, #FFFFFF 0%, #859199 250%);
+        background: url("https://nxpcommunity.force.com/community/resource/1392098025000/NXPFooterBackground"); 
+        background-repeat:repeat-x;
+        
+        }
+        
+        #footer {
+        clear: both;
+        float: left;
+        margin: 16px 0 0;
+        min-height: 30px;
+        overflow: hidden;
+        width: 100%;
+        margin-top: 15%;
+        top: expression((   0 -(   footer.offsetHeight) +( 
+        document.documentElement.clientHeight ?   
+        document.documentElement.clientHeight :    
+        document.body.clientHeight ) +(   ignoreMe =    
+        document.documentElement.scrollTop ?   
+        document.documentElement.scrollTop :     document.body.scrollTop ) )
+        + 
+        'px' );
+        }
+        
+        .left a {
+        font-size: 12px;
+        color: black;
+        text-decoration: none;
+        }
+        
+        .left {
+        float: left;
+        top: -10px;
+        }
+        
+        .last {
+        font-size: 12px;
+        }
+        
+        .disp_inline {
+        display: inline;
+        padding-right: 12px;
+        margin-left: 10px;
+        }
+        
+        .border {
+        border-right: 1px solid black;
+        }
+        
+        .btn {
+        height: 27px;
+        width: 54px;
+        }
+        
+        .textar {
+        width: 200px;
+        height: 26px;
+        border: 1px solid #c0c0c0;
+        border-top-left-radius: 3px;
+        border-top-right-radius: 3px;
+        border-bottom-left-radius: 3px;
+        border-bottom-right-radius: 3px;
+        }
+        
+        .formBorder {
+        border: 1px solid #c0c0c0;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        }
+        
+        .whitebackground1 { /* IE10 Consumer Preview */
+        background-image: -ms-linear-gradient(top, #FFFFFF 29%, #859199 134%);
+        /* Mozilla Firefox */
+        background-image: -moz-linear-gradient(top, #FFFFFF 29%, #859199 134%);
+        /* Opera */
+        background-image: -o-linear-gradient(top, #FFFFFF 29%, #859199 134%);
+        /* Webkit (Safari/Chrome 10) */
+        background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #FFFFFF),
+        color-stop(1, #859199) );
+        /* Webkit (Chrome 11+) */
+        background-image: -webkit-linear-gradient(top, #FFFFFF 29%, #859199 134%);
+        /* W3C Markup, IE10 Release Preview */
+        background-image: linear-gradient(to bottom, #FFFFFF 29%, #859199 134%);
+        }
+        
+        .logowidth {
+        width: 100%;
+        height: 173px;
+        }
+        
+        .redChar{
+        color: #C30000;
+        font-size: 24px;
+        padding:5px;
+        }
+        .blackChar{
+        color: black;
+        font-weight: bold;
+        font-size: 24px;
+        padding:5px;
+        }
+        .container{
+        margin-left:1px;
+        background-color: #E8E8E8;
+        border-style: solid;
+        border-width:1px;
+        width: 180px;
+        height: 27px;
+        text-align: center;
+        }
+        
+        
+        .className td {
+        padding-left: 2em;
+        }  
+        #wrapper {
+        
+        margin-top: 0px;
+        margin-right: 0px;
+        margin-bottom: 0px;
+        margin-left: 0px;
+        }
+        .box-1, .box-3, .box-fix-ie6 {
+        margin-top: 0px;
+        }
+        
+        .dotted {
+        margin-left:25px;
+        margin-top:30px;
+        border:none;
+        border:1px dotted black;
+        color:black;
+        width:90%;
+        }
+        .submit-btn input {
+        background-color: #c1c123;
+        background-image: linear-gradient(to bottom, #c1c123 0%, #c1c123 50%, #9f9f01 100%);
+        border: 1px solid #9f9f01;
+        border-radius:3px;
+        width:12%;
+        color: #ffffff;
+        margin-right:250px;
+        margin-top:0px;
+        }
+        .submit-btn input:hover {
+        background-color: #c1c123;
+        background-image: linear-gradient(to bottom, #c1c123 0%, #c1c123 0%, #9f9f01 0%);
+        border: 1px solid #9f9f01;
+        border-radius:3px;
+        width:12%;
+        color: #ffffff;
+        margin-right:250px;
+        margin-top:0px;
+        }
+        .submit-btn1 input {
+        background-color: #c1c123;
+        background-image: linear-gradient(to bottom, #c1c123 0%, #c1c123 50%, #9f9f01 100%);
+        border: 1px solid #9f9f01;
+        border-radius:3px;
+        width:12%;
+        color: #ffffff;
+        margin-right:320px;
+        margin-top:0px;
+        }
+        .submit-btn1 input:hover {
+        background-color: #c1c123;
+        background-image: linear-gradient(to bottom, #c1c123 0%, #c1c123 0%, #9f9f01 0%);
+        border: 1px solid #9f9f01;
+        border-radius:3px;
+        width:12%;
+        color: #ffffff;
+        margin-right:320px;
+        margin-top:0px;
+        }
+    </style>
+    
+    <apex:define name="body">
+        
+        <div id="page" style="background:white;width: 1040px; position: relative;top: 0px;">
+            <!-----------Header----------->
+            <c:headercommunity >
+            </c:headercommunity>  
+            <apex:stylesheet value="{!URLFOR($Resource.CustomLogin, 'CustomLogin/css/login.css')}" ></apex:stylesheet>
+            <apex:includeScript value="{!URLFOR($Resource.NXPJs, '/jquery-1.7.2.js')}" />
+            <apex:includeScript value="{!URLFOR($Resource.NXPJs, '/jquery.hoverIntent.js')}" />
+            <apex:includeScript value="{!URLFOR($Resource.NXPJs, '/header.js')}" />
+            <apex:stylesheet value="{!URLFOR($Resource.NXPCss, '/reset.css')}" />
+            <apex:stylesheet value="{!URLFOR($Resource.NXPCss, '/basic.css')}" />
+            <apex:stylesheet value="{!URLFOR($Resource.NXPCss, '/header.css')}" /> 
+            <apex:stylesheet value="{!URLFOR($Resource.NXPCss, '/tabs.css')}" /> 
+            <!--------------Menu------------>
+            <c:menuxp1 >
+            </c:menuxp1>  <br/>
+            
+        </div><br/><br/>
+        <div style="width:980px; float:left; margin-left:20px; margin-bottom:-5px; " class="hoverAnchor">
+            <apex:outputLink id="HomePage" value="/community/CommunitiesHomePage" >Home
+            </apex:outputLink>&nbsp;
+            <apex:image value="{!$Resource.arrow}" style="test-align: bottom;"/>
+            User Registration &nbsp;
+        </div><br/><br/><br/>
+        
+        <div id="wrapper">
+            <div class="box-3 last">
+                <div class="box-center border-radius grey-gradient box-shadow" style="margin-top: 2px;
+                                                                                      margin-bottom: 43px ;width:570px;margin-left: 40px;">
+                    <div style="margin-left: 2em; ">
+                        <apex:outputLabel value="Register for NXP Community" for="Sign Up"
+                                          style="font-size:15px;float:left;color:#e76802" />
+                    </div>
+                    <span class="center-dotted" style="color: black;"></span>
+                    <apex:form id="theForm" forceSSL="true" style="clear: both">
+                        <apex:pageMessages id="error" />
+                        <apex:panelGrid columns="2" style="margin-top:1em;  " styleClass="className"> 
+                            <apex:outputPanel >
+                                <apex:outputLabel value="First Name" for="firstName"
+                                                  style="font-weight:bold;text-align: left;" /> 
+                                <div style="border-left: 3px solid red; padding-left: 2px;height:30px;">
+                                    <apex:inputText styleClass="textar" required="true"
+                                                    id="firstName" value="{!strFirstName}" label="First Name"
+                                                    style="text-align:left;" />
+                                </div>
+                            </apex:outputPanel>
+                            <apex:outputPanel >
+                                <br/>
+                                <apex:outputLabel value="Last Name" for="lastName"
+                                                  style="font-weight:bold" />
+                                <div style="border-left: 3px solid red; padding-left: 2px;height:30px;">
+                                    <apex:inputText styleClass="textar" required="true"
+                                                    id="lastName" value="{!strLastName}" label="Last Name" />
+                                </div>
+                                <br/>
+                            </apex:outputPanel>
+                            <apex:outputPanel >
+                                <apex:outputLabel value="Community Nickname"
+                                                  for="communityNickname" style="font-weight:bold" />
+                                <div style="border-left: 3px solid red; padding-left: 2px;height:30px;">
+                                    <apex:inputText styleClass="textar" required="true"
+                                                    id="communityNickname" value="{!strCommunityNickname}"
+                                                    label="Community Nickname" />
+                                </div>
+                                <br/>
+                            </apex:outputPanel>
+                            <apex:outputPanel >
+                                <apex:outputLabel value="Email" for="email"
+                                                  style="font-weight:bold;">&nbsp;                     
+                                    <div class="mouseOverInfoOuter" onfocus="addMouseOver(this)"
+                                         onmouseover="addMouseOver(this)" tabindex="0">
+                                        <img src="https://nxpcommunity.force.com/community/resource/1392097947000/Icon_Image"
+                                             alt="" class="infoIcon" title="" />
+                                        <div class="mouseOverInfo" style="display: none;">
+                                            <span>This will also be your user name.</span>
+                                        </div>
+                                    </div>
+                                </apex:outputLabel>&nbsp;
+                                <div style="border-left: 3px solid red; padding-left: 2px;height:30px;">
+                                    <apex:inputText styleClass="textar" required="true"
+                                                    id="email" value="{!strEmail}" label="Email" />
+                                </div><br/>
+                            </apex:outputPanel>
+                            <apex:outputPanel >
+                                <apex:outputLabel value="Password"
+                                                  for="password" style="font-weight:bold" />
+                                <div style="border-left: 3px solid red; padding-left: 2px;height:30px;">
+                                    <apex:inputSecret styleClass="textar" id="password"
+                                                      value="{!strPassword}" />
+                                </div><br/>
+                            </apex:outputPanel>
+                            <apex:outputPanel >
+                                <apex:outputLabel value="Confirm Password"
+                                                  for="confirmPassword" style="font-weight:bold" />
+                                <div style="border-left: 3px solid red; padding-left: 2px;height:30px;">
+                                    <apex:inputSecret styleClass="textar" id="confirmPassword"
+                                                      value="{!strConfirmPassword}" />
+                                </div><br/>
+                            </apex:outputPanel>
+                            
+                            <!------Code by Amrutha Based on requirement--->
+                            <apex:outputPanel >
+                                <apex:outputLabel value="Phone Number" for="phoneNumber"
+                                                  style="font-weight:bold;text-align: left;" />
+                                <div style="border-left: 3px solid red; padding-left: 2px;height:30px;">
+                                    <apex:inputText styleClass="textar" required="true"
+                                                    id="phoneNumber" value="{!strPhone}" label="Phone Number"
+                                                    style="text-align:left;" />
+                                </div><br/>
+                            </apex:outputPanel>
+                            <apex:outputPanel >
+                                <apex:outputLabel value="Company" for="company"
+                                                  style="font-weight:bold;text-align: left;" />
+                                <div style="border-left: 3px solid red; padding-left: 2px;height:30px;">
+                                    <apex:inputText styleClass="textar" required="true"
+                                                    id="company" value="{!strCompany}" label="Company"
+                                                    style="text-align:left;" />
+                                </div><br/>
+                            </apex:outputPanel>
+                            <apex:outputPanel >
+                                <apex:outputLabel value="Facebook" for="facebook"
+                                                  style="font-weight:bold;text-align: left;" >
+                                    &nbsp;                     
+                                    <div class="mouseOverInfoOuter" onfocus="addMouseOver(this)"
+                                         onmouseover="addMouseOver(this)" tabindex="0">
+                                        <img src="https://nxpcommunity.force.com/community/resource/1392097947000/Icon_Image"
+                                             alt="" class="infoIcon" title="" />
+                                        <div class="mouseOverInfo" style="display: none;">
+                                            <span>Please enter your facebook profile link</span>
+                                        </div>
+                                    </div>
+                                </apex:outputLabel><br/>
+                                <apex:inputText styleClass="textar" id="facebook" value="{!strFacebook}" label="Facebook"
+                                                style="text-align:left;" /></apex:outputPanel>
+                            <apex:outputPanel >
+                                <apex:outputLabel value="LinkedIn" for="LinkedIn"
+                                                  style="font-weight:bold;text-align: left;" >
+                                    &nbsp;                     
+                                    <div class="mouseOverInfoOuter" onfocus="addMouseOver(this)"
+                                         onmouseover="addMouseOver(this)" tabindex="0">
+                                        <img src="https://nxpcommunity.force.com/community/resource/1392097947000/Icon_Image"
+                                             alt="" class="infoIcon" title="" />
+                                        <div class="mouseOverInfo" style="display: none;">
+                                            <span>Please enter your Linkedin Profile link</span>
+                                        </div>
+                                    </div>
+                                </apex:outputLabel><br/>
+                                <apex:inputText styleClass="textar" id="LinkedIn" value="{!strLinkedIn}" label="LinkedIn"
+                                                style="text-align:left;" /></apex:outputPanel>
+                            <apex:outputPanel ><br/>
+                                <apex:outputLabel value="Twitter" for="twitter"
+                                                  style="font-weight:bold;text-align: left;" >
+                                    &nbsp;                     
+                                    <div class="mouseOverInfoOuter" onfocus="addMouseOver(this)"
+                                         onmouseover="addMouseOver(this)" tabindex="0">
+                                        <img src="https://nxpcommunity.force.com/community/resource/1392097947000/Icon_Image"
+                                             alt="" class="infoIcon" title="" />
+                                        <div class="mouseOverInfo" style="display: none;">
+                                            <span>Please enter your twitter handleÂ </span>
+                                        </div>
+                                    </div>
+                                </apex:outputLabel><br/>
+                                <apex:inputText styleClass="textar" id="twitter" value="{!strTwitter}" label="Twitter"
+                                                style="text-align:left;" /></apex:outputPanel>
+                            <apex:outputPanel ><br/>
+                                <apex:outputLabel value="Job Title" for="jobTitle" style="font-weight:bold;text-align: left;"/>    
+                                <div style="border-left: 3px solid red; padding-left: 2px;">
+                                    <apex:selectList size="1" value="{!strJobTitle}" required="true" id="JobTitle" style="text-align:left;color: black;">
+                                        <apex:selectOptions value="{!jobTitles}" />
+                                    </apex:selectList>
+                                </div>
+                            </apex:outputPanel>
+                            <apex:outputPanel ><br/>
+                                <apex:outputLabel value="State/Province" for="state"
+                                                  style="font-weight:bold;text-align: left;" /><br/>
+                                <apex:inputText styleClass="textar" id="state" value="{!strState}" label="State/Province"
+                                                style="text-align:left;" />
+                            </apex:outputPanel>
+                            <apex:outputPanel ><br/><br/>
+                                <apex:outputLabel value="Country" for="country" style="font-weight:bold;text-align: left;"/>  
+                                <div style="border-left: 3px solid red; padding-left: 2px;">
+                                    <apex:selectList size="1" value="{!strCountry}" required="true" id="country" style="text-align:left;color: black;">                    
+                                        <apex:selectOptions value="{!countries}"/>
+                                    </apex:selectList>
+                                </div><br/>
+                            </apex:outputPanel>
+                            <apex:outputPanel ><br/>
+                                <apex:outputLabel value="Region" for="webRegion" style="font-weight:bold;text-align: left;"/>
+                                <div >
+                                    <apex:selectList size="1" value="{!strWebRegion}" id="webRegion" style="text-align:left;color: black;" >
+                                        <apex:selectOptions value="{!webRegions}" />
+                                    </apex:selectList>
+                                </div><br/>
+                            </apex:outputPanel>
+                            <br/>
+                            
+                            
+                        </apex:panelGrid>
+                        
+                        <apex:panelGrid style="margin-left:20px;">
+                            
+                            Enter below characters.
+                            <apex:outputPanel styleClass="container" layout="block" id="code">
+                                <apex:outputText value="{!char1}" styleClass="blackChar"/>
+                                <apex:outputText value="{!char2}" styleClass="redChar"/>
+                                <apex:outputText value="{!char3}" styleClass="blackChar"/>
+                                <apex:outputText value="{!char4}" styleClass="redChar"/>
+                                <apex:outputText value="{!char5}" styleClass="blackChar"/>
+                                <apex:outputText value="{!char6}" styleClass="redChar"/>
+                            </apex:outputPanel>
+                            <apex:outputPanel >
+                                <apex:inputText value="{!input}"/>
+                                <apex:commandButton value="Reset" rerender="code"/>
+                            </apex:outputPanel>
+                        </apex:panelGrid><br/>
+                        
+                        <!-- To display guidelines and buttons-->
+                        <apex:panelGroup style="margin-left: 2em;">
+                            <a style="color: black; text-decoration: none; font-weight: bold;"
+                               href="http://www.nxp.com/terms-of-use/community-user-guidelines.html">Community
+                                User Guidelines</a>
+                        </apex:panelGroup><br/><br/>
+                        <apex:panelGroup style="margin-left: 2em;">
+                            <apex:inputCheckbox value="{!isCheck}" id="checkbx" required="true">
+                            </apex:inputCheckbox>&nbsp;&nbsp;I agree to the Terms and Conditions
+                        </apex:panelGroup>&nbsp;&nbsp;
+                        <div class="controls submit-btn" style="margin:1px;padding:0px 0px;">
+                            <apex:commandButton action="{!registerUser}" accesskey=""                                                            style="clear:both;" value="{!$Label.site.submit}"
+                                                id="submit" /><br/><br/></div>
+                        <apex:panelGroup style="margin-left: 1em;">
+                            <div style="width: 100%; margin-left: 2em;">
+                                <b> <apex:outputText value="Have an account?" /> </b>
+                                <div class="controls submit-btn1" style="margin:1px;padding:0px 0px;">
+                                    <apex:commandButton action="{!SignInPage}" value="Sign In"
+                                                        id="SignIn"  /></div>
+                            </div></apex:panelGroup>
+                        
+                    </apex:form>
+                </div>
+            </div>
+        </div>
+    </apex:define>
+    <!----============================ FOOTER ======================------->
+    <c:CommunityFooter ></c:CommunityFooter>
+    <script>
+    function getUrlParameter(sParam) {
+        var sPageURL = window.location.search.substring(1);
+        var sURLVariables = sPageURL.split('&');
+        
+        for (var i = 0; i < sURLVariables.length; i++) {
+            var sParameterName = sURLVariables[i].split('=');
+            if (sParameterName[0] == sParam) {
+                return sParameterName[1];
+            }
+        }
+    };
+    
+    $(document).ready(function(){
+        if(typeof window.s !='undefined'){
+            window.s.pageName = document.location.pathname;
+            
+            if(window.location.host == 'nxpcommunity.force.com' && window.location.href.indexOf("dc=") > -1) {
+                window.s.pageName += '/'+getUrlParameter('dc');
+            }
+            
+            window.s.tl();
+        }
+    });
+    
+    </script>
+    <script type="text/javascript" src="/community/resource/1412757333000/CommunityOmnitureScript/s_code.js"></script>
+    </apex:page>

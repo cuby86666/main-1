@@ -1,0 +1,465 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <description>Tax Classification</description>
+    <enableActivities>false</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableChangeDataCapture>false</enableChangeDataCapture>
+    <enableEnhancedLookup>true</enableEnhancedLookup>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <fields>
+        <fullName>CMD_Request__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>CMD Request</label>
+        <referenceTo>CMD_Request__c</referenceTo>
+        <relationshipLabel>Tax Classification</relationshipLabel>
+        <relationshipName>Tax_Classification</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Country__c</fullName>
+        <description>Country</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Country</inlineHelpText>
+        <label>Country</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>AT - Austria</fullName>
+                    <default>false</default>
+                    <label>AT - Austria</label>
+                </value>
+                <value>
+                    <fullName>AU - Australia</fullName>
+                    <default>false</default>
+                    <label>AU - Australia</label>
+                </value>
+                <value>
+                    <fullName>BE - Belgium</fullName>
+                    <default>false</default>
+                    <label>BE - Belgium</label>
+                </value>
+                <value>
+                    <fullName>BR - Brazil</fullName>
+                    <default>false</default>
+                    <label>BR - Brazil</label>
+                </value>
+                <value>
+                    <fullName>CA - Canada</fullName>
+                    <default>false</default>
+                    <label>CA - Canada</label>
+                </value>
+                <value>
+                    <fullName>CN - China</fullName>
+                    <default>false</default>
+                    <label>CN - China</label>
+                </value>
+                <value>
+                    <fullName>CZ - Czech Republic</fullName>
+                    <default>false</default>
+                    <label>CZ - Czech Republic</label>
+                </value>
+                <value>
+                    <fullName>DE - Germany</fullName>
+                    <default>false</default>
+                    <label>DE - Germany</label>
+                </value>
+                <value>
+                    <fullName>EE - Estonia</fullName>
+                    <default>false</default>
+                    <label>EE - Estonia</label>
+                </value>
+                <value>
+                    <fullName>ES - Spain</fullName>
+                    <default>false</default>
+                    <label>ES - Spain</label>
+                </value>
+                <value>
+                    <fullName>FI - Finland</fullName>
+                    <default>false</default>
+                    <label>FI - Finland</label>
+                </value>
+                <value>
+                    <fullName>FR - France</fullName>
+                    <default>false</default>
+                    <label>FR - France</label>
+                </value>
+                <value>
+                    <fullName>GB - United Kingdom</fullName>
+                    <default>false</default>
+                    <label>GB - United Kingdom</label>
+                </value>
+                <value>
+                    <fullName>HK - Hong Kong</fullName>
+                    <default>false</default>
+                    <label>HK - Hong Kong</label>
+                </value>
+                <value>
+                    <fullName>HU - Hungary</fullName>
+                    <default>false</default>
+                    <label>HU - Hungary</label>
+                </value>
+                <value>
+                    <fullName>ID - Indonesia</fullName>
+                    <default>false</default>
+                    <label>ID - Indonesia</label>
+                </value>
+                <value>
+                    <fullName>IE - Ireland</fullName>
+                    <default>false</default>
+                    <label>IE - Ireland</label>
+                </value>
+                <value>
+                    <fullName>IN - India</fullName>
+                    <default>false</default>
+                    <label>IN - India</label>
+                </value>
+                <value>
+                    <fullName>IT - Italy</fullName>
+                    <default>false</default>
+                    <label>IT - Italy</label>
+                </value>
+                <value>
+                    <fullName>JP - Japan</fullName>
+                    <default>false</default>
+                    <label>JP - Japan</label>
+                </value>
+                <value>
+                    <fullName>KR - South Korea</fullName>
+                    <default>false</default>
+                    <label>KR - South Korea</label>
+                </value>
+                <value>
+                    <fullName>MX - Mexico</fullName>
+                    <default>false</default>
+                    <label>MX - Mexico</label>
+                </value>
+                <value>
+                    <fullName>MY - Malaysia</fullName>
+                    <default>false</default>
+                    <label>MY - Malaysia</label>
+                </value>
+                <value>
+                    <fullName>NL - Netherlands</fullName>
+                    <default>false</default>
+                    <label>NL - Netherlands</label>
+                </value>
+                <value>
+                    <fullName>PH - Philippines</fullName>
+                    <default>false</default>
+                    <label>PH - Philippines</label>
+                </value>
+                <value>
+                    <fullName>PL - Polska</fullName>
+                    <default>false</default>
+                    <label>PL - Polska</label>
+                </value>
+                <value>
+                    <fullName>PT - Portugal</fullName>
+                    <default>false</default>
+                    <label>PT - Portugal</label>
+                </value>
+                <value>
+                    <fullName>RO - Rumania</fullName>
+                    <default>false</default>
+                    <label>RO - Rumania</label>
+                </value>
+                <value>
+                    <fullName>SG - Singapore</fullName>
+                    <default>false</default>
+                    <label>SG - Singapore</label>
+                </value>
+                <value>
+                    <fullName>SK - Slovakia</fullName>
+                    <default>false</default>
+                    <label>SK - Slovakia</label>
+                </value>
+                <value>
+                    <fullName>TH - Thailand</fullName>
+                    <default>false</default>
+                    <label>TH - Thailand</label>
+                </value>
+                <value>
+                    <fullName>TW - Taiwan</fullName>
+                    <default>false</default>
+                    <label>TW - Taiwan</label>
+                </value>
+                <value>
+                    <fullName>US - USA</fullName>
+                    <default>false</default>
+                    <label>US - USA</label>
+                </value>
+                <value>
+                    <fullName>VN - Vietnam</fullName>
+                    <default>false</default>
+                    <label>VN - Vietnam</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>SAP_CMD_Tax_Classification__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>SAP CMD Tax Classification</description>
+        <externalId>false</externalId>
+        <inlineHelpText>SAP CMD Tax Classification</inlineHelpText>
+        <label>SAP CMD Tax Classification</label>
+        <referenceTo>SAP_CMD__c</referenceTo>
+        <relationshipLabel>Tax Classification</relationshipLabel>
+        <relationshipName>SAP_CMD_Tax_Classification</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Tax_Category__c</fullName>
+        <description>Tax_Category</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Tax_Category</inlineHelpText>
+        <label>Tax Category</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <controllingField>Country__c</controllingField>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>MWST</fullName>
+                    <default>false</default>
+                    <label>MWST</label>
+                </value>
+                <value>
+                    <fullName>UTXJ</fullName>
+                    <default>false</default>
+                    <label>UTXJ</label>
+                </value>
+                <value>
+                    <fullName>ZWRC</fullName>
+                    <default>false</default>
+                    <label>ZWRC</label>
+                </value>
+            </valueSetDefinition>
+            <valueSettings>
+                <controllingFieldValue>MX - Mexico</controllingFieldValue>
+                <controllingFieldValue>MY - Malaysia</controllingFieldValue>
+                <controllingFieldValue>NL - Netherlands</controllingFieldValue>
+                <controllingFieldValue>PH - Philippines</controllingFieldValue>
+                <controllingFieldValue>PL - Polska</controllingFieldValue>
+                <controllingFieldValue>PT - Portugal</controllingFieldValue>
+                <controllingFieldValue>RO - Rumania</controllingFieldValue>
+                <controllingFieldValue>SG - Singapore</controllingFieldValue>
+                <controllingFieldValue>SK - Slovakia</controllingFieldValue>
+                <controllingFieldValue>TH - Thailand</controllingFieldValue>
+                <controllingFieldValue>ES - Spain</controllingFieldValue>
+                <controllingFieldValue>TW - Taiwan</controllingFieldValue>
+                <controllingFieldValue>FI - Finland</controllingFieldValue>
+                <controllingFieldValue>FR - France</controllingFieldValue>
+                <controllingFieldValue>VN - Vietnam</controllingFieldValue>
+                <controllingFieldValue>GB - United Kingdom</controllingFieldValue>
+                <controllingFieldValue>HK - Hong Kong</controllingFieldValue>
+                <controllingFieldValue>HU - Hungary</controllingFieldValue>
+                <controllingFieldValue>ID - Indonesia</controllingFieldValue>
+                <controllingFieldValue>IE - Ireland</controllingFieldValue>
+                <controllingFieldValue>IN - India</controllingFieldValue>
+                <controllingFieldValue>IT - Italy</controllingFieldValue>
+                <controllingFieldValue>AT - Austria</controllingFieldValue>
+                <controllingFieldValue>AU - Australia</controllingFieldValue>
+                <controllingFieldValue>BE - Belgium</controllingFieldValue>
+                <controllingFieldValue>BR - Brazil</controllingFieldValue>
+                <controllingFieldValue>CA - Canada</controllingFieldValue>
+                <controllingFieldValue>CN - China</controllingFieldValue>
+                <controllingFieldValue>CZ - Czech Republic</controllingFieldValue>
+                <controllingFieldValue>DE - Germany</controllingFieldValue>
+                <controllingFieldValue>EE - Estonia</controllingFieldValue>
+                <controllingFieldValue>JP - Japan</controllingFieldValue>
+                <controllingFieldValue>KR - South Korea</controllingFieldValue>
+                <valueName>MWST</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>NL - Netherlands</controllingFieldValue>
+                <controllingFieldValue>GB - United Kingdom</controllingFieldValue>
+                <controllingFieldValue>DE - Germany</controllingFieldValue>
+                <valueName>ZWRC</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>US - USA</controllingFieldValue>
+                <valueName>UTXJ</valueName>
+            </valueSettings>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Tax_Classification__c</fullName>
+        <description>Tax Classification</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Tax Classification</inlineHelpText>
+        <label>Tax Classification</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <controllingField>Tax_Category__c</controllingField>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>0</fullName>
+                    <default>false</default>
+                    <label>0</label>
+                </value>
+                <value>
+                    <fullName>1</fullName>
+                    <default>true</default>
+                    <label>1</label>
+                </value>
+                <value>
+                    <fullName>B</fullName>
+                    <default>false</default>
+                    <label>B</label>
+                </value>
+                <value>
+                    <fullName>E</fullName>
+                    <default>false</default>
+                    <label>E</label>
+                </value>
+                <value>
+                    <fullName>S</fullName>
+                    <default>false</default>
+                    <label>S</label>
+                </value>
+            </valueSetDefinition>
+            <valueSettings>
+                <controllingFieldValue>MWST</controllingFieldValue>
+                <controllingFieldValue>UTXJ</controllingFieldValue>
+                <controllingFieldValue>ZWRC</controllingFieldValue>
+                <valueName>0</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>MWST</controllingFieldValue>
+                <controllingFieldValue>UTXJ</controllingFieldValue>
+                <controllingFieldValue>ZWRC</controllingFieldValue>
+                <valueName>1</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>MWST</controllingFieldValue>
+                <controllingFieldValue>UTXJ</controllingFieldValue>
+                <controllingFieldValue>ZWRC</controllingFieldValue>
+                <valueName>B</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>MWST</controllingFieldValue>
+                <controllingFieldValue>UTXJ</controllingFieldValue>
+                <controllingFieldValue>ZWRC</controllingFieldValue>
+                <valueName>E</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>MWST</controllingFieldValue>
+                <controllingFieldValue>UTXJ</controllingFieldValue>
+                <controllingFieldValue>ZWRC</controllingFieldValue>
+                <valueName>S</valueName>
+            </valueSettings>
+        </valueSet>
+    </fields>
+    <label>Tax Classification</label>
+    <listViews>
+        <fullName>All</fullName>
+        <columns>NAME</columns>
+        <columns>OBJECT_ID</columns>
+        <columns>Tax_Category__c</columns>
+        <columns>Tax_Classification__c</columns>
+        <filterScope>Everything</filterScope>
+        <label>All</label>
+    </listViews>
+    <nameField>
+        <displayFormat>A-{0000}</displayFormat>
+        <label>Tax Classification</label>
+        <trackHistory>false</trackHistory>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Tax Classification</pluralLabel>
+    <searchLayouts/>
+    <sharingModel>Read</sharingModel>
+    <visibility>Public</visibility>
+    <webLinks>
+        <fullName>Create_New_Tax_Classification</fullName>
+        <availability>online</availability>
+        <displayType>massActionButton</displayType>
+        <height>600</height>
+        <linkType>page</linkType>
+        <masterLabel>Create New Tax Classification</masterLabel>
+        <openType>noSidebar</openType>
+        <page>TaxClassification</page>
+        <protected>false</protected>
+        <requireRowSelection>false</requireRowSelection>
+    </webLinks>
+    <webLinks>
+        <fullName>Create_New_Tax_Classification_CMD_Request</fullName>
+        <availability>online</availability>
+        <displayType>massActionButton</displayType>
+        <height>600</height>
+        <linkType>page</linkType>
+        <masterLabel>Create New Tax Classification</masterLabel>
+        <openType>noSidebar</openType>
+        <page>TaxClassificationCMDRequest</page>
+        <protected>false</protected>
+        <requireRowSelection>false</requireRowSelection>
+    </webLinks>
+</CustomObject>

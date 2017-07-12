@@ -1,0 +1,277 @@
+<!--*********************************************************************************************
+@Created By :      Amrutha R
+@CreatedDate :     02 Aug 2015
+Description :      Page for NXP community users to post view stories
+****************************************************************************************************-->
+
+<!--*********************************************************************************************
+@Modified By :      Avichal Kumar 
+@ModifiedDate :     31 Aug 2015
+Description :      Pagination implementation
+****************************************************************************************************-->
+
+<apex:page sidebar="false" showHeader="false" standardStylesheets="false" extensions="CommunityTabsController" Controller="CommunitiesSuccessStoriesController" >
+
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <title>Stories - NXP TechSupport Community</title>
+    <apex:stylesheet value="{!URLFOR($Resource.Forum_Community_3, 'NXP-community/css/font-awesome.css')}" ></apex:stylesheet>      
+    <apex:stylesheet value="{!URLFOR($Resource.Forum_Community_3, 'NXP-community/css/hover.css')}" ></apex:stylesheet>
+    <apex:stylesheet value="{!URLFOR($Resource.Forum_Community_3, 'NXP-community/css/main.css')}" ></apex:stylesheet>  
+</head>
+    <!--script for redirection as this page is not used for now-->
+<script type="text/javascript">
+    var thecookie = readCookie('doRedirect');
+    if(!thecookie) {
+       createCookie('doRedirect','true','1');
+        window.location = 'http://www.nxp.com/404_Page_not_Found';
+    };
+    function createCookie(name,value,days){
+      // do work
+    }
+    function readCookie(name){
+      // do work
+    }
+</script>
+    
+<body>
+ <c:CommunityHeaderComponent ></c:CommunityHeaderComponent>
+   
+    <!-- Breadcrumbs -->
+    <div class="breadcrumb-bar">
+        <div class="container">
+            <ul class="breadcrumb">
+                <li><a href="/community/CommunityOverview">{!$label.Community_breadcrumb_Home}</a></li>
+                <li><a href="/community/CommunityOverview">{!$label.Community_breadcrumb_Community}</a></li>
+                <li class="active"><a href="/community/CommunityStories">Story</a></li>
+            </ul>
+        </div>
+    </div>
+    <!-- Community Navigtion -->
+    <div class="container h-spacer navigation">
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-10 col-sm-10">
+                        <div class="navbar-header">
+                            <a class="navbar-brand" href="#">NXP Community</a>
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                                <span class="sr-only">Toggle navigation</span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                        </div>
+                        <div id="navbar" class="navbar-collapse collapse">
+                            <ul class="nav navbar-nav">
+                                <li ><a href="/community/CommunityOverview">{!$label.Community_tab_Overview}</a></li>
+                              <li><a href="/community/CommunityForum">{!$label.Community_breadcrumb_Forum}</a></li>
+                              <li><a href="/community/CommunityFAQ">{!$label.Community_tab_FAQ}</a></li>
+                              <li><apex:outputLink rendered="{!If(($Profile.Name='NXP Community Profile'|| publicDomain==true),false,true)}" value="/community/CommunityCaseList">{!$Label.Community_tab_Contactsupport}</apex:outputLink></li>
+                              <li class="active"><a href="/community/CommunityStories">{!$Label.Community_tab_Stories}</a></li>
+                              <li ><apex:outputLink rendered="{!InternalExternalUser}" value="/community/CommunityProjectIssueList">{!$Label.Community_tab_Project}</apex:outputLink></li> 
+
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- login container -->
+                    <apex:outputPanel rendered="{!If(($Profile.Name='NXP Community Profile'),true,false)}">
+                    <div class="nav navbar-nav navbar-right">
+                        <div class="login-holder">
+                            <img class="hvr-grow" id="logo" src="{!URLFOR($Resource.Forum_Community_3,'NXP-community/img/community-logo_small.png')}"/>
+                            <a href="/community/communityLogin?pagename=communityStories">Login / </a>
+                            <a href="/community/communityRegistration">Register</a>
+                        </div>
+                    </div>
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!If(($Profile.Name='NXP Community Profile'),false,true)}">
+                    <div class="nav navbar-nav navbar-right">
+                        <span>
+                         <!--   <img src="{!URLFOR($Resource.Forum_Community_3,'NXP-community/img/avatar_round.png')}" class="avatar" alt="" /> -->
+                          <img src="{!largePhotoUrl}" height="42" width="42" /> 
+                     &nbsp;<a title="" data-toggle="popover" href="#" data-original-title="Profile properties">
+                    {!$User.firstName}&nbsp;{!$User.Lastname} <i class="fa fa-gear"></i>
+                    </a>
+                  </span>
+                    </div>
+                    </apex:outputPanel>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <br/>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-9 col-xs-9">
+                <h4>Stories</h4>
+            </div>
+   
+        <div class="col-md-3 col-xs-3">
+            <a href="/community/CommunitySubmitStory"><button class="button-submit-case">SUBMIT YOUR STORY</button></a>
+        </div>
+         </div>
+         
+    </div>
+    <apex:form style="margin-left:100px;">
+   <apex:pageMessages ></apex:pageMessages>
+   </apex:form>
+    <br/>
+     
+    <div class="container dropdown-search">
+        <div class="row">
+            <div class="col-md-12 col-xs-12 text-left">
+                <span>Show</span>
+                <!-- Single button -->
+                <div class="btn-group">
+                   <apex:form >
+                    <apex:selectList value="{!categoryFilterId}" size="1" styleClass="btn btn-default dropdown-toggle dropdown-style">
+                                                        <apex:actionSupport event="onchange" action="{!fetchStories1}" rerender="ideas,Pages"/>
+                                                        <apex:selectOptions value="{!stories}"/>
+                                                    </apex:selectList>
+                     </apex:form>
+                </div>
+                <span>Sort by</span>
+                <div class="btn-group">
+                 <apex:form >
+                   <apex:selectList value="{!sortFilterId}" size="1" styleClass="btn btn-default dropdown-toggle dropdown-style">
+                                                        <apex:actionSupport event="onchange" action="{!fetchStories1}" rerender="ideas,Pages"/>
+                                                        <apex:selectOptions value="{!sortStories}"/>
+                                                    </apex:selectList>
+                                                    </apex:form>
+                </div>
+            </div>
+        </div>
+    </div>
+<apex:form id="ideas" >
+    <!-- story holder -->
+
+    <apex:repeat value="{!lstIdeas}" var="objIdea" >       <!-- rows="{!index}"  -->
+    <div class="container stories-holder">
+        <div class="row-fluid">
+            <div class="col-md-1 col-xs-1 clear-left clear-right vote-container">
+                <div class="vote">
+                    <span>Vote for this story</span>
+                    <apex:outputPanel rendered="{!IF((objIdea.createdbyid<>$User.Id && $Profile.Name<>'NXP Community Profile'),true,false)}">
+                    <apex:commandLink reRender="total" >
+                          <span class="fa fa-thumbs-o-up"><!-- -- --></span>
+                          <apex:actionSupport action="{!promoteStory}" event="onclick" oncomplete="window.location.reload()" reRender="ideas">
+                          <apex:param name="strIdeaId" value="{!objIdea.id}" assignTo="{!strIdeaId}"/>
+                          </apex:actionSupport>
+                    </apex:commandLink>
+                    <apex:commandLink reRender="total" >
+                          <span class="fa fa-thumbs-o-down fa-flip-horizontal"><!-- -- --></span>
+                          <apex:actionSupport action="{!demoteStory}" event="onclick" oncomplete="window.location.reload()" reRender="ideas">
+                          <apex:param name="strIdeaId" value="{!objIdea.id}" assignTo="{!strIdeaId}"/>
+                          </apex:actionSupport>
+                    </apex:commandLink>
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!IF((objIdea.createdbyid==$User.Id || $Profile.Name=='NXP Community Profile'),true,false)}">
+                          <apex:outputpanel ><span class="fa fa-thumbs-o-up"><!-- -- --></span></apex:outputpanel>
+                          <apex:outputpanel ><span class="fa fa-thumbs-o-down fa-flip-horizontal"><!-- -- --></span></apex:outputpanel>
+                    </apex:outputPanel>
+                    <hr/>
+                    <span id="total">{!FLOOR(objIdea.votetotal)}</span>
+                </div>
+            </div>
+            <div class="col-md-11 col-xs-11 clear-left clear-right">
+                <div class="row-fluid avatar-header">
+                    
+                       
+                       <apex:outputPanel rendered="{!IF($Profile.Name=='NXP Community Profile',true,false)}" styleClass="col-md-12 col-xs-12 clear-left clear-right"  >
+                      
+                       <img src="{!URLFOR($Resource.Forum_Community_3,'NXP-community/img/avatar.png')}"/>
+                       <div>
+                            <span>{!objIdea.creatorName}</span>
+                            <span>{!objIdea.title}</span>
+                        </div>
+                       
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!IF($Profile.Name=='NXP Community Profile',false,true)}" styleClass="col-md-12 col-xs-12 clear-left clear-right">
+                    
+                       <img src="{!objIdea.createdby.Fullphotourl}"/>
+                       <div>
+                            <span>{!objIdea.creatorName}</span>
+                            <span>{!objIdea.title}</span>
+                        </div>
+                      
+                    </apex:outputPanel> 
+                       
+                    
+                    
+                </div>
+                <div class="row-fluid content-holder">
+                    
+                    <div class="col-md-12 col-xs-12 story" >
+                        <div ><apex:outputText value="{!objIdea.body}" escape="false" /></div>
+                        <div></div>
+                        <div></div><br/>
+                        <span><apex:outputText value="{0,date,MMMM dd, yyyy}">
+                                        <apex:param value="{!objIdea.lastModifiedDate}" /> 
+                                    </apex:outputText></span>
+                        <ideas:detailOutputLink page="CommunityStoryDetail" ideaId="{!objIdea.id}">
+                                <span>Comments ({!objIdea.numcomments})</span>
+                            </ideas:detailOutputLink>
+                                    <span>Category: {!objIdea.categories}</span>
+                    </div>
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+    </apex:repeat>
+ <!-- Pagination DS   <div class="container">
+    <apex:actionFunction action="{!showmore}" name="showmore"/>
+                <apex:outputPanel rendered="{!If((noOfStories>5)&&(not(index>=noOfStories)),true,false)}">
+                <div class="text-center readmore"><a href="#" onclick="showmore()" >... show more</a></div>
+                </apex:outputPanel>
+        </div> Pagination DS --> 
+    <!-- Pagination DS -->
+            
+                  <!-- Pagination DS -->         
+    
+        
+        <div align="left" style="padding-left:7.8%;">
+                <apex:outputpanel id="pages" >
+                    Page {!pageNum} of {!totalPages}
+                </apex:outputpanel>
+                
+            </div>
+     <div align="right" style="padding-right:8%;margin-top:-40px;" >
+                    
+                     <apex:outputpanel id="pagination" >
+                <ul class="pagination" >
+                <li><apex:commandlink value="First Page" rerender="ideas,pagination,pages" action="{!FirstPage}" /> </li>
+                 <li><apex:commandlink value="Previous" rerender="ideas,pagination,pages" action="{!previous}"   /> </li>
+                  <li><apex:commandlink value="Next"  rerender="ideas,pagination,pages" action="{!next}"  /> </li>
+                   <li><apex:commandlink value="Last Page" rerender="ideas,pagination,pages" action="{!LastPage}"  /> </li>
+                   </ul>
+                  </Apex:outputpanel>
+                
+            </div> 
+            </apex:form>
+    <br/>
+    <c:CommunityFooterComponent ></c:CommunityFooterComponent>
+    <!-- Menu for user configuration -->
+    <div id="user-config-popover" style="display:none">
+        <ul class='nav nav-pills nav-stacked'>
+            <li><apex:outputlink style="width:179px; margin-left: 0px;" value="/community/CommunitiesEditUserProfile" rendered="{!If(($Profile.Name='NXP Customer Community Login User'),true,false)}" > Edit profile</apex:outputlink></li>
+            <li ><apex:outputlink style="width:179px; margin-left: 0px;" value="/secur/logout.jsp?retUrl=https%3A%2F%2Fnxpcommunity.force.com%2Fcommunity%2FCommunityOverview">Logout</apex:outputlink></li>
+        </ul>
+    </div>
+    <!-- Bootstrap core JavaScript
+         ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="{!URLFOR($Resource.Forum_Community_3,'NXP-community/js/bootstrap.js')}"></script>
+    <script src="{!URLFOR($Resource.Forum_Community_3,'NXP-community/js/collapse.js')}"></script>
+    <script src="{!URLFOR($Resource.Forum_Community_3,'NXP-community/js/nxp-community.js')}"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <!-- <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script> -->
+</body>
+
+
+</apex:page>

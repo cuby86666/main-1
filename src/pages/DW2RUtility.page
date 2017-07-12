@@ -1,0 +1,174 @@
+<apex:page >
+</apex:page>
+<!--
+Controller="DW2RUtilityController" readOnly="true" tabStyle="Opportunity">
+	<apex:pageMessages />
+    <apex:form >
+    <apex:pageBlock >
+	    <apex:outputText value="Parent Account: " style="font-weight:bold;" />
+        <apex:inputField value="{!tmpAccount.ParentId}">-->
+            <!--<apex:actionSupport event="onchange" action="{!getOppty}" reRender="report"/>-->
+<!--
+</apex:inputField>
+
+		<apex:outputText value="Year" style="font-weight:bold;" />
+    	<apex:selectList id="year" style="width:100px;" size="1" value="{!fulfillmentYear}">
+	    	<apex:selectOptions value="{!YearPicklist}"/>
+    	</apex:selectList>
+
+    <apex:pageBlockSection title="DW2R Info: {!parentAccount.Name} ({!parentAccount.Id})" columns="1" id="report1">
+       
+    <!--<apex:commandButton value="Search Opportunity" action="{!getOpptyByParentAccount}" id="getOpptyByParentAccount" reRender="report1" />
+    <br />-->
+<!--
+    <apex:commandButton value="Search DW2R info by Parent Account" action="{!getDW2RInfo}" id="getDW2RInfo" reRender="report1" />
+    <!--<apex:pageBlockTable value="{!lstOppty}" var="o">
+    	<apex:column value="{!o.Name}"/>
+    </apex:pageBlockTable>-->
+<!--
+    <apex:pageBlock >
+        <apex:pageBlockTable value="{!lstDW2RInfoByParentAcc}" var="dw">
+            <apex:column headerValue="Production Year" value="{!dw.Year}" style="text-align:right;"/>
+            <apex:column headerValue="DW - Claim at Submission" value="{!dw.DWClaim}" style="text-align:right;"/>
+            <apex:column headerValue="Total Revenue" value="{!dw.TotalRevenue}" style="text-align:right;"/>
+            <apex:column headerValue="Revenue %" value="{!dw.RevenuePercentage}" style="text-align:right;"/>
+            <apex:column headerValue="Total Sales" value="{!dw.TotalSales}" style="text-align:right;"/>
+            <apex:column headerValue="Allocation %" value="{!dw.AllocationPercentage}" style="text-align:right;"/>
+            <apex:column headerValue="Channel Total Sales" value="{!dw.ChannelTotalSales}" style="text-align:right;"/>
+            <apex:column headerValue="No Revenue Part Total Sales" value="{!dw.PartTotalSales}" style="text-align:right;"/>
+        </apex:pageBlockTable>
+	</apex:pageBlock>
+    </apex:pageBlockSection>
+    <apex:pageBlockSection title="Fulfillment Sales: {!parentAccount.Name} (Count={!fulfillmentSalesCount})" columns="1" id="report2">
+		<apex:commandButton value="Search Fulfillment Sales by Parent Account" action="{!getFulfillmentSalesInfo}" id="getFulfillmentSalesInfo" reRender="report2" />
+    <apex:pageBlockSectionItem >
+        <apex:outputPanel layout="none">
+            <apex:inputCheckbox id="searchByProductType" value="{!isSearchByProductType}" />
+            <apex:outputText value="Search By Product Type: " style="font-weight:bold;" />
+            <apex:inputText id="productType" value="{!strProductType}" size="25"/>
+        </apex:outputPanel>
+    </apex:pageBlockSectionItem>
+
+    <apex:pageBlockSectionItem >
+        <apex:outputPanel layout="none">
+            <apex:inputCheckbox id="searchByPart" value="{!isSearchByPart}" />
+            <apex:outputText value="In FFP below" style="font-weight:bold;" />
+        </apex:outputPanel>
+    </apex:pageBlockSectionItem>
+    <apex:pageBlockSectionItem >
+        <apex:outputPanel layout="none">
+            <apex:inputCheckbox id="searchByPart" value="{!isNotSearchByPart}" />
+            <apex:outputText value="NOT IN FFP below" style="font-weight:bold;" />
+        </apex:outputPanel>
+    </apex:pageBlockSectionItem>
+	
+    <apex:pageBlock >
+        <apex:pageBlockTable value="{!lstFulfillmentSales}" var="sales">
+            <apex:column headerValue="9NC" value="{!sales.X9NC}" style="text-align:left;"/>
+            <apex:column headerValue="Sold to" value="{!sales.SoldTo}" style="text-align:left;"/>
+            <apex:column headerValue="Ship to" value="{!sales.ShipTo}" style="text-align:left;"/>
+            <apex:column headerValue="Sales Net Net" value="{!sales.SalesNetNetString}" style="text-align:right;"/>
+            <apex:column headerValue="Year" value="{!sales.Year}" style="text-align:right;"/>
+            <apex:column headerValue="Quarter" value="{!sales.Quarter}" style="text-align:right;"/>
+        </apex:pageBlockTable>
+    </apex:pageBlock>
+    </apex:pageBlockSection>
+    <apex:pageBlockSection title="Fulfillment Part:{!parentAccount.Name} (Count={!fulfillmentPartCount})" columns="1" id="report3">
+	<apex:commandButton value="Search Fulfillment Part by Parent Account" action="{!getFulfillmentPartInfo}" id="getFulfillmentPartInfo" reRender="report3" />
+
+    <apex:pageBlockSectionItem >
+        <apex:outputPanel layout="none">
+            <apex:inputCheckbox id="searchByProductType2" value="{!isSearchByProductType2}" />
+            <apex:outputText value="Search By Product Type: " style="font-weight:bold;" />
+            <apex:inputText id="productType2" value="{!strProductType2}" size="25"/>
+        </apex:outputPanel>
+    </apex:pageBlockSectionItem>
+
+    <apex:pageBlockSectionItem >
+        <apex:outputPanel layout="none">
+            <apex:inputCheckbox id="searchByFullfillmentPartDesc" value="{!isSearchByPartDesc}" />
+            <apex:outputText value="Search By Part Desc: " style="font-weight:bold;" />
+            <apex:inputText id="partDesc" value="{!strPartDesc}" size="25"/>
+        </apex:outputPanel>
+    </apex:pageBlockSectionItem>
+
+    <apex:pageBlockSectionItem >
+        <apex:outputPanel layout="none">
+            <apex:inputCheckbox id="searchBySales" value="{!isSearchBySales}" />
+            <apex:outputText value="In FFS above" style="font-weight:bold;" />
+        </apex:outputPanel>
+    </apex:pageBlockSectionItem>
+    <apex:pageBlockSectionItem >
+        <apex:outputPanel layout="none">
+            <apex:inputCheckbox id="searchBySales" value="{!isNotSearchBySales}" />
+            <apex:outputText value="NOT IN FFS above" style="font-weight:bold;" />
+        </apex:outputPanel>
+    </apex:pageBlockSectionItem>
+
+    <apex:pageBlockSectionItem >
+        <apex:outputPanel layout="none">
+            <apex:inputCheckbox id="searchByZeroAllocation" value="{!isAllocationZero}" />
+            <apex:outputText value="Find Zero Allocation" style="font-weight:bold;" />
+        </apex:outputPanel>
+    </apex:pageBlockSectionItem>
+        
+	<apex:pageBlock >
+        <apex:pageBlockTable value="{!lstFulfillmentPart}" var="part">
+            <apex:column headerValue="9NC" value="{!part.X9NC__c}" style="text-align:left;"/>
+            <apex:column headerValue="Opportunity Name" style="text-align:left;">
+                <apex:outputLink value="/{!part.Opportunity__c}" target="_blank">{!part.Opportunity__r.Name}</apex:outputLink>
+            </apex:column>
+            <apex:column headerValue="Owner" value="{!part.Opportunity__r.Owner.Name}" style="text-align:left;"/>
+            <apex:column headerValue="Fulfillment Part" style="text-align:left;">
+                <apex:outputLink value="/{!part.Id}/e" target="_blank">{!part.Name}</apex:outputLink>
+            </apex:column>
+            <apex:column headerValue="Fulfillment Part Desc." value="{!part.Fullfillment_Part__r.Name}" style="text-align:left;"/>
+            <apex:column headerValue="DW Claim at Submission" value="{!part.DW_Claim_at_Submission__c}" style="text-align:right;"/>
+            <apex:column headerValue="Total Revenue" value="{!part.Total_Revenue__c}" style="text-align:right;"/>
+            <apex:column headerValue="Production Year" value="{!part.Production_Year__c}" style="text-align:right;"/>
+        </apex:pageBlockTable>
+    </apex:pageBlock>
+    </apex:pageBlockSection>
+    </apex:pageBlock>
+
+    <apex:pageBlock title="{!parentAccount.Id}::{!parentAccount.Name}" id="report4">
+	
+  	<apex:outputText value="Opportunity Name: " style="font-weight:bold;" />
+    <apex:inputField value="{!tmpPart.Opportunity__c}">
+-->
+        <!--<apex:actionSupport event="onchange" action="{!getOppty}" reRender="report"/>-->
+<!--
+    </apex:inputField>
+    <br />
+	<apex:commandButton value="Search DW2R info by Opportunity" action="{!getAllocationByOpportunity}" id="getAllocationByOpportunity" reRender="report4" />
+	<apex:pageBlockSection title="Opportunity DW2R Info" columns="1">
+    <apex:pageBlockTable value="{!lstDW2RInfo}" var="dw">
+    	<apex:column headerValue="Production Year" value="{!dw.Year}" style="text-align:right;"/>
+        <apex:column headerValue="DW - Claim at Submission" value="{!dw.DWClaim}" style="text-align:right;"/>
+        <apex:column headerValue="Total Revenue" value="{!dw.TotalRevenue}" style="text-align:right;"/>
+		<apex:column headerValue="Revenue %" value="{!dw.RevenuePercentage}" style="text-align:right;"/>
+        <apex:column headerValue="Total Sales" value="{!dw.TotalSales}" style="text-align:right;"/>
+        <apex:column headerValue="Allocation %" value="{!dw.AllocationPercentage}" style="text-align:right;"/>
+		<apex:column headerValue="Channel Total Sales" value="{!dw.ChannelTotalSales}" style="text-align:right;"/>
+		<apex:column headerValue="Part Total Sales" value="{!dw.PartTotalSales}" style="text-align:right;"/>
+    </apex:pageBlockTable>
+        <apex:pageBlockSection title="Fulfillment Part" columns="1">
+        <apex:pageBlockTable value="{!lstOpportunityPart}" var="part" columnsWidth="100px,100px,100px,100px,100px,250px,150px,200px">
+            <apex:column headerValue="Production Year" value="{!part.Production_Year__c}" style="text-align:right;"/>
+            <apex:column headerValue="DW Claim at Submission" value="{!part.DW_Claim_at_Submission__c}" style="text-align:right;"/>
+            <apex:column headerValue="Total Revenue" value="{!part.Total_Revenue__c}" style="text-align:right;"/>
+            <apex:column headerValue="Fulfillment Part" style="text-align:left;">
+                <apex:outputLink value="/{!part.Id}/e" target="_blank">{!part.Name}</apex:outputLink>
+            </apex:column>
+            <apex:column headerValue="9NC" value="{!part.X9NC__c}" style="text-align:left;"/>
+            <apex:column headerValue="Fulfillment Part Desc." value="{!part.Fullfillment_Part__r.Name}" style="text-align:left;"/>
+            <apex:column headerValue="Opportunity Name" style="text-align:left;">
+                <apex:outputLink value="/{!part.Opportunity__c}" target="_blank">{!part.Opportunity__r.Name}</apex:outputLink>
+            </apex:column>
+            <apex:column headerValue="Owner" value="{!part.Opportunity__r.Owner.Name}" style="text-align:left;"/>
+        </apex:pageBlockTable>
+        </apex:pageBlockSection>
+    </apex:pageBlockSection>
+    </apex:pageBlock>
+	</apex:form>
+</apex:page>-->

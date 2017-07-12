@@ -1,0 +1,98 @@
+<apex:page showHeader="false">
+
+<!--
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
+<apex:image url="{!$Resource.NXPLogo}"  style="centre" /><br></br><!--<p></p>-->
+
+
+<script type="text/javascript">
+(function() {
+function handlePageLoad() {
+var endpointMatcher = new RegExp("[\\?\\&]endpoint=([^&#]*)");
+document.getElementById('prechatForm').setAttribute('action',
+decodeURIComponent(endpointMatcher.exec(document.location.search)[1]));
+} if (window.addEventListener) {
+window.addEventListener('load', handlePageLoad, false);
+} else { window.attachEvent('onload', handlePageLoad, false);
+}})();
+</script>
+<script type="text/javascript">
+function validateForm(){
+ var x=document.forms["prechatForm"]["liveagent.prechat:Email"].value;
+ var y=document.forms["prechatForm"]["liveagent.prechat:name"].value;
+ var filter = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+ var filter1 = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;  
+ if ((x==null || x=="")&&(y==null||y==""))
+   {
+   alert("Name and email fields are mandatory");
+   return false;
+   }
+
+ else if(x==null || x=="")
+   {
+   alert("Email Field is mandatory");
+   return false;
+   }
+ else if(y==null || y=="")
+   {
+   alert("Name Field is mandatory");
+   return false;
+   }   
+ else if((x!=null||x!="")&&(y!=null||y!=""))
+    {
+     if (!filter1.test(x))  
+      {  
+         alert("Please enter valid e-mail address")
+         return false;
+      }
+ }        
+     if (y==null || y=="")
+   {
+   alert("Name Field is mandatory");
+   return false;
+   }  
+ }  
+</script>
+<style type="text/css">
+h1{font-size:100%;font-weight: bold;text-indent:1px;text-align:center}
+h2{font-size:80%;text-indent:0px;text-align:center;color:#D71629}
+body{ font-weight: bold;text-indent:0px;text-align:left;font-size:100%;border-style:solid;
+ border-width:1px;}
+legend {font-size:150%}
+fieldset {border: 1px solid;padding: 1em;font:80%/1 sans-serif}
+label {float:left;width:25%;margin-right:2.5em;padding-top:0.2em;text-align:left;font-weight:bold;font-size:100%}
+#prechat_submit {border-top:        2px solid #a3ceda;
+    border-left:        4px solid #000000;
+    border-right:       4px solid #000000;
+    border-bottom:      4px solid #000000;
+    padding:        10px 20px !important;
+    font-size:      14px !important;
+    background-color:   #DCDCDC;
+    font-weight:        bold;
+    color:          #000000;
+}
+</style>
+
+<h1>Please fill below details </h1><br></br>
+
+<h2>(All fields marked * are compulsory)</h2>
+
+<form method='post' id='prechatForm' name="prechatForm" onsubmit="return validateForm();" >
+<fieldset id ="Personal information">
+<legend>Personal information</legend>
+<label for="name">Name:*</label>
+<input type='text' name='liveagent.prechat:name' id='prechat_field'  size="40" /><br />
+<label for="email">Email Address:*</label>
+<input type='text' id="email"  name='liveagent.prechat:Email' size="40"  /><br />
+<label for="company">Company:</label>
+<input type='text' name='liveagent.prechat:company' id='prechat_field' size="40" /><br />  
+<input type="hidden" name="liveagent.prechat.query:Email"
+value="Contact,Contact.Email" />
+<input type="hidden" name="liveagent.prechat.save:Email" value="Email__c" size="40" />
+<input type='submit' value='Request Chat' id='prechat_submit' align="center"/>
+</fieldset>
+</form>
+</apex:page>

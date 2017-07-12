@@ -1,0 +1,20 @@
+<apex:page showheader="false">
+<head>
+<!--<meta http-equiv="Refresh" content="1, URL=http://www.nxp.com/support/sales-and-support:SUPPORTHOME" />-->
+</head>
+<body>
+<iframe src="{!$Site.Prefix}/secur/logout.jsp" width="100%" height="0"></iframe>
+Logging Out ....
+</body>
+<script>
+ 
+function redirectToLogin(){
+ 
+window.parent.location="http://www.nxp.com/support/sales-and-support:SUPPORTHOME";
+ 
+}
+ 
+setTimeout("redirectToLogin()", 1000);
+ 
+</script>
+</apex:page>

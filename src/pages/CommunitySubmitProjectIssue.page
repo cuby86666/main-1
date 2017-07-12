@@ -1,0 +1,268 @@
+<!--*********************************************************************************************
+@Created By :      Vinanthi
+@CreatedDate :     03 Dec 2015
+Description :      This page is to submit project issue
+****************************************************************************************************-->
+
+
+<apex:page standardStylesheets="false" sidebar="false" action="{!getPageReference1}" controller="CommunitySubmitProjectIssueController" showQuickActionVfHeader="false" showHeader="false"  extensions="CommunityTabsController"  >
+
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <title>Project - NXP TechSupport Community</title>
+    <apex:stylesheet value="{!URLFOR($Resource.Forum_Community_3, 'NXP-community/css/jasny-bootstrap.css')}" ></apex:stylesheet>  
+    <apex:stylesheet value="{!URLFOR($Resource.Forum_Community_3, 'NXP-community/css/font-awesome.css')}" ></apex:stylesheet>      
+    <apex:stylesheet value="{!URLFOR($Resource.Forum_Community_3, 'NXP-community/css/hover.css')}" ></apex:stylesheet>
+    <apex:stylesheet value="{!URLFOR($Resource.Forum_Community_3, 'NXP-community/css/main.css')}" ></apex:stylesheet>
+</head>
+    <!--script for redirection as this page is not used for now-->
+<script type="text/javascript">
+    var thecookie = readCookie('doRedirect');
+    if(!thecookie) {
+       createCookie('doRedirect','true','1');
+        window.location = 'http://www.nxp.com/404_Page_not_Found';
+    };
+    function createCookie(name,value,days){
+      // do work
+    }
+    function readCookie(name){
+      // do work
+    }
+</script>
+    
+<body class="new-case">
+    <c:CommunityHeaderComponent ></c:CommunityHeaderComponent>
+    <!-- Breadcrumbs -->
+    <div class="breadcrumb-bar">
+        <div class="container">
+            <ul class="breadcrumb">
+                <li><a href="/community/CommunityOverview">{!$label.Community_breadcrumb_Home}</a></li>
+                <li><a href="/community/CommunityOverview">{!$label.Community_breadcrumb_Community}</a></li>
+                <li class="active"><a href="/community/CommunityProjectIssueList">{!$Label.Community_tab_Project}</a></li>
+            </ul>
+        </div>
+    </div>
+    <!-- Community Navigtion -->
+    <div class="container h-spacer navigation">
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-10 col-sm-10">
+                        <div class="navbar-header">
+                            <a class="navbar-brand" href="#">NXP Community</a>
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                                <span class="sr-only">Toggle navigation</span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                        </div>
+                        <div id="navbar" class="navbar-collapse collapse">
+                            <ul class="nav navbar-nav">
+                                <li ><a href="/community/CommunityOverview">{!$label.Community_tab_Overview}</a></li>
+                                <li ><a href="/community/CommunityForum">{!$label.Community_breadcrumb_Forum}</a></li>
+                                <li><a href="/community/CommunityFAQ">{!$label.Community_tab_FAQ}</a></li>
+                               <li ><apex:outputLink rendered="{!If(($Profile.Name='NXP Community Profile'|| publicDomain==true),false,true)}" value="/community/CommunityCaseList">{!$Label.Community_tab_Contactsupport}</apex:outputLink></li>
+                              
+
+                                <li><a href="/community/CommunityStories">{!$Label.Community_tab_Stories}</a></li>
+                                <li class="active"><apex:outputLink rendered="{!InternalExternalUser}" value="/community/CommunityProjectIssueList">{!$Label.Community_tab_Project}</apex:outputLink></li> 
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- login container -->
+                    <apex:outputPanel rendered="{!If(($Profile.Name='NXP Community Profile'),true,false)}" id="navigation">
+                    <div class="nav navbar-nav navbar-right">
+                        <div class="login-holder">
+                            <img class="hvr-grow" id="logo" src="{!URLFOR($Resource.Forum_Community_3,'NXP-community/img/community-logo_small.png')}"/>
+                            <a href="/community/communityLogin">Login / </a>
+                            <a href="/community/communityRegistration">Register</a>
+                        </div>
+                    </div>
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!If(($Profile.Name='NXP Community Profile'),false,true)}" id="displayPhoto">
+                    <div class="nav navbar-nav navbar-right">
+                        <span>
+                       <img src="{!largePhotoUrl}" height="42" width="42" /> 
+                     &nbsp;<a title="" data-toggle="popover" href="#" data-original-title="Profile properties">
+                    {!$User.firstName}&nbsp;{!$User.Lastname} <i class="fa fa-gear"></i>
+                    </a>
+                  </span>
+                    </div>
+                    </apex:outputPanel>
+                </div>
+            </div>
+        </nav>
+    </div>
+    
+    <apex:form styleclass="form-horizontal" rendered="{!isNotIntExtUser}" id="withoutLogin">
+        <div class="container submit-question">
+            <div class="row">
+                <div class="col-md-6 col-xs-12">
+                    <fieldset>
+                        <span style="color:red;" > Sorry, Access Denied</span>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+        <br/><br/><br/>
+    </apex:form><br/><br/>
+    
+    <apex:form styleclass="form-horizontal" rendered="{!isIntExtUser}" id="displayForm">
+       
+    <div class="container">
+        
+        <div class="back-link-cases"><a href="javascript:history.go(-1)"><span class="glyphicon glyphicon-menu-left" aria-hidden="true"><span>Overview of my Issues</span></span></a></div>
+        <apex:pageMessages id="errorMsg"></apex:pageMessages>
+        <div class="h-spacer">&nbsp;</div>
+        
+            <div class="row">
+                <div class="col-md-12 col-xs-12 bg-color-bar padding-left-10">
+                    <h5>Project Issue Detail</h5>
+                </div>
+            </div>
+            <br/>
+            <div class="row">
+             <div class="col-md-6 col-xs-6">
+                    <div class="form-group">
+                        <label class="control-label col-md-4" for="Company">Company</label>
+                        <div class="control-label col-md-8">
+                            <apex:outputText value="{!strcompany}"  id="Company"/>
+                        </div>
+                    </div>
+            </div>
+            <!--
+            <div class="col-md-6 col-xs-6">
+            <div class="form-group">
+                        <label class="control-label col-md-4" for="bl">MAG</label>
+                        <div class="col-md-8">
+                          <apex:selectList size="1" value="{!strMag}" required="true" styleclass="form-control input-form" id="bl">
+                                                                    <apex:selectOptions value="{!MagValues}" />
+                                                                </apex:selectList>
+                        </div>
+                    </div>
+                    </div>-->
+                   
+            </div>
+            <div class="row h-spacer">
+                <div class="col-md-12 col-xs-12">
+                    
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="subject">Title</label>
+                        <div class="col-md-10">
+                            <apex:inputText value="{!strTitle }" required="true" styleclass="form-control input-form" id="subject"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 col-xs-12">
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="description">Description</label>
+                        <div class="col-md-10">
+                            <apex:inputTextarea value="{!strDescription}" required="true" styleclass="form-control input-form" style="height:150px;" id="description" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 col-xs-12">
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="Project">Project</label>
+                        <div class="col-md-10">
+                                <apex:selectList size="1" value="{!strProjectName}" required="true" id="inputResolved" styleclass="btn btn-default dropdown-toggle input-form">
+                                    <apex:selectOptions value="{!lstProjectNameValues}" />
+                                </apex:selectList>                     
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-xs-6">
+                    <div class="form-group">
+                        <label class="control-label col-md-4" for="attachment">Attachment</label>
+                        <div class="col-md-8">
+                            <div >
+                                <apex:inputFile value="{!objAttachment.body}" filename="{!objAttachment.name}" />
+                            </div>
+                            (Maximum 10 MB file size can be uploaded)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="row">
+               
+              <br/>
+                
+            </div> 
+           
+        <apex:commandButton value="SUBMIT" styleclass="btn btn-default submit" action="{!saveProjectIssue}" id="button"/>
+    </div>
+      </apex:form> 
+    <br/><br/>
+    <c:CommunityFooterComponent ></c:CommunityFooterComponent>
+    <!-- Menu for user configuration -->
+   <div id="user-config-popover" style="display:none">
+        <ul class='nav nav-pills nav-stacked'>
+            <li><apex:outputlink style="width:179px; margin-left: 0px;" value="/community/CommunitiesEditUserProfile" rendered="{!If(($Profile.Name='NXP Customer Community Login User'),true,false)}" > Edit profile</apex:outputlink></li>
+            <li ><apex:outputlink style="width:179px; margin-left: 0px;" value="/secur/logout.jsp?retUrl=https%3A%2F%2Fnxpcommunity.force.com%2Fcommunity%2FCommunityOverview">Logout</apex:outputlink></li>
+        </ul>
+    </div>
+    <!-- Bootstrap core JavaScript
+         ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="{!URLFOR($Resource.Forum_Community_3,'NXP-community/js/bootstrap.js')}"></script>
+    <script src="{!URLFOR($Resource.Forum_Community_3,'NXP-community/js/collapse.js')}"></script>
+    <script src="{!URLFOR($Resource.Forum_Community_3,'NXP-community/js/nxp-community.js')}"></script>
+    <script src="{!URLFOR($Resource.Forum_Community_3,'NXP-community/js/jasny-bootstrap.min.js')}"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <!-- <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script> -->
+    
+<script>
+// Mutation object
+var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
+
+// Defining observer 
+var observer = new MutationObserver(function(mutations) { 
+    // If the 'btn btn-default dropdown-toggle btn-lg' was removed from the list - re-assign it
+    if(!jQuery('#selectList select').first().hasClass('btn btn-default dropdown-toggle input-form')){
+        jQuery('#selectList select').first().addClass('btn btn-default dropdown-toggle input-form');
+    }
+    if(!jQuery('#selectList1 select').first().hasClass('btn btn-default dropdown-toggle input-form')){
+        jQuery('#selectList1 select').first().addClass('btn btn-default dropdown-toggle input-form');
+    }
+    if(!jQuery('#selectList2 select').first().hasClass('btn btn-default dropdown-toggle input-form')){
+        jQuery('#selectList2 select').first().addClass('btn btn-default dropdown-toggle input-form');
+    }
+});
+
+// A target object fot the observer
+var myNode = document.querySelector('#selectList'); 
+var myNode1 = document.querySelector('#selectList1');
+var myNode2=document.querySelector('#selectList2');
+// Assigning observer to the dependent picklist
+observer.observe(myNode, {
+    childList: true,
+    subtree: true,
+    attributes: true
+});
+observer.observe(myNode1, {
+    childList: true,
+    subtree: true,
+    attributes: true
+});
+observer.observe(myNode2, {
+    childList: true,
+    subtree: true,
+    attributes: true
+});
+</script>
+</body>
+
+</apex:page>

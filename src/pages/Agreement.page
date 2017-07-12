@@ -1,0 +1,370 @@
+<!----------------------------------------------------------------------------------------------------------
+Name        :    Agreement
+Author      :    Syed Jameel 
+Date        :    11 Nov,2011
+Description :    To Submit an Apttus NDA Form
+---------------------------------------------------------------------------------------------------------->
+<apex:page id="pg" controller="AgreementController" cache="false" sidebar="false" showHeader="false">
+
+<head>
+    <style>
+        .startStyle{
+            font-size:12px;
+            font-weight:bold;
+            color:red;
+        }
+       
+
+    </style>
+    <script>
+        String.prototype.trim = function() { return this.replace(/^\s+|\s+$/g, ''); };
+        function fillValues(){
+            document.getElementById('racclegentity').value=document.getElementById('pg:frm:nxp:pbs2:acclegentity').value;
+            document.getElementById('rlegentity').value=document.getElementById('pg:frm:nxp:pbs2:legentity').value;
+            document.getElementById('raname').value=document.getElementById('pg:frm:nxp:pbs2:aname').value;        
+           <!-- document.getElementById('rcontid').value=document.getElementById('pg:frm:nxp:pbs2:contid').value; -->       
+            document.getElementById('rainfo').value=document.getElementById('pg:frm:nxp:pbs2:ainfo').value;        
+            document.getElementById('rresp').value=document.getElementById('pg:frm:nxp:pbs2:j_id33:resp_email').value;        
+            document.getElementById('rounit').value=document.getElementById('pg:frm:nxp:pbs2:ounit').value;
+            var selObj = document.getElementById('pg:frm:nxp:pbs2:stholder');
+            var selectedArray = new Array();
+            var str='';
+            var count =0;
+            var i=0;
+            for (i=0; i<selObj.options.length; i++) {
+                if (selObj.options[i].selected) {
+                  selectedArray[count] = selObj.options[i].value;
+                  str += selObj.options[i].value +'\n';
+                  count++;
+                }
+            }
+            document.getElementById('rstholder').value = str;
+            //document.getElementById('rstholder').rows = count;
+            //document.getElementById('rstholder').value=document.getElementById('pg:frm:nxp:pbs2:stholder');        
+            document.getElementById('rsdate').value=document.getElementById('pg:frm:nxp:pbs2:sdate').value;                
+            document.getElementById('redate').value=document.getElementById('pg:frm:nxp:pbs2:edate').value;                        
+           /* document.getElementById('rtdate').value=document.getElementById('pg:frm:nxp:pbs2:tdate').value;        
+            document.getElementById('rtdateother').value=document.getElementById('pg:frm:nxp:pbs2:tdateother').value; */  
+            document.getElementById('rtconfid').value=document.getElementById('pg:frm:nxp:pbs2:confid').value;                                     
+            document.getElementById('rsemail').value=document.getElementById('pg:frm:nxp:pbs2:semail').value;                        
+          /*  document.getElementById('rmlimit').checked = document.getElementById('pg:frm:nxp:pbs3:mlimit').checked;
+            document.getElementById('rlbpolicy').checked = document.getElementById('pg:frm:nxp:pbs3:lbpolicy').checked;            
+            document.getElementById('rgustock').checked = document.getElementById('pg:frm:nxp:pbs3:gustock').checked; */                      
+            document.getElementById('ract').checked = document.getElementById('pg:frm:nxp:pbs3:act').checked;                                    
+            document.getElementById('rcrecontor').checked = document.getElementById('pg:frm:nxp:pbs3:crecontor').checked;                                                
+          /*  document.getElementById('rosuprod').checked = document.getElementById('pg:frm:nxp:pbs3:osuprod').checked;                                                            
+            document.getElementById('rliability').checked = document.getElementById('pg:frm:nxp:pbs3:liability').checked;                                                                        
+            document.getElementById('roslargevol').checked = document.getElementById('pg:frm:nxp:pbs3:oslargevol').checked;                                                                        
+            document.getElementById('rltpliability').checked = document.getElementById('pg:frm:nxp:pbs3:ltpliability').checked;                                                                        
+            document.getElementById('rsomore').checked = document.getElementById('pg:frm:nxp:pbs3:somore').checked;                                                                                    
+            document.getElementById('rppprovis').checked = document.getElementById('pg:frm:nxp:pbs3:ppprovis').checked;                   
+            document.getElementById('rexredflag').value=document.getElementById('pg:frm:nxp:pbs3:exredflag').value; */                                  
+            //document.getElementById('rattfile').value=filename;
+            
+        }
+        var filename;
+        function next(){
+            var isError = false;
+            var errorMsg = '';
+            document.getElementById('pg:frm:j_id3').style.display='none';
+            var em = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+            //filename = document.getElementById("pg:frm:nxp:pbs3:pbs4:file1").getElementsByTagName("input")[0].value;
+            filename = document.getElementById("pg:frm:nxp:pbs3:pbs4:file1").value.split(/(\\|\/)/g).pop();
+            var email = document.getElementById('pg:frm:nxp:pbs2:semail').value;           
+            var acclegentity = document.getElementById('pg:frm:nxp:pbs2:acclegentity').value;
+            var legentity =document.getElementById('pg:frm:nxp:pbs2:legentity').value;
+            var agreementName = document.getElementById('pg:frm:nxp:pbs2:aname').value;
+            var agreementinfo = document.getElementById('pg:frm:nxp:pbs2:ainfo').value;
+            var agreementSDate = document.getElementById('pg:frm:nxp:pbs2:sdate').value;
+            var agreementEDate = document.getElementById('pg:frm:nxp:pbs2:edate').value;
+            var selObj = document.getElementById('pg:frm:nxp:pbs2:stholder');
+            var respons = document.getElementById('pg:frm:nxp:pbs2:j_id33:resp_email').value;
+            var selectedArray = new Array();
+            var str='';
+            //var count =0;
+            var i=0;
+            for (i=0; i<selObj.options.length; i++) {
+                if (selObj.options[i].selected) {
+                  //selectedArray[count] = selObj.options[i].value;
+                  str += selObj.options[i].value +'\n';
+                 
+                }
+            }
+            if(acclegentity.trim().length ==0 ){
+                errorMsg +='<li> Account Legal Entity</li>';
+                isError = true;
+            }
+            if(legentity.trim().length == 0){
+                errorMsg +='<li>NXP Legal Entity</li>';
+                isError = true;
+            }
+            if(agreementName.trim().length == 0 ){
+                errorMsg += '<li>Agreement Name</li> ';
+                isError = true;                
+            }
+            if(agreementinfo.trim().length == 0){
+                errorMsg +='<li>Agreement Information</li>';
+                isError = true;
+            }
+            if(filename.trim().length == 0){
+                errorMsg +='<li>Attachment</li>';
+                isError = true;
+            }
+            if(respons.trim().length ==0 ){
+                errorMsg +='<li> Responsible</li>';
+                isError = true;
+            }else {
+                if(em.test(respons) == false){
+                    errorMsg +='<li>Responsible Email Address is not valid</li>';
+                    isError = true;
+                }
+            }
+            if(email.value == '' || email.trim().length ==0){
+                errorMsg += '<li>Submitter Email Address</li>';
+                isError = true;
+            }else{
+                if(em.test(email) == false){
+                    errorMsg += '<li>Submitter Email Address is not valid</li>';
+                    isError = true;
+                }
+            }
+            
+            if(str.trim().length == 0){
+                errorMsg +='<li>StakeHolders</li> ';
+                isError = true;
+            }
+            if(agreementSDate.trim().length ==0){
+                errorMsg += '<li>Agreement Start Date</li> ';
+                isError = true;
+            }
+            if(agreementEDate.trim().length ==0){
+                errorMsg += '<li>Agreement End Date</li> ';
+                isError = true;
+            }
+            
+            //if(em.test(email) == true && email.value != '' && filename != ''){
+            if(isError == false){
+                document.getElementById('rattfile').value = filename;
+                //document.getElementById('pg:frm:nxp1:pbs5:attach:fileatt').value = filename;
+                //alert(document.getElementById('fileatt').value);
+                fillValues();
+                document.getElementById('secdiv').style.display = 'block';                
+                document.getElementById('firstdiv').style.display = 'none';
+                
+            }else{
+                document.getElementById('err').innerHTML = '<ul><lh>Error : Please fill in the following required fields:</lh>'+ errorMsg+'</ul>';                
+                document.getElementById('pg:frm:nxp:pbs2:acclegentity').value = acclegentity;
+                document.getElementById('txterr').focus();                
+                 document.getElementById('err').style.display='block';                 
+                //window.location = '#';
+            }
+        }
+        function prev(){
+            document.getElementById('firstdiv').style.display = '';
+            document.getElementById('secdiv').style.display = 'none'; 
+            document.getElementById('err').style.display='none';
+        }
+    </script>
+</head>
+
+<apex:image id="logo" value="{!$Resource.Apttus}" style="align: left;" height="100" width="233"/>
+<apex:sectionHeader subtitle="Apttus NDA Agreement Entry Form"/>
+<apex:form id="frm">
+<input type="text" style="position:absolute;left:-10;width:1px;border:none" id="txterr"/>
+<apex:pageMessages escape="false"/>
+<div style="width:900px; padding-left:15%; " id="firstdiv">
+    <div id="err" style="font-weight:bold;color:red;">
+        <apex:outputLabel id="errmsg" value="" style="font-weight:bold;"/>
+    </div>  
+    <apex:pageBlock title="Guidelines for filling this Form:" >
+        <table border="none" width="100%">
+        <col width="25%"/>
+        <col width="85%" />
+          <tr>
+             <td><big><b>Responsible Field:</b></big></td>
+             <td>Type your first name, hit on the look up icon and select the name from the list. Please do not change user type to "Partner User" or "Customer Portal User", doing so would not display the list of users.  </td>
+          </tr>
+          <tr></tr>
+          <tr>
+             <td><big><b>Required Fields:</b></big></td>
+             <td>In order to submit the form, the following fields need to be filled in: Account Legal Entity, NXP Legal Entity, Agreement Name, Agreement Information, Stakeholder, Agreement Start Date, Agreement End Date, Submitter Email Address and Attachment.</td>
+          </tr>   
+      </table>
+        </apex:pageBlock>
+                        
+    <apex:pageBlock id="nxp" rendered="{!nxp}" title="Apttus NDA Agreement Entry Form">
+        <apex:pageBlockSection id="pbs2" columns="1"> 
+            <apex:inputField id="acclegentity" value="{!arg.nxp_account_Legal_Entity__c}" />
+            <apex:inputField id="legentity" value="{!arg.NXP_Legal_Entity__c}"/>
+            <apex:inputField id="aname" value="{!arg.Name}"/>
+            <!--<apex:inputField id="contid" value="{!arg.nxp_Contract_Id__c}"/>-->
+            <apex:inputField id="ainfo" value="{!arg.nxp_agreement_info__c}"/>
+            <!--<apex:inputField id="resp" value="{!arg.nxp_Responsible__c}"/>-->
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="Responsible Email"/>
+                <apex:inputText id="resp_email" value="{!Responsible_email}"/>
+            </apex:pageBlockSectionItem>
+            
+            <apex:inputField id="ounit" value="{!arg.Owner_Unit__c}"/>
+            <apex:inputField id="stholder" value="{!arg.nxp_stakeholders__c}"/>
+            <apex:inputField id="sdate" value="{!arg.Apttus__Contract_Start_Date__c}"/>
+            <apex:inputField id="edate" value="{!arg.Apttus__Contract_End_Date__c}"/>
+         <!--   <apex:inputField id="tdate" value="{!arg.nxp_Date_of_Earliest_Termination__c}"/>
+            <apex:inputField id="tdateother" value="{!arg.nxp_Date_of_Earliest_Terminate_by_Other__c}"/>-->
+            <apex:inputField id="confid" value="{!arg.Confidentiality_period__c}"/>
+            <apex:inputField id="semail" value="{!arg.Submitter_Email_Address__c}"/>
+            
+        </apex:pageBlockSection><br/>
+        <apex:pageBlockSection title="Red Flags" id="pbs3" columns="2">
+          <!--  <apex:inputField id="mlimit" value="{!arg.nxp_Material_Limitations__c}"/>
+            <apex:inputField id="lbpolicy" value="{!arg.nxp_Liab_byond_policy__c}"/>
+            <apex:inputField id="gustock" value="{!arg.nxp_Give_up_ownership_of_stocks__c}"/>-->
+            <apex:inputField id="act" value="{!arg.nxp_Accept_Cust_TnCs__c}"/>
+            <apex:inputField id="crecontor" value="{!arg.nxp_Cntrcts_related_to_Exp_Contr__c}"/>
+         <!--   <apex:inputField id="osuprod" value="{!arg.nxp_Oblgs_ship_unrel_prod__c}"/>
+            <apex:inputField id="liability" value="{!arg.nxp_Liabilities_gt_1MUSD__c}"/>
+            <apex:inputField id="oslargevol" value="{!arg.nxp_Oblg_supply_large_vol__c}"/>
+            <apex:inputField id="ltpliability" value="{!arg.nxp_Long_term_pmt_liabilities__c}"/>
+            <apex:inputField id="somore" value="{!arg.nxp_Supply_oblg_more_12mnth__c}"/>
+            <apex:inputField id="ppprovis" value="{!arg.nxp_Preferred_pricing_provisions__c}"/>
+            <apex:inputField id="exredflag" value="{!arg.nxp_Explanation_for_Red_Flags__c}"/>-->
+            <!-- Field to upload attachments-->
+            
+            <apex:pageBlockSectionItem id="pbs4">
+                <apex:outputText value="Upload your Attachment"/>
+             <apex:inputFile id="file1" filename="{!fileName}"  size="28" value="{!Attach}"/>
+            </apex:pageBlockSectionItem>
+            
+        </apex:pageBlockSection><br/>
+        <center>
+        <input type="button" value="Next" onclick="next();return false;" />
+        <!--<apex:commandButton value="Next" onclick="next();return false;" />-->
+               <!-- <apex:commandButton value="Next" action="{!next}"/>-->
+        </center>
+    </apex:pageBlock>
+</div>
+
+<div style="width:900px; padding-left:15%;display:none;" id="secdiv">  
+   <apex:pageBlock id="nxp1" rendered="{!nxp}" title="Apttus NDA Agreement Entry Form">
+        <apex:pageBlockSection id="pbs4" columns="1">
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="Account Legal Entity"/>
+                <input type="text" id="racclegentity" ReadOnly="true" value="" style="border-style:none"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="NXP Legal Entity"/>
+                <input type="text" id="rlegentity"  ReadOnly="true" size="50" value="" style="border-style:none;width:350"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="Agreement Name"/>
+                <input type="text" id="raname" ReadOnly="true" value="" style="border-style:none"/>
+            </apex:pageBlockSectionItem>
+          <!--  <apex:pageBlockSectionItem >
+                <apex:outputLabel value="Contract Id"/>
+                <input type="text" id="rcontid" ReadOnly="true" value="" style="border-style:none"/>
+            </apex:pageBlockSectionItem>-->
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="Agreement Information"/>
+                <textarea id="rainfo" ReadOnly="true" value="" style="border-style:none">
+                </textarea>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="Responsible Email"/>
+                <input type="text" id="rresp" ReadOnly="true" value="" style="border-style:none"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="Owner Unit"/>
+                <input type="text" id="rounit" ReadOnly="true" value="" style="border-style:none"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="Stakeholders"/>
+                <textarea id="rstholder" ReadOnly="true" value="" style="height:100px;width:300px;border-style:none"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="Agreement Start Date"/>
+                <input type="text" id="rsdate" ReadOnly="true" value="" style="border-style:none"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="Agreement End Date"/>
+                <input type="text" id="redate" ReadOnly="true" value="" style="border-style:none"/>
+            </apex:pageBlockSectionItem>
+         <!--   <apex:pageBlockSectionItem >
+                <apex:outputLabel value="Earliest Termination Date (NXP)"/>
+                <input type="text" id="rtdate" ReadOnly="true" value="" style="border-style:none"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="Earliest Termination Date (Other Party)"/>
+                <input type="text" id="rtdateother" ReadOnly="true" value="" style="border-style:none"/>
+            </apex:pageBlockSectionItem>-->
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="Confidentiality Period"/>
+                <input type="text" id="rtconfid" ReadOnly="true" value="" style="border-style:none"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="Submitter Email Address"/>
+                <input type="text" id="rsemail" ReadOnly="true" value="" style="border-style:none"/>
+            </apex:pageBlockSectionItem>            
+        </apex:pageBlockSection><br/>
+            <apex:pageBlockSection title="Red Flags" id="pbs5" columns="2">
+         <!--   <apex:pageBlockSectionItem >
+                <apex:outputLabel value="Material Limitations to do Business"/>
+                <input type="checkbox" id="rmlimit" disabled="true" value=""/>
+            </apex:pageBlockSectionItem>  
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="Liability/Indemnity beyond NXP policy"/>
+                <input type="checkbox" id="rlbpolicy" disabled="true" value=""/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="Give up ownership of stocks prior to pmt"/>
+                <input type="checkbox" id="rgustock" disabled="true" value=""/>
+            </apex:pageBlockSectionItem>-->
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="Acceptance of Customer’s T & Cs"/>
+                <input type="checkbox" id="ract" disabled="true" value=""/>
+            </apex:pageBlockSectionItem>  
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="Contract related to Export Control items"/>
+                <input type="checkbox" id="rcrecontor" disabled="true" value=""/>
+            </apex:pageBlockSectionItem> 
+            <!--<apex:pageBlockSectionItem >
+                <apex:outputLabel value="Obligations to ship unreleased products"/>
+                <input type="checkbox" id="rosuprod" disabled="true" value=""/>
+            </apex:pageBlockSectionItem> 
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="Liabilities > 1 MUSD outside normal biz"/>
+                <input type="checkbox" id="rliability" disabled="true" value=""/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="Obligations to supply large volumes"/>
+                <input type="checkbox" id="roslargevol" disabled="true" value=""/>
+            </apex:pageBlockSectionItem>   
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="Long term payment liabilities > 12months"/>
+                <input type="checkbox" id="rltpliability" disabled="true" value=""/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="Supply obligations exceeding 12 months"/>
+                <input type="checkbox" id="rsomore" disabled="true" value=""/>
+            </apex:pageBlockSectionItem> 
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="Preferred pricing provisions"/>
+                <input type="checkbox" id="rppprovis" disabled="true" value=""/>
+            </apex:pageBlockSectionItem> 
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="Explanation for Red Flags"/>
+                <textarea id="rexredflag" style="border-style:none;height:100px;width:300px" readOnly="true" value=""/>
+            </apex:pageBlockSectionItem>    -->
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="Attach File Name"/>
+                <input type="text" id="rattfile" style="border-style:none" ReadOnly="true" value=""/>
+            </apex:pageBlockSectionItem>    
+            
+        </apex:pageBlockSection><br/>
+        <center>
+            <apex:commandButton value="Previous" onclick="prev();return false;"/>
+            <apex:commandButton value="Save" action="{!save}"/>
+        </center>
+    </apex:pageBlock> 
+</div>
+</apex:form>
+</apex:page>

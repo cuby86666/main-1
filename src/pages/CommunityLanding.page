@@ -1,0 +1,166 @@
+<apex:page id="pg" showHeader="False" sidebar="false">
+    <apex:includeScript value="{!URLFOR($Resource.jquery171min, '/jquery-1.7.1.min.js')}" />
+    <apex:includeScript value="{!URLFOR($Resource.jquery171min, '/jquery-ui-1.8.17.custom.min.js')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.CommunityStyleSheet, 'CommunityStyleSheet.css')}" />
+<style>
+body {
+    background-color: white !important;
+}
+ 
+  a {color:black;
+  text-decoration: none;}
+   a:hover {
+text-decoration:none;
+}
+  
+  .leftnavigation{
+   padding: 5px; 
+   border-bottom-color: #E4E4E4; 
+   border-bottom-width: 1px; 
+   height: 20px; 
+   vertical-align: middle;
+   border-bottom-style: solid;"}
+.threecolumn
+{
+    position: relative;
+    margin: 0px;
+    background:white;
+}
+#cs\:footer a{
+visibility:hidden;
+}
+.threecolumn .centerContent {
+padding-left: 10px;
+}
+  </style>
+ 
+   
+    <script>
+    
+    
+  jQuery("document").ready(function() {
+    /*var pathname = window.location.pathname.split("/");
+    var tabname = pathname[pathname.length-1]; 
+    console.log('tabname'+tabname);
+   window.open( '#!/feedtype=RECENT&dc='+tabname+'&criteria=ALLQUESTIONS','_parent' );*/
+   
+    if(location.href.indexOf('&')== -1){
+        window.location.href=window.location.href+'#!/feedtype=RECENT&dc=All&criteria=ALLQUESTIONS';
+    }
+    });
+    </script>
+   
+
+    <!-- ================================================ HEADER ====================================================== -->
+    <div style="float:left;position:relative;width:1349px;">
+    <c:CommunityHeader ></c:CommunityHeader>
+    <!--Login and Registeration------------------------------------------------------------------------------------------->
+    <c:CommunityLogin ></c:CommunityLogin>
+   
+
+    <div id="chantteranswer" style="background-color: white;top:52px; left:-200px;float:left;position:relative;">
+
+        <div style="float:left;position:relative;">
+            <div class="threecolumn" style="background-color: white;float:left;position:relative;">
+                <div class="leftContent" style="height: 500px; background-color: white;padding-top:10px;border-right-color: #E4E4E4; border-right-width: 1px; border-right-style: solid;" >
+                   <table>
+                        <tr>
+                            <td class="leftnavigation">
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a
+                                href="/community"><b>Community</b>
+                            </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td class="leftnavigation">
+                                &nbsp;&nbsp;&nbsp;&nbsp; <a
+                                href="/community/apex/CommunityAutomotivePage">Automotive</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </td>
+                        </tr>
+                         <tr>
+                            <td class="leftnavigation">
+                                &nbsp;&nbsp;&nbsp;&nbsp; <a
+                                href="/community/apex/CommunityI2CPage">I2C</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="leftnavigation">
+                                &nbsp;&nbsp;&nbsp;&nbsp; <a
+                                href="/community/apex/CommunityInterfaceProductsPage">Interface Products</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </td>
+                        </tr>
+                         
+                        <tr>
+                             <td class="leftnavigation">
+                                &nbsp;&nbsp;&nbsp;&nbsp; <a
+                                href="/community/apex/CommunityIdentificationAndSecurityPage">Identification And Security</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </td>
+                        </tr>
+                         <tr>
+                            <td class="leftnavigation">
+                                &nbsp;&nbsp;&nbsp;&nbsp; <a
+                                href="/community/apex/CommunityLogicPage">Logic</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </td>
+                        </tr>
+                         <tr>
+                            <td class="leftnavigation">
+                                &nbsp;&nbsp;&nbsp;&nbsp; <a
+                                href="community/apex/CommunityMicrocontroller">Microcontrollers</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </td>
+                        </tr>
+                         <tr>
+                            <td class="leftnavigation">
+                                &nbsp;&nbsp;&nbsp;&nbsp; <a
+                                href="/community/apex/CommunityOtherProductsPage">Other Products</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </td>
+                        </tr>
+                         <tr>
+                            <td class="leftnavigation">
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/community/apex/CommunityRFPage">RF
+                                    Small Signal</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </td>
+                        </tr>
+                         <tr>
+                            <td class="leftnavigation">
+                                &nbsp;&nbsp;&nbsp;&nbsp; <a
+                                href="/community/apex/CommunityStandardProductsPage">Standard Products</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="mainContent" style="background-color: white;">
+                    <div class="lowerMainContent" id="lowerMainContent"
+                        style="background-color: white;">
+                        <div id="rightContent" class="rightContent"
+                            style="background-color: white;"></div>
+                        <div id="centerContent" class="centerContent"
+                            style="background-color: white; ">
+                            <div style="padding-top: 0px; background-color: white;">
+
+                                <div
+                                    style="position: relative; padding-left: 10px; background-color: white; width: 771px;">
+                                    <h1
+                                        style="color: black; position: relative; center: -216px; font-size: 18px;">Welcome to the improved NXP Support Community</h1>
+
+                                    <p style="position: relative; text-align: justify; font-size: 13px; color: #313233;">
+                                        This new community site gives visitors a better collaboration on accessing Frequently Asked Questions, community posts and direct 
+                                       support questions and answers to our NXP technical experts.</p>
+                                    <p style="position: relative; text-align: justify; font-size: 13px; color: #313233;">
+                                       The community is available for all to view. However, in order to post a question or share information, you must sign-in. Be sure to search the community first to see if there is any communications on the topic or issue you are having. NXP employees are also part of this community. Should you have issues/feedback/questions with regards to the community, please contact <a href="mailto:tech.support@nxp.com" style="text-decoration: none">
+                                       <strong>tech.support@nxp.com</strong></a>.</p> 
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearingBox"></div>
+            </div>
+        </div>
+
+    </div>
+    <c:CommunityFooter ></c:CommunityFooter>
+    </div>
+    <!----============================ FOOTER ======================------->
+
+   
+</apex:page>

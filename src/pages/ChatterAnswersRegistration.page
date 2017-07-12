@@ -1,0 +1,61 @@
+<!--PLEASE READ: If you override the automatically generated CSS, your Chatter Answers community might not function correctly.-->
+<apex:page showHeader="false" sidebar="false" cache="true">
+
+<style>
+
+.whitebackground
+  {
+             /* IE10 Consumer Preview */ 
+        background-image: -ms-linear-gradient(top, #FFFFFF 29%, #859199 134%);
+
+        /* Mozilla Firefox */ 
+        background-image: -moz-linear-gradient(top, #FFFFFF 29%, #859199 134%);
+
+        /* Opera */ 
+        background-image: -o-linear-gradient(top, #FFFFFF 29%, #859199 134%);
+
+        /* Webkit (Safari/Chrome 10) */ 
+        background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #FFFFFF), color-stop(1, #859199));
+
+        /* Webkit (Chrome 11+) */ 
+        background-image: -webkit-linear-gradient(top, #FFFFFF 29%, #859199 134%);
+
+        /* W3C Markup, IE10 Release Preview */ 
+        background-image: linear-gradient(to bottom, #FFFFFF 29%, #859199 134%);
+ 
+  }
+
+.popup
+{
+    
+    z-index: 1;
+    position: relative;
+    top: -62px;
+}
+
+.logowidth
+{
+width:100%;
+height:173px;
+}
+</style>
+
+
+<body style="background:white; ">
+
+<div class="whitebackground logowidth">
+<apex:outputLink value="http://www.nxp.com" style="position:absolute"> <apex:image value="{!$Resource.NXPLogo}" alt="NXP Semiconductor" width="85px" height="32px"/> </apex:outputLink>
+</div>
+<center>
+<apex:image value="{!$Resource.EngineersCorner}"  style="position:relative;top:-60px"/>   
+</center>
+   
+    
+        <chatteranswers:registration />
+        
+        <center>
+        <apex:outputLink value="http://www.nxp.com/community-user-guidelines.html" style="position:relative;top:-100px;z-index:1;color: black;font-weight: bold; " >Community User Guidelines</apex:outputLink>
+</center>
+    </body>
+    
+</apex:page>

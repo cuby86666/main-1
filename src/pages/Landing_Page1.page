@@ -1,0 +1,43 @@
+<apex:page sidebar="false" showHeader="false">
+<head>
+<style>
+body{font-family:Arial,Helvetica,sans-serif; font-size:12px; color:#333;}
+#main td{background-color:#fff;-moz-box-shadow:1px 1px 5px rgba(0,0,0,0.5);box-shadow:1px 1px 5px rgba(0,0,0,0.5);}
+.white{background-color:#FFF}
+#top{vertical-align:bottom;margin-top:7px}
+.padding{padding:20px 0px}
+.padding1{padding:45px 0px}
+#main img{border:none}
+.text{background-color:#F3F3F3; padding:5px;}
+#padding2{padding-top:2px}
+</style>
+</head>
+<br></br>
+<br></br>
+<body>    
+    <table cellpadding="0" cellspacing="10" align="center" width="714" border="0" id="main">
+        <tr>
+            <td width="352" valign="top">
+                <div align="center" class="padding"><a href="https://extranet.nxp.com"><img src="{!$Resource.NXP_logo}" width="300"/></a></div>
+                <div align="justify" id="top" class="text">Click above to self-register to the NXP Extranet Site to get access to Samples, Demo boards, Order Status, Lead-time, and Quality information.</div>
+            </td>
+            <td width="352">
+                <div align="center" id="padding2"><a href="http://nxpsemiconductors.force.com/newuser"><img src="{!$Resource.Salesforce}" width="250" /></a></div>
+                <div  align="justify" id="top" class="text">Click above to register for Salesforce.com which is used for Customer Relationship Management and Design Win Tracking. </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div align="center"><a href="http://nxpsemiconductors.force.com/newuser"><img  src="{!$Resource.Box}"/></a></div>
+                <div align="justify" id="top" class="text">Click above to register for Box.net which is used for Content Management and file collaboration.</div>
+            </td>
+            <td>
+                <div align="center" class="padding1"><a href="http://nxpsemiconductors.force.com/modeln"><img src="{!$Resource.ModelN}"/></a></div>
+                <div align="justify" id="top" class="text">Click above to register for ModelN which is used for pricing and quoting.</div>
+            </td>
+        </tr>
+    </table>
+</body>
+
+ 
+</apex:page>

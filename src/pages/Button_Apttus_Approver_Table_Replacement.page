@@ -1,0 +1,23 @@
+<apex:page standardController="Apttus_Approver_Table__c" extensions="Apttus_Approver_Table_Ext_Controller" cache="false" showHeader="false" sidebar="false">
+<script type="text/javascript"> 
+    var previousOnload = window.onload;        
+    window.onload = function() { 
+        if( previousOnload ){ 
+            previousOnload();
+        }
+        
+        if( {!Apttus_Approver_Table__c.User__c == null} ){
+            alert('Please double check Approver. Approver cannot be blank.');
+            window.history.back();
+        } 
+        else if( {!Apttus_Approver_Table__c.Former_Approver__c == null}) {
+            alert('Please double check Former Approver. Former approver cannot be blank.');
+            window.history.back();
+        } 
+        else {
+        	alert('Updating Agreement Records...');
+             window.location.href="/apex/Button_Apttus_Approver_Table?id={!Apttus_Approver_Table__c.Id}";
+        }
+    }
+</script>
+</apex:page>

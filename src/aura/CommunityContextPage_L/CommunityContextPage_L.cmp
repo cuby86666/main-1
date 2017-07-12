@@ -1,0 +1,5 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" >
+
+    <iframe width="100%" height="5000px"  style="border:0" src="{! ($SfdcSite.pathPrefix == null? '/apex': $SfdcSite.pathPrefix) + '/CommunityContextPage_cloneL'}" />
+
+</aura:component>

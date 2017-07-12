@@ -1,0 +1,584 @@
+<apex:page standardStylesheets="true" controller="chatterAnswersController" showHeader="false" sidebar="false" setup="false">
+  <apex:stylesheet value="{!URLFOR($Resource.NxpResource, '/css/Styles.css')}"/> 
+  <apex:includeScript value="{!URLFOR($Resource.jquery171min, '/jquery-1.7.1.min.js')}"  />
+  <apex:includeScript value="{!URLFOR($Resource.jquery171min, '/jquery-ui-1.8.17.custom.min.js')}"  />
+
+  <head>
+<title> Transistors </title>
+<meta name="description" content="Community for Transistors community in Engineers' corner"> </meta>
+
+<meta name="keywords" content="Transistors, Bipolar, MOSFET, Power Transistors"> </meta>
+
+<meta name="contenttype" content="engineers_corner"> </meta>
+
+<meta name="contenttypedisplay" content="Engineers' Corner"> </meta>
+
+<meta name="contentcategory" content="Support"> </meta>
+
+<meta name="path" content="http://community.nxp.com/Transistors"> </meta>
+
+</head>
+  
+  
+ <style>
+    .feedtypelinks.togglePill{
+        width:131px; !important
+    }
+
+    .feedtypelinks.togglePill li.feedtypeoption {
+        float:right; !important;
+    }
+ 
+   .signin ul li.last {
+border: none;
+background: transparent;
+box-shadow: 0 0;
+  }
+ 
+ 
+  .csoptimizequestion .leftContent li.selected a, .csoptimizequestion #cs\3A profile li.selected a {
+background: rgba(0, 0, 0, 0);
+}
+
+.leftContent .feedcriterialinks li.selected a, #cs\3A profile li.selected a {
+background:transparent;
+}
+
+.leftContent li.selected a {
+background:transparent;
+}
+
+.leftContent li, .rightContent li {
+        /* IE10 Consumer Preview */ 
+        background-image: -ms-linear-gradient(top, #FFFFFF 0%, #859199 250%);
+
+        /* Mozilla Firefox */ 
+        background-image: -moz-linear-gradient(top, #FFFFFF 0%, #859199 250%);
+
+        /* Opera */ 
+        background-image: -o-linear-gradient(top, #FFFFFF 0%, #859199 250%);
+
+        /* Webkit (Safari/Chrome 10) */ 
+        background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #FFFFFF), color-stop(1, #859199));
+
+        /* Webkit (Chrome 11+) */ 
+        background-image: -webkit-linear-gradient(top, #FFFFFF 0%, #859199 250%);
+
+        /* W3C Markup, IE10 Release Preview */ 
+        background-image: linear-gradient(to bottom, #FFFFFF 0%, #859199 250%);     
+border-radius: 5px;
+-moz-box-shadow: 3px 3px 5px #808080;
+-webkit-box-shadow: 3px 3px 5px rgb(128, 128, 128);
+box-shadow: 3px 3px 5px rgb(128, 128, 128);
+margin-bottom: 15px;
+}
+
+.feedcriterialinks ul {
+margin-right: 0px;
+width: 195px;
+padding: 10px 0 1px 6px;
+}
+  
+  .threecolumn .leftContent {
+float: left;
+width: 207px;
+overflow: visible;
+padding-left: 10px;
+}
+
+  .datacategorylinks ul{
+   list-style-type: circle;
+  }
+  
+  .datacategorylinks li{
+  background: transparent;
+  box-shadow: 0 0 0;
+  margin-bottom: 0px;
+  }
+  .datacategorylinks h3
+  {
+  padding: 10px;
+  }
+  
+  .datacategorylinks .csChildOption a{
+      color: white;
+  }
+   
+  
+  a {color:black;}
+  
+  .custompicklist_gradient{
+        /* IE10 Consumer Preview */ 
+        background-image: -ms-linear-gradient(top, #FFFFFF 70%, #859199 250%);
+
+        /* Mozilla Firefox */ 
+        background-image: -moz-linear-gradient(top, #FFFFFF 70%, #859199 250%);
+
+        /* Opera */ 
+        background-image: -o-linear-gradient(top, #FFFFFF 70%, #859199 250%);
+
+        /* Webkit (Safari/Chrome 10) */ 
+        background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #FFFFFF), color-stop(1, #859199));
+
+        /* Webkit (Chrome 11+) */ 
+        background-image: -webkit-linear-gradient(top, #FFFFFF 70%, #859199 250%);
+
+        /* W3C Markup, IE10 Release Preview */ 
+        background-image: linear-gradient(to bottom, #FFFFFF 70%, #859199 250%);
+  }
+  
+  .whitebackground
+  {
+             /* IE10 Consumer Preview */ 
+        background-image: -ms-linear-gradient(top, #FFFFFF 0%, #859199 250%);
+
+        /* Mozilla Firefox */ 
+        background-image: -moz-linear-gradient(top, #FFFFFF 0%, #859199 250%);
+
+        /* Opera */ 
+        background-image: -o-linear-gradient(top, #FFFFFF 0%, #859199 250%);
+
+        /* Webkit (Safari/Chrome 10) */ 
+        background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #FFFFFF), color-stop(1, #859199));
+
+        /* Webkit (Chrome 11+) */ 
+        background-image: -webkit-linear-gradient(top, #FFFFFF 0%, #859199 250%);
+
+        /* W3C Markup, IE10 Release Preview */ 
+        background-image: linear-gradient(to bottom, #FFFFFF 0%, #859199 250%);
+ 
+  }
+ 
+  .greybackground
+  {
+         /* IE10 Consumer Preview */ 
+        /* background-image: -ms-linear-gradient(top, #BFBFBF 0%, #1F2224 250%); */
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#cccccc', endColorstr='#000000'); /* for IE */
+
+        /* Mozilla Firefox */ 
+        background-image: -moz-linear-gradient(top, #BFBFBF -170%, #1F2224 100%);
+
+        /* Opera */ 
+        background-image: -o-linear-gradient(top, #BFBFBF -170%, #1F2224 100%);
+
+        /* Webkit (Safari/Chrome 10) */ 
+        background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #BFBFBF), color-stop(1, #1F2224));
+
+        /* Webkit (Chrome 11+) */ 
+        background-image: -webkit-linear-gradient(top, #BFBFBF -170%, #1F2224 100%);
+
+        /* W3C Markup, IE10 Release Preview */ 
+        background-image: linear-gradient(to bottom, #BFBFBF -170%, #1F2224 100%);
+  }
+  
+  
+  .datacategorylinks
+  {
+      background-color: #585858 ;
+      padding-bottom: 1px;
+        /* IE10 Consumer Preview */ 
+        background-image: -ms-linear-gradient(top, #BFBFBF 0%, #1F2224 150%);
+
+        /* Mozilla Firefox */ 
+        background-image: -moz-linear-gradient(top, #BFBFBF 0%, #1F2224 150%);
+
+        /* Opera */ 
+        background-image: -o-linear-gradient(top, #BFBFBF 0%, #1F2224 150%);
+
+        /* Webkit (Safari/Chrome 10) */ 
+        background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #BFBFBF), color-stop(1, #1F2224));
+
+        /* Webkit (Chrome 11+) */ 
+        background-image: -webkit-linear-gradient(top, #BFBFBF 0%, #1F2224 150%);
+
+        /* W3C Markup, IE10 Release Preview */ 
+        background-image: linear-gradient(to bottom, #BFBFBF 0%, #1F2224 150%);
+  }
+  
+  
+  .signin
+  {
+      margin:6px;
+      font-size: medium;
+      
+              /* IE10 Consumer Preview */ 
+        background-image: -ms-linear-gradient(top, #FFFFFF 0%, #859199 250%);
+
+        /* Mozilla Firefox */ 
+        background-image: -moz-linear-gradient(top, #FFFFFF 0%, #859199 250%);
+
+        /* Opera */ 
+        background-image: -o-linear-gradient(top, #FFFFFF 0%, #859199 250%);
+
+        /* Webkit (Safari/Chrome 10) */ 
+        background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #FFFFFF), color-stop(1, #859199));
+
+        /* Webkit (Chrome 11+) */ 
+        background-image: -webkit-linear-gradient(top, #FFFFFF 0%, #859199 250%);
+
+        /* W3C Markup, IE10 Release Preview */ 
+        background-image: linear-gradient(to bottom, #FFFFFF 0%, #859199 250%);      
+  }
+  
+  .footer_gradient
+  {
+        /* IE10 Consumer Preview */ 
+        background-image: -ms-linear-gradient(bottom, #FFFFFF 0%, #859199 250%);
+
+        /* Mozilla Firefox */ 
+        background-image: -moz-linear-gradient(bottom, #FFFFFF 0%, #859199 250%);
+
+        /* Opera */ 
+        background-image: -o-linear-gradient(bottom, #FFFFFF 0%, #859199 250%);
+
+        /* Webkit (Safari/Chrome 10) */ 
+        background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #FFFFFF), color-stop(2, #859199));
+
+        /* Webkit (Chrome 11+) */ 
+        background-image: -webkit-linear-gradient(bottom, #FFFFFF 0%, #859199 250%);
+
+        /* W3C Markup, IE10 Release Preview */ 
+        background-image: linear-gradient(to top, #FFFFFF 0%, #859199 250%);
+  }
+  
+  .leftContent
+  {
+    
+  }
+  .centerContent
+  {
+     
+  }
+  
+  .cxdatacategory cxAll cxtoplevel
+  {
+      color:white;
+  }
+  
+  .threecolumn
+  {
+      position: relative;
+      margin: 0px;
+      background:white;
+  }
+  
+  #header-wrapper .header .logo {
+        float: left;
+    }
+    #header-wrapper .header .logo a {
+        background: url("https://community.nxp.com/resource/1363006603000/NXPLogo") no-repeat 0 0 #FFFFFF;
+        display: block;
+        height: 32px;
+        width: 85px;
+    }
+    .left {
+        float: left;
+    }
+    .disp_inline
+    {
+        display:inline;
+        
+        padding-right: 12px;
+        margin-left: 10px;
+    }
+    
+    .border
+    {
+        border-right: 1px solid black;
+    }
+    #navbar-wrapper ul.nav li.first {
+        border-left: 0;
+    }
+    #navbar-wrapper ul.nav li.last {
+        border-right: 0px;
+    }
+    #navbar-wrapper ul.nav.border-radius li.first.active,
+    #navbar-wrapper ul.nav.border-radius li.first:hover {
+        border-radius: 3px 0 0 3px;
+        -webkit-border-radius: 3px 0 0 3px; /* for webkit browsers */
+        -moz-border-radius: 3px 0 0 3px; /* for firefox */  
+    }
+    #navbar-wrapper ul.nav.border-radius li.last.active,
+    #navbar-wrapper ul.nav.border-radius li.last:hover  {
+        border-radius: 0 3px 3px 0;
+        -webkit-border-radius: 0 3px 3px 0; /* for webkit browsers */
+        -moz-border-radius: 0 3px 3px 0; /* for firefox */  
+    }
+    .bodyDiv {
+        background-color: transparent;
+    }   
+  
+     #footer {
+    clear: both;
+    float: left;
+    margin: 16px 0 0;
+    min-height: 30px;
+    overflow: hidden;
+    width: 100%;
+    top:expression((0-(footer.offsetHeight)+(document.documentElement.clientHeight ? document.documentElement.clientHeight : document.body.clientHeight)+(ignoreMe = document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop))+'px');
+}
+
+.sub_img_pos img
+{
+position: relative;
+top: 5px;
+padding-right: 5px;
+}
+
+.box_component li{
+padding: 1px 0 3px 0;
+color:#969200;
+}
+
+ .leaderboardStyle
+    {
+        /* IE10 Consumer Preview */ 
+        background-image: -ms-linear-gradient(top, #FFFFFF 0%, #859199 250%);
+
+        /* Mozilla Firefox */ 
+        background-image: -moz-linear-gradient(top, #FFFFFF 0%, #859199 250%);
+
+        /* Opera */ 
+        background-image: -o-linear-gradient(top, #FFFFFF 0%, #859199 250%);
+
+        /* Webkit (Safari/Chrome 10) */ 
+        background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #FFFFFF), color-stop(1, #859199));
+
+        /* Webkit (Chrome 11+) */ 
+        background-image: -webkit-linear-gradient(top, #FFFFFF 0%, #859199 250%);
+
+        /* W3C Markup, IE10 Release Preview */ 
+        background-image: linear-gradient(to bottom, #FFFFFF 0%, #859199 250%);      
+        
+        box-shadow: inset 0 0 4px #c4c4c4;
+        border-radius: 5px;
+        padding:10px;
+
+    }
+
+    .borderTop{
+        border-top: 1px dotted gray;
+    }
+
+
+
+  </style>
+<script>  
+/* Changing the default active tab and filter from "Popular,Best Answer" to "Recent,OpenQuestions" on page load*/ 
+/* Get the current zone from URL and add it to dc query parameter in URL */
+
+jQuery("document").ready(function() {
+    var pathname = window.location.pathname.split("/");
+    var tabname = pathname[pathname.length-1]; 
+       
+    if(location.href.indexOf('&')== -1){
+        window.location.href=window.location.href+'#!/feedtype=RECENT&dc='+tabname+'&criteria=OPENQUESTIONS';
+    }
+       
+
+});
+</script>     
+    
+<body background="{!$resource.Site_background_image}" style="background-size: 100%;background-color: rgb(255, 255, 255);"> 
+<center>
+    <div id="page" style="background: white;width: 1040px;height: 100%;position: relative;top: 22px;">  
+        
+        <!-- ================================================ HEADER ====================================================== -->
+        <div id="header-top" style="height: 50px;">
+            <div class="logo" style="float: left;padding-left:15px;padding-top: 5px;">
+                <a shape="rect" href="http://www.nxp.com" title="NXP Semiconductors homepage">
+                    <apex:image value="{!$Resource.NXPLogo}" alt="NXP Semiconductor" width="85" height="32" />
+                </a>
+            </div>
+            <ul class="left" style="z-index: 1;position:relative;left:90px">
+                <li class="first disp_inline border"><a href="http://www.nxp.com/">Home</a></li>
+                <li class="disp_inline border"><a href="http://www.nxp.com/about.html">About NXP</a></li>
+                <li class="disp_inline border"><a href="http://www.nxp.com/news.html">News</a></li>
+                <li class="disp_inline border"><a href="http://www.nxp.com/careers.html">Careers</a></li>
+                <li class="disp_inline border"><a href="http://investors.nxp.com">Investors</a></li>
+                <li class="disp_inline border"><a href="http://www.nxp.com/my" class="_blank" target="_blank">my.NXP</a></li>
+                <li class="disp_inline last"><a href="http://www.nxp.com/support.html">Contact</a></li>                
+                <li class="disp_inline last" style=" padding-left: 185px;" ><a href="http://www.nxp.com">Logout</a></li>                 
+            </ul>
+        </div>
+
+        <!-- ==================================== Main Content ====================================================== -->
+        <div id="main_content">
+        
+    
+            <!------- Custom Picklist----->
+            <div  class="custompicklist_gradient" style="width: 100%;height:100px;">  
+                <div style="position: relative;left: 235px;top: 45px;width: 700px;">
+                    <table>
+                    <tr>
+                        <td>
+                            <p style="font-size: large;color:#e7670a;width:140px; display: inline;padding-right: 10px;"> Choose your corner </p>
+                        </td>
+                        <td>
+                            <select class="whitebackground solrNoIndex" name="menu1" id="menu1"  style="width: 364px;">
+                            <option value="Transistors">Transistors</option>
+                            <option value="EngineersCorner">Engineer's Corner </option>
+                            <option value="Amplifiers">Amplifiers</option>
+                            <option value="CATVHybrids">CATV Hybrids</option>
+                            <option value="Diodes">Diodes</option>
+                            <option value="Mixers">Mixers</option>
+                            <option value="PLLsandOscillators">PLL's and Oscillators</option>
+                            
+                            </select>
+
+                            <script type="text/javascript">
+                             var urlmenu = document.getElementById( 'menu1' );
+                             urlmenu.onchange = function() {
+                                /*Change the filter of zones in custom picklist option by Change the URL query parameter to RECENT and OPENQUESTION */
+                                                                 
+                                 window.open( this.options[ this.selectedIndex ].value+'#!/feedtype=RECENT&dc='+this.options[ this.selectedIndex ].value+'&criteria=OPENQUESTIONS','_parent' );
+                             };
+                            </script>
+                        </td>
+                    </tr>
+                    </table>
+                </div>
+            </div>   
+
+    <div style="padding-top: 20px;">
+        <!----------------------- Engineer's Corner Image-------------------------------->
+          
+           <div style=" position: relative; left: 19px; float: left;"> 
+           <a href="https://nxpsemiconductors.secure.force.com/community/" target="_top"><apex:image value="{! $Resource.Engineerscorner}" width="195px"/></a>           
+           </div>
+         
+         
+        <!--------------------- Engineer's Corner Text---------------------------->
+        <div style="padding-left: 235px;"> 
+            <h1  style="color:#e7670a;position: relative;left: -216px;font-size: 21px; ">Welcome to the Engineers’ Corner </h1> 
+             
+            <p  style=" position: relative;text-align: justify;font: status-bar;font-size: 13px;width: 771px;color: #313233; ">
+            An Engineer-to-Engineer <strong>RF Small Signal</strong> community for collaboration, tech support and sharing of ideas. 
+            The community is available for all to view. However, in order to post a question or share information, you must sign-in.
+            Be sure to search the community first to see if there is any communications on the topic or issue you are having. If not, please then go ahead and ask the question. NXP employees are also part of this community. Should you have issues/feedback/questions with regards to the community, please contact 
+            <a href="mailto:engineers.corner@nxp.com" style="text-decoration: none">
+            <strong>engineers.corner@nxp.com</strong></a>. </p>
+        </div>
+    </div>
+<table>     
+<tr>
+    <td valign="top"><!---- call to chatter answer community--->
+        <div style="width: 790px;">
+            <chatteranswers:allfeeds communityId="09aD0000000gXbs" ></chatteranswers:allfeeds>
+        </div>
+    </td>  
+    
+    <!---------------------- RSS Feed --------------------------------->
+    <td valign="top">
+        <div id="sidebar" style="padding-left: 10px;">
+        
+            <div id="subs" class="sub_img_pos">
+                <apex:outputLink value="http://www.nxp.com/news/receive-news/rss-feeds.html" style="font-weight: bold;color:#6aa8ce;" > <apex:image value="{!$Resource.RSSFeed}"/>Subscribe to our RSS Feed </apex:outputLink>
+            </div>
+         <br></br>
+         <div style="border: 1px solid gray;border-radius: 5px;padding: 10px 0 10px 0;">
+            <apex:outputLink value="http://www.nxp.com/unleash-rf/lna/" > <apex:image value="{!$Resource.NXPBanner}"/> </apex:outputLink>
+        </div>
+         <br></br>
+         <!----- Leaderboard---->
+
+<!-----  <link rel="stylesheet" type="text/css" href="https://community.nxp.com/resource/1363152769000/Leaderboard_css" />  ---->
+         
+                    <div id="leaderBoardContainer" class="leaderboardStyle">
+                        <div class="articlesTitle">
+                            <b style="font-size: 17px;font-weight: normal;">Leaderboard</b>
+                            <br/><br/>
+                        </div>
+                        <div id="leaderBoardInfo">
+                            <table cellspacing="0">
+                                <tr>
+                                    <td class="textInfo InfoHeader borderTop" width="15px" align="center">Rank</td>
+                                    <td class="textInfo InfoHeader borderTop" width="45px" align="center"></td>
+                                    <td class="textInfo InfoHeader borderTop" >Name</td>
+                                    <td class="textInfo InfoHeader borderTop"  width="20px" align="center">Score</td>
+                                </tr>
+                                <apex:repeat value="{!finalScoreBoardInfo}" var="tsKey">                                  
+                                    <tr>
+                                        <td class="textInfo borderTop" align="center">{!tsKey.RankNo}</td>
+                                        <td class="textInfo borderTop" align="center"><img src="{!tsKey.photoURL}" style="width: 45px;"/></td>
+                                        <td class="textInfo borderTop">{!tsKey.personName}</td>
+                                        <td class="textInfo borderTop" align="center">{!tsKey.personScore}</td>
+                                    </tr>
+                                </apex:repeat>
+                            </table>
+                        </div>
+                    </div>
+                
+                        
+                <!---- Video and image custom component--->
+                <br></br>
+                <div>
+                    <apex:iframe frameborder="true" scrolling="true" title="video" src=" http://www.youtube.com/embed/x4Yk_DmaPUg" height="170" width="225" />
+                </div>
+                <br></br>   
+                <!----- Box Component ------->    
+                <div class="greybackground" style="border-radius: 5px;height: 100px;width: 225px;padding:6px 0 22px 0;"> 
+                    <ul type="square" class="designresourcesul"> 
+                        <div class="box_component" style="font-size: small;color:white;">
+                       <p style="font-size: larger;">Design Resources </p>
+                        
+                            <li> <a href="http://elearning.nxp.com/" style="color:white" >Training </a> </li>
+                            <li> <a href="http://www.nxp.com/design-portal.html" style="color:white" >Evaluation tool </a> </li>
+                            <li> <a href="http://www.nxp.com/technicalsupport/"  style="color:white">Technical support </a> </li>
+                        </div>
+                    </ul>
+                </div>
+            
+                <br></br>
+                <!---------------- Social Connect ---------------->
+                <div id="social_connect" class="whitebackground" style="border-radius: 5px;border: 1px solid rgb(128, 128, 128); height: 100px;width: 225px; font-size:initial;"> 
+                    <p id="social_connect_title" style="padding: 0 0 10px 10px;border-bottom: 1px dotted gray;">Follow Us</p>
+                    
+                    <div id="social_icons">
+                    <center>
+                        <apex:outputLink value="http://nxp.com/youtube"> <apex:image url="{! $resource.Youtube}" height="30" /> </apex:outputLink>
+                        
+                        <apex:outputLink value="http://www.twitter.com/NXP" style="padding-left: 15px;"> <apex:image url="{! $resource.twitter}" height="30" /> </apex:outputLink>
+                        
+                        <apex:outputLink value="http://nxp.com/facebook" style="padding-left: 15px;"> <apex:image url="{! $resource.facebook}" height="30" /> </apex:outputLink>
+                        
+                        <apex:outputLink value="http://www.linkedin.com/company/nxp-semiconductors" style="padding-left: 15px;"> <apex:image url="{! $resource.linkedin}" height="30" /></apex:outputLink> 
+                    </center>
+                    </div>
+                </div> 
+            
+        </div>
+    </td>
+</tr>
+</table>
+        
+        
+  
+        
+    </div>
+    <!----============================ FOOTER ======================------->
+    
+    <div class="footer_gradient" id="footer" style="position: relative;" >
+         <div id="footer-bottom-links">
+                  <ul class="left">
+                  <li class="first disp_inline border"><a href="http://www.nxp.com/site-owner.html" title="NXP Semiconductors">NXP</a>  </li>
+                  <li class="disp_inline border" ><a href="http://www.nxp.com/privacy-policy.html" title="Privacy policy">Privacy</a> </li>
+                  <li class="disp_inline border"><a href="http://www.nxp.com/terms-of-use.html" title="Terms of use">Terms of use</a></li>
+                  <li class="last disp_inline"><a href="http://nxp.uservoice.com/forums/89223-nxp-semiconductors-beta-feedback" title="Feedback" class="_blank" target="_blank">Feedback</a></li>
+                  <li  class="last disp_inline"  style="padding-left: 275px;">NXP Semiconductors. All rights reserved. 沪ICP备1020807</li>
+                  </ul>
+        </div>
+        
+           
+ </div>
+        
+</div>   
+
+</center>
+<script type="text/javascript" src="/community/resource/1368784859000/Tracking_code"></script> 
+<script type="text/javascript" src="/community/resource/1369360327000/Tracking_code_init"></script> 
+</body>
+
+
+
+</apex:page>

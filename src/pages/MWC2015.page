@@ -1,0 +1,315 @@
+<apex:page sidebar="false" showHeader="false"  standardStylesheets="false">
+
+<html>
+<head>
+<title>Preparing for MWC 2015 - Secure Connections for a Smarter World</title>
+<meta name="keywords" content="" />
+
+<style>
+
+body 
+{
+    font-family: Verdana,Arial,Helvetica,Geneva,sans-serif;
+    color: rgb(0, 0, 0) !important;
+    font-size: 75%;
+}
+
+ .p-pagetitle
+{
+    height:25px; padding:4px 0 0 17px; 
+    font:bold 14px Verdana, Geneva, Arial, Helvetica, sans-serif; 
+    margin-bottom:10px; color: #FFF; 
+    background-color: #749AC2;
+    position:relative;
+}
+
+.auto-style23 
+{
+    text-decoration: underline;
+}
+
+.auto-style17 {
+    font-size: small;
+}
+ 
+.auto-style18 {
+    background-color: #FFFF00;
+}
+
+.auto-style24 {
+    color: #FF0000;
+    background-color: #FFFF00;
+}
+
+.auto-style25 {
+    text-decoration: underline;
+} 
+
+.auto-style19 {
+    color: #FF0000;
+}    
+
+.bullet, ul.bullet-list li, .aop ul li, .aip ul li {
+    padding: 0 0 0 12px;
+}
+
+</style>
+</head>
+<body>
+<a name="top"></a>
+
+
+<!-- begin content area -->      
+
+<div>
+    <center><img src="{!URLFOR($Resource.MWC2015_banner)}" /></center>
+</div>
+<div style="padding: 10px 20px;">
+<div class="p-pagetitle">Preparing for MWC 2015 - Secure Connections for a Smarter World</div>
+
+<div>
+<p>Over the course of four days, 2-5 March 2015, Barcelona will host the world’s greatest mobile event: Mobile World Congress.</p>
+<p>The mobile communications revolution is driving the world’s major technology breakthroughs. From wearable devices to connected cars and homes, mobile technology is at the heart of worldwide innovation. As an industry, we are connecting billions of people to the transformative power of the Internet and mobilizing every device we use in our daily lives.
+In short, we’re on The Edge of Innovation and the possibilities are endless. The 2015 GSMA Mobile World Congress will convene industry leaders, visionaries and innovators to explore the trends that will shape mobile in the years ahead.
+</p>
+<p>In 2014, Mobile World Congress attracted more than 85,000 attendees from over 200 countries and they were treated to a wealth of learning and networking opportunities; product showcases and announcements; inspiration and innovation.</p>
+<p>NXP is represented in this top international environment! This is the platform for effectively approaching our target group and making new business contacts.</p>
+<p>On this page all relevant forms and other information can be found – please keep checking the site as new information is posted regularly. We will be looking for support from the sales team to help line up commitments with customers as soon as possible.</p>
+</div>
+
+<div>
+<P><U><B><FONT face="Verdana">Goals / Objectives</FONT></B></U></P>
+<ol>
+<li>Position NXP as the clear market &amp; thought leader in Secure Connections for a Smarter World.
+    <ol type="i">
+        <li>Market leadership: MS, turnover, RMS, stock price, global reach (locations)</li>
+    	<li>Thought leadership: innovation, first mover products, domain expertise, awards, publications, quotes, speeches, key player in standard committees, IP &amp; patents</li>
+    </ol>
+    </li>
+<li>Raise the visibility and awareness that NXP is a technology leader.</li>
+<li>Raise the visibility of our brands and increase overall NXP brand value.</li>
+<li>Raise awareness that NXP is the global #1 in identification solutions.</li>
+<li>Meet with major press representatives and analysts to generate a buzz for NXP within 2 weeks after the show (publications, quotes, public visibility, stock price, rankings in research papers)</li>
+<li>Conduct quality meetings (well prepared, clear objectives, well defined attendance and outcome).</li>
+<li>Help position NXP for continued future success as a result of the meetings, discussions, etc., held throughout the show week.</li>
+<li>Introduce new product and solutions, as applicable.</li>
+</ol>
+</div>    
+
+<DIV  align="left">
+<TABLE id="table1" border="1" width="63%" height="113">
+<TBODY>
+<TR>
+<TD height="19" width="47%"><FONT size="2" face="Verdana"><A href="#Customer Invitation">Customer Invitation</A> &nbsp;</FONT></TD>
+<TD height="16" width="50%"><FONT size="2" face="Verdana"><A href="#Location MWC &amp; NXP Booth">Location MWC &amp; NXP Booth</A></FONT></TD></TR>
+<TR>
+<TD height="16" width="47%"><FONT size="2" face="Verdana"><A href="#Customer Meetings">Customer Meetings</A></FONT> </TD>
+<TD height="16" width="50%"><FONT size="2" face="Verdana"><A href="#Show Opening Hours">Show Opening Hours</A> </FONT></TD></TR>
+<TR>
+<TD height="16" width="47%"><FONT size="2" face="Verdana"><A href="#Demonstrations">Demonstrations</A></FONT></TD>
+<TD height="16" width="50%"><FONT size="2" face="Verdana"><A href="#Shipping Instructions">Shipping instructions</A></FONT></TD></TR>
+<TR>
+<TD height="16" width="47%"><FONT size="2" face="Verdana"><a href="#MWC Entry Badge">MWC Entry Badge</a></FONT></TD>
+<TD height="16" width="50%"><FONT size="2" face="Verdana"><a href="#Show guide">Show Guide</a></FONT></TD>
+</TR>
+<TR>
+<TD height="16" width="47%"><FONT size="2" face="Verdana"><a href="#Hotel registration">Hotel registration</a></FONT></TD>
+<TD height="16" width="50%"><FONT size="2" face="Verdana"><a href="#Team &amp; Responsibilities">Team &amp; Responsibilities</a></FONT></TD>
+</TR>
+</TBODY></TABLE></DIV>
+<BR /> <BR />
+
+<div id="orange-divider" style="background-color:#FF9933; width:100%">&nbsp;</div>
+<br />
+<P><U><B><FONT face="Verdana"><A class="anchorGlyph" name="Customer Invitation"></A>CUSTOMER INVITATION</FONT></B></U><FONT size="2" face="Verdana"><BR /><BR />
+<P>A customer invitation letter is available to help your communication with customers. You may customize the letter to fit your needs. The customer letter is available for download <a href="{!URLFOR($Resource.NXP_Customer_Invitation_MWC2015_1)}">here</a>.</P>
+<P>Also, for all meetings it is <U>mandatory</U> to complete the customer briefing form to prepare everyone for the discussion. Send all meeting briefing <a href="{!URLFOR($Resource.MWC2015_CustProfile_template)}">forms</a> to <a href="mailto:janine.peeters@nxp.com">janine.peeters@nxp.com</a></P> 
+</FONT>
+</P>
+
+<P><FONT face="Verdana"><FONT size="2"><BR /><A class="anchorGlyph" name="Customer Meetings"></A></FONT><B><U>CUSTOMER MEETINGS<BR /><BR /></U></B></FONT><FONT size="2" face="Verdana">
+<ul class="bullet-list">
+<li>We encourage you to schedule meetings with customers before the start of the exhibition. You will have a private room for your discussion and you can also secure MT attendance, if required.</li>
+</ul>
+</FONT></P>
+
+<P><FONT face="Verdana"><FONT size="2"><BR /><A class="anchorGlyph" name="Booking a meeting room"></A></FONT><B><U>Booking a meeting room<BR /><BR /></U></B></FONT><FONT size="2" face="Verdana">
+<ul class="bullet-list">
+<li>The NXP booth will have 5 meeting rooms: 1 for 4 guests, 3 for 6 guests and 1 for 8 guests.</li>
+<li>To simplify the reservation process we will use Outlook to schedule all meetings at MWC 2015.  A step-by-step guide can be found <a href="{!URLFOR($Resource.Scheduling_a_customer_meeting_MWC2015)}">here</a></li>
+</ul>
+</FONT></P>
+
+<P><FONT face="Verdana"><FONT size="2"><BR /><A class="anchorGlyph" name="Demonstrations"></A></FONT><B><U>PROPOSED DEMONSTRATIONS<BR /></U></B></FONT>
+<FONT size="2" face="Verdana">
+<ol>
+<li class="auto-style17">Augmented Call - NXP Software</li>
+<li class="auto-style17">Smart Earbud / True Wireless Audio</li>
+<li class="auto-style17">Coolflux</li>
+<li class="auto-style17">Senseg Haptic Feedback</li>
+<li class="auto-style17">Smart Sensors</li>
+<li class="auto-style17">mPOS </li>
+<li class="auto-style17">Secure Services Development Platform(SSDP)</li>
+<li class="auto-style17">NFC/DCDC Boost platform</li>
+<li class="auto-style17">NXP Bluetooth Smart Platform for Wearables and IoT</li>
+<li class="auto-style17">Maximus 2 dongle</li>
+<li class="auto-style17">Acoustic Fridge</li>
+<li class="auto-style17">Tesla Rinspeed</li>
+<li class="auto-style17">Wireless charging - TX Qi</li>
+</ol>
+</FONT></P>
+
+<br />
+<div id="blue-divider" style="background-color:#99CCFF; width:100%">&nbsp;</div>
+<br />
+
+<U><B><FONT face="Verdana"><A class="anchorGlyph" name="MWC Entry Badge"></A>MWC ENTRY BADGE<BR /></FONT></B></U>
+<FONT size="2" face="Verdana">We will take care of your MWC entry badge registration. You will receive an e-mail with a barcode. Please bring this e-mail with you to MWC as you will need it to pick up your badge. You have to show identification as well so don’t forget your ID card, passport or driving license!</FONT>
+<br />
+<br />
+
+<U><B><FONT face="Verdana"><A class="anchorGlyph" name="Hotel registration"></A>REGISTRATION / HOTEL REGISTRATION<BR /></FONT></B></U>
+<FONT size="2" face="Verdana">
+<P>Those approved to go to MWC will receive the registration link via e-mail. Even if you do not require a hotel room, you need to register! Unfortunately with the new registration system you need to provide your credit card details even if you do not require a hotel room.</P>
+<ul>
+<li>We have a block reservation at the Barcelona Princess hotel for NXP employees attending MWC.</li>
+<li>All hotel reservations must be made via the registration link (see below) due to the contract we have signed with the hotel.</li>
+<li>As we want to avoid cancellation fees, we need to fill all the rooms in this hotel first before we look at another hotel.</li>
+<li>Please do not contact the hotel yourself as all reservations are handled via a housing agency and the hotel won’t have your details.</li>
+</ul>
+<U><B><FONT face="Verdana">HOTEL<BR /></FONT></B></U>
+<P>
+Hotel Barcelona Princess<BR />
+Avinguda Diagonal 1<BR />
+08019 Barcelona, Spain<BR />
+Tel +34 933 56 10<BR />
+</P>
+
+<a href="">Registration link</a><BR />
+    
+<U><B><FONT face="Verdana"><A class="anchorGlyph" name="Location MWC &amp; NXP Booth"></A>LOCATION MWC &amp; NXP BOOTH<BR /></FONT></B></U>
+<P>
+Fira de Gran Via<BR />
+Av. Joan Carles I, 64<BR />
+08908 L'Hospitalet de Llobregat (Barcelona)<BR />
+</P>
+    
+<U><B><FONT face="Verdana">NXP BOOTH<BR /></FONT></B></U>
+<P>
+Hall 7, 7E30<BR />
+<a href="http://www.mobileworldcongress.com ">www.mobileworldcongress.com </a>
+</P>
+
+<U><B><FONT face="Verdana">BOOTH LAY-OUT<BR /></FONT></B></U>    
+<div>
+    <center><img src="{!URLFOR($Resource.MWC2015_nxp_booth_layout)}" /></center>
+</div>
+</FONT>
+<br />
+
+<U><B><FONT face="Verdana"><A class="anchorGlyph" name="Show Opening Hours"></A>SHOW OPENING HOURS<BR /></FONT></B></U>
+<br />
+<table border="1" width="49%">
+<tbody>
+<tr>
+<td style="width: 49%"><font face="Verdana" size="2"></font></td>
+<td class="auto-style2" width="54%"><font size="2"><B>Exhibition</B></font></td></tr>
+<tr>
+<td style="width: 49%"><font face="Verdana" size="2">Monday 2 March 2015</font></td>
+<td class="auto-style2" width="54%"><font size="2">09:00 – 19:00 hrs</font></td></tr>
+<tr>
+<td style="width: 49%"><font face="Verdana" size="2">Tuesday 3 March 2015</font></td>
+<td class="auto-style2" width="54%"><font size="2">09:00 – 19:00 hrs</font></td></tr>
+<tr>
+<td style="width: 49%"><font face="Verdana" size="2">Wednesday 4 March 2015</font></td>
+<td class="auto-style2" width="54%"><font size="2">09:00 – 19:00 hrs</font>
+</td>
+</tr>
+<tr>
+<td style="width: 49%"><font face="Verdana" size="2">Thursday 5 March 2015</font></td>
+<td class="auto-style2" width="54%"><font size="2">09:00 – 16:00 hrs</font>
+</td>
+</tr>
+</tbody></table>
+<br />
+<P>You can schedule your customer meetings as of 09:30 AM on Monday 2 March 2015.</P>
+<P>NXP will provide coffee, tea, water and soft drinks on the booth. Lunch will be provided for demo staff only.</P>
+
+<br />
+<div id="green-divider" style="background-color:#99CC00; width:100%">&nbsp;</div>
+<br />
+
+<P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px" class="MsoNormal" ><FONT face="Verdana"><U><B><A class="anchorGlyph" name="Shipping Instructions"></A>
+SHIPPING INSTRUCTIONS<BR /><BR /></B></U></FONT></P>
+<P>
+In case you cannot hand carry your demo, you can send it to the NXP office in Eindhoven. Materials have to be in Eindhoven by <U>10 February 2015</U> at the very latest.
+</P>
+<P>
+Please address parcels to NXP Semiconductors, attn. Nancy Schepers. Please mark the boxes clearly with “MWC 2015”.
+</P>
+
+<div id="orange-divider" style="background-color:#FF9933; width:100%">&nbsp;</div>
+<br />
+
+<P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px" class="MsoNormal" ><FONT face="Verdana"><U><B><A class="anchorGlyph" name="Show guide"></A>
+SHOW GUIDE</B></U></FONT><BR /><BR />
+<FONT size="2" face="Verdana">
+The MWC show guide will be available soon. <BR /><BR />
+
+
+<B>DEMO SET-UP SCHEDULE</B>
+<P>Sunday 1 March 2015, 12:00 – 16:00 hrs</P>
+<P><U>All demos must be set-up and working properly by Sunday 1 March 16:00 hrs!!</U></P>
+<P><B>Demo owners have full responsibility to ensure their demos are up and running at least 30 minutes prior to the event opening and during the exhibition hours. Demos must not be dismantled prior to event closure.</B></P>
+
+<B>DEMO TEAR DOWN SCHEDULE</B><BR />
+<P>Thursday 4 March AFTER show closure at 16:00 hrs. Please make sure to book your return flight accordingly; if you leave earlier please appoint somebody else to pack up your demo.</P>    
+<P>In case you ship your demo to Eindhoven, <U>please ensure you have the correct documents for the return shipment</U>.</P>
+</FONT></P>
+<BR /><BR />
+
+<P style="MARGIN-TOP: -10px; MARGIN-BOTTOM: 0px">
+<U><FONT size="2" face="Verdana"></FONT></U><B><FONT size="2" face="Verdana"><U><A class="anchorGlyph" name="Team &amp; Responsibilities"></A></U></FONT>
+
+<U><FONT face="Verdana">TEAM &amp; RESPONSIBILITIES<BR /></FONT></U></B></P>
+<br />
+
+<TABLE border="1" height="161" style="width: 83%">
+<TBODY>
+<TR>
+<TD width="44%" height="7" class="auto-style2"><font size="2" face="Verdana">Project owner</font></TD>
+<TD height="7" class="auto-style2" style="width: 83%"><font size="2" face="Verdana">Bill Gruenewald</font></TD></TR>
+<TR>
+<TD width="44%" height="7" class="auto-style2"><font size="2" face="Verdana">Business / Sales owner</font></TD>
+<TD height="7" class="auto-style2" style="width: 83%"><font size="2" face="Verdana">Jeff Miles</font></TD></TR>
+<tr>
+<TD width="44%" height="9" class="auto-style2"><font size="2" face="Verdana">Demo &amp; content coordination</font></TD>
+<TD height="9" style="width: 83%" class="auto-style2"><font size="2" face="Verdana">Mohamed Chemloul</font></TD>
+</tr>
+<TR>
+<TD width="44%" height="11"><font size="2" face="Verdana">On-site project owner</font></TD>
+<TD height="11" style="width: 83%"><font size="2" face="Verdana">Jeff Fonseca</font></TD></TR>
+<TR>
+<TD width="44%" height="11" class="auto-style2"><font size="2" face="Verdana">Internal communications</font></TD>
+<TD height="11" style="width: 83%"><font size="2" face="Verdana">Rebecca Samuel</font></TD></TR>
+<TR>
+<TD width="44%" height="11" class="auto-style2"><font size="2" face="Verdana">Media &amp; PR</font></TD>
+<TD height="11" style="width: 83%" class="auto-style5"><font size="2" face="Verdana">Martijn van der Linden</font></TD></TR>
+<TR>
+<TD width="44%" height="11" class="auto-style2"><font size="2" face="Verdana">Overall event manager</font></TD>
+<TD height="11" style="width: 83%" class="auto-style5"><font size="2" face="Verdana">Nancy Schepers</font></TD></TR>
+<TR>
+<TD width="44%" height="11" class="auto-style2"><font size="2" face="Verdana">Meeting Schedules</font></TD>
+<TD height="11" style="width: 83%" class="auto-style5"><font size="2" face="Verdana">Janine Peeters</font></TD></TR>
+<TR>
+<TD width="44%" height="11" class="auto-style2"><font size="2" face="Verdana">Hotel reservations &amp; Exhibitor badges</font></TD>
+<TD height="11" style="width: 83%" class="auto-style5"><font size="2" face="Verdana">Nancy Schepers</font></TD></TR>
+<TR>
+<TD width="44%" height="11" class="auto-style2"><font size="2" face="Verdana">On-site support</font></TD>
+<TD height="11" style="width: 83%" class="auto-style5"><font size="2" face="Verdana">Janine Peeters, Nancy Schepers and Anika Timm</font></TD></TR>    
+    </TBODY></TABLE>
+<P><FONT size="2" face="Verdana"><BR />Please do not hesitate to contact us if you have any feedback, questions or comments.<BR /><BR /></FONT></P>
+ </div>
+</body>
+</html>
+</apex:page>

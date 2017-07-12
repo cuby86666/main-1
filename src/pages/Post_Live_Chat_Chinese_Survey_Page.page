@@ -1,0 +1,219 @@
+<apex:page id="thepage" sidebar="false" showHeader="false" standardStylesheets="false" controller="CommunityLiveAgentChatSurveyController">
+  <div id="thepage" style="overflow:auto;height:450px;">  
+   <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <title>Survey - NXP TechSupport Community</title>
+    <apex:stylesheet value="{!URLFOR($Resource.Forum_Community_3, 'NXP-community/css/jasny-bootstrap.css')}" ></apex:stylesheet>  
+    <apex:stylesheet value="{!URLFOR($Resource.Forum_Community_3, 'NXP-community/css/font-awesome.css')}" ></apex:stylesheet>      
+    <apex:stylesheet value="{!URLFOR($Resource.Forum_Community_3, 'NXP-community/css/hover.css')}" ></apex:stylesheet>
+    <apex:stylesheet value="{!URLFOR($Resource.Forum_Community_3, 'NXP-community/css/main.css')}" ></apex:stylesheet>
+</head>
+  
+  <body class="new-case">
+   <apex:image value="{!$Resource.NXPLogo}" alt="NXP Semiconductor" width="85"
+                    height="32" style="outline:none; border:0;" />
+   
+    
+    
+    <apex:form styleclass="form-horizontal" id="surveyForm">
+     
+           <div id='details'>
+
+       
+    <div class="container">
+        
+        <h4><b>感谢您的反馈。</b></h4>
+        <apex:pageMessages ></apex:pageMessages>
+        <div class="h-spacer">&nbsp;</div>
+      
+        <div style="color:#e66a08  ; font-size: 16px"> <b>
+备注：此聊天窗口没有被关闭， 
+您只是返回到该页面？ 
+您的聊天窗口可能在一段时间没有回复后自动关闭。 如有需要，欢迎再次联系我们！</b>
+
+
+</div>
+        
+   <!--    <div class="row">
+            <div class="col-md-8 col-xs-8">                                                           
+                <div class="form-group">
+                    <apex:outputLabel value="Chat Key" styleclass="control-label col-md-4" id="caseNumber"/>
+                    <div class="control-label col-md-8">
+                        <apex:outputText value="{!$CurrentPage.parameters.chatKey}" id="chat" >
+                       </apex:outputText>  
+                    </div>
+                </div>
+                
+            </div>  
+        </div> 
+        <br/>  -->
+        <div class="row">
+            <div class="col-md-12 col-xs-12 bg-color-bar padding-left-10">
+                <h5>满意度调查</h5></div>
+        </div>
+        <br/>
+        <div class="row">
+                <div class="col-md-8 col-xs-8">
+                    <div class="form-group">
+                        <label class="control-label col-md-4"><b>已解决 ?</b></label>
+                        <div class="col-md-5">
+                            <apex:outputPanel styleClass="requiredInput"  layout="block" id="inputPanelResolved">                 
+                                <apex:outputPanel styleClass="requiredBlock" layout="block" id="inputBlockResolved"/>
+                                <apex:selectList size="1" value="{!strResolved}" required="true" id="inputResolved" styleclass="btn btn-default dropdown-toggle input-form">
+                                    <apex:selectOptions value="{!quesValues}" />
+                                </apex:selectList>
+                            </apex:outputPanel>
+                        </div>
+                        <div class="col-md-3">
+                        <apex:outputtext value="你有多满意答案您收到此聊天吗?" id="resolvedQuestion" style="color:Black" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4"><b>解决时间吗?</b></label>
+                        <div class="col-md-5">
+                            <apex:outputPanel styleClass="requiredInput"  layout="block" id="inputPanelResolution">                 
+                                <apex:outputPanel styleClass="requiredBlock" layout="block" id="inputBlockResolution"/>
+                                <apex:selectList size="1" value="{!strResolutionTime}" required="true" id="inputResolution" styleclass="btn btn-default dropdown-toggle input-form">
+                                    <apex:selectOptions value="{!quesValues}" />
+                                </apex:selectList>
+                            </apex:outputPanel>
+                        </div>
+                        <div class="col-md-3">
+                        <apex:outputtext value="如何满足您的聊天请求解决时间吗?" id="resolutionQuestion" style="color:Black" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4"><b>支持人员</b></label>
+                        <div class="col-md-5">
+                        <apex:outputPanel styleClass="requiredInput"  layout="block" id="inputPanelSupport">                 
+                                <apex:outputPanel styleClass="requiredBlock" layout="block" id="inputBlockSupport"/>
+                                <apex:selectList size="1" value="{!strSupportPerson}" required="true" id="inputSupport" styleclass="btn btn-default dropdown-toggle input-form">
+                                    <apex:selectOptions value="{!quesValues}" />
+                                </apex:selectList>
+                        </apex:outputPanel>
+                        </div>
+                        <div class="col-md-3">
+                        <apex:outputtext id="supportQuestion" value="您的满意, 工作人员的支持, 回答您的问题?" style="color:Black"/>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="control-label col-md-4"><b>就像我们的支持吗?</b></label>
+                        <div class="col-md-5">
+                        <apex:outputPanel styleClass="requiredInput"  layout="block" id="inputPanelLike">                 
+                                <apex:outputPanel styleClass="requiredBlock" layout="block" id="inputBlockLike"/>
+                                <apex:selectList size="1" value="{!strLikeOurSupport}" id="inputLike" required="true" styleclass="btn btn-default dropdown-toggle input-form">
+                                    <apex:selectOptions value="{!quesValues1}" />
+                                </apex:selectList>
+                        </apex:outputPanel>
+                        </div>
+                        <div class="col-md-3">
+                        <apex:outputtext id="likeQuestion" value="如果有人要求您对我们的支持, 你说 “yes”, 你应该使用它?" style="color:Black"/>
+                        </div>
+                    </div>
+                    
+                </div>
+                </div>
+        <br/>
+                <div class="row">
+            <div class="col-md-12 col-xs-12 bg-color-bar padding-left-10">
+                <h5>任何其他评论您要共享的吗?</h5></div>
+        </div>
+         <br/>
+        <div class="row">
+                <div class="col-md-8 col-xs-8">
+                   
+                    <div class="form-group">
+                        <label class="control-label col-md-4"><b>评论</b></label>
+                        <div class="col-md-5">
+                            <apex:outputPanel styleClass="requiredInput"  layout="block" id="inputPanelComment" >                 
+                                <apex:outputPanel styleClass="requiredBlock" layout="block" id="inputBlockComment"/>
+                                <apex:inputTextarea value="{!strComment}" rows="5" cols="45" id="inputComment" />
+                            </apex:outputPanel>
+                        </div>
+                        <div class="col-md-3">
+                        <apex:outputtext value="请添加任何额外的评论。" id="commentQuestion"  style="color:Black"/>
+                        </div>
+                    </div>
+                    
+                </div>
+             <apex:inputHidden value="{!chatKey}" id="myHiddenField" />   
+             <!--  <apex:inputHidden value="{!chatbut}" id="myHiddenboolField" />  -->
+             <apex:inputHidden value="{!flgChinese}" id="myHiddenboolField" />      
+        </div><br/>
+        
+        <apex:actionFunction name="passStringToController" action="{!submitSurvey}" rerender="myHiddenField,myHiddenboolField"/>
+               <!-- <apex:actionFunction name="passStringToController" action="{!submitSurvey}" rerender="myHiddenField,myHiddenboolField"/>  -->
+
+        <apex:commandButton value="提交评价" styleclass="btn btn-default submit"  onclick="setVar('{!$CurrentPage.parameters.chatKey}','{!$CurrentPage.parameters.buttonId}'); return false;" id="submitQuestion"> 
+     
+        </apex:commandButton>
+   
+        </div>
+        
+                </div>
+
+        
+        <div id='abandoned' style='display: none;'>
+                        <apex:outputtext value="很抱歉. 感觉免费 要开始新的一届会议。" id="disconnectComment" style="color:Black"/>
+                       &nbsp; <apex:outputLink value="http://www.nxp.com/zh-Hans/support/sales-and-support:SUPPORTHOME?lang_cd=zh-Hans">转至</apex:outputLink>
+                      &nbsp;  <apex:outputtext value="恩智浦半导体销售和支持" id="disconnectComment1" style="color:Black"/>
+
+</div>
+        
+      </apex:form><br/>
+      
+<!--    <apex:image value="{!$Resource.NXPLogo}" alt="NXP Semiconductor" width="85"
+                    height="32" style="outline:none; border:0;" />     -->
+
+      <div class="h-spacer"></div>
+<!-- Menu for user configuration -->
+    <div id="user-config-popover" style="display:none">
+        <ul class='nav nav-pills nav-stacked'>
+            <li><apex:outputlink style="width:179px; margin-left: 0px;" value="/community/CommunitiesEditUserProfile" rendered="{!If(($Profile.Name='NXP Customer Community Login User'),true,false)}" > Edit profile</apex:outputlink></li>
+            <li ><apex:outputlink style="width:179px; margin-left: 0px;" value="/secur/logout.jsp?retUrl=https%3A%2F%2Fnxpcommunity.force.com%2Fcommunity%2FCommunityOverview">Logout</apex:outputlink></li>
+        </ul>
+    </div>
+      <!-- Bootstrap core JavaScript
+         ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="{!URLFOR($Resource.Forum_Community_3,'NXP-community/js/bootstrap.js')}"></script>
+    <script src="{!URLFOR($Resource.Forum_Community_3,'NXP-community/js/collapse.js')}"></script>
+    <script src="{!URLFOR($Resource.Forum_Community_3,'NXP-community/js/nxp-community.js')}"></script>
+    <script src="{!URLFOR($Resource.Forum_Community_3,'NXP-community/js/jasny-bootstrap.min.js')}"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <!-- <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script> -->
+    
+    
+   
+<script>
+function setVar(param, param1){
+   // alert("Inside set Var"+param);
+   // alert("Inside set Var"+param1);
+
+    jQuery('[id$=myHiddenField]').val(param);
+   // jQuery('[id$=myHiddenboolField]').val(param1);
+      jQuery('[id$=myHiddenboolField]').val("True");
+    passStringToController();
+    //alert("Passed the value");
+}
+</script>
+
+<script type='text/javascript'>
+var requestTime = '{!$CurrentPage.parameters.requestTime}';
+var startTime = '{!$CurrentPage.parameters.startTime}';
+// when startTime doesn't have a value, it means the chat never started
+if (!startTime) {
+document.getElementById('details').style.display = 'none';
+document.getElementById('abandoned').style.display = 'block';
+} 
+</script>    
+         
+    </body>                
+       </div>    
+        </apex:page>
