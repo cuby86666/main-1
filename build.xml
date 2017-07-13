@@ -43,8 +43,8 @@
 
 <!--///////////////////////////////////////////////////////////////////////////////////-->
 
-    <!-- Retrieve an unpackaged set of metadata from your org -->
-    <target name="retrieve">
+    <!-- Retrieve an unpackaged set of metadata -->
+    <target name="retrieve" depends="proxy" description="Retrieve an unpackaged set of metadata">
         <sf:retrieve 
 	        username="${sf.username}" 
 		    password="${sf.password}" 

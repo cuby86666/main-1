@@ -1,0 +1,614 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Add</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <enableFeeds>true</enableFeeds>
+    <fields>
+        <fullName>Alternative_BG__c</fullName>
+        <description>Alternative BG is annually updated every Q4, and its source is GSM Controller.</description>
+        <externalId>false</externalId>
+        <formula>CASE(
+    BU__c ,
+    &apos;510&apos; , &apos;8000 High Performance Mixed Signal&apos; ,
+    &apos;513&apos; , &apos;8000 High Performance Mixed Signal&apos; ,
+    &apos;514&apos; , &apos;8000 High Performance Mixed Signal&apos; ,
+    &apos;525&apos; , &apos;8000 High Performance Mixed Signal&apos; ,
+    &apos;527&apos; , &apos;8000 High Performance Mixed Signal&apos; ,
+    &apos;580&apos; , &apos;8000 High Performance Mixed Signal&apos; ,
+    &apos;511&apos; , &apos;8001 Standard Products&apos; ,
+    &apos;581&apos; , &apos;8001 Standard Products&apos; ,
+    &apos;540&apos; , &apos;8020 Technology &amp; Operations&apos; ,
+    &apos;541&apos; , &apos;8020 Technology &amp; Operations&apos; ,
+    &apos;591&apos; , &apos;8025 Corporate &amp; Other&apos; ,
+    &apos;592&apos; , &apos;8025 Corporate &amp; Other&apos; ,
+    &apos;593&apos; , &apos;8025 Corporate &amp; Other&apos; ,
+    &apos;594&apos; , &apos;8025 Corporate &amp; Other&apos; ,
+    &apos;599&apos; , &apos;8025 Corporate &amp; Other&apos; ,
+    &apos;&apos;
+)</formula>
+        <label>Alternative BG</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Alternative_BL__c</fullName>
+        <description>Alternative BL is annualy updated every Q4, and its source is GSM Controller.</description>
+        <externalId>false</externalId>
+        <formula>IF(
+    MAG__c = &apos;R67&apos; ,
+    &apos;BL01 BL SECURE INTERFACE &amp; POWER&apos; ,
+    BL__c &amp; &apos; &apos; &amp;  BL_Description__c
+)</formula>
+        <label>Alternative BL</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Alternative_BU__c</fullName>
+        <description>Alternative BU is annually updated every Q4, and its source is GSM Controller.</description>
+        <externalId>false</externalId>
+        <formula>IF( 
+    MAG__c = &apos;R67&apos; ,
+    &apos;510 BU SECURITY &amp; CONNECTIVITY&apos; ,
+    IF(
+        BU__c = &apos;513&apos; ,
+        &apos;511 BU STANDARD PRODUCTS&apos; ,
+        BU__c &amp; &apos; &apos; &amp;  BU_Description__c 
+    )
+)</formula>
+        <label>Alternative BU</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>BL_Description__c</fullName>
+        <externalId>false</externalId>
+        <label>BL Description</label>
+        <length>255</length>
+        <required>false</required>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>BL__c</fullName>
+        <externalId>false</externalId>
+        <label>BL</label>
+        <length>255</length>
+        <required>false</required>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>BU_Description__c</fullName>
+        <externalId>false</externalId>
+        <label>BU Description</label>
+        <length>255</length>
+        <required>false</required>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>BU__c</fullName>
+        <externalId>false</externalId>
+        <label>BU</label>
+        <length>255</length>
+        <required>false</required>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Basic_Type_Description__c</fullName>
+        <externalId>false</externalId>
+        <label>Basic Type Description</label>
+        <length>255</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Basic_Type__c</fullName>
+        <externalId>false</externalId>
+        <label>Basic Type</label>
+        <length>255</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CurrencyIsoCode</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+    </fields>
+    <fields>
+        <fullName>Description</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+    </fields>
+    <fields>
+        <fullName>DisplayUrl</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+    </fields>
+    <fields>
+        <fullName>ExternalDataSourceId</fullName>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>ExternalId</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+    </fields>
+    <fields>
+        <fullName>Family</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>High_Margin_MAG__c</fullName>
+        <description>High Margin MAG is annually updated every Q4, and its source is GSM Controller.
+* As of Spring &apos;15, CASE() cannot return Boolean</description>
+        <externalId>false</externalId>
+        <formula>FALSE</formula>
+        <inlineHelpText>The product is of High Margin MAG</inlineHelpText>
+        <label>High Margin MAG</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>IsActive</fullName>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+    </fields>
+    <fields>
+        <fullName>Legacy_Id__c</fullName>
+        <caseSensitive>true</caseSensitive>
+        <description>Legacy Id from FSL</description>
+        <externalId>true</externalId>
+        <label>Legacy Id</label>
+        <length>32</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>true</unique>
+    </fields>
+    <fields>
+        <fullName>MAG_Description__c</fullName>
+        <externalId>false</externalId>
+        <label>MAG Description</label>
+        <length>255</length>
+        <required>false</required>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>MAG__c</fullName>
+        <externalId>false</externalId>
+        <label>MAG</label>
+        <length>255</length>
+        <required>false</required>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>NXP_Package_Type_Description__c</fullName>
+        <externalId>false</externalId>
+        <label>NXP Package Type Description</label>
+        <length>255</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>NXP_Package_Type__c</fullName>
+        <externalId>false</externalId>
+        <label>NXP Package Type</label>
+        <length>255</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Name</fullName>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+    </fields>
+    <fields>
+        <fullName>ProductCode</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+    </fields>
+    <fields>
+        <fullName>Product_ID_Full__c</fullName>
+        <externalId>false</externalId>
+        <formula>CASESAFEID( Id )</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Product ID_Full</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Product_Search_Intrane_newt__c</fullName>
+        <externalId>false</externalId>
+        <formula>&quot;http://nww.prod.spider.nxp.com:8513/productinformation/search/&quot;</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Product Search - Intranet</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Product_Type__c</fullName>
+        <externalId>false</externalId>
+        <label>Product Type</label>
+        <length>255</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>QuantityUnitOfMeasure</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>SalesItem_CSI__c</fullName>
+        <description>1602 Release SIR 450</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Sales Item Customer Specific Indicator</inlineHelpText>
+        <label>Sales Item CSI</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Yes</fullName>
+                    <default>false</default>
+                    <label>Yes</label>
+                </value>
+                <value>
+                    <fullName>No</fullName>
+                    <default>false</default>
+                    <label>No</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>SalesItem_OrderablePartNumber__c</fullName>
+        <description>1602 Release SIR 450</description>
+        <externalId>false</externalId>
+        <label>Sales Item Orderable Part Number</label>
+        <length>18</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>SalesItem_ProductState__c</fullName>
+        <externalId>false</externalId>
+        <label>Sales Item Product State</label>
+        <length>255</length>
+        <required>false</required>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Sales_Item_Market_Segment__c</fullName>
+        <description>Automotive product flag</description>
+        <externalId>false</externalId>
+        <label>Sales Item Market Segment</label>
+        <length>18</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Sales_Item__c</fullName>
+        <caseSensitive>true</caseSensitive>
+        <externalId>true</externalId>
+        <label>Sales Item</label>
+        <length>255</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <type>Text</type>
+        <unique>true</unique>
+    </fields>
+    <fields>
+        <fullName>Thrust_Indicator__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Thrust product indicator</description>
+        <externalId>false</externalId>
+        <label>z_OBSOLETED_Thrust Indicator</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Type_System__c</fullName>
+        <externalId>false</externalId>
+        <label>Type System</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>1</fullName>
+                    <default>false</default>
+                    <label>1</label>
+                </value>
+                <value>
+                    <fullName>A</fullName>
+                    <default>false</default>
+                    <label>A</label>
+                </value>
+                <value>
+                    <fullName>C</fullName>
+                    <default>false</default>
+                    <label>C</label>
+                </value>
+                <value>
+                    <fullName>L</fullName>
+                    <default>false</default>
+                    <label>L</label>
+                </value>
+                <value>
+                    <fullName>M</fullName>
+                    <default>false</default>
+                    <label>M</label>
+                </value>
+                <value>
+                    <fullName>N</fullName>
+                    <default>false</default>
+                    <label>N</label>
+                </value>
+                <value>
+                    <fullName>R</fullName>
+                    <default>false</default>
+                    <label>R</label>
+                </value>
+                <value>
+                    <fullName>W</fullName>
+                    <default>false</default>
+                    <label>W</label>
+                </value>
+                <value>
+                    <fullName>Y</fullName>
+                    <default>false</default>
+                    <label>Y</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>X9NC__c</fullName>
+        <externalId>false</externalId>
+        <formula>LEFT( Sales_Item__c ,9)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>9NC</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <listViews>
+        <fullName>AllProducts</fullName>
+        <columns>PRODUCT2.NAME</columns>
+        <columns>PRODUCT2.CUSTOMER_PRODUCT_ID</columns>
+        <columns>Sales_Item__c</columns>
+        <columns>Basic_Type__c</columns>
+        <columns>Basic_Type_Description__c</columns>
+        <columns>BL__c</columns>
+        <columns>BL_Description__c</columns>
+        <columns>BU__c</columns>
+        <columns>BU_Description__c</columns>
+        <columns>MAG__c</columns>
+        <columns>MAG_Description__c</columns>
+        <columns>NXP_Package_Type__c</columns>
+        <columns>NXP_Package_Type_Description__c</columns>
+        <filterScope>Everything</filterScope>
+        <label>All Products</label>
+    </listViews>
+    <recordTypeTrackFeedHistory>false</recordTypeTrackFeedHistory>
+    <recordTypeTrackHistory>false</recordTypeTrackHistory>
+    <recordTypes>
+        <fullName>Basic_Type</fullName>
+        <active>true</active>
+        <description>Basic Type</description>
+        <label>Basic Type</label>
+        <picklistValues>
+            <picklist>SalesItem_CSI__c</picklist>
+            <values>
+                <fullName>No</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yes</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Type_System__c</picklist>
+            <values>
+                <fullName>1</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>A</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>C</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Sales_Item</fullName>
+        <active>true</active>
+        <description>Sales Item</description>
+        <label>Sales Item</label>
+        <picklistValues>
+            <picklist>SalesItem_CSI__c</picklist>
+            <values>
+                <fullName>No</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yes</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Type_System__c</picklist>
+            <values>
+                <fullName>1</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>A</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>C</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <searchLayouts>
+        <customTabListAdditionalFields>PRODUCT2.NAME</customTabListAdditionalFields>
+        <customTabListAdditionalFields>MAG__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>MAG_Description__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>BU_Description__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>BL_Description__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>PRODUCT2.DESCRIPTION</customTabListAdditionalFields>
+        <customTabListAdditionalFields>PRODUCT2.CUSTOMER_PRODUCT_ID</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Thrust_Indicator__c</customTabListAdditionalFields>
+        <lookupDialogsAdditionalFields>PRODUCT2.NAME</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Sales_Item__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>BU__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>BL__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>MAG__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Product_Type__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>PRODUCT2.ACTIVE</lookupDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>PRODUCT2.NAME</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>PRODUCT2.CUSTOMER_PRODUCT_ID</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>PRODUCT2.DESCRIPTION</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>PRODUCT2.FAMILY</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Thrust_Indicator__c</lookupPhoneDialogsAdditionalFields>
+        <searchResultsAdditionalFields>PRODUCT2.NAME</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Product_Type__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>PRODUCT2.CUSTOMER_PRODUCT_ID</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>PRODUCT2.DESCRIPTION</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Thrust_Indicator__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>MAG__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>PRODUCT2.ACTIVE</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>SalesItem_ProductState__c</searchResultsAdditionalFields>
+    </searchLayouts>
+    <webLinks>
+        <fullName>Mass_Edit</fullName>
+        <availability>online</availability>
+        <displayType>massActionButton</displayType>
+        <height>600</height>
+        <linkType>page</linkType>
+        <masterLabel>Mass Edit</masterLabel>
+        <openType>sidebar</openType>
+        <page>MassEditProduct</page>
+        <protected>false</protected>
+        <requireRowSelection>true</requireRowSelection>
+    </webLinks>
+    <webLinks>
+        <fullName>Mass_Update</fullName>
+        <availability>online</availability>
+        <displayType>massActionButton</displayType>
+        <height>600</height>
+        <linkType>page</linkType>
+        <masterLabel>Mass Update</masterLabel>
+        <openType>sidebar</openType>
+        <page>MassUpdateProduct2</page>
+        <protected>false</protected>
+        <requireRowSelection>true</requireRowSelection>
+    </webLinks>
+</CustomObject>
