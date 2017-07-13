@@ -15,49 +15,27 @@
 	<!-- Import macros to install/uninstall packages -->
 	<import file="${basedir}/lib/ant-salesforce.xml"/>
 	
-	<!-- Demo uninstall and install target -->
-	<target name="package.installdemo">
-		<uninstallPackage
-			namespace="fforce"
-			username="${sf.username}"
-			password="${sf.password}"/>
-		<installPackage
-			namespace="fforce"
-			version="1.0"
-			username="${sf.username}"
-			password="${sf.password}"/>			
-	</target>
-
-	<!-- Retrieve package contents locally from packaging org -->
-	<target name="retrieve.package"> 
-    	<sf:retrieve  
-        	username="${sf.username}"  
-        	password="${sf.password}"  
-        	retrieveTarget="${basedir}/src"  
-        	packageNames="FormulaForce"/>  
-	</target> 
-	
 	<!-- Deploy -->
-	<target name="deploy" depends="undeploy">
+	<target name="deploy">
 		<sf:deploy 
 	        username="${sf.username}" 
 	        password="${sf.password}" 
-	        serverurl="${sf.server}"
-	        runAllTests="true" 
+	        serverurl="${sf.serverurl}"
+	        runAllTests="false" 
 	        deployRoot="${basedir}/src"/>
 	</target>
 
-	<target name="deploy.jenkins" depends="undeploy">
+	<target name="deploy.jenkins">
 		<sf:deploy 
 			username="${sf.username}" 
 			password="${sf.password}" 
-			serverurl="${sf.server}"
-			runAllTests="true"
+			serverurl="${sf.serverurl}"
+			runAllTests="false"
 			deployRoot="${basedir}/src"/> 
 		<sf:deploy 
-			username="${sf.package.username}" 
-			password="${sf.package.password}" 
-			serverurl="${sf.server}"
+			username="${sf.full.username}" 
+			password="${sf.full.password}" 
+			serverurl="${sf.serverurl}"
 			checkOnly="true"
 			runAllTests="true"
 			deployRoot="${basedir}/src"/> 
