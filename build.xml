@@ -1,8 +1,8 @@
-<project name="NXP" xmlns:sf="antlib:com.salesforce" basedir="." default="deploy">
-
-    <property file="build.properties"/>
+<project name="NXP" xmlns:sf="antlib:com.salesforce" basedir="."  default="deploy">
 	
-	<property name="sf.server" value="https://test.salesforce.com"/>
+	<property file="build.properties"/>
+	
+	<property name="sf.server" value="https://login.salesforce.com"/>
 	<import file="${basedir}/lib/exec_anon.xml"/> 
 	<import file="${basedir}/lib/undeploy.xml"/>
 
@@ -42,10 +42,26 @@
 		<sf:deploy 
 	        username="${sf.username}" 
 	        password="${sf.password}" 
-	        serverurl="${sf.serverurl}"
-	        runAllTests="false" 
+	        serverurl="${sf.server}"
+	        runAllTests="true" 
 	        deployRoot="${basedir}/src"/>
 	</target>
+
+	<target name="deploy.jenkins" depends="undeploy">
+		<sf:deploy 
+			username="${sf.username}" 
+			password="${sf.password}" 
+			serverurl="${sf.server}"
+			runAllTests="true"
+			deployRoot="${basedir}/src"/> 
+		<sf:deploy 
+			username="${sf.package.username}" 
+			password="${sf.package.password}" 
+			serverurl="${sf.server}"
+			checkOnly="true"
+			runAllTests="true"
+			deployRoot="${basedir}/src"/> 
+		</target>
 
 <!--///////////////////////////////////////////////////////////////////////////////////-->
 
@@ -56,6 +72,7 @@
 		    password="${sf.password}" 
 			serverurl="${sf.serverurl}" 
 			retrieveTarget="${basedir}/src" 
-			unpackaged="${basedir}/package.xml"/>
+			unpackaged="${basedir}/src/package.xml"/>
     </target>
+		
 </project>
