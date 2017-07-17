@@ -88,6 +88,14 @@ public virtual with sharing class fflib_SObjectDomain
 	}
 	
 	/**
+     * Constructor required for Test.createStub
+     **/
+    public fflib_SObjectDomain() 
+    {
+        System.assert(System.Test.isRunningTest());
+    }
+	
+	/**
 	 * Constructs the domain class with the data on which to apply the behaviour implemented within
 	 *
 	 * @param sObjectList A concreate list (e.g. List<Account> vs List<SObject>) of records
