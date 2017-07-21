@@ -6,6 +6,11 @@ private class CommonUtilsTest {
     	
     	System.assertEquals('Account', CommonUtils.getSObjectTypeName(a));
     }
+    
+    @isTest
+    static void testGetChildRelationshipName() {
+    	System.assertEquals('OpportunityLineItems', CommonUtils.getChildRelationshipName(Opportunity.SObjectType, OpportunityLineItem.SObjectType));	
+    }
 	
     @isTest
     static void testRoundDouble() {

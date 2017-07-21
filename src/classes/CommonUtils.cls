@@ -11,6 +11,19 @@ public class CommonUtils {
 		return so.getSObjectType().getDescribe().getName();
 	}
 	
+	public static String getChildRelationshipName(Schema.SObjectType parent, Schema.SObjectType child) {
+		String result = null;
+		
+		for (Schema.ChildRelationship cr : parent.getDescribe().getChildRelationships()) {
+			if (cr.getChildSObject() == child) {
+				result = cr.getRelationshipName();
+				break;
+			}	
+		}
+		
+		return result;	
+	}
+	
 	public static Double roundDouble(Double value, Integer scaleFactor) {
     	return Decimal.valueOf(value).setScale(scaleFactor).doubleValue();	
     }

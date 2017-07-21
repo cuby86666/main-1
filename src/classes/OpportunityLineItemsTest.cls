@@ -1,5 +1,5 @@
 @isTest
-private class OpportunitiesTest {
+private class OpportunityLineItemsTest {
 	
 	private static final String TEST_USER_PROFILE = 'Standard User';
 	private static final String TEST_USER = 't_user_1';
@@ -39,7 +39,7 @@ private class OpportunitiesTest {
         
         MAG_LIFETIME = claimValueMagSetting.MAG__c;
         
-        List<OpportunityLineItem> opptyLineItems = [select Id, OpportunityId, Program__c, PricebookEntry.Product2.MAG__c from OpportunityLineItem]; 
+        List<OpportunityLineItem> opptyLineItems = [select Id, OpportunityId, Program__c, Opportunity.Program__c, PricebookEntry.Product2.MAG__c from OpportunityLineItem]; 
         
         for (OpportunityLineItem oli : opptyLineItems) {
         	opptyProds.add(oli);    
@@ -90,12 +90,17 @@ private class OpportunitiesTest {
         
         insert prods;
         
+        // Insert an opportunity program
+        OpportunityProgram__c op = new OpportunityProgram__c(Name = 'Test Program');
+        insert op;
+        
         // Insert an opportunity
         Opportunity o = new Opportunity(Name = 'Test Oppty', OwnerId = u.Id, AccountId = a.Id, Industry_Segment__c = 'AFC', StageName = 'Initial Engagement');
         o.Production_Date__c = PRODUCTION_DATE;
         o.CloseDate = PRODUCTION_DATE - 60;
         o.Currency__c = fxRates.get(CCY_CODE_DEFAULT).Id; // Locked_Exchange_Rate__c will be set to this by workflow.
         o.CurrencyIsoCode = CCY_CODE_DEFAULT; // CurrencyIsoCode and Currency__c are correlated.
+        o.Program__c = op.Id;
         insert o;
         
         System.debug('//J ========== after insert oppty');  
@@ -137,21 +142,10 @@ private class OpportunitiesTest {
     }
 
 	@isTest
-    static void testOpptyProdProgramSyncedWithOppty() {
-        Test.startTest();
-        OpportunityProgram__c opptyProg = new OpportunityProgram__c(Name = 'Test Program');
-        insert opptyProg; 
-        
-        Opportunity oppty = getOpportunity(opptyProd.OpportunityId);
-        oppty.Program__c = opptyProg.Id;
-        update oppty;
-        Test.stopTest();
-        
-        opptyProd = [select Program__c from OpportunityLineItem where Id = :opptyProd.Id];
-        
-        System.assertEquals(opptyProg.Id, opptyProd.Program__c);
+    static void testProgramSyncedWithOppty() {
+        System.assertEquals(opptyProd.Opportunity.Program__c, opptyProd.Program__c);
     }
-  
+    
     static User createUser(String alias, String lastName, ID profileID, Boolean signedARIA) {
     	User user = newUser(alias, lastName, profileID, signedARIA); 
     	insert user;
@@ -191,5 +185,5 @@ private class OpportunitiesTest {
         		  from Opportunity 
         		 where Id = :opptyID];    
     }
-
+        
 }
