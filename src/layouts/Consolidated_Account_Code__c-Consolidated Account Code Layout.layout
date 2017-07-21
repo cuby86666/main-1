@@ -59,7 +59,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Base_Sub_Region__c</field>
+                <field>Sales_Area__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>

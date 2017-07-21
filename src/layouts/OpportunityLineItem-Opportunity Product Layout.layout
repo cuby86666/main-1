@@ -23,6 +23,10 @@
         <label>Product Information</label>
         <layoutColumns>
             <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Program__c</field>
+            </layoutItems>
+            <layoutItems>
                 <behavior>Required</behavior>
                 <field>OpportunityId</field>
             </layoutItems>
@@ -33,10 +37,6 @@
             <layoutItems>
                 <behavior>Required</behavior>
                 <field>Price_Erosion_Rate__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Description</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
@@ -51,6 +51,10 @@
             <layoutItems>
                 <behavior>Required</behavior>
                 <field>Share__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Description</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsTopToBottom</style>

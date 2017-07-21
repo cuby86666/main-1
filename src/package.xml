@@ -31,5 +31,9 @@
         <members>Product2</members>
         <name>CustomObject</name>
     </types>
+    <types>
+        <members>*</members>
+        <name>Layout</name>
+    </types>
     <version>40.0</version>
 </Package>
