@@ -1342,7 +1342,7 @@ If Non-Thrusted product, value = zero</inlineHelpText>
         <fullName>Program__c</fullName>
         <deleteConstraint>Restrict</deleteConstraint>
         <externalId>false</externalId>
-        <label>Program</label>
+        <label>Opportunity Program</label>
         <referenceTo>OpportunityProgram__c</referenceTo>
         <relationshipLabel>Opportunity Product</relationshipLabel>
         <relationshipName>Opportunity_Product</relationshipName>

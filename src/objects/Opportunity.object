@@ -3990,7 +3990,7 @@ IF(
         <fullName>Program__c</fullName>
         <deleteConstraint>Restrict</deleteConstraint>
         <externalId>false</externalId>
-        <label>Program</label>
+        <label>Opportunity Program</label>
         <referenceTo>OpportunityProgram__c</referenceTo>
         <relationshipLabel>Opportunities</relationshipLabel>
         <relationshipName>Opportunities</relationshipName>
