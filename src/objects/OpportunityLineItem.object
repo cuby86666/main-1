@@ -1339,6 +1339,17 @@ If Non-Thrusted product, value = zero</inlineHelpText>
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Program__c</fullName>
+        <deleteConstraint>Restrict</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Program</label>
+        <referenceTo>OpportunityProgram__c</referenceTo>
+        <relationshipLabel>Opportunity Product</relationshipLabel>
+        <relationshipName>Opportunity_Product</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <fields>
         <fullName>Quantity</fullName>
     </fields>
     <fields>

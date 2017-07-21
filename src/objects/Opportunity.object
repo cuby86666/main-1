@@ -3987,6 +3987,19 @@ IF(
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Program__c</fullName>
+        <deleteConstraint>Restrict</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Program</label>
+        <referenceTo>OpportunityProgram__c</referenceTo>
+        <relationshipLabel>Opportunities</relationshipLabel>
+        <relationshipName>Opportunities</relationshipName>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
         <fullName>Project_Known__c</fullName>
         <defaultValue>false</defaultValue>
         <description>Discovery Milestone</description>
