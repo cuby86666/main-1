@@ -67,7 +67,17 @@
         <type>Text</type>
     </nameField>
     <pluralLabel>Opportunity Programs</pluralLabel>
-    <searchLayouts/>
+    <searchLayouts>
+        <customTabListAdditionalFields>OWNER.FIRST_NAME</customTabListAdditionalFields>
+        <customTabListAdditionalFields>OWNER.LAST_NAME</customTabListAdditionalFields>
+        <lookupDialogsAdditionalFields>OWNER.FIRST_NAME</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>OWNER.LAST_NAME</lookupDialogsAdditionalFields>
+        <searchFilterFields>NAME</searchFilterFields>
+        <searchFilterFields>OWNER.FIRST_NAME</searchFilterFields>
+        <searchFilterFields>OWNER.LAST_NAME</searchFilterFields>
+        <searchResultsAdditionalFields>OWNER.FIRST_NAME</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>OWNER.LAST_NAME</searchResultsAdditionalFields>
+    </searchLayouts>
     <sharingModel>Read</sharingModel>
     <startsWith>Vowel</startsWith>
     <visibility>Public</visibility>
