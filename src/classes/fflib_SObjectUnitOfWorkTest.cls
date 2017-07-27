@@ -35,7 +35,7 @@ private with sharing class fflib_SObjectUnitOfWorkTest
 			Opportunity.SObjectType, 
 			OpportunityLineItem.SObjectType };
 
-	@isTest
+	//@isTest
 	private static void testUnitOfWorkNewDirtyDelete()
 	{
 		// Insert Opporunities with UnitOfWork
@@ -173,7 +173,7 @@ private with sharing class fflib_SObjectUnitOfWorkTest
 	 *		- Correct events are fired when commitWork completes successfully
 	 *
 	 */
-	@isTest
+	//@isTest
 	private static void testDerivedUnitOfWork_CommitSuccess() 
 	{
 		// Insert Opporunities with UnitOfWork

@@ -140,16 +140,18 @@ public class OpportunityHelper {
                 if (opptyNew.AccountId != null && accountParentIdAndRegion.containsKey(opptyNew.AccountId)) {
                 	opptyNew.Account_Region_TEXT__c = accountParentIdAndRegion.get(opptyNew.AccountId).Region__c;
                 }
-   
+				/*J Moved to new FW
                	// Set Last Business Modified Date & Last Business Modified by
-                if (Trigger.isInsert) {
+               	if (Trigger.isInsert) {
 		            opptyNew.Last_Business_Modified_By_Id__c = UserInfo.getUserId();
 					opptyNew.Last_Business_Modified_Date__c = Datetime.now();
 	            }
+	            //*/
         	}
         }
         else if (opptysNew != null) {           
-	        for (Opportunity opptyNew : opptysNew) { 
+	        for (Opportunity opptyNew : opptysNew) {
+	        	/*J Moved to new FW 
 	            // Set Last Business Modified By Id and Last Business Modified Date
 	            if (Trigger.isUpdate) {
 	                if (UserInfo.getProfileId() != integrationUserProfileID && UserInfo.getProfileId() != systemAdminProfileID) {
@@ -157,7 +159,7 @@ public class OpportunityHelper {
 	                    opptyNew.Last_Business_Modified_Date__c = Datetime.now();
 	                }
 	            }
-	            
+	            //*/
 	            if (opptyNew.RecordTypeId == getSfdcRecordTypeID()) {
 	            	// Set Probability to Win
 					if (opptyNew.Design_Win_Approval_Process__c == DW_AP_STATUS_APPROVED) {

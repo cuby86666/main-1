@@ -21,7 +21,7 @@ public class OpportunitiesSelector extends ApplicationSelector {
 		fflib_QueryFactory opptiesQueryFactory = newQueryFactory();	
 		
 		new OpportunityLineItemsSelector().
-			addQueryFactorySubselect(opptiesQueryFactory, CommonUtils.getChildRelationshipName(getSObjectType(), OpportunityLineItem.SObjectType)).
+			addQueryFactorySubselect(opptiesQueryFactory, CommonUtils.getChildRelationshipName(getSObjectType(), OpportunityLineItem.sObjectType)).
 			selectField(OpportunityLineItem.OpportunityId.getDescribe().getRelationshipName() + '.' + Opportunity.Program__c);	
 		
 		return (List<Opportunity>)Database.query(opptiesQueryFactory.setCondition('Id in :ids').toSOQL());

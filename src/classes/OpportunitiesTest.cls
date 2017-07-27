@@ -151,6 +151,73 @@ private class OpportunitiesTest {
         
         System.assertEquals(opptyProg.Id, opptyProd.Program__c);
     }
+    
+    @isTest
+    static void testOpptyProgramEditable() {
+    	User user = [select Id from User where Alias = :TEST_USER];
+    	
+    	Test.startTest();
+    	Opportunity oppty = getOpportunity(opptyProd.OpportunityId);
+	    oppty.Design_Win_Approval_Process__c = 'Approved';
+	    update oppty;
+	    
+	    OpportunityProgram__c opptyProg = new OpportunityProgram__c(Name = 'Test Program 1');
+	    insert opptyProg;
+	        
+    	System.runAs(user) {
+	        oppty.Program__c = opptyProg.Id;
+	        update oppty;
+	        
+	        opptyProd = [select Program__c from OpportunityLineItem where Id = :opptyProd.Id];
+	        
+	        System.assertEquals(opptyProg.Id, opptyProd.Program__c);
+	        
+	        try {
+	        	opptyProg = new OpportunityProgram__c(Name = 'Test Program 2');
+	        	insert opptyProg;
+	        	
+	        	// Only Program can be edited all the time.
+	        	oppty.Program__c = opptyProg.Id;
+	        	oppty.Name = 'Name 1';
+	        	update oppty;	
+	        	
+	        	System.assert(false);
+	        } catch (Exception e) {
+	        	System.assert(true);
+	        }
+	    }
+	    
+	    oppty.StageName = 'Commitment';
+	    oppty.RecordTypeId = OpportunityHelper.getMnRecordTypeID();
+	    update oppty;
+	    
+	    System.runAs(user) {
+	    	opptyProg = new OpportunityProgram__c(Name = 'Test Program 3');
+	        insert opptyProg;
+	        
+	        oppty.Program__c = opptyProg.Id;
+	        update oppty;
+	        
+	        opptyProd = [select Program__c from OpportunityLineItem where Id = :opptyProd.Id];
+	        
+	        System.assertEquals(opptyProg.Id, opptyProd.Program__c);
+	        
+	        try {
+	        	opptyProg = new OpportunityProgram__c(Name = 'Test Program 4');
+	        	insert opptyProg;
+	        	
+	        	// Only Program can be edited all the time.
+	        	oppty.Program__c = opptyProg.Id;
+	        	oppty.Name = 'Name 2';
+	        	update oppty;
+	        	
+	        	System.assert(false);
+	        } catch (Exception e) {
+	        	System.assert(true);
+	        }	
+	    }
+	    Test.stopTest();
+    }
   
     static User createUser(String alias, String lastName, ID profileID, Boolean signedARIA) {
     	User user = newUser(alias, lastName, profileID, signedARIA); 
