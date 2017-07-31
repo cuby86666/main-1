@@ -33,23 +33,100 @@ private with sharing class fflib_SObjectUnitOfWorkTest
 			Product2.SObjectType, 
 			PricebookEntry.SObjectType, 
 			Opportunity.SObjectType, 
-			OpportunityLineItem.SObjectType };
+			OpportunitySchedule__c.SObjectType, //J
+			OpportunityLineItem.SObjectType
+		};
 
-	//@isTest
+	@isTest
+	private static void testUnitOfWorkNewOpptyProd() {
+		fflib_SObjectUnitOfWork uow = new fflib_SObjectUnitOfWork(MY_SOBJECTS);	
+		
+		Opportunity o = new Opportunity();
+		o.Name = 'Test Oppty';
+		o.StageName = 'Initial Engagement';
+		o.CloseDate = System.today();
+		o.Production_Date__c = o.CloseDate + 30; 
+		uow.registerNew(o);
+				
+		OpportunitySchedule__c os = new OpportunitySchedule__c();
+		os.Sched_Date__c = o.Production_Date__c;
+		os.Oppty_Sched_Qty__c = 1000;
+		os.Frozen_Oppty_Sched_Qty__c = 1000; 
+		uow.registerNew(os, OpportunitySchedule__c.Opportunity__c, o);
+		
+		Product2 p = new Product2(Name = 'Test Product', IsActive = true);
+		insert p;
+			
+		PricebookEntry pbe = [select Id from PricebookEntry where Product2Id = :p.Id and CurrencyIsoCode = 'USD'];
+		
+		OpportunityLineItem oli = new OpportunityLineItem();
+		oli.UnitPrice = 1; 
+		uow.registerRelationship(oli, OpportunityLineItem.PricebookEntryId, pbe);
+		uow.registerNew(oli, OpportunityLineItem.OpportunityId, o);
+		
+		uow.commitWork();
+		
+		List<Opportunity> oppties = [select Id, Name, (Select Id from OpportunityLineItems) from Opportunity where Name = 'Test Oppty'];
+		
+		// Update the record
+		uow = new fflib_SObjectUnitOfWork(MY_SOBJECTS);	
+		
+		Opportunity oppty = oppties[0];
+		oppty.Name = oppty.Name + ' Changed';
+		uow.registerDirty(oppty);
+		
+		OpportunityLineItem newOpptyLineItem = new OpportunityLineItem();
+		newOpptyLineItem.UnitPrice = 2;
+		uow.registerRelationship(newOpptyLineItem, OpportunityLineItem.PricebookEntryId, pbe);
+		uow.registerNew(newOpptyLineItem, OpportunityLineItem.OpportunityId, oppty);
+		
+		OpportunityLineItem existingOpptyLineItem = oppty.OpportunityLineItems[0];
+		existingOpptyLineItem.UnitPrice = 3.5; 
+		uow.registerDirty(existingOpptyLineItem); 
+		
+		uow.commitWork();
+		
+		// Assert Results
+		oppties = [select Id, Name, (Select Id, UnitPrice from OpportunityLineItems) from Opportunity where Name = 'Test Oppty Changed'];
+		
+		System.assertEquals(1, oppties.size());
+		System.assertEquals('Test Oppty Changed', oppties[0].Name);
+		System.assertEquals(2, oppties[0].OpportunityLineItems.size());
+		System.assertEquals(3.5, oppties[0].OpportunityLineItems[0].UnitPrice);
+	}
+
+	@isTest
 	private static void testUnitOfWorkNewDirtyDelete()
 	{
+		//J
+		Product2 p = new Product2(Name = 'Test Product', IsActive = true);
+		insert p;
+			
+		PricebookEntry pbe = [select Id from PricebookEntry where Product2Id = :p.Id and CurrencyIsoCode = 'USD'];
+		//-J
+		
 		// Insert Opporunities with UnitOfWork
 		{
 			fflib_SObjectUnitOfWork uow = new fflib_SObjectUnitOfWork(MY_SOBJECTS);
+						
 			for(Integer o=0; o<10; o++)
 			{
 				Opportunity opp = new Opportunity();
 				opp.Name = 'UoW Test Name ' + o;
-				opp.StageName = 'Open';
+				opp.StageName = 'Initial Engagement'; //J
 				opp.CloseDate = System.today();
+				opp.Production_Date__c = opp.CloseDate + 30; //J 
 				uow.registerNew(new List<SObject>{opp});
+				//J
+				OpportunitySchedule__c os = new OpportunitySchedule__c();
+				os.Sched_Date__c = opp.Production_Date__c;
+				os.Oppty_Sched_Qty__c = 1000;
+				os.Frozen_Oppty_Sched_Qty__c = 1000; 
+				uow.registerNew(os, OpportunitySchedule__c.Opportunity__c, opp);
+				//-J
 				for(Integer i=0; i<o+1; i++)
 				{
+					/*J Comment out by Jason Tsai. PricebookEntry will be created after creating a product. 
 					Product2 product = new Product2();
 					product.Name = opp.Name + ' : Product : ' + i;
 					uow.registerNew(new List<SObject>{product});
@@ -59,9 +136,12 @@ private with sharing class fflib_SObjectUnitOfWorkTest
 					pbe.UseStandardPrice = false;
 					pbe.Pricebook2Id = Test.getStandardPricebookId();
 					uow.registerNew(pbe, PricebookEntry.Product2Id, product);
+					*/
 					OpportunityLineItem oppLineItem = new OpportunityLineItem();
-					oppLineItem.Quantity = 1;
-					oppLineItem.TotalPrice = 10;
+					//J oppLineItem.Quantity = 1;
+					//J oppLineItem.TotalPrice = 10;
+					oppLineItem.UnitPrice = 1; //J
+					oppLineItem.Description = 'Line ' + i;
 					uow.registerRelationship(oppLineItem, OpportunityLineItem.PricebookEntryId, pbe);
 					uow.registerNew(oppLineItem, OpportunityLineItem.OpportunityId, opp);
 				}
@@ -76,7 +156,7 @@ private with sharing class fflib_SObjectUnitOfWorkTest
 		// System.assertEquals(5 /* Oddly a setSavePoint consumes a DML */, Limits.getDmlStatements());
 
 		// Records to update
-		List<Opportunity> opps = [select Id, Name, (Select Id from OpportunityLineItems) from Opportunity where Name like 'UoW Test Name %' order by Name];
+		List<Opportunity> opps = [select Id, Name, (Select Id from OpportunityLineItems Order By Description) from Opportunity where Name like 'UoW Test Name %' order by Name];
 		
 		// Update some records with UnitOfWork
 		{
@@ -84,6 +164,7 @@ private with sharing class fflib_SObjectUnitOfWorkTest
 			Opportunity opp = opps[0];
 			opp.Name = opp.Name + ' Changed';
 			uow.registerDirty(new List<SObject>{opp});
+			/*J
 			Product2 product = new Product2();
 			product.Name = opp.Name + ' : New Product';
 			uow.registerNew(new List<SObject>{product});
@@ -93,18 +174,25 @@ private with sharing class fflib_SObjectUnitOfWorkTest
 			pbe.UseStandardPrice = false;
 			pbe.Pricebook2Id = Test.getStandardPricebookId();
 			uow.registerNew(pbe, PricebookEntry.Product2Id, product);
+			*/
 			OpportunityLineItem newOppLineItem = new OpportunityLineItem();
-			newOppLineItem.Quantity = 1;
-			newOppLineItem.TotalPrice = 10;
+			//J newOppLineItem.Quantity = 1;
+			//J newOppLineItem.TotalPrice = 10;
+			newOppLineItem.UnitPrice = 2;
+			newOppLineItem.Description = 'Line ' + opp.OpportunityLineItems.size();
 			uow.registerRelationship(newOppLineItem, OpportunityLineItem.PricebookEntryId, pbe);
 			uow.registerNew(newOppLineItem, OpportunityLineItem.OpportunityId, opp);
 			OpportunityLineItem existingOppLine = opp.OpportunityLineItems[0];
 			// Test that operations on the same object can be daisy chained, and the same object registered as dirty more than once
 			// This verifies that using a Map to back the dirty records collection prevents duplicate registration.
+			/*J
 			existingOppLine.Quantity = 2;
 			uow.registerDirty(new List<SObject>{existingOppLine});
 			existingOppLine.TotalPrice = 20;
 			uow.registerDirty(new List<SObject>{existingOppLine});
+			*/
+			existingOppLine.UnitPrice = 3.5; //J
+			uow.registerDirty(new List<SObject>{existingOppLine}); //J
 			uow.commitWork();
 		}
 		
@@ -112,25 +200,26 @@ private with sharing class fflib_SObjectUnitOfWorkTest
 		// TODO: Need to re-instate this check with a better approach, as it is not possible when 
 		//       product triggers contribute to DML (e.g. in sample app Opportunity trigger)
 		// System.assertEquals(11, Limits.getDmlStatements());
-		opps = [select Id, Name, (Select Id, PricebookEntry.Product2.Name, Quantity, TotalPrice from OpportunityLineItems Order By PricebookEntry.Product2.Name) from Opportunity where Name like 'UoW Test Name %' order by Name];
+		opps = [select Id, Name, (Select Id, PricebookEntry.Product2.Name, Quantity, TotalPrice, UnitPrice from OpportunityLineItems Order By Description) from Opportunity where Name like 'UoW Test Name %' order by Name];
 		System.assertEquals(10, opps.size());
 		System.assertEquals('UoW Test Name 0 Changed', opps[0].Name);
 		System.assertEquals(2, opps[0].OpportunityLineItems.size());
 		// Verify that both fields were updated properly
-		System.assertEquals(2, opps[0].OpportunityLineItems[0].Quantity);
-		System.assertEquals(20, opps[0].OpportunityLineItems[0].TotalPrice);
-		System.assertEquals('UoW Test Name 0 Changed : New Product', opps[0].OpportunityLineItems[1].PricebookEntry.Product2.Name);
+		//J System.assertEquals(2, opps[0].OpportunityLineItems[0].Quantity);
+		//J System.assertEquals(20, opps[0].OpportunityLineItems[0].TotalPrice);
+		System.assertEquals(3.5, opps[0].OpportunityLineItems[0].UnitPrice); //J
+		//J System.assertEquals('UoW Test Name 0 Changed : New Product', opps[0].OpportunityLineItems[1].PricebookEntry.Product2.Name);
 		
 		// Delete some records with the UnitOfWork
 		{
 			fflib_SObjectUnitOfWork uow = new fflib_SObjectUnitOfWork(MY_SOBJECTS);	
-			uow.registerDeleted(new List<SObject>{opps[0].OpportunityLineItems[1].PricebookEntry.Product2}); // Delete PricebookEntry Product 
-			uow.registerDeleted(new List<SObject>{opps[0].OpportunityLineItems[1].PricebookEntry}); // Delete PricebookEntry
+			//J uow.registerDeleted(new List<SObject>{opps[0].OpportunityLineItems[1].PricebookEntry.Product2}); // Delete PricebookEntry Product 
+			//J uow.registerDeleted(new List<SObject>{opps[0].OpportunityLineItems[1].PricebookEntry}); // Delete PricebookEntry
 			uow.registerDeleted(new List<SObject>{opps[0].OpportunityLineItems[1]}); // Delete OpportunityLine Item
 			// Register the same deletions more than once.
 			// This verifies that using a Map to back the deleted records collection prevents duplicate registration.
-			uow.registerDeleted(new List<SObject>{opps[0].OpportunityLineItems[1].PricebookEntry.Product2}); // Delete PricebookEntry Product 
-			uow.registerDeleted(new List<SObject>{opps[0].OpportunityLineItems[1].PricebookEntry}); // Delete PricebookEntry
+			//J uow.registerDeleted(new List<SObject>{opps[0].OpportunityLineItems[1].PricebookEntry.Product2}); // Delete PricebookEntry Product 
+			//J uow.registerDeleted(new List<SObject>{opps[0].OpportunityLineItems[1].PricebookEntry}); // Delete PricebookEntry
 			uow.registerDeleted(new List<SObject>{opps[0].OpportunityLineItems[1]}); // Delete OpportunityLine Item
 			uow.commitWork();
 		}
@@ -173,20 +262,36 @@ private with sharing class fflib_SObjectUnitOfWorkTest
 	 *		- Correct events are fired when commitWork completes successfully
 	 *
 	 */
-	//@isTest
+	@isTest
 	private static void testDerivedUnitOfWork_CommitSuccess() 
 	{
+		//J
+		Product2 p = new Product2(Name = 'Test Product', IsActive = true);
+		insert p;
+			
+		PricebookEntry pbe = [select Id from PricebookEntry where Product2Id = :p.Id and CurrencyIsoCode = 'USD'];
+		//-J
+		
 		// Insert Opporunities with UnitOfWork
 		DerivedUnitOfWork uow = new DerivedUnitOfWork(MY_SOBJECTS);
 		for(Integer o=0; o<10; o++)
 		{
 			Opportunity opp = new Opportunity();
 			opp.Name = 'UoW Test Name ' + o;
-			opp.StageName = 'Open';
+			opp.StageName = 'Initial Engagement'; //J
 			opp.CloseDate = System.today();
+			opp.Production_Date__c = opp.CloseDate + 30; //J
 			uow.registerNew(new List<SObject>{opp});
+			//J
+			OpportunitySchedule__c os = new OpportunitySchedule__c();
+			os.Sched_Date__c = opp.Production_Date__c;
+			os.Oppty_Sched_Qty__c = 1000;
+			os.Frozen_Oppty_Sched_Qty__c = 1000; 
+			uow.registerNew(os, OpportunitySchedule__c.Opportunity__c, opp);
+			//-J
 			for(Integer i=0; i<o+1; i++)
 			{
+				/*J Comment out by Jason Tsai. PricebookEntry will be created after creating a product.
 				Product2 product = new Product2();
 				product.Name = opp.Name + ' : Product : ' + i;
 				uow.registerNew(new List<SObject>{product});
@@ -196,9 +301,11 @@ private with sharing class fflib_SObjectUnitOfWorkTest
 				pbe.UseStandardPrice = false;
 				pbe.Pricebook2Id = Test.getStandardPricebookId();
 				uow.registerNew(pbe, PricebookEntry.Product2Id, product);
+				*/
 				OpportunityLineItem oppLineItem = new OpportunityLineItem();
-				oppLineItem.Quantity = 1;
-				oppLineItem.TotalPrice = 10;
+				//J oppLineItem.Quantity = 1;
+				//J oppLineItem.TotalPrice = 10;
+				oppLineItem.UnitPrice = 1; //J
 				uow.registerRelationship(oppLineItem, OpportunityLineItem.PricebookEntryId, pbe);
 				uow.registerNew(oppLineItem, OpportunityLineItem.OpportunityId, opp);
 			}

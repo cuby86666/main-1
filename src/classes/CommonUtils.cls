@@ -28,8 +28,16 @@ public class CommonUtils {
     	return Decimal.valueOf(value).setScale(scaleFactor).doubleValue();	
     }
     
+    public static Boolean isAdminOrIntegrationUser() {
+		return (isAdmin() || isIntegrationUser());
+	}
+    
     public static Boolean isIntegrationUser() {
     	return UserInfo.getProfileId() == getIntegrationUserProfileID();
+    }
+    
+    public static Boolean isAdmin() {
+    	return UserInfo.getProfileId() == getSystemAdminProfileID();	
     }
     
     public static ID getIntegrationUserProfileID() {
@@ -48,6 +56,16 @@ public class CommonUtils {
     	return systemAdminProfileID;
     }
     
+    public static ID getDataAdminUserID() {
+    	if (dataAdminUserID == null) {
+    		User u = [select Id, Name from User where Name = :DATA_ADMIN_USER];
+		
+			dataAdminUserID = u.Id;	
+    	}
+    	
+    	return dataAdminUserID;
+    } 
+    
     private static void setProfileIDs(){
 		List<Profile> profiles = [
 			select 	Id, Name 
@@ -65,16 +83,6 @@ public class CommonUtils {
 			}
 		}
     }
-    
-    public static ID getDataAdminUserID() {
-    	if (dataAdminUserID == null) {
-    		User u = [select Id, Name from User where Name = :DATA_ADMIN_USER];
-		
-			dataAdminUserID = u.Id;	
-    	}
-    	
-    	return dataAdminUserID;
-    } 
     
     public static String generateGUID() {
     	Blob b = Crypto.GenerateAESKey(128);

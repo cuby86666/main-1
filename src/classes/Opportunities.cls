@@ -19,8 +19,7 @@ public class Opportunities extends ApplicationDomain {
 		System.debug('//- Opportunities.onBeforeUpdate');
 		bypassValidation((Map<Id, Opportunity>)existingRecords);	
 		
-		if (UserInfo.getProfileId() != CommonUtils.getSystemAdminProfileID() && 
-			UserInfo.getProfileId() != CommonUtils.getIntegrationUserProfileID()) {
+		if (!CommonUtils.isAdminOrIntegrationUser()) {
 			updateLastBusinessModifiedInfo();	
 		}
 	}
@@ -36,19 +35,16 @@ public class Opportunities extends ApplicationDomain {
 			
 			Opportunity oldOppty = existingRecords.get(oppty.Id);
 			
-			if (oppty.Program__c != oldOppty.Program__c &&
-				UserInfo.getProfileId() != CommonUtils.getSystemAdminProfileID() && 
-				UserInfo.getProfileId() != CommonUtils.getIntegrationUserProfileID()) {
+			if (oppty.Program__c != oldOppty.Program__c) {
 				// Check if any other field is changed. If no, bypass the validation.
 				Map<String, Schema.SObjectField> opptyFields = fflib_SObjectDescribe.getDescribe(getSObjectType()).getFieldsMap();
 				Boolean otherFieldsChanged = false; 	
-System.debug('//////// program changed. new: ' + oppty.Program__c + ', old: ' + oldOppty.Program__c);		
+		
 				for (Schema.SObjectField field : opptyFields.values()) {
 					if (field != Opportunity.Program__c && field != Opportunity.Bypass_Validation__c && field.getDescribe().isUpdateable()) {
 						String fieldName = field.getDescribe().getName();
 						
 						if (oppty.get(fieldName) != oldOppty.get(fieldName)) {
-System.debug('//////// other field changed: ' + fieldName + ', new: ' + oppty.get(fieldName) + ', old: ' + oldOppty.get(fieldName));							
 							otherFieldsChanged = true;
 							break;
 						}	
@@ -56,7 +52,6 @@ System.debug('//////// other field changed: ' + fieldName + ', new: ' + oppty.ge
 				}
 				
 				if (!otherFieldsChanged) {
-System.debug('//////// set Bypass_Validation__c to true.');
 					oppty.Bypass_Validation__c = true;	
 				}
 			}

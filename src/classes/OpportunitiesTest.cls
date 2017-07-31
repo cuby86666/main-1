@@ -75,6 +75,18 @@ private class OpportunitiesTest {
         Account parentGeneral = createAccount('Parent Account - General', AccountHelper.getParentRecordTypeID(), null, null);
         Account a = createAccount('Test Account', AccountHelper.getChildRecordTypeID(), parentGeneral.Id, AccountHelper.CBG_AUTOMOTIVE);
          
+        // Insert an opportunity
+        Opportunity o = new Opportunity(Name = 'Test Oppty', OwnerId = u.Id, AccountId = a.Id, Industry_Segment__c = 'AFC', StageName = 'Initial Engagement');
+        o.Production_Date__c = PRODUCTION_DATE;
+        o.CloseDate = PRODUCTION_DATE - 60;
+        o.Currency__c = fxRates.get(CCY_CODE_DEFAULT).Id; // Locked_Exchange_Rate__c will be set to this by workflow.
+        o.CurrencyIsoCode = CCY_CODE_DEFAULT; // CurrencyIsoCode and Currency__c are correlated.
+        insert o;
+        
+        System.debug('//J ========== after insert oppty');  
+        
+        createOpportunitySchedules(o.Id, 1000);
+        
         // Insert products
         List<Product2> prods = new List<Product2>();
         
@@ -89,18 +101,6 @@ private class OpportunitiesTest {
         }
         
         insert prods;
-        
-        // Insert an opportunity
-        Opportunity o = new Opportunity(Name = 'Test Oppty', OwnerId = u.Id, AccountId = a.Id, Industry_Segment__c = 'AFC', StageName = 'Initial Engagement');
-        o.Production_Date__c = PRODUCTION_DATE;
-        o.CloseDate = PRODUCTION_DATE - 60;
-        o.Currency__c = fxRates.get(CCY_CODE_DEFAULT).Id; // Locked_Exchange_Rate__c will be set to this by workflow.
-        o.CurrencyIsoCode = CCY_CODE_DEFAULT; // CurrencyIsoCode and Currency__c are correlated.
-        insert o;
-        
-        System.debug('//J ========== after insert oppty');  
-        
-        createOpportunitySchedules(o.Id, 1000); 
         
         List<PricebookEntry> pbes = [select Id from PricebookEntry where Product2Id in :prods and CurrencyIsoCode = :CCY_CODE_DEFAULT];
         

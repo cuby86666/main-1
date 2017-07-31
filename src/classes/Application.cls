@@ -4,7 +4,10 @@ public class Application {
 	public static final fflib_Application.UnitOfWorkFactory UnitOfWork = 
 		new fflib_Application.UnitOfWorkFactory(
 			new List<SObjectType> { 
+				Product2.SObjectType, 
+				PricebookEntry.SObjectType,
 				Opportunity.SObjectType, 
+				OpportunitySchedule__c.SObjectType,
 				OpportunityLineItem.SObjectType
 			}
 		);
