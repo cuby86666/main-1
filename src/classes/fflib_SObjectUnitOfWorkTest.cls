@@ -141,7 +141,7 @@ private with sharing class fflib_SObjectUnitOfWorkTest
 					//J oppLineItem.Quantity = 1;
 					//J oppLineItem.TotalPrice = 10;
 					oppLineItem.UnitPrice = 1; //J
-					oppLineItem.Description = 'Line ' + i;
+					oppLineItem.Description = 'Line ' + i; //J
 					uow.registerRelationship(oppLineItem, OpportunityLineItem.PricebookEntryId, pbe);
 					uow.registerNew(oppLineItem, OpportunityLineItem.OpportunityId, opp);
 				}
@@ -156,7 +156,7 @@ private with sharing class fflib_SObjectUnitOfWorkTest
 		// System.assertEquals(5 /* Oddly a setSavePoint consumes a DML */, Limits.getDmlStatements());
 
 		// Records to update
-		List<Opportunity> opps = [select Id, Name, (Select Id from OpportunityLineItems Order By Description) from Opportunity where Name like 'UoW Test Name %' order by Name];
+		List<Opportunity> opps = [select Id, Name, (Select Id from OpportunityLineItems Order By Description) from Opportunity where Name like 'UoW Test Name %' order by Name]; //J
 		
 		// Update some records with UnitOfWork
 		{
@@ -178,8 +178,8 @@ private with sharing class fflib_SObjectUnitOfWorkTest
 			OpportunityLineItem newOppLineItem = new OpportunityLineItem();
 			//J newOppLineItem.Quantity = 1;
 			//J newOppLineItem.TotalPrice = 10;
-			newOppLineItem.UnitPrice = 2;
-			newOppLineItem.Description = 'Line ' + opp.OpportunityLineItems.size();
+			newOppLineItem.UnitPrice = 2; //J
+			newOppLineItem.Description = 'Line ' + opp.OpportunityLineItems.size(); //J
 			uow.registerRelationship(newOppLineItem, OpportunityLineItem.PricebookEntryId, pbe);
 			uow.registerNew(newOppLineItem, OpportunityLineItem.OpportunityId, opp);
 			OpportunityLineItem existingOppLine = opp.OpportunityLineItems[0];
@@ -200,7 +200,7 @@ private with sharing class fflib_SObjectUnitOfWorkTest
 		// TODO: Need to re-instate this check with a better approach, as it is not possible when 
 		//       product triggers contribute to DML (e.g. in sample app Opportunity trigger)
 		// System.assertEquals(11, Limits.getDmlStatements());
-		opps = [select Id, Name, (Select Id, PricebookEntry.Product2.Name, Quantity, TotalPrice, UnitPrice from OpportunityLineItems Order By Description) from Opportunity where Name like 'UoW Test Name %' order by Name];
+		opps = [select Id, Name, (Select Id, PricebookEntry.Product2.Name, Quantity, TotalPrice, UnitPrice from OpportunityLineItems Order By Description) from Opportunity where Name like 'UoW Test Name %' order by Name]; //J
 		System.assertEquals(10, opps.size());
 		System.assertEquals('UoW Test Name 0 Changed', opps[0].Name);
 		System.assertEquals(2, opps[0].OpportunityLineItems.size());
