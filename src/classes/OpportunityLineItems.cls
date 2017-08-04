@@ -11,11 +11,12 @@ public class OpportunityLineItems extends ApplicationDomain {
 	}
 	
 	public override void onBeforeInsert() {
-		System.debug('//- OpportunityLineItems.onBeforeInsert');
+		p('onBeforeInsert');
 		updatePrograms();
 	}
 	
 	public void updatePrograms(fflib_ISObjectUnitOfWork uow) {
+		p('updatePrograms(uow)');
 		for (OpportunityLineItem opptyProd : (List<OpportunityLineItem>)records) {
 			opptyProd.Program__c = opptyProd.Opportunity.Program__c;
 			uow.registerDirty(opptyProd);	
@@ -23,6 +24,7 @@ public class OpportunityLineItems extends ApplicationDomain {
 	}
 	
 	private void updatePrograms() {
+		p('updatePrograms');
 		Set<Id> opptyIds = new Set<Id>();
 		
 		for (OpportunityLineItem opptyProd : (List<OpportunityLineItem>)records) {
@@ -34,6 +36,10 @@ public class OpportunityLineItems extends ApplicationDomain {
 		for (OpportunityLineItem opptyProd : (List<OpportunityLineItem>)records) {
 			opptyProd.Program__c = opptys.get(opptyProd.OpportunityId).Program__c;	
 		}	
+	}
+	
+	private static void p(String msg) {
+		System.debug('//-d OpportunityLineItems - ' + msg);
 	}
     
 }

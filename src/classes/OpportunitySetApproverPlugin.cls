@@ -1,10 +1,11 @@
 global class OpportunitySetApproverPlugin implements Process.Plugin {
     global Process.PluginResult invoke(Process.PluginRequest request) {
-		String OpptyId = (String) request.inputParameters.get('Id');
+		String opptyId = (String) request.inputParameters.get('Id');
         Map<String, String> result = new Map<String, String>();
         try
         {
-            OpportunityApproval.setAllApprovers(opptyID);
+            OpportunityService.updateDesignWinApprovers(new Set<Id>{opptyId});
+            
             result.put('Message', 'Success');
         }
         catch (Exception err)

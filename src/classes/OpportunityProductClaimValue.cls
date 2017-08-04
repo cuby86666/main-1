@@ -198,7 +198,7 @@ public class OpportunityProductClaimValue {
     	
     	for (Integer i = 0; i < quarterQtys.size(); i++) {
     		price = OpportunityProductHelper.calcOpportunityProductSchedulePrice(opptyLineItem.UnitPrice, opptyLineItem.Price_Erosion_Rate__c, i);
-    		sumQuarterValue += quarterQtys.get(i) * price;
+    		sumQuarterValue += (quarterQtys.get(i) != null ? quarterQtys.get(i) : 0) * price;
     	}
     	
     	Double result = sumQuarterValue * opptyLineItem.Component_Multiplier__c * (opptyLineItem.Share__c / 100);

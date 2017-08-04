@@ -265,10 +265,17 @@ private class OpportunityApprovalTest {
     
     @isTest
     static void testSalesDirectorApproverIdGeneral() {
-    	System.assertEquals(userIdMT2, OpportunityApproval.getSalesDirectorApproverID(opptyProd.OpportunityId));  
-    	
-    	OpportunityApproval.setSalesDirectorApproverID(opptyProd.OpportunityId);
     	Opportunity oppty = getOpportunity(opptyProd.OpportunityId);
+    	
+    	System.assertEquals(userIdMT2, OpportunityApproval.getSalesDirectorApproverID(oppty));  
+    	
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+    	
+    	OpportunityApproval.setSalesDirectorApproverID(oppty, uow);
+    	
+    	uow.commitWork();
+    	
+    	oppty = getOpportunity(opptyProd.OpportunityId);
     	
     	System.assertEquals(userIdMT2, oppty.Sales_Director_Approver__c);
     	
@@ -283,9 +290,16 @@ private class OpportunityApprovalTest {
     	update oppty.Account; 
     	Test.stopTest();
     	
-    	System.assertEquals(userIdGamSTAR, OpportunityApproval.getSalesDirectorApproverID(opptyProd.OpportunityId)); 
+    	oppty = getOpportunity(opptyProd.OpportunityId);
     	
-    	OpportunityApproval.setSalesDirectorApproverID(opptyProd.OpportunityId);
+    	System.assertEquals(userIdGamSTAR, OpportunityApproval.getSalesDirectorApproverID(oppty)); 
+    	
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+    	
+    	OpportunityApproval.setSalesDirectorApproverID(oppty, uow);
+    	
+    	uow.commitWork();
+    	
     	oppty = getOpportunity(opptyProd.OpportunityId);
     	
     	System.assertEquals(userIdGamSTAR, oppty.Sales_Director_Approver__c); 
@@ -301,9 +315,16 @@ private class OpportunityApprovalTest {
     	update oppty.Account; 
     	Test.stopTest();
     	
-    	System.assertEquals(userIdGamSamsung, OpportunityApproval.getSalesDirectorApproverID(opptyProd.OpportunityId)); 
+    	oppty = getOpportunity(opptyProd.OpportunityId);
     	
-    	OpportunityApproval.setSalesDirectorApproverID(opptyProd.OpportunityId);
+    	System.assertEquals(userIdGamSamsung, OpportunityApproval.getSalesDirectorApproverID(oppty)); 
+    	
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+    	
+    	OpportunityApproval.setSalesDirectorApproverID(oppty, uow);
+    	
+    	uow.commitWork();
+    	
     	oppty = getOpportunity(opptyProd.OpportunityId);
     	
     	System.assertEquals(userIdGamSamsung, oppty.Sales_Director_Approver__c); 
@@ -321,9 +342,16 @@ private class OpportunityApprovalTest {
     	update oppty.Account;
     	Test.stopTest();
     	
-    	System.assertEquals(userIdAuto, OpportunityApproval.getVpApprover1ID(opptyProd.OpportunityId)); 
+    	oppty = getOpportunity(opptyProd.OpportunityId);
     	
-    	OpportunityApproval.setVpApprover1ID(opptyProd.OpportunityId);
+    	System.assertEquals(userIdAuto, OpportunityApproval.getVpApprover1ID(oppty)); 
+    	
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+    	
+    	OpportunityApproval.setVpApprover1ID(oppty, uow);
+    	
+    	uow.commitWork();
+    	
     	oppty = getOpportunity(opptyProd.OpportunityId);
     	
     	System.assertEquals(userIdAuto, oppty.Regional_VP_Approver__c);
@@ -341,9 +369,16 @@ private class OpportunityApprovalTest {
     	update oppty.Account;
     	Test.stopTest();
     	
-    	System.assertEquals(userIdMT1, OpportunityApproval.getVpApprover1ID(opptyProd.OpportunityId)); 
+    	oppty = getOpportunity(opptyProd.OpportunityId);
     	
-    	OpportunityApproval.setVpApprover1ID(opptyProd.OpportunityId);
+    	System.assertEquals(userIdMT1, OpportunityApproval.getVpApprover1ID(oppty)); 
+    	
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+    	
+    	OpportunityApproval.setVpApprover1ID(oppty, uow);
+    	
+    	uow.commitWork();
+    	
     	oppty = getOpportunity(opptyProd.OpportunityId);
     	
     	System.assertEquals(userIdMT1, oppty.Regional_VP_Approver__c);
@@ -364,9 +399,16 @@ private class OpportunityApprovalTest {
     	createOpportunitySchedules(opptyProd.OpportunityId, 100);
     	Test.stopTest();
     	
-    	System.assertEquals(null, OpportunityApproval.getVpApprover1ID(opptyProd.OpportunityId)); 
+    	oppty = getOpportunity(opptyProd.OpportunityId);
     	
-    	OpportunityApproval.setVpApprover1ID(opptyProd.OpportunityId);
+    	System.assertEquals(null, OpportunityApproval.getVpApprover1ID(oppty)); 
+    	
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+    	
+    	OpportunityApproval.setVpApprover1ID(oppty, uow);
+    	
+    	uow.commitWork();
+    	
     	oppty = getOpportunity(opptyProd.OpportunityId);
     	
     	System.assertEquals(null, oppty.Regional_VP_Approver__c); 
@@ -385,9 +427,16 @@ private class OpportunityApprovalTest {
     	createOpportunitySchedules(opptyProd.OpportunityId, THRESHOLD_VP * 2);
     	Test.stopTest();
     	
-    	System.assertEquals(userIdAuto, OpportunityApproval.getVpApprover1ID(opptyProd.OpportunityId)); 
+    	oppty = getOpportunity(opptyProd.OpportunityId);
     	
-    	OpportunityApproval.setVpApprover1ID(opptyProd.OpportunityId);
+    	System.assertEquals(userIdAuto, OpportunityApproval.getVpApprover1ID(oppty)); 
+    	
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+    	
+    	OpportunityApproval.setVpApprover1ID(oppty, uow);
+    	
+    	uow.commitWork();
+    	
     	oppty = getOpportunity(opptyProd.OpportunityId);
     	
     	System.assertEquals(userIdAuto, oppty.Regional_VP_Approver__c);
@@ -408,9 +457,16 @@ private class OpportunityApprovalTest {
     	createOpportunitySchedules(opptyProd.OpportunityId, 100);
     	Test.stopTest();
     	
-    	System.assertEquals(null, OpportunityApproval.getVpApprover1ID(opptyProd.OpportunityId)); 
+    	oppty = getOpportunity(opptyProd.OpportunityId);
     	
-    	OpportunityApproval.setVpApprover1ID(opptyProd.OpportunityId);
+    	System.assertEquals(null, OpportunityApproval.getVpApprover1ID(oppty)); 
+    	
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+    	
+    	OpportunityApproval.setVpApprover1ID(oppty, uow);
+    	
+    	uow.commitWork();
+    	
     	oppty = getOpportunity(opptyProd.OpportunityId);
     	
     	System.assertEquals(null, oppty.Regional_VP_Approver__c); 
@@ -429,9 +485,16 @@ private class OpportunityApprovalTest {
     	createOpportunitySchedules(opptyProd.OpportunityId, THRESHOLD_VP * 2);
     	Test.stopTest();
     	
-    	System.assertEquals(userIdMT1, OpportunityApproval.getVpApprover1ID(opptyProd.OpportunityId)); 
+    	oppty = getOpportunity(opptyProd.OpportunityId);
     	
-    	OpportunityApproval.setVpApprover1ID(opptyProd.OpportunityId);
+    	System.assertEquals(userIdMT1, OpportunityApproval.getVpApprover1ID(oppty)); 
+    	
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+    	
+    	OpportunityApproval.setVpApprover1ID(oppty, uow);
+    	
+    	uow.commitWork();
+    	
     	oppty = getOpportunity(opptyProd.OpportunityId);
     	
     	System.assertEquals(userIdMT1, oppty.Regional_VP_Approver__c);
@@ -452,9 +515,16 @@ private class OpportunityApprovalTest {
     	createOpportunitySchedules(opptyProd.OpportunityId, 100);
     	Test.stopTest();
     	
-    	System.assertEquals(null, OpportunityApproval.getVpApprover1ID(opptyProd.OpportunityId)); 
+    	oppty = getOpportunity(opptyProd.OpportunityId);
     	
-    	OpportunityApproval.setVpApprover1ID(opptyProd.OpportunityId);
+    	System.assertEquals(null, OpportunityApproval.getVpApprover1ID(oppty)); 
+    	
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+    	
+    	OpportunityApproval.setVpApprover1ID(oppty, uow);
+    	
+    	uow.commitWork();
+    	
     	oppty = getOpportunity(opptyProd.OpportunityId);
     	
     	System.assertEquals(null, oppty.Regional_VP_Approver__c); 
@@ -473,9 +543,16 @@ private class OpportunityApprovalTest {
     	createOpportunitySchedules(opptyProd.OpportunityId, THRESHOLD_VP * 2);
     	Test.stopTest();
     	
-    	System.assertEquals(userIdEvpSTAR, OpportunityApproval.getVpApprover1ID(opptyProd.OpportunityId)); 
+    	oppty = getOpportunity(opptyProd.OpportunityId);
     	
-    	OpportunityApproval.setVpApprover1ID(opptyProd.OpportunityId);
+    	System.assertEquals(userIdEvpSTAR, OpportunityApproval.getVpApprover1ID(oppty)); 
+    	
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+    	
+    	OpportunityApproval.setVpApprover1ID(oppty, uow);
+    	
+    	uow.commitWork();
+    	
     	oppty = getOpportunity(opptyProd.OpportunityId);
     	
     	System.assertEquals(userIdEvpSTAR, oppty.Regional_VP_Approver__c);
@@ -496,9 +573,16 @@ private class OpportunityApprovalTest {
     	createOpportunitySchedules(opptyProd.OpportunityId, 100);
     	Test.stopTest();
     	
-    	System.assertEquals(null, OpportunityApproval.getVpApprover1ID(opptyProd.OpportunityId)); 
+    	oppty = getOpportunity(opptyProd.OpportunityId);
     	
-    	OpportunityApproval.setVpApprover1ID(opptyProd.OpportunityId);
+    	System.assertEquals(null, OpportunityApproval.getVpApprover1ID(oppty)); 
+    	
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+    	
+    	OpportunityApproval.setVpApprover1ID(oppty, uow);
+    	
+    	uow.commitWork();
+    	
     	oppty = getOpportunity(opptyProd.OpportunityId);
     	
     	System.assertEquals(null, oppty.Regional_VP_Approver__c); 
@@ -517,9 +601,16 @@ private class OpportunityApprovalTest {
     	createOpportunitySchedules(opptyProd.OpportunityId, THRESHOLD_VP * 2);
     	Test.stopTest();
     	
-    	System.assertEquals(userIdEvpSamsung, OpportunityApproval.getVpApprover1ID(opptyProd.OpportunityId)); 
+    	oppty = getOpportunity(opptyProd.OpportunityId);
     	
-    	OpportunityApproval.setVpApprover1ID(opptyProd.OpportunityId);
+    	System.assertEquals(userIdEvpSamsung, OpportunityApproval.getVpApprover1ID(oppty)); 
+    	
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+    	
+    	OpportunityApproval.setVpApprover1ID(oppty, uow);
+    	
+    	uow.commitWork();
+    	
     	oppty = getOpportunity(opptyProd.OpportunityId);
     	
     	System.assertEquals(userIdEvpSamsung, oppty.Regional_VP_Approver__c);
@@ -538,9 +629,16 @@ private class OpportunityApprovalTest {
     	update oppty.Account;
     	Test.stopTest();
     	
-    	System.assertEquals(userIdMT1, OpportunityApproval.getVpApprover2ID(opptyProd.OpportunityId)); 
+    	oppty = getOpportunity(opptyProd.OpportunityId);
     	
-    	OpportunityApproval.setVpApprover2ID(opptyProd.OpportunityId);
+    	System.assertEquals(userIdMT1, OpportunityApproval.getVpApprover2ID(oppty)); 
+    	
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+    	
+    	OpportunityApproval.setVpApprover2ID(oppty, uow);
+    	
+    	uow.commitWork();
+    	
     	oppty = getOpportunity(opptyProd.OpportunityId);
     	
     	System.assertEquals(userIdMT1, oppty.VP_Approver_2__c);
@@ -559,9 +657,16 @@ private class OpportunityApprovalTest {
     	update oppty.Account;
     	Test.stopTest();
     	
-    	System.assertEquals(userIdMT1, OpportunityApproval.getVpApprover2ID(opptyProd.OpportunityId)); 
+    	oppty = getOpportunity(opptyProd.OpportunityId);
     	
-    	OpportunityApproval.setVpApprover2ID(opptyProd.OpportunityId);
+    	System.assertEquals(userIdMT1, OpportunityApproval.getVpApprover2ID(oppty)); 
+    	
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+    	
+    	OpportunityApproval.setVpApprover2ID(oppty, uow);
+    	
+    	uow.commitWork();
+    	
     	oppty = getOpportunity(opptyProd.OpportunityId);
     	
     	System.assertEquals(userIdMT1, oppty.VP_Approver_2__c);
@@ -580,9 +685,16 @@ private class OpportunityApprovalTest {
     	update oppty.Account;
     	Test.stopTest();
     	
-    	System.assertEquals(null, OpportunityApproval.getVpApprover2ID(opptyProd.OpportunityId)); 
+    	oppty = getOpportunity(opptyProd.OpportunityId);
     	
-    	OpportunityApproval.setVpApprover2ID(opptyProd.OpportunityId);
+    	System.assertEquals(null, OpportunityApproval.getVpApprover2ID(oppty)); 
+    	
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+    	
+    	OpportunityApproval.setVpApprover2ID(oppty, uow);
+    	
+    	uow.commitWork();
+    	
     	oppty = getOpportunity(opptyProd.OpportunityId);
     	
     	System.assertEquals(null, oppty.VP_Approver_2__c);
@@ -599,9 +711,16 @@ private class OpportunityApprovalTest {
     	update oppty.Account;
     	Test.stopTest();
     	
-    	System.assertEquals(null, OpportunityApproval.getVpApprover2ID(opptyProd.OpportunityId)); 
+    	oppty = getOpportunity(opptyProd.OpportunityId);
     	
-    	OpportunityApproval.setVpApprover2ID(opptyProd.OpportunityId);
+    	System.assertEquals(null, OpportunityApproval.getVpApprover2ID(oppty)); 
+    	
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+    	
+    	OpportunityApproval.setVpApprover2ID(oppty, uow);
+    	
+    	uow.commitWork();
+    	
     	oppty = getOpportunity(opptyProd.OpportunityId);
     	
     	System.assertEquals(null, oppty.VP_Approver_2__c);
@@ -618,9 +737,16 @@ private class OpportunityApprovalTest {
     	update oppty.Account;
     	Test.stopTest();
     	
-    	System.assertEquals(null, OpportunityApproval.getVpApprover2ID(opptyProd.OpportunityId)); 
+    	oppty = getOpportunity(opptyProd.OpportunityId);
     	
-    	OpportunityApproval.setVpApprover2ID(opptyProd.OpportunityId);
+    	System.assertEquals(null, OpportunityApproval.getVpApprover2ID(oppty)); 
+    	
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+    	
+    	OpportunityApproval.setVpApprover2ID(oppty, uow);
+    	
+    	uow.commitWork();
+    	
     	oppty = getOpportunity(opptyProd.OpportunityId);
     	
     	System.assertEquals(null, oppty.VP_Approver_2__c);
@@ -637,9 +763,16 @@ private class OpportunityApprovalTest {
     	update oppty.Account;
     	Test.stopTest();
     	
-    	System.assertEquals(null, OpportunityApproval.getVpApprover2ID(opptyProd.OpportunityId)); 
+    	oppty = getOpportunity(opptyProd.OpportunityId);
     	
-    	OpportunityApproval.setVpApprover2ID(opptyProd.OpportunityId);
+    	System.assertEquals(null, OpportunityApproval.getVpApprover2ID(oppty)); 
+    	
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+    	
+    	OpportunityApproval.setVpApprover2ID(oppty, uow);
+    	
+    	uow.commitWork();
+    	
     	oppty = getOpportunity(opptyProd.OpportunityId);
     	
     	System.assertEquals(null, oppty.VP_Approver_2__c);
@@ -659,9 +792,16 @@ private class OpportunityApprovalTest {
     	createOpportunitySchedules(opptyProd.OpportunityId, 100);
     	Test.stopTest();
     	
-    	System.assertEquals(null, OpportunityApproval.getVpApprover2ID(opptyProd.OpportunityId)); 
+    	oppty = getOpportunity(opptyProd.OpportunityId);
     	
-    	OpportunityApproval.setVpApprover2ID(opptyProd.OpportunityId);
+    	System.assertEquals(null, OpportunityApproval.getVpApprover2ID(oppty)); 
+    	
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+    	
+    	OpportunityApproval.setVpApprover2ID(oppty, uow);
+    	
+    	uow.commitWork();
+    	
     	oppty = getOpportunity(opptyProd.OpportunityId);
     	
     	System.assertEquals(null, oppty.VP_Approver_2__c);
@@ -681,9 +821,16 @@ private class OpportunityApprovalTest {
     	createOpportunitySchedules(opptyProd.OpportunityId, THRESHOLD_VP * 2);
     	Test.stopTest();
     	
-    	System.assertEquals(userIdMT1, OpportunityApproval.getVpApprover2ID(opptyProd.OpportunityId)); 
+    	oppty = getOpportunity(opptyProd.OpportunityId);
     	
-    	OpportunityApproval.setVpApprover2ID(opptyProd.OpportunityId);
+    	System.assertEquals(userIdMT1, OpportunityApproval.getVpApprover2ID(oppty)); 
+    	
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+    	
+    	OpportunityApproval.setVpApprover2ID(oppty, uow);
+    	
+    	uow.commitWork();
+    	
     	oppty = getOpportunity(opptyProd.OpportunityId);
     	
     	System.assertEquals(userIdMT1, oppty.VP_Approver_2__c);
@@ -705,9 +852,16 @@ private class OpportunityApprovalTest {
     	createOpportunitySchedules(opptyProd.OpportunityId, 100);
     	Test.stopTest();
     	
-    	System.assertEquals(null, OpportunityApproval.getVpApprover2ID(opptyProd.OpportunityId)); 
+    	oppty = getOpportunity(opptyProd.OpportunityId);
     	
-    	OpportunityApproval.setVpApprover2ID(opptyProd.OpportunityId);
+    	System.assertEquals(null, OpportunityApproval.getVpApprover2ID(oppty)); 
+    	
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+    	
+    	OpportunityApproval.setVpApprover2ID(oppty, uow);
+    	
+    	uow.commitWork();
+    	
     	oppty = getOpportunity(opptyProd.OpportunityId);
     	
     	System.assertEquals(null, oppty.VP_Approver_2__c);
@@ -727,9 +881,16 @@ private class OpportunityApprovalTest {
     	createOpportunitySchedules(opptyProd.OpportunityId, THRESHOLD_VP * 2);
     	Test.stopTest();
     	
-    	System.assertEquals(userIdMT1, OpportunityApproval.getVpApprover2ID(opptyProd.OpportunityId)); 
+    	oppty = getOpportunity(opptyProd.OpportunityId);
     	
-    	OpportunityApproval.setVpApprover2ID(opptyProd.OpportunityId);
+    	System.assertEquals(userIdMT1, OpportunityApproval.getVpApprover2ID(oppty)); 
+    	
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+    	
+    	OpportunityApproval.setVpApprover2ID(oppty, uow);
+    	
+    	uow.commitWork();
+    	
     	oppty = getOpportunity(opptyProd.OpportunityId);
     	
     	System.assertEquals(userIdMT1, oppty.VP_Approver_2__c);
@@ -751,9 +912,16 @@ private class OpportunityApprovalTest {
     	createOpportunitySchedules(opptyProd.OpportunityId, 100);
     	Test.stopTest();
     	
-    	System.assertEquals(null, OpportunityApproval.getVpApprover2ID(opptyProd.OpportunityId)); 
+    	oppty = getOpportunity(opptyProd.OpportunityId);
     	
-    	OpportunityApproval.setVpApprover2ID(opptyProd.OpportunityId);
+    	System.assertEquals(null, OpportunityApproval.getVpApprover2ID(oppty)); 
+    	
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+    	
+    	OpportunityApproval.setVpApprover2ID(oppty, uow);
+    	
+    	uow.commitWork();
+    	
     	oppty = getOpportunity(opptyProd.OpportunityId);
     	
     	System.assertEquals(null, oppty.VP_Approver_2__c);
@@ -773,9 +941,16 @@ private class OpportunityApprovalTest {
     	createOpportunitySchedules(opptyProd.OpportunityId, THRESHOLD_VP * 2);
     	Test.stopTest();
     	
-    	System.assertEquals(null, OpportunityApproval.getVpApprover2ID(opptyProd.OpportunityId)); 
+    	oppty = getOpportunity(opptyProd.OpportunityId);
     	
-    	OpportunityApproval.setVpApprover2ID(opptyProd.OpportunityId);
+    	System.assertEquals(null, OpportunityApproval.getVpApprover2ID(oppty)); 
+    	
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+    	
+    	OpportunityApproval.setVpApprover2ID(oppty, uow);
+    	
+    	uow.commitWork();
+    	
     	oppty = getOpportunity(opptyProd.OpportunityId);
     	
     	System.assertEquals(null, oppty.VP_Approver_2__c);
@@ -795,9 +970,16 @@ private class OpportunityApprovalTest {
     	createOpportunitySchedules(opptyProd.OpportunityId, 100);
     	Test.stopTest();
     	
-    	System.assertEquals(null, OpportunityApproval.getVpApprover2ID(opptyProd.OpportunityId)); 
+    	oppty = getOpportunity(opptyProd.OpportunityId);
     	
-    	OpportunityApproval.setVpApprover2ID(opptyProd.OpportunityId);
+    	System.assertEquals(null, OpportunityApproval.getVpApprover2ID(oppty)); 
+    	
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+    	
+    	OpportunityApproval.setVpApprover2ID(oppty, uow);
+    	
+    	uow.commitWork();
+    	
     	oppty = getOpportunity(opptyProd.OpportunityId);
     	
     	System.assertEquals(null, oppty.VP_Approver_2__c);
@@ -817,9 +999,16 @@ private class OpportunityApprovalTest {
     	createOpportunitySchedules(opptyProd.OpportunityId, THRESHOLD_VP * 2);
     	Test.stopTest();
     	
-    	System.assertEquals(null, OpportunityApproval.getVpApprover2ID(opptyProd.OpportunityId)); 
+    	oppty = getOpportunity(opptyProd.OpportunityId);
     	
-    	OpportunityApproval.setVpApprover2ID(opptyProd.OpportunityId);
+    	System.assertEquals(null, OpportunityApproval.getVpApprover2ID(oppty)); 
+    	
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+    	
+    	OpportunityApproval.setVpApprover2ID(oppty, uow);
+    	
+    	uow.commitWork();
+    	
     	oppty = getOpportunity(opptyProd.OpportunityId);
     	
     	System.assertEquals(null, oppty.VP_Approver_2__c);
@@ -839,9 +1028,16 @@ private class OpportunityApprovalTest {
     	createOpportunitySchedules(opptyProd.OpportunityId, 100);
     	Test.stopTest();
     	
-    	System.assertEquals(null, OpportunityApproval.getVpApprover2ID(opptyProd.OpportunityId)); 
+    	oppty = getOpportunity(opptyProd.OpportunityId);
     	
-    	OpportunityApproval.setVpApprover2ID(opptyProd.OpportunityId);
+    	System.assertEquals(null, OpportunityApproval.getVpApprover2ID(oppty)); 
+    	
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+    	
+    	OpportunityApproval.setVpApprover2ID(oppty, uow);
+    	
+    	uow.commitWork();
+    	
     	oppty = getOpportunity(opptyProd.OpportunityId);
     	
     	System.assertEquals(null, oppty.VP_Approver_2__c);
@@ -861,9 +1057,16 @@ private class OpportunityApprovalTest {
     	createOpportunitySchedules(opptyProd.OpportunityId, THRESHOLD_VP * 2);
     	Test.stopTest();
     	
-    	System.assertEquals(null, OpportunityApproval.getVpApprover2ID(opptyProd.OpportunityId)); 
+    	oppty = getOpportunity(opptyProd.OpportunityId);
     	
-    	OpportunityApproval.setVpApprover2ID(opptyProd.OpportunityId);
+    	System.assertEquals(null, OpportunityApproval.getVpApprover2ID(oppty)); 
+    	
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+    	
+    	OpportunityApproval.setVpApprover2ID(oppty, uow);
+    	
+    	uow.commitWork();
+    	
     	oppty = getOpportunity(opptyProd.OpportunityId);
     	
     	System.assertEquals(null, oppty.VP_Approver_2__c);
@@ -881,10 +1084,17 @@ private class OpportunityApprovalTest {
     	update oppty.Account;
     	Test.stopTest();
     	
-    	System.assertEquals(userIdAuto, OpportunityApproval.getVpApprover1ID(opptyProd.OpportunityId));
-    	System.assertEquals(userIdAuto, OpportunityApproval.getVpApprover2ID(opptyProd.OpportunityId)); 
+    	oppty = getOpportunity(opptyProd.OpportunityId);
     	
-    	OpportunityApproval.setVpApproverIDs(opptyProd.OpportunityId);
+    	System.assertEquals(userIdAuto, OpportunityApproval.getVpApprover1ID(oppty));
+    	System.assertEquals(userIdAuto, OpportunityApproval.getVpApprover2ID(oppty)); 
+    	
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+    	
+    	OpportunityApproval.setVpApproverIDs(oppty, uow);
+    	
+    	uow.commitWork();
+    	
     	oppty = getOpportunity(opptyProd.OpportunityId);
     	
     	System.assertEquals(userIdAuto, oppty.Regional_VP_Approver__c);
@@ -904,10 +1114,17 @@ private class OpportunityApprovalTest {
     	update oppty.Account;
     	Test.stopTest();
     	
-    	System.assertEquals(userIdAuto, OpportunityApproval.getVpApprover1ID(opptyProd.OpportunityId));
-    	System.assertEquals(userIdMT1, OpportunityApproval.getVpApprover2ID(opptyProd.OpportunityId)); 
+    	oppty = getOpportunity(opptyProd.OpportunityId);
     	
-    	OpportunityApproval.setVpApproverIDs(opptyProd.OpportunityId);
+    	System.assertEquals(userIdAuto, OpportunityApproval.getVpApprover1ID(oppty));
+    	System.assertEquals(userIdMT1, OpportunityApproval.getVpApprover2ID(oppty)); 
+    	
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+    	
+    	OpportunityApproval.setVpApproverIDs(oppty, uow);
+    	
+    	uow.commitWork();
+    	
     	oppty = getOpportunity(opptyProd.OpportunityId);
     	
     	System.assertEquals(userIdAuto, oppty.Regional_VP_Approver__c);
@@ -925,13 +1142,20 @@ private class OpportunityApprovalTest {
     	createOpportunitySchedules(opptyProd.OpportunityId, 100);
     	Test.stopTest();
     	
-    	Map<String, ID> magApproverIDs = OpportunityApproval.getMagApproverIDs(opptyProd.OpportunityId);
+    	Opportunity oppty = getOpportunity(opptyProd.OpportunityId);
+    	
+    	Map<String, ID> magApproverIDs = OpportunityApproval.getMagApproverIdsWithMag(oppty);
     	
     	System.assertEquals(null, magApproverIDs.get(MAG_SHORT_LIVED));
     	System.assertEquals(null, magApproverIDs.get(MAG_LIFETIME));
     	
-    	OpportunityApproval.setMagApproverIDs(opptyProd.OpportunityId);
-    	Opportunity oppty = getOpportunity(opptyProd.OpportunityId);
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+    	
+    	OpportunityApproval.setMagApproverIDs(oppty, uow);
+    	
+    	uow.commitWork();
+    	
+    	oppty = getOpportunity(opptyProd.OpportunityId);
     	
     	System.assertEquals(null, oppty.MAG_Approver_1__c);
     	System.assertEquals(null, oppty.MAG_Approver_2__c);
@@ -946,13 +1170,20 @@ private class OpportunityApprovalTest {
     	createOpportunitySchedules(opptyProd.OpportunityId, THRESHOLD_MAG * 2);
     	Test.stopTest();
     	
-    	Map<String, ID> magApproverIDs = OpportunityApproval.getMagApproverIDs(opptyProd.OpportunityId);
+    	Opportunity oppty = getOpportunity(opptyProd.OpportunityId);
+    	
+    	Map<String, ID> magApproverIDs = OpportunityApproval.getMagApproverIdsWithMag(oppty);
     	
     	System.assertEquals(userIdMAG, magApproverIDs.get(MAG_SHORT_LIVED));
     	System.assertEquals(userIdMAG, magApproverIDs.get(MAG_LIFETIME));
     	
-    	OpportunityApproval.setMagApproverIDs(opptyProd.OpportunityId);
-    	Opportunity oppty = getOpportunity(opptyProd.OpportunityId);
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+    	
+    	OpportunityApproval.setMagApproverIDs(oppty, uow);
+    	
+    	uow.commitWork();
+    	
+    	oppty = getOpportunity(opptyProd.OpportunityId);
     	
     	System.assertEquals(userIdMAG, oppty.MAG_Approver_1__c);
     	System.assertEquals(null, oppty.MAG_Approver_2__c);
@@ -985,13 +1216,20 @@ private class OpportunityApprovalTest {
     	createOpportunitySchedules(opptyProd.OpportunityId, THRESHOLD_MAG * 2);
     	Test.stopTest();
     	
-    	Map<String, ID> magApproverIDs = OpportunityApproval.getMagApproverIDs(opptyProd.OpportunityId);
+    	Opportunity oppty = getOpportunity(opptyProd.OpportunityId);
+    	
+    	Map<String, ID> magApproverIDs = OpportunityApproval.getMagApproverIdsWithMag(oppty);
     	
     	System.assertEquals(CommonUtils.getDataAdminUserID(), magApproverIDs.get(mag1));
     	System.assertEquals(CommonUtils.getDataAdminUserID(), magApproverIDs.get(mag2));
+    	
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
     	    	
-    	OpportunityApproval.setMagApproverIDs(opptyProd.OpportunityId);
-    	Opportunity oppty = getOpportunity(opptyProd.OpportunityId);
+    	OpportunityApproval.setMagApproverIDs(oppty, uow);
+    	
+    	uow.commitWork();
+    	
+    	oppty = getOpportunity(opptyProd.OpportunityId);
     	
     	System.assertEquals(CommonUtils.getDataAdminUserID(), oppty.MAG_Approver_1__c);
     	System.assertEquals(null, oppty.MAG_Approver_2__c);
@@ -1012,12 +1250,19 @@ private class OpportunityApprovalTest {
     	createOpportunitySchedules(opptyProd.OpportunityId, 100);
     	Test.stopTest();
     	
-    	Map<String, ID> magApproverIDs = OpportunityApproval.getMagApproverIDs(opptyProd.OpportunityId);
+    	oppty = getOpportunity(opptyProd.OpportunityId);
+    	
+    	Map<String, ID> magApproverIDs = OpportunityApproval.getMagApproverIdsWithMag(oppty);
     	
     	System.assertEquals(null, magApproverIDs.get(MAG_SHORT_LIVED));
     	System.assertEquals(null, magApproverIDs.get(MAG_LIFETIME));
     	
-    	OpportunityApproval.setMagApproverIDs(opptyProd.OpportunityId);
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+    	
+    	OpportunityApproval.setMagApproverIDs(oppty, uow);
+    	
+    	uow.commitWork();
+    	
     	oppty = getOpportunity(opptyProd.OpportunityId);
     	
     	System.assertEquals(null, oppty.MAG_Approver_1__c);
@@ -1037,12 +1282,19 @@ private class OpportunityApprovalTest {
     	createOpportunitySchedules(opptyProd.OpportunityId, THRESHOLD_MAG * 2);
     	Test.stopTest();
     	
-    	Map<String, ID> magApproverIDs = OpportunityApproval.getMagApproverIDs(opptyProd.OpportunityId);
+    	oppty = getOpportunity(opptyProd.OpportunityId);
+    	
+    	Map<String, ID> magApproverIDs = OpportunityApproval.getMagApproverIdsWithMag(oppty);
     	
     	System.assertEquals(userIdMagSTAR, magApproverIDs.get(MAG_SHORT_LIVED));
     	System.assertEquals(userIdMagSTAR, magApproverIDs.get(MAG_LIFETIME));
     	
-    	OpportunityApproval.setMagApproverIDs(opptyProd.OpportunityId);
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+    	
+    	OpportunityApproval.setMagApproverIDs(oppty, uow);
+    	
+    	uow.commitWork();
+    	
     	oppty = getOpportunity(opptyProd.OpportunityId);
     	
     	System.assertEquals(userIdMagSTAR, oppty.MAG_Approver_1__c);
@@ -1080,12 +1332,19 @@ private class OpportunityApprovalTest {
     	createOpportunitySchedules(opptyProd.OpportunityId, THRESHOLD_MAG * 2);
     	Test.stopTest();
     	
-    	Map<String, ID> magApproverIDs = OpportunityApproval.getMagApproverIDs(opptyProd.OpportunityId);
+    	oppty = getOpportunity(opptyProd.OpportunityId);
+    	
+    	Map<String, ID> magApproverIDs = OpportunityApproval.getMagApproverIdsWithMag(oppty);
     	
     	System.assertEquals(CommonUtils.getDataAdminUserID(), magApproverIDs.get(mag1));
     	System.assertEquals(CommonUtils.getDataAdminUserID(), magApproverIDs.get(mag2));
+    	
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
     	    	
-    	OpportunityApproval.setMagApproverIDs(opptyProd.OpportunityId);
+    	OpportunityApproval.setMagApproverIDs(oppty, uow);
+    	
+    	uow.commitWork();
+    	
     	oppty = getOpportunity(opptyProd.OpportunityId);
     	
     	System.assertEquals(CommonUtils.getDataAdminUserID(), oppty.MAG_Approver_1__c);
@@ -1107,12 +1366,19 @@ private class OpportunityApprovalTest {
     	createOpportunitySchedules(opptyProd.OpportunityId, 100);
     	Test.stopTest();
     	
-    	Map<String, ID> magApproverIDs = OpportunityApproval.getMagApproverIDs(opptyProd.OpportunityId);
+    	oppty = getOpportunity(opptyProd.OpportunityId);
+    	
+    	Map<String, ID> magApproverIDs = OpportunityApproval.getMagApproverIdsWithMag(oppty);
     	
     	System.assertEquals(null, magApproverIDs.get(MAG_SHORT_LIVED));
     	System.assertEquals(null, magApproverIDs.get(MAG_LIFETIME));
     	
-    	OpportunityApproval.setMagApproverIDs(opptyProd.OpportunityId);
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+    	
+    	OpportunityApproval.setMagApproverIDs(oppty, uow);
+    	
+    	uow.commitWork();
+    	
     	oppty = getOpportunity(opptyProd.OpportunityId);
     	
     	System.assertEquals(null, oppty.MAG_Approver_1__c);
@@ -1132,12 +1398,19 @@ private class OpportunityApprovalTest {
     	createOpportunitySchedules(opptyProd.OpportunityId, THRESHOLD_MAG * 2);
     	Test.stopTest();
     	
-    	Map<String, ID> magApproverIDs = OpportunityApproval.getMagApproverIDs(opptyProd.OpportunityId);
+    	oppty = getOpportunity(opptyProd.OpportunityId);
+    	
+    	Map<String, ID> magApproverIDs = OpportunityApproval.getMagApproverIdsWithMag(oppty);
     	
     	System.assertEquals(userIdMAG, magApproverIDs.get(MAG_SHORT_LIVED));
     	System.assertEquals(userIdMAG, magApproverIDs.get(MAG_LIFETIME));
     	
-    	OpportunityApproval.setMagApproverIDs(opptyProd.OpportunityId);
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+    	
+    	OpportunityApproval.setMagApproverIDs(oppty, uow);
+    	
+    	uow.commitWork();
+    	
     	oppty = getOpportunity(opptyProd.OpportunityId);
     	
     	System.assertEquals(userIdMAG, oppty.MAG_Approver_1__c);
@@ -1175,12 +1448,19 @@ private class OpportunityApprovalTest {
     	createOpportunitySchedules(opptyProd.OpportunityId, THRESHOLD_MAG * 2);
     	Test.stopTest();
     	
-    	Map<String, ID> magApproverIDs = OpportunityApproval.getMagApproverIDs(opptyProd.OpportunityId);
+    	oppty = getOpportunity(opptyProd.OpportunityId);
+    	
+    	Map<String, ID> magApproverIDs = OpportunityApproval.getMagApproverIdsWithMag(oppty);
     	
     	System.assertEquals(CommonUtils.getDataAdminUserID(), magApproverIDs.get(mag1));
     	System.assertEquals(CommonUtils.getDataAdminUserID(), magApproverIDs.get(mag2));
+    	
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
     	    	
-    	OpportunityApproval.setMagApproverIDs(opptyProd.OpportunityId);
+    	OpportunityApproval.setMagApproverIDs(oppty, uow);
+    	
+    	uow.commitWork();
+    	
     	oppty = getOpportunity(opptyProd.OpportunityId);
     	
     	System.assertEquals(CommonUtils.getDataAdminUserID(), oppty.MAG_Approver_1__c);
@@ -1198,13 +1478,20 @@ private class OpportunityApprovalTest {
     	createOpportunitySchedules(opptyProd.OpportunityId, 100);
     	Test.stopTest();
     	
-    	Map<String, ID> blApproverIDs = OpportunityApproval.getBlApproverIDs(opptyProd.OpportunityId);
+    	Opportunity oppty = getOpportunity(opptyProd.OpportunityId);
+    	
+    	Map<String, ID> blApproverIDs = OpportunityApproval.getBlApproverIdsWithBl(oppty);
     	
     	System.assertEquals(null, blApproverIDs.get(BL1));
     	System.assertEquals(null, blApproverIDs.get(BL2));
     	
-    	OpportunityApproval.setBlApproverIDs(opptyProd.OpportunityId);
-    	Opportunity oppty = getOpportunity(opptyProd.OpportunityId);
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+    	
+    	OpportunityApproval.setBlApproverIDs(oppty, uow);
+    	
+    	uow.commitWork();
+    	
+    	oppty = getOpportunity(opptyProd.OpportunityId);
     	
     	System.assertEquals(null, oppty.BL_Approver_1__c);
     	System.assertEquals(null, oppty.BL_Approver_2__c);
@@ -1219,13 +1506,20 @@ private class OpportunityApprovalTest {
     	createOpportunitySchedules(opptyProd.OpportunityId, THRESHOLD_BL * 2);
     	Test.stopTest();
     	
-    	Map<String, ID> blApproverIDs = OpportunityApproval.getBlApproverIDs(opptyProd.OpportunityId);
+    	Opportunity oppty = getOpportunity(opptyProd.OpportunityId);
+    	
+    	Map<String, ID> blApproverIDs = OpportunityApproval.getBlApproverIdsWithBl(oppty);
     	
     	System.assertEquals(userIdBL, blApproverIDs.get(BL1));
     	System.assertEquals(userIdBL, blApproverIDs.get(BL2));
     	
-    	OpportunityApproval.setBlApproverIDs(opptyProd.OpportunityId);
-    	Opportunity oppty = getOpportunity(opptyProd.OpportunityId);
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+    	
+    	OpportunityApproval.setBlApproverIDs(oppty, uow);
+    	
+    	uow.commitWork();
+    	
+    	oppty = getOpportunity(opptyProd.OpportunityId);
     	
     	System.assertEquals(userIdBL, oppty.BL_Approver_1__c);
     	System.assertEquals(null, oppty.BL_Approver_2__c);
@@ -1258,13 +1552,20 @@ private class OpportunityApprovalTest {
     	createOpportunitySchedules(opptyProd.OpportunityId, THRESHOLD_BL * 2);
     	Test.stopTest();
     	
-    	Map<String, ID> blApproverIDs = OpportunityApproval.getBlApproverIDs(opptyProd.OpportunityId);
+    	Opportunity oppty = getOpportunity(opptyProd.OpportunityId);
+    	
+    	Map<String, ID> blApproverIDs = OpportunityApproval.getBlApproverIdsWithBl(oppty);
     	
     	System.assertEquals(CommonUtils.getDataAdminUserID(), blApproverIDs.get(aBL1));
     	System.assertEquals(CommonUtils.getDataAdminUserID(), blApproverIDs.get(aBL2));
+    	
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
     	    	
-    	OpportunityApproval.setBlApproverIDs(opptyProd.OpportunityId);
-    	Opportunity oppty = getOpportunity(opptyProd.OpportunityId);
+    	OpportunityApproval.setBlApproverIDs(oppty, uow);
+    	
+    	uow.commitWork();
+    	
+    	oppty = getOpportunity(opptyProd.OpportunityId);
     	
     	System.assertEquals(CommonUtils.getDataAdminUserID(), oppty.BL_Approver_1__c);
     	System.assertEquals(null, oppty.BL_Approver_2__c);
@@ -1285,12 +1586,19 @@ private class OpportunityApprovalTest {
     	createOpportunitySchedules(opptyProd.OpportunityId, 100);
     	Test.stopTest();
     	
-    	Map<String, ID> blApproverIDs = OpportunityApproval.getBlApproverIDs(opptyProd.OpportunityId);
+    	oppty = getOpportunity(opptyProd.OpportunityId);
+    	
+    	Map<String, ID> blApproverIDs = OpportunityApproval.getBlApproverIdsWithBl(oppty);
     	
     	System.assertEquals(null, blApproverIDs.get(BL1));
     	System.assertEquals(null, blApproverIDs.get(BL2));
     	
-    	OpportunityApproval.setBlApproverIDs(opptyProd.OpportunityId);
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+    	
+    	OpportunityApproval.setBlApproverIDs(oppty, uow);
+    	
+    	uow.commitWork();
+    	
     	oppty = getOpportunity(opptyProd.OpportunityId);
     	
     	System.assertEquals(null, oppty.BL_Approver_1__c);
@@ -1310,12 +1618,19 @@ private class OpportunityApprovalTest {
     	createOpportunitySchedules(opptyProd.OpportunityId, THRESHOLD_BL * 2);
     	Test.stopTest();
     	
-    	Map<String, ID> blApproverIDs = OpportunityApproval.getBlApproverIDs(opptyProd.OpportunityId);
+    	oppty = getOpportunity(opptyProd.OpportunityId);
+    	
+    	Map<String, ID> blApproverIDs = OpportunityApproval.getBlApproverIdsWithBl(oppty);
     	
     	System.assertEquals(userIdBlSTAR, blApproverIDs.get(BL1));
     	System.assertEquals(userIdBlSTAR, blApproverIDs.get(BL2));
     	
-    	OpportunityApproval.setBlApproverIDs(opptyProd.OpportunityId);
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+    	
+    	OpportunityApproval.setBlApproverIDs(oppty, uow);
+    	
+    	uow.commitWork();
+    	
     	oppty = getOpportunity(opptyProd.OpportunityId);
     	
     	System.assertEquals(userIdBlSTAR, oppty.BL_Approver_1__c);
@@ -1353,12 +1668,19 @@ private class OpportunityApprovalTest {
     	createOpportunitySchedules(opptyProd.OpportunityId, THRESHOLD_BL * 2);
     	Test.stopTest();
     	
-    	Map<String, ID> blApproverIDs = OpportunityApproval.getBlApproverIDs(opptyProd.OpportunityId);
+    	oppty = getOpportunity(opptyProd.OpportunityId);
+    	
+    	Map<String, ID> blApproverIDs = OpportunityApproval.getBlApproverIdsWithBl(oppty);
     	
     	System.assertEquals(CommonUtils.getDataAdminUserID(), blApproverIDs.get(aBL1));
     	System.assertEquals(CommonUtils.getDataAdminUserID(), blApproverIDs.get(aBL2));
+    	
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
     	    	
-    	OpportunityApproval.setBlApproverIDs(opptyProd.OpportunityId);
+    	OpportunityApproval.setBlApproverIDs(oppty, uow);
+    	
+    	uow.commitWork();
+    	
     	oppty = getOpportunity(opptyProd.OpportunityId);
     	
     	System.assertEquals(CommonUtils.getDataAdminUserID(), oppty.BL_Approver_1__c);
@@ -1380,12 +1702,19 @@ private class OpportunityApprovalTest {
     	createOpportunitySchedules(opptyProd.OpportunityId, 100);
     	Test.stopTest();
     	
-    	Map<String, ID> blApproverIDs = OpportunityApproval.getBlApproverIDs(opptyProd.OpportunityId);
+    	oppty = getOpportunity(opptyProd.OpportunityId);
+    	
+    	Map<String, ID> blApproverIDs = OpportunityApproval.getBlApproverIdsWithBl(oppty);
     	
     	System.assertEquals(null, blApproverIDs.get(BL1));
     	System.assertEquals(null, blApproverIDs.get(BL2));
     	
-    	OpportunityApproval.setBlApproverIDs(opptyProd.OpportunityId);
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+    	
+    	OpportunityApproval.setBlApproverIDs(oppty, uow);
+    	
+    	uow.commitWork();
+    	
     	oppty = getOpportunity(opptyProd.OpportunityId);
     	
     	System.assertEquals(null, oppty.BL_Approver_1__c);
@@ -1405,12 +1734,19 @@ private class OpportunityApprovalTest {
     	createOpportunitySchedules(opptyProd.OpportunityId, THRESHOLD_BL * 2);
     	Test.stopTest();
     	
-    	Map<String, ID> blApproverIDs = OpportunityApproval.getBlApproverIDs(opptyProd.OpportunityId);
+    	oppty = getOpportunity(opptyProd.OpportunityId);
+    	
+    	Map<String, ID> blApproverIDs = OpportunityApproval.getBlApproverIdsWithBl(oppty);
     	
     	System.assertEquals(userIdBL, blApproverIDs.get(BL1));
     	System.assertEquals(userIdBL, blApproverIDs.get(BL2));
     	
-    	OpportunityApproval.setBlApproverIDs(opptyProd.OpportunityId);
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+    	
+    	OpportunityApproval.setBlApproverIDs(oppty, uow);
+    	
+    	uow.commitWork();
+    	
     	oppty = getOpportunity(opptyProd.OpportunityId);
     	
     	System.assertEquals(userIdBL, oppty.BL_Approver_1__c);
@@ -1448,12 +1784,19 @@ private class OpportunityApprovalTest {
     	createOpportunitySchedules(opptyProd.OpportunityId, THRESHOLD_BL * 2);
     	Test.stopTest();
     	
-    	Map<String, ID> blApproverIDs = OpportunityApproval.getBlApproverIDs(opptyProd.OpportunityId);
+    	oppty = getOpportunity(opptyProd.OpportunityId);
+    	
+    	Map<String, ID> blApproverIDs = OpportunityApproval.getBlApproverIdsWithBl(oppty);
     	
     	System.assertEquals(CommonUtils.getDataAdminUserID(), blApproverIDs.get(aBL1));
     	System.assertEquals(CommonUtils.getDataAdminUserID(), blApproverIDs.get(aBL2));
+    	
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
     	    	
-    	OpportunityApproval.setBlApproverIDs(opptyProd.OpportunityId);
+    	OpportunityApproval.setBlApproverIDs(oppty, uow);
+    	
+    	uow.commitWork();
+    	
     	oppty = getOpportunity(opptyProd.OpportunityId);
     	
     	System.assertEquals(CommonUtils.getDataAdminUserID(), oppty.BL_Approver_1__c);
@@ -1475,7 +1818,7 @@ private class OpportunityApprovalTest {
     	
     	createOpportunitySchedules(opptyProd.OpportunityId, THRESHOLD_BL * 2);
     	
-    	Map<String, String> approvers = OpportunityApproval.getAllApprovers(opptyProd.OpportunityId);
+    	Map<String, String> approvers = OpportunityService.getDesignWinApprovers(opptyProd.OpportunityId);
     	
     	System.assertEquals(TEST_USER_MT2, approvers.get(OpportunityApproval.APPROVER_LABELS.get(OpportunityApproval.ApproverLabel.SALES_DIRECTOR_APPROVER)));
     	System.assertEquals(TEST_USER_AUTO, approvers.get(OpportunityApproval.APPROVER_LABELS.get(OpportunityApproval.ApproverLabel.REGIONAL_VP_APPROVER)));
@@ -1485,7 +1828,8 @@ private class OpportunityApprovalTest {
     	System.assertEquals(TEST_USER_BL, approvers.get(OpportunityApproval.APPROVER_LABELS.get(OpportunityApproval.ApproverLabel.BL_APPROVER_1)));
     	System.assertEquals(null, approvers.get(OpportunityApproval.APPROVER_LABELS.get(OpportunityApproval.ApproverLabel.BL_APPROVER_2)));
     	    	
-    	OpportunityApproval.setAllApprovers(opptyProd.OpportunityId);
+    	OpportunityService.updateDesignWinApprovers(new Set<Id>{opptyProd.OpportunityId});
+    	
     	oppty = getOpportunity(opptyProd.OpportunityId);
     	
     	System.assertEquals(userIdMT2, oppty.Sales_Director_Approver__c);
@@ -1512,7 +1856,7 @@ private class OpportunityApprovalTest {
     	
     	createOpportunitySchedules(opptyProd.OpportunityId, THRESHOLD_BL * 2);
     	    	
-    	Map<String, String> approvers = OpportunityApproval.getAllApprovers(opptyProd.OpportunityId);
+    	Map<String, String> approvers = OpportunityService.getDesignWinApprovers(opptyProd.OpportunityId);
     	
     	System.assertEquals(TEST_USER_GAM_STAR, approvers.get(OpportunityApproval.APPROVER_LABELS.get(OpportunityApproval.ApproverLabel.SALES_DIRECTOR_APPROVER)));
     	System.assertEquals(TEST_USER_EVP_STAR, approvers.get(OpportunityApproval.APPROVER_LABELS.get(OpportunityApproval.ApproverLabel.REGIONAL_VP_APPROVER)));
@@ -1522,7 +1866,8 @@ private class OpportunityApprovalTest {
     	System.assertEquals(TEST_USER_BL_STAR, approvers.get(OpportunityApproval.APPROVER_LABELS.get(OpportunityApproval.ApproverLabel.BL_APPROVER_1)));
     	System.assertEquals(null, approvers.get(OpportunityApproval.APPROVER_LABELS.get(OpportunityApproval.ApproverLabel.BL_APPROVER_2)));
     	    	
-    	OpportunityApproval.setAllApprovers(opptyProd.OpportunityId);
+    	OpportunityService.updateDesignWinApprovers(new Set<Id>{opptyProd.OpportunityId});
+    	
     	oppty = getOpportunity(opptyProd.OpportunityId);
     	
     	System.assertEquals(userIdGamSTAR, oppty.Sales_Director_Approver__c);
@@ -1549,7 +1894,7 @@ private class OpportunityApprovalTest {
     	
     	createOpportunitySchedules(opptyProd.OpportunityId, THRESHOLD_BL * 2);
     	    	
-    	Map<String, String> approvers = OpportunityApproval.getAllApprovers(opptyProd.OpportunityId);
+    	Map<String, String> approvers = OpportunityService.getDesignWinApprovers(opptyProd.OpportunityId);
     	
     	System.assertEquals(TEST_USER_GAM_SAMSUNG, approvers.get(OpportunityApproval.APPROVER_LABELS.get(OpportunityApproval.ApproverLabel.SALES_DIRECTOR_APPROVER)));
     	System.assertEquals(TEST_USER_EVP_SAMSUNG, approvers.get(OpportunityApproval.APPROVER_LABELS.get(OpportunityApproval.ApproverLabel.REGIONAL_VP_APPROVER)));
@@ -1559,7 +1904,8 @@ private class OpportunityApprovalTest {
     	System.assertEquals(TEST_USER_BL, approvers.get(OpportunityApproval.APPROVER_LABELS.get(OpportunityApproval.ApproverLabel.BL_APPROVER_1)));
     	System.assertEquals(null, approvers.get(OpportunityApproval.APPROVER_LABELS.get(OpportunityApproval.ApproverLabel.BL_APPROVER_2)));
     	    	
-    	OpportunityApproval.setAllApprovers(opptyProd.OpportunityId);
+    	OpportunityService.updateDesignWinApprovers(new Set<Id>{opptyProd.OpportunityId});
+    	
     	oppty = getOpportunity(opptyProd.OpportunityId);
     	
     	System.assertEquals(userIdGamSamsung, oppty.Sales_Director_Approver__c);
@@ -1618,12 +1964,8 @@ private class OpportunityApprovalTest {
     	return approverMatrix;
     }
     
-    static Opportunity getOpportunity(ID opptyID) {
-        return [select LT_Value_USD__c, Sales_Director_Approver__c, Regional_VP_Approver__c, VP_Approver_2__c, 
-        			   MAG_Approver_1__c, MAG_Approver_2__c, BL_Approver_1__c, BL_Approver_2__c,  
-        			   Account.ParentId, Owner.MT_2__c 
-        		  from Opportunity 
-        		 where Id = :opptyID];    
+    static Opportunity getOpportunity(Id opptyId) {
+    	return new OpportunitiesSelector().selectByIdWithAccountAndOwner(new Set<Id>{opptyId}).get(0);    
     } 
     
     static void testOpptyShare(List<ID> userIDs) {

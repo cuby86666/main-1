@@ -62,288 +62,306 @@ public class OpportunityApproval {
 	class OpportunityApprovalException extends Exception {}
 	
 	interface Approver {
-		ID getOpptySalesDirectorApproverID();
-		ID setOpptySalesDirectorApproverID();
-		ID getOpptyVpApprover1ID();
-		ID setOpptyVpApprover1ID();
-		ID getOpptyVpApprover2ID();
-		ID setOpptyVpApprover2ID(); 
-		Map<String, ID> setOpptyVpApproverIDs();
-		Map<String, ID> getOpptyMagApproverIDs();
-		Map<String, ID> setOpptyMagApproverIDs();
-		Map<String, ID> getOpptyBlApproverIDs();
-		Map<String, ID> setOpptyBlApproverIDs();
+		Id getOpptySalesDirectorApproverId();
+		void setOpptySalesDirectorApproverId(fflib_ISObjectUnitOfWork uow);
+		
+		Id getOpptyVpApprover1Id();
+		void setOpptyVpApprover1Id(fflib_ISObjectUnitOfWork uow);
+		
+		Id getOpptyVpApprover2Id();
+		void setOpptyVpApprover2Id(fflib_ISObjectUnitOfWork uow);
+		
+		Map<String, Id> getOpptyVpApproverIds();
+		void setOpptyVpApproverIds(fflib_ISObjectUnitOfWork uow);
+		
+		Map<String, Id> getOpptyMagApproverIdsWithMag();
+		Map<String, Id> getOpptyMagApproverIds();
+		void setOpptyMagApproverIds(fflib_ISObjectUnitOfWork uow);
+		
+		Map<String, Id> getOpptyBlApproverIdsWithBl();
+		Map<String, Id> getOpptyBlApproverIds();
+		void setOpptyBlApproverIds(fflib_ISObjectUnitOfWork uow);
+		
 		Map<String, String> getOpptyAllApprovers(); 
-		void setOpptyAllApprovers();
+		void setOpptyAllApprovers(fflib_ISObjectUnitOfWork uow);
 	}
 	
 	abstract class AbstractApprover implements Approver {
-		protected ID opptyID;
 		protected Opportunity oppty; 
 		
-		AbstractApprover(ID opptyID) {
-			this.opptyID = opptyID;
-			this.oppty = [select LT_Value_USD__c, Account.CMD_Industry_Segment__c, Account.Region__c, Owner.MT_1__c, Owner.MT_2__c from Opportunity where Id = :opptyID];	
+		AbstractApprover(Opportunity oppty) {
+			this.oppty = oppty;
 		}
 		
-		abstract ID getOpptySalesDirectorApproverID();
-		abstract ID getOpptyVpApprover1ID();
+		abstract Id getOpptySalesDirectorApproverId();
+		abstract Id getOpptyVpApprover1Id();
 				
 		protected abstract List<Approvers_Matrix__c> getMagApprovers(Set<String> mags);
 		protected abstract List<Approvers_Matrix__c> getBlApprovers(Set<String> bls);
 				
-		public virtual ID getOpptyVpApprover2ID() {
+		public virtual Id getOpptyVpApprover2Id() {
 			return null;
 		}
 		
-		public Map<String, ID> getOpptyMagApproverIDs() {
-			Map<String, ID> result = new Map<String, ID>();
+		public void setOpptySalesDirectorApproverId(fflib_ISObjectUnitOfWork uow) {
+			p('setOpptySalesDirectorApproverId');
+			this.oppty.Sales_Director_Approver__c = getOpptySalesDirectorApproverId();
+			
+			if (this.oppty.Sales_Director_Approver__c != null) {
+				createOpptyShares(new List<Id>{this.oppty.Sales_Director_Approver__c}, uow);
+				updateOppty(uow);
+			}
+		}
+		
+		public void setOpptyVpApprover1Id(fflib_ISObjectUnitOfWork uow) {
+			p('setOpptyVpApprover1Id');
+			this.oppty.Regional_VP_Approver__c = getOpptyVpApprover1Id();
+			
+			if (this.oppty.Regional_VP_Approver__c != null) {
+				createOpptyShares(new List<Id>{this.oppty.Regional_VP_Approver__c}, uow);
+				updateOppty(uow);
+			}	
+		}
+		
+		public void setOpptyVpApprover2Id(fflib_ISObjectUnitOfWork uow) {
+			p('setOpptyVpApprover2Id');
+			this.oppty.VP_Approver_2__c = getOpptyVpApprover2Id();
+			
+			if (this.oppty.VP_Approver_2__c != null) {
+				createOpptyShares(new List<Id>{this.oppty.VP_Approver_2__c}, uow);
+				updateOppty(uow);
+			}
+		}
+		
+		public Map<String, Id> getOpptyVpApproverIds() {
+			p('getOpptyVpApproverIds');
+			Map<String, Id> result = new Map<String, Id>();
+			
+			Id vpApprover1Id = getOpptyVpApprover1Id();
+			Id vpApprover2Id = getOpptyVpApprover2Id();
+			vpApprover2Id = (vpApprover1Id != vpApprover2Id) ? vpApprover2Id : null; // De-duplication	
+			
+			if (vpApprover1Id != null) {
+				result.put(Opportunity.Regional_VP_Approver__c.getDescribe().getName(), vpApprover1Id);	
+			}
+			
+			if (vpApprover2Id != null) {
+				result.put(Opportunity.VP_Approver_2__c.getDescribe().getName(), vpApprover2Id);	
+			}
+			
+			return result;
+		}
+		
+		public void setOpptyVpApproverIds(fflib_ISObjectUnitOfWork uow) {
+			p('setOpptyVpApproverIds');
+			Map<String, Id> vpApproverIds = getOpptyVpApproverIds();
+			
+			this.oppty.Regional_VP_Approver__c = vpApproverIds.get(Opportunity.Regional_VP_Approver__c.getDescribe().getName());
+			this.oppty.VP_Approver_2__c = vpApproverIds.get(Opportunity.VP_Approver_2__c.getDescribe().getName());
+			 
+			if (vpApproverIds.size() > 0) {
+				createOpptyShares(vpApproverIds.values(), uow);
+				updateOppty(uow);
+			}
+		}
+		
+		public Map<String, Id> getOpptyMagApproverIdsWithMag() {
+			p('getOpptyMagApproverIdsWithMag');
+			Map<String, Id> result = new Map<String, Id>();
 			
 			Map<String, Double> magLtValues = new Map<String, Double>();
 			
-			List<AggregateResult> opptyProdMagLtValues = 
-				[select PricebookEntry.Product2.MAG__c mag, sum(LT_Value_USD__c) totalMagLtValue
-               	   from OpportunityLineItem 
-              	  where OpportunityId = :this.opptyID 
-              	    and Prod_Lost_Cancelled__c = null
-             	 group by PricebookEntry.Product2.MAG__c]; 
-             	 
-			for (AggregateResult ar : opptyProdMagLtValues) {
-				magLtValues.put((String)ar.get('mag'), (Double)ar.get('totalMagLtValue'));		
-			} 
+			for (OpportunityLineItemsSelector.OpportunityProductValueSummary opvs : new OpportunityLineItemsSelector().selectLifetimeValueByOpptyIdGroupByMag(new Set<Id>{this.oppty.Id})) {
+				magLtValues.put(opvs.mag, opvs.totalMagLtValue);	
+			}
 			
 			List<Approvers_Matrix__c> amMagApprovers = getMagApprovers(magLtValues.keySet());
-			Map<String, ID> magApproverIDs = new Map<String, ID>();
+			Map<String, Id> magApproverIds = new Map<String, Id>();
 			Map<String, Double> magThresholds = new Map<String, Double>();
 			
 			for (Approvers_Matrix__c am : amMagApprovers) {
-				magApproverIDs.put(am.Criteria_1__c, am.Approver__c);
+				magApproverIds.put(am.Criteria_1__c, am.Approver__c);
 				magThresholds.put(am.Criteria_1__c, am.Threshold_1__c);	
 			}           	 
 
 			for (String mag : magLtValues.keySet()) {
-				if (magApproverIDs.containsKey(mag)) {
+				if (magApproverIds.containsKey(mag)) {
 					if (magLtValues.get(mag) > magThresholds.get(mag)) {
-						result.put(mag, magApproverIDs.get(mag));	
+						result.put(mag, magApproverIds.get(mag));	
 					}	
 				} else {
-					result.put(mag, CommonUtils.getDataAdminUserID());
+					result.put(mag, CommonUtils.getDataAdminUserId());
 				}
 			}
 						
 			return result;
 		}
 		
-		public Map<String, ID> getOpptyBlApproverIDs() {
-			Map<String, ID> result = new Map<String, ID>();
+		public Map<String, Id> getOpptyMagApproverIds() {
+			p('getOpptyMagApproverIds');
+			Map<String, Id> result = new Map<String, Id>();
+			
+			Map<String, Id> magApproverIds = getOpptyMagApproverIdsWithMag();
+			List<Id> approverIds = new List<Id>(new Set<Id>(magApproverIds.values())); // De-duplication
+			
+			if (approverIds.size() > MAG_APPROVER_FIELDS.size()) {
+				throw new OpportunityApprovalException('The approval process allows a maximum of ' + MAG_APPROVER_FIELDS.size() + ' MAG Approvers on the Opportunity. Please contact Global Sales Application Support.');
+			}
+			
+			for (Integer i = 0; i < approverIds.size(); i++) {
+				String fieldName = MAG_APPROVER_FIELDS.get(i);
+				Id approverId = approverIds.get(i);  
+				
+				this.oppty.put(fieldName, approverId);
+				result.put(fieldName, approverId);	
+			}
+			
+			return result;	
+		}
+		
+		public void setOpptyMagApproverIds(fflib_ISObjectUnitOfWork uow) {
+			p('setOpptyMagApproverIds');
+			Map<String, Id> magApproverIds = getOpptyMagApproverIds();
+			
+			if (magApproverIds.size() > 0) {
+				createOpptyShares(magApproverIds.values(), uow);
+				updateOppty(uow);
+			}
+		}
+		
+		public Map<String, Id> getOpptyBlApproverIdsWithBl() {
+			p('getOpptyBlApproverIdsWithBl');
+			Map<String, Id> result = new Map<String, Id>();
 			
 			Map<String, Double> blLtValues = new Map<String, Double>();
 			
-			List<AggregateResult> opptyProdBlLtValues = 
-				[select PricebookEntry.Product2.BL__c bl, sum(LT_Value_USD__c) totalBlLtValue
-               	   from OpportunityLineItem 
-              	  where OpportunityId = :this.opptyID 
-              	    and Prod_Lost_Cancelled__c = null
-             	 group by PricebookEntry.Product2.BL__c];
-             	 
-			for (AggregateResult ar : opptyProdBlLtValues) {
-				blLtValues.put((String)ar.get('bl'), (Double)ar.get('totalBlLtValue'));		
-			} 
+			for (OpportunityLineItemsSelector.OpportunityProductValueSummary opvs : new OpportunityLineItemsSelector().selectLifetimeValueByOpptyIdGroupByBl(new Set<Id>{this.oppty.Id})) {
+				blLtValues.put(opvs.bl, opvs.totalBlLtValue);	
+			}
 			
 			List<Approvers_Matrix__c> amBlApprovers = getBlApprovers(blLtValues.keySet());
-			Map<String, ID> blApproverIDs = new Map<String, ID>();
+			Map<String, Id> blApproverIds = new Map<String, Id>();
 			Map<String, Double> blThresholds = new Map<String, Double>();
 			
 			for (Approvers_Matrix__c am : amBlApprovers) {
-				blApproverIDs.put(am.Criteria_1__c, am.Approver__c);
+				blApproverIds.put(am.Criteria_1__c, am.Approver__c);
 				blThresholds.put(am.Criteria_1__c, am.Threshold_1__c);	
 			}           	 
 
 			for (String bl : blLtValues.keySet()) {
-				if (blApproverIDs.containsKey(bl)) {
+				if (blApproverIds.containsKey(bl)) {
 					if (blLtValues.get(bl) > blThresholds.get(bl)) {
-						result.put(bl, blApproverIDs.get(bl));	
+						result.put(bl, blApproverIds.get(bl));	
 					}	
 				} else {
-					result.put(bl, CommonUtils.getDataAdminUserID());
+					result.put(bl, CommonUtils.getDataAdminUserId());
 				}
 			}           	 
 			
 			return result;
 		}
-				
-		public ID setOpptySalesDirectorApproverID() {
-			this.oppty.Sales_Director_Approver__c = getOpptySalesDirectorApproverID();
-			
-			if (this.oppty.Sales_Director_Approver__c != null) {
-				createOpptyShares(new List<ID>{this.oppty.Sales_Director_Approver__c});
-				updateOppty();
-			}
-			
-			return this.oppty.Sales_Director_Approver__c; 
-		}
 		
-		public ID setOpptyVpApprover1ID() {
-			this.oppty.Regional_VP_Approver__c = getOpptyVpApprover1ID();
+		public Map<String, Id> getOpptyBlApproverIds() {
+			p('getOpptyBlApproverIds');
+			Map<String, Id> result = new Map<String, Id>();
 			
-			if (this.oppty.Regional_VP_Approver__c != null) {
-				createOpptyShares(new List<ID>{this.oppty.Regional_VP_Approver__c});
-				updateOppty();
-			}	
+			Map<String, Id> blApproverIds = getOpptyBlApproverIdsWithBl();
+			List<Id> approverIds = new List<Id>(new Set<Id>(blApproverIds.values())); // De-duplication  
 			
-			return this.oppty.Regional_VP_Approver__c; 
-		}
-		
-		public ID setOpptyVpApprover2ID() {
-			this.oppty.VP_Approver_2__c = getOpptyVpApprover2ID();
-			
-			if (this.oppty.VP_Approver_2__c != null) {
-				createOpptyShares(new List<ID>{this.oppty.VP_Approver_2__c});
-				updateOppty();
-			}
-			
-			return this.oppty.VP_Approver_2__c; 	
-		}
-		
-		public Map<String, ID> setOpptyVpApproverIDs() {
-			Map<String, ID> result = new Map<String, ID>();
-			
-			ID vpApprover1ID = getOpptyVpApprover1ID();
-			ID vpApprover2ID = getOpptyVpApprover2ID();
-			vpApprover2ID = (vpApprover1ID != vpApprover2ID) ? vpApprover2ID : null; // De-duplication   
-			
-			this.oppty.Regional_VP_Approver__c = vpApprover1ID;
-			this.oppty.VP_Approver_2__c = vpApprover2ID; 
-			
-			if (vpApprover1ID != null) {
-				result.put(Opportunity.Regional_VP_Approver__c.getDescribe().getName(), vpApprover1ID);	
-			}
-			
-			if (vpApprover2ID != null) {
-				result.put(Opportunity.VP_Approver_2__c.getDescribe().getName(), vpApprover2ID);	
-			}
-			
-			if (result.size() > 0) {
-				createOpptyShares(result.values());
-				updateOppty();
-			}
-			
-			return result;	
-		}
-		
-		public Map<String, ID> setOpptyMagApproverIDs() {
-			Map<String, ID> result = new Map<String, ID>();
-			
-			Map<String, ID> magApproverIDs = getOpptyMagApproverIDs();
-			List<ID> approverIDs = new List<ID>(new Set<ID>(magApproverIDs.values())); // De-duplication
-			
-			if (approverIDs.size() > MAG_APPROVER_FIELDS.size()) {
-				throw new OpportunityApprovalException('The approval process allows a maximum of ' + MAG_APPROVER_FIELDS.size() + ' MAG Approvers on the Opportunity. Please contact Global Sales Application Support.');
-			}
-			
-			for (Integer i = 0; i < approverIDs.size(); i++) {
-				String fieldName = MAG_APPROVER_FIELDS.get(i);
-				ID approverID = approverIDs.get(i);  
-				
-				this.oppty.put(fieldName, approverID);
-				result.put(fieldName, approverID);	
-			}
-			
-			if (result.size() > 0) {
-				createOpptyShares(approverIDs);
-				updateOppty();
-			}
-				
-			return result;
-		}
-		
-		public Map<String, ID> setOpptyBlApproverIDs() {
-			Map<String, ID> result = new Map<String, ID>();
-			
-			Map<String, ID> blApproverIDs = getOpptyBlApproverIDs();
-			List<ID> approverIDs = new List<ID>(new Set<ID>(blApproverIDs.values())); // De-duplication  
-			
-			if (approverIDs.size() > BL_APPROVER_FIELDS.size()) {
+			if (approverIds.size() > BL_APPROVER_FIELDS.size()) {
 				throw new OpportunityApprovalException('The approval process allows a maximum of ' + BL_APPROVER_FIELDS.size() + ' BL Approvers on the Opportunity. Please contact Global Sales Application Support.');
 			}
 			
-			for (Integer i = 0; i < approverIDs.size(); i++) {
+			for (Integer i = 0; i < approverIds.size(); i++) {
 				String fieldName = BL_APPROVER_FIELDS.get(i);
-				ID approverID = approverIDs.get(i);  
+				Id approverId = approverIds.get(i);  
 				
-				this.oppty.put(fieldName, approverID);
-				result.put(fieldName, approverID);	
-			}
-			
-			if (result.size() > 0) {
-				createOpptyShares(approverIDs);
-				updateOppty();
-			}
-			
-			return result;
-		}
-		
-		public Map<String, String> getOpptyAllApprovers() {
-			Map<String, String> result = new Map<String, String>();
-			
-			Map<ApproverLabel, ID> approverIDs = getOpptyAllApproverIDs();
-			Map<ID, User> userNames = getUserNames(approverIDs.values());
-			
-			for (ApproverLabel al : approverIDs.keySet()) {
-				result.put(APPROVER_LABELS.get(al), (userNames.get(approverIDs.get(al)) != null) ? userNames.get(approverIDs.get(al)).Name : null);
+				this.oppty.put(fieldName, approverId);
+				result.put(fieldName, approverId);	
 			}
 			
 			return result;	
 		}
 		
-		public void setOpptyAllApprovers() {
-			resetOpptyAllApprovers();
+		public void setOpptyBlApproverIds(fflib_ISObjectUnitOfWork uow) {
+			p('setOpptyBlApproverIds');
+			Map<String, Id> blApproverIds = getOpptyBlApproverIds();
 			
-			List<ID> approverIDs = getOpptyAllApproverIDs().values();
+			if (blApproverIds.size() > 0) {
+				createOpptyShares(blApproverIds.values(), uow);
+				updateOppty(uow);
+			}
+		}
+		
+		public Map<String, String> getOpptyAllApprovers() {
+			p('getOpptyAllApprovers');
+			Map<String, String> result = new Map<String, String>();
+			
+			Map<ApproverLabel, Id> approverIds = getOpptyAllApproverIds();
+			
+			Map<Id, User> userNames = new Map<Id, User>(
+				new UsersSelector().selectById(new Set<Id>(approverIds.values()))
+			);
+			
+			for (ApproverLabel al : approverIds.keySet()) {
+				result.put(APPROVER_LABELS.get(al), (userNames.get(approverIds.get(al)) != null) ? userNames.get(approverIds.get(al)).Name : null);
+			}
+			
+			return result;	
+		}
+		
+		public void setOpptyAllApprovers(fflib_ISObjectUnitOfWork uow) {
+			p('setOpptyAllApprovers');
+			resetOpptyAllApprovers();
 			
 			isUpdatable = true;
 			
-			if (approverIDs.size() > 0) {
-				createOpptyShares(approverIDs);	
-			}
-			
-			updateOppty();
+			setOpptySalesDirectorApproverId(uow);
+			setOpptyVpApproverIds(uow);
+			setOpptyMagApproverIds(uow);
+			setOpptyBlApproverIds(uow);
 		}
 		
 		protected Double getOpptyLtValueUSD() {
+			p('getOpptyLtValueUSD');
 			return this.oppty.LT_Value_USD__c; 
 		}
 		
-		protected ID getOpptyOwnerMT1() {
+		protected Id getOpptyOwnerMT1() {
+			p('getOpptyOwnerMT1');
 			return this.oppty.Owner.MT_1__c; 
 		}
 		
-		protected ID getOpptyOwnerMT2() {
+		protected Id getOpptyOwnerMT2() {
+			p('getOpptyOwnerMT2');
 			return this.oppty.Owner.MT_2__c; 
 		}
 		
 		private void resetOpptyAllApprovers() {
+			p('resetOpptyAllApprovers');
 			for (String fieldName : ALL_APPROVER_FIELDS) {
 				this.oppty.put(fieldName, null);	
 			}		
 		}
 		
-		private Map<ApproverLabel, ID> getOpptyAllApproverIDs() {
+		private Map<ApproverLabel, Id> getOpptyAllApproverIds() {
+			p('getOpptyAllApproverIds');
 			isUpdatable = false;
 			
-			Map<ApproverLabel, ID> result = new Map<ApproverLabel, ID>();
+			Map<ApproverLabel, Id> result = new Map<ApproverLabel, Id>();
 			
-			result.put(ApproverLabel.SALES_DIRECTOR_APPROVER, setOpptySalesDirectorApproverID());
+			result.put(ApproverLabel.SALES_DIRECTOR_APPROVER, getOpptySalesDirectorApproverId());
 			
-			Map<String, ID> approverIDs = new Map<String, ID>();
-			approverIDs.putAll(setOpptyVpApproverIDs());
-			approverIDs.putAll(setOpptyMagApproverIDs());
-			approverIDs.putAll(setOpptyBlApproverIDs());
+			Map<String, Id> approverIds = new Map<String, Id>();
 			
-			for (String fieldName : approverIDs.keySet()) {
+			approverIds.putAll(getOpptyVpApproverIds());
+			approverIds.putAll(getOpptyMagApproverIds());
+			approverIds.putAll(getOpptyBlApproverIds());
+			
+			for (String fieldName : approverIds.keySet()) {
 				for (ApproverLabel al : ApproverLabel.values()) {
 					if (fieldName.containsIgnoreCase(al.name())) {
-						result.put(al, approverIDs.get(fieldName));
+						result.put(al, approverIds.get(fieldName));
 						break;
 					}
 				}	
@@ -352,98 +370,107 @@ public class OpportunityApproval {
 			return result;
 		}
 		
-		private Map<ID, User> getUserNames(List<ID> userIDs) {
-			return new Map<ID, User>([select Name from User where Id in :userIDs]);
-		}
-		
-		private void updateOppty() {
+		private void updateOppty(fflib_ISObjectUnitOfWork uow) {
+			p('updateOppty');
 			if (!isUpdatable) return;
 			
-			update this.oppty;	
+			uow.registerDirty(this.oppty);	
 		}
 		
-		private void createOpptyShares(List<ID> userIDs) {
+		private void createOpptyShares(List<Id> userIds, fflib_ISObjectUnitOfWork uow) {
+			p('createOpptyShares');
 			if (!isUpdatable) return;
 			
 			List<OpportunityShare> opptyShares = new List<OpportunityShare>();
 			
-			for (ID uid : userIDs) {
+			for (Id uid : userIds) {
 				if (uid != null) {
-					opptyShares.add(new OpportunityShare(OpportunityId = this.opptyID, OpportunityAccessLevel = 'Read', UserOrGroupId = uid));	
+					opptyShares.add(new OpportunityShare(OpportunityId = this.oppty.Id, OpportunityAccessLevel = 'Read', UserOrGroupId = uid));	
 				}
 			} 
 			
 			if (opptyShares.size() > 0) {
-				insert opptyShares;	
+				uow.registerNew(opptyShares);	
 			}
 		}
 	}
 	
 	abstract class MajorAccountApprover extends AbstractApprover {
-		MajorAccountApprover(ID opptyID) {
-			super(opptyID);
+		MajorAccountApprover(Opportunity oppty) {
+			super(oppty);
 		}
 		
-		protected ID getApproverID(Approvers_Matrix__c approverMatrix) {
+		protected Id getApproverId(Approvers_Matrix__c approverMatrix) {
+			p('getApproverId');
 			return (getOpptyLtValueUSD() > approverMatrix.Threshold_1__c) ? approverMatrix.Approver__c : null;	
 		}	
 	}
 	
 	class StarApprover extends MajorAccountApprover {
-		StarApprover(ID opptyID) {
-			super(opptyID);
+		StarApprover(Opportunity oppty) {
+			super(oppty);
 		}
 		
-		public override ID getOpptySalesDirectorApproverID() {
-			return getApproverID(ApproverMatrixHelper.getDirectOpptyGamSTAR());
+		public override Id getOpptySalesDirectorApproverId() {
+			p('getOpptySalesDirectorApproverId');
+			return getApproverId(ApproverMatrixHelper.getDirectOpptyGamSTAR());
 		}
 		
-		public override ID getOpptyVpApprover1ID() {
-			return getApproverID(ApproverMatrixHelper.getDirectOpptyEvpSTAR());
+		public override Id getOpptyVpApprover1Id() {
+			p('getOpptyVpApprover1Id');
+			return getApproverId(ApproverMatrixHelper.getDirectOpptyEvpSTAR());
 		}
 		
 		protected override List<Approvers_Matrix__c> getMagApprovers(Set<String> mags) {
+			p('getMagApprovers');
 			return ApproverMatrixHelper.getDirectOpptyMagApproversSTAR(mags);
 		}
 		
 		protected override List<Approvers_Matrix__c> getBlApprovers(Set<String> bls) {
+			p('getBlApprovers');
 			return ApproverMatrixHelper.getDirectOpptyBlApproversSTAR(bls);
 		}
 	}
 	
 	class SamsungApprover extends MajorAccountApprover {
-		SamsungApprover(ID opptyID) {
-			super(opptyID);
+		SamsungApprover(Opportunity oppty) {
+			super(oppty);
 		}
 		
-		public override ID getOpptySalesDirectorApproverID() {
-			return getApproverID(ApproverMatrixHelper.getDirectOpptyGamSamsung());
+		public override Id getOpptySalesDirectorApproverId() {
+			p('getOpptySalesDirectorApproverId');
+			return getApproverId(ApproverMatrixHelper.getDirectOpptyGamSamsung());
 		}
 		
-		public override ID getOpptyVpApprover1ID() {
-			return getApproverID(ApproverMatrixHelper.getDirectOpptyEvpSamsung());
+		public override Id getOpptyVpApprover1Id() {
+			p('getOpptyVpApprover1Id');
+			return getApproverId(ApproverMatrixHelper.getDirectOpptyEvpSamsung());
 		}
 		
 		protected override List<Approvers_Matrix__c> getMagApprovers(Set<String> mags) {
+			p('getMagApprovers');
 			return ApproverMatrixHelper.getDirectOpptyMagApprovers(mags);
 		}
 		
 		protected override List<Approvers_Matrix__c> getBlApprovers(Set<String> bls) {
+			p('getBlApprovers');
 			return ApproverMatrixHelper.getDirectOpptyBlApprovers(bls);
 		}
 	}
 	
 	class GeneralApprover extends AbstractApprover {
-		GeneralApprover(ID opptyID) {
-			super(opptyID);
+		GeneralApprover(Opportunity oppty) {
+			super(oppty);
 		}
 		
-		public override ID getOpptySalesDirectorApproverID() {
+		public override Id getOpptySalesDirectorApproverId() {
+			p('getOpptySalesDirectorApproverId');
 			return (getOpptyLtValueUSD() > ApproverMatrixHelper.getDirectOpptyGsmSalesDirector().Threshold_1__c) ? getOpptyOwnerMT2() : null;
 		}
 		
-		public override ID getOpptyVpApprover1ID() {
-			ID result;
+		public override Id getOpptyVpApprover1Id() {
+			p('getOpptyVpApprover1Id');
+			Id result;
 			
 			Approvers_Matrix__c amSegmentVpAuto = ApproverMatrixHelper.getDirectOpptySegmentVpAuto();
 			Approvers_Matrix__c amGsmVp1 = ApproverMatrixHelper.getDirectOpptyGsmVp1();
@@ -469,8 +496,9 @@ public class OpportunityApproval {
 			return result;
 		}
 		
-		public override ID getOpptyVpApprover2ID() {
-			ID result;
+		public override Id getOpptyVpApprover2Id() {
+			p('getOpptyVpApprover2Id');
+			Id result;
 			
 			Approvers_Matrix__c amGsmVp2AutoGC = ApproverMatrixHelper.getDirectOpptyGsmVp2AutoGC();
 			Approvers_Matrix__c amGsmVp2AutoSAP = ApproverMatrixHelper.getDirectOpptyGsmVp2AutoSAP();
@@ -491,100 +519,106 @@ public class OpportunityApproval {
 		}
 		
 		protected override List<Approvers_Matrix__c> getMagApprovers(Set<String> mags) {
+			p('getMagApprovers');
 			return ApproverMatrixHelper.getDirectOpptyMagApprovers(mags);	
 		}
 		
 		protected override List<Approvers_Matrix__c> getBlApprovers(Set<String> bls) {
+			p('getBlApprovers');
 			return ApproverMatrixHelper.getDirectOpptyBlApprovers(bls);
 		}
 	} 
 	
-	public static Map<String, String> getAllApprovers(ID opptyID) {
-		return getApprover(opptyID).getOpptyAllApprovers();	
+	public static Map<String, String> getAllApprovers(Opportunity oppty) {
+		p('getAllApprovers');
+		return getApprover(oppty).getOpptyAllApprovers();	
 	}
 	
-	public static void setAllApprovers(ID opptyID) {
-		getApprover(opptyID).setOpptyAllApprovers();
+	public static void setAllApprovers(Opportunity oppty, fflib_ISObjectUnitOfWork uow) {
+		p('setAllApprovers');
+		getApprover(oppty).setOpptyAllApprovers(uow);
 	}
 	
 	@TestVisible
-	private static ID getSalesDirectorApproverID(ID opptyID) {
-		return getApprover(opptyID).getOpptySalesDirectorApproverID();
+	private static Id getSalesDirectorApproverId(Opportunity oppty) {
+		return getApprover(oppty).getOpptySalesDirectorApproverId();
 	} 
 	
 	@TestVisible
-	private static void setSalesDirectorApproverID(ID opptyID) {
-		getApprover(opptyID).setOpptySalesDirectorApproverID();	
+	private static void setSalesDirectorApproverId(Opportunity oppty, fflib_ISObjectUnitOfWork uow) {
+		getApprover(oppty).setOpptySalesDirectorApproverId(uow);	
 	}
 	
 	@TestVisible
-	private static ID getVpApprover1ID(ID opptyID) {
-		return getApprover(opptyID).getOpptyVpApprover1ID();
+	private static Id getVpApprover1Id(Opportunity oppty) {
+		return getApprover(oppty).getOpptyVpApprover1Id();
 	}
 	
 	@TestVisible
-	private static void setVpApprover1ID(ID opptyID) {
-		getApprover(opptyID).setOpptyVpApprover1ID();	
+	private static void setVpApprover1Id(Opportunity oppty, fflib_ISObjectUnitOfWork uow) {
+		getApprover(oppty).setOpptyVpApprover1Id(uow);	
 	}
 	
 	@TestVisible
-	private static ID getVpApprover2ID(ID opptyID) {
-		return getApprover(opptyID).getOpptyVpApprover2ID();
+	private static Id getVpApprover2Id(Opportunity oppty) {
+		return getApprover(oppty).getOpptyVpApprover2Id();
 	}
 	
 	@TestVisible
-	private static void setVpApprover2ID(ID opptyID) {
-		getApprover(opptyID).setOpptyVpApprover2ID();	
+	private static void setVpApprover2Id(Opportunity oppty, fflib_ISObjectUnitOfWork uow) {
+		getApprover(oppty).setOpptyVpApprover2Id(uow);	
 	}
 	
 	@TestVisible
-	private static void setVpApproverIDs(ID opptyID) {
-		getApprover(opptyID).setOpptyVpApproverIDs();	
+	private static void setVpApproverIds(Opportunity oppty, fflib_ISObjectUnitOfWork uow) {
+		getApprover(oppty).setOpptyVpApproverIds(uow);	
 	}
 	
 	@TestVisible
-	private static Map<String, ID> getMagApproverIDs(ID opptyID) {
-		return getApprover(opptyID).getOpptyMagApproverIDs();
+	private static Map<String, Id> getMagApproverIdsWithMag(Opportunity oppty) {
+		return getApprover(oppty).getOpptyMagApproverIdsWithMag();
 	}
 	
 	@TestVisible
-	private static void setMagApproverIDs(ID opptyID) {
-		getApprover(opptyID).setOpptyMagApproverIDs();
+	private static void setMagApproverIds(Opportunity oppty, fflib_ISObjectUnitOfWork uow) {
+		getApprover(oppty).setOpptyMagApproverIds(uow);
 	}
 	
 	@TestVisible
-	private static Map<String, ID> getBlApproverIDs(ID opptyID) {
-		return getApprover(opptyID).getOpptyBlApproverIDs();
+	private static Map<String, Id> getBlApproverIdsWithBl(Opportunity oppty) {
+		return getApprover(oppty).getOpptyBlApproverIdsWithBl();
 	}
 	
 	@TestVisible
-	private static void setBlApproverIDs(ID opptyID) {
-		getApprover(opptyID).setOpptyBlApproverIDs();
+	private static void setBlApproverIds(Opportunity oppty, fflib_ISObjectUnitOfWork uow) {
+		getApprover(oppty).setOpptyBlApproverIds(uow);
 	}
 	
-	private static Approver getApprover(ID opptyID) {
+	private static Approver getApprover(Opportunity oppty) {
 		if (approver == null) {
-			setApprover(opptyID);	
+			setApprover(oppty);	
 		}
 		
 		return approver;		
 	}
 	
-	private static void setApprover(ID opptyID) {
-		String parentAccountName = getParentAccountName(opptyID);
+	private static void setApprover(Opportunity oppty) {
+		String parentAccountName = oppty.Account.Parent.Name;
 		
 		if (parentAccountName == AccountHelper.PARENT_ACCOUNT_STAR) {
-			approver = new StarApprover(opptyID);
+			p('StarApprover');
+			approver = new StarApprover(oppty);
 		} else if (parentAccountName == AccountHelper.PARENT_ACCOUNT_SAMSUNG) {
-			approver = new SamsungApprover(opptyID);
+			p('SamsungApprover');
+			approver = new SamsungApprover(oppty);
 		} else {
-			approver = new GeneralApprover(opptyID);	
+			p('GeneralApprover');
+			approver = new GeneralApprover(oppty);	
 		}	
 	}
 	
-	private static String getParentAccountName(ID opptyID) {
-		Opportunity oppty = [select Account.Parent.Name from Opportunity where Id = :opptyID];
-		
-		return oppty.Account.Parent.Name;
-	}   
+	private static void p(String msg) {
+		System.debug('//-c OpportunityApproval - ' + msg);
+	}
+	
 }

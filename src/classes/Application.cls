@@ -7,6 +7,7 @@ public class Application {
 				Product2.SObjectType, 
 				PricebookEntry.SObjectType,
 				Opportunity.SObjectType, 
+				OpportunityShare.SObjectType,
 				OpportunitySchedule__c.SObjectType,
 				OpportunityLineItem.SObjectType
 			}

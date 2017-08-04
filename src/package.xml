@@ -21,10 +21,6 @@
         <name>CustomLabels</name>
     </types>
     <types>
-        <members>*</members>
-        <name>CustomObject</name>
-    </types>
-    <types>
         <members>Account</members>
         <members>Opportunity</members>
         <members>OpportunityLineItem</members>

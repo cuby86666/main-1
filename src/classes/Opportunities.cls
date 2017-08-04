@@ -11,12 +11,12 @@ public class Opportunities extends ApplicationDomain {
 	}
 	
 	public override void onBeforeInsert() {
-		System.debug('//- Opportunities.onBeforeInsert');
+		p('onBeforeInsert');
 		updateLastBusinessModifiedInfo();	
 	}
 	
 	public override void onBeforeUpdate(Map<Id,SObject> existingRecords) {
-		System.debug('//- Opportunities.onBeforeUpdate');
+		p('onBeforeUpdate');
 		bypassValidation((Map<Id, Opportunity>)existingRecords);	
 		
 		if (!CommonUtils.isAdminOrIntegrationUser()) {
@@ -25,11 +25,20 @@ public class Opportunities extends ApplicationDomain {
 	}
 	
 	public override void onAfterUpdate(Map<Id, SObject> existingRecords) {
-		System.debug('//- Opportunities.onAfterUpdate');
+		p('onAfterUpdate');
 		updateOpptyProdPrograms((Map<Id, Opportunity>)existingRecords);
 	}
 	
+	public void updateDesignWinApprovers(fflib_ISObjectUnitOfWork uow) {
+		p('updateDesignWinApprovers');
+		for (Opportunity oppty : (List<Opportunity>)records) {
+			//J OpportunityApproval.setAllApprovers(oppty.Id, uow);
+			OpportunityApproval.setAllApprovers(oppty, uow);
+		}	
+	}
+	
 	private void bypassValidation(Map<Id, Opportunity> existingRecords) {
+		p('bypassValidation');
 		for (Opportunity oppty : (List<Opportunity>)records) {
 			oppty.Bypass_Validation__c = false;
 			
@@ -59,6 +68,7 @@ public class Opportunities extends ApplicationDomain {
 	}
 	
 	private void updateLastBusinessModifiedInfo() {
+		p('updateLastBusinessModifiedInfo');
 		for (Opportunity oppty : (List<Opportunity>)records) {
 			oppty.Last_Business_Modified_By_Id__c = UserInfo.getUserId();
 	        oppty.Last_Business_Modified_Date__c = Datetime.now();	
@@ -66,6 +76,7 @@ public class Opportunities extends ApplicationDomain {
 	}
 	
 	private void updateOpptyProdPrograms(Map<Id, Opportunity> existingRecords) {
+		p('updateOpptyProdPrograms');
 		Set<Id> opptyIds = new Set<Id>();
 		
 		for (Opportunity oppty : (List<Opportunity>)records) {
@@ -85,10 +96,16 @@ public class Opportunities extends ApplicationDomain {
 	        
 	        if (opptyProds.size() > 0) {
 	        	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
-	        	new OpportunityLineItems(opptyProds).updatePrograms(uow);	
+	        	
+	        	new OpportunityLineItems(opptyProds).updatePrograms(uow);
+	        		
 	        	uow.commitWork();
 	        }	
 		}	
+	}
+	
+	private static void p(String msg) {
+		System.debug('//-d Opportunities - ' + msg);
 	}
     
 }

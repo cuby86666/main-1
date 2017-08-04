@@ -161,10 +161,10 @@ private class OpportunitiesTest {
 	    oppty.Design_Win_Approval_Process__c = 'Approved';
 	    update oppty;
 	    
-	    OpportunityProgram__c opptyProg = new OpportunityProgram__c(Name = 'Test Program 1');
-	    insert opptyProg;
-	        
-    	System.runAs(user) {
+	    System.runAs(user) {
+	    	OpportunityProgram__c opptyProg = new OpportunityProgram__c(Name = 'Test Program 1');
+	    	insert opptyProg;
+	            	
 	        oppty.Program__c = opptyProg.Id;
 	        update oppty;
 	        
@@ -192,7 +192,7 @@ private class OpportunitiesTest {
 	    update oppty;
 	    
 	    System.runAs(user) {
-	    	opptyProg = new OpportunityProgram__c(Name = 'Test Program 3');
+	    	OpportunityProgram__c opptyProg = new OpportunityProgram__c(Name = 'Test Program 3');
 	        insert opptyProg;
 	        
 	        oppty.Program__c = opptyProg.Id;

@@ -31,11 +31,12 @@ global class OpportunityApproverPlugin implements Process.Plugin {
 						BL_APPROVER_1, BL_APPROVER_2, BL_APPROVER_3, BL_APPROVER_4, BL_APPROVER_5}
     
     global Process.PluginResult invoke(Process.PluginRequest request) {
-        String OpptyId = (String) request.inputParameters.get('Id');
+        String opptyId = (String) request.inputParameters.get('Id');
         Map<String,String> result = new Map<String,String>();
         try
         {
-            Map<String,String> allApprovers = OpportunityApproval.getAllApprovers(OpptyId);
+            Map<String,String> allApprovers = OpportunityService.getDesignWinApprovers(opptyId);
+            
             for(String key : allApprovers.keySet())
             {
 				result.put(key, allApprovers.get(key));
