@@ -8,6 +8,9 @@ public class OpportunityApproval {
 	
 	private static Approver approver;
 	private static Boolean isUpdatable = true;
+	private static Map<Id, User> allUsers;
+	private static Map<Id, List<OpportunityLineItemsSelector.OpportunityProductValueSummary>> opptyProdValMagSummariesByOpptyId;
+	private static Map<Id, List<OpportunityLineItemsSelector.OpportunityProductValueSummary>> opptyProdValBlSummariesByOpptyId;
 	
 	static {
 		APPROVER_LABELS.put(ApproverLabel.SALES_DIRECTOR_APPROVER, Opportunity.Sales_Director_Approver__c.getDescribe().getLabel());	
@@ -171,7 +174,7 @@ public class OpportunityApproval {
 			
 			Map<String, Double> magLtValues = new Map<String, Double>();
 			
-			for (OpportunityLineItemsSelector.OpportunityProductValueSummary opvs : new OpportunityLineItemsSelector().selectLifetimeValueByOpptyIdGroupByMag(new Set<Id>{this.oppty.Id})) {
+			for (OpportunityLineItemsSelector.OpportunityProductValueSummary opvs : opptyProdValMagSummariesByOpptyId.get(this.oppty.Id)) {
 				magLtValues.put(opvs.mag, opvs.totalMagLtValue);	
 			}
 			
@@ -235,7 +238,7 @@ public class OpportunityApproval {
 			
 			Map<String, Double> blLtValues = new Map<String, Double>();
 			
-			for (OpportunityLineItemsSelector.OpportunityProductValueSummary opvs : new OpportunityLineItemsSelector().selectLifetimeValueByOpptyIdGroupByBl(new Set<Id>{this.oppty.Id})) {
+			for (OpportunityLineItemsSelector.OpportunityProductValueSummary opvs : opptyProdValBlSummariesByOpptyId.get(this.oppty.Id)) {
 				blLtValues.put(opvs.bl, opvs.totalBlLtValue);	
 			}
 			
@@ -297,14 +300,18 @@ public class OpportunityApproval {
 			p('getOpptyAllApprovers');
 			Map<String, String> result = new Map<String, String>();
 			
-			Map<ApproverLabel, Id> approverIds = getOpptyAllApproverIds();
+			Map<ApproverLabel, Id> approverIdsByLabel = getOpptyAllApproverIds();
 			
-			Map<Id, User> userNames = new Map<Id, User>(
-				new UsersSelector().selectById(new Set<Id>(approverIds.values()))
-			);
+			Map<Id, User> users = new Map<Id, User>();
 			
-			for (ApproverLabel al : approverIds.keySet()) {
-				result.put(APPROVER_LABELS.get(al), (userNames.get(approverIds.get(al)) != null) ? userNames.get(approverIds.get(al)).Name : null);
+			for (Id approverId : approverIdsByLabel.values()) {
+				if (allUsers.containsKey(approverId)) {
+					users.put(approverId, allUsers.get(approverId));
+				}
+			}
+			
+			for (ApproverLabel al : approverIdsByLabel.keySet()) {
+				result.put(APPROVER_LABELS.get(al), (users.get(approverIdsByLabel.get(al)) != null) ? users.get(approverIdsByLabel.get(al)).Name : null);
 			}
 			
 			return result;	
@@ -335,6 +342,10 @@ public class OpportunityApproval {
 		protected Id getOpptyOwnerMT2() {
 			p('getOpptyOwnerMT2');
 			return this.oppty.Owner.MT_2__c; 
+		}
+		
+		protected void p(String msg) {
+			CommonUtils.p(this, '//-c', msg);
 		}
 		
 		private void resetOpptyAllApprovers() {
@@ -529,70 +540,133 @@ public class OpportunityApproval {
 		}
 	} 
 	
-	public static Map<String, String> getAllApprovers(Opportunity oppty) {
-		p('getAllApprovers');
-		return getApprover(oppty).getOpptyAllApprovers();	
+	public static Map<Id, Map<String, String>> getAllApprovers(List<Opportunity> oppties) {
+		p2('getAllApprovers');
+		init(oppties);
+		
+		Map<Id, Map<String, String>> result = new Map<Id, Map<String, String>>();
+		
+		for (Opportunity oppty : oppties) {
+			result.put(oppty.Id, getApprover(oppty).getOpptyAllApprovers());
+		}
+		
+		return result;	
 	}
 	
-	public static void setAllApprovers(Opportunity oppty, fflib_ISObjectUnitOfWork uow) {
-		p('setAllApprovers');
-		getApprover(oppty).setOpptyAllApprovers(uow);
+	public static void setAllApprovers(List<Opportunity> oppties, fflib_ISObjectUnitOfWork uow) {
+		p2('setAllApprovers');
+		init(oppties);
+		
+		for (Opportunity oppty : oppties) {
+			getApprover(oppty).setOpptyAllApprovers(uow);	
+		}
 	}
 	
 	@TestVisible
 	private static Id getSalesDirectorApproverId(Opportunity oppty) {
+		init(new List<Opportunity>{oppty});
+		
 		return getApprover(oppty).getOpptySalesDirectorApproverId();
 	} 
 	
 	@TestVisible
 	private static void setSalesDirectorApproverId(Opportunity oppty, fflib_ISObjectUnitOfWork uow) {
+		init(new List<Opportunity>{oppty});
+		
 		getApprover(oppty).setOpptySalesDirectorApproverId(uow);	
 	}
 	
 	@TestVisible
 	private static Id getVpApprover1Id(Opportunity oppty) {
+		init(new List<Opportunity>{oppty});
+		
 		return getApprover(oppty).getOpptyVpApprover1Id();
 	}
 	
 	@TestVisible
 	private static void setVpApprover1Id(Opportunity oppty, fflib_ISObjectUnitOfWork uow) {
+		init(new List<Opportunity>{oppty});
+		
 		getApprover(oppty).setOpptyVpApprover1Id(uow);	
 	}
 	
 	@TestVisible
 	private static Id getVpApprover2Id(Opportunity oppty) {
+		init(new List<Opportunity>{oppty});
+		
 		return getApprover(oppty).getOpptyVpApprover2Id();
 	}
 	
 	@TestVisible
 	private static void setVpApprover2Id(Opportunity oppty, fflib_ISObjectUnitOfWork uow) {
+		init(new List<Opportunity>{oppty});
+		
 		getApprover(oppty).setOpptyVpApprover2Id(uow);	
 	}
 	
 	@TestVisible
 	private static void setVpApproverIds(Opportunity oppty, fflib_ISObjectUnitOfWork uow) {
+		init(new List<Opportunity>{oppty});
+		
 		getApprover(oppty).setOpptyVpApproverIds(uow);	
 	}
 	
 	@TestVisible
 	private static Map<String, Id> getMagApproverIdsWithMag(Opportunity oppty) {
+		init(new List<Opportunity>{oppty});
+		
 		return getApprover(oppty).getOpptyMagApproverIdsWithMag();
 	}
 	
 	@TestVisible
 	private static void setMagApproverIds(Opportunity oppty, fflib_ISObjectUnitOfWork uow) {
+		init(new List<Opportunity>{oppty});
+		
 		getApprover(oppty).setOpptyMagApproverIds(uow);
 	}
 	
 	@TestVisible
 	private static Map<String, Id> getBlApproverIdsWithBl(Opportunity oppty) {
+		init(new List<Opportunity>{oppty});
+		
 		return getApprover(oppty).getOpptyBlApproverIdsWithBl();
 	}
 	
 	@TestVisible
 	private static void setBlApproverIds(Opportunity oppty, fflib_ISObjectUnitOfWork uow) {
+		init(new List<Opportunity>{oppty});
+		
 		getApprover(oppty).setOpptyBlApproverIds(uow);
 	}
+	
+	private static void init(List<Opportunity> oppties) {
+		if (allUsers == null) {
+    		setAllUsers();
+    	}
+		
+		if (opptyProdValMagSummariesByOpptyId == null) {
+    		setOpptyProdValMagSummariesByOpptyId(oppties);
+    	}
+    	
+    	if (opptyProdValBlSummariesByOpptyId == null) {
+    		setOpptyProdValBlSummariesByOpptyId(oppties);
+    	}	
+	}
+	
+	private static void setAllUsers() {
+		p2('setAllUsers');
+		allUsers = new Map<Id, User>(new UsersSelector().selectAll());	
+	}
+	
+	private static void setOpptyProdValMagSummariesByOpptyId(List<Opportunity> oppties) {
+		p2('setOpptyProdValMagSummariesByOpptyId');
+    	opptyProdValMagSummariesByOpptyId = new OpportunityLineItemsSelector().selectLifetimeValueByOpptyIdGroupByOpptyIdAndMag(new Map<Id, Opportunity>(oppties).keySet());
+	}
+    
+    private static void setOpptyProdValBlSummariesByOpptyId(List<Opportunity> oppties) {
+    	p2('setOpptyProdValBlSummariesByOpptyId');
+    	opptyProdValBlSummariesByOpptyId = new OpportunityLineItemsSelector().selectLifetimeValueByOpptyIdGroupByOpptyIdAndBl(new Map<Id, Opportunity>(oppties).keySet());  
+    }
 	
 	private static Approver getApprover(Opportunity oppty) {
 		if (approver == null) {
@@ -606,19 +680,19 @@ public class OpportunityApproval {
 		String parentAccountName = oppty.Account.Parent.Name;
 		
 		if (parentAccountName == AccountHelper.PARENT_ACCOUNT_STAR) {
-			p('StarApprover');
+			p2('StarApprover');
 			approver = new StarApprover(oppty);
 		} else if (parentAccountName == AccountHelper.PARENT_ACCOUNT_SAMSUNG) {
-			p('SamsungApprover');
+			p2('SamsungApprover');
 			approver = new SamsungApprover(oppty);
 		} else {
-			p('GeneralApprover');
+			p2('GeneralApprover');
 			approver = new GeneralApprover(oppty);	
 		}	
 	}
 	
-	private static void p(String msg) {
-		System.debug('//-c OpportunityApproval - ' + msg);
+	private static void p2(String msg) {
+		CommonUtils.p(OpportunityApproval.class, '//-c', msg);
 	}
 	
 }

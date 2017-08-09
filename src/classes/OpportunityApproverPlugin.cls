@@ -35,13 +35,14 @@ global class OpportunityApproverPlugin implements Process.Plugin {
         Map<String,String> result = new Map<String,String>();
         try
         {
-            Map<String,String> allApprovers = OpportunityService.getDesignWinApprovers(opptyId);
+            List<OpportunityService.DesignWinApprover> allApprovers = OpportunityService.getDesignWinApprovers(new Set<Id>{opptyId}).get(opptyId);
             
-            for(String key : allApprovers.keySet())
+            for(OpportunityService.DesignWinApprover dwa : allApprovers)
             {
-				result.put(key, allApprovers.get(key));
-                System.debug('@@@' + key + ',' + allApprovers.get(key));
+				result.put(dwa.label, dwa.name);
+                System.debug('@@@' + dwa.label + ',' + dwa.name);
             }
+            
             result.put('Message', 'Success');
         } catch (Exception err)
         {

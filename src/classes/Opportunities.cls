@@ -17,7 +17,7 @@ public class Opportunities extends ApplicationDomain {
 	
 	public override void onBeforeUpdate(Map<Id,SObject> existingRecords) {
 		p('onBeforeUpdate');
-		bypassValidation((Map<Id, Opportunity>)existingRecords);	
+		bypassValidation((Map<Id, Opportunity>)existingRecords);
 		
 		if (!CommonUtils.isAdminOrIntegrationUser()) {
 			updateLastBusinessModifiedInfo();	
@@ -31,10 +31,7 @@ public class Opportunities extends ApplicationDomain {
 	
 	public void updateDesignWinApprovers(fflib_ISObjectUnitOfWork uow) {
 		p('updateDesignWinApprovers');
-		for (Opportunity oppty : (List<Opportunity>)records) {
-			//J OpportunityApproval.setAllApprovers(oppty.Id, uow);
-			OpportunityApproval.setAllApprovers(oppty, uow);
-		}	
+		OpportunityApproval.setAllApprovers((List<Opportunity>)records, uow);
 	}
 	
 	private void bypassValidation(Map<Id, Opportunity> existingRecords) {
@@ -102,10 +99,6 @@ public class Opportunities extends ApplicationDomain {
 	        	uow.commitWork();
 	        }	
 		}	
-	}
-	
-	private static void p(String msg) {
-		System.debug('//-d Opportunities - ' + msg);
 	}
     
 }

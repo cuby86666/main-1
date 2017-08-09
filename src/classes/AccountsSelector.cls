@@ -1,6 +1,6 @@
 public class AccountsSelector extends ApplicationSelector {
 	
-	public Schema.SObjectType getSObjectType() {
+	public override Schema.SObjectType getSObjectType() {
 		return Account.SObjectType;
 	}
 	

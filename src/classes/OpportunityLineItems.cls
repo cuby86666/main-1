@@ -37,9 +37,5 @@ public class OpportunityLineItems extends ApplicationDomain {
 			opptyProd.Program__c = opptys.get(opptyProd.OpportunityId).Program__c;	
 		}	
 	}
-	
-	private static void p(String msg) {
-		System.debug('//-d OpportunityLineItems - ' + msg);
-	}
     
 }

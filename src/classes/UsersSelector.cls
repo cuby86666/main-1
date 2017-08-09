@@ -1,6 +1,6 @@
 public class UsersSelector extends ApplicationSelector {
     
-    public Schema.SObjectType getSObjectType() {
+    public override Schema.SObjectType getSObjectType() {
 		return User.SObjectType;
 	}
 	
@@ -13,8 +13,13 @@ public class UsersSelector extends ApplicationSelector {
 	}
 	
 	public List<User> selectById(Set<Id> ids) {
-		System.debug('//-s UsersSelector.selectById');
+		p('selectById');
 		return (List<User>)selectSObjectsById(ids);
 	}
+	
+	public List<User> selectAll() {
+		p('selectAll');
+        return (List<User>)Database.query(newQueryFactory().toSOQL());        
+    }
     
 }

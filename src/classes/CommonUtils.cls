@@ -90,5 +90,13 @@ public class CommonUtils {
 		String guid = h.SubString(0,8)+ '-' + h.SubString(8,12) + '-' + h.SubString(12,16) + '-' + h.SubString(16,20) + '-' + h.substring(20);
 		
 		return guid; 
-    }   
+    }
+    
+    public static void p(Object obj, String prefix, String msg) {
+    	System.debug(prefix + ' ' + String.valueOf(obj).substring(0, String.valueOf(obj).indexOf(':')) + ' - ' + msg);
+    } 
+    
+    public static void p(Type klass, String prefix, String msg) {
+    	System.debug(prefix + ' ' + klass.getName() + ' - ' + msg);
+    }  
 }

@@ -1,5 +1,4 @@
 public class ApproverMatrixHelper {
-	private static final String RECORD_TYPE_DIRECT_OPPTY = 'Direct_Oppty';
 	private static final String DIRECT_OPPTY_TYPE_MAG_APPROVER = 'MAG Approver';
 	private static final String DIRECT_OPPTY_TYPE_BL_APPROVER = 'BL Approver';
 	private static final String DIRECT_OPPTY_TYPE_GAM = 'GAM';
@@ -9,35 +8,10 @@ public class ApproverMatrixHelper {
 	private static final String DIRECT_OPPTY_TYPE_GSM_VP_1 = 'GSM VP 1';
 	private static final String DIRECT_OPPTY_TYPE_GSM_VP_2 = 'GSM VP 2';
 	
-	private static ID directOpptyRecordTypeID;
 	private static Map<ID, Approvers_Matrix__c> directOpptyApproverMatrixes;  
 	
 	static{
-		directOpptyRecordTypeID = getDirectOpptyRecordTypeID();	
 		directOpptyApproverMatrixes = getDirectOpptyApproverMatrixes(); 
-	}
-	
-	public static ID getDirectOpptyRecordTypeID() {
-    	if (directOpptyRecordTypeID == null) {
-    		setRecordTypeIDs();	
-    	}
-    	
-    	return directOpptyRecordTypeID;
-    }
-    
-    private static void setRecordTypeIDs() {
-		List<RecordType> recordTypes = [
-			select Id, DeveloperName 
-		      from RecordType 
-		     where IsActive = TRUE 
-		       and SobjectType = 'Approvers_Matrix__c'
-		]; 
-		
-		for (RecordType rt : recordTypes) {
-			if (rt.DeveloperName == RECORD_TYPE_DIRECT_OPPTY) {
-				directOpptyRecordTypeID = rt.Id;
-			} 
-		}
 	}
 	
 	public static Map<ID, Approvers_Matrix__c> getDirectOpptyApproverMatrixes() {
@@ -50,13 +24,11 @@ public class ApproverMatrixHelper {
     
     private static void setDirectOpptyApproverMatrixes() {
     	directOpptyApproverMatrixes = new Map<ID, Approvers_Matrix__c>(
-    		[select Type__c, Criteria_1__c, Criteria_2__c, Threshold_1__c, Approver__c 
-    		   from Approvers_Matrix__c 
-    		  where RecordTypeId = :getDirectOpptyRecordTypeID()]
-    	);		
-    }
+    		new ApproverMatrixesSelector().selectByRecordTypeId(new Set<Id>{new ApproverMatrixesSelector().getRecordTypeId(ApproverMatrixesSelector.RecordType.DIRECT_OPPTY)})
+    	);
+	}
     
-    public static Approvers_Matrix__c getDirectOpptyGamSTAR() {
+    public static Approvers_Matrix__c getDirectOpptyGamStar() {
     	Approvers_Matrix__c result;
     	
     	for (Approvers_Matrix__c am : directOpptyApproverMatrixes.values()) {

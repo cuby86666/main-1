@@ -1,6 +1,13 @@
 public class OpportunitiesSelector extends ApplicationSelector {
-
-	public Schema.SObjectType getSObjectType() {
+	
+	private static final Map<RecordType, String> RECORD_TYPES = new Map<RecordType, String> {
+		RecordType.SFDC_OPPTY => 'SFDC Oppty',
+		RecordType.MODEL_N_OPPTY => 'Model N Oppty'	
+	};
+	
+	public enum RecordType {SFDC_OPPTY, MODEL_N_OPPTY}
+	
+	public override Schema.SObjectType getSObjectType() {
 		return Opportunity.SObjectType;
 	}
 	
@@ -17,6 +24,11 @@ public class OpportunitiesSelector extends ApplicationSelector {
 			Opportunity.Sales_Director_Approver__c, 
 			Opportunity.VP_Approver_2__c
 		};
+	}
+	
+	public Id getRecordTypeId(RecordType recType) {
+		p('getRecordTypeId');
+		return getRecordTypeId(RECORD_TYPES.get(recType));	
 	}
 	
 	public List<Opportunity> selectById(Set<Id> ids) {
@@ -48,8 +60,4 @@ public class OpportunitiesSelector extends ApplicationSelector {
 		return (List<Opportunity>)Database.query(opptiesQueryFactory.setCondition('Id in :ids').toSOQL());	
 	}
 	
-	private static void p(String msg) {
-		System.debug('//-s OpportunitiesSelector - ' + msg);
-	}
-    
 }

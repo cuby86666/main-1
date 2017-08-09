@@ -15,5 +15,9 @@ public abstract class ApplicationDomain extends fflib_SObjectDomain {
         // Disable the base class CRUD checking in preference to explicit checking elsewhere
         Configuration.disableTriggerCRUDSecurity();
     }
+    
+    protected void p(String msg) {
+    	CommonUtils.p(this, '//-d', msg);
+    }
         
 }

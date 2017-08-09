@@ -1818,7 +1818,11 @@ private class OpportunityApprovalTest {
     	
     	createOpportunitySchedules(opptyProd.OpportunityId, THRESHOLD_BL * 2);
     	
-    	Map<String, String> approvers = OpportunityService.getDesignWinApprovers(opptyProd.OpportunityId);
+    	Map<String, String> approvers = new Map<String, String>();
+    	
+    	for (OpportunityService.DesignWinApprover dwa : OpportunityService.getDesignWinApprovers(new Set<Id>{opptyProd.OpportunityId}).get(opptyProd.OpportunityId)) {
+    		approvers.put(dwa.label, dwa.name);	
+    	}
     	
     	System.assertEquals(TEST_USER_MT2, approvers.get(OpportunityApproval.APPROVER_LABELS.get(OpportunityApproval.ApproverLabel.SALES_DIRECTOR_APPROVER)));
     	System.assertEquals(TEST_USER_AUTO, approvers.get(OpportunityApproval.APPROVER_LABELS.get(OpportunityApproval.ApproverLabel.REGIONAL_VP_APPROVER)));
@@ -1856,7 +1860,11 @@ private class OpportunityApprovalTest {
     	
     	createOpportunitySchedules(opptyProd.OpportunityId, THRESHOLD_BL * 2);
     	    	
-    	Map<String, String> approvers = OpportunityService.getDesignWinApprovers(opptyProd.OpportunityId);
+    	Map<String, String> approvers = new Map<String, String>();
+    	
+    	for (OpportunityService.DesignWinApprover dwa : OpportunityService.getDesignWinApprovers(new Set<Id>{opptyProd.OpportunityId}).get(opptyProd.OpportunityId)) {
+    		approvers.put(dwa.label, dwa.name);	
+    	}
     	
     	System.assertEquals(TEST_USER_GAM_STAR, approvers.get(OpportunityApproval.APPROVER_LABELS.get(OpportunityApproval.ApproverLabel.SALES_DIRECTOR_APPROVER)));
     	System.assertEquals(TEST_USER_EVP_STAR, approvers.get(OpportunityApproval.APPROVER_LABELS.get(OpportunityApproval.ApproverLabel.REGIONAL_VP_APPROVER)));
@@ -1894,7 +1902,11 @@ private class OpportunityApprovalTest {
     	
     	createOpportunitySchedules(opptyProd.OpportunityId, THRESHOLD_BL * 2);
     	    	
-    	Map<String, String> approvers = OpportunityService.getDesignWinApprovers(opptyProd.OpportunityId);
+    	Map<String, String> approvers = new Map<String, String>();
+    	
+    	for (OpportunityService.DesignWinApprover dwa : OpportunityService.getDesignWinApprovers(new Set<Id>{opptyProd.OpportunityId}).get(opptyProd.OpportunityId)) {
+    		approvers.put(dwa.label, dwa.name);	
+    	}
     	
     	System.assertEquals(TEST_USER_GAM_SAMSUNG, approvers.get(OpportunityApproval.APPROVER_LABELS.get(OpportunityApproval.ApproverLabel.SALES_DIRECTOR_APPROVER)));
     	System.assertEquals(TEST_USER_EVP_SAMSUNG, approvers.get(OpportunityApproval.APPROVER_LABELS.get(OpportunityApproval.ApproverLabel.REGIONAL_VP_APPROVER)));
@@ -1954,7 +1966,7 @@ private class OpportunityApprovalTest {
     
     static Approvers_Matrix__c newApproverMatrix(String type, String criteria1, String criteria2, Double threshold1, ID approverID) {
     	Approvers_Matrix__c approverMatrix = new Approvers_Matrix__c();
-    	approverMatrix.RecordTypeId = ApproverMatrixHelper.getDirectOpptyRecordTypeID();
+    	approverMatrix.RecordTypeId = new ApproverMatrixesSelector().getRecordTypeId(ApproverMatrixesSelector.RecordType.DIRECT_OPPTY);
     	approverMatrix.Type__c = type;
     	approverMatrix.Criteria_1__c = criteria1;
     	approverMatrix.Criteria_2__c = criteria2;

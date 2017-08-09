@@ -1,6 +1,6 @@
 public class OpportunityLineItemsSelector extends ApplicationSelector {
 
-	public Schema.SObjectType getSObjectType() {
+	public override Schema.SObjectType getSObjectType() {
 		return OpportunityLineItem.SObjectType;
 	}
 	
@@ -17,40 +17,42 @@ public class OpportunityLineItemsSelector extends ApplicationSelector {
 		return (List<OpportunityLineItem>)selectSObjectsById(ids);
 	}
 	
-	public List<OpportunityProductValueSummary> selectLifetimeValueByOpptyIdGroupByMag(Set<Id> opptyIds) {
-		p('selectLifetimeValueByOpptyIdGroupByMag');
-		List<OpportunityProductValueSummary> result = new List<OpportunityProductValueSummary>();
+	public Map<Id, List<OpportunityProductValueSummary>> selectLifetimeValueByOpptyIdGroupByOpptyIdAndMag(Set<Id> opptyIds) {
+		p('selectLifetimeValueByOpptyIdGroupByOpptyIdAndMag');
+		List<OpportunityProductValueSummary> opptyProdValSummaries = new List<OpportunityProductValueSummary>();
 		
 		List<AggregateResult> opptyProdMagLtValues = 
-			[select PricebookEntry.Product2.MAG__c mag, sum(LT_Value_USD__c) totalMagLtValue
+			[select OpportunityId opptyId, PricebookEntry.Product2.MAG__c mag, sum(LT_Value_USD__c) totalMagLtValue
            	   from OpportunityLineItem 
           	  where OpportunityId in :opptyIds 
           	    and Prod_Lost_Cancelled__c = null
-         	 group by PricebookEntry.Product2.MAG__c];
+         	 group by OpportunityId, PricebookEntry.Product2.MAG__c
+         	 order by OpportunityId, PricebookEntry.Product2.MAG__c];
          	 
 		for (AggregateResult ar : opptyProdMagLtValues) {
-			result.add(new OpportunityProductValueSummary(ar));	
+			opptyProdValSummaries.add(new OpportunityProductValueSummary(ar));	
 		}         	 	
 		
-		return result;
+		return convertToMap(opptyProdValSummaries);
 	}
 	
-	public List<OpportunityProductValueSummary> selectLifetimeValueByOpptyIdGroupByBl(Set<Id> opptyIds) {
-		p('selectLifetimeValueByOpptyIdGroupByBl');
-		List<OpportunityProductValueSummary> result = new List<OpportunityProductValueSummary>();
+	public Map<Id, List<OpportunityProductValueSummary>> selectLifetimeValueByOpptyIdGroupByOpptyIdAndBl(Set<Id> opptyIds) {
+		p('selectLifetimeValueByOpptyIdGroupByOpptyIdAndBl');
+		List<OpportunityProductValueSummary> opptyProdValSummaries = new List<OpportunityProductValueSummary>();
 		
 		List<AggregateResult> opptyProdBlLtValues = 
-			[select PricebookEntry.Product2.BL__c bl, sum(LT_Value_USD__c) totalBlLtValue
+			[select OpportunityId opptyId, PricebookEntry.Product2.BL__c bl, sum(LT_Value_USD__c) totalBlLtValue
            	   from OpportunityLineItem 
           	  where OpportunityId in :opptyIds 
           	    and Prod_Lost_Cancelled__c = null
-         	 group by PricebookEntry.Product2.BL__c];
+         	 group by OpportunityId, PricebookEntry.Product2.BL__c
+         	 order by OpportunityId, PricebookEntry.Product2.BL__c];
          	 
 		for (AggregateResult ar : opptyProdBlLtValues) {
-			result.add(new OpportunityProductValueSummary(ar));	
+			opptyProdValSummaries.add(new OpportunityProductValueSummary(ar));	
 		}         	 	
 		
-		return result;
+		return convertToMap(opptyProdValSummaries);
 	}
 	
 	public class OpportunityProductValueSummary {
@@ -58,6 +60,10 @@ public class OpportunityLineItemsSelector extends ApplicationSelector {
 		
 		private OpportunityProductValueSummary(AggregateResult result) {
 			this.result = result;	
+		}
+		
+		public Id opptyId { 
+			get { return (Id)result.get('opptyId'); } 
 		}
 		
 		public String mag { 
@@ -77,8 +83,29 @@ public class OpportunityLineItemsSelector extends ApplicationSelector {
 		}
 	}
 	
-	private static void p(String msg) {
-		System.debug('//-s OpportunityLineItemsSelector - ' + msg);
-	}
-    
+	private Map<Id, List<OpportunityProductValueSummary>> convertToMap(List<OpportunityProductValueSummary> opptyProdValSummaries) {
+		Map<Id, List<OpportunityProductValueSummary>> result = new Map<Id, List<OpportunityProductValueSummary>>();
+		
+		Id key = null;
+		List<OpportunityProductValueSummary> value = new List<OpportunityProductValueSummary>();  
+		
+		for (OpportunityProductValueSummary opvs : opptyProdValSummaries) {
+			if (key == null) {
+				key = opvs.opptyId;
+			}
+			
+			if (key == opvs.opptyId) {
+				value.add(opvs);	
+			} else {
+				key = opvs.opptyId;
+				value = new List<OpportunityProductValueSummary>(); 
+				value.add(opvs);
+			}
+			
+			result.put(key, value);
+		}	
+		
+		return result;
+	} 
+	
 }
