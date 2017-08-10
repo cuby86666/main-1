@@ -6,7 +6,6 @@ public class OpportunityApproval {
 	private static final List<String> BL_APPROVER_FIELDS = new List<String>();
 	private static final List<String> ALL_APPROVER_FIELDS = new List<String>();
 	
-	private static Approver approver;
 	private static Boolean isUpdatable = true;
 	private static Map<Id, User> allUsers;
 	private static Map<Id, List<OpportunityLineItemsSelector.OpportunityProductValueSummary>> opptyProdValMagSummariesByOpptyId;
@@ -655,7 +654,7 @@ public class OpportunityApproval {
 	
 	private static void setAllUsers() {
 		p2('setAllUsers');
-		allUsers = new Map<Id, User>(new UsersSelector().selectAll());	
+		allUsers = new Map<Id, User>(new UsersSelector().selectAll('User_License__c not in (\'Customer Community Login\', \'Chatter Free\')'));	
 	}
 	
 	private static void setOpptyProdValMagSummariesByOpptyId(List<Opportunity> oppties) {
@@ -669,25 +668,17 @@ public class OpportunityApproval {
     }
 	
 	private static Approver getApprover(Opportunity oppty) {
-		if (approver == null) {
-			setApprover(oppty);	
-		}
-		
-		return approver;		
-	}
-	
-	private static void setApprover(Opportunity oppty) {
 		String parentAccountName = oppty.Account.Parent.Name;
 		
 		if (parentAccountName == AccountHelper.PARENT_ACCOUNT_STAR) {
 			p2('StarApprover');
-			approver = new StarApprover(oppty);
+			return new StarApprover(oppty);
 		} else if (parentAccountName == AccountHelper.PARENT_ACCOUNT_SAMSUNG) {
 			p2('SamsungApprover');
-			approver = new SamsungApprover(oppty);
+			return new SamsungApprover(oppty);
 		} else {
 			p2('GeneralApprover');
-			approver = new GeneralApprover(oppty);	
+			return new GeneralApprover(oppty);	
 		}	
 	}
 	

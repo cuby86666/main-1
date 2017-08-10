@@ -17,9 +17,9 @@ public class UsersSelector extends ApplicationSelector {
 		return (List<User>)selectSObjectsById(ids);
 	}
 	
-	public List<User> selectAll() {
+	public List<User> selectAll(String condition) {
 		p('selectAll');
-        return (List<User>)Database.query(newQueryFactory().toSOQL());        
+        return (List<User>)Database.query(newQueryFactory().setCondition(condition).toSOQL());        
     }
     
 }

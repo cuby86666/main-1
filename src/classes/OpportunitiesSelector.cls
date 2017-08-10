@@ -53,6 +53,7 @@ public class OpportunitiesSelector extends ApplicationSelector {
 		fflib_QueryFactory opptiesQueryFactory = newQueryFactory();
 		
 		new AccountsSelector().configureQueryFactoryFields(opptiesQueryFactory, Opportunity.AccountId.getDescribe().getRelationshipName());
+		
 		opptiesQueryFactory.selectField(Opportunity.AccountId.getDescribe().getRelationshipName() + '.' + Account.ParentId.getDescribe().getRelationshipName() + '.' + Account.Name);
 		
 		new UsersSelector().configureQueryFactoryFields(opptiesQueryFactory, Opportunity.OwnerId.getDescribe().getRelationshipName());

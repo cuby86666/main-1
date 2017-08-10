@@ -8,13 +8,13 @@ public class ApproverMatrixHelper {
 	private static final String DIRECT_OPPTY_TYPE_GSM_VP_1 = 'GSM VP 1';
 	private static final String DIRECT_OPPTY_TYPE_GSM_VP_2 = 'GSM VP 2';
 	
-	private static Map<ID, Approvers_Matrix__c> directOpptyApproverMatrixes;  
+	private static Map<Id, Approvers_Matrix__c> directOpptyApproverMatrixes;  
 	
 	static{
 		directOpptyApproverMatrixes = getDirectOpptyApproverMatrixes(); 
 	}
 	
-	public static Map<ID, Approvers_Matrix__c> getDirectOpptyApproverMatrixes() {
+	public static Map<Id, Approvers_Matrix__c> getDirectOpptyApproverMatrixes() {
     	if (directOpptyApproverMatrixes == null) {
     		setDirectOpptyApproverMatrixes();	
     	}
@@ -23,7 +23,7 @@ public class ApproverMatrixHelper {
     }
     
     private static void setDirectOpptyApproverMatrixes() {
-    	directOpptyApproverMatrixes = new Map<ID, Approvers_Matrix__c>(
+    	directOpptyApproverMatrixes = new Map<Id, Approvers_Matrix__c>(
     		new ApproverMatrixesSelector().selectByRecordTypeId(new Set<Id>{new ApproverMatrixesSelector().getRecordTypeId(ApproverMatrixesSelector.RecordType.DIRECT_OPPTY)})
     	);
 	}
@@ -54,7 +54,7 @@ public class ApproverMatrixHelper {
     	return result;
     }
     
-    public static Approvers_Matrix__c getDirectOpptyEvpSTAR() {
+    public static Approvers_Matrix__c getDirectOpptyEvpStar() {
     	Approvers_Matrix__c result;
     	
     	for (Approvers_Matrix__c am : directOpptyApproverMatrixes.values()) {
@@ -119,7 +119,7 @@ public class ApproverMatrixHelper {
     	return result;	
     }
     
-    public static Approvers_Matrix__c getDirectOpptyGsmVp2AutoGC() {
+    public static Approvers_Matrix__c getDirectOpptyGsmVp2AutoGc() {
     	Approvers_Matrix__c result;
     	
     	for (Approvers_Matrix__c am : directOpptyApproverMatrixes.values()) {
@@ -132,7 +132,7 @@ public class ApproverMatrixHelper {
     	return result;
     } 
     
-    public static Approvers_Matrix__c getDirectOpptyGsmVp2AutoSAP() {
+    public static Approvers_Matrix__c getDirectOpptyGsmVp2AutoSap() {
     	Approvers_Matrix__c result;
     	
     	for (Approvers_Matrix__c am : directOpptyApproverMatrixes.values()) {
@@ -157,7 +157,7 @@ public class ApproverMatrixHelper {
     	return result;		
     }
     
-    public static List<Approvers_Matrix__c> getDirectOpptyMagApproversSTAR(Set<String> mags) {
+    public static List<Approvers_Matrix__c> getDirectOpptyMagApproversStar(Set<String> mags) {
     	List<Approvers_Matrix__c> result = new List<Approvers_Matrix__c>();
     	
     	for (Approvers_Matrix__c am : directOpptyApproverMatrixes.values()) {
@@ -181,7 +181,7 @@ public class ApproverMatrixHelper {
     	return result;		
     }
     
-    public static List<Approvers_Matrix__c> getDirectOpptyBlApproversSTAR(Set<String> bls) {
+    public static List<Approvers_Matrix__c> getDirectOpptyBlApproversStar(Set<String> bls) {
     	List<Approvers_Matrix__c> result = new List<Approvers_Matrix__c>();
     	
     	for (Approvers_Matrix__c am : directOpptyApproverMatrixes.values()) {

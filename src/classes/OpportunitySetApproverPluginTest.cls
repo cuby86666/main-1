@@ -288,7 +288,7 @@ public class OpportunitySetApproverPluginTest {
     
     static Approvers_Matrix__c newApproverMatrix(String type, String criteria1, String criteria2, Double threshold1, ID approverID) {
     	Approvers_Matrix__c approverMatrix = new Approvers_Matrix__c();
-    	approverMatrix.RecordTypeId = ApproverMatrixHelper.getDirectOpptyRecordTypeID();
+    	approverMatrix.RecordTypeId = new ApproverMatrixesSelector().getRecordTypeId(ApproverMatrixesSelector.RecordType.DIRECT_OPPTY);
     	approverMatrix.Type__c = type;
     	approverMatrix.Criteria_1__c = criteria1;
     	approverMatrix.Criteria_2__c = criteria2;
