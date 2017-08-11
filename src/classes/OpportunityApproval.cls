@@ -7,7 +7,7 @@ public class OpportunityApproval {
 	private static final List<String> ALL_APPROVER_FIELDS = new List<String>();
 	
 	private static Boolean isUpdatable = true;
-	private static Map<Id, User> allUsers;
+	private static Map<Id, User> users;
 	private static Map<Id, List<OpportunityLineItemsSelector.OpportunityProductValueSummary>> opptyProdValMagSummariesByOpptyId;
 	private static Map<Id, List<OpportunityLineItemsSelector.OpportunityProductValueSummary>> opptyProdValBlSummariesByOpptyId;
 	
@@ -301,16 +301,16 @@ public class OpportunityApproval {
 			
 			Map<ApproverLabel, Id> approverIdsByLabel = getOpptyAllApproverIds();
 			
-			Map<Id, User> users = new Map<Id, User>();
+			Map<Id, User> approvers = new Map<Id, User>();
 			
 			for (Id approverId : approverIdsByLabel.values()) {
-				if (allUsers.containsKey(approverId)) {
-					users.put(approverId, allUsers.get(approverId));
+				if (users.containsKey(approverId)) {
+					approvers.put(approverId, users.get(approverId));
 				}
 			}
 			
 			for (ApproverLabel al : approverIdsByLabel.keySet()) {
-				result.put(APPROVER_LABELS.get(al), (users.get(approverIdsByLabel.get(al)) != null) ? users.get(approverIdsByLabel.get(al)).Name : null);
+				result.put(APPROVER_LABELS.get(al), (approvers.get(approverIdsByLabel.get(al)) != null) ? approvers.get(approverIdsByLabel.get(al)).Name : null);
 			}
 			
 			return result;	
@@ -639,8 +639,8 @@ public class OpportunityApproval {
 	}
 	
 	private static void init(List<Opportunity> oppties) {
-		if (allUsers == null) {
-    		setAllUsers();
+		if (users == null) {
+    		setUsers();
     	}
 		
 		if (opptyProdValMagSummariesByOpptyId == null) {
@@ -652,9 +652,9 @@ public class OpportunityApproval {
     	}	
 	}
 	
-	private static void setAllUsers() {
-		p2('setAllUsers');
-		allUsers = new Map<Id, User>(new UsersSelector().selectAll('User_License__c not in (\'Customer Community Login\', \'Chatter Free\')'));	
+	private static void setUsers() {
+		p2('setUsers');
+		users = new Map<Id, User>(new UsersSelector().selectWhere('User_License__c not in (\'Customer Community Login\', \'Chatter Free\')'));	
 	}
 	
 	private static void setOpptyProdValMagSummariesByOpptyId(List<Opportunity> oppties) {

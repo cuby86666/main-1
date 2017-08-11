@@ -15,8 +15,11 @@ public class Opportunities extends ApplicationDomain {
 		updateLastBusinessModifiedInfo();	
 	}
 	
-	public override void onBeforeUpdate(Map<Id,SObject> existingRecords) {
+	public override void onBeforeUpdate(Map<Id, SObject> existingRecords) {
 		p('onBeforeUpdate');
+		OpportunityProductClaimValue.updateTmmaOverrideIfOpportunityMnUpdatedByTmma((Map<ID, Opportunity>)existingRecords, new Map<Id, Opportunity>((List<Opportunity>)this.records));
+		OpportunityProductClaimValue.bypassOpportunityMnUpdateForTmmaOverride((Map<Id, Opportunity>)existingRecords, new Map<Id, Opportunity>((List<Opportunity>)this.records));
+		
 		bypassValidation((Map<Id, Opportunity>)existingRecords);
 		
 		if (!CommonUtils.isAdminOrIntegrationUser()) {
@@ -31,12 +34,12 @@ public class Opportunities extends ApplicationDomain {
 	
 	public void updateDesignWinApprovers(fflib_ISObjectUnitOfWork uow) {
 		p('updateDesignWinApprovers');
-		OpportunityApproval.setAllApprovers((List<Opportunity>)records, uow);
+		OpportunityApproval.setAllApprovers((List<Opportunity>)this.records, uow);
 	}
 	
 	private void bypassValidation(Map<Id, Opportunity> existingRecords) {
 		p('bypassValidation');
-		for (Opportunity oppty : (List<Opportunity>)records) {
+		for (Opportunity oppty : (List<Opportunity>)this.records) {
 			oppty.Bypass_Validation__c = false;
 			
 			Opportunity oldOppty = existingRecords.get(oppty.Id);
@@ -66,7 +69,7 @@ public class Opportunities extends ApplicationDomain {
 	
 	private void updateLastBusinessModifiedInfo() {
 		p('updateLastBusinessModifiedInfo');
-		for (Opportunity oppty : (List<Opportunity>)records) {
+		for (Opportunity oppty : (List<Opportunity>)this.records) {
 			oppty.Last_Business_Modified_By_Id__c = UserInfo.getUserId();
 	        oppty.Last_Business_Modified_Date__c = Datetime.now();	
 		}	
@@ -76,7 +79,7 @@ public class Opportunities extends ApplicationDomain {
 		p('updateOpptyProdPrograms');
 		Set<Id> opptyIds = new Set<Id>();
 		
-		for (Opportunity oppty : (List<Opportunity>)records) {
+		for (Opportunity oppty : (List<Opportunity>)this.records) {
 			Opportunity oldOppty = existingRecords.get(oppty.Id);
 			
 			if (oppty.Program__c != oldOppty.Program__c) {

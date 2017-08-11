@@ -4,8 +4,8 @@ public class TriggerHandlerOpptyBeforeUpdate extends TriggerHandlerBase {
         OpportunityHelper.setOpportunityStarInfo(tp.newList);
 		
 		// TMMA
-		OpportunityProductClaimValue.updateTmmaOverrideIfOpportunityMnUpdatedByTMMA((Map<ID, Opportunity>)tp.oldMap, (Map<ID, Opportunity>)tp.newMap);  
-    	OpportunityProductClaimValue.bypassOpportunityMnUpdateForTmmaOverride((Map<ID, Opportunity>)tp.oldMap, (Map<ID, Opportunity>)tp.newMap);
+		//J OpportunityProductClaimValue.updateTmmaOverrideIfOpportunityMnUpdatedByTMMA((Map<ID, Opportunity>)tp.oldMap, (Map<ID, Opportunity>)tp.newMap);  
+    	//J OpportunityProductClaimValue.bypassOpportunityMnUpdateForTmmaOverride((Map<ID, Opportunity>)tp.oldMap, (Map<ID, Opportunity>)tp.newMap);
 		
 		OpportunityTrigger.onBeforeUpdate(tp.newList, (Map<ID, Opportunity>)tp.oldMap);
 	}    

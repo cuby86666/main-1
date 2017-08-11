@@ -1,8 +1,8 @@
 public class TriggerHandlerOpptyProdAfterUpdate extends TriggerHandlerBase {
     public override void mainEntry(TriggerParameters tp) {
     	// TMMA
-    	OpportunityProductClaimValue.updateTmmaOverrideIfOpportunityProductMnUpdatedByTMMA((Map<ID, OpportunityLineItem>)tp.oldMap, (Map<ID, OpportunityLineItem>)tp.newMap);
-    	
+    	//J OpportunityProductClaimValue.updateTmmaOverrideIfOpportunityProductMnUpdatedByTMMA((Map<ID, OpportunityLineItem>)tp.oldMap, (Map<ID, OpportunityLineItem>)tp.newMap);
+     
         OpportunityLineItemTrigger.onAfterInsert_Update_Delete(tp.newList);
         
         deleteOpportunityProductSchedues(tp);

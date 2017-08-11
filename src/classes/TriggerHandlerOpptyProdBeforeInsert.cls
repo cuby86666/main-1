@@ -7,6 +7,6 @@ public class TriggerHandlerOpptyProdBeforeInsert extends TriggerHandlerBase {
 		OpportunityProductHelper.setOpportunityProductLastBusinessModifiedInfo(tp.newList);
 		OpportunityProductHelper.setOpportunityProductQuantity(tp.newList);
 		OpportunityProductHelper.setOpportunityProductLostCancelledInfo(tp.newList);
-		OpportunityProductClaimValue.setOpportunityProductClaimValues(tp.newList);	
+		//J OpportunityProductClaimValue.setOpportunityProductClaimValues(tp.newList);	
 	}    
 }
