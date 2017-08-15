@@ -1,9 +1,9 @@
 public class TriggerHandlerOpptySchedAfterUpdate extends TriggerHandlerBase {
 	public override void mainEntry(TriggerParameters tp) {
-        updateOpportunityProductQuantity(tp);	
-		updateOpportunityProductSchedules(tp);
+        //J updateOpportunityProductQuantity(tp);	
+		//J updateOpportunityProductSchedules(tp);
 	}
-	
+	/*J
 	private void updateOpportunityProductQuantity(TriggerParameters tp) {
 		List<OpportunityLineItem> opptyProdsUpdated = OpportunityScheduleHelper.updateOpportunityProductQuantity(tp.newList);
 		
@@ -19,5 +19,6 @@ public class TriggerHandlerOpptySchedAfterUpdate extends TriggerHandlerBase {
         for(OpportunityProductSchedule__c ops : opptyProdSchedsUpdated){
             sObjectsToUpdate.put(ops.Id, ops);
         }	
-	}     
+	}  
+	*/   
 }

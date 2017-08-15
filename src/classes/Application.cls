@@ -9,7 +9,8 @@ public class Application {
 				Opportunity.SObjectType, 
 				OpportunityShare.SObjectType,
 				OpportunitySchedule__c.SObjectType,
-				OpportunityLineItem.SObjectType
+				OpportunityLineItem.SObjectType,
+				OpportunityProductSchedule__c.SObjectType
 			}
 		);
 

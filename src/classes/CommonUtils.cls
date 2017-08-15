@@ -3,9 +3,9 @@ public class CommonUtils {
 	private static final String SYSTEM_ADMIN_PROFILE = 'System Administrator';
 	private static final String DATA_ADMIN_USER = 'Data Admin';
 	
-	private static ID integrationUserProfileID;
-	private static ID systemAdminProfileID;
-	private static ID dataAdminUserID;
+	private static Id integrationUserProfileId;
+	private static Id systemAdminProfileId;
+	private static Id dataAdminUserId;
 	
 	public static String getSObjectTypeName(SObject so) {
 		return so.getSObjectType().getDescribe().getName();
@@ -33,53 +33,49 @@ public class CommonUtils {
 	}
     
     public static Boolean isIntegrationUser() {
-    	return UserInfo.getProfileId() == getIntegrationUserProfileID();
+    	return UserInfo.getProfileId() == getIntegrationUserProfileId();
     }
     
     public static Boolean isAdmin() {
-    	return UserInfo.getProfileId() == getSystemAdminProfileID();	
+    	return UserInfo.getProfileId() == getSystemAdminProfileId();	
     }
     
-    public static ID getIntegrationUserProfileID() {
-    	if (integrationUserProfileID == null) {
-    		setProfileIDs();	
+    public static Id getIntegrationUserProfileId() {
+    	if (integrationUserProfileId == null) {
+    		setProfileIds();	
     	}
     	
-    	return integrationUserProfileID;
+    	return integrationUserProfileId;
     }
     
-    public static ID getSystemAdminProfileID() {
-    	if (systemAdminProfileID == null) {
-    		setProfileIDs();	
+    public static Id getSystemAdminProfileId() {
+    	if (systemAdminProfileId == null) {
+    		setProfileIds();	
     	}
     	
-    	return systemAdminProfileID;
+    	return systemAdminProfileId;
     }
     
-    public static ID getDataAdminUserID() {
-    	if (dataAdminUserID == null) {
-    		User u = [select Id, Name from User where Name = :DATA_ADMIN_USER];
+    public static Id getDataAdminUserId() {
+    	if (dataAdminUserId == null) {
+    		User u = new UsersSelector().selectByName(new Set<String>{DATA_ADMIN_USER}).get(0);
 		
-			dataAdminUserID = u.Id;	
+			dataAdminUserId = u.Id;	
     	}
     	
-    	return dataAdminUserID;
+    	return dataAdminUserId;
     } 
     
-    private static void setProfileIDs(){
-		List<Profile> profiles = [
-			select 	Id, Name 
-			  from 	Profile 
-			 where 	Name in (:INTEGRATION_USER_PROFILE, :SYSTEM_ADMIN_PROFILE)
-		];
+    private static void setProfileIds() {
+		List<Profile> profiles = new ProfilesSelector().selectByName(new Set<String>{INTEGRATION_USER_PROFILE, SYSTEM_ADMIN_PROFILE});
 		
 		for (Profile p : profiles) {
 			if (p.Name == INTEGRATION_USER_PROFILE) {
-				integrationUserProfileID = p.Id;
+				integrationUserProfileId = p.Id;
 			}
 			
 			if (p.Name == SYSTEM_ADMIN_PROFILE) {
-				systemAdminProfileID = p.Id;
+				systemAdminProfileId = p.Id;
 			}
 		}
     }

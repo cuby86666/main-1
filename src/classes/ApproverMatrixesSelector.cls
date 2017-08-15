@@ -1,10 +1,10 @@
 public class ApproverMatrixesSelector extends ApplicationSelector {
 	
+	public enum RecordType {DIRECT_OPPTY}
+	
 	private static final Map<RecordType, String> RECORD_TYPES = new Map<RecordType, String> {
 		RecordType.DIRECT_OPPTY => 'Direct Oppty'
 	};
-	
-	public enum RecordType {DIRECT_OPPTY}
 	
 	public override Schema.SObjectType getSObjectType() {
 		return Approvers_Matrix__c.SObjectType;

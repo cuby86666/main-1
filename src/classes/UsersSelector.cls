@@ -6,6 +6,7 @@ public class UsersSelector extends ApplicationSelector {
 	
 	public List<Schema.SObjectField> getSObjectFieldList() {
 		return new List<Schema.SObjectField> {
+			User.Id,
 			User.Name,
 			User.MT_1__c,
 			User.MT_2__c 
@@ -15,6 +16,11 @@ public class UsersSelector extends ApplicationSelector {
 	public List<User> selectById(Set<Id> ids) {
 		p('selectById');
 		return (List<User>)selectSObjectsById(ids);
+	}
+	
+	public List<User> selectByName(Set<String> names) {
+		p('selectByName');
+		return (List<User>)Database.query(newQueryFactory().setCondition('Name in :names').toSOQL());
 	}
 	
 	public List<User> selectWhere(String condition) {

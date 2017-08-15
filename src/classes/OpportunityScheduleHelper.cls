@@ -17,7 +17,7 @@ public class OpportunityScheduleHelper {
         sfdcRecordTypeID = OpportunityHelper.getSfdcRecordTypeID();
         mnRecordTypeID = OpportunityHelper.getMnRecordTypeID();
     }   
-    
+    /*J
     public static List<OpportunityLineItem> updateOpportunityProductQuantity(List<OpportunitySchedule__c> opptyScheds) {
         Set<ID> opptyIDs = new Set<ID>();
         
@@ -51,7 +51,8 @@ public class OpportunityScheduleHelper {
         
         return result;  
     }
-    
+    */
+    /*J
     public static List<AggregateResult> getOpportunityScheduleQuantity(Set<ID> opptyIDs) {
     	List<AggregateResult> result = 
             [select Opportunity__c, sum(Frozen_Oppty_Sched_Qty__c) totalQty
@@ -60,8 +61,9 @@ public class OpportunityScheduleHelper {
              group by Opportunity__c];
              
     	return result;	
-    }   
-    
+    }  
+     */
+    /*J
     public static void updateOpportunitySchedules(List<OpportunitySchedule__c> opptySchedsOld, List<OpportunitySchedule__c> opptySchedsNew){
         if (!(Trigger.isBefore && (Trigger.isInsert || Trigger.isUpdate))) return;
         
@@ -93,8 +95,9 @@ public class OpportunityScheduleHelper {
         	}
             
         }
-    }    
-
+    }  
+    */  
+/*J
     public static void deleteOpportunityProductSchedules(List<OpportunitySchedule__c> opptyScheds){
         //Oppty Sched Id -> (Oppty Prod Sched Id -> Oppty Prod Sched)
         Map<Id, Map<Id, OpportunityProductSchedule__c>> oppySchedAndOpptyProdSched = new Map<Id, Map<Id, OpportunityProductSchedule__c>>();
@@ -116,7 +119,8 @@ public class OpportunityScheduleHelper {
 		
 		updateAllOpportunityProductSchedulesPriceAndFrozenPrice(opptyIDs);
     }
-    
+   */ 
+   /*J
     public static void updateAllOpportunityProductSchedulesPriceAndFrozenPrice(Set<ID> opptyIDs){
         Map<ID, List<OpportunityLineItem>> opptyAndOpptyProd = new Map<ID, List<OpportunityLineItem>>();
         Map<ID, List<OpportunityProductSchedule__c>> opptyProdAndOpptyProdSched = new Map<ID, List<OpportunityProductSchedule__c>>();
@@ -158,7 +162,8 @@ public class OpportunityScheduleHelper {
 		
 		update opptyProdSchedUpdate;
     }
-    
+    */
+    /*J
     public static List<OpportunityProductSchedule__c> createOpportunityProductSchedules(List<OpportunitySchedule__c> opptySchedsNew){
         Set<ID> opptyIDs = new Set<ID>();
         Map<ID, Opportunity> opptys = new Map<ID, Opportunity>();
@@ -253,7 +258,8 @@ public class OpportunityScheduleHelper {
         
         return result;
     }
-    
+    */
+    /*J
     private static Map<ID, List<OpportunityLineItem>> getOpptyAndOpptyProdList(Set<ID> opptyIDs){
         Map<ID, List<OpportunityLineItem>> result = new Map<ID, List<OpportunityLineItem>>(); // Oppty Id -> Oppty Prod List
         List<OpportunityLineItem> allOpptyProds;
@@ -275,8 +281,9 @@ public class OpportunityScheduleHelper {
         
         return result;
     }
-
-//new    
+*/
+//new  
+/*J  
     private static Map<ID, List<OpportunityProductSchedule__c>> getOpptyProdAndOpptyProdSchedList(Set<ID> opptyIDs, Map<ID, List<OpportunityLineItem>> opptyAndOpptyProdList){
     	Set<ID> oliIDs = new Set<ID>();
     	List<OpportunityLineItem> opptyProdList;
@@ -311,7 +318,8 @@ public class OpportunityScheduleHelper {
     	
     	return result;
     }
-    
+    */
+    /*J
     public static List<OpportunityProductSchedule__c> updateOpportunityProductSchedules(List<OpportunitySchedule__c> opptySchedsOld, List<OpportunitySchedule__c> opptySchedsNew){
     	Set<ID> opptyIDs = new Set<ID>();
         Map<ID, Opportunity> opptys = new Map<ID, Opportunity>();
@@ -370,7 +378,8 @@ public class OpportunityScheduleHelper {
 	    
 	    return result;
     }
-    
+    */
+    /*J
     private static Map<Id, Opportunity> getOpptys(Set<ID> opptyIDs){        
         Map<Id, Opportunity> result = new Map<Id, Opportunity>(
             [SELECT Id, RecordTypeId, StageName, Production_Date__c, CurrencyIsoCode
@@ -380,7 +389,8 @@ public class OpportunityScheduleHelper {
         
         return result;
     } 
-    
+    */
+    /*J
     private static Map<Id, Map<Id, OpportunityProductSchedule__c>> getOpptySchedAndOpptyProdSched(List<OpportunitySchedule__c> opptyScheds){
         Set<ID> opptyIDs = new Set<ID>();
         // Opporunity Schedule Id -> (Opportunity Product Schedule Id -> Opportunity Product Schedule)
@@ -414,4 +424,5 @@ public class OpportunityScheduleHelper {
         
         return result;
     }
+    */
 }

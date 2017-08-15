@@ -29,21 +29,27 @@ public class OpportunityHelper {
     }
     	
 	public static ID getSfdcRecordTypeID() {
+		/*J
     	if (sfdcRecordTypeID == null) {
     		setOpptyRecordTypeIDs();	
     	}
     	
     	return sfdcRecordTypeID;
+    	*/
+    	return new OpportunitiesSelector().getRecordTypeId(OpportunitiesSelector.RecordType.SFDC_OPPTY);
     }
     
     public static ID getMnRecordTypeID() {
+    	/*J
     	if (mnRecordTypeID == null) {
     		setOpptyRecordTypeIDs();	
     	}
     	
     	return mnRecordTypeID;
+    	*/
+    	return new OpportunitiesSelector().getRecordTypeId(OpportunitiesSelector.RecordType.MODEL_N_OPPTY);
     }
-        		
+    /*J    		
 	private static void setOpptyRecordTypeIDs() {
 		List<RecordType> recordTypes = [SELECT Id, DeveloperName 
 		                                  FROM RecordType 
@@ -59,7 +65,7 @@ public class OpportunityHelper {
 			}
 		}
 	}
-	
+	*/
     public static Map<String, FX_Rates__c> getFxRates() {
     	if (fxRates == null) {
     		setFxRates();	

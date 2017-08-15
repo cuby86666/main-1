@@ -1,4 +1,6 @@
 public class OpportunityLineItemsSelector extends ApplicationSelector {
+	
+	public static final Set<String> LOST_CANCELLED = new Set<String>{'Lost', 'Cancelled'};
 
 	public override Schema.SObjectType getSObjectType() {
 		return OpportunityLineItem.SObjectType;
@@ -8,13 +10,35 @@ public class OpportunityLineItemsSelector extends ApplicationSelector {
 		return new List<Schema.SObjectField> {
 			OpportunityLineItem.Id,
 			OpportunityLineItem.OpportunityId,
-			OpportunityLineItem.Program__c
+			OpportunityLineItem.Product2Id,
+			OpportunityLineItem.Quantity,
+			OpportunityLineItem.UnitPrice,
+			OpportunityLineItem.Component_Multiplier__c,
+			OpportunityLineItem.Price_Erosion_Rate__c,
+			OpportunityLineItem.Prod_Lost_Cancelled__c,
+			OpportunityLineItem.Program__c,
+			OpportunityLineItem.Share__c
 		};
 	}
 	
 	public List<OpportunityLineItem> selectById(Set<Id> ids) {
 		p('selectById');
 		return (List<OpportunityLineItem>)selectSObjectsById(ids);
+	}
+	
+	public List<OpportunityLineItem> selectByOpptyIdWithOpportunity(Set<Id> opptyIds, Set<String> lostCancelled) {
+		p('selectByOpptyIdWithOpportunity');
+		fflib_QueryFactory opptyLineItemsQueryFactory = newQueryFactory();
+		
+		new OpportunitiesSelector().configureQueryFactoryFields(opptyLineItemsQueryFactory, OpportunityLineItem.OpportunityId.getDescribe().getRelationshipName());	
+		
+		String condition = 'OpportunityId in :opptyIds';
+		 
+		if (lostCancelled != null) {
+			condition += ' and Prod_Lost_Cancelled__c not in :lostCancelled';
+		}
+		
+		return (List<OpportunityLineItem>)Database.query(opptyLineItemsQueryFactory.setCondition(condition).toSOQL());
 	}
 	
 	public Map<Id, List<OpportunityProductValueSummary>> selectLifetimeValueByOpptyIdGroupByOpptyIdAndMag(Set<Id> opptyIds) {

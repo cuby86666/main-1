@@ -1,9 +1,9 @@
 public class TriggerHandlerOpptySchedAfterDelete extends TriggerHandlerBase {
     public override void mainEntry(TriggerParameters tp) {
-        updateOpportunityProductQuantity(tp); 
-        OpportunityScheduleHelper.deleteOpportunityProductSchedules(tp.oldList);
+        //J updateOpportunityProductQuantity(tp); 
+        //J OpportunityScheduleHelper.deleteOpportunityProductSchedules(tp.oldList);
     } 
-    
+    /*J
     private void updateOpportunityProductQuantity(TriggerParameters tp) {
     	List<OpportunityLineItem> opptyProdsUpdated = OpportunityScheduleHelper.updateOpportunityProductQuantity(tp.oldList);
         
@@ -11,4 +11,5 @@ public class TriggerHandlerOpptySchedAfterDelete extends TriggerHandlerBase {
             sObjectsToUpdate.put(oli.Id, oli);  
         }	
     } 
+    */
 }

@@ -1,5 +1,5 @@
 public class OpportunityLineItems extends ApplicationDomain {
-
+	
 	public OpportunityLineItems(List<OpportunityLineItem> opptyProds) {
 		super(opptyProds);
 	}

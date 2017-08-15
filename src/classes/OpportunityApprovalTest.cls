@@ -256,11 +256,10 @@ private class OpportunityApprovalTest {
     @isTest
     static void testOpptyLifetimeValue() {
     	Opportunity oppty = getOpportunity(opptyProd.OpportunityId);
-    	List<AggregateResult> opptySchedQtys = OpportunityScheduleHelper.getOpportunityScheduleQuantity(new Set<ID>{opptyProd.OpportunityId});
-    	AggregateResult ar = opptySchedQtys.get(0);
-    	Double schedQty = (Double)ar.get('totalQty');
     	
-    	System.assertEquals((schedQty * COMP_MULT * UNIT_PRICE * PROD_COUNT) / EXCH_RATE_USD, oppty.LT_Value_USD__c);		
+    	OpportunitySchedulesSelector.OpportunityScheduleValueSummary schedValue = new OpportunitySchedulesSelector().selectSchedValueByOpptyIdGroupByOpptyId(new Set<Id>{opptyProd.OpportunityId}).get(0);
+    	
+    	System.assertEquals((schedValue.totalFrozenSchedQty * COMP_MULT * UNIT_PRICE * PROD_COUNT) / EXCH_RATE_USD, oppty.LT_Value_USD__c);
     } 
     
     @isTest

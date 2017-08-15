@@ -17,7 +17,7 @@ public class Opportunities extends ApplicationDomain {
 	
 	public override void onBeforeUpdate(Map<Id, SObject> existingRecords) {
 		p('onBeforeUpdate');
-		OpportunityProductClaimValue.updateTmmaOverrideIfOpportunityMnUpdatedByTmma((Map<ID, Opportunity>)existingRecords, new Map<Id, Opportunity>((List<Opportunity>)this.records));
+		OpportunityProductClaimValue.updateTmmaOverrideIfOpportunityMnUpdatedByTmma((Map<Id, Opportunity>)existingRecords, new Map<Id, Opportunity>((List<Opportunity>)this.records));
 		OpportunityProductClaimValue.bypassOpportunityMnUpdateForTmmaOverride((Map<Id, Opportunity>)existingRecords, new Map<Id, Opportunity>((List<Opportunity>)this.records));
 		
 		bypassValidation((Map<Id, Opportunity>)existingRecords);

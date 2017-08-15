@@ -1,11 +1,22 @@
 public class OpportunitiesSelector extends ApplicationSelector {
 	
+	public enum RecordType {SFDC_OPPTY, MODEL_N_OPPTY}
+	
+	public enum Stage {INITIAL_ENGAGEMENT, DISCOVERY, DECISION, COMMITMENT, LOST, CANCELLED}
+	
 	private static final Map<RecordType, String> RECORD_TYPES = new Map<RecordType, String> {
 		RecordType.SFDC_OPPTY => 'SFDC Oppty',
 		RecordType.MODEL_N_OPPTY => 'Model N Oppty'	
 	};
 	
-	public enum RecordType {SFDC_OPPTY, MODEL_N_OPPTY}
+	public static final Map<Stage, String> STAGES = new Map<Stage, String> {
+		Stage.INITIAL_ENGAGEMENT => 'Initial Engagement',
+		Stage.DISCOVERY => 'Discovery',
+		Stage.DECISION => 'Decision',
+		Stage.COMMITMENT => 'Commitment',
+		Stage.LOST => 'Lost',
+		Stage.CANCELLED => 'Cancelled'
+	};
 	
 	public override Schema.SObjectType getSObjectType() {
 		return Opportunity.SObjectType;
@@ -25,6 +36,7 @@ public class OpportunitiesSelector extends ApplicationSelector {
 			Opportunity.RecordTypeId,
 			Opportunity.Regional_VP_Approver__c,
 			Opportunity.Sales_Director_Approver__c, 
+			Opportunity.StageName,
 			Opportunity.TMMA_Override__c,
 			Opportunity.VP_Approver_2__c
 		};

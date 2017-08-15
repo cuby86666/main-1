@@ -51,14 +51,14 @@ public class OpportunityProductHelper {
     }
     
     public static void setOpportunityProductQuantity(List<OpportunityLineItem> opptyLineItems) {   
-        Set<ID> opptyIDs = getOpptyIDs(opptyLineItems);
+        Set<Id> opptyIds = getOpptyIDs(opptyLineItems);
         
-        List<AggregateResult> opptySchedQtys = OpportunityScheduleHelper.getOpportunityScheduleQuantity(opptyIDs);
+        List<OpportunitySchedulesSelector.OpportunityScheduleValueSummary> schedValues = new OpportunitySchedulesSelector().selectSchedValueByOpptyIdGroupByOpptyId(opptyIds);
              
         for (OpportunityLineItem oli : opptyLineItems) {
-            for (AggregateResult ar : opptySchedQtys) {
-                if (oli.OpportunityId == ar.get('Opportunity__c')) {
-                    oli.Quantity = (Double)ar.get('totalQty');
+        	for (OpportunitySchedulesSelector.OpportunityScheduleValueSummary osvs : schedValues) {
+                if (oli.OpportunityId == osvs.opptyId) {
+                    oli.Quantity = osvs.totalFrozenSchedQty;
                     oli.UnitPrice = oli.UnitPrice;  // SFDC constraint. Need to update UnitPrice and Quantity at the same time.
                     break;
                 }
