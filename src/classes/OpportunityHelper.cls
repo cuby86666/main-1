@@ -1,4 +1,4 @@
-public class OpportunityHelper { 
+public class OpportunityHelper {
 	public static final String OPPTY_STAGE_INITIAL_ENGAGEMENT = 'Initial Engagement';
 	public static final String OPPTY_STAGE_DISCOVERY = 'Discovery';
 	public static final String OPPTY_STAGE_DECISION = 'Decision';
@@ -29,43 +29,13 @@ public class OpportunityHelper {
     }
     	
 	public static ID getSfdcRecordTypeID() {
-		/*J
-    	if (sfdcRecordTypeID == null) {
-    		setOpptyRecordTypeIDs();	
-    	}
-    	
-    	return sfdcRecordTypeID;
-    	*/
-    	return new OpportunitiesSelector().getRecordTypeId(OpportunitiesSelector.RecordType.SFDC_OPPTY);
+		return new OpportunitiesSelector().getRecordTypeId(OpportunitiesSelector.RecordType.SFDC_OPPTY);
     }
     
     public static ID getMnRecordTypeID() {
-    	/*J
-    	if (mnRecordTypeID == null) {
-    		setOpptyRecordTypeIDs();	
-    	}
-    	
-    	return mnRecordTypeID;
-    	*/
     	return new OpportunitiesSelector().getRecordTypeId(OpportunitiesSelector.RecordType.MODEL_N_OPPTY);
     }
-    /*J    		
-	private static void setOpptyRecordTypeIDs() {
-		List<RecordType> recordTypes = [SELECT Id, DeveloperName 
-		                                  FROM RecordType 
-		                                 WHERE IsActive = TRUE 
-		                                   AND SobjectType = 'Opportunity' 
-		                                   AND (DeveloperName = :TYPE_SFDC OR DeveloperName = :TYPE_MN)];
-		
-		for (RecordType rt : recordTypes) {
-			if (rt.DeveloperName == TYPE_SFDC) {
-				sfdcRecordTypeID = rt.Id;
-			} else if (rt.DeveloperName == TYPE_MN) {
-				mnRecordTypeID = rt.Id;
-			}
-		}
-	}
-	*/
+    
     public static Map<String, FX_Rates__c> getFxRates() {
     	if (fxRates == null) {
     		setFxRates();	
@@ -77,18 +47,13 @@ public class OpportunityHelper {
     private static void setFxRates() {
     	fxRates = new Map<String, FX_Rates__c>();  
         
-        for (FX_Rates__c fr : [SELECT Id, Currency_Code__c, Exchange_Rate__c FROM FX_Rates__c]) {
+        //J for (FX_Rates__c fr : [SELECT Id, Currency_Code__c, Exchange_Rate__c FROM FX_Rates__c]) {
+        for (FX_Rates__c fr : new FxRatesSelector().selectAll()) {
             fxRates.put(fr.Currency_Code__c, fr);
         }
     }
-    
+    /*J
     private static Map<ID, Account> getAccountParentIdAndRegion(Set<ID> accountIDs) {
-        /*
-        for (Account a : [SELECT Id, ParentId, Region__c FROM Account WHERE Id in :accountIDs]) {
-            result.put(a.Id, a.ParentId);
-        }
-        */
-        
         Map<ID, Account> result = new Map<ID, Account>(
         	[SELECT Id, ParentId, Region__c 
         	 FROM Account 
@@ -97,7 +62,8 @@ public class OpportunityHelper {
         
         return result;
     }
-    
+    */
+    /*J
     public static void setOpportunityGeneralInfo(List<Opportunity> opptysOld, List<Opportunity> opptysNew){
     	if (!(Trigger.isBefore && (Trigger.isInsert || Trigger.isUpdate))) return;
     	
@@ -146,26 +112,26 @@ public class OpportunityHelper {
                 if (opptyNew.AccountId != null && accountParentIdAndRegion.containsKey(opptyNew.AccountId)) {
                 	opptyNew.Account_Region_TEXT__c = accountParentIdAndRegion.get(opptyNew.AccountId).Region__c;
                 }
-				/*J Moved to new FW
+				//J Moved to new FW
                	// Set Last Business Modified Date & Last Business Modified by
-               	if (Trigger.isInsert) {
-		            opptyNew.Last_Business_Modified_By_Id__c = UserInfo.getUserId();
-					opptyNew.Last_Business_Modified_Date__c = Datetime.now();
-	            }
-	            //*/
+               	//if (Trigger.isInsert) {
+		          //  opptyNew.Last_Business_Modified_By_Id__c = UserInfo.getUserId();
+					//opptyNew.Last_Business_Modified_Date__c = Datetime.now();
+	            //}
+	            
         	}
         }
         else if (opptysNew != null) {           
 	        for (Opportunity opptyNew : opptysNew) {
-	        	/*J Moved to new FW 
+	        	//J Moved to new FW 
 	            // Set Last Business Modified By Id and Last Business Modified Date
-	            if (Trigger.isUpdate) {
-	                if (UserInfo.getProfileId() != integrationUserProfileID && UserInfo.getProfileId() != systemAdminProfileID) {
-	                    opptyNew.Last_Business_Modified_By_Id__c = UserInfo.getUserId();
-	                    opptyNew.Last_Business_Modified_Date__c = Datetime.now();
-	                }
-	            }
-	            //*/
+	            //if (Trigger.isUpdate) {
+	              //  if (UserInfo.getProfileId() != integrationUserProfileID && UserInfo.getProfileId() != systemAdminProfileID) {
+	                //    opptyNew.Last_Business_Modified_By_Id__c = UserInfo.getUserId();
+	                  //  opptyNew.Last_Business_Modified_Date__c = Datetime.now();
+	                //}
+	            //}
+	            
 	            if (opptyNew.RecordTypeId == getSfdcRecordTypeID()) {
 	            	// Set Probability to Win
 					if (opptyNew.Design_Win_Approval_Process__c == DW_AP_STATUS_APPROVED) {
@@ -254,7 +220,8 @@ public class OpportunityHelper {
         	}
         }
     }
-
+*/
+/*J
     public static void setOpportunityStarInfo(List<Opportunity> opptysNew){
     	if (!(Trigger.isBefore && (Trigger.isInsert || Trigger.isUpdate))) return;
         
@@ -296,7 +263,8 @@ public class OpportunityHelper {
     		}
     	}
     }
-    
+ */  
+ /*J 
     public static Double calculateDwCompletion(Opportunity opptyNew){
     	Double result = 0;
 
@@ -360,7 +328,8 @@ public class OpportunityHelper {
 		    
 		return result;
     }
-    
+    */
+    /*J
 	public static List<OpportunitySchedule__c> createOpportunitySchedulesMN(List<Opportunity> opptys) {
 		List<OpportunitySchedule__c> result = new List<OpportunitySchedule__c>();
         
@@ -406,7 +375,8 @@ public class OpportunityHelper {
 		
 		return result;	
 	}
-	
+	*/
+	/*J
 	public static List<OpportunitySchedule__c> updateOpportunitySchedulesMN(Map<ID, Opportunity> opptysOld, Map<ID, Opportunity> opptysNew) {
 		List<OpportunitySchedule__c> result = new List<OpportunitySchedule__c>();
 		
@@ -438,7 +408,8 @@ public class OpportunityHelper {
 		
 		return result;
 	}
-	
+	*/
+	/*J
 	public static List<OpportunitySchedule__c> updateOpportunitySchedulesSFDC(Map<ID, Opportunity> opptysOld, Map<ID, Opportunity> opptysNew) {
 		List<OpportunitySchedule__c> result = new List<OpportunitySchedule__c>();
 		
@@ -461,7 +432,8 @@ public class OpportunityHelper {
 		
 		return result;	
 	}
-	
+	*/
+	/*J
 	public static List<OpportunityLineItem> updateOpportunityProductLostCancelledInfo(List<Opportunity> opptysOld, List<Opportunity> opptysNew){
 		List<OpportunityLineItem> opptyProds;
 		List<OpportunityLineItem> result = new List<OpportunityLineItem>();
@@ -535,7 +507,7 @@ public class OpportunityHelper {
 		
 		return result;
 	} 
-	
+	*/
 	
 	public static void modelNExpiredOpportunitiesUpdate(List<SObject> scope) {
 		List<Opportunity> updatedOpptys = new List<Opportunity>();
@@ -562,7 +534,7 @@ public class OpportunityHelper {
         
         update opptyLineItems;
 	}
-	
+	/*J
 	private static List<OpportunitySchedule__c> getOpportunitySchedulesForUpdate(List<OpportunitySchedule__c> opptyScheds, ID opptyID) {
 		List<OpportunitySchedule__c> result = new List<OpportunitySchedule__c>();
 		
@@ -574,7 +546,8 @@ public class OpportunityHelper {
 		
 		return result;	
 	}
-	
+	*/
+	/*J
 	private static Map<Id, List<OpportunityLineItem>> getOpportunityProducts(List<Opportunity> opptys){
 		Set<ID> opptyIDs = new Set<ID>();
 		Map<Id, List<OpportunityLineItem>> result = new Map<Id, List<OpportunityLineItem>>();
@@ -607,7 +580,7 @@ public class OpportunityHelper {
         
 		return result;
 	}
-	
+	*/
 	public static Boolean isRecordTypeMN(Opportunity oppty) {
 		return oppty.RecordTypeId == getMnRecordTypeID();
     }
@@ -619,8 +592,9 @@ public class OpportunityHelper {
     public static Boolean isTMMA(Opportunity oppty) {
     	return (oppty.Account.Customer_Category__c == 'Tier 4 - TMMA');
     }
-    
+    /*J
     private static void setParentAccountIdText(Opportunity oppty, ID parentID) {
     	oppty.Parent_Account_ID_Text__c = (parentID != null) ? String.valueOf(parentID).substring(0, 15) : null;
     }
+    */
 }

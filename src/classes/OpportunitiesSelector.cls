@@ -4,6 +4,8 @@ public class OpportunitiesSelector extends ApplicationSelector {
 	
 	public enum Stage {INITIAL_ENGAGEMENT, DISCOVERY, DECISION, COMMITMENT, LOST, CANCELLED}
 	
+	public enum ApprovalStatus {OPEN, APPROVED, LOST}
+	
 	private static final Map<RecordType, String> RECORD_TYPES = new Map<RecordType, String> {
 		RecordType.SFDC_OPPTY => 'SFDC Oppty',
 		RecordType.MODEL_N_OPPTY => 'Model N Oppty'	
@@ -16,6 +18,23 @@ public class OpportunitiesSelector extends ApplicationSelector {
 		Stage.COMMITMENT => 'Commitment',
 		Stage.LOST => 'Lost',
 		Stage.CANCELLED => 'Cancelled'
+	};
+	
+	public static final Set<String> OPEN_STAGES = new Set<String> {
+		STAGES.get(Stage.INITIAL_ENGAGEMENT),
+		STAGES.get(Stage.DISCOVERY),
+		STAGES.get(Stage.DECISION)		
+	};
+	
+	public static final Set<String> LOST_STAGES = new Set<String> {
+		STAGES.get(Stage.LOST),
+		STAGES.get(Stage.CANCELLED)		
+	}; 
+	
+	public static final Map<ApprovalStatus, String> APPROVAL_STATUSES = new Map<ApprovalStatus, String> {
+		ApprovalStatus.OPEN => 'Open',
+		ApprovalStatus.APPROVED => 'Approved',
+		ApprovalStatus.LOST => 'Lost'	
 	};
 	
 	public override Schema.SObjectType getSObjectType() {

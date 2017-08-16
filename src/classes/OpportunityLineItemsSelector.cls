@@ -15,7 +15,11 @@ public class OpportunityLineItemsSelector extends ApplicationSelector {
 			OpportunityLineItem.UnitPrice,
 			OpportunityLineItem.Component_Multiplier__c,
 			OpportunityLineItem.Price_Erosion_Rate__c,
+			OpportunityLineItem.Prod_Lost__c,
 			OpportunityLineItem.Prod_Lost_Cancelled__c,
+			OpportunityLineItem.Prod_Lost_Cancelled_Date__c, 
+			OpportunityLineItem.Prod_Lost_Cancelled_Reason__c,
+			OpportunityLineItem.Prod_Lost_Reason__c, 
 			OpportunityLineItem.Program__c,
 			OpportunityLineItem.Share__c
 		};

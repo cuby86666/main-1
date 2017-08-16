@@ -1,8 +1,8 @@
 public class TriggerHandlerOpptyAfterInsert extends TriggerHandlerBase {
 	public override void mainEntry(TriggerParameters tp) {
-		createOpportunitySchedulesMN(tp);	
+		//J createOpportunitySchedulesMN(tp);	
 	} 
-	
+	/*J
 	private void createOpportunitySchedulesMN(TriggerParameters tp) {
 		List<SObject> opptysMN = new List<SObject>();
 		
@@ -20,4 +20,5 @@ public class TriggerHandlerOpptyAfterInsert extends TriggerHandlerBase {
 			}	
 		}	
 	} 
+	*/
 }

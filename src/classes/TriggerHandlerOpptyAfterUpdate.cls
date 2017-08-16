@@ -1,9 +1,9 @@
 public class TriggerHandlerOpptyAfterUpdate extends TriggerHandlerBase {
 	public override void mainEntry(TriggerParameters tp) {
-        updateOpportunitySchedules(tp);
-        updateOpportunityProductLostCancelledInfo(tp);
+        //J updateOpportunitySchedules(tp);
+        //J updateOpportunityProductLostCancelledInfo(tp);
     } 
-	
+	/*J
 	private void updateOpportunitySchedules(TriggerParameters tp) {
 		Map<ID, Opportunity> opptysOldMN = new Map<ID, Opportunity>();
 		Map<ID, Opportunity> opptysNewMN = new Map<ID, Opportunity>();
@@ -46,7 +46,8 @@ public class TriggerHandlerOpptyAfterUpdate extends TriggerHandlerBase {
 	private Boolean isMnOpptySchedsUpdatable(Opportunity oppty) {
 		return OpportunityHelper.isRecordTypeMN(oppty) && !OpportunityHelper.isTmmaOverride(oppty) && CommonUtils.isIntegrationUser();
 	}
-	
+	*/
+	/*J
 	private void updateOpportunityProductLostCancelledInfo(TriggerParameters tp){
 		List<OpportunityLineItem> opptyProds = OpportunityHelper.updateOpportunityProductLostCancelledInfo(tp.oldList, tp.newList);
 		
@@ -54,4 +55,5 @@ public class TriggerHandlerOpptyAfterUpdate extends TriggerHandlerBase {
 			sObjectsToUpdate.put(opptyProd.Id, opptyProd);
 		}
 	}
+	*/
 }
