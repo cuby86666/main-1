@@ -28,7 +28,7 @@ public class OpportunitySchedulesSelector extends ApplicationSelector {
 		List<OpportunityScheduleValueSummary> result = new List<OpportunityScheduleValueSummary>();
 		
 		List<AggregateResult> schedValues = 
-            [select Opportunity__c opptyId, sum(Frozen_Oppty_Sched_Qty__c) totalFrozenSchedQty
+            [select Opportunity__c opptyId, sum(Frozen_Oppty_Sched_Qty__c) totalFrozenSchedQty, count(Id) totalCount
                from OpportunitySchedule__c 
               where Opportunity__c in :opptyIds 
              group by Opportunity__c];
@@ -53,6 +53,10 @@ public class OpportunitySchedulesSelector extends ApplicationSelector {
 		
 		public Double totalFrozenSchedQty { 
 			get { return (Double)result.get('totalFrozenSchedQty'); } 
+		}
+		
+		public Integer totalCount { 
+			get { return (Integer)result.get('totalCount'); } 
 		}
 	}
     

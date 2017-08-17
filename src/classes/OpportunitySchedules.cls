@@ -27,6 +27,7 @@ public class OpportunitySchedules extends ApplicationDomain {
 		fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
 		
 		updateOpptyProdQty((List<OpportunitySchedule__c>)this.records, uow);
+		
 		createOpptyProdScheds(uow);
 		
 		uow.commitWork();
@@ -37,6 +38,7 @@ public class OpportunitySchedules extends ApplicationDomain {
 		fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
 		
 		updateOpptyProdQty((List<OpportunitySchedule__c>)existingRecords.values(), uow);
+		
 		updateOpptyProdScheds((List<OpportunitySchedule__c>)existingRecords.values(), uow);
 		
 		uow.commitWork();
@@ -47,6 +49,7 @@ public class OpportunitySchedules extends ApplicationDomain {
 		fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
 		
 		updateOpptyProdQty((List<OpportunitySchedule__c>)this.records, uow);
+		
 		deleteOpptyProdScheds(uow);
 		
 		uow.commitWork();

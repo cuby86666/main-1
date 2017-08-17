@@ -45,17 +45,20 @@ public class OpportunitiesSelector extends ApplicationSelector {
 		return new List<Schema.SObjectField> {
 			Opportunity.Id,
 			Opportunity.AccountId,
+			Opportunity.RecordTypeId,
+			Opportunity.StageName,
 			Opportunity.BL_Approver_1__c, 
 			Opportunity.BL_Approver_2__c,
+			Opportunity.Expiration_Date__c,
+			Opportunity.Lost_Description__c,
+			Opportunity.Lost_Reason__c,
 			Opportunity.LT_Value_USD__c,
 			Opportunity.MAG_Approver_1__c, 
 			Opportunity.MAG_Approver_2__c,
 			Opportunity.Production_Date__c,
 			Opportunity.Program__c,
-			Opportunity.RecordTypeId,
 			Opportunity.Regional_VP_Approver__c,
 			Opportunity.Sales_Director_Approver__c, 
-			Opportunity.StageName,
 			Opportunity.TMMA_Override__c,
 			Opportunity.VP_Approver_2__c
 		};

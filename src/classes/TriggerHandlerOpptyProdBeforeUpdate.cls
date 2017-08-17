@@ -4,9 +4,9 @@ public class TriggerHandlerOpptyProdBeforeUpdate extends TriggerHandlerBase {
 		//J OpportunityProductClaimValue.bypassOpportunityProductMnUpdateForTmmaOverride((Map<ID, OpportunityLineItem>)tp.oldMap, (Map<ID, OpportunityLineItem>)tp.newMap);
 		
 		//J OpportunityProductClaimValue.setOpportunityProductClaimValues(tp.newList);	
-		OpportunityProductHelper.setOpportunityProductLastBusinessModifiedInfo(tp.newList);
-        OpportunityProductHelper.updateOpportunityProductLostCancelledInformation(tp.oldList, tp.newList);
+		//J OpportunityProductHelper.setOpportunityProductLastBusinessModifiedInfo(tp.newList);
+        //J OpportunityProductHelper.updateOpportunityProductLostCancelledInformation(tp.oldList, tp.newList);
 		
-		OpportunityLineItemTrigger.onBeforeUpdate(tp.newList);
+		//J OpportunityLineItemTrigger.onBeforeUpdate(tp.newList);
 	}    
 }

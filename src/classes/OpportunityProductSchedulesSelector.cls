@@ -15,6 +15,10 @@ public class OpportunityProductSchedulesSelector extends ApplicationSelector {
 		};
 	}
 	
+	public override String getOrderBy() {
+		return String.valueOf(OpportunityProductSchedule__c.Sched_Date__c);
+	}
+	
 	public List<OpportunityProductSchedule__c> selectByOpptyId(Set<Id> opptyIds) {
 		p('selectByOpptyId');
 		return (List<OpportunityProductSchedule__c>)Database.query(newQueryFactory().setCondition('Opportunity__c in :opptyIds').toSOQL());	

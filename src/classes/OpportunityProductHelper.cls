@@ -27,7 +27,7 @@ public class OpportunityProductHelper {
         systemAdminProfileID = CommonUtils.getSystemAdminProfileID();
         integrationUserProfileID = CommonUtils.getIntegrationUserProfileID();
     }
-    
+    /*J
     public static void checkOpportunitySchedule(List<OpportunityLineItem> opptyLineItems) {
         Set<ID> opptyIDs = getOpptyIDs(opptyLineItems);   
         
@@ -49,7 +49,8 @@ public class OpportunityProductHelper {
             }
         }
     }
-    
+    */
+    /*J
     public static void setOpportunityProductQuantity(List<OpportunityLineItem> opptyLineItems) {   
         Set<Id> opptyIds = getOpptyIDs(opptyLineItems);
         
@@ -65,7 +66,7 @@ public class OpportunityProductHelper {
             }
         }               
     } 
-    
+    */
     /**
      * @param schedDateIndex: 0-based list index of the schedule date
      */
@@ -73,7 +74,7 @@ public class OpportunityProductHelper {
         // Apply price erosion rate every PRICE_EROSION_QUARTERS quarters. Use previous quarter price as base price.
         return (unitPrice * Math.pow(Double.valueOf(1 - (priceErosionRate / 100)), schedDateIndex / PRICE_EROSION_QUARTERS)).setScale(6);
     }
-
+/*J
     public static List<OpportunityProductSchedule__c> createOpportunityProductSchedules(List<OpportunityLineItem> opptyLineItems) {
         Set<ID> opptyIDs = getOpptyIDs(opptyLineItems);
                      
@@ -125,7 +126,8 @@ public class OpportunityProductHelper {
         
         return result;
     }
-
+*/
+/*J
     public static List<OpportunityProductSchedule__c> updateOpportunityProducySchedules(List<OpportunityLineItem> opptyProdsOld, List<OpportunityLineItem> opptyProdsNew){
         Set<ID> oliIDs = new Set<ID>();
         Set<ID> opptyIDs = new Set<ID>();
@@ -206,7 +208,8 @@ public class OpportunityProductHelper {
         
         return opptyProdSchedUpdateList;
     }
-    
+    */
+    /*J
     public static List<OpportunityProductSchedule__c> deleteOpportunityProductScheds(List<OpportunityLineItem> opptyProds){
         Set<ID> oilIDs = new Set<ID>();
         Map<Id, Map<Id, OpportunityProductSchedule__c>> opptyProdAndOpptyProdSched; // Opporunity Product Id -> (Opportunity Product Schedule Id -> Opportunity Product Schedule)
@@ -231,7 +234,8 @@ public class OpportunityProductHelper {
         
         return opptyProdSchedsDelete;
     }
-    
+    */
+    /*J
     public static void updateOpportunityProductLostCancelledInformation(List<OpportunityLineItem> opptyProdsOld, List<OpportunityLineItem> opptyProdsNew){
     	for (OpportunityLineItem opptyProdOld : opptyProdsOld) {
     		for (OpportunityLineItem opptyProdNew : opptyProdsNew) {
@@ -255,7 +259,8 @@ public class OpportunityProductHelper {
     		}
     	}
     }
-    
+    */
+    /*J
     public static void setOpportunityProductLastBusinessModifiedInfo(List<OpportunityLineItem> opptyProdsNew){
 		for (OpportunityLineItem opptyProdNew : opptyProdsNew) { 
 			if (Trigger.isInsert) {
@@ -270,7 +275,8 @@ public class OpportunityProductHelper {
             }    		
 		}
     }
-    
+    */
+    /*J
     public static List<OpportunityProductSchedule__c> deleteLostCancelledOpportunityProductSchedules(List<OpportunityLineItem> opptyProdsOld, List<OpportunityLineItem> opptyProdsNew){
     	List<OpportunityProductSchedule__c> opptyProdSchedsDelete;      
     	Set<ID> oilIDs = new Set<ID>();
@@ -314,7 +320,8 @@ public class OpportunityProductHelper {
 
     	return opptyProdSchedsDelete;
     }
-    
+    */
+    /*J
     public static List<OpportunityProductSchedule__c> createReOpenOpportunityProductSchedules(List<OpportunityLineItem> opptyProdsOld, List<OpportunityLineItem> opptyProdsNew){
     	Set<ID> opptyIDs = new Set<ID>();
     	Set<ID> oilIDs = new Set<ID>();
@@ -379,7 +386,8 @@ public class OpportunityProductHelper {
     	return opptyProdSchedsInsert;
 
     }
-    
+    */
+    /*J
     public static void setOpportunityProductLostCancelledInfo(List<OpportunityLineItem> opptyProdsNew){
     	Map<ID, Opportunity> opptyLostCancelledInfo;
     	
@@ -396,7 +404,7 @@ public class OpportunityProductHelper {
     		}
     	}
     }
-    
+    */
     public static Set<ID> getOpptyIDs(List<OpportunityLineItem> opptyLineItems) {
         Set<ID> result = new Set<ID>();
         
@@ -416,7 +424,7 @@ public class OpportunityProductHelper {
         
         return result;
     } 
-    
+    /*J
     public static Map<ID, List<OpportunityProductSchedule__c>> getOpptyProdAndOpptyProdSchedList(Set<ID> opptyIDs, Set<ID> opptyProdIDs){
     	// Opportunity Product Id -> (Opportunity Product Schedule)
     	Map<ID, List<OpportunityProductSchedule__c>> result = new Map<ID, List<OpportunityProductSchedule__c>>();
@@ -440,7 +448,7 @@ public class OpportunityProductHelper {
     	 
     	 return result;
     }
-    
+    */
     public static Boolean isOpptyProdLostCancelled(OpportunityLineItem opptyLineItem) {
     	return OPPTY_PROD_LOST_CANCELLED.contains(opptyLineItem.Prod_Lost_Cancelled__c);	
     }
@@ -466,7 +474,7 @@ public class OpportunityProductHelper {
         
         return result;
     }
-        
+     /*J   
     private static Boolean updateOpptyProdSchedShare(String stageName, 
                                                      OpportunityLineItem opptyProdOld, OpportunityLineItem opptyProdNew){
         Boolean result = false;
@@ -479,7 +487,8 @@ public class OpportunityProductHelper {
         
         return result;
     }
-    
+    */
+    /*J
     private static Boolean updateOpptyProdSchedFrozenShare(OpportunityLineItem opptyProdOld, OpportunityLineItem opptyProdNew){
         Boolean result = false;
         
@@ -489,7 +498,8 @@ public class OpportunityProductHelper {
                 
         return result;
     }
-    
+    */
+    /*J
     private static Boolean updateOpptyProdSchedQtyPerSystem(OpportunityLineItem opptyProdOld, OpportunityLineItem opptyProdNew){
         Boolean result = false;
         
@@ -499,7 +509,8 @@ public class OpportunityProductHelper {
         
         return result;
     }
-    
+    */
+    /*J
     private static Map<Id, Map<Id, OpportunityProductSchedule__c>> getOpptyProdAndOpptyProdSched(List<OpportunityLineItem> opptyProds, Set<ID> oliIDs){
         // Opporunity Product Id -> (Opportunity Product Schedule Id -> Opportunity Product Schedule)
         Map<Id, Map<Id, OpportunityProductSchedule__c>> result = new Map<Id, Map<Id, OpportunityProductSchedule__c>>();
@@ -522,7 +533,8 @@ public class OpportunityProductHelper {
         
         return result;
     }
-
+*/
+/*J
     private static Map<ID, List<OpportunitySchedule__c>> getOpptyAndOpptySchedList(Set<ID> opptyIDs){
         Map<ID, List<OpportunitySchedule__c>> result = new Map<ID, List<OpportunitySchedule__c>>(); // Oppty Id -> Oppty Sched List
         List<OpportunitySchedule__c> allOpptyScheds;
@@ -545,7 +557,8 @@ public class OpportunityProductHelper {
         
         return result;
     }
-    
+   */ 
+   /*J
     private static Map<ID, Opportunity> getOpptyLostCancelledInfo(List<OpportunityLineItem> opptyProds){
     	Set<ID> opptyIDs = new Set<ID>();
     	
@@ -566,4 +579,5 @@ public class OpportunityProductHelper {
         
         return result;
     }
+    */
 }
