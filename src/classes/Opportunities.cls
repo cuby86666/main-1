@@ -21,6 +21,8 @@ public class Opportunities extends ApplicationDomain {
 	
 	public override void onBeforeUpdate(Map<Id, SObject> existingRecords) {
 		p('onBeforeUpdate');
+		bypassValidation((Map<Id, Opportunity>)existingRecords); // Must be the first method call to skip any field updates by the following method calls.
+		
 		updateOpptyGeneralInfo((List<Opportunity>)existingRecords.values());
 		
 		updateOpptyStarInfo();
@@ -30,8 +32,6 @@ public class Opportunities extends ApplicationDomain {
 		OpportunityProductClaimValue.bypassOpportunityMnUpdateForTmmaOverride((Map<Id, Opportunity>)existingRecords, new Map<Id, Opportunity>((List<Opportunity>)this.records));
 		
 		OpportunityTrigger.onBeforeUpdate((List<Opportunity>)this.records, (Map<Id, Opportunity>)existingRecords);
-		
-		bypassValidation((Map<Id, Opportunity>)existingRecords);
 	}
 	
 	public override void onAfterInsert() {
