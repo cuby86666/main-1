@@ -21,7 +21,8 @@ public class Opportunities extends ApplicationDomain {
 	
 	public override void onBeforeUpdate(Map<Id, SObject> existingRecords) {
 		p('onBeforeUpdate');
-		bypassValidation((Map<Id, Opportunity>)existingRecords); // Must be the first method call to skip any field updates by the following method calls.
+		// Must be the first method call to skip any field updates by the following method calls.
+		bypassValidation((Map<Id, Opportunity>)existingRecords); 
 		
 		updateOpptyGeneralInfo((List<Opportunity>)existingRecords.values());
 		
