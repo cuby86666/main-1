@@ -18,7 +18,6 @@ private class ModelNExpiredOpportunitiesUpdateJobTest {
         }            
         List<Database.SaveResult> prodsr = Database.insert(prods);
 
-        
         //Model N Record type
         RecordType rt = [SELECT Id,Name from RecordType where Name='Model N Oppty'];
         
@@ -28,7 +27,43 @@ private class ModelNExpiredOpportunitiesUpdateJobTest {
             Opportunity oppty = new Opportunity(Name = 'Model N Oppty '+i,StageName='Discovery',AccountId=asr.getId(),RecordTypeId=rt.id,Expiration_Date__c=System.today().addDays(-2),CloseDate=System.today().addDays(100), Production_Date__c = Date.newInstance(2016, 04, 30), One_Year_Pieces__c = 1000);  
             opptys.add(oppty);
         }
+        
         insert opptys;
+        
+        List<PricebookEntry> pbes = [select Id from PricebookEntry where Product2Id in :prods and CurrencyIsoCode = 'USD'];
+        
+        // Insert opportunity products
+        List<OpportunityLineItem> olis = new List<OpportunityLineItem>();
+        
+        for (Opportunity o : opptys) {
+        	createOpportunitySchedules(o.Id, 1000);
+        	
+	        for (PricebookEntry pbe : pbes) {
+	            OpportunityLineItem oli = new OpportunityLineItem(OpportunityId = o.Id, PricebookEntryId = pbe.Id);
+	            oli.UnitPrice = 1;
+	            oli.Component_Multiplier__c = 1;
+	            olis.add(oli);
+	        }
+        }
+        
+        insert olis;
+    }
+    
+    static void createOpportunitySchedules(ID opptyID, Double totalQty) {
+    	List<OpportunitySchedule__c> opptyScheds = new List<OpportunitySchedule__c>();
+    	Double qty = totalQty / 4;
+    	
+    	OpportunitySchedule__c opptySched;
+		opptySched = new OpportunitySchedule__c(Opportunity__c = opptyID, Sched_Date__c = Date.newInstance(2016, 01, 01), Oppty_Sched_Qty__c = qty, Frozen_Oppty_Sched_Qty__c = qty);
+		opptyScheds.add(opptySched);
+		opptySched = new OpportunitySchedule__c(Opportunity__c = opptyID, Sched_Date__c = Date.newInstance(2016, 04, 01), Oppty_Sched_Qty__c = qty, Frozen_Oppty_Sched_Qty__c = qty);
+		opptyScheds.add(opptySched);
+		opptySched = new OpportunitySchedule__c(Opportunity__c = opptyID, Sched_Date__c = Date.newInstance(2016, 07, 01), Oppty_Sched_Qty__c = qty, Frozen_Oppty_Sched_Qty__c = qty);
+		opptyScheds.add(opptySched);
+		opptySched = new OpportunitySchedule__c(Opportunity__c = opptyID, Sched_Date__c = Date.newInstance(2016, 10, 01), Oppty_Sched_Qty__c = qty, Frozen_Oppty_Sched_Qty__c = qty);
+		opptyScheds.add(opptySched);	
+    	
+    	insert opptyScheds;
     }
     
     @istest

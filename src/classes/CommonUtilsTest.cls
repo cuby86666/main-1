@@ -22,4 +22,12 @@ private class CommonUtilsTest {
     	System.assertEquals(0.875428, CommonUtils.roundDouble(b, 6));	
     	System.assertEquals(0.875428, CommonUtils.roundDouble(c, 6));
     }
+    
+    @isTest
+    static void testIdGetters() {
+    	System.assertNotEquals(null, CommonUtils.getIntegrationUserProfileId());
+    	System.assertNotEquals(null, CommonUtils.getSystemAdminProfileId());
+    	System.assertNotEquals(null, CommonUtils.getDataAdminUserId());
+    }
+    
 }

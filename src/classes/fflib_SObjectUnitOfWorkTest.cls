@@ -83,6 +83,7 @@ private with sharing class fflib_SObjectUnitOfWorkTest
 		OpportunityLineItem existingOpptyLineItem = oppty.OpportunityLineItems[0];
 		existingOpptyLineItem.UnitPrice = 3.5; 
 		uow.registerDirty(existingOpptyLineItem); 
+		uow.registerDirty(existingOpptyLineItem, null, null); //J for test coverage
 		
 		uow.commitWork();
 		

@@ -25,11 +25,6 @@ public class OpportunityLineItemsSelector extends ApplicationSelector {
 		};
 	}
 	
-	public List<OpportunityLineItem> selectById(Set<Id> ids) {
-		p('selectById');
-		return (List<OpportunityLineItem>)selectSObjectsById(ids);
-	}
-	
 	public List<OpportunityLineItem> selectByOpptyIdWithOpportunity(Set<Id> opptyIds, Set<String> lostCancelled) {
 		p('selectByOpptyIdWithOpportunity');
 		fflib_QueryFactory opptyLineItemsQueryFactory = newQueryFactory();

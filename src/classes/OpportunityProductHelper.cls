@@ -414,7 +414,7 @@ public class OpportunityProductHelper {
         
         return result;
     }
- 
+ /*J
     public static Map<Id, Opportunity> getOpptys(Set<ID> opptyIDs){        
         Map<Id, Opportunity> result = new Map<Id, Opportunity>(
             [SELECT Id, RecordTypeId, StageName, Production_Date__c
@@ -423,7 +423,8 @@ public class OpportunityProductHelper {
         );
         
         return result;
-    } 
+    }
+    */ 
     /*J
     public static Map<ID, List<OpportunityProductSchedule__c>> getOpptyProdAndOpptyProdSchedList(Set<ID> opptyIDs, Set<ID> opptyProdIDs){
     	// Opportunity Product Id -> (Opportunity Product Schedule)
@@ -452,7 +453,7 @@ public class OpportunityProductHelper {
     public static Boolean isOpptyProdLostCancelled(OpportunityLineItem opptyLineItem) {
     	return OPPTY_PROD_LOST_CANCELLED.contains(opptyLineItem.Prod_Lost_Cancelled__c);	
     }
-    
+    /*J
     private static Map<ID, Map<ID, OpportunityProductSchedule__c>> getOpptyProdScheds(Set<ID> opptyIDs, Set<ID> opptyProdIDs){
         // Opportunity Product Id -> (Opportunity Product Schedule Id -> Opportunity Product Schedule)
         Map<ID, Map<ID, OpportunityProductSchedule__c>> result = new Map<Id, Map<ID, OpportunityProductSchedule__c>>();
@@ -474,6 +475,7 @@ public class OpportunityProductHelper {
         
         return result;
     }
+    */
      /*J   
     private static Boolean updateOpptyProdSchedShare(String stageName, 
                                                      OpportunityLineItem opptyProdOld, OpportunityLineItem opptyProdNew){

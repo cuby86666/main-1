@@ -13,11 +13,6 @@ public class UsersSelector extends ApplicationSelector {
 		};
 	}
 	
-	public List<User> selectById(Set<Id> ids) {
-		p('selectById');
-		return (List<User>)selectSObjectsById(ids);
-	}
-	
 	public List<User> selectByName(Set<String> names) {
 		p('selectByName');
 		return (List<User>)Database.query(newQueryFactory().setCondition('Name in :names').toSOQL());
