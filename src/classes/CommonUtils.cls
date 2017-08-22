@@ -6,6 +6,7 @@ public class CommonUtils {
 	private static Id integrationUserProfileId;
 	private static Id systemAdminProfileId;
 	private static Id dataAdminUserId;
+	private static Map<String, FX_Rates__c> fxRatesByCurIsoCode;
 	
 	public static String getSObjectTypeName(SObject so) {
 		return so.getSObjectType().getDescribe().getName();
@@ -78,6 +79,22 @@ public class CommonUtils {
 				systemAdminProfileId = p.Id;
 			}
 		}
+    }
+    
+    public static Map<String, FX_Rates__c> getFxRatesByCurIsoCode() {
+    	if (fxRatesByCurIsoCode == null) {
+    		setFxRatesByCurIsoCode();	
+    	}
+    	
+        return fxRatesByCurIsoCode;
+    }
+    
+    private static void setFxRatesByCurIsoCode() {
+    	fxRatesByCurIsoCode = new Map<String, FX_Rates__c>();  
+        
+        for (FX_Rates__c fr : new FxRatesSelector().selectAll()) {
+            fxRatesByCurIsoCode.put(fr.Currency_Code__c, fr);
+        }
     }
     
     public static String generateGuid() {

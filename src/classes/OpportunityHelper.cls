@@ -1,18 +1,19 @@
 public class OpportunityHelper {
+	/*J
 	public static final String OPPTY_STAGE_INITIAL_ENGAGEMENT = 'Initial Engagement';
 	public static final String OPPTY_STAGE_DISCOVERY = 'Discovery';
 	public static final String OPPTY_STAGE_DECISION = 'Decision';
 	public static final String OPPTY_STAGE_COMMITMENT = 'Commitment';
 	public static final String OPPTY_STAGE_LOST = 'Lost';
 	public static final String OPPTY_STAGE_CANCELLED = 'Cancelled';
-	
+	*/
 	private static final String TYPE_SFDC = 'SFDC_OPPTY'; 
 	private static final String TYPE_MN = 'Model_N_Oppty';
 	private static final String DW_AP_STATUS_OPEN = 'Open'; //Opportunity Design Win Apporval Status: Open
 	private static final String DW_AP_STATUS_APPROVED = 'Approved'; //Opportunity Design Win Apporval Status: Approved
 	private static final String DW_AP_STATUS_LOST = 'Lost';//Opportunity Design Win Approval Status: Lost
-	private static final Set<String> OPPTY_OPEN_STAGES = new Set<String> {OPPTY_STAGE_INITIAL_ENGAGEMENT, OPPTY_STAGE_DISCOVERY, OPPTY_STAGE_DECISION};
-	private static final Set<String> OPPTY_LOST_STAGES = new Set<String> {OPPTY_STAGE_LOST, OPPTY_STAGE_CANCELLED};
+	//J private static final Set<String> OPPTY_OPEN_STAGES = new Set<String> {OPPTY_STAGE_INITIAL_ENGAGEMENT, OPPTY_STAGE_DISCOVERY, OPPTY_STAGE_DECISION};
+	//J private static final Set<String> OPPTY_LOST_STAGES = new Set<String> {OPPTY_STAGE_LOST, OPPTY_STAGE_CANCELLED};
 	private static final String LOST_STAGE = 'Lost';
 	
 	private static ID sfdcRecordTypeID;
@@ -22,12 +23,12 @@ public class OpportunityHelper {
 	private static ID systemAdminProfileID;
 	
 	static{
-        sfdcRecordTypeID = getSfdcRecordTypeID();
-        mnRecordTypeID = getMnRecordTypeID();
+        //J sfdcRecordTypeID = getSfdcRecordTypeID();
+        //J mnRecordTypeID = getMnRecordTypeID();
         systemAdminProfileID = CommonUtils.getSystemAdminProfileID();
         integrationUserProfileID = CommonUtils.getIntegrationUserProfileID();
     }
-    	
+    /*J	
 	public static ID getSfdcRecordTypeID() {
 		return new OpportunitiesSelector().getRecordTypeId(OpportunitiesSelector.RecordType.SFDC_OPPTY);
     }
@@ -35,7 +36,8 @@ public class OpportunityHelper {
     public static ID getMnRecordTypeID() {
     	return new OpportunitiesSelector().getRecordTypeId(OpportunitiesSelector.RecordType.MODEL_N_OPPTY);
     }
-    
+    */
+    /*J
     public static Map<String, FX_Rates__c> getFxRates() {
     	if (fxRates == null) {
     		setFxRates();	
@@ -52,6 +54,7 @@ public class OpportunityHelper {
             fxRates.put(fr.Currency_Code__c, fr);
         }
     }
+    */
     /*J
     private static Map<ID, Account> getAccountParentIdAndRegion(Set<ID> accountIDs) {
         Map<ID, Account> result = new Map<ID, Account>(
@@ -508,7 +511,7 @@ public class OpportunityHelper {
 		return result;
 	} 
 	*/
-	
+	/*J
 	public static void modelNExpiredOpportunitiesUpdate(List<SObject> scope) {
 		List<Opportunity> updatedOpptys = new List<Opportunity>();
         
@@ -534,6 +537,7 @@ public class OpportunityHelper {
         
         update opptyLineItems;
 	}
+	*/
 	/*J
 	private static List<OpportunitySchedule__c> getOpportunitySchedulesForUpdate(List<OpportunitySchedule__c> opptyScheds, ID opptyID) {
 		List<OpportunitySchedule__c> result = new List<OpportunitySchedule__c>();
@@ -581,17 +585,21 @@ public class OpportunityHelper {
 		return result;
 	}
 	*/
+	/*J
 	public static Boolean isRecordTypeMN(Opportunity oppty) {
 		return oppty.RecordTypeId == getMnRecordTypeID();
     }
-    
+    */
+    /*J
     public static Boolean isTmmaOverride(Opportunity oppty) {
     	return oppty.TMMA_Override__c;
     }
-    
+    */
+    /*J
     public static Boolean isTMMA(Opportunity oppty) {
     	return (oppty.Account.Customer_Category__c == 'Tier 4 - TMMA');
     }
+    */
     /*J
     private static void setParentAccountIdText(Opportunity oppty, ID parentID) {
     	oppty.Parent_Account_ID_Text__c = (parentID != null) ? String.valueOf(parentID).substring(0, 15) : null;

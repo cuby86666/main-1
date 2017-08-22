@@ -149,7 +149,7 @@ public with Sharing class TrackingSheetController
     
     public void generateDetails()        
     {
-        String sfdcRecordTypeId = OpportunityHelper.getSfdcRecordTypeID();
+        String sfdcRecordTypeId = OpportunitiesSelector.getSfdcRecordTypeId();
         AOP1HY1 = 0;
         AOP2HY1 = 0;
         AOP1HY2 = 0;
@@ -535,7 +535,7 @@ public with Sharing class TrackingSheetController
 
     public static List<SelectOption> getOwners() 
     {
-        String sfdcRecordTypeId = OpportunityHelper.getSfdcRecordTypeID();
+        String sfdcRecordTypeId = OpportunitiesSelector.getSfdcRecordTypeId();
         List<SelectOption> theOptions = new List<SelectOption>();
         Set<String> setOwners = new Set<String>();
         String accountIdString = ApexPages.currentPage().getParameters().get('id');
@@ -570,7 +570,7 @@ public with Sharing class TrackingSheetController
 
     public static List<SelectOption> getMAGs() 
     {
-        String sfdcRecordTypeId = OpportunityHelper.getSfdcRecordTypeID();
+        String sfdcRecordTypeId = OpportunitiesSelector.getSfdcRecordTypeId();
         List<SelectOption> theOptions = new List<SelectOption>();
         Set<String> setMAGs = new Set<String>();
         String accountIdString = ApexPages.currentPage().getParameters().get('id');
@@ -616,7 +616,7 @@ public with Sharing class TrackingSheetController
     
 	public static List<SelectOption> getBUs() 
     {
-        String sfdcRecordTypeId = OpportunityHelper.getSfdcRecordTypeID();
+        String sfdcRecordTypeId = OpportunitiesSelector.getSfdcRecordTypeId();
         List<SelectOption> theOptions = new List<SelectOption>();
         Set<String> setBUs = new Set<String>();
         String accountIdString = ApexPages.currentPage().getParameters().get('id');

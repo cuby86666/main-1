@@ -10,11 +10,8 @@ global class ModelNExpiredOpportunitiesUpdateJob implements Database.Batchable<S
     }	
 
     global void execute(Database.BatchableContext BC, List<sObject> scope) {
-		System.debug('//J ModelNExpiredOpportunitiesUpdateJob starts');	
-		
-		OpportunityHelper.modelNExpiredOpportunitiesUpdate(scope);
-        
-		System.debug('//J ModelNExpiredOpportunitiesUpdateJob ends');	
+		p('execute');	
+		OpportunityService.updateModelNExpiredOpportunities((List<Opportunity>)scope);
    }
 
    global void finish(Database.BatchableContext bc) {
@@ -28,5 +25,9 @@ global class ModelNExpiredOpportunitiesUpdateJob implements Database.Batchable<S
         mail.setSubject('Model N Expired Opportunities Batch Job');
         mail.setPlainTextBody('Batch job has completed with '+ job.TotalJobItems + ' batches with ' + job.NumberOfErrors + ' failures.' );
         Messaging.sendEmail(new Messaging.SingleEmailMessage[] {mail});
+   }
+   
+   private static void p(String msg) {
+		CommonUtils.p(ModelNExpiredOpportunitiesUpdateJob.class, '//-c', msg);
    }
 }

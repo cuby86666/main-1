@@ -1,5 +1,9 @@
 public class OpportunityLineItems extends ApplicationDomain {
 	
+	public static final Set<String> LOST_CANCELLED = new Set<String> {'Lost', 'Cancelled'};
+	
+	private static final Integer PRICE_EROSION_QUARTERS = 4;
+	
 	private static Set<Id> opptyProdSchedIds;
 	
 	public OpportunityLineItems(List<OpportunityLineItem> opptyProds) {
@@ -81,13 +85,31 @@ public class OpportunityLineItems extends ApplicationDomain {
 		uow.commitWork();
 	}
 	
+	/**
+     * @param schedDateIndex: 0-based list index of the schedule date
+     */
+    public static Decimal calcOpportunityProductSchedulePrice(Decimal unitPrice, Decimal priceErosionRate, Integer schedDateIndex) {
+        // Apply price erosion rate every PRICE_EROSION_QUARTERS quarters. Use previous quarter price as base price.
+        return (unitPrice * Math.pow(Double.valueOf(1 - (priceErosionRate / 100)), schedDateIndex / PRICE_EROSION_QUARTERS)).setScale(6);
+    }
+	 
 	public void updatePrograms(fflib_ISObjectUnitOfWork uow) {
 		p('updatePrograms(uow)');
 		for (OpportunityLineItem opptyProd : (List<OpportunityLineItem>)this.records) {
 			opptyProd.Program__c = opptyProd.Opportunity.Program__c;
-			
-			uow.registerDirty(opptyProd);	
 		}
+		
+		uow.registerDirty(this.records);
+	}
+	
+	public void updateModelNExpiredOpportunityProducts(fflib_ISObjectUnitOfWork uow) {
+		p('updateModelNExpiredOpportunityProducts');
+		for (OpportunityLineItem oli : (List<OpportunityLineItem>)this.records) {
+        	oli.Prod_Lost_Cancelled__c = oli.Opportunity.StageName;
+        	oli.Prod_Lost_Cancelled_Date__c = oli.Opportunity.Expiration_Date__c; 			
+        }
+        
+        uow.registerDirty(this.records);
 	}
 	
 	private void updatePrograms() {
@@ -138,7 +160,7 @@ public class OpportunityLineItems extends ApplicationDomain {
         
         opptyProdSchedIds = new Set<Id>();
         
-        Set<Id> opptyIds = OpportunityProductHelper.getOpptyIds(opptyProds);
+        Set<Id> opptyIds = getOpptyIds(opptyProds);
 
         for (OpportunityProductSchedule__c opptyProdSched : new OpportunityProductSchedulesSelector().selectByOpptyIdAndOpptyProdId(opptyIds, opptyProdIds)) {
             opptyProdSchedIds.add(opptyProdSched.Id);                                                     
@@ -156,7 +178,7 @@ public class OpportunityLineItems extends ApplicationDomain {
     
 	private void createOpptyProdScheds(fflib_ISObjectUnitOfWork uow) {
 		p('createOpptyProdScheds');
-        Set<Id> opptyIds = OpportunityProductHelper.getOpptyIds((List<OpportunityLineItem>)this.records);
+        Set<Id> opptyIds = getOpptyIds((List<OpportunityLineItem>)this.records);
                      
         Id opptyId = null;
         List<OpportunitySchedule__c> opptyScheds = null;
@@ -175,12 +197,12 @@ public class OpportunityLineItems extends ApplicationDomain {
         List<OpportunityProductSchedule__c> opptyProdSchedsCreated = new List<OpportunityProductSchedule__c>();
         
         for (OpportunityLineItem oli : (List<OpportunityLineItem>)this.records) {
-        	if (OpportunityProductHelper.isOpptyProdLostCancelled(oli)) continue;
+        	if (LOST_CANCELLED.contains(oli.Prod_Lost_Cancelled__c)) continue;
         	
             Integer schedDateIndex = 0;
             
             for (OpportunitySchedule__c os : opptySchedsMap.get(oli.OpportunityId)) {
-                Decimal price = OpportunityProductHelper.calcOpportunityProductSchedulePrice(oli.UnitPrice, oli.Price_Erosion_Rate__c, schedDateIndex);
+                Decimal price = calcOpportunityProductSchedulePrice(oli.UnitPrice, oli.Price_Erosion_Rate__c, schedDateIndex);
                 OpportunityProductSchedule__c opptyProdSched = new OpportunityProductSchedule__c();
                     
                 opptyProdSched.Sched_Date__c = os.Sched_Date__c;
@@ -213,7 +235,7 @@ public class OpportunityLineItems extends ApplicationDomain {
     	for (OpportunityLineItem opptyProdOld : existingRecords) {
     		for (OpportunityLineItem opptyProdNew : (List<OpportunityLineItem>)this.records) {
                 if(opptyProdOld.Id == opptyProdNew.Id) {
-                    if (!OpportunityLineItemsSelector.LOST_CANCELLED.contains(opptyProdOld.Prod_Lost_Cancelled__c) && OpportunityLineItemsSelector.LOST_CANCELLED.contains(opptyProdNew.Prod_Lost_Cancelled__c)) {
+                    if (!LOST_CANCELLED.contains(opptyProdOld.Prod_Lost_Cancelled__c) && LOST_CANCELLED.contains(opptyProdNew.Prod_Lost_Cancelled__c)) {
                         opptyProdIds.add(opptyProdNew.Id);
                         opptyProds.add(opptyProdNew);
                         system.debug('=====[Scarlett] Oppty Prod is changed from Open to Lost/Cancelled...');
@@ -232,7 +254,7 @@ public class OpportunityLineItems extends ApplicationDomain {
     	for (OpportunityLineItem opptyProdOld : existingRecords) {
     		for (OpportunityLineItem opptyProdNew : (List<OpportunityLineItem>)this.records) {
                 if(opptyProdOld.Id == opptyProdNew.Id) {
-                    if (!OpportunityLineItemsSelector.LOST_CANCELLED.contains(opptyProdOld.Prod_Lost_Cancelled__c) && OpportunityLineItemsSelector.LOST_CANCELLED.contains(opptyProdNew.Prod_Lost_Cancelled__c)) {
+                    if (!LOST_CANCELLED.contains(opptyProdOld.Prod_Lost_Cancelled__c) && LOST_CANCELLED.contains(opptyProdNew.Prod_Lost_Cancelled__c)) {
                         for (Id opptyProdSchedId : opptyProdSchedIds) {
                             if (opptyProdSchedsByOpptyProdId.get(opptyProdNew.Id).ContainsKey(opptyProdSchedId)) {
                                 opptyProdSchedsDeleted.add(opptyProdSchedsByOpptyProdId.get(opptyProdNew.Id).get(opptyProdSchedId));
@@ -257,7 +279,7 @@ public class OpportunityLineItems extends ApplicationDomain {
     	for (OpportunityLineItem opptyProdOld : existingRecords) {
     		for (OpportunityLineItem opptyProdNew : (List<OpportunityLineItem>)this.records) {
                 if (opptyProdOld.Id == opptyProdNew.Id) {
-                    if (OpportunityLineItemsSelector.LOST_CANCELLED.contains(opptyProdOld.Prod_Lost_Cancelled__c) && !OpportunityLineItemsSelector.LOST_CANCELLED.contains(opptyProdNew.Prod_Lost_Cancelled__c)) {
+                    if (LOST_CANCELLED.contains(opptyProdOld.Prod_Lost_Cancelled__c) && !LOST_CANCELLED.contains(opptyProdNew.Prod_Lost_Cancelled__c)) {
                         opptyProdIds.add(opptyProdNew.Id);
                         opptyIds.add(opptyProdNew.OpportunityId);
                         system.debug('=====[Scarlett] create oppty prod scheds for re open oppty products...');
@@ -297,8 +319,8 @@ public class OpportunityLineItems extends ApplicationDomain {
                             opptyProdSchedNew.Share__c = opptyProdNew.Share__c;
                             opptyProdSchedNew.Frozen_Share__c = opptyProdNew.Share__c;
                             
-                            opptyProdSchedNew.Prod_Sched_Price__c = OpportunityProductHelper.calcOpportunityProductSchedulePrice(opptyProdNew.UnitPrice, opptyProdNew.Price_Erosion_Rate__c, schedIndex);
-                            opptyProdSchedNew.Frozen_Prod_Sched_Price__c = OpportunityProductHelper.calcOpportunityProductSchedulePrice(opptyProdNew.UnitPrice, opptyProdNew.Price_Erosion_Rate__c, schedIndex);
+                            opptyProdSchedNew.Prod_Sched_Price__c = calcOpportunityProductSchedulePrice(opptyProdNew.UnitPrice, opptyProdNew.Price_Erosion_Rate__c, schedIndex);
+                            opptyProdSchedNew.Frozen_Prod_Sched_Price__c = calcOpportunityProductSchedulePrice(opptyProdNew.UnitPrice, opptyProdNew.Price_Erosion_Rate__c, schedIndex);
                             schedIndex++;
                             
                             opptyProdSchedsCreated.add(opptyProdSchedNew);
@@ -371,12 +393,12 @@ public class OpportunityLineItems extends ApplicationDomain {
                             		// Update Prod  Sched Price & Frozen Prod Sched Price of Opportunity Product Schedule
                             		if (opptyProdOld.UnitPrice != opptyProdNew.UnitPrice || opptyProdOld.Price_Erosion_Rate__c != opptyProdNew.Price_Erosion_Rate__c) {
 		                                // Before DW
-		                                if (opptys.get(opptyProdNew.OpportunityId).StageName != OpportunitiesSelector.STAGES.get(OpportunitiesSelector.Stage.COMMITMENT)) {
-		                                    opptyProdSchedUpdated.Prod_Sched_Price__c = OpportunityProductHelper.calcOpportunityProductSchedulePrice(unitPrice, priceErosionRate, i);
-		                                    opptyProdSchedUpdated.Frozen_Prod_Sched_Price__c = OpportunityProductHelper.calcOpportunityProductSchedulePrice(unitPrice, priceErosionRate, i);
+		                                if (opptys.get(opptyProdNew.OpportunityId).StageName != Opportunities.STAGES.get(Opportunities.Stage.COMMITMENT)) {
+		                                    opptyProdSchedUpdated.Prod_Sched_Price__c = calcOpportunityProductSchedulePrice(unitPrice, priceErosionRate, i);
+		                                    opptyProdSchedUpdated.Frozen_Prod_Sched_Price__c = calcOpportunityProductSchedulePrice(unitPrice, priceErosionRate, i);
 		                                }
 		                                else { // After DW
-		                                	opptyProdSchedUpdated.Frozen_Prod_Sched_Price__c = OpportunityProductHelper.calcOpportunityProductSchedulePrice(unitPrice, priceErosionRate, i);
+		                                	opptyProdSchedUpdated.Frozen_Prod_Sched_Price__c = calcOpportunityProductSchedulePrice(unitPrice, priceErosionRate, i);
 		                                }
                             		}
 	                                
@@ -430,7 +452,7 @@ public class OpportunityLineItems extends ApplicationDomain {
     	p('updateOpptyProdSchedShare');
         Boolean result = false;
         
-        if (stageName != OpportunitiesSelector.STAGES.get(OpportunitiesSelector.Stage.COMMITMENT)) {
+        if (stageName != Opportunities.STAGES.get(Opportunities.Stage.COMMITMENT)) {
             if (opptyProdOld.Share__c != opptyProdNew.Share__c) {
                 result = true;
             }
@@ -463,7 +485,7 @@ public class OpportunityLineItems extends ApplicationDomain {
     
     private void checkOpptyScheds() {
     	p('checkOpptyScheds');
-        Set<Id> opptyIds = OpportunityProductHelper.getOpptyIds((List<OpportunityLineItem>)this.records);   
+        Set<Id> opptyIds = getOpptyIds((List<OpportunityLineItem>)this.records);   
         
         Map<Id, Integer> opptyScheds = new Map<Id, Integer>();
         
@@ -496,7 +518,7 @@ public class OpportunityLineItems extends ApplicationDomain {
     
     private void updateOpptyProdQty() {  
     	p('updateOpptyProdQty'); 
-        Set<Id> opptyIds = OpportunityProductHelper.getOpptyIds((List<OpportunityLineItem>)this.records);
+        Set<Id> opptyIds = getOpptyIds((List<OpportunityLineItem>)this.records);
         
         List<OpportunitySchedulesSelector.OpportunityScheduleValueSummary> schedValues = new OpportunitySchedulesSelector().selectSchedValueByOpptyIdGroupByOpptyId(opptyIds);
              
@@ -518,8 +540,8 @@ public class OpportunityLineItems extends ApplicationDomain {
     	opptyLostCancelledInfo = getOpptyLostCancelledInfo();
     	
     	for (OpportunityLineItem opptyProd : (List<OpportunityLineItem>)this.records) {
-    		if (opptyLostCancelledInfo.get(opptyProd.OpportunityId).RecordTypeId == OpportunityHelper.getMnRecordTypeId() && 
-    			OpportunitiesSelector.LOST_STAGES.contains(opptyLostCancelledInfo.get(opptyProd.OpportunityId).StageName)) {
+    		if (opptyLostCancelledInfo.get(opptyProd.OpportunityId).RecordTypeId == OpportunitiesSelector.getMnRecordTypeId() && 
+    			Opportunities.LOST_STAGES.contains(opptyLostCancelledInfo.get(opptyProd.OpportunityId).StageName)) {
     			opptyProd.Prod_Lost__c = true;
     			opptyProd.Prod_Lost_Cancelled__c = opptyLostCancelledInfo.get(opptyProd.OpportunityId).StageName;
     			opptyProd.Prod_Lost_Cancelled_Date__c = opptyLostCancelledInfo.get(opptyProd.OpportunityId).Expiration_Date__c;
@@ -548,13 +570,13 @@ public class OpportunityLineItems extends ApplicationDomain {
     		for (OpportunityLineItem opptyProdNew : (List<OpportunityLineItem>)this.records) {
     			if (opptyProdOld.Id == opptyProdNew.Id) {
     				// From Open to Lost/Cancelled
-    				if (!OpportunityLineItemsSelector.LOST_CANCELLED.contains(opptyProdOld.Prod_Lost_Cancelled__c) && OpportunityLineItemsSelector.LOST_CANCELLED.contains(opptyProdNew.Prod_Lost_Cancelled__c)) {
+    				if (!LOST_CANCELLED.contains(opptyProdOld.Prod_Lost_Cancelled__c) && LOST_CANCELLED.contains(opptyProdNew.Prod_Lost_Cancelled__c)) {
     					opptyProdNew.Prod_Lost_Cancelled_Date__c = date.today();
     					opptyProdNew.Prod_Lost__c = true;// Prod_Lost__c will be obsoleted in the near future
     				}
     				
     				// From Lost/Cancelled to Open
-    				if (OpportunityLineItemsSelector.LOST_CANCELLED.contains(opptyProdOld.Prod_Lost_Cancelled__c) && !OpportunityLineItemsSelector.LOST_CANCELLED.contains(opptyProdNew.Prod_Lost_Cancelled__c)) {
+    				if (LOST_CANCELLED.contains(opptyProdOld.Prod_Lost_Cancelled__c) && !LOST_CANCELLED.contains(opptyProdNew.Prod_Lost_Cancelled__c)) {
     					opptyProdNew.Prod_Lost_Cancelled__c = null;
     					opptyProdNew.Prod_Lost_Cancelled_Date__c = null;
     					opptyProdNew.Prod_Lost_Reason__c = null;
@@ -565,6 +587,21 @@ public class OpportunityLineItems extends ApplicationDomain {
     			}
     		}
     	}
+    }
+    
+    private Set<Id> getOpptyIds(List<OpportunityLineItem> opptyLineItems) {
+    	p('getOpptyIds');
+        Set<Id> result = new Set<Id>();
+        
+        for (OpportunityLineItem oli : opptyLineItems) {
+            result.add(oli.OpportunityId);
+        }
+        
+        return result;
+    }
+    
+    private Boolean isOpptyProdLostCancelled(OpportunityLineItem opptyLineItem) {
+    	return LOST_CANCELLED.contains(opptyLineItem.Prod_Lost_Cancelled__c);	
     }
     
 }

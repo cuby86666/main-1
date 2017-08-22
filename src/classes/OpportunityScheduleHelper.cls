@@ -14,8 +14,8 @@ public class OpportunityScheduleHelper {
     private static ID mnRecordTypeID;
     
     static{
-        sfdcRecordTypeID = OpportunityHelper.getSfdcRecordTypeID();
-        mnRecordTypeID = OpportunityHelper.getMnRecordTypeID();
+        sfdcRecordTypeID = OpportunitiesSelector.getSfdcRecordTypeId();
+        mnRecordTypeID = OpportunitiesSelector.getMnRecordTypeId();
     }   
     /*J
     public static List<OpportunityLineItem> updateOpportunityProductQuantity(List<OpportunitySchedule__c> opptyScheds) {

@@ -1,7 +1,5 @@
 public class OpportunityLineItemsSelector extends ApplicationSelector {
 	
-	public static final Set<String> LOST_CANCELLED = new Set<String>{'Lost', 'Cancelled'};
-
 	public override Schema.SObjectType getSObjectType() {
 		return OpportunityLineItem.SObjectType;
 	}
@@ -25,8 +23,13 @@ public class OpportunityLineItemsSelector extends ApplicationSelector {
 		};
 	}
 	
+	public List<OpportunityLineItem> selectByOpptyIdWithOpportunity(Set<Id> opptyIds) {
+		p('selectByOpptyIdWithOpportunity(opptyIds)');
+		return selectByOpptyIdWithOpportunity(opptyIds, null);
+	}
+	
 	public List<OpportunityLineItem> selectByOpptyIdWithOpportunity(Set<Id> opptyIds, Set<String> lostCancelled) {
-		p('selectByOpptyIdWithOpportunity');
+		p('selectByOpptyIdWithOpportunity(opptyIds, lostCancelled)');
 		fflib_QueryFactory opptyLineItemsQueryFactory = newQueryFactory();
 		
 		new OpportunitiesSelector().configureQueryFactoryFields(opptyLineItemsQueryFactory, OpportunityLineItem.OpportunityId.getDescribe().getRelationshipName());	

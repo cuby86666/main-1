@@ -40,7 +40,7 @@ public with sharing class ProductTrigger {
         List<OpportunityLineItem> oliList = [select id,Product_Status__c, Thrust_Indicator__c , PricebookEntryId,PricebookEntry.Product2Id , Opportunity.Design_Win_Approval_Process__c
                                                from OpportunityLineItem
                                               where PricebookEntry.Product2Id in: productMap.keySet() 
-                                                and ((Opportunity.RecordTypeId = :OpportunityHelper.getSfdcRecordTypeID()) 
+                                                and ((Opportunity.RecordTypeId = :OpportunitiesSelector.getSfdcRecordTypeId())
                                                 and (Opportunity.Design_Win_Approval_Process__c =: 'Pending' or Opportunity.Design_Win_Approval_Process__c =: 'Rejected' or Opportunity.Design_Win_Approval_Process__c =: 'Open'))
                                             ];        
         if (oliList.size() > 0) {

@@ -188,7 +188,7 @@ private class OpportunitiesTest {
 	    }
 	    
 	    oppty.StageName = 'Commitment';
-	    oppty.RecordTypeId = OpportunityHelper.getMnRecordTypeID();
+	    oppty.RecordTypeId = OpportunitiesSelector.getMnRecordTypeId();
 	    update oppty;
 	    
 	    System.runAs(user) {

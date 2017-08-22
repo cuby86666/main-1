@@ -37,6 +37,17 @@ public with sharing class OpportunityService {
 		public String name;
 	}
 	
+	public static void updateModelNExpiredOpportunities(List<Opportunity> oppties) {
+		p('updateModelNExpiredOpportunities');
+		fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+		
+        List<Opportunity> opptiesUpdated = new Opportunities(oppties).updateModelNExpiredOpportunities(uow);
+        
+        new OpportunityLineItems(new OpportunityLineItemsSelector().selectByOpptyIdWithOpportunity(new Map<Id, Opportunity>(opptiesUpdated).keySet())).updateModelNExpiredOpportunityProducts(uow);
+        
+        uow.commitWork();
+	}
+	
 	private static void p(String msg) {
 		CommonUtils.p(OpportunityService.class, '//-v', msg);
 	}

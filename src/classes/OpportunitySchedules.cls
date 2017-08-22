@@ -69,7 +69,7 @@ public class OpportunitySchedules extends ApplicationDomain {
         
         for (OpportunitySchedule__c opptySchedNew : (List<OpportunitySchedule__c>)this.records){
         	if (Trigger.isInsert) {
-                if (oppties.get(opptySchedNew.Opportunity__c).StageName != OpportunitiesSelector.STAGES.get(OpportunitiesSelector.Stage.COMMITMENT)) {
+                if (oppties.get(opptySchedNew.Opportunity__c).StageName != Opportunities.STAGES.get(Opportunities.Stage.COMMITMENT)) {
         			opptySchedNew.Frozen_Oppty_Sched_Qty__c = opptySchedNew.Oppty_Sched_Qty__c;
                 }
                 
@@ -79,7 +79,7 @@ public class OpportunitySchedules extends ApplicationDomain {
         	if (Trigger.isUpdate) {
         		for (OpportunitySchedule__c opptySchedOld : opptySchedsOld){
                 	if (opptySchedOld.Id == opptySchedNew.Id) {
-                		if (oppties.get(opptySchedNew.Opportunity__c).StageName != OpportunitiesSelector.STAGES.get(OpportunitiesSelector.Stage.COMMITMENT)) {
+                		if (oppties.get(opptySchedNew.Opportunity__c).StageName != Opportunities.STAGES.get(Opportunities.Stage.COMMITMENT)) {
                         	opptySchedNew.Frozen_Oppty_Sched_Qty__c = opptySchedNew.Oppty_Sched_Qty__c;
                     	}
                 	}
@@ -97,7 +97,7 @@ public class OpportunitySchedules extends ApplicationDomain {
         }
         
         for (Opportunity o : new OpportunitiesSelector().selectById(opptyIds)) {
-        	if (o.StageName == OpportunitiesSelector.STAGES.get(OpportunitiesSelector.Stage.COMMITMENT)) {
+        	if (o.StageName == Opportunities.STAGES.get(Opportunities.Stage.COMMITMENT)) {
         		opptyIds.remove(o.Id);	
         	}
         }
@@ -106,7 +106,7 @@ public class OpportunitySchedules extends ApplicationDomain {
         
         List<OpportunitySchedulesSelector.OpportunityScheduleValueSummary> schedValues = new OpportunitySchedulesSelector().selectSchedValueByOpptyIdGroupByOpptyId(opptyIds);
              
-        List<OpportunityLineItem> opptyProdsUpdated = new OpportunityLineItemsSelector().selectByOpptyIdWithOpportunity(opptyIds, null);   
+        List<OpportunityLineItem> opptyProdsUpdated = new OpportunityLineItemsSelector().selectByOpptyIdWithOpportunity(opptyIds);   
         
         for (OpportunityLineItem oli : opptyProdsUpdated) {
             for (OpportunitySchedulesSelector.OpportunityScheduleValueSummary osvs : schedValues) {
@@ -149,7 +149,7 @@ public class OpportunitySchedules extends ApplicationDomain {
 
                     if (opptySchedList.size() > 0 && opptyProdList.size() > 0) {
                         for (OpportunityLineItem opptyProd : opptyProdList) {
-                            if (!OpportunityLineItemsSelector.LOST_CANCELLED.contains(opptyProd.Prod_Lost_Cancelled__c)) {
+                            if (!OpportunityLineItems.LOST_CANCELLED.contains(opptyProd.Prod_Lost_Cancelled__c)) {
                                 opptyProdSchedNew = new OpportunityProductSchedule__c();
                                 
                                 opptyProdSchedNew.Opportunity__c = opptySchedNew.Opportunity__c;
@@ -169,14 +169,14 @@ public class OpportunitySchedules extends ApplicationDomain {
                                     }
                                 }
                                 
-                                opptyProdSchedNew.Prod_Sched_Price__c = OpportunityProductHelper.calcOpportunityProductSchedulePrice(opptyProd.UnitPrice, opptyProd.Price_Erosion_Rate__c, schedIndex);
+                                opptyProdSchedNew.Prod_Sched_Price__c = OpportunityLineItems.calcOpportunityProductSchedulePrice(opptyProd.UnitPrice, opptyProd.Price_Erosion_Rate__c, schedIndex);
                                 
                                 opptyProdSchedNew.CurrencyIsoCode = oppties.get(opptyProd.OpportunityId).CurrencyIsoCode;
                                 
-                                if (oppties.get(opptySchedNew.Opportunity__c).StageName != OpportunitiesSelector.STAGES.get(OpportunitiesSelector.Stage.COMMITMENT)) {
+                                if (oppties.get(opptySchedNew.Opportunity__c).StageName != Opportunities.STAGES.get(Opportunities.Stage.COMMITMENT)) {
                                     opptyProdSchedNew.Frozen_Oppty_Sched_Qty__c = opptySchedNew.Oppty_Sched_Qty__c;
                                     opptyProdSchedNew.Frozen_Share__c = opptyProd.Share__c;
-                                    opptyProdSchedNew.Frozen_Prod_Sched_Price__c = OpportunityProductHelper.calcOpportunityProductSchedulePrice(opptyProd.UnitPrice, opptyProd.Price_Erosion_Rate__c, schedIndex);
+                                    opptyProdSchedNew.Frozen_Prod_Sched_Price__c = OpportunityLineItems.calcOpportunityProductSchedulePrice(opptyProd.UnitPrice, opptyProd.Price_Erosion_Rate__c, schedIndex);
                                 }
                                 
                                 opptyProdSchedsCreated.add(opptyProdSchedNew);
@@ -211,7 +211,7 @@ public class OpportunitySchedules extends ApplicationDomain {
     	p('getOpptyProdsByOpptyId');
         Map<Id, List<OpportunityLineItem>> result = new Map<Id, List<OpportunityLineItem>>(); // Oppty Id -> Oppty Prod List
         
-        for (OpportunityLineItem opptyProd : new OpportunityLineItemsSelector().selectByOpptyIdWithOpportunity(opptyIds, OpportunityLineItemsSelector.LOST_CANCELLED)) {
+        for (OpportunityLineItem opptyProd : new OpportunityLineItemsSelector().selectByOpptyIdWithOpportunity(opptyIds, OpportunityLineItems.LOST_CANCELLED)) {
             if (result.containsKey(opptyProd.OpportunityId)) {
                 result.get(opptyProd.OpportunityId).add(opptyProd);
             }
@@ -246,7 +246,7 @@ public class OpportunitySchedules extends ApplicationDomain {
 	                            opptyProdSchedUpdated.Id = opptyProdSchedId;
 	                            
 	                            //Before DW
-	                            if(oppties.get(opptySchedNew.Opportunity__c).StageName != OpportunitiesSelector.STAGES.get(OpportunitiesSelector.Stage.COMMITMENT)) {
+	                            if(oppties.get(opptySchedNew.Opportunity__c).StageName != Opportunities.STAGES.get(Opportunities.Stage.COMMITMENT)) {
 	                                if(opptySchedOld.Oppty_Sched_Qty__c != opptySchedNew.Oppty_Sched_Qty__c) {
 	                                    opptyProdSchedUpdated.Oppty_Sched_Qty__c = opptySchedNew.Oppty_Sched_Qty__c;
 	                                    opptyProdSchedUpdated.Frozen_Oppty_Sched_Qty__c = opptySchedNew.Oppty_Sched_Qty__c;
@@ -254,7 +254,7 @@ public class OpportunitySchedules extends ApplicationDomain {
 	                            }
 	                            
 	                            //After DW
-	                            if(oppties.get(opptySchedNew.Opportunity__c).StageName == OpportunitiesSelector.STAGES.get(OpportunitiesSelector.Stage.COMMITMENT)) {
+	                            if(oppties.get(opptySchedNew.Opportunity__c).StageName == Opportunities.STAGES.get(Opportunities.Stage.COMMITMENT)) {
 	                                if(opptySchedOld.Oppty_Sched_Qty__c != opptySchedNew.Oppty_Sched_Qty__c) {
 	                                    opptyProdSchedUpdated.Oppty_Sched_Qty__c = opptySchedNew.Oppty_Sched_Qty__c;
 	                                }
@@ -353,9 +353,9 @@ public class OpportunitySchedules extends ApplicationDomain {
 						schedIndex = 0;
 						
 						for (OpportunityProductSchedule__c opptyProdSched : opptyProdSchedList) {
-							opptyProdSched.Prod_Sched_Price__c = OpportunityProductHelper.calcOpportunityProductSchedulePrice(opptyProd.UnitPrice, opptyProd.Price_Erosion_Rate__c, schedIndex);
-							if (opptyProd.Opportunity.StageName != OpportunitiesSelector.STAGES.get(OpportunitiesSelector.Stage.COMMITMENT)) {
-								opptyProdSched.Frozen_Prod_Sched_Price__c = OpportunityProductHelper.calcOpportunityProductSchedulePrice(opptyProd.UnitPrice, opptyProd.Price_Erosion_Rate__c, schedIndex);
+							opptyProdSched.Prod_Sched_Price__c = OpportunityLineItems.calcOpportunityProductSchedulePrice(opptyProd.UnitPrice, opptyProd.Price_Erosion_Rate__c, schedIndex);
+							if (opptyProd.Opportunity.StageName != Opportunities.STAGES.get(Opportunities.Stage.COMMITMENT)) {
+								opptyProdSched.Frozen_Prod_Sched_Price__c = OpportunityLineItems.calcOpportunityProductSchedulePrice(opptyProd.UnitPrice, opptyProd.Price_Erosion_Rate__c, schedIndex);
 							}
 							
 							opptyProdSchedsUpdated.add(opptyProdSched);

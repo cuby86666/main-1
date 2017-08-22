@@ -1407,7 +1407,7 @@ private class OpportunityLineItemTriggerTest {
 
         static testMethod void testAttachmentNotesCountSFDCTest() 
     {
-        String recordTypeId = OpportunityHelper.getSfdcRecordTypeID();
+        String recordTypeId = OpportunitiesSelector.getSfdcRecordTypeId();
         testProduct = createProduct( 'R01' );
         insert testProduct;
         

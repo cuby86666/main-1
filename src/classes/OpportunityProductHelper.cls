@@ -1,6 +1,6 @@
 public class OpportunityProductHelper { 
-	public static final String PROD_LOST = 'Lost';
-    public static final String PROD_CANCELLED = 'Cancelled';
+	//J public static final String PROD_LOST = 'Lost';
+    //J public static final String PROD_CANCELLED = 'Cancelled';
     
     private static final String OPPTY_LOST = 'Lost';
     private static final String OPPTY_CANCELLED = 'Cancelled';
@@ -8,8 +8,8 @@ public class OpportunityProductHelper {
     private static final String STAGE_COMMITMENT = 'Commitment';
     private static final String TYPE_SFDC = 'SFDC_OPPTY'; 
     private static final String TYPE_MN = 'Model_N_Oppty';
-    private static final Set<String> OPPTY_PROD_LOST_CANCELLED = new Set<String>{PROD_LOST, PROD_CANCELLED};
-    private static final Set<String> OPPTY_LOST_CANCELLED = new Set<String>{OpportunityHelper.OPPTY_STAGE_LOST, OpportunityHelper.OPPTY_STAGE_CANCELLED};
+    //J private static final Set<String> OPPTY_PROD_LOST_CANCELLED = new Set<String>{PROD_LOST, PROD_CANCELLED};
+    //J private static final Set<String> OPPTY_LOST_CANCELLED = new Set<String>{OpportunityHelper.OPPTY_STAGE_LOST, OpportunityHelper.OPPTY_STAGE_CANCELLED};
  
     private static List<OpportunityProductSchedule__c> opptyProdSchedUpdateList;
     private static List<OpportunityProductSchedule__c> opptyProdScheds;
@@ -20,13 +20,14 @@ public class OpportunityProductHelper {
     private static ID mnRecordTypeID;
    	private static ID integrationUserProfileID;
 	private static ID systemAdminProfileID;
-    
+  /*J  
     static{
-        sfdcRecordTypeID = OpportunityHelper.getSfdcRecordTypeID();
-        mnRecordTypeID = OpportunityHelper.getMnRecordTypeID();
+        sfdcRecordTypeID = Opportunities.getSfdcRecordTypeId();
+        mnRecordTypeID = Opportunities.getMnRecordTypeId();
         systemAdminProfileID = CommonUtils.getSystemAdminProfileID();
         integrationUserProfileID = CommonUtils.getIntegrationUserProfileID();
     }
+    */
     /*J
     public static void checkOpportunitySchedule(List<OpportunityLineItem> opptyLineItems) {
         Set<ID> opptyIDs = getOpptyIDs(opptyLineItems);   
@@ -70,10 +71,12 @@ public class OpportunityProductHelper {
     /**
      * @param schedDateIndex: 0-based list index of the schedule date
      */
+     /*J
     public static Decimal calcOpportunityProductSchedulePrice(Decimal unitPrice, Decimal priceErosionRate, Integer schedDateIndex) {
         // Apply price erosion rate every PRICE_EROSION_QUARTERS quarters. Use previous quarter price as base price.
         return (unitPrice * Math.pow(Double.valueOf(1 - (priceErosionRate / 100)), schedDateIndex / PRICE_EROSION_QUARTERS)).setScale(6);
     }
+    */
 /*J
     public static List<OpportunityProductSchedule__c> createOpportunityProductSchedules(List<OpportunityLineItem> opptyLineItems) {
         Set<ID> opptyIDs = getOpptyIDs(opptyLineItems);
@@ -405,6 +408,7 @@ public class OpportunityProductHelper {
     	}
     }
     */
+    /*J 
     public static Set<ID> getOpptyIDs(List<OpportunityLineItem> opptyLineItems) {
         Set<ID> result = new Set<ID>();
         
@@ -414,6 +418,7 @@ public class OpportunityProductHelper {
         
         return result;
     }
+    */
  /*J
     public static Map<Id, Opportunity> getOpptys(Set<ID> opptyIDs){        
         Map<Id, Opportunity> result = new Map<Id, Opportunity>(
@@ -450,9 +455,11 @@ public class OpportunityProductHelper {
     	 return result;
     }
     */
+    /*J
     public static Boolean isOpptyProdLostCancelled(OpportunityLineItem opptyLineItem) {
     	return OPPTY_PROD_LOST_CANCELLED.contains(opptyLineItem.Prod_Lost_Cancelled__c);	
     }
+    */
     /*J
     private static Map<ID, Map<ID, OpportunityProductSchedule__c>> getOpptyProdScheds(Set<ID> opptyIDs, Set<ID> opptyProdIDs){
         // Opportunity Product Id -> (Opportunity Product Schedule Id -> Opportunity Product Schedule)

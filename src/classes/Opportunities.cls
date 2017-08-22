@@ -1,6 +1,36 @@
 public class Opportunities extends ApplicationDomain {
 	
-	public Opportunities(List<Opportunity> oppties) {
+	public enum Stage {INITIAL_ENGAGEMENT, DISCOVERY, DECISION, COMMITMENT, LOST, CANCELLED}
+	
+	public enum ApprovalStatus {OPEN, APPROVED, LOST}
+	
+	public static final Map<Stage, String> STAGES = new Map<Stage, String> {
+		Stage.INITIAL_ENGAGEMENT => 'Initial Engagement',
+		Stage.DISCOVERY => 'Discovery',
+		Stage.DECISION => 'Decision',
+		Stage.COMMITMENT => 'Commitment',
+		Stage.LOST => 'Lost',
+		Stage.CANCELLED => 'Cancelled'
+	};
+	
+	public static final Set<String> OPEN_STAGES = new Set<String> {
+		STAGES.get(Stage.INITIAL_ENGAGEMENT),
+		STAGES.get(Stage.DISCOVERY),
+		STAGES.get(Stage.DECISION)		
+	};
+	
+	public static final Set<String> LOST_STAGES = new Set<String> {
+		STAGES.get(Stage.LOST),
+		STAGES.get(Stage.CANCELLED)		
+	}; 
+	
+	public static final Map<ApprovalStatus, String> APPROVAL_STATUSES = new Map<ApprovalStatus, String> {
+		ApprovalStatus.OPEN => 'Open',
+		ApprovalStatus.APPROVED => 'Approved',
+		ApprovalStatus.LOST => 'Lost'	
+	};
+	
+    public Opportunities(List<Opportunity> oppties) {
 		super(oppties);
 	}
 
@@ -9,7 +39,7 @@ public class Opportunities extends ApplicationDomain {
 			return new Opportunities(sObjectList);
 		}
 	}
-	
+	 
 	public override void onBeforeInsert() {
 		p('onBeforeInsert');
 		updateOpptyGeneralInfo(null);
@@ -60,6 +90,23 @@ public class Opportunities extends ApplicationDomain {
 	public void updateDesignWinApprovers(fflib_ISObjectUnitOfWork uow) {
 		p('updateDesignWinApprovers');
 		OpportunityApproval.setAllApprovers((List<Opportunity>)this.records, uow);
+	}
+	
+	public List<Opportunity> updateModelNExpiredOpportunities(fflib_ISObjectUnitOfWork uow) {
+		p('updateModelNExpiredOpportunities');
+		List<Opportunity> opptiesUpdated = new List<Opportunity>();
+        
+        for (Opportunity o : (List<Opportunity>)this.records) {
+       		o.StageName = STAGES.get(Stage.CANCELLED); 
+            o.Lost_Date__c = o.Expiration_Date__c;
+            o.Lost_Reason__c = 'Expired';
+            o.Design_Win_Approval_Process__c = APPROVAL_STATUSES.get(ApprovalStatus.LOST); 
+            opptiesUpdated.add(o);
+        }
+       	       
+        uow.registerDirty(opptiesUpdated);
+        
+        return opptiesUpdated; 
 	}
 	
 	private void bypassValidation(Map<Id, Opportunity> existingRecords) {
@@ -122,7 +169,7 @@ public class Opportunities extends ApplicationDomain {
 		List<SObject> opptiesMn = new List<SObject>();
 		
 		for (SObject o : (List<Opportunity>)this.records) {
-			if (((Opportunity)o).RecordTypeId == OpportunityHelper.getMnRecordTypeId()) {
+			if (((Opportunity)o).RecordTypeId == OpportunitiesSelector.getMnRecordTypeId()) {
 				opptiesMn.add(o);	
 			}
 		}
@@ -219,10 +266,10 @@ public class Opportunities extends ApplicationDomain {
 	
 	private Boolean isMnOpptySchedsUpdatable(Opportunity oppty) {
 		p('isMnOpptySchedsUpdatable');
-		return OpportunityHelper.isRecordTypeMN(oppty) && !OpportunityHelper.isTmmaOverride(oppty) && CommonUtils.isIntegrationUser();
+		return isMnRecordType(oppty) && !isTmmaOverride(oppty) && CommonUtils.isIntegrationUser();
 	}
-    
-    private List<OpportunitySchedule__c> updateMnOpptyScheds(Map<Id, Opportunity> opptiesOld, Map<Id, Opportunity> opptiesNew) {
+	
+	private List<OpportunitySchedule__c> updateMnOpptyScheds(Map<Id, Opportunity> opptiesOld, Map<Id, Opportunity> opptiesNew) {
     	p('updateMnOpptyScheds');
 		List<OpportunitySchedule__c> result = new List<OpportunitySchedule__c>();
 		
@@ -299,8 +346,8 @@ public class Opportunities extends ApplicationDomain {
 						opptyProds = opptyAndOpptyProds.get(opptyNew.Id);
 						
 						if (opptyProds != null) {
-							if (opptyNew.RecordTypeId == OpportunityHelper.getSfdcRecordTypeId()) {
-								if ((OpportunitiesSelector.OPEN_STAGES.contains(opptyOld.StageName) || opptyOld.StageName == OpportunitiesSelector.STAGES.get(OpportunitiesSelector.Stage.COMMITMENT)) && OpportunitiesSelector.LOST_STAGES.contains(opptyNew.StageName)) {
+							if (opptyNew.RecordTypeId == OpportunitiesSelector.getSfdcRecordTypeId()) {
+								if ((OPEN_STAGES.contains(opptyOld.StageName) || opptyOld.StageName == STAGES.get(Stage.COMMITMENT)) && LOST_STAGES.contains(opptyNew.StageName)) {
 									for (OpportunityLineItem opptyProd : opptyProds) {
 										OpportunityLineItem opptyProdUpdate = new OpportunityLineItem(
 											Id = opptyProd.Id,
@@ -317,8 +364,8 @@ public class Opportunities extends ApplicationDomain {
 								}
 							}
 							
-							if (opptyNew.RecordTypeId == OpportunityHelper.getMnRecordTypeId()) {
-								if (OpportunitiesSelector.OPEN_STAGES.contains(opptyOld.StageName) && OpportunitiesSelector.LOST_STAGES.contains(opptyNew.StageName)) {
+							if (opptyNew.RecordTypeId == OpportunitiesSelector.getMnRecordTypeId()) {
+								if (OPEN_STAGES.contains(opptyOld.StageName) && LOST_STAGES.contains(opptyNew.StageName)) {
 									for (OpportunityLineItem opptyProd : opptyProds) {
 										OpportunityLineItem opptyProdUpdate = new OpportunityLineItem(
 											Id = opptyProd.Id,
@@ -333,7 +380,7 @@ public class Opportunities extends ApplicationDomain {
 									}
 								}
 								
-								if (OpportunitiesSelector.LOST_STAGES.contains(opptyOld.StageName) && OpportunitiesSelector.OPEN_STAGES.contains(opptyNew.StageName)) {
+								if (LOST_STAGES.contains(opptyOld.StageName) && OPEN_STAGES.contains(opptyNew.StageName)) {
 									for (OpportunityLineItem opptyProd : opptyProds) {
 										OpportunityLineItem opptyProdUpdate = new OpportunityLineItem(
 											Id = opptyProd.Id,
@@ -368,7 +415,7 @@ public class Opportunities extends ApplicationDomain {
 			opptyIds.add(oppty.Id);
 		} 
 				
-		for (OpportunityLineItem opptyProd : new OpportunityLineItemsSelector().selectByOpptyIdWithOpportunity(opptyIds, null)) {
+		for (OpportunityLineItem opptyProd : new OpportunityLineItemsSelector().selectByOpptyIdWithOpportunity(opptyIds)) {
 			if(result.containsKey(opptyProd.OpportunityId)) {
 				result.get(opptyProd.OpportunityId).add(opptyProd);
 			}
@@ -398,24 +445,24 @@ public class Opportunities extends ApplicationDomain {
         
         if (existingRecords == null) {
         	for(Opportunity opptyNew : (List<Opportunity>)this.records) {
-	        	if (opptyNew.RecordTypeId == OpportunityHelper.getSfdcRecordTypeId()) {
+	        	if (opptyNew.RecordTypeId == OpportunitiesSelector.getSfdcRecordTypeId()) {
 	        		// Set Lost Date, Design Win Approval Status
-                    if (OpportunitiesSelector.LOST_STAGES.Contains(opptyNew.StageName)){       		
+                    if (LOST_STAGES.Contains(opptyNew.StageName)){       		
                         opptyNew.Lost_Date__c = date.today();
-	        			opptyNew.Design_Win_Approval_Process__c = OpportunitiesSelector.APPROVAL_STATUSES.get(OpportunitiesSelector.ApprovalStatus.LOST);
+	        			opptyNew.Design_Win_Approval_Process__c = APPROVAL_STATUSES.get(ApprovalStatus.LOST);
                     }
 	        		
 	        		// Set Curreny and update Locked Exchange Rate
-	        		if (OpportunityHelper.getFxRates().containsKey(opptyNew.CurrencyIsoCode)) {
-	        			opptyNew.Currency__c = OpportunityHelper.getFxRates().get(opptyNew.CurrencyIsoCode).Id;
-                        opptyNew.Locked_Exchange_Rate__c = OpportunityHelper.getFxRates().get(opptyNew.CurrencyIsoCode).Exchange_Rate__c;
+	        		if (CommonUtils.getFxRatesByCurIsoCode().containsKey(opptyNew.CurrencyIsoCode)) {
+	        			opptyNew.Currency__c = CommonUtils.getFxRatesByCurIsoCode().get(opptyNew.CurrencyIsoCode).Id;
+                        opptyNew.Locked_Exchange_Rate__c = CommonUtils.getFxRatesByCurIsoCode().get(opptyNew.CurrencyIsoCode).Exchange_Rate__c;
 	        		}
 	        	}
 	        	
-	        	if (opptyNew.RecordTypeId == OpportunityHelper.getMnRecordTypeId()) {
+	        	if (opptyNew.RecordTypeId == OpportunitiesSelector.getMnRecordTypeId()) {
 	        		// Set Curreny for MN Oppty
-	        		if (OpportunityHelper.getFxRates().containsKey(opptyNew.CurrencyIsoCode)) {
-	        			opptyNew.Currency__c = OpportunityHelper.getFxRates().get(opptyNew.CurrencyIsoCode).Id;
+	        		if (CommonUtils.getFxRatesByCurIsoCode().containsKey(opptyNew.CurrencyIsoCode)) {
+	        			opptyNew.Currency__c = CommonUtils.getFxRatesByCurIsoCode().get(opptyNew.CurrencyIsoCode).Id;
 	        		}
 	        	}
 	        	
@@ -446,17 +493,17 @@ public class Opportunities extends ApplicationDomain {
 	                }
 	            }
 	            
-	            if (opptyNew.RecordTypeId == OpportunityHelper.getSfdcRecordTypeId()) {
+	            if (opptyNew.RecordTypeId == OpportunitiesSelector.getSfdcRecordTypeId()) {
 	            	// Set Probability to Win
-					if (opptyNew.Design_Win_Approval_Process__c == OpportunitiesSelector.APPROVAL_STATUSES.get(OpportunitiesSelector.ApprovalStatus.APPROVED)) {
+					if (opptyNew.Design_Win_Approval_Process__c == APPROVAL_STATUSES.get(ApprovalStatus.APPROVED)) {
 						opptyNew.Probability_to_Win__c = '80% - 100%';
 					}
 				}
 				
-				if (opptyNew.RecordTypeId == OpportunityHelper.getMnRecordTypeId()) {
+				if (opptyNew.RecordTypeId == OpportunitiesSelector.getMnRecordTypeId()) {
 	        		// Set Curreny for MN Oppty
-	        		if (OpportunityHelper.getFxRates().containsKey(opptyNew.CurrencyIsoCode)) {
-	        			opptyNew.Currency__c = OpportunityHelper.getFxRates().get(opptyNew.CurrencyIsoCode).Id;
+	        		if (CommonUtils.getFxRatesByCurIsoCode().containsKey(opptyNew.CurrencyIsoCode)) {
+	        			opptyNew.Currency__c = CommonUtils.getFxRatesByCurIsoCode().get(opptyNew.CurrencyIsoCode).Id;
 	        		}
 	        	}
 	        }
@@ -464,36 +511,36 @@ public class Opportunities extends ApplicationDomain {
 	        for (Opportunity opptyOld : existingRecords) {
 	    		for (Opportunity opptyNew : (List<Opportunity>)this.records) {    			
 	    			if (opptyOld.Id == opptyNew.Id) {    				
-	    				if (opptyOld.RecordTypeId == OpportunityHelper.getSfdcRecordTypeId()) {
+	    				if (opptyOld.RecordTypeId == OpportunitiesSelector.getSfdcRecordTypeId()) {
 	                        //If Opportunity is changed from Open to Lost/Cancelled
-	                        if (OpportunitiesSelector.OPEN_STAGES.Contains(opptyOld.StageName) && OpportunitiesSelector.LOST_STAGES.Contains(opptyNew.StageName)) {
+	                        if (OPEN_STAGES.Contains(opptyOld.StageName) && LOST_STAGES.Contains(opptyNew.StageName)) {
 	                            //Set Lost/Cancelled Date
 	                            opptyNew.Lost_Date__c = date.today();
 	                            
 	                            //Update Design Win Approval Status
-	                            opptyNew.Design_Win_Approval_Process__c = OpportunitiesSelector.APPROVAL_STATUSES.get(OpportunitiesSelector.ApprovalStatus.LOST);
+	                            opptyNew.Design_Win_Approval_Process__c = APPROVAL_STATUSES.get(ApprovalStatus.LOST);
 	                        }             
 	                        
 	                        //If Opportunity is changed from Lost/Cancelled to Open
-	                        if (OpportunitiesSelector.LOST_STAGES.Contains(opptyOld.StageName) && OpportunitiesSelector.OPEN_STAGES.Contains(opptyNew.StageName)) {
+	                        if (LOST_STAGES.Contains(opptyOld.StageName) && OPEN_STAGES.Contains(opptyNew.StageName)) {
 	                            opptyNew.Lost_Date__c = NULL;
 	                            opptyNew.Lost_Description__c = NULL;
 	                            opptyNew.Lost_Reason__c = NULL;
 	                            
-	                            opptyNew.Design_Win_Approval_Process__c = OpportunitiesSelector.APPROVAL_STATUSES.get(OpportunitiesSelector.ApprovalStatus.OPEN);
+	                            opptyNew.Design_Win_Approval_Process__c = APPROVAL_STATUSES.get(ApprovalStatus.OPEN);
 	                        }
 
 							// Set Curreny and update Locked Exchange Rate
-					        if (OpportunityHelper.getFxRates().containsKey(opptyNew.CurrencyIsoCode)) {
-			                    opptyNew.Currency__c = OpportunityHelper.getFxRates().get(opptyNew.CurrencyIsoCode).Id;
+					        if (CommonUtils.getFxRatesByCurIsoCode().containsKey(opptyNew.CurrencyIsoCode)) {
+			                    opptyNew.Currency__c = CommonUtils.getFxRatesByCurIsoCode().get(opptyNew.CurrencyIsoCode).Id;
 			                    
-			                    if (opptyNew.Design_Win_Approval_Process__c == OpportunitiesSelector.APPROVAL_STATUSES.get(OpportunitiesSelector.ApprovalStatus.OPEN)) {
-			                    	opptyNew.Locked_Exchange_Rate__c = OpportunityHelper.getFxRates().get(opptyNew.CurrencyIsoCode).Exchange_Rate__c;
+			                    if (opptyNew.Design_Win_Approval_Process__c == APPROVAL_STATUSES.get(ApprovalStatus.OPEN)) {
+			                    	opptyNew.Locked_Exchange_Rate__c = CommonUtils.getFxRatesByCurIsoCode().get(opptyNew.CurrencyIsoCode).Exchange_Rate__c;
 			                    }
 			                }
 
 	                        // Set Probability to Win
-	                        if (opptyOld.Design_Win_Approval_Process__c != OpportunitiesSelector.APPROVAL_STATUSES.get(OpportunitiesSelector.ApprovalStatus.APPROVED) && opptyNew.Design_Win_Approval_Process__c == OpportunitiesSelector.APPROVAL_STATUSES.get(OpportunitiesSelector.ApprovalStatus.APPROVED)) {
+	                        if (opptyOld.Design_Win_Approval_Process__c != APPROVAL_STATUSES.get(ApprovalStatus.APPROVED) && opptyNew.Design_Win_Approval_Process__c == APPROVAL_STATUSES.get(ApprovalStatus.APPROVED)) {
 	    						opptyNew.Probability_to_Win__c = '80% - 100%';
 	    					}
 	                	}
@@ -519,17 +566,17 @@ public class Opportunities extends ApplicationDomain {
         
         // Set Design Win Approval Status for MN Oppty
         for (Opportunity opptyNew : (List<Opportunity>)this.records) {
-        	if (opptyNew.RecordTypeId == OpportunityHelper.getMnRecordTypeId()) {
-        		if (OpportunitiesSelector.OPEN_STAGES.contains(opptyNew.StageName)) {
-        			opptyNew.Design_Win_Approval_Process__c = OpportunitiesSelector.APPROVAL_STATUSES.get(OpportunitiesSelector.ApprovalStatus.OPEN);
+        	if (opptyNew.RecordTypeId == OpportunitiesSelector.getMnRecordTypeId()) {
+        		if (OPEN_STAGES.contains(opptyNew.StageName)) {
+        			opptyNew.Design_Win_Approval_Process__c = APPROVAL_STATUSES.get(ApprovalStatus.OPEN);
         		}
         		
-        		if (opptyNew.StageName == OpportunitiesSelector.STAGES.get(OpportunitiesSelector.Stage.COMMITMENT)) {
-        			opptyNew.Design_Win_Approval_Process__c = OpportunitiesSelector.APPROVAL_STATUSES.get(OpportunitiesSelector.ApprovalStatus.APPROVED);
+        		if (opptyNew.StageName == STAGES.get(Stage.COMMITMENT)) {
+        			opptyNew.Design_Win_Approval_Process__c = APPROVAL_STATUSES.get(ApprovalStatus.APPROVED);
         		}
         		
-        		if(OpportunitiesSelector.LOST_STAGES.contains(opptyNew.StageName)) {
-        			opptyNew.Design_Win_Approval_Process__c = OpportunitiesSelector.APPROVAL_STATUSES.get(OpportunitiesSelector.ApprovalStatus.LOST);
+        		if(LOST_STAGES.contains(opptyNew.StageName)) {
+        			opptyNew.Design_Win_Approval_Process__c = APPROVAL_STATUSES.get(ApprovalStatus.LOST);
         		}
         	}
         }
@@ -547,7 +594,7 @@ public class Opportunities extends ApplicationDomain {
         system.debug('===== [Scarlett] Update Star info');
 
     	for (Opportunity opptyNew : (List<Opportunity>)this.records) {
-    		if (opptyNew.RecordTypeId == OpportunityHelper.getSfdcRecordTypeId()) {
+    		if (opptyNew.RecordTypeId == OpportunitiesSelector.getSfdcRecordTypeId()) {
     			if (opptyNew.ASSE_Qual_plan_requested_by__c != null) {
     				opptyNew.Qual_Plan_requested__c = true;
     			}
@@ -646,6 +693,14 @@ public class Opportunities extends ApplicationDomain {
 			}
 		    
 		return result;
+    }
+    
+    private Boolean isTmmaOverride(Opportunity oppty) {
+    	return oppty.TMMA_Override__c;
+    }
+    
+    private Boolean isMnRecordType(Opportunity oppty) {
+		return oppty.RecordTypeId == OpportunitiesSelector.getMnRecordTypeId();
     }
     
 }

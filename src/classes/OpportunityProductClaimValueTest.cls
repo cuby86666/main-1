@@ -31,6 +31,8 @@ private class OpportunityProductClaimValueTest {
     private static final Double LOCKED_EXCHANGE_RATE = 1.5;
     private static final Double CLAIM_VALUE_MN = ((UP_CM * ONE_YEAR_PIECES) / LOCKED_EXCHANGE_RATE); // SIR 1069: Change from 3 years to 1 year
     private static final Date PRODUCTION_DATE = Date.newInstance(2016, 04, 30);
+    private static final String PROD_LOST = 'Lost';
+    private static final String PROD_CANCELLED = 'Cancelled';
         
     private static List<OpportunityLineItem> opptyProds = new List<OpportunityLineItem>();
     private static List<OpportunityLineItem> opptyProdsMN = new List<OpportunityLineItem>();
@@ -71,9 +73,9 @@ private class OpportunityProductClaimValueTest {
                from OpportunityLineItem]; 
         
         for (OpportunityLineItem oli : olis) {
-            if (oli.opportunity.RecordTypeId == OpportunityHelper.getSfdcRecordTypeID()) {
+            if (oli.opportunity.RecordTypeId == OpportunitiesSelector.getSfdcRecordTypeId()) {
                 opptyProds.add(oli);    
-            } else if (oli.opportunity.RecordTypeId == OpportunityHelper.getMnRecordTypeID()) {
+            } else if (oli.opportunity.RecordTypeId == OpportunitiesSelector.getMnRecordTypeId()) {
                 opptyProdsMN.add(oli);
             }
         }
@@ -154,17 +156,17 @@ private class OpportunityProductClaimValueTest {
         insert prods;
         
         Test.startTest();
-        createOpportunityProducts(OpportunityHelper.getSfdcRecordTypeID(), u, fxRates, a, prods);
+        createOpportunityProducts(OpportunitiesSelector.getSfdcRecordTypeId(), u, fxRates, a, prods);
         Test.stopTest();
         
-        createOpportunityProducts(OpportunityHelper.getMnRecordTypeID(), u, fxRates, a, prods);
+        createOpportunityProducts(OpportunitiesSelector.getMnRecordTypeId(), u, fxRates, a, prods);
     }
     
     static void createOpportunityProducts(ID recordTypeID, User u, Map<String, FX_Rates__c> fxRates, Account a, List<Product2> prods) {
         // Insert an opportunity
         Opportunity o;
         
-        if (recordTypeID == OpportunityHelper.getMnRecordTypeID()) {
+        if (recordTypeID == OpportunitiesSelector.getMnRecordTypeId()) {
         	o = new Opportunity(Name = 'Test Oppty', AccountId = a.Id, Industry_Segment__c = 'AFC', StageName = 'Initial Engagement'); //Todo: Not set AccountId for code coverage	
         } else {
         	o = new Opportunity(Name = 'Test Oppty', AccountId = a.Id, Industry_Segment__c = 'AFC', StageName = 'Initial Engagement');
@@ -179,7 +181,7 @@ private class OpportunityProductClaimValueTest {
         o.One_Year_Pieces__c= ONE_YEAR_PIECES;
         insert o;
         
-        if (recordTypeID == OpportunityHelper.getSfdcRecordTypeID()) {
+        if (recordTypeID == OpportunitiesSelector.getSfdcRecordTypeId()) {
         	// For direct oppty, oppty scheds are manually created.
         	createOpportunitySchedules(o);	
         } 
@@ -351,7 +353,7 @@ private class OpportunityProductClaimValueTest {
    
     @isTest
     static void testOpptyProdClaimValueProductCancelled() {
-        opptyProd.Prod_Lost_Cancelled__c = OpportunityProductHelper.PROD_CANCELLED;
+        opptyProd.Prod_Lost_Cancelled__c = PROD_CANCELLED;
         opptyProd.Prod_Lost_Cancelled_Reason__c='No Bid';
         opptyProd.Prod_Lost_Reason__c='TEST';
         opptyProd.Competitor__c='TEST';     //2016.9 SIR# 958 added competitor for lost opportunity to comply with validation rule   
@@ -368,7 +370,7 @@ private class OpportunityProductClaimValueTest {
     
     @isTest
     static void testOpptyProdClaimValueProductLost() {
-        opptyProd.Prod_Lost_Cancelled__c = OpportunityProductHelper.PROD_LOST;
+        opptyProd.Prod_Lost_Cancelled__c = PROD_LOST;
         opptyProd.Prod_Lost_Cancelled_Reason__c='Price';
         opptyProd.Prod_Lost_Reason__c='TEST';
         opptyProd.Competitor__c='TEST';            //2016.9 SIR# 958 added competitor for lost opportunity to comply with validation rule     
@@ -386,7 +388,7 @@ private class OpportunityProductClaimValueTest {
     
     @isTest
     static void testOpptyProdClaimValueLifetimeProductCancelled() {
-        opptyProd.Prod_Lost_Cancelled__c = OpportunityProductHelper.PROD_CANCELLED;
+        opptyProd.Prod_Lost_Cancelled__c = PROD_CANCELLED;
         opptyProd.Prod_Lost_Cancelled_Reason__c='No Bid';
         opptyProd.Prod_Lost_Reason__c='TEST';
         opptyProd.Competitor__c='TEST';     //2016.9 SIR# 958 added competitor for lost opportunity to comply with validation rule   
@@ -403,7 +405,7 @@ private class OpportunityProductClaimValueTest {
     
     @isTest
     static void testOpptyProdClaimValueLifetimeProductLost() {
-        opptyProd.Prod_Lost_Cancelled__c = OpportunityProductHelper.PROD_LOST;
+        opptyProd.Prod_Lost_Cancelled__c = PROD_LOST;
         opptyProd.Prod_Lost_Cancelled_Reason__c='Price';
         opptyProd.Prod_Lost_Reason__c='TEST';
         opptyProd.Competitor__c='TEST';            //2016.9 SIR# 958 added competitor for lost opportunity to comply with validation rule     
@@ -650,7 +652,7 @@ private class OpportunityProductClaimValueTest {
         
         delete opptyProdsDeleted;
         
-        opptyProd.Prod_Lost_Cancelled__c = OpportunityProductHelper.PROD_CANCELLED;
+        opptyProd.Prod_Lost_Cancelled__c = PROD_CANCELLED;
         opptyProd.Prod_Lost_Cancelled_Reason__c='No Bid';
         opptyProd.Prod_Lost_Reason__c='TEST';
         opptyProd.Competitor__c='TEST';          //2016.9 SIR# 958 added competitor for lost opportunity to comply with validation rule      
@@ -679,7 +681,7 @@ private class OpportunityProductClaimValueTest {
 
 		Test.startTest();        
         delete opptyProdsDeleted;
-        opptyProd.Prod_Lost_Cancelled__c = OpportunityProductHelper.PROD_LOST;
+        opptyProd.Prod_Lost_Cancelled__c = PROD_LOST;
         opptyProd.Prod_Lost_Cancelled_Reason__c='Price';
         opptyProd.Prod_Lost_Reason__c='TEST';
         opptyProd.Competitor__c='TEST';              //2016.9 SIR# 958 added competitor for lost opportunity to comply with validation rule  
@@ -730,7 +732,7 @@ private class OpportunityProductClaimValueTest {
     static void testOpptyClaimValueLifetimeOpptyProdCancelled() {
         Test.startTest();
         for (OpportunityLineItem oli : opptyProds) {
-            oli.Prod_Lost_Cancelled__c = OpportunityProductHelper.PROD_CANCELLED;
+            oli.Prod_Lost_Cancelled__c = PROD_CANCELLED;
             oli.Prod_Lost_Cancelled_Reason__c='No Bid';
             oli.Prod_Lost_Reason__c='TEST';
             oli.Competitor__c='TEST';              //2016.9 SIR# 958 added competitor for lost opportunity to comply with validation rule               
@@ -753,7 +755,7 @@ private class OpportunityProductClaimValueTest {
     static void testOpptyClaimValueLifetimeOpptyProdLost() {
         Test.startTest();
         for (OpportunityLineItem oli : opptyProds) {
-            oli.Prod_Lost_Cancelled__c = OpportunityProductHelper.PROD_LOST;
+            oli.Prod_Lost_Cancelled__c = PROD_LOST;
             oli.Prod_Lost_Cancelled_Reason__c='Price';
             oli.Prod_Lost_Reason__c='TEST';
             oli.Competitor__c='TEST';           //2016.9 SIR# 958 added competitor for lost opportunity to comply with validation rule         
@@ -1102,7 +1104,7 @@ private class OpportunityProductClaimValueTest {
         OpportunityLineItem oli = new OpportunityLineItem(OpportunityId = opptyProd.OpportunityId, PricebookEntryId = pbe.Id);
         oli.UnitPrice = UNIT_PRICE;
         oli.Component_Multiplier__c = COMP_MULT;
-        oli.Prod_Lost_Cancelled__c = OpportunityProductHelper.PROD_LOST;
+        oli.Prod_Lost_Cancelled__c = PROD_LOST;
         insert oli;
         
         List<OpportunityProductSchedule__c> opptyProdScheds = [select Id from OpportunityProductSchedule__c where Opportunity__c = :oli.OpportunityId and Oppty_Prod_ID_Full__c = :oli.Id];
@@ -1119,7 +1121,7 @@ private class OpportunityProductClaimValueTest {
         OpportunityLineItem oli = new OpportunityLineItem(OpportunityId = opptyProd.OpportunityId, PricebookEntryId = pbe.Id);
         oli.UnitPrice = UNIT_PRICE;
         oli.Component_Multiplier__c = COMP_MULT;
-        oli.Prod_Lost_Cancelled__c = OpportunityProductHelper.PROD_CANCELLED;
+        oli.Prod_Lost_Cancelled__c = PROD_CANCELLED;
         insert oli;
         
         List<OpportunityProductSchedule__c> opptyProdScheds = [select Id from OpportunityProductSchedule__c where Opportunity__c = :oli.OpportunityId and Oppty_Prod_ID_Full__c = :oli.Id];
@@ -1429,7 +1431,7 @@ private class OpportunityProductClaimValueTest {
     	        
         for (OpportunityLineItem oli : olis) {
             if (OpportunityProductClaimValue.isLifetime(oppty, oli)) {
-                result += (oppty.RecordTypeId == OpportunityHelper.getMnRecordTypeID() ? ((UP_CM * ONE_YEAR_PIECES) / oppty.Locked_Exchange_Rate__c) : CLAIM_VALUE_LIFETIME);
+                result += (oppty.RecordTypeId == OpportunitiesSelector.getMnRecordTypeId() ? ((UP_CM * ONE_YEAR_PIECES) / oppty.Locked_Exchange_Rate__c) : CLAIM_VALUE_LIFETIME);
                 continue;
             }
             

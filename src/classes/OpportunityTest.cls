@@ -153,7 +153,7 @@ private class OpportunityTest {
         // Insert SFDC Opportunity        
         Opportunity oppty = new Opportunity(
             Name = 'Test Oppty',
-            RecordTypeId = OpportunityHelper.getSfdcRecordTypeID(),
+            RecordTypeId = OpportunitiesSelector.getSfdcRecordTypeId(),
             AccountId = a.Id,
             Industry_Segment__c = 'AFC',
             StageName = opptyStageName,
@@ -245,7 +245,7 @@ private class OpportunityTest {
         // Insert MN Opportunity        
         Opportunity oppty = new Opportunity(
             Name = 'Test Oppty',
-            RecordTypeId = OpportunityHelper.getMnRecordTypeID(),
+            RecordTypeId = OpportunitiesSelector.getMnRecordTypeId(),
             AccountId = a.Id,
             Industry_Segment__c = 'AFC',
             StageName = opptyStageName,
@@ -286,7 +286,7 @@ private class OpportunityTest {
                     Lost_Reason__c,
                     Design_Win_Approval_Process__c
             FROM Opportunity
-            WHERE RecordTypeId = :OpportunityHelper.getSfdcRecordTypeID() AND StageName =: STAGE_NAME
+            WHERE RecordTypeId = :OpportunitiesSelector.getSfdcRecordTypeId() AND StageName =: STAGE_NAME
         ];
         
         system.assertEquals(NULL, opptySfdc.Lost_Date__c);
@@ -334,7 +334,7 @@ private class OpportunityTest {
                     StageName,
                     Design_Win_Approval_Process__c
             FROM    Opportunity
-            WHERE   RecordTypeId = :OpportunityHelper.getSfdcRecordTypeID() AND StageName =: STAGE_NAME
+            WHERE   RecordTypeId = :OpportunitiesSelector.getSfdcRecordTypeId() AND StageName =: STAGE_NAME
         ];
         
         system.assertEquals(DW_APPROVAL_STATUS_OPEN, opptySfdc.Design_Win_Approval_Process__c);
@@ -371,7 +371,7 @@ private class OpportunityTest {
                     Help_Needed_History__c,
                     RecordTypeId
             FROM    Opportunity
-            WHERE   RecordTypeId = :OpportunityHelper.getSfdcRecordTypeID() AND StageName = : STAGE_NAME
+            WHERE   RecordTypeId = :OpportunitiesSelector.getSfdcRecordTypeId() AND StageName = : STAGE_NAME
         ];
         
         opptyMn = [
@@ -380,7 +380,7 @@ private class OpportunityTest {
                     Help_Needed_History__c,
                     RecordTypeId
             FROM    Opportunity
-            WHERE   RecordTypeId = :OpportunityHelper.getMnRecordTypeID()
+            WHERE   RecordTypeId = :OpportunitiesSelector.getMnRecordTypeId()
         ];
 
         system.assertEquals(NULL, opptySfdc.Help_Needed_History__c);
@@ -417,7 +417,7 @@ private class OpportunityTest {
                     Account.Region__c,
                     Account_Region_TEXT__c
             FROM    Opportunity
-            WHERE   RecordTypeId = :OpportunityHelper.getSfdcRecordTypeID() AND StageName = : STAGE_NAME
+            WHERE   RecordTypeId = :OpportunitiesSelector.getSfdcRecordTypeId() AND StageName = : STAGE_NAME
         ];
         
         opptyMn = [
@@ -427,7 +427,7 @@ private class OpportunityTest {
                     Account.Region__c,
                     Account_Region_TEXT__c
             FROM    Opportunity
-            WHERE   RecordTypeId = :OpportunityHelper.getMnRecordTypeID()
+            WHERE   RecordTypeId = :OpportunitiesSelector.getMnRecordTypeId()
         ];
         
         system.assertEquals(string.valueof(opptySfdc.Account.ParentId).substring(0, 15), opptySfdc.Parent_Account_ID_Text__c);
@@ -479,7 +479,7 @@ private class OpportunityTest {
                     EVT_Done__c,
                     DVT_Done__c
             FROM    Opportunity
-            WHERE   RecordTypeId = :OpportunityHelper.getSfdcRecordTypeID() AND StageName = : STAGE_NAME
+            WHERE   RecordTypeId = :OpportunitiesSelector.getSfdcRecordTypeId() AND StageName = : STAGE_NAME
         ];
         
         system.assertEquals(false, opptySfdc.Qual_Plan_requested__c);
@@ -528,7 +528,7 @@ private class OpportunityTest {
         opptySfdc = [
             SELECT  Id, Probability_to_Win__c, Design_Win_Approval_Process__c
             FROM    Opportunity
-            WHERE   RecordTypeId = :OpportunityHelper.getSfdcRecordTypeID() AND StageName = : STAGE_NAME
+            WHERE   RecordTypeId = :OpportunitiesSelector.getSfdcRecordTypeId() AND StageName = : STAGE_NAME
             LIMIT 1
         ];
         
@@ -562,7 +562,7 @@ private class OpportunityTest {
         
         Opportunity opptyNew1 = new Opportunity(
             Name = 'Test Oppty',
-            RecordTypeId = OpportunityHelper.getSfdcRecordTypeID(),
+            RecordTypeId = OpportunitiesSelector.getSfdcRecordTypeId(),
             AccountId = childAccount.Id,
             Industry_Segment__c = 'AFC',
             StageName = STAGE_NAME,
@@ -592,7 +592,7 @@ private class OpportunityTest {
         
         Opportunity opptyNew2 = new Opportunity(
             Name = 'Test Oppty',
-            RecordTypeId = OpportunityHelper.getSfdcRecordTypeID(),
+            RecordTypeId = OpportunitiesSelector.getSfdcRecordTypeId(),
             AccountId = childAccount.Id,
             Industry_Segment__c = 'AFC',
             StageName = STAGE_NAME,
@@ -649,7 +649,7 @@ private class OpportunityTest {
             FROM    Opportunity
             WHERE   Design_Win_Approval_Process__c = :DW_APPROVAL_STATUS_OPEN 
                     AND CurrencyIsoCode != NULL
-                    AND RecordTypeId = :OpportunityHelper.getSfdcRecordTypeID()
+                    AND RecordTypeId = :OpportunitiesSelector.getSfdcRecordTypeId()
             LIMIT 1
         ];
         
@@ -658,7 +658,7 @@ private class OpportunityTest {
             FROM    Opportunity
             WHERE   Design_Win_Approval_Process__c = :DW_APPROVAL_STATUS_OPEN 
                     AND CurrencyIsoCode != NULL
-                    AND RecordTypeId = :OpportunityHelper.getMnRecordTypeID()
+                    AND RecordTypeId = :OpportunitiesSelector.getMnRecordTypeId()
             LIMIT 1
         ];
         
@@ -708,7 +708,7 @@ private class OpportunityTest {
         opptyMn = [
             SELECT  Id, StageName, Design_Win_Approval_Process__c 
             FROM    Opportunity 
-            WHERE   RecordTypeId = :OpportunityHelper.getMnRecordTypeID() AND StageName = :STAGE_NAME
+            WHERE   RecordTypeId = :OpportunitiesSelector.getMnRecordTypeId() AND StageName = :STAGE_NAME
             LIMIT 1
         ];
         
@@ -739,7 +739,7 @@ private class OpportunityTest {
         opptySfdc = [
             SELECT  Id, StageName, Design_Win_Approval_Process__c, Lost_Date__c, Lost_Description__c, Lost_Reason__c
             FROM    Opportunity 
-            WHERE   RecordTypeId = :OpportunityHelper.getSfdcRecordTypeID() AND StageName = :STAGE_NAME
+            WHERE   RecordTypeId = :OpportunitiesSelector.getSfdcRecordTypeId() AND StageName = :STAGE_NAME
             LIMIT 1
         ];    
         
@@ -753,7 +753,7 @@ private class OpportunityTest {
         opptyMn = [
             SELECT  Id, StageName, Design_Win_Approval_Process__c, Lost_Date__c, Expiration_Date__c, Lost_Description__c, Lost_Reason__c
             FROM    Opportunity 
-            WHERE   RecordTypeId = :OpportunityHelper.getMnRecordTypeID() AND StageName = :STAGE_NAME
+            WHERE   RecordTypeId = :OpportunitiesSelector.getMnRecordTypeId() AND StageName = :STAGE_NAME
             LIMIT 1
         ];
         

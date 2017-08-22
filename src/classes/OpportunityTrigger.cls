@@ -133,12 +133,12 @@ public with sharing class OpportunityTrigger
       
         for(opportunity opp:newOppList)
         {
-          if(opp.RecordTypeId == OpportunityHelper.getMnRecordTypeID() && opp.Legacy_Opportunity_Owner__c != null)
+          if(opp.RecordTypeId == OpportunitiesSelector.getMnRecordTypeId() && opp.Legacy_Opportunity_Owner__c != null)
            {
              setMNOppLegacyOwnerEmailIds.add(opp.Legacy_Opportunity_Owner__c);
           }
         }
-    
+      
        if(!setMNOppLegacyOwnerEmailIds.isempty()){
            lstUserDetails = ([SELECT Id, Name, Email,IsActive,profile.name FROM user where Email in: setMNOppLegacyOwnerEmailIds AND 
                                (Profile.UserLicense.Name = 'Salesforce' OR Profile.UserLicense.Name = 'Salesforce Platform')]);
@@ -155,7 +155,7 @@ public with sharing class OpportunityTrigger
          }
        for(Opportunity newOpp : newOppList)
         {
-            if(newOpp.RecordTypeId == OpportunityHelper.getMnRecordTypeID() && newOpp.Legacy_Opportunity_Owner__c != null)
+            if(newOpp.RecordTypeId == OpportunitiesSelector.getMnRecordTypeId() && newOpp.Legacy_Opportunity_Owner__c != null)
              {
               
                 if((mapMNOppLegacyOwnerDetails.containsKey(newOpp.Legacy_Opportunity_Owner__c)))
@@ -190,7 +190,7 @@ public with sharing class OpportunityTrigger
         for(opportunity opp:newOppList)
         {
           Opportunity oldOpp= oldOppMap.get(Opp.Id);
-          if(opp.RecordTypeId == OpportunityHelper.getMnRecordTypeID() && opp.Legacy_Opportunity_Owner__c !=null )
+          if(opp.RecordTypeId == OpportunitiesSelector.getMnRecordTypeId() && opp.Legacy_Opportunity_Owner__c !=null )
            {
             setMNOppLegacyOwnerEmailIds.add(opp.Legacy_Opportunity_Owner__c);
            }
@@ -204,7 +204,7 @@ public with sharing class OpportunityTrigger
         for(opportunity opp:newOppList)
         {
           
-          if(opp.RecordTypeId == OpportunityHelper.getMnRecordTypeID() && opp.Legacy_Opportunity_Owner__c !=null )
+          if(opp.RecordTypeId == OpportunitiesSelector.getMnRecordTypeId() && opp.Legacy_Opportunity_Owner__c !=null )
            {
             Opportunity oldOpp= oldOppMap.get(Opp.Id);
             setMNOppSFDCOwner.add(oldOpp.ownerid);
@@ -229,7 +229,7 @@ public with sharing class OpportunityTrigger
      {
        for(Opportunity newOpp : newOppList)
         {
-            if(oldOppMap != null && newOpp.RecordTypeId == OpportunityHelper.getMnRecordTypeID() && newOpp.Legacy_Opportunity_Owner__c !=null)
+            if(oldOppMap != null && newOpp.RecordTypeId == OpportunitiesSelector.getMnRecordTypeId() && newOpp.Legacy_Opportunity_Owner__c !=null)
              {
              Opportunity oldOpp= oldOppMap.get(newOpp.Id);
             

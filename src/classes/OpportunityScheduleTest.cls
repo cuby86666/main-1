@@ -60,8 +60,8 @@ private class OpportunityScheduleTest {
     private static Set<ID> opptyProdSchedIDs = new Set<ID>();
     
     static{
-        SFDC_RECORD_TYPE_ID = OpportunityHelper.getSfdcRecordTypeID();
-        MN_RECORD_TYPE_ID = OpportunityHelper.getSfdcRecordTypeID();
+        SFDC_RECORD_TYPE_ID = OpportunitiesSelector.getSfdcRecordTypeId();
+        MN_RECORD_TYPE_ID = OpportunitiesSelector.getMnRecordTypeId();
         fetchAccountRecordTypes();
         
      }
@@ -233,7 +233,7 @@ private class OpportunityScheduleTest {
             SELECT  Id,
                     StageName
             FROM    Opportunity
-            WHERE   RecordTypeId = :OpportunityHelper.getSfdcRecordTypeID() AND
+            WHERE   RecordTypeId = :OpportunitiesSelector.getSfdcRecordTypeId() AND
                     StageName =: STAGE_NAME
         ];
         
@@ -241,7 +241,7 @@ private class OpportunityScheduleTest {
             SELECT  Id,
                     StageName
             FROM    Opportunity
-            WHERE   RecordTypeId = :OpportunityHelper.getSfdcRecordTypeID() AND
+            WHERE   RecordTypeId = :OpportunitiesSelector.getSfdcRecordTypeId() AND
                     StageName =: STAGE_WON
         ];
         
@@ -302,7 +302,7 @@ private class OpportunityScheduleTest {
                     StageName,
                     CurrencyIsoCode
             FROM    Opportunity
-            WHERE   RecordTypeId = :OpportunityHelper.getSfdcRecordTypeID() AND
+            WHERE   RecordTypeId = :OpportunitiesSelector.getSfdcRecordTypeId() AND
                     StageName =: STAGE_NAME
         ];
         
@@ -355,9 +355,9 @@ private class OpportunityScheduleTest {
                 schedIndex = 0;
                 
                 for (OpportunityProductSchedule__c opptyProdSched : opptyProdSchedList) {
-                    system.assertEquals(OpportunityProductHelper.calcOpportunityProductSchedulePrice(unitPrice, priceErosionRate, schedIndex),
+                    system.assertEquals(OpportunityLineItems.calcOpportunityProductSchedulePrice(unitPrice, priceErosionRate, schedIndex),
                         opptyProdSched.Prod_Sched_Price__c);
-                    system.assertEquals(OpportunityProductHelper.calcOpportunityProductSchedulePrice(unitPrice, priceErosionRate, schedIndex),
+                    system.assertEquals(OpportunityLineItems.calcOpportunityProductSchedulePrice(unitPrice, priceErosionRate, schedIndex),
                         opptyProdSched.Frozen_Prod_Sched_Price__c);         
                         
                     system.assertEquals(opptyOpen.CurrencyIsoCode, opptyProdSched.CurrencyIsoCode);     
@@ -386,7 +386,7 @@ private class OpportunityScheduleTest {
             SELECT  Id,
                     StageName
             FROM    Opportunity
-            WHERE   RecordTypeId = :OpportunityHelper.getSfdcRecordTypeID() AND
+            WHERE   RecordTypeId = :OpportunitiesSelector.getSfdcRecordTypeId() AND
                     StageName =: STAGE_NAME
         ];
         
@@ -434,9 +434,9 @@ private class OpportunityScheduleTest {
                 schedIndex = 0;
                 
                 for (OpportunityProductSchedule__c opptyProdSched : opptyProdSchedList) {
-                    system.assertEquals(OpportunityProductHelper.calcOpportunityProductSchedulePrice(unitPrice, priceErosionRate, schedIndex),
+                    system.assertEquals(OpportunityLineItems.calcOpportunityProductSchedulePrice(unitPrice, priceErosionRate, schedIndex),
                         opptyProdSched.Prod_Sched_Price__c);
-                    system.assertEquals(OpportunityProductHelper.calcOpportunityProductSchedulePrice(unitPrice, priceErosionRate, schedIndex),
+                    system.assertEquals(OpportunityLineItems.calcOpportunityProductSchedulePrice(unitPrice, priceErosionRate, schedIndex),
                         opptyProdSched.Frozen_Prod_Sched_Price__c);                 
                     
                     schedIndex++;
@@ -457,7 +457,7 @@ private class OpportunityScheduleTest {
             SELECT  Id,
                     StageName
             FROM    Opportunity
-            WHERE   RecordTypeId = :OpportunityHelper.getSfdcRecordTypeID() AND
+            WHERE   RecordTypeId = :OpportunitiesSelector.getSfdcRecordTypeId() AND
                     StageName =: STAGE_NAME
             LIMIT   1
         ];
@@ -466,7 +466,7 @@ private class OpportunityScheduleTest {
             SELECT  Id,
                     StageName
             FROM    Opportunity
-            WHERE   RecordTypeId = :OpportunityHelper.getSfdcRecordTypeID() AND
+            WHERE   RecordTypeId = :OpportunitiesSelector.getSfdcRecordTypeId() AND
                     StageName =: STAGE_WON
             LIMIT   1
         ];
@@ -539,7 +539,7 @@ private class OpportunityScheduleTest {
             SELECT  Id,
                     StageName
             FROM    Opportunity
-            WHERE   RecordTypeId = :OpportunityHelper.getSfdcRecordTypeID() AND
+            WHERE   RecordTypeId = :OpportunitiesSelector.getSfdcRecordTypeId() AND
                     StageName =: STAGE_NAME
         ];
         

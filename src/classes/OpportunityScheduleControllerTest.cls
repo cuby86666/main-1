@@ -85,8 +85,8 @@ private class OpportunityScheduleControllerTest {
 
     
     static{
-        SFDC_RECORD_TYPE_ID = OpportunityHelper.getSfdcRecordTypeID();
-        MN_RECORD_TYPE_ID = OpportunityHelper.getMnRecordTypeID();
+        SFDC_RECORD_TYPE_ID = OpportunitiesSelector.getSfdcRecordTypeId();
+        MN_RECORD_TYPE_ID = OpportunitiesSelector.getMnRecordTypeId();
         fetchAccountRecordTypes();
     }
     public static void fetchAccountRecordTypes(){

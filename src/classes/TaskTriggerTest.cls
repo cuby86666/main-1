@@ -11,7 +11,7 @@ private class TaskTriggerTest {
     private static final Integer TASK_COUNT_DEFAULT = 5;
         
     static {
-        SFDC_RECORD_TYPE_ID = OpportunityHelper.getSfdcRecordTypeID();
+        SFDC_RECORD_TYPE_ID = OpportunitiesSelector.getSfdcRecordTypeId();
     }
     
     @testSetup
