@@ -16,6 +16,9 @@ private class OpportunityLineItemsTest {
     private static final Decimal UNIT_PRICE = 2;
     private static final Double COMP_MULT = 5;
     private static final Integer PROD_COUNT = 4;
+    private static final String PARENT_ACCOUNT_STAR = 'STAR';
+	private static final String PARENT_ACCOUNT_SAMSUNG = 'Samsung';
+    private static final String CBG_AUTOMOTIVE = 'Automotive';
     
     private static List<OpportunityLineItem> opptyProds = new List<OpportunityLineItem>();
     private static OpportunityLineItem opptyProd;
@@ -70,10 +73,10 @@ private class OpportunityLineItemsTest {
         fxRates.put(CCY_CODE_EUR, fxrs.get(1));
         
         // Insert accounts
-        createAccount(AccountHelper.PARENT_ACCOUNT_STAR, AccountHelper.getParentRecordTypeID(), null, null);
-        createAccount(AccountHelper.PARENT_ACCOUNT_SAMSUNG, AccountHelper.getParentRecordTypeID(), null, null);
-        Account parentGeneral = createAccount('Parent Account - General', AccountHelper.getParentRecordTypeID(), null, null);
-        Account a = createAccount('Test Account', AccountHelper.getChildRecordTypeID(), parentGeneral.Id, AccountHelper.CBG_AUTOMOTIVE);
+        createAccount(PARENT_ACCOUNT_STAR, AccountsSelector.getParentRecordTypeID(), null, null);
+        createAccount(PARENT_ACCOUNT_SAMSUNG, AccountsSelector.getParentRecordTypeID(), null, null);
+        Account parentGeneral = createAccount('Parent Account - General', AccountsSelector.getParentRecordTypeID(), null, null);
+        Account a = createAccount('Test Account', AccountsSelector.getChildRecordTypeID(), parentGeneral.Id, CBG_AUTOMOTIVE);
          
         // Insert products
         List<Product2> prods = new List<Product2>();

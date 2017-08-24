@@ -22,10 +22,12 @@ public class OpportunityApproverPluginTest {
     private static final String CCY_CODE_DEFAULT = CCY_CODE_USD; // @default
     private static final Double EXCH_RATE_USD = 2.0;
     private static final Double EXCH_RATE_EUR = 0.9;
-    private static final String CBG_AUTOMOTIVE = AccountHelper.CBG_AUTOMOTIVE;
+    private static final String PARENT_ACCOUNT_STAR = 'STAR';
+	private static final String PARENT_ACCOUNT_SAMSUNG = 'Samsung';
+    private static final String CBG_AUTOMOTIVE = 'Automotive';
     private static final String CBG_NON_AUTOMOTIVE = 'Non-Automotive';
-    private static final String REGION_GC = AccountHelper.REGION_GC;
-    private static final String REGION_SAP = AccountHelper.REGION_SAP;
+    private static final String REGION_GC = 'Greater China';
+    private static final String REGION_SAP = 'South Asia Pacific';
     private static final Date PRODUCTION_DATE = Date.newInstance(2016, 04, 30);
     private static final Decimal UNIT_PRICE = 2;
     private static final Double COMP_MULT = 5;
@@ -99,9 +101,9 @@ public class OpportunityApproverPluginTest {
         List<Account> accounts = [select Name from Account];
         
         for (Account a : accounts) {
-        	if (a.Name == AccountHelper.PARENT_ACCOUNT_STAR) {
+        	if (a.Name == PARENT_ACCOUNT_STAR) {
         		parentAccountIdSTAR = a.Id;	
-        	} else if (a.Name == AccountHelper.PARENT_ACCOUNT_SAMSUNG) {
+        	} else if (a.Name == PARENT_ACCOUNT_SAMSUNG) {
         		parentAccountIdSamsung = a.Id;	
         	}
         }
@@ -188,10 +190,10 @@ public class OpportunityApproverPluginTest {
         fxRates.put(CCY_CODE_EUR, fxrs.get(1));
         
         // Insert accounts
-        createAccount(AccountHelper.PARENT_ACCOUNT_STAR, AccountHelper.getParentRecordTypeID(), null, null);
-        createAccount(AccountHelper.PARENT_ACCOUNT_SAMSUNG, AccountHelper.getParentRecordTypeID(), null, null);
-        Account parentGeneral = createAccount('Parent Account - General', AccountHelper.getParentRecordTypeID(), null, null);
-        Account a = createAccount('Test Account', AccountHelper.getChildRecordTypeID(), parentGeneral.Id, CBG_AUTOMOTIVE);
+        createAccount(PARENT_ACCOUNT_STAR, AccountsSelector.getParentRecordTypeID(), null, null);
+        createAccount(PARENT_ACCOUNT_SAMSUNG, AccountsSelector.getParentRecordTypeID(), null, null);
+        Account parentGeneral = createAccount('Parent Account - General', AccountsSelector.getParentRecordTypeID(), null, null);
+        Account a = createAccount('Test Account', AccountsSelector.getChildRecordTypeID(), parentGeneral.Id, CBG_AUTOMOTIVE);
          
         // Insert products
         List<Product2> prods = new List<Product2>();

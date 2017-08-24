@@ -7,6 +7,9 @@ public class OpportunitiesSelector extends ApplicationSelector {
 		RecordType.MODEL_N_OPPTY => 'Model N Oppty'	
 	};
 	
+	private static Id sfdcRecordTypeId;
+	private static Id mnRecordTypeId;
+	
 	public override Schema.SObjectType getSObjectType() {
 		return Opportunity.SObjectType;
 	}
@@ -35,11 +38,19 @@ public class OpportunitiesSelector extends ApplicationSelector {
 	}
 	
 	public static Id getSfdcRecordTypeId() {
-		return new OpportunitiesSelector().getRecordTypeId(RecordType.SFDC_OPPTY);
-    }
+		if (sfdcRecordTypeId == null) {
+			sfdcRecordTypeId = new OpportunitiesSelector().getRecordTypeId(RecordType.SFDC_OPPTY); 
+		}
+		
+		return sfdcRecordTypeId;
+	}
     
     public static Id getMnRecordTypeId() {
-    	return new OpportunitiesSelector().getRecordTypeId(RecordType.MODEL_N_OPPTY);
+    	if (mnRecordTypeId == null) {
+    		mnRecordTypeId = new OpportunitiesSelector().getRecordTypeId(RecordType.MODEL_N_OPPTY); 	
+    	}
+    	
+    	return mnRecordTypeId; 
     }
 	
 	public Id getRecordTypeId(RecordType recType) {

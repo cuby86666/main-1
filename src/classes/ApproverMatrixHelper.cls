@@ -1,4 +1,5 @@
 public class ApproverMatrixHelper {
+	
 	private static final String DIRECT_OPPTY_TYPE_MAG_APPROVER = 'MAG Approver';
 	private static final String DIRECT_OPPTY_TYPE_BL_APPROVER = 'BL Approver';
 	private static final String DIRECT_OPPTY_TYPE_GAM = 'GAM';
@@ -7,6 +8,12 @@ public class ApproverMatrixHelper {
 	private static final String DIRECT_OPPTY_TYPE_GSM_SALES_DIRECTOR = 'GSM Sales Director';
 	private static final String DIRECT_OPPTY_TYPE_GSM_VP_1 = 'GSM VP 1';
 	private static final String DIRECT_OPPTY_TYPE_GSM_VP_2 = 'GSM VP 2';
+	// Account constants
+	private static final String PARENT_ACCOUNT_STAR = 'STAR';
+	private static final String PARENT_ACCOUNT_SAMSUNG = 'Samsung';
+	private static final String CBG_AUTOMOTIVE = 'Automotive';
+	private static final String REGION_GC = 'Greater China';
+	private static final String REGION_SAP = 'South Asia Pacific';
 	
 	private static Map<Id, Approvers_Matrix__c> directOpptyApproverMatrixes;  
 	
@@ -32,7 +39,7 @@ public class ApproverMatrixHelper {
     	Approvers_Matrix__c result;
     	
     	for (Approvers_Matrix__c am : directOpptyApproverMatrixes.values()) {
-    		if (am.Type__c == DIRECT_OPPTY_TYPE_GAM && am.Criteria_1__c == AccountHelper.PARENT_ACCOUNT_STAR) {
+    		if (am.Type__c == DIRECT_OPPTY_TYPE_GAM && am.Criteria_1__c == PARENT_ACCOUNT_STAR) {
     			result = am;
     			break;	
     		}
@@ -45,7 +52,7 @@ public class ApproverMatrixHelper {
     	Approvers_Matrix__c result;
     	
     	for (Approvers_Matrix__c am : directOpptyApproverMatrixes.values()) {
-    		if (am.Type__c == DIRECT_OPPTY_TYPE_GAM && am.Criteria_1__c == AccountHelper.PARENT_ACCOUNT_SAMSUNG) {
+    		if (am.Type__c == DIRECT_OPPTY_TYPE_GAM && am.Criteria_1__c == PARENT_ACCOUNT_SAMSUNG) {
     			result = am;
     			break;	
     		}
@@ -58,7 +65,7 @@ public class ApproverMatrixHelper {
     	Approvers_Matrix__c result;
     	
     	for (Approvers_Matrix__c am : directOpptyApproverMatrixes.values()) {
-    		if (am.Type__c == DIRECT_OPPTY_TYPE_EVP && am.Criteria_1__c == AccountHelper.PARENT_ACCOUNT_STAR) {
+    		if (am.Type__c == DIRECT_OPPTY_TYPE_EVP && am.Criteria_1__c == PARENT_ACCOUNT_STAR) {
     			result = am;
     			break;	
     		}
@@ -71,7 +78,7 @@ public class ApproverMatrixHelper {
     	Approvers_Matrix__c result;
     	
     	for (Approvers_Matrix__c am : directOpptyApproverMatrixes.values()) {
-    		if (am.Type__c == DIRECT_OPPTY_TYPE_EVP && am.Criteria_1__c == AccountHelper.PARENT_ACCOUNT_SAMSUNG) {
+    		if (am.Type__c == DIRECT_OPPTY_TYPE_EVP && am.Criteria_1__c == PARENT_ACCOUNT_SAMSUNG) {
     			result = am;
     			break;	
     		}
@@ -84,7 +91,7 @@ public class ApproverMatrixHelper {
     	Approvers_Matrix__c result;
     	
     	for (Approvers_Matrix__c am : directOpptyApproverMatrixes.values()) {
-    		if (am.Type__c == DIRECT_OPPTY_TYPE_SEGMENT_VP && am.Criteria_1__c == AccountHelper.CBG_AUTOMOTIVE) {
+    		if (am.Type__c == DIRECT_OPPTY_TYPE_SEGMENT_VP && am.Criteria_1__c == CBG_AUTOMOTIVE) {
     			result = am;
     			break;	
     		}
@@ -123,7 +130,7 @@ public class ApproverMatrixHelper {
     	Approvers_Matrix__c result;
     	
     	for (Approvers_Matrix__c am : directOpptyApproverMatrixes.values()) {
-    		if (am.Type__c == DIRECT_OPPTY_TYPE_GSM_VP_2 && am.Criteria_1__c == AccountHelper.CBG_AUTOMOTIVE && am.Criteria_2__c == AccountHelper.REGION_GC) {
+    		if (am.Type__c == DIRECT_OPPTY_TYPE_GSM_VP_2 && am.Criteria_1__c == CBG_AUTOMOTIVE && am.Criteria_2__c == REGION_GC) {
     			result = am;
     			break;	
     		}
@@ -136,7 +143,7 @@ public class ApproverMatrixHelper {
     	Approvers_Matrix__c result;
     	
     	for (Approvers_Matrix__c am : directOpptyApproverMatrixes.values()) {
-    		if (am.Type__c == DIRECT_OPPTY_TYPE_GSM_VP_2 && am.Criteria_1__c == AccountHelper.CBG_AUTOMOTIVE && am.Criteria_2__c == AccountHelper.REGION_SAP) {
+    		if (am.Type__c == DIRECT_OPPTY_TYPE_GSM_VP_2 && am.Criteria_1__c == CBG_AUTOMOTIVE && am.Criteria_2__c == REGION_SAP) {
     			result = am;
     			break;	
     		}
@@ -161,7 +168,7 @@ public class ApproverMatrixHelper {
     	List<Approvers_Matrix__c> result = new List<Approvers_Matrix__c>();
     	
     	for (Approvers_Matrix__c am : directOpptyApproverMatrixes.values()) {
-    		if (am.Type__c == DIRECT_OPPTY_TYPE_MAG_APPROVER && mags.contains(am.Criteria_1__c) && am.Criteria_2__c == AccountHelper.PARENT_ACCOUNT_STAR) {
+    		if (am.Type__c == DIRECT_OPPTY_TYPE_MAG_APPROVER && mags.contains(am.Criteria_1__c) && am.Criteria_2__c == PARENT_ACCOUNT_STAR) {
     			result.add(am);
     		}
     	}	
@@ -185,11 +192,12 @@ public class ApproverMatrixHelper {
     	List<Approvers_Matrix__c> result = new List<Approvers_Matrix__c>();
     	
     	for (Approvers_Matrix__c am : directOpptyApproverMatrixes.values()) {
-    		if (am.Type__c == DIRECT_OPPTY_TYPE_BL_APPROVER && bls.contains(am.Criteria_1__c) && am.Criteria_2__c == AccountHelper.PARENT_ACCOUNT_STAR) {
+    		if (am.Type__c == DIRECT_OPPTY_TYPE_BL_APPROVER && bls.contains(am.Criteria_1__c) && am.Criteria_2__c == PARENT_ACCOUNT_STAR) {
     			result.add(am);
     		}
     	}	
     	
     	return result;		
     }
+    
 }

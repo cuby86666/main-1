@@ -7,6 +7,15 @@ public class CommonUtils {
 	private static Id systemAdminProfileId;
 	private static Id dataAdminUserId;
 	private static Map<String, FX_Rates__c> fxRatesByCurIsoCode;
+	@TestVisible
+	private static Boolean isLoggingActive = null;
+	
+	static {
+		if (isLoggingActive == null) {
+			isLoggingActive = new LoggingSettingsSelector().selectWhere('MasterLabel = \'System Debug\'').get(0).IsActive__c;
+		}
+		System.debug('//-c isLoggingActive: ' + isLoggingActive);		
+	}
 	
 	public static String getSObjectTypeName(SObject so) {
 		return so.getSObjectType().getDescribe().getName();
@@ -96,7 +105,7 @@ public class CommonUtils {
             fxRatesByCurIsoCode.put(fr.Currency_Code__c, fr);
         }
     }
-    
+        
     public static String generateGuid() {
     	Blob b = Crypto.GenerateAESKey(128);
 		String h = EncodingUtil.ConvertTohex(b);
@@ -106,10 +115,14 @@ public class CommonUtils {
     }
     
     public static void p(Object obj, String prefix, String msg) {
-    	System.debug(prefix + ' ' + String.valueOf(obj).substring(0, String.valueOf(obj).indexOf(':')) + ' - ' + msg);
+    	if (isLoggingActive != null ? isLoggingActive : false) {
+    		System.debug(prefix + ' ' + String.valueOf(obj).substring(0, String.valueOf(obj).indexOf(':')) + ' - ' + msg);
+    	}
     } 
     
     public static void p(Type klass, String prefix, String msg) {
-    	System.debug(prefix + ' ' + klass.getName() + ' - ' + msg);
+    	if (isLoggingActive != null ? isLoggingActive : false) {
+    		System.debug(prefix + ' ' + klass.getName() + ' - ' + msg);
+    	}
     }  
 }

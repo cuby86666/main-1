@@ -32,13 +32,23 @@ private class CommonUtilsTest {
     	System.assertNotEquals(null, CommonUtils.isIntegrationUser());
     	System.assertNotEquals(null, CommonUtils.isAdmin());
     	System.assertNotEquals(null, CommonUtils.generateGuid());
-    	
+    }
+    
+    @isTest
+    static void testFxRates() {
     	List<FX_Rates__c> fxrs = new List<FX_Rates__c>();
         fxrs.add(new FX_Rates__c(Name = 'USD', Currency_Code__c = 'USD', CurrencyIsoCode = 'USD', Exchange_Rate__c = 1.0));
         fxrs.add(new FX_Rates__c(Name = 'EUR', Currency_Code__c = 'EUR', CurrencyIsoCode = 'EUR', Exchange_Rate__c = 0.9));
         insert fxrs;
         
-    	System.assert(CommonUtils.getFxRatesByCurIsoCode().size() > 0);
+    	System.assert(CommonUtils.getFxRatesByCurIsoCode().size() > 0);	
+    }
+    
+    @isTest
+    static void testLoggingSetting() {
+    	Boolean isLoggingActive = new LoggingSettingsSelector().selectWhere('MasterLabel = \'System Debug\'').get(0).IsActive__c;	
+    	
+    	System.assertEquals(isLoggingActive, CommonUtils.isLoggingActive);
     }
     
 }

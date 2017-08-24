@@ -1,5 +1,15 @@
 public class AccountsSelector extends ApplicationSelector {
 	
+	public enum RecordType {CHILD_ACCOUNT, PARENT_ACCOUNT}
+	
+	private static final Map<RecordType, String> RECORD_TYPES = new Map<RecordType, String> {
+		RecordType.CHILD_ACCOUNT => 'Child Account',
+		RecordType.PARENT_ACCOUNT => 'Parent Account'	
+	};
+	
+	private static Id childRecordTypeId;
+	private static Id parentRecordTypeId;
+	
 	public override Schema.SObjectType getSObjectType() {
 		return Account.SObjectType;
 	}
@@ -12,6 +22,27 @@ public class AccountsSelector extends ApplicationSelector {
 			Account.Customer_Category__c,
 			Account.Region__c 
 		};
+	}
+	
+	public static Id getChildRecordTypeId() {
+		if (childRecordTypeId == null) {
+			childRecordTypeId = new AccountsSelector().getRecordTypeId(RecordType.CHILD_ACCOUNT); 
+		}
+		
+		return childRecordTypeId;
+	}
+    
+    public static Id getParentRecordTypeId() {
+    	if (parentRecordTypeId == null) {
+    		parentRecordTypeId = new AccountsSelector().getRecordTypeId(RecordType.PARENT_ACCOUNT); 	
+    	}
+    	
+    	return parentRecordTypeId; 
+    }
+	
+	public Id getRecordTypeId(RecordType recType) {
+		p('getRecordTypeId');
+		return getRecordTypeId(RECORD_TYPES.get(recType));	
 	}
 	
 	public List<Account> selectById(Set<Id> ids) {

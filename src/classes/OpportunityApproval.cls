@@ -1,10 +1,14 @@
 public class OpportunityApproval {
+	
 	@TestVisible
 	private static final Map<ApproverLabel, String> APPROVER_LABELS = new Map<ApproverLabel, String>();
 	
 	private static final List<String> MAG_APPROVER_FIELDS = new List<String>();
 	private static final List<String> BL_APPROVER_FIELDS = new List<String>();
 	private static final List<String> ALL_APPROVER_FIELDS = new List<String>();
+	// Account constants
+	private static final String PARENT_ACCOUNT_STAR = 'STAR';
+	private static final String PARENT_ACCOUNT_SAMSUNG = 'Samsung';
 	
 	private static Boolean isUpdatable = true;
 	private static Map<Id, User> users;
@@ -670,10 +674,10 @@ public class OpportunityApproval {
 	private static Approver getApprover(Opportunity oppty) {
 		String parentAccountName = oppty.Account.Parent.Name;
 		
-		if (parentAccountName == AccountHelper.PARENT_ACCOUNT_STAR) {
+		if (parentAccountName == PARENT_ACCOUNT_STAR) {
 			p2('StarApprover');
 			return new StarApprover(oppty);
-		} else if (parentAccountName == AccountHelper.PARENT_ACCOUNT_SAMSUNG) {
+		} else if (parentAccountName == PARENT_ACCOUNT_SAMSUNG) {
 			p2('SamsungApprover');
 			return new SamsungApprover(oppty);
 		} else {

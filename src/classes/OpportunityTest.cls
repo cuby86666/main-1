@@ -736,6 +736,7 @@ private class OpportunityTest {
         Map<Id, OpportunityLineItem> opptyProdLostCancelledInfo = new Map<Id, OpportunityLineItem>();
         List<Opportunity> opptysUpdate;
         
+        Test.startTest();
         opptySfdc = [
             SELECT  Id, StageName, Design_Win_Approval_Process__c, Lost_Date__c, Lost_Description__c, Lost_Reason__c
             FROM    Opportunity 
@@ -779,6 +780,7 @@ private class OpportunityTest {
         opptySfdc.Competitors__c = 'Test Competitor';
         opptysUpdate.add(opptySfdc);
         update opptysUpdate;
+        Test.stopTest();
         
         opptyProdLostCancelledInfo = getOpptyProdLostCancelledInfo(opptysUpdate);
         

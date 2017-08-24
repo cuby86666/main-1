@@ -50,7 +50,14 @@ public class OpportunitySchedules extends ApplicationDomain {
 		
 		updateOpptyProdQty((List<OpportunitySchedule__c>)this.records, uow);
 		
-		deleteOpptyProdScheds(uow);
+		Set<Id> opptyIds = deleteOpptyProdScheds(uow);
+		
+		uow.commitWork();
+		
+		// Need to commit and start a new uow because updateAllOpptyProdSchedsPriceAndFrozenPrice depends on the result of deleteOpptyProdScheds.
+		uow = Application.UnitOfWork.newInstance();
+		
+		updateAllOpptyProdSchedsPriceAndFrozenPrice(opptyIds, uow);
 		
 		uow.commitWork();
 	}
@@ -309,7 +316,7 @@ public class OpportunitySchedules extends ApplicationDomain {
         return result;
     }
     
-    private void deleteOpptyProdScheds(fflib_ISObjectUnitOfWork uow){
+    private Set<Id> deleteOpptyProdScheds(fflib_ISObjectUnitOfWork uow){
     	p('deleteOpptyProdScheds');
         //Oppty Sched Id -> (Oppty Prod Sched Id -> Oppty Prod Sched)
         List<OpportunityProductSchedule__c> opptyProdSchedsDeleted = new List<OpportunityProductSchedule__c>();
@@ -328,11 +335,13 @@ public class OpportunitySchedules extends ApplicationDomain {
         
 		uow.registerDeleted(opptyProdSchedsDeleted);
 		
-		updateAllOpportunityProductSchedulesPriceAndFrozenPrice(opptyIds, uow);
+		return opptyIds; 
+		
+		//J updateAllOpptyProdSchedsPriceAndFrozenPrice(opptyIds, uow);
     }
     
-    private void updateAllOpportunityProductSchedulesPriceAndFrozenPrice(Set<Id> opptyIds, fflib_ISObjectUnitOfWork uow){
-    	p('updateAllOpportunityProductSchedulesPriceAndFrozenPrice');
+    private void updateAllOpptyProdSchedsPriceAndFrozenPrice(Set<Id> opptyIds, fflib_ISObjectUnitOfWork uow){
+    	p('updateAllOpptyProdSchedsPriceAndFrozenPrice');
         Map<Id, List<OpportunityProductSchedule__c>> opptyProdAndOpptyProdSched = new Map<Id, List<OpportunityProductSchedule__c>>();
     	List<OpportunityLineItem> opptyProdList;
     	List<OpportunityProductSchedule__c> opptyProdSchedList;
@@ -340,7 +349,7 @@ public class OpportunitySchedules extends ApplicationDomain {
     	Integer schedIndex = 0;
     	
 		Map<Id, List<OpportunityLineItem>> opptyProdsByOpptyId = getOpptyProdsByOpptyId(opptyIds);
-		opptyProdAndOpptyProdSched = getOpptyProdAndOpptyProdSchedList(opptyIds, opptyProdsByOpptyId);
+		opptyProdAndOpptyProdSched = getOpptyProdSchedsByOpptyProdId(opptyIds, opptyProdsByOpptyId);
 		
 		for (Id opptyId : opptyIds) {
 			if (opptyProdsByOpptyId.containsKey(opptyId)) {
@@ -373,8 +382,8 @@ public class OpportunitySchedules extends ApplicationDomain {
 		uow.registerDirty(opptyProdSchedsUpdated);
     }
     
-    private Map<Id, List<OpportunityProductSchedule__c>> getOpptyProdAndOpptyProdSchedList(Set<Id> opptyIds, Map<Id, List<OpportunityLineItem>> opptyAndOpptyProdList){
-    	p('getOpptyProdAndOpptyProdSchedList');
+    private Map<Id, List<OpportunityProductSchedule__c>> getOpptyProdSchedsByOpptyProdId(Set<Id> opptyIds, Map<Id, List<OpportunityLineItem>> opptyAndOpptyProdList){
+    	p('getOpptyProdSchedsByOpptyProdId');
     	Set<Id> opptyProdIds = new Set<Id>();
     	List<OpportunityLineItem> opptyProdList;
     	Map<Id, List<OpportunityProductSchedule__c>> result = new Map<Id, List<OpportunityProductSchedule__c>>();
