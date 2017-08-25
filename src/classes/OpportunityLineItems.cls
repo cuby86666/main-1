@@ -308,6 +308,7 @@ public class OpportunityLineItems extends ApplicationDomain {
                             opptyProdSchedNew = new OpportunityProductSchedule__c();
                             
                             opptyProdSchedNew.Opportunity__c = opptyProdNew.OpportunityId;
+                            opptyProdSchedNew.CurrencyIsoCode = opptyProdNew.CurrencyIsoCode; //J
                             
                             opptyProdSchedNew.Sched_Date__c = opptySched.Sched_Date__c;
                             opptyProdSchedNew.Oppty_Sched_Qty__c = opptySched.Oppty_Sched_Qty__c;
