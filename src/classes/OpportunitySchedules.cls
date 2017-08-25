@@ -336,9 +336,7 @@ public class OpportunitySchedules extends ApplicationDomain {
 		uow.registerDeleted(opptyProdSchedsDeleted);
 		
 		return opptyIds; 
-		
-		//J updateAllOpptyProdSchedsPriceAndFrozenPrice(opptyIds, uow);
-    }
+	}
     
     private void updateAllOpptyProdSchedsPriceAndFrozenPrice(Set<Id> opptyIds, fflib_ISObjectUnitOfWork uow){
     	p('updateAllOpptyProdSchedsPriceAndFrozenPrice');
