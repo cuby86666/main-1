@@ -360,8 +360,6 @@ private class OpportunityLineItemTriggerTest {
             (
                 Name='Test Opportunity',
                 AccountId = testAccountId,
-                Industry_Segment__c = 'Mobile',
-                Sub_Segment__c = 'Mobile Handsets',
                 X2010_Pieces__c = 0,
                 X2011_Pieces__c = 0,
                 X2012_Pieces__c = 0,

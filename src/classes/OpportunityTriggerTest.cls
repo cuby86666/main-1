@@ -135,7 +135,7 @@ private class OpportunityTriggerTest{
          insert prods;
         
         // Insert an opportunity
-        Opportunity o = new Opportunity(Name = 'Test Oppty', AccountId = a.Id, Industry_Segment__c = 'AFC', StageName = 'Initial Engagement',Design_win_approval_process__c='open');
+        Opportunity o = new Opportunity(Name = 'Test Oppty', AccountId = a.Id, StageName = 'Initial Engagement',Design_win_approval_process__c='open');
         o.RecordTypeId = SFDC_RECORD_TYPE_ID;
         o.Production_Date__c = PRODUCTION_DATE;
         o.CloseDate = PRODUCTION_DATE - 60;
@@ -365,7 +365,7 @@ private class OpportunityTriggerTest{
   
     static testMethod void testAutomotiveSegment() 
     {
-      opptyProd.Opportunity.Industry_Segment__c = 'Automotive & Transportation';
+      //opptyProd.Opportunity.Industry_Segment__c = 'Automotive & Transportation'; //J comment out since the picklist values may be invalid if any changes.
       opptyProd.Opportunity.Production_Date__c  = Date.newInstance(2016, 03, 15);
       opptyProd.Opportunity.CloseDate = Date.newInstance(2016, 01, 20);
       

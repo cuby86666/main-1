@@ -167,9 +167,9 @@ private class OpportunityProductClaimValueTest {
         Opportunity o;
         
         if (recordTypeID == OpportunitiesSelector.getMnRecordTypeId()) {
-        	o = new Opportunity(Name = 'Test Oppty', AccountId = a.Id, Industry_Segment__c = 'AFC', StageName = 'Initial Engagement'); //Todo: Not set AccountId for code coverage	
+        	o = new Opportunity(Name = 'Test Oppty', AccountId = a.Id, StageName = 'Initial Engagement'); //Todo: Not set AccountId for code coverage	
         } else {
-        	o = new Opportunity(Name = 'Test Oppty', AccountId = a.Id, Industry_Segment__c = 'AFC', StageName = 'Initial Engagement');
+        	o = new Opportunity(Name = 'Test Oppty', AccountId = a.Id, StageName = 'Initial Engagement');
         }
         
         o.RecordTypeId = recordTypeID;

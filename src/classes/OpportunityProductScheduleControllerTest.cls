@@ -144,7 +144,6 @@ private class OpportunityProductScheduleControllerTest {
             Name = 'Test Oppty',
             RecordTypeId = SFDC_RECORD_TYPE_ID,
             AccountId = childAcc.Id,
-            Industry_Segment__c = 'AFC',
             StageName = STAGE_NAME,
             CurrencyIsoCode = CCY_CODE_DEFAULT,
             Production_Date__c = PRODUCTION_DATE,

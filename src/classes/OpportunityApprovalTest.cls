@@ -210,7 +210,7 @@ private class OpportunityApprovalTest {
         insert prods;
         
         // Insert an opportunity
-        Opportunity o = new Opportunity(Name = 'Test Oppty', OwnerId = u.Id, AccountId = a.Id, Industry_Segment__c = 'AFC', StageName = 'Initial Engagement');
+        Opportunity o = new Opportunity(Name = 'Test Oppty', OwnerId = u.Id, AccountId = a.Id, StageName = 'Initial Engagement');
         o.Production_Date__c = PRODUCTION_DATE;
         o.CloseDate = PRODUCTION_DATE - 60;
         o.Currency__c = fxRates.get(CCY_CODE_DEFAULT).Id; // Locked_Exchange_Rate__c will be set to this by workflow.

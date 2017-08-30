@@ -132,7 +132,6 @@ private class OpportunityScheduleTest {
             Name = 'Test Oppty',
             RecordTypeId = recordTypeID,
             AccountId = a.Id,
-            Industry_Segment__c = 'AFC',
             StageName = opptyStageName,
             CurrencyIsoCode = CCY_CODE_EUR,
             Production_Date__c = PRODUCTION_DATE,

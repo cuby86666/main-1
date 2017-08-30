@@ -50,7 +50,7 @@ private class TaskTriggerTest {
         insert a;
         
         // Insert an opportunity
-        Opportunity o = new Opportunity(Name = 'Test Oppty', AccountId = a.Id, Industry_Segment__c = 'AFC', StageName = 'Initial Engagement');
+        Opportunity o = new Opportunity(Name = 'Test Oppty', AccountId = a.Id, StageName = 'Initial Engagement');
         o.RecordTypeId = SFDC_RECORD_TYPE_ID;
         o.Production_Date__c = PRODUCTION_DATE;
         o.CloseDate = PRODUCTION_DATE - 60;
