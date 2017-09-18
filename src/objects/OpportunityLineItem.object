@@ -1708,7 +1708,8 @@ NOT(ISPICKVAL(Opportunity.Account.Customer_Category__c, &quot;Tier 4 - TMMA&quot
 NOT( 
 OR( 
 $User.ProfileId=&quot;00e20000001Nc7g&quot;, 
-$User.ProfileId=&quot;00eD0000001oBDw&quot; 
+$User.ProfileId=&quot;00eD0000001oBDw&quot;,
+Opportunity.Bypass_Validation__c 
 ) 
 ), 
 Opportunity.RecordType.DeveloperName = &quot;Model_N_Oppty&quot; 
@@ -1718,14 +1719,14 @@ Opportunity.RecordType.DeveloperName = &quot;Model_N_Oppty&quot;
     <validationRules>
         <fullName>Oppty_Prod_Not_Editable</fullName>
         <active>true</active>
-        <description>SFDC Opportunity Product cannot be edited after Commitment stage.</description>
+        <description>Opportunity Product cannot be edited after Commitment stage.</description>
         <errorConditionFormula>AND( 
-ISPICKVAL( Opportunity.StageName ,&apos;Commitment&apos;)
-, 
+ISPICKVAL(Opportunity.StageName ,&apos;Commitment&apos;),
 NOT( 
 OR( 
 $User.ProfileId=&quot;00e20000001Nc7g&quot;, 
-$User.ProfileId=&quot;00eD0000001oBDw&quot; 
+$User.ProfileId=&quot;00eD0000001oBDw&quot;,
+Opportunity.Bypass_Validation__c  
 ) 
 ) 
 )</errorConditionFormula>
@@ -1772,18 +1773,17 @@ NOT(OR($User.ProfileId = &apos;00e20000001Nc7g&apos;, $User.ProfileId = &apos;00
     </validationRules>
     <validationRules>
         <fullName>SFDC_Oppty_Prod_Not_Editable</fullName>
-        <active>true</active>
+        <active>false</active>
         <description>SFDC Opportunity Product cannot be edited after Commitment stage.</description>
         <errorConditionFormula>AND( 
 Opportunity.RecordType.DeveloperName = &quot;SFDC_Oppty&quot;, 
-ISPICKVAL( Opportunity.StageName ,&apos;Commitment&apos;)
-, 
+ISPICKVAL(Opportunity.StageName ,&apos;Commitment&apos;), 
 NOT( 
 OR( 
 $User.ProfileId=&quot;00e20000001Nc7g&quot;, 
-$User.ProfileId=&quot;00eD0000001oBDw&quot; 
+$User.ProfileId=&quot;00eD0000001oBDw&quot;    
 ) 
-) 
+)  
 )</errorConditionFormula>
         <errorMessage>SFDC Opportunity Product cannot be edited after Commitment stage.</errorMessage>
     </validationRules>

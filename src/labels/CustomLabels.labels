@@ -9,6 +9,13 @@
         <value>Additional Description</value>
     </labels>
     <labels>
+        <fullName>CaseUrl</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>CaseUrl</shortDescription>
+        <value>https://nxp.my.salesforce.com</value>
+    </labels>
+    <labels>
         <fullName>CommunityAbout</fullName>
         <categories>NXP Community Header</categories>
         <language>en_US</language>
@@ -1453,6 +1460,13 @@ Project Folder</value>
         <value>Login</value>
     </labels>
     <labels>
+        <fullName>Community_Content_Migration_User_Id</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Community Content Migration User Id</shortDescription>
+        <value>00557000007HQ8YAAW</value>
+    </labels>
+    <labels>
         <fullName>Community_Login_URL</fullName>
         <language>en_US</language>
         <protected>false</protected>
@@ -1606,6 +1620,13 @@ Project Folder</value>
         <protected>false</protected>
         <shortDescription>Lead Default Owner</shortDescription>
         <value>NXP Lead Creation Program</value>
+    </labels>
+    <labels>
+        <fullName>NXP_Lightning_Community_Network_Id</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>NXP Lightning Community Network Id</shortDescription>
+        <value>0DB57000000Xa6kGAC</value>
     </labels>
     <labels>
         <fullName>Reference_Id</fullName>

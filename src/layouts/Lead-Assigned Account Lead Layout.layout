@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Layout xmlns="http://soap.sforce.com/2006/04/metadata">
     <excludeButtons>Convert</excludeButtons>
-    <excludeButtons>DataDotComClean</excludeButtons>
     <excludeButtons>Submit</excludeButtons>
     <feedLayout>
         <autocollapsePublisher>true</autocollapsePublisher>
@@ -257,6 +256,10 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Note_To_Disti__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Send_To_Disti_Age_In_Days__c</field>
             </layoutItems>
         </layoutColumns>
         <style>OneColumn</style>

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Layout xmlns="http://soap.sforce.com/2006/04/metadata">
     <excludeButtons>ChangeRecordType</excludeButtons>
-    <excludeButtons>Share</excludeButtons>
     <excludeButtons>Submit</excludeButtons>
     <headers>PersonalTagging</headers>
     <headers>PublicTagging</headers>
@@ -80,14 +79,14 @@
         <fields>ACCOUNT.NAME</fields>
         <fields>Executive_Summary__c</fields>
         <fields>CORE.USERS.FULL_NAME</fields>
+        <fields>OPPORTUNITY.CREATED_DATE</fields>
+        <fields>Schematic_Close_Date__c</fields>
         <fields>OPPORTUNITY.CLOSE_DATE</fields>
         <fields>OPPORTUNITY.STAGE_NAME</fields>
-        <fields>Design_Win_Approval_Process__c</fields>
         <fields>Claim_Value_USD__c</fields>
-        <fields>Block_Diagram_Close_Date__c</fields>
         <fields>BL__c</fields>
         <relatedList>Opportunity.Program__c</relatedList>
-        <sortField>OPPORTUNITY.STAGE_NAME</sortField>
+        <sortField>OPPORTUNITY.CREATED_DATE</sortField>
         <sortOrder>Asc</sortOrder>
     </relatedLists>
     <relatedLists>
@@ -105,13 +104,16 @@
         <sortField>Opportunity_Name__c</sortField>
         <sortOrder>Asc</sortOrder>
     </relatedLists>
+    <relatedLists>
+        <relatedList>RelatedNoteList</relatedList>
+    </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>
     <showInteractionLogPanel>false</showInteractionLogPanel>
     <showRunAssignmentRulesCheckbox>false</showRunAssignmentRulesCheckbox>
     <showSubmitAndAttachButton>false</showSubmitAndAttachButton>
     <summaryLayout>
-        <masterLabel>00h9E000000Nqer</masterLabel>
+        <masterLabel>00h5E000000F9JN</masterLabel>
         <sizeX>4</sizeX>
         <sizeY>0</sizeY>
         <summaryLayoutStyle>Default</summaryLayoutStyle>

@@ -2362,7 +2362,7 @@ Otherwise, the 1st-Degree Parent of this Location will be NXP Ultimate Parent.</
         <fullName>House_Number__c</fullName>
         <externalId>false</externalId>
         <inlineHelpText>Part of customer address.</inlineHelpText>
-        <label>House Number</label>
+        <label>z_OBSOLETED_House Number</label>
         <length>10</length>
         <required>false</required>
         <trackFeedHistory>false</trackFeedHistory>
@@ -10279,20 +10279,18 @@ For Parent Accounts, the account owner is set to &quot;Data Admin&quot;.</inline
         <fullName>NewThisWeek</fullName>
         <columns>ACCOUNT.NAME</columns>
         <columns>ACCOUNT.SITE</columns>
-        <columns>ACCOUNT.ADDRESS1_STATE</columns>
-        <columns>ACCOUNT.PHONE1</columns>
-        <columns>ACCOUNT.TYPE</columns>
         <columns>CORE.USERS.ALIAS</columns>
+        <columns>Sales_Area__c</columns>
+        <columns>Region__c</columns>
+        <columns>NXP_Global_ID__c</columns>
+        <columns>IsInactive__c</columns>
+        <columns>Customer_Category__c</columns>
+        <columns>Consolidated_Account_Code__c</columns>
         <filterScope>Everything</filterScope>
         <filters>
             <field>ACCOUNT.CREATED_DATE</field>
             <operation>equals</operation>
             <value>THIS_WEEK</value>
-        </filters>
-        <filters>
-            <field>ACCOUNT.RECORDTYPE</field>
-            <operation>notEqual</operation>
-            <value>012D0000000QkS1</value>
         </filters>
         <label>New This Week</label>
         <sharedTo>
@@ -39214,6 +39212,25 @@ For Parent Accounts, the account owner is set to &quot;Data Admin&quot;.</inline
     </searchLayouts>
     <sharingModel>Private</sharingModel>
     <validationRules>
+        <fullName>Can_Not_Modify_Account_Name</fullName>
+        <active>true</active>
+        <description>Only CMD team and System Admin user can modify Account Name</description>
+        <errorConditionFormula>AND
+(
+ ISCHANGED( Name ),
+ NOT(  
+      OR
+      (
+	$Permission.Is_System_Admin,  
+	$Permission.Is_CMD_Officer,
+	$Permission.Is_CMD_Manager 
+       )
+    )
+)</errorConditionFormula>
+        <errorDisplayField>Name</errorDisplayField>
+        <errorMessage>You are not allowed to change Account Name. Please contact CMD team for the same.</errorMessage>
+    </validationRules>
+    <validationRules>
         <fullName>D_B_Fields_Admin_Only</fullName>
         <active>false</active>
         <description>End users should not be able to select &quot;Exception&quot; status in field Status of D&amp;B Cleansing.</description>
@@ -39488,30 +39505,6 @@ ISPICKVAL( State_Province__c , &quot;&quot;)
         <showsLocation>true</showsLocation>
         <showsStatus>true</showsStatus>
         <url>http://www.genwatt.com/genwatt/billing.htm?actname={!Account.Name}</url>
-    </webLinks>
-    <webLinks>
-        <fullName>Mass_Edit</fullName>
-        <availability>online</availability>
-        <displayType>massActionButton</displayType>
-        <height>600</height>
-        <linkType>page</linkType>
-        <masterLabel>Mass Edit</masterLabel>
-        <openType>sidebar</openType>
-        <page>MassEditAccount</page>
-        <protected>false</protected>
-        <requireRowSelection>true</requireRowSelection>
-    </webLinks>
-    <webLinks>
-        <fullName>Mass_Update</fullName>
-        <availability>online</availability>
-        <displayType>massActionButton</displayType>
-        <height>600</height>
-        <linkType>page</linkType>
-        <masterLabel>Mass Update</masterLabel>
-        <openType>sidebar</openType>
-        <page>MassUpdateAccount</page>
-        <protected>false</protected>
-        <requireRowSelection>true</requireRowSelection>
     </webLinks>
     <webLinks>
         <fullName>New_Child</fullName>

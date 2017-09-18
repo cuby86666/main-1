@@ -665,6 +665,11 @@ IMAGE (&quot;/img/samples/flag_red.gif&quot;, &quot;STOP&quot;)
                     <label>TATA</label>
                 </value>
                 <value>
+                    <fullName>Tesla</fullName>
+                    <default>false</default>
+                    <label>Tesla</label>
+                </value>
+                <value>
                     <fullName>TOYOTA</fullName>
                     <default>false</default>
                     <label>TOYOTA</label>
@@ -1016,6 +1021,15 @@ IMAGE (&quot;/img/samples/flag_red.gif&quot;, &quot;STOP&quot;)
                 <controllingFieldValue>Car Infotainment</controllingFieldValue>
                 <controllingFieldValue>Chassis</controllingFieldValue>
                 <controllingFieldValue>Intelligent transportation systems (ITS)</controllingFieldValue>
+                <valueName>Tesla</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Powertrain</controllingFieldValue>
+                <controllingFieldValue>Telematics</controllingFieldValue>
+                <controllingFieldValue>Body, Safety and Comfort</controllingFieldValue>
+                <controllingFieldValue>Car Infotainment</controllingFieldValue>
+                <controllingFieldValue>Chassis</controllingFieldValue>
+                <controllingFieldValue>Intelligent transportation systems (ITS)</controllingFieldValue>
                 <valueName>TOYOTA</valueName>
             </valueSettings>
             <valueSettings>
@@ -1231,7 +1245,7 @@ Field changed from Lookup to Free Text - SFDC52 Rel1612</description>
         <fullName>Block_Diagram_Close_Date__c</fullName>
         <description>Rel 1701 SFDC-188 Block Diagram Date</description>
         <externalId>false</externalId>
-        <label>Block Diagram Close Date</label>
+        <label>z_OBSOLETED_Block Diagram Close Date</label>
         <required>false</required>
         <trackFeedHistory>false</trackFeedHistory>
         <trackHistory>false</trackHistory>
@@ -1246,6 +1260,16 @@ Field changed from Lookup to Free Text - SFDC52 Rel1612</description>
         <trackFeedHistory>false</trackFeedHistory>
         <trackHistory>false</trackHistory>
         <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Bypass_Validation__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Bypass validation rules to allow Opportunity Program field to be editable all the time.</description>
+        <externalId>false</externalId>
+        <label>Bypass Validation</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
     </fields>
     <fields>
         <fullName>CampaignId</fullName>
@@ -1327,6 +1351,20 @@ NOT(BL_Approver_5__r.Signed_ARIA__c)
         <type>Checkbox</type>
     </fields>
     <fields>
+        <fullName>Claim_Value_USD_SYS__c</fullName>
+        <description>This field is updated by Process Builder to capture the historical trending of Opportunity.Claim_Value_USD__c.</description>
+        <externalId>false</externalId>
+        <label>Oppty Claim Value (USD) - Audit Trail</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <trackTrending>true</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Claim_Value_USD__c</fullName>
         <description>Opportunity claim value in USD.</description>
         <externalId>false</externalId>
@@ -1357,7 +1395,7 @@ Lost/Cancelled products are excluded from this calculation.</inlineHelpText>
     <fields>
         <fullName>CloseDate</fullName>
         <inlineHelpText>Estimated date which the opportunity is likely to sign off with customer</inlineHelpText>
-        <trackFeedHistory>false</trackFeedHistory>
+        <trackFeedHistory>true</trackFeedHistory>
         <trackHistory>true</trackHistory>
         <trackTrending>true</trackTrending>
     </fields>
@@ -1694,7 +1732,7 @@ If Compliance Risk is not applicable, please uncheck Compliance Assessment Evide
         <inlineHelpText>The risk associated with non-compliance to NXP Code of Conduct and international rules and regulations regarding anti-bribery and competition laws.</inlineHelpText>
         <label>Compliance Risk</label>
         <required>false</required>
-        <trackFeedHistory>false</trackFeedHistory>
+        <trackFeedHistory>true</trackFeedHistory>
         <trackHistory>true</trackHistory>
         <type>Picklist</type>
         <valueSet>
@@ -1829,7 +1867,7 @@ If Compliance Risk is not applicable, please uncheck Compliance Assessment Evide
         <externalId>false</externalId>
         <inlineHelpText>Indicates if this revenue should be included in the pipeline. Unchecking Count Revenue is rare. For more information, see Multiparty Opportunity Management.</inlineHelpText>
         <label>Count ​Product Revenue</label>
-        <trackFeedHistory>false</trackFeedHistory>
+        <trackFeedHistory>true</trackFeedHistory>
         <trackHistory>false</trackHistory>
         <type>Checkbox</type>
     </fields>
@@ -1866,7 +1904,7 @@ If Compliance Risk is not applicable, please uncheck Compliance Assessment Evide
     </fields>
     <fields>
         <fullName>CurrencyIsoCode</fullName>
-        <trackFeedHistory>true</trackFeedHistory>
+        <trackFeedHistory>false</trackFeedHistory>
         <trackHistory>true</trackHistory>
     </fields>
     <fields>
@@ -2031,7 +2069,7 @@ IMAGE (&quot;/img/samples/flag_red.gif&quot;, &quot;STOP&quot;)
     <fields>
         <fullName>Description</fullName>
         <inlineHelpText>The area to take notes on project. Describe actions are being taken at customer or make note of actions within account team.</inlineHelpText>
-        <trackFeedHistory>false</trackFeedHistory>
+        <trackFeedHistory>true</trackFeedHistory>
         <trackHistory>false</trackHistory>
     </fields>
     <fields>
@@ -2386,7 +2424,7 @@ Expected Close Date Quarter. Calculate the quarter of Expected Close Date. Syste
         <externalId>false</externalId>
         <label>Industry Segment</label>
         <required>false</required>
-        <trackFeedHistory>true</trackFeedHistory>
+        <trackFeedHistory>false</trackFeedHistory>
         <trackHistory>true</trackHistory>
         <type>Picklist</type>
         <valueSet>
@@ -2604,7 +2642,7 @@ Lost/Cancelled products are excluded from this calculation.</inlineHelpText>
         <inlineHelpText>Last time this record has been updated</inlineHelpText>
         <label>Last Business Modified Date</label>
         <required>false</required>
-        <trackFeedHistory>false</trackFeedHistory>
+        <trackFeedHistory>true</trackFeedHistory>
         <trackHistory>false</trackHistory>
         <type>DateTime</type>
     </fields>
@@ -2838,7 +2876,7 @@ Lost/Cancelled products are excluded from this calculation.</inlineHelpText>
         <precision>18</precision>
         <required>false</required>
         <scale>6</scale>
-        <trackFeedHistory>true</trackFeedHistory>
+        <trackFeedHistory>false</trackFeedHistory>
         <trackHistory>true</trackHistory>
         <type>Number</type>
         <unique>false</unique>
@@ -3506,7 +3544,7 @@ Lost/Cancelled products are excluded from this calculation.</inlineHelpText>
     <fields>
         <fullName>NextStep</fullName>
         <inlineHelpText>executive summary of steps needed to develop and close opportunity (for New Opportunity only)​</inlineHelpText>
-        <trackFeedHistory>true</trackFeedHistory>
+        <trackFeedHistory>false</trackFeedHistory>
         <trackHistory>true</trackHistory>
     </fields>
     <fields>
@@ -3525,7 +3563,7 @@ Lost/Cancelled products are excluded from this calculation.</inlineHelpText>
         <inlineHelpText>executive summary of steps needed to develop and close opportunity (for New Opportunity only)​</inlineHelpText>
         <label>Next Steps</label>
         <length>32768</length>
-        <trackFeedHistory>false</trackFeedHistory>
+        <trackFeedHistory>true</trackFeedHistory>
         <trackHistory>false</trackHistory>
         <type>LongTextArea</type>
         <visibleLines>3</visibleLines>
@@ -3616,9 +3654,8 @@ ORIGINAL LABEL before Release 1506: Opp. Design Win Claim Value (USD)</descripti
         <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
-        <trackFeedHistory>true</trackFeedHistory>
+        <trackFeedHistory>false</trackFeedHistory>
         <trackHistory>false</trackHistory>
-        <trackTrending>true</trackTrending>
         <type>Number</type>
         <unique>false</unique>
     </fields>
@@ -3934,7 +3971,6 @@ Opportunity with any Red Flag is not allowed to submit for approval.</inlineHelp
         <scale>2</scale>
         <trackFeedHistory>false</trackFeedHistory>
         <trackHistory>false</trackHistory>
-        <trackTrending>true</trackTrending>
         <type>Number</type>
         <unique>false</unique>
     </fields>
@@ -3956,7 +3992,7 @@ Opportunity with any Red Flag is not allowed to submit for approval.</inlineHelp
         <inlineHelpText>Estimate the likely production date of this design win.</inlineHelpText>
         <label>Production Date</label>
         <required>false</required>
-        <trackFeedHistory>false</trackFeedHistory>
+        <trackFeedHistory>true</trackFeedHistory>
         <trackHistory>true</trackHistory>
         <type>Date</type>
     </fields>
@@ -4087,7 +4123,7 @@ IF(
         <inlineHelpText>Target date Prototype devices are required in the lab to begin system HW debug and validation work.</inlineHelpText>
         <label>Prototype Required Date</label>
         <required>false</required>
-        <trackFeedHistory>false</trackFeedHistory>
+        <trackFeedHistory>true</trackFeedHistory>
         <trackHistory>false</trackHistory>
         <type>Date</type>
     </fields>
@@ -4582,7 +4618,7 @@ Controlling Field of &quot;RC8_Sub_Segment__c&quot;</description>
         <label>Approved or Rejected By</label>
         <length>80</length>
         <required>false</required>
-        <trackFeedHistory>false</trackFeedHistory>
+        <trackFeedHistory>true</trackFeedHistory>
         <trackHistory>false</trackHistory>
         <type>Text</type>
         <unique>false</unique>
@@ -4629,7 +4665,7 @@ Controlling Field of &quot;RC8_Sub_Segment__c&quot;</description>
         <externalId>false</externalId>
         <label>Sample Date</label>
         <required>false</required>
-        <trackFeedHistory>false</trackFeedHistory>
+        <trackFeedHistory>true</trackFeedHistory>
         <trackHistory>false</trackHistory>
         <type>Date</type>
     </fields>
@@ -4667,9 +4703,10 @@ Controlling Field of &quot;RC8_Sub_Segment__c&quot;</description>
         <fullName>Schematic_Close_Date__c</fullName>
         <description>Rel 1701 SFDC-188 Schematic Close Date</description>
         <externalId>false</externalId>
+        <inlineHelpText>The planned or actual date when the Schematic Diagram will be or has been completed. The schematic should provide the detailed, complete explanations of the parts that the customer system holds, as well as how they are connected.</inlineHelpText>
         <label>Schematic Close Date</label>
         <required>false</required>
-        <trackFeedHistory>false</trackFeedHistory>
+        <trackFeedHistory>true</trackFeedHistory>
         <trackHistory>false</trackHistory>
         <type>Date</type>
     </fields>
@@ -4730,7 +4767,7 @@ Controlling Field of &quot;RC8_Sub_Segment__c&quot;</description>
         <externalId>false</externalId>
         <label>Industry Sub Segment</label>
         <required>false</required>
-        <trackFeedHistory>true</trackFeedHistory>
+        <trackFeedHistory>false</trackFeedHistory>
         <trackHistory>true</trackHistory>
         <type>Picklist</type>
         <valueSet>
@@ -5621,7 +5658,7 @@ Controlling Field of &quot;RC8_Sub_Segment__c&quot;</description>
         <inlineHelpText>Target date for completion of qualification of customer’s system solution (HW &amp; SW), This implies all development and validation completed.</inlineHelpText>
         <label>System Qualification Date</label>
         <required>false</required>
-        <trackFeedHistory>false</trackFeedHistory>
+        <trackFeedHistory>true</trackFeedHistory>
         <trackHistory>false</trackHistory>
         <type>Date</type>
     </fields>
@@ -8029,6 +8066,10 @@ False
                 <default>false</default>
             </values>
             <values>
+                <fullName>Tesla</fullName>
+                <default>false</default>
+            </values>
+            <values>
                 <fullName>VOLVO</fullName>
                 <default>false</default>
             </values>
@@ -9400,6 +9441,7 @@ NOT(
 OR(
 $User.ProfileId=&quot;00e20000001Nc7g&quot;,
 $User.ProfileId=&quot;00eD0000001oBDw&quot;,
+Bypass_Validation__c,
 AND(
 ISPICKVAL(Account.Customer_Category__c,&quot;Tier 4 - TMMA&quot;), 
 NOT(ISCHANGED(CloseDate)),
@@ -9439,7 +9481,8 @@ NOT(ISPICKVAL( Account.Customer_Category__c , &quot;Tier 4 - TMMA&quot;)),
 NOT( 
 OR( 
 $User.ProfileId=&quot;00e20000001Nc7g&quot;, 
-$User.ProfileId=&quot;00eD0000001oBDw&quot; 
+$User.ProfileId=&quot;00eD0000001oBDw&quot;,
+Bypass_Validation__c 
 ) 
 ) 
 )</errorConditionFormula>
@@ -9501,7 +9544,8 @@ ISPICKVAL(Design_Win_Approval_Process__c,&apos;Approved&apos;),
 NOT(
 OR(
 $User.ProfileId=&quot;00e20000001Nc7g&quot;,
-$User.ProfileId=&quot;00eD0000001oBDw&quot;
+$User.ProfileId=&quot;00eD0000001oBDw&quot;,
+Bypass_Validation__c
 )
 ) 
 )</errorConditionFormula>
@@ -9560,6 +9604,30 @@ $User.ProfileId=&quot;00eD0000001oBDw&quot;
         <url>/apex/Apttus__OfflineOpportunityAgreement?id={!Opportunity.Id}</url>
     </webLinks>
     <webLinks>
+        <fullName>Clone_for_Lightning</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <height>600</height>
+        <linkType>url</linkType>
+        <masterLabel>Clone</masterLabel>
+        <openType>noSidebar</openType>
+        <protected>false</protected>
+        <url>/apex/opportunityClone?id={!Opportunity.Id}&amp;env=p1&amp;func=clone</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Clone_for_Oppty2</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <height>600</height>
+        <linkType>url</linkType>
+        <masterLabel>Clone</masterLabel>
+        <openType>noSidebar</openType>
+        <protected>false</protected>
+        <url>/apex/opportunityClone?id={!Opportunity.Id}&amp;func=clone</url>
+    </webLinks>
+    <webLinks>
         <fullName>DW_Evidence_Templates</fullName>
         <availability>online</availability>
         <description>SIR 691 - Production Request</description>
@@ -9583,31 +9651,6 @@ $User.ProfileId=&quot;00eD0000001oBDw&quot;
         <openType>replace</openType>
         <protected>false</protected>
         <url>/500/e?RecordType=012D0000000gXOP&amp;{!Opportunity.Id}={!Case.ContactId}&amp;cas7=&quot;New&quot;&amp;cas11=&quot;Web&quot;&amp;cas14=Opportunity Name {!Opportunity.Name}&amp;cas5=&quot;Question&quot;&amp;cas15=  I have a question about this record {!Opportunity.Link}</url>
-    </webLinks>
-    <webLinks>
-        <fullName>Mass_Edit</fullName>
-        <availability>online</availability>
-        <displayType>massActionButton</displayType>
-        <height>600</height>
-        <linkType>page</linkType>
-        <masterLabel>Mass Edit</masterLabel>
-        <openType>sidebar</openType>
-        <page>MassEditOpp</page>
-        <protected>false</protected>
-        <requireRowSelection>true</requireRowSelection>
-    </webLinks>
-    <webLinks>
-        <fullName>Mass_Update</fullName>
-        <availability>online</availability>
-        <description>Mass update</description>
-        <displayType>massActionButton</displayType>
-        <height>600</height>
-        <linkType>page</linkType>
-        <masterLabel>Mass Update</masterLabel>
-        <openType>sidebar</openType>
-        <page>MassUpdateOpportunity</page>
-        <protected>false</protected>
-        <requireRowSelection>true</requireRowSelection>
     </webLinks>
     <webLinks>
         <fullName>New_Opportunity</fullName>
@@ -9704,12 +9747,27 @@ showBox();</url>
         <fullName>Spin_Off</fullName>
         <availability>online</availability>
         <displayType>button</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Spin Off</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <url>if({!ISPICKVAL(Opportunity.Design_Win_Approval_Process__c, &apos;Open&apos;)}){ 
+location.replace(&quot;/apex/opportunityClone?id={!Opportunity.Id}&amp;func=spin off&quot;); 
+} 
+else{ 
+alert(&quot;Only open opportunity can be spun off.&quot;); 
+}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Spin_Off_Lightning</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
         <encodingKey>UTF-8</encodingKey>
         <height>600</height>
         <linkType>url</linkType>
         <masterLabel>Spin Off</masterLabel>
-        <openType>sidebar</openType>
+        <openType>noSidebar</openType>
         <protected>false</protected>
-        <url>/apex/OpportunityClonerPage?id={!Opportunity.Id}</url>
+        <url>/apex/opportunityClone?id={!Opportunity.Id}&amp;env=p1&amp;func=spin off</url>
     </webLinks>
 </CustomObject>

@@ -359,11 +359,11 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Product_Type_Number__c</field>
+                <field>Product_Name__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Product_Name__c</field>
+                <field>Product_Type_Number__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Readonly</behavior>
@@ -527,6 +527,8 @@
         <fields>Contact_Service_Level__c</fields>
         <fields>Product_Service_Level__c</fields>
         <fields>Project_Service_Level__c</fields>
+        <fields>Product_Name__c</fields>
+        <fields>Product_Type_Number__c</fields>
         <fields>Case_Service_Level__c</fields>
         <fields>Product__c</fields>
         <fields>Product_Category__c</fields>
@@ -611,6 +613,8 @@
     <relatedLists>
         <relatedList>RelatedAttachmentList</relatedList>
     </relatedLists>
+    <relatedObjects>ContactId</relatedObjects>
+    <relatedObjects>AccountId</relatedObjects>
     <runAssignmentRulesDefault>false</runAssignmentRulesDefault>
     <showEmailCheckbox>true</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>
