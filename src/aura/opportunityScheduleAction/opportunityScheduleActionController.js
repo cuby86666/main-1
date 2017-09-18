@@ -6,9 +6,7 @@
 				
     // Create the Opportunity Schedule at initail phase and also post reestablish				
     createOpptyScheld : function(component, event, helper) {				
-     var isValidQtrjs = component.get("v.isValidQtr");				
-     var isValidQtyjs = component.get("v.isValidQty");				
-     				
+    
      if(helper.validateOpportunityScheduleForm(component)) {				
          				
          var qttr = component.find("noQtr").get("v.value");				
@@ -275,15 +273,17 @@ save : function(component, event, helper) {
        var prodDate = component.find("proddate"); 
        helper.disableButton(component); 
        component.set("v.flagSaveSuccess", false);				
-       var NewProdDateValue= component.find("proddate").get("v.value"); 				
-       var OldProdDateValue = component.get("v.OldProdDate");				
+       var NewProdDateValue= component.find("proddate").get("v.value"); 
+        var NewProdDateValueStg = String(NewProdDateValue);
+       var OldProdDateValue = component.get("v.OldProdDate");	
+        var OldProdDateValueStg = String(OldProdDateValue);
        if(NewProdDateValue != OldProdDateValue && NewProdDateValue!= null && OldProdDateValue !=null){				
        var lstPositions = component.get("v.lstPositions");				
        if(!$A.util.isEmpty(lstPositions) && !$A.util.isUndefined(lstPositions)){
        var action = component.get("c.checkIfSameQuarterProdDateChange");				
        action.setParams({				
-                NewProdDate: component.find("proddate").get("v.value"),				
-                OldProdDate: component.get("v.OldProdDate")				
+                NewProdDate: NewProdDateValue,				
+                OldProdDate: OldProdDateValue				
             }); 				
        action.setCallback(this,function(response){				
                 var state = response.getState();				
@@ -291,7 +291,7 @@ save : function(component, event, helper) {
                  var result = response.getReturnValue();				
                  component.set("v.flagAlert", true);								
                 } 
-                else if(state == "ERROR"){				
+                else if(state == "ERROR"){
                 }				
             });				
             $A.enqueueAction(action);

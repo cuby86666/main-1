@@ -6,6 +6,7 @@
             <div class="slds-col"><a href="http://www.nxp.com/applications/solutions-for-the-iot-and-adas:IFINDSTRYFCS" title="Applications">Applications</a></div>
             <div class="slds-col"><a href="http://www.nxp.com/training/sales-and-support:SUPPORTHOME" title="Support">Support</a></div>
             <div class="slds-col"><a href="http://www.nxp.com/about/about-nxp:COMPANY_INFO_HOME" title="About">About</a></div>
+        	<forceCommunity:notifications />
     </div>
    </div>
 </aura:component>

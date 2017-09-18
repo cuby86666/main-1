@@ -1,0 +1,191 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" controller="OpportunityCloneController">
+	<aura:attribute name="opptyId" type="String"/>
+	<aura:attribute name="wrapper" type="OpportunityCloneController.OpportunityWrapper"/>
+    <aura:attribute name="envType" type="String"/>
+    <!-- func: clone, spin off, reopen -->
+    <aura:attribute name="func" type="String"/>
+    <aura:attribute name="funcString" type="String"/>
+    <aura:attribute name="errorMessage" type="String"/>
+    <aura:attribute name="isProcessing" type="Boolean"/>
+    <aura:attribute name="isPreview" type="Boolean"/>
+    <aura:attribute name="isError" type="Boolean"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <!-- Spinner -->
+    <aura:if isTrue="{!v.isProcessing}">
+        <div class="slds-spinner_container">
+            <div role="status" class="slds-spinner slds-spinner--large slds-spinner--brand">					
+                <span class="slds-assistive-text">Loading</span>					
+                <div class="slds-spinner__dot-a"></div>					
+                <div class="slds-spinner__dot-b"></div>	
+            </div>       
+        </div>
+    </aura:if>
+    
+    <!-- Cloning message -->
+ 	<aura:if isTrue="{!and(v.isProcessing, v.func == 'clone')}">
+        <div class="recordSaveSuccess">					
+          <ui:message title="Clone operation is processing, please wait..." severity="info" closable="false">
+              When clone operation is completed, browser will redirect to Maintain Oppty Sched of new opportunity. <br/>
+              Please review the Expected Close Date, Production Date and Opportunity Schedule of new Opportunity.
+          </ui:message>					
+     </div>					
+    </aura:if>
+    
+    <!-- Display form Exception errors, if any -->
+    <aura:if isTrue="{!(v.errorMessage != null)}">
+        <div class="recordSaveError">
+            <ui:message title="Error" severity="error" closable="false">
+                <ui:outputText value="{!v.errorMessage}"/>
+            </ui:message>
+        </div>
+    </aura:if>
+
+    <!-- Label -->
+    <h1 class="slds-page-header__title slds-m-right--small slds-truncate slds-align-left">{!v.funcString}</h1>
+
+    <!-- Current Opportunity Name -->
+    <div class="slds-form-element">
+        <label class="slds-form-element__label" for="text-input-id-1">Current Opportunity Name</label>
+        <div class="slds-form-element__control">
+            <input type="text" id="text-input-id-1" class="slds-input" value="{!v.wrapper.oppty.Name}" disabled="true"/>
+        </div>
+    </div>
+    
+    <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+        <colgroup>
+            <col style="width: 30%;"/>
+            <col style="width: 10%;"/>
+            <col style="width: 10%;"/>
+            <col style="width: 10%;"/>
+            <col style="width: 10%;"/>
+            <col style="width: 10%;"/>
+            <col style="width: 10%;"/>
+            <col style="width: 10%;"/>
+        </colgroup>
+        <thead>
+            <tr class="slds-text-title_caps">
+                <th scope="col"><div class="slds-truncate" title="Product Name">Product Name</div></th>
+                <th scope="col"><div class="slds-truncate" title="MAG">MAG</div></th>
+                <th scope="col"><div class="slds-truncate" title="Sales Price">Sales Price</div></th>
+                <th scope="col"><div class="slds-truncate" title="Qty per Sys">Qty per Sys</div></th>
+                <th scope="col"><div class="slds-truncate" title="Prod Claim Value (USD)">Prod Claim Value (USD)</div></th>
+                <th scope="col"><div class="slds-truncate" title="Product Lost">Product Lost/Cancelled</div></th>
+                <th scope="col"><div class="slds-truncate" title="Product Status">Product Status</div></th>
+                <th scope="col"><div class="slds-truncate" title="Selected">Selected</div></th>
+            </tr>
+        </thead>
+        <tbody>
+            <aura:if isTrue="{!(v.isPreview == false)}">
+                <aura:iteration items="{!v.wrapper.lstWrappers}" var="w" indexVar="index">
+                    <tr>
+                        <td>{!w.opptyLineItem.Product2.Name}</td>
+                        <td>{!w.opptyLineItem.MAG__c}</td>
+                        <td><ui:outputNumber value="{!w.opptyLineItem.UnitPrice}" format=".00"/></td>
+                        <td><ui:outputNumber value="{!w.opptyLineItem.Component_Multiplier__c}" format=".00"/></td>
+                        <td><ui:outputNumber value="{!w.opptyLineItem.Claim_Value_USD__c}"/></td>
+                        <td><ui:outputText value="{!w.opptyLineItem.Prod_Lost_Cancelled__c}"/></td>
+                        <td><ui:outputCheckbox value="{!w.opptyLineItem.Product2.IsActive}"/></td>
+                        <td>
+                            <ui:inputCheckbox aura:id="selected" value="{!w.isSelected}" change="{!c.onChecked}" disabled="{!(w.opptyLineItem.Product2.IsActive) == false}"/>
+                        </td>
+                    </tr>
+                </aura:iteration>
+            </aura:if>
+            <aura:if isTrue="{!v.isPreview}">
+                <aura:iteration items="{!v.wrapper.lstWrappers}" var="w">
+                    <aura:if isTrue="{!v.func == 'clone' || and(v.func == 'spin off', (w.isSelected == false))}">
+                        <tr>
+                            <td>{!w.opptyLineItem.Product2.Name}</td>
+                            <td>{!w.opptyLineItem.MAG__c}</td>
+                            <td><ui:outputNumber value="{!w.opptyLineItem.UnitPrice}" format=".00"/></td>
+                            <td><ui:outputNumber value="{!w.opptyLineItem.Component_Multiplier__c}" format=".00"/></td>
+                            <td><ui:outputNumber value="{!w.opptyLineItem.Claim_Value_USD__c}"/></td>
+                            <td><ui:outputText value="{!w.opptyLineItem.Prod_Lost_Cancelled__c}"/></td>
+                            <td><ui:outputCheckbox value="{!w.opptyLineItem.Product2.IsActive}"/></td>
+                            <td>
+                                <ui:outputCheckbox aura:id="selected" class="slds-align--absolute-right" value="{!w.isSelected}"/>
+                            </td>
+                        </tr>                
+                    </aura:if>
+                </aura:iteration>                
+            </aura:if>
+        </tbody>
+    </table>
+		
+    <aura:if isTrue="{!v.isPreview}">
+	    <hr />
+        
+        <div class="slds-form-element">
+            <!--<label class="slds-form-element__label" for="text-input-id-1">New Opportunity Name</label>-->
+            <div class="slds-form-element__control">
+                <!--<input type="text" id="text-input-id-1" class="slds-input" value="{!v.wrapper.newOpptyName}" />-->
+                <ui:inputText label="New Opportunity Name" class="slds-input" value="{!v.wrapper.newOpptyName}"/>
+            </div>
+        </div>
+
+        <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+            <colgroup>
+                <col style="width: 30%;"/>
+                <col style="width: 10%;"/>
+                <col style="width: 10%;"/>
+                <col style="width: 10%;"/>
+                <col style="width: 10%;"/>
+                <col style="width: 10%;"/>
+                <col style="width: 10%;"/>
+                <col style="width: 10%;"/>
+            </colgroup>
+            <thead>
+                <tr class="slds-text-title_caps">
+                    <th scope="col"><div class="slds-truncate" title="Product Name">Product Name</div></th>
+                    <th scope="col"><div class="slds-truncate" title="MAG">MAG</div></th>
+                    <th scope="col"><div class="slds-truncate" title="Sales Price">Sales Price</div></th>
+                    <th scope="col"><div class="slds-truncate" title="Qty per Sys">Qty per Sys</div></th>
+                    <th scope="col"><div class="slds-truncate" title="Prod Claim Value (USD)">Prod Claim Value (USD)</div></th>
+                    <th scope="col"><div class="slds-truncate" title="Product Lost">Product Lost/Cancelled</div></th>
+                    <th scope="col"><div class="slds-truncate" title="Product Status">Product Status</div></th>
+                    <th scope="col"><div class="slds-truncate" title="Selected">Selected</div></th>
+                </tr>
+            </thead>
+            <tbody>
+                <aura:iteration items="{!v.wrapper.lstWrappers}" var="w">
+                    <aura:if isTrue="{!w.isSelected}">
+                        <tr>
+                        <td>{!w.opptyLineItem.Product2.Name}</td>
+                        <td>{!w.opptyLineItem.MAG__c}</td>
+                        <td><ui:outputNumber value="{!w.opptyLineItem.UnitPrice}" format=".00"/></td>
+                        <td><ui:outputNumber value="{!w.opptyLineItem.Component_Multiplier__c}" format=".00"/></td>
+                        <td><ui:outputNumber value="{!w.opptyLineItem.Claim_Value_USD__c}"/></td>
+                        <td><ui:outputText value="{!w.opptyLineItem.Prod_Lost_Cancelled__c}"/></td>
+                        <td><ui:outputCheckbox value="{!w.opptyLineItem.Product2.IsActive}"/></td>
+                        <td><div class="slds-truncate">
+                            <ui:outputCheckbox aura:id="selected" class="slds-align--absolute-right" value="{!w.isSelected}"/>
+                            </div>
+                        </td>
+                        </tr>                
+                    </aura:if>
+                </aura:iteration>
+            </tbody>
+        </table>
+        </aura:if>
+        <!-- buttons -->
+
+    <aura:if isTrue="{!(v.isPreview == false)}">
+  	    <ui:button aura:id="back"
+          class="slds-button slds-button--neutral"
+          labelClass="label" press="{!c.gotoURL}">Back</ui:button>
+        <ui:button aura:id="next"
+          class="slds-button slds-button--neutral"
+          labelClass="label" press="{!c.doPreview}" disabled="{!v.isError}">Next</ui:button>
+    </aura:if>
+    
+    <aura:if isTrue="{!v.isPreview}">
+        <ui:button aura:id="back"
+          class="slds-button slds-button--neutral"
+          labelClass="label" press="{!c.doBack}">Back</ui:button>
+        <ui:button aura:id="finish"
+          class="slds-button slds-button--neutral"
+          labelClass="label" press="{!c.doFinish}">Finish</ui:button>    
+    </aura:if>        
+</aura:component>

@@ -8,6 +8,8 @@
     action.setCallback(this, function(response) {					
     if (response.getState() === "SUCCESS") {					
      var result = response.getReturnValue();
+     //alert('User Experience'+result.userTheme);
+     component.set("v.UserTheme", result.userTheme);   
      var opptyStage= component.get("v.opp");
      component.set("v.OldCloseDate", result.oppValues.CloseDate);   
      component.set("v.opp", result.oppValues);  //step1 Oppty Val Init					
@@ -67,9 +69,9 @@ validateOpportunityScheduleForm: function(component){
         var expCloseDate = component.find("expclosedate1");					
         var expCloseDateValue = expCloseDate.get("v.value");					
         var todayDate = new Date();					
-        var todayDateOnly = new Date(todayDate.getFullYear(),todayDate.getMonth(),todayDate.getDate()); //This will write a Date with time set to 00:00:00 so you kind of have date only        					
+        var todayDateOnly = new Date(todayDate.getUTCFullYear(),todayDate.getUTCMonth(),todayDate.getUTCDate()); //This will write a Date with time set to 00:00:00 so you kind of have date only        					
         var expdate = new Date(expCloseDateValue);					
-        var expClsDateOnly = new Date(expdate.getFullYear(),expdate.getMonth(),expdate.getDate());					
+        var expClsDateOnly = new Date(expdate.getUTCFullYear(),expdate.getUTCMonth(),expdate.getUTCDate());					
         if (expClsDateOnly <todayDateOnly || $A.util.isEmpty(expCloseDate.get("v.value"))) {					
              validForm = false;					
             expCloseDate.set("v.errors", [{message:"Close date can not be prior to today: " + todayDate}]);					
@@ -81,7 +83,7 @@ validateOpportunityScheduleForm: function(component){
         var prodDate = component.find("proddate1");					
         var prodDateValue = prodDate.get("v.value");        					
         var proDate = new Date(prodDateValue);					
-        var prodDateOnly = new Date(proDate.getFullYear(),proDate.getMonth(),proDate.getDate());					
+        var prodDateOnly = new Date(proDate.getUTCFullYear(),proDate.getUTCMonth(),proDate.getUTCDate());					
         if (prodDateOnly <expClsDateOnly || $A.util.isEmpty(prodDate.get("v.value"))) {					
              validForm = false;					
             prodDate.set("v.errors", [{message:"Production Date should be greater than or equal to Expected Close Date: " + expCloseDateValue}]);					
@@ -261,9 +263,9 @@ addQuarter:function(component){
         var expCloseDate = component.find("expclosedate");					
         var expCloseDateValue = expCloseDate.get("v.value");					
         var todayDate = new Date();					
-        var todayDateOnly = new Date(todayDate.getFullYear(),todayDate.getMonth(),todayDate.getDate()); //This will write a Date with time set to 00:00:00 so you kind of have date only					
+        var todayDateOnly = new Date(todayDate.getUTCFullYear(),todayDate.getUTCMonth(),todayDate.getUTCDate()); //This will write a Date with time set to 00:00:00 so you kind of have date only					
         var expdate = new Date(expCloseDateValue);					
-        var expClsDateOnly = new Date(expdate.getFullYear(),expdate.getMonth(),expdate.getDate());					
+        var expClsDateOnly = new Date(expdate.getUTCFullYear(),expdate.getUTCMonth(),expdate.getUTCDate());					
 					
         if (expClsDateOnly <todayDateOnly || $A.util.isEmpty(expCloseDate.get("v.value"))) {					
              validForm = false;					
@@ -276,10 +278,10 @@ addQuarter:function(component){
         var prodDate = component.find("proddate");					
         var prodDateValue = prodDate.get("v.value");					
         var proDate = new Date(prodDateValue);					
-        var prodDateOnly = new Date(proDate.getFullYear(),proDate.getMonth(),proDate.getDate());					
-       	var prodYear = proDate.getFullYear();
+        var prodDateOnly = new Date(proDate.getUTCFullYear(),proDate.getUTCMonth(),proDate.getUTCDate());					
+       	var prodYear = proDate.getUTCFullYear();
         var firstSchedQuarter;
-        firstSchedQuarter = "Q"+(parseInt(((proDate.getMonth()) / 3))+1);
+        firstSchedQuarter = "Q"+(parseInt(((proDate.getUTCMonth()) / 3))+1);
         var prodDateqtr = prodYear+firstSchedQuarter;	
             
         if (prodDateOnly <expClsDateOnly || $A.util.isEmpty(prodDate.get("v.value"))) {					
