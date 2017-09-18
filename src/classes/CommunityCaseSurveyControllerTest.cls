@@ -9,6 +9,11 @@ Description :      Test class for Communitycasesurveycontroller class.
 @Description:        Added test method- email to case owner based on survey feedback
 *******************************************************************************************************/
 // 3rdJan2017 Balaji - Repositioned StartTest() and StopTest() methods in CommunityCaseSurveyControllerTest1 and CommunityCaseSurveyControllerTest4 methods to fix the test failure
+/***************************************************************************************************
+@Last Modified By  :   Shridevi badiger
+@Last Modified Date:   24 Jul 2017
+@Description       :   Modified by shridevi as part of SIR 750-Improve code coverage for community classes
+****************************************************************************************************/
 @isTest
 public class CommunityCaseSurveyControllerTest 
 {
@@ -22,16 +27,16 @@ public class CommunityCaseSurveyControllerTest
         timezonesidkey='America/Los_Angeles',username='testingnew7@test.com');
         insert objUser;
         
-        CommunityCaseControllerTest.fetchRecordTypes();
-        Account objOtherAccount = CommunityCaseControllerTest.createOtherAccountRecord();
+        CommunityCaseCloneControllerTest.fetchRecordTypes();
+        Account objOtherAccount = CommunityCaseCloneControllerTest.createOtherAccountRecord();
         insert objOtherAccount;
         System.assert(objOtherAccount.Id != null);
         
-        Account objTechServiceAccount = CommunityCaseControllerTest.createTechServiceAccountRecord(objOtherAccount.ID);
+        Account objTechServiceAccount = CommunityCaseCloneControllerTest.createTechServiceAccountRecord(objOtherAccount.ID);
         insert objTechServiceAccount;
         System.assert(objTechServiceAccount.Id != null);
             
-        Contact objContact= CommunityCaseControllerTest.createContact();
+        Contact objContact= CommunityCaseCloneControllerTest.createContact();
         objContact.Email='test1@test.com';
         objContact.AccountID = objTechServiceAccount.Id;
         insert objContact;
@@ -74,7 +79,7 @@ public class CommunityCaseSurveyControllerTest
         system.runAs(objUser)
         {
             Case objCase = new Case();
-            objCase= new Case(RecordTypeID = CommunityCaseControllerTest.tsCommunity.Id,contactId=objContact.Id, Status= 'New', Priority = 'Medium', 
+            objCase= new Case(RecordTypeID = CommunityCaseCloneControllerTest.tsCommunity.Id,contactId=objContact.Id, Status= 'New', Priority = 'Medium', 
                               Product_Category__c = 'RF', Product_Sub__c = 'Mixers', 
                               email__c = 'test1@test.com', JobTitle__c = 'Other', Facebook__c = 'test_fb',
                               Company__c = 'test_Company', Linkedin__c = 'test_lnk', Community_Web_Country__c = 'test_country',
@@ -172,16 +177,16 @@ public class CommunityCaseSurveyControllerTest
         timezonesidkey='America/Los_Angeles',username='testingnew7@test.com');
         insert objUser;
         
-        CommunityCaseControllerTest.fetchRecordTypes();
-        Account objOtherAccount = CommunityCaseControllerTest.createOtherAccountRecord();
+        CommunityCaseCloneControllerTest.fetchRecordTypes();
+        Account objOtherAccount = CommunityCaseCloneControllerTest.createOtherAccountRecord();
         insert objOtherAccount;
         System.assert(objOtherAccount.Id != null);
         
-        Account objTechServiceAccount = CommunityCaseControllerTest.createTechServiceAccountRecord(objOtherAccount.ID);
+        Account objTechServiceAccount = CommunityCaseCloneControllerTest.createTechServiceAccountRecord(objOtherAccount.ID);
         insert objTechServiceAccount;
         System.assert(objTechServiceAccount.Id != null);
             
-        Contact objContact= CommunityCaseControllerTest.createContact();
+        Contact objContact= CommunityCaseCloneControllerTest.createContact();
         objContact.Email='test1@test.com';
         objContact.AccountID = objTechServiceAccount.Id;
         insert objContact;
@@ -225,7 +230,7 @@ public class CommunityCaseSurveyControllerTest
         system.runAs(objUser)
         {
             Case objCase = new Case();
-            objCase= new Case(RecordTypeID = CommunityCaseControllerTest.tsCommunity.Id,contactId=objContact.Id, Status= 'New', Priority = 'Medium', 
+            objCase= new Case(RecordTypeID = CommunityCaseCloneControllerTest.tsCommunity.Id,contactId=objContact.Id, Status= 'New', Priority = 'Medium', 
                               Product_Category__c = 'RF', Product_Sub__c = 'Mixers', 
                               email__c = 'test1@test.com', JobTitle__c = 'Other', Facebook__c = 'test_fb',
                               Company__c = 'test_Company', Linkedin__c = 'test_lnk', Community_Web_Country__c = 'test_country',
@@ -262,16 +267,16 @@ public class CommunityCaseSurveyControllerTest
         timezonesidkey='America/Los_Angeles',username='testingnew7@test.com');
         insert objUser;
         
-        CommunityCaseControllerTest.fetchRecordTypes();
-        Account objOtherAccount = CommunityCaseControllerTest.createOtherAccountRecord();
+        CommunityCaseCloneControllerTest.fetchRecordTypes();
+        Account objOtherAccount = CommunityCaseCloneControllerTest.createOtherAccountRecord();
         insert objOtherAccount;
         System.assert(objOtherAccount.Id != null);
         
-        Account objTechServiceAccount = CommunityCaseControllerTest.createTechServiceAccountRecord(objOtherAccount.ID);
+        Account objTechServiceAccount = CommunityCaseCloneControllerTest.createTechServiceAccountRecord(objOtherAccount.ID);
         insert objTechServiceAccount;
         System.assert(objTechServiceAccount.Id != null);
             
-        Contact objContact= CommunityCaseControllerTest.createContact();
+        Contact objContact= CommunityCaseCloneControllerTest.createContact();
         objContact.Email='test1@test.com';
         objContact.AccountID = objTechServiceAccount.Id;
         insert objContact;
@@ -315,7 +320,7 @@ public class CommunityCaseSurveyControllerTest
         system.runAs(objUser)
         {
             Case objCase = new Case();
-            objCase= new Case(RecordTypeID = CommunityCaseControllerTest.tsCommunity.Id,contactId=objContact.Id, Status= 'New', Priority = 'Medium', 
+            objCase= new Case(RecordTypeID = CommunityCaseCloneControllerTest.tsCommunity.Id,contactId=objContact.Id, Status= 'New', Priority = 'Medium', 
                               Product_Category__c = 'RF', Product_Sub__c = 'Mixers', assigned_to__c=objUser.id,
                               email__c = 'test1@test.com', JobTitle__c = 'Other', Facebook__c = 'test_fb',
                               Company__c = 'test_Company', Linkedin__c = 'test_lnk', Community_Web_Country__c = 'test_country',

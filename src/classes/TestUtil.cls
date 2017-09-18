@@ -1,8 +1,12 @@
-/*
+/*********************************************************************************
 @Created By :       Nisha Agrawal
 @Created Date:      10 August 2012
 @Description:       Utility to prepare Test Data for Test Classes. 
-*/
+------------------------------------------------------------------------------
+@Last Modified By : 	Nisha Agrawal 
+@Last Modified Date : 	26 Jul, 2017 
+@Description : 			Removed methods for Object_Description class
+*********************************************************************************/
 
 @isTest(SeeAllData=false)
 public class TestUtil 
@@ -147,15 +151,4 @@ public class TestUtil
     	}
     	return lstTrainings;
     }*/
-    // Add By Michael Fan
-    public static void Test_Object_Description() {
-    	Object_Description objDesc = new Object_Description();
-    	objDesc.GetFieldName();
-    	objDesc.selectedObject = 'Account';
-    	objDesc.GetFieldName();
-    	objDesc.selectedObject = 'Opportunity';
-    	objDesc.GetFieldName();
-    	objDesc.selectedObject = 'User';
-    	objDesc.GetFieldName();
-    }
 }

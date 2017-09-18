@@ -1,7 +1,11 @@
 /**************************************************************************************
- @Modified By 		Nisha Agrawal
- @Modified Date 	Aug 31, 2016
- @Description 		Updated test class for Email duplicate issue in Contact SIR 1155
+ @Modified By       Nisha Agrawal
+ @Modified Date     Aug 31, 2016
+ @Description       Updated test class for Email duplicate issue in Contact SIR 1155
+ **************************************************************************************
+ @Last Modified By   : Shridevi Badiger
+ @Last Modified Date : 25-Aug-2017
+ @Description : As part of SIR 828-Increased the code coverage of Contact_AfterTrigger
 *******************************************************************************************/
 @isTest
 public class Contact_AfterTriggerTest {
@@ -141,7 +145,15 @@ public class Contact_AfterTriggerTest {
         
         Contact objContact =  createContact(objParent2.Id, 'test1', 'test', 'title', 
                                               '8123978919', 'prakhar.gupta@nxp.com');
-        
+         
+       
+         objContact.Job_Title__c='tester';
+         objContact.Linkedin__c='linkedIn1';
+         objContact.Twitter__c='Twitter1';
+         objContact.State_Province__c='Karnataka';
+         objContact.Web_Region__c='EMEA';
+         objContact.Company__c='TCS';
+         objContact.Community_web_country__c='India';
         insert objContact; 
         
         System.assertEquals('prakhar.gupta@nxp.com', objContact.Email );
@@ -159,7 +171,23 @@ public class Contact_AfterTriggerTest {
                                               '8123978919', 'prakhar.gupta1@nxp.com');
 
         insert objContact1;
+        //added by shridevi to increase the code coverage of the trigger Contact_AfterTrigger
+         objContact=[select id,Email,FirstName,LastName,Phone,Job_Title__c,Linkedin__c,Twitter__c,State_Province__c,Web_Region__c,Company__c,Community_web_country__c from contact where id=:objContact.id];
+         //objContact.Email='shridevi.badiger@nxp.com';
+         //objContact.FirstName='venky';
+        // objContact.LastName='guna';
+        // objContact.Phone='3421598765';
+        // objContact.Job_Title__c='Developer';
+        // objContact.Linkedin__c='linkedIn';
+        // objContact.Twitter__c='Twitter';
+        // objContact.State_Province__c='Goa';
+         objContact.Web_Region__c='Japan';
+        // objContact.Company__c='TCS';
+         //objContact.Community_web_country__c='India';
+         update objContact;
+        lstCase=[select Id,Company__c,Community_web_country__c from case where id in :lstCase];
+        System.assertEquals(objContact.Community_web_country__c,lstCase[0].Community_Web_Country__c);
+        System.assertEquals(objContact.Company__c,lstCase[0].Company__c);
         
-        Test.StopTest();
     }
 }

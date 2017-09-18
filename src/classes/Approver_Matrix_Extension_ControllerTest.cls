@@ -184,7 +184,6 @@ private class Approver_Matrix_Extension_ControllerTest {
                 RecordType = SFDC_Oppty,
                 Name = 'Test Opportunity' + i,
                 AccountId = objChildAccount.Id,
-                Industry_Segment__c = 'Test',
                 Channel__c = 'Test',
                 Production_Date__c = Date.valueof(Date.today().year() + '-06-10'),
                 CloseDate = Date.valueof(Date.today().year() + '-05-10'),

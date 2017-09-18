@@ -6,6 +6,10 @@
 @Modified By :     Baji
 @Modified Date :   16 Mar 2017
 @Description :     Modified as part of SFDC 363(Update SAP CMD - funloc under multiple Sales Orgs - to update General Data at once)
+**********************************************************************************************************
+@Modified By :     Baji
+@Modified Date :   27 Jul 2017
+@Description :     Modified as part of SFDC 729(to extend SFDC 363 functionlity for Version ID for International Addresses and Tax Number 5
 ***********************************************************************************************/
 
 public class SAP_CMD_Request_Trigger {
@@ -92,8 +96,8 @@ public class SAP_CMD_Request_Trigger {
       
        List<SAP_CMD__c> lstAllSapCmds = [SELECT id,FunLoc__c,HUB_Customer__c,Name_2__c,Name_4__c,Legal_Name__c,Name_3__c,Name_1_Service_Provider__c,
                                          Street_2__c,Street_1__c,State_Province__c,Country__c,City__c,Zip__c,PO_Box__c,PO_Box_City__c,PO_Box_Postal_Code__c, Telephone__c,Email__c,Fax__c,
-                                         Transportation_Zone__c,Language__c,Chinese_Name1__c,Chinese_Name2__c,Chinese_Street__c, Chinese_City__c,Trading_Partner__c,Tax_Number_1__c,
-                                         VAT_Registration_Number__c,Country_Additional_VAT_Number_1__c,Country_Additional_VAT_Number_2__c,Country_Additional_VAT_Number_3__c,Country_Additional_VAT_Number_4__c,  
+                                         Transportation_Zone__c,Language__c,Chinese_Name1__c,Chinese_Name2__c,Chinese_Street__c, Chinese_City__c,Version_ID_for_International_Addresses__c,Trading_Partner__c,Tax_Number_1__c,
+                                         Tax_Number_5__c,VAT_Registration_Number__c,Country_Additional_VAT_Number_1__c,Country_Additional_VAT_Number_2__c,Country_Additional_VAT_Number_3__c,Country_Additional_VAT_Number_4__c,  
                                          Country_Additional_VAT_Number_5__c,Country_Additional_VAT_Number_6__c,Country_Additional_VAT_Number_7__c,Country_Additional_VAT_Number_8__c,Additional_VAT_Number_1_Plants_Abroad__c,
                                          Additional_VAT_Number_2_Plants_Abroad__c,Additional_VAT_Number_3_Plants_Abroad__c,Additional_VAT_Number_4_Plants_Abroad__c,Additional_VAT_Number_5_Plants_Abroad__c,
                                          Additional_VAT_Number_6_Plants_Abroad__c,Additional_VAT_Number_7_Plants_Abroad__c,Additional_VAT_Number_8_Plants_Abroad__c,Global_Account__c,
@@ -102,70 +106,71 @@ public class SAP_CMD_Request_Trigger {
                                          FROM SAP_CMD__c
                                          WHERE FunLoc__c =:setSapCmdFunloc and id not in:lstSapCmd ];
        
-       for(SAP_CMD__c sc : lstSapCmd){
-        for(SAP_CMD__c scAll : lstAllSapCmds){
-        if(sc.Funloc__c == scAll.funloc__c){
+       for(SAP_CMD__c objSAPCMD : lstSapCmd){
+        for(SAP_CMD__c objSAPCMDAll : lstAllSapCmds){
+        if(objSAPCMD.Funloc__c == objSAPCMDAll.funloc__c){
          
-            if(sc.HUB_Customer__c != scAll.HUB_Customer__c) scAll.HUB_Customer__c = sc.HUB_Customer__c;
-            if(sc.Name_2__c != scAll.Name_2__c) scAll.Name_2__c = sc.Name_2__c;
-            if(sc.Name_4__c != scAll.Name_4__c) scAll.Name_4__c = sc.Name_4__c;
-            if(sc.Legal_Name__c != scAll.Legal_Name__c) scAll.Legal_Name__c = sc.Legal_Name__c;
-            if(sc.Name_3__c != scAll.Name_3__c) scAll.Name_3__c = sc.Name_3__c;
-            if(sc.Name_1_Service_Provider__c != scAll.Name_1_Service_Provider__c) scAll.Name_1_Service_Provider__c = sc.Name_1_Service_Provider__c;
-            if(sc.Street_2__c != scAll.Street_2__c) scAll.Street_2__c = sc.Street_2__c;
-            if(sc.Street_1__c != scAll.Street_1__c) scAll.Street_1__c = sc.Street_1__c;
-            if(sc.State_Province__c != scAll.State_Province__c) scAll.State_Province__c = sc.State_Province__c;
-            if(sc.Country__c != scAll.Country__c) scAll.Country__c = sc.Country__c;
-            if(sc.City__c != scAll.City__c) scAll.City__c = sc.City__c;
-            if(sc.Zip__c != scAll.Zip__c) scAll.Zip__c = sc.Zip__c;
-            if(sc.PO_Box__c != scAll.PO_Box__c) scAll.PO_Box__c = sc.PO_Box__c;
-            if(sc.PO_Box_City__c != scAll.PO_Box_City__c) scAll.PO_Box_City__c = sc.PO_Box_City__c;
-            if(sc.PO_Box_Postal_Code__c != scAll.PO_Box_Postal_Code__c) scAll.PO_Box_Postal_Code__c = sc.PO_Box_Postal_Code__c;
-            if(sc.Telephone__c != scAll.Telephone__c) scAll.Telephone__c = sc.Telephone__c;
-            if(sc.Email__c != scAll.Email__c) scAll.Email__c = sc.Email__c;
-            if(sc.Fax__c != scAll.Fax__c) scAll.Fax__c = sc.Fax__c;
-            if(sc.Transportation_Zone__c != scAll.Transportation_Zone__c) scAll.Transportation_Zone__c = sc.Transportation_Zone__c;
-            if(sc.Language__c != scAll.Language__c) scAll.Language__c = sc.Language__c;
-            if(sc.Chinese_Name1__c != scAll.Chinese_Name1__c) scAll.Chinese_Name1__c = sc.Chinese_Name1__c;
-            if(sc.Chinese_Name2__c != scAll.Chinese_Name2__c) scAll.Chinese_Name2__c = sc.Chinese_Name2__c;
-            if(sc.Chinese_Street__c != scAll.Chinese_Street__c) scAll.Chinese_Street__c = sc.Chinese_Street__c;
-            if(sc.Chinese_City__c != scAll.Chinese_City__c) scAll.Chinese_City__c = sc.Chinese_City__c;
-            if(sc.Trading_Partner__c != scAll.Trading_Partner__c) scAll.Trading_Partner__c = sc.Trading_Partner__c;
-            if(sc.Tax_Number_1__c != scAll.Tax_Number_1__c) scAll.Tax_Number_1__c = sc.Tax_Number_1__c;
-            if(sc.VAT_Registration_Number__c != scAll.VAT_Registration_Number__c) scAll.VAT_Registration_Number__c = sc.VAT_Registration_Number__c;
-            if(sc.Country_Additional_VAT_Number_1__c != scAll.Country_Additional_VAT_Number_1__c) scAll.Country_Additional_VAT_Number_1__c = sc.Country_Additional_VAT_Number_1__c;
-            if(sc.Country_Additional_VAT_Number_2__c != scAll.Country_Additional_VAT_Number_2__c) scAll.Country_Additional_VAT_Number_2__c = sc.Country_Additional_VAT_Number_2__c;
-            if(sc.Country_Additional_VAT_Number_3__c != scAll.Country_Additional_VAT_Number_3__c) scAll.Country_Additional_VAT_Number_3__c = sc.Country_Additional_VAT_Number_3__c;
-            if(sc.Country_Additional_VAT_Number_4__c != scAll.Country_Additional_VAT_Number_4__c) scAll.Country_Additional_VAT_Number_4__c = sc.Country_Additional_VAT_Number_4__c;
-            if(sc.Country_Additional_VAT_Number_5__c != scAll.Country_Additional_VAT_Number_5__c) scAll.Country_Additional_VAT_Number_5__c = sc.Country_Additional_VAT_Number_5__c;
-            if(sc.Country_Additional_VAT_Number_6__c != scAll.Country_Additional_VAT_Number_6__c) scAll.Country_Additional_VAT_Number_6__c = sc.Country_Additional_VAT_Number_6__c;
-            if(sc.Country_Additional_VAT_Number_7__c != scAll.Country_Additional_VAT_Number_7__c) scAll.Country_Additional_VAT_Number_7__c = sc.Country_Additional_VAT_Number_7__c;
-            if(sc.Country_Additional_VAT_Number_8__c != scAll.Country_Additional_VAT_Number_8__c) scAll.Country_Additional_VAT_Number_8__c = sc.Country_Additional_VAT_Number_8__c;
-            if(sc.Additional_VAT_Number_1_Plants_Abroad__c != scAll.Additional_VAT_Number_1_Plants_Abroad__c) scAll.Additional_VAT_Number_1_Plants_Abroad__c = sc.Additional_VAT_Number_1_Plants_Abroad__c;
-            if(sc.Additional_VAT_Number_2_Plants_Abroad__c != scAll.Additional_VAT_Number_2_Plants_Abroad__c) scAll.Additional_VAT_Number_2_Plants_Abroad__c = sc.Additional_VAT_Number_2_Plants_Abroad__c;
-            if(sc.Additional_VAT_Number_3_Plants_Abroad__c != scAll.Additional_VAT_Number_3_Plants_Abroad__c) scAll.Additional_VAT_Number_3_Plants_Abroad__c = sc.Additional_VAT_Number_3_Plants_Abroad__c;
-            if(sc.Additional_VAT_Number_4_Plants_Abroad__c != scAll.Additional_VAT_Number_4_Plants_Abroad__c) scAll.Additional_VAT_Number_4_Plants_Abroad__c = sc.Additional_VAT_Number_4_Plants_Abroad__c;
-            if(sc.Additional_VAT_Number_5_Plants_Abroad__c != scAll.Additional_VAT_Number_5_Plants_Abroad__c) scAll.Additional_VAT_Number_5_Plants_Abroad__c = sc.Additional_VAT_Number_5_Plants_Abroad__c;
-            if(sc.Additional_VAT_Number_6_Plants_Abroad__c != scAll.Additional_VAT_Number_6_Plants_Abroad__c) scAll.Additional_VAT_Number_6_Plants_Abroad__c = sc.Additional_VAT_Number_6_Plants_Abroad__c;
-            if(sc.Additional_VAT_Number_7_Plants_Abroad__c != scAll.Additional_VAT_Number_7_Plants_Abroad__c) scAll.Additional_VAT_Number_7_Plants_Abroad__c = sc.Additional_VAT_Number_7_Plants_Abroad__c;
-            if(sc.Additional_VAT_Number_8_Plants_Abroad__c != scAll.Additional_VAT_Number_8_Plants_Abroad__c) scAll.Additional_VAT_Number_8_Plants_Abroad__c = sc.Additional_VAT_Number_8_Plants_Abroad__c;
-            if(sc.Global_Account__c != scAll.Global_Account__c) scAll.Global_Account__c = sc.Global_Account__c;
-            if(sc.Customer_Factory_Calendar__c != scAll.Customer_Factory_Calendar__c) scAll.Customer_Factory_Calendar__c = sc.Customer_Factory_Calendar__c;
-            if(sc.Unloading_Point__c != scAll.Unloading_Point__c) scAll.Unloading_Point__c = sc.Unloading_Point__c;
-            if(sc.Military_Usage__c != scAll.Military_Usage__c) scAll.Military_Usage__c = sc.Military_Usage__c;
-            if(sc.Controlled_Party__c != scAll.Controlled_Party__c) scAll.Controlled_Party__c = sc.Controlled_Party__c;
-            if(sc.SDI_Screened__c != scAll.SDI_Screened__c) scAll.SDI_Screened__c = sc.SDI_Screened__c;
-            if(sc.Consolidated_Account_Code__c != scAll.Consolidated_Account_Code__c) scAll.Consolidated_Account_Code__c = sc.Consolidated_Account_Code__c;
-            if(sc.Fix_Price_Ind_SP__c != scAll.Fix_Price_Ind_SP__c) scAll.Fix_Price_Ind_SP__c = sc.Fix_Price_Ind_SP__c;
-            if(sc.Delivery_Group_Ind_SH__c != scAll.Delivery_Group_Ind_SH__c) scAll.Delivery_Group_Ind_SH__c = sc.Delivery_Group_Ind_SH__c;
-            if(sc.Rounding_Rule_SH__c != scAll.Rounding_Rule_SH__c) scAll.Rounding_Rule_SH__c = sc.Rounding_Rule_SH__c;
-            if(sc.Pull_Up_OK_SH__c != scAll.Pull_Up_OK_SH__c) scAll.Pull_Up_OK_SH__c = sc.Pull_Up_OK_SH__c;
+            if(objSAPCMD.HUB_Customer__c != objSAPCMDAll.HUB_Customer__c) objSAPCMDAll.HUB_Customer__c = objSAPCMD.HUB_Customer__c;
+            if(objSAPCMD.Name_2__c != objSAPCMDAll.Name_2__c) objSAPCMDAll.Name_2__c = objSAPCMD.Name_2__c;
+            if(objSAPCMD.Name_4__c != objSAPCMDAll.Name_4__c) objSAPCMDAll.Name_4__c = objSAPCMD.Name_4__c;
+            if(objSAPCMD.Legal_Name__c != objSAPCMDAll.Legal_Name__c) objSAPCMDAll.Legal_Name__c = objSAPCMD.Legal_Name__c;
+            if(objSAPCMD.Name_3__c != objSAPCMDAll.Name_3__c) objSAPCMDAll.Name_3__c = objSAPCMD.Name_3__c;
+            if(objSAPCMD.Name_1_Service_Provider__c != objSAPCMDAll.Name_1_Service_Provider__c) objSAPCMDAll.Name_1_Service_Provider__c = objSAPCMD.Name_1_Service_Provider__c;
+            if(objSAPCMD.Street_2__c != objSAPCMDAll.Street_2__c) objSAPCMDAll.Street_2__c = objSAPCMD.Street_2__c;
+            if(objSAPCMD.Street_1__c != objSAPCMDAll.Street_1__c) objSAPCMDAll.Street_1__c = objSAPCMD.Street_1__c;
+            if(objSAPCMD.State_Province__c != objSAPCMDAll.State_Province__c) objSAPCMDAll.State_Province__c = objSAPCMD.State_Province__c;
+            if(objSAPCMD.Country__c != objSAPCMDAll.Country__c) objSAPCMDAll.Country__c = objSAPCMD.Country__c;
+            if(objSAPCMD.City__c != objSAPCMDAll.City__c) objSAPCMDAll.City__c = objSAPCMD.City__c;
+            if(objSAPCMD.Zip__c != objSAPCMDAll.Zip__c) objSAPCMDAll.Zip__c = objSAPCMD.Zip__c;
+            if(objSAPCMD.PO_Box__c != objSAPCMDAll.PO_Box__c) objSAPCMDAll.PO_Box__c = objSAPCMD.PO_Box__c;
+            if(objSAPCMD.PO_Box_City__c != objSAPCMDAll.PO_Box_City__c) objSAPCMDAll.PO_Box_City__c = objSAPCMD.PO_Box_City__c;
+            if(objSAPCMD.PO_Box_Postal_Code__c != objSAPCMDAll.PO_Box_Postal_Code__c) objSAPCMDAll.PO_Box_Postal_Code__c = objSAPCMD.PO_Box_Postal_Code__c;
+            if(objSAPCMD.Telephone__c != objSAPCMDAll.Telephone__c) objSAPCMDAll.Telephone__c = objSAPCMD.Telephone__c;
+            if(objSAPCMD.Email__c != objSAPCMDAll.Email__c) objSAPCMDAll.Email__c = objSAPCMD.Email__c;
+            if(objSAPCMD.Fax__c != objSAPCMDAll.Fax__c) objSAPCMDAll.Fax__c = objSAPCMD.Fax__c;
+            if(objSAPCMD.Transportation_Zone__c != objSAPCMDAll.Transportation_Zone__c) objSAPCMDAll.Transportation_Zone__c = objSAPCMD.Transportation_Zone__c;
+            if(objSAPCMD.Language__c != objSAPCMDAll.Language__c) objSAPCMDAll.Language__c = objSAPCMD.Language__c;
+            if(objSAPCMD.Chinese_Name1__c != objSAPCMDAll.Chinese_Name1__c) objSAPCMDAll.Chinese_Name1__c = objSAPCMD.Chinese_Name1__c;
+            if(objSAPCMD.Chinese_Name2__c != objSAPCMDAll.Chinese_Name2__c) objSAPCMDAll.Chinese_Name2__c = objSAPCMD.Chinese_Name2__c;
+            if(objSAPCMD.Chinese_Street__c != objSAPCMDAll.Chinese_Street__c) objSAPCMDAll.Chinese_Street__c = objSAPCMD.Chinese_Street__c;
+            if(objSAPCMD.Chinese_City__c != objSAPCMDAll.Chinese_City__c) objSAPCMDAll.Chinese_City__c = objSAPCMD.Chinese_City__c;
+            if(objSAPCMD.Version_ID_for_International_Addresses__c != objSAPCMDAll.Version_ID_for_International_Addresses__c) objSAPCMDAll.Version_ID_for_International_Addresses__c = objSAPCMD.Version_ID_for_International_Addresses__c;
+            if(objSAPCMD.Trading_Partner__c != objSAPCMDAll.Trading_Partner__c) objSAPCMDAll.Trading_Partner__c = objSAPCMD.Trading_Partner__c;
+            if(objSAPCMD.Tax_Number_1__c != objSAPCMDAll.Tax_Number_1__c) objSAPCMDAll.Tax_Number_1__c = objSAPCMD.Tax_Number_1__c;
+            if(objSAPCMD.Tax_Number_5__c != objSAPCMDAll.Tax_Number_5__c) objSAPCMDAll.Tax_Number_5__c = objSAPCMD.Tax_Number_5__c;
+            if(objSAPCMD.VAT_Registration_Number__c != objSAPCMDAll.VAT_Registration_Number__c) objSAPCMDAll.VAT_Registration_Number__c = objSAPCMD.VAT_Registration_Number__c;
+            if(objSAPCMD.Country_Additional_VAT_Number_1__c != objSAPCMDAll.Country_Additional_VAT_Number_1__c) objSAPCMDAll.Country_Additional_VAT_Number_1__c = objSAPCMD.Country_Additional_VAT_Number_1__c;
+            if(objSAPCMD.Country_Additional_VAT_Number_2__c != objSAPCMDAll.Country_Additional_VAT_Number_2__c) objSAPCMDAll.Country_Additional_VAT_Number_2__c = objSAPCMD.Country_Additional_VAT_Number_2__c;
+            if(objSAPCMD.Country_Additional_VAT_Number_3__c != objSAPCMDAll.Country_Additional_VAT_Number_3__c) objSAPCMDAll.Country_Additional_VAT_Number_3__c = objSAPCMD.Country_Additional_VAT_Number_3__c;
+            if(objSAPCMD.Country_Additional_VAT_Number_4__c != objSAPCMDAll.Country_Additional_VAT_Number_4__c) objSAPCMDAll.Country_Additional_VAT_Number_4__c = objSAPCMD.Country_Additional_VAT_Number_4__c;
+            if(objSAPCMD.Country_Additional_VAT_Number_5__c != objSAPCMDAll.Country_Additional_VAT_Number_5__c) objSAPCMDAll.Country_Additional_VAT_Number_5__c = objSAPCMD.Country_Additional_VAT_Number_5__c;
+            if(objSAPCMD.Country_Additional_VAT_Number_6__c != objSAPCMDAll.Country_Additional_VAT_Number_6__c) objSAPCMDAll.Country_Additional_VAT_Number_6__c = objSAPCMD.Country_Additional_VAT_Number_6__c;
+            if(objSAPCMD.Country_Additional_VAT_Number_7__c != objSAPCMDAll.Country_Additional_VAT_Number_7__c) objSAPCMDAll.Country_Additional_VAT_Number_7__c = objSAPCMD.Country_Additional_VAT_Number_7__c;
+            if(objSAPCMD.Country_Additional_VAT_Number_8__c != objSAPCMDAll.Country_Additional_VAT_Number_8__c) objSAPCMDAll.Country_Additional_VAT_Number_8__c = objSAPCMD.Country_Additional_VAT_Number_8__c;
+            if(objSAPCMD.Additional_VAT_Number_1_Plants_Abroad__c != objSAPCMDAll.Additional_VAT_Number_1_Plants_Abroad__c) objSAPCMDAll.Additional_VAT_Number_1_Plants_Abroad__c = objSAPCMD.Additional_VAT_Number_1_Plants_Abroad__c;
+            if(objSAPCMD.Additional_VAT_Number_2_Plants_Abroad__c != objSAPCMDAll.Additional_VAT_Number_2_Plants_Abroad__c) objSAPCMDAll.Additional_VAT_Number_2_Plants_Abroad__c = objSAPCMD.Additional_VAT_Number_2_Plants_Abroad__c;
+            if(objSAPCMD.Additional_VAT_Number_3_Plants_Abroad__c != objSAPCMDAll.Additional_VAT_Number_3_Plants_Abroad__c) objSAPCMDAll.Additional_VAT_Number_3_Plants_Abroad__c = objSAPCMD.Additional_VAT_Number_3_Plants_Abroad__c;
+            if(objSAPCMD.Additional_VAT_Number_4_Plants_Abroad__c != objSAPCMDAll.Additional_VAT_Number_4_Plants_Abroad__c) objSAPCMDAll.Additional_VAT_Number_4_Plants_Abroad__c = objSAPCMD.Additional_VAT_Number_4_Plants_Abroad__c;
+            if(objSAPCMD.Additional_VAT_Number_5_Plants_Abroad__c != objSAPCMDAll.Additional_VAT_Number_5_Plants_Abroad__c) objSAPCMDAll.Additional_VAT_Number_5_Plants_Abroad__c = objSAPCMD.Additional_VAT_Number_5_Plants_Abroad__c;
+            if(objSAPCMD.Additional_VAT_Number_6_Plants_Abroad__c != objSAPCMDAll.Additional_VAT_Number_6_Plants_Abroad__c) objSAPCMDAll.Additional_VAT_Number_6_Plants_Abroad__c = objSAPCMD.Additional_VAT_Number_6_Plants_Abroad__c;
+            if(objSAPCMD.Additional_VAT_Number_7_Plants_Abroad__c != objSAPCMDAll.Additional_VAT_Number_7_Plants_Abroad__c) objSAPCMDAll.Additional_VAT_Number_7_Plants_Abroad__c = objSAPCMD.Additional_VAT_Number_7_Plants_Abroad__c;
+            if(objSAPCMD.Additional_VAT_Number_8_Plants_Abroad__c != objSAPCMDAll.Additional_VAT_Number_8_Plants_Abroad__c) objSAPCMDAll.Additional_VAT_Number_8_Plants_Abroad__c = objSAPCMD.Additional_VAT_Number_8_Plants_Abroad__c;
+            if(objSAPCMD.Global_Account__c != objSAPCMDAll.Global_Account__c) objSAPCMDAll.Global_Account__c = objSAPCMD.Global_Account__c;
+            if(objSAPCMD.Customer_Factory_Calendar__c != objSAPCMDAll.Customer_Factory_Calendar__c) objSAPCMDAll.Customer_Factory_Calendar__c = objSAPCMD.Customer_Factory_Calendar__c;
+            if(objSAPCMD.Unloading_Point__c != objSAPCMDAll.Unloading_Point__c) objSAPCMDAll.Unloading_Point__c = objSAPCMD.Unloading_Point__c;
+            if(objSAPCMD.Military_Usage__c != objSAPCMDAll.Military_Usage__c) objSAPCMDAll.Military_Usage__c = objSAPCMD.Military_Usage__c;
+            if(objSAPCMD.Controlled_Party__c != objSAPCMDAll.Controlled_Party__c) objSAPCMDAll.Controlled_Party__c = objSAPCMD.Controlled_Party__c;
+            if(objSAPCMD.SDI_Screened__c != objSAPCMDAll.SDI_Screened__c) objSAPCMDAll.SDI_Screened__c = objSAPCMD.SDI_Screened__c;
+            if(objSAPCMD.Consolidated_Account_Code__c != objSAPCMDAll.Consolidated_Account_Code__c) objSAPCMDAll.Consolidated_Account_Code__c = objSAPCMD.Consolidated_Account_Code__c;
+            if(objSAPCMD.Fix_Price_Ind_SP__c != objSAPCMDAll.Fix_Price_Ind_SP__c) objSAPCMDAll.Fix_Price_Ind_SP__c = objSAPCMD.Fix_Price_Ind_SP__c;
+            if(objSAPCMD.Delivery_Group_Ind_SH__c != objSAPCMDAll.Delivery_Group_Ind_SH__c) objSAPCMDAll.Delivery_Group_Ind_SH__c = objSAPCMD.Delivery_Group_Ind_SH__c;
+            if(objSAPCMD.Rounding_Rule_SH__c != objSAPCMDAll.Rounding_Rule_SH__c) objSAPCMDAll.Rounding_Rule_SH__c = objSAPCMD.Rounding_Rule_SH__c;
+            if(objSAPCMD.Pull_Up_OK_SH__c != objSAPCMDAll.Pull_Up_OK_SH__c) objSAPCMDAll.Pull_Up_OK_SH__c = objSAPCMD.Pull_Up_OK_SH__c;
 
-            allSapCmdToBeUpdated.add(scAll);
+            allSapCmdToBeUpdated.add(objSAPCMDAll);
        }
    }
   }   
-    
      update allSapCmdToBeUpdated;
     }           
 }

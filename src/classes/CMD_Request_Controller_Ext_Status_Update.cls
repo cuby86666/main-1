@@ -9,10 +9,10 @@ public without sharing class CMD_Request_Controller_Ext_Status_Update {
     public CMD_Request_Controller_Ext_Status_Update(ApexPages.StandardController stdController ){
         this.theRequest = (CMD_Request__c)stdController.getRecord();
         theRequest = [
-            SELECT 	Id, 
+            SELECT  Id, 
             Request_Status__c 
-            FROM 	CMD_Request__c 
-            WHERE 	Id = :theRequest.Id AND 
+            FROM    CMD_Request__c 
+            WHERE   Id = :theRequest.Id AND 
             (RecordType.Name = 'SAP New Funloc Request' 
              OR RecordType.Name = 'SAP Funloc Edit Request' 
              OR RecordType.Name = 'SAP Mass Update Request'
@@ -20,6 +20,10 @@ public without sharing class CMD_Request_Controller_Ext_Status_Update {
              OR RecordType.Name = 'New SFDC Child Account' 
              OR RecordType.Name = 'Edit SFDC Parent Account' 
              OR RecordType.Name = 'Edit SFDC Child Account'
+             OR RecordType.Name = 'SAP New MANU Funloc request' 
+             OR RecordType.Name = 'SAP MANU Funloc Edit request' 
+             OR RecordType.Name = 'SAP New SBE Funloc request' 
+             OR RecordType.Name = 'SAP SBE Funloc Edit request'
             )
         ];
         

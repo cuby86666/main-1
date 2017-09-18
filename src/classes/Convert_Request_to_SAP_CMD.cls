@@ -33,6 +33,14 @@
 @Modified By :       Baji
 @Modified Date:      21 Jun 2017
 @Description:        1707 Release (SFDC 585) -  To add new fields 'Version ID for internationla addresses' & 'Tax Number 5' for MSO China project
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+@Modified By :       Baji
+@Modified Date:      17 Jul 2017 
+@Description:        1708 Release (SFDC 684) - SAP CMD - BillCurrency-PY should be on SAP CMD layout
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+@Modified By :       Baji
+@Modified Date:      08 Sep 2017 
+@Description:        1709 Release (SFDC 729) - Extended batch:convert CMD Request to SAP CMD functionality to MANU/SBE Edit funloc.
 ***************************************************************************************************************************************************************/
 
 
@@ -205,7 +213,8 @@ public with sharing class Convert_Request_to_SAP_CMD{
                     No_of_days_for_Early_Shipment__c
             /*****SIR 534 - Modified By Shridevi -END*******/
             FROM    CMD_Request__c
-            WHERE   (Request_Status__c = 'Approved' AND RecordType.Name = 'SAP Funloc Edit Request' 
+            WHERE   (Request_Status__c = 'Approved'  
+                     AND (RecordType.Name = 'SAP Funloc Edit Request' OR RecordType.Name = 'SAP MANU Funloc Edit request' OR RecordType.Name = 'SAP SBE Funloc Edit request')
                      AND Update_SAP_CMD_Failed__c = False) AND (Effective_Date__c <=: timeNow OR Effective_Date__c = null)
             ORDER BY Approval_Submission_Date__c ASC LIMIT 10000
         ];
@@ -522,11 +531,11 @@ public with sharing class Convert_Request_to_SAP_CMD{
                                     if(request.Order_Combination__c == 'No')
                                         SAP.Order_Combination__c = false;
                                 } 
-            
-            if(request.BillCurrency_PY__c != null && request.BillCurrency_PY__c != '' && request.BillCurrency_PY__c != 'Set to BLANK') 
+           // commenetd as part of SFDC-684 
+          /*  if(request.BillCurrency_PY__c != null && request.BillCurrency_PY__c != '' && request.BillCurrency_PY__c != 'Set to BLANK') 
                                     SAP.BillCurrency_PY__c = request.BillCurrency_PY__c;
                                 else if(request.BillCurrency_PY__c == 'Set to BLANK')
-                                    SAP.BillCurrency_PY__c = null;
+                                    SAP.BillCurrency_PY__c = null; */
             
             if(request.Grp_1_Sls_Channel_SP__c != null && request.Grp_1_Sls_Channel_SP__c != '' )   
                                     SAP.Grp_1_Sls_Channel_SP__c = request.Grp_1_Sls_Channel_SP__c;
@@ -767,6 +776,11 @@ public with sharing class Convert_Request_to_SAP_CMD{
             
                     if(request.Tax_Number_5__c != null && request.Tax_Number_5__c != '' )   
                                     SAP.Tax_Number_5__c = request.Tax_Number_5__c;
+                    // Added as aprt of SFDC-684                
+                    if(request.BillCurrency_PY__c != null && request.BillCurrency_PY__c != '' && request.BillCurrency_PY__c != 'Set to BLANK') 
+                                    SAP.BillCurrency_PY__c = request.BillCurrency_PY__c;
+                                else if(request.BillCurrency_PY__c == 'Set to BLANK')
+                                    SAP.BillCurrency_PY__c = null;
             
        }
 /*******************End - Fields specific to Payer-To Type***************************/

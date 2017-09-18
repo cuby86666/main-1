@@ -7,13 +7,17 @@
  * Created Date : MAR 09,2017
  * Description  : This Wrapper class will have the attributes realted for the Opportunity Scheduling 
                   and Production Management related operations.
------------------------------------------------------------------------------------- 
+------------------------------------------------------------------------------------              
 ------------------------------------------------------------------------------------
  * Edited By   : Venkateshwar G
  * Edited Date : MAY 31,2017
  * Description : Added Exception handling wrapper methods for Production Management.
 ------------------------------------------------------------------------------------ 
-
+------------------------------------------------------------------------------------
+ * Edited By   : Venkateshwar G
+ * Edited Date : Jul 12,2017
+ * Description : Modified to add the usertheme variable for identifying the theme of logged in user.
+------------------------------------------------------------------------------------ 
 */
 public class OpportunitySchedulingWrapper {
 
@@ -21,6 +25,7 @@ public class OpportunitySchedulingWrapper {
        @AuraEnabled public boolean isOpptySchedule;
        @AuraEnabled public Opportunity oppValues;
        @AuraEnabled public String messageException; //added for Exception handling
+       @AuraEnabled public String userTheme; //added for identifying the user theme
         public OpportunityScheduleExists(){
             isOpptySchedule = false;
             messageException='';

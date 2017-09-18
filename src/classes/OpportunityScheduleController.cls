@@ -25,6 +25,11 @@
  * Created Date : JUN 28,2017	
  * Description  : Modified the Controller to throw the exceptions and to avoid saving of abnormal Oppty Sched.	
 ------------------------------------------------------------------------------------ 
+------------------------------------------------------------------------------------
+ * Edited By   : Venkateshwar G
+ * Edited Date : Jul 12,2017
+ * Description : Modified to add the usertheme variable for identifying the theme of logged in user.
+------------------------------------------------------------------------------------ 
 */		
 public with sharing class OpportunityScheduleController {	
 	
@@ -41,6 +46,8 @@ public with sharing class OpportunityScheduleController {
         }	
         Opportunity oppty= [SELECT Id, Name,StageName,CloseDate, Production_Date__c,LT_Value_USD__c, Claim_Value_USD__c,AccountId, Account.Customer_Category__c,TMMA_Override__c,RecordType.DeveloperName,Design_Win_Approval_Process__c,CreatedDate FROM Opportunity WHERE Id =:opportunityId];	
         opptyAlExists.oppValues = oppty;	
+        String theme = UserInfo.getUiThemeDisplayed();	
+        opptyAlExists.userTheme = theme;	
         return opptyAlExists;	
     }	
 	
@@ -226,14 +233,14 @@ public with sharing class OpportunityScheduleController {
                  }	
             }	
             if(sumOpptySchedQtyCheck(opptyschldWrapRec)!= true)	
-            {   
-              // DML operations executed in try catch block  
+            {  
+              // DML operations executed in try catch block    
               try{                	
                   updateOpptyValue(opportunityId,oppPassed.CloseDate,oppPassed.Production_Date__c); //call for updating the Opportunity record with newly modified Expected Closed Dtae and Production date.	
                   upsert lstOpptySchld;
                   delete lstdelOpptySchld;
               }	
-              // If Exception found throw the Error to Front End user  
+              // If Exception found throw the Error to Front End user
               catch(Exception e)	
               {	
                throw e;	
@@ -339,6 +346,8 @@ public with sharing class OpportunityScheduleController {
     @AuraEnabled	
     public static boolean checkIfSameQuarterProdDateChange(String NewProdDate, String OldProdDate){	
      boolean isSameQuarter = true;
+        system.debug('NewProdDate'+NewProdDate);
+        system.debug('OldProdDate'+OldProdDate);
      if(NewProdDate!= null && OldProdDate != null){	
         Date NewProdDateValue= Date.valueOf(NewProdDate);	
         Integer NewProdMonth= NewProdDateValue.month();	
@@ -530,7 +539,7 @@ public with sharing class OpportunityScheduleController {
                 }	
             }
             opptyProdSchedSaveRet.isOpptyProdSchedSave = flgUpdateError;
-            // DML operations executed in try catch block
+            // DML operations executed in try catch block  
             try{  
                   updateOpptyValue(opportunityId,null,null);
                   Update lstUpdateOpptyProdSched; 

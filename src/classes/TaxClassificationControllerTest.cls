@@ -35,6 +35,10 @@
 @Modified By :       Baji
 @Modified Date:      27 June 2017
 @Description:        1707 Release (SFDC 455) - Generate Tax Classifications for Sales Org. CN60
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+@Modified By :       Baji
+@Modified Date:      01 Aug 2017 
+@Description:        1708 Release (SFDC 729) - Generate Tax Classifications for MANU/SBE sales orgs.
 ******************************************************************************************************************/
 
 @isTest
@@ -656,7 +660,6 @@ private class TaxClassificationControllerTest
                                                  Delivery_priority__c='10 - Priority 1', Zip__c = '188456');
         insert objSapCmd;        
         system.assert(objSapCmd.Id != null);
-        
         //start the test
         Test.startTest();
         
@@ -700,6 +703,90 @@ private class TaxClassificationControllerTest
                                                  Delivery_priority__c='10 - Priority 1', Zip__c = '188456');
         insert objSapCmd;        
         system.assert(objSapCmd.Id != null);
+        //start the test
+        Test.startTest();
+        
+        PageReference pgRef = Page.TaxClassification;
+        pgRef.getParameters().put('Id',objSapCmd.Id);
+        Test.setCurrentPageReference(pgRef);
+        
+        ApexPages.StandardSetController stdController = new Apexpages.StandardSetController(new List<Tax_Classification__c>());
+        TaxClassificationController controller = new TaxClassificationController(stdController);
+        
+        System.assert(controller.lstTaxClassifications != null);
+        System.assert(controller.lstTaxClassifications.size() > 0);
+        
+        //invoke saveTaxClassification method
+        pgRef = controller.saveTaxClassification();
+        System.assert(pgRef != null);
+        System.assertEquals(pgRef.getUrl(), '/' + controller.objSapCmd.Id);
+        
+        //stop the test
+        Test.stopTest();   
+    }  
+    static testMethod void TaxClassificationSalesOrgAT61()
+    {
+        //prepare test data
+        fetchRecordTypes();
+        //inserting customer list 
+        customer__c objCustomer = createCustomer();
+        insert objCustomer;
+        system.assert(objCustomer.Id != null);
+        
+        SAP_CMD__c objSapCmd = new SAP_CMD__c(RecordTypeId=Z013_Payer_Bill_To.Id, HUB_Customer__c = objCustomer.Id, Status__c='Draft', 
+                                                Legal_Name__c = 'test legal name4' ,  City__c= 'ut_city', Street_1__c = 'ut_Street1', Country__c = 'ANDORRA',    
+                                                Language__c='E - English', FunLoc_Type__c='Internal',
+                                                End_Customer_NXP_Global_ID__c = objCustomer.Id, Grp_1_Sls_Channel_SP__c='DIS - Distributor',
+                                                Acct_assgmt_group__c='01 - Local 3rd Party',Currency__c='USD - US Dollar',Sales_Organisation__c = 'AT61 - SOrg. GRK', Transportation_Zone__c='AR1',
+                                                Customer_Factory_Calendar__c='1A - Customer Calendar ARROW NL',Fix_Price_Ind_SP__c='Y - Yes',
+                                                Reconciliation_Account__c='1200000 - Trade AR with domestic parties',Terms_of_payment__c='014 - Prepaid',
+                                                Payment_Credit_Memo__c='014 - Prepaid',S_O_Sub_Group__c='AT - Austria',Reprice_Basis__c='C - Conf. Delivery Date',
+                                                 Distribution_Region__c='A1 - HK00',Cust_pric_proc__c='1 - OEM/EMS Pricing',Incoterms_1__c='CIP - Carriage & Insurance Paid To',
+                                                 Delivery_priority__c='10 - Priority 1', Zip__c = '188456');
+        insert objSapCmd;        
+        system.assert(objSapCmd.Id != null);
+        //start the test
+        Test.startTest();
+        
+        PageReference pgRef = Page.TaxClassification;
+        pgRef.getParameters().put('Id',objSapCmd.Id);
+        Test.setCurrentPageReference(pgRef);
+        
+        ApexPages.StandardSetController stdController = new Apexpages.StandardSetController(new List<Tax_Classification__c>());
+        TaxClassificationController controller = new TaxClassificationController(stdController);
+        
+        System.assert(controller.lstTaxClassifications != null);
+        System.assert(controller.lstTaxClassifications.size() > 0);
+        
+        //invoke saveTaxClassification method
+        pgRef = controller.saveTaxClassification();
+        System.assert(pgRef != null);
+        System.assertEquals(pgRef.getUrl(), '/' + controller.objSapCmd.Id);
+        
+        //stop the test
+        Test.stopTest();   
+    }      
+    static testMethod void TaxClassificationSalesOrgBE61()
+    {
+        //prepare test data
+        fetchRecordTypes();
+        //inserting customer list 
+        customer__c objCustomer = createCustomer();
+        insert objCustomer;
+        system.assert(objCustomer.Id != null);
+        
+        SAP_CMD__c objSapCmd = new SAP_CMD__c(RecordTypeId=Z013_Payer_Bill_To.Id, HUB_Customer__c = objCustomer.Id, Status__c='Draft', 
+                                                Legal_Name__c = 'test legal name4' ,  City__c= 'ut_city', Street_1__c = 'ut_Street1', Country__c = 'ANDORRA',    
+                                                Language__c='E - English', FunLoc_Type__c='Internal',
+                                                End_Customer_NXP_Global_ID__c = objCustomer.Id, Grp_1_Sls_Channel_SP__c='DIS - Distributor',
+                                                Acct_assgmt_group__c='01 - Local 3rd Party',Currency__c='USD - US Dollar',Sales_Organisation__c = 'BE61 - NXP Semicon. Leuven', Transportation_Zone__c='AR1',
+                                                Customer_Factory_Calendar__c='1A - Customer Calendar ARROW NL',Fix_Price_Ind_SP__c='Y - Yes',
+                                                Reconciliation_Account__c='1200000 - Trade AR with domestic parties',Terms_of_payment__c='014 - Prepaid',
+                                                Payment_Credit_Memo__c='014 - Prepaid',S_O_Sub_Group__c='AT - Austria',Reprice_Basis__c='C - Conf. Delivery Date',
+                                                 Distribution_Region__c='A1 - HK00',Cust_pric_proc__c='1 - OEM/EMS Pricing',Incoterms_1__c='CIP - Carriage & Insurance Paid To',
+                                                 Delivery_priority__c='10 - Priority 1', Zip__c = '188456');
+        insert objSapCmd;        
+        system.assert(objSapCmd.Id != null);
         
         //start the test
         Test.startTest();
@@ -721,5 +808,478 @@ private class TaxClassificationControllerTest
         
         //stop the test
         Test.stopTest();   
-    }           
+    }      
+    static testMethod void TaxClassificationSalesOrgCN68()
+    {
+        //prepare test data
+        fetchRecordTypes();
+        //inserting customer list 
+        customer__c objCustomer = createCustomer();
+        insert objCustomer;
+        system.assert(objCustomer.Id != null);
+        
+        SAP_CMD__c objSapCmd = new SAP_CMD__c(RecordTypeId=Z013_Payer_Bill_To.Id, HUB_Customer__c = objCustomer.Id, Status__c='Draft', 
+                                                Legal_Name__c = 'test legal name4' ,  City__c= 'ut_city', Street_1__c = 'ut_Street1', Country__c = 'ANDORRA',    
+                                                Language__c='E - English', FunLoc_Type__c='Internal',
+                                                End_Customer_NXP_Global_ID__c = objCustomer.Id, Grp_1_Sls_Channel_SP__c='DIS - Distributor',
+                                                Acct_assgmt_group__c='01 - Local 3rd Party',Currency__c='USD - US Dollar',Sales_Organisation__c =  'CN68 - NXP(China)Management', Transportation_Zone__c='AR1',
+                                                Customer_Factory_Calendar__c='1A - Customer Calendar ARROW NL',Fix_Price_Ind_SP__c='Y - Yes',
+                                                Reconciliation_Account__c='1200000 - Trade AR with domestic parties',Terms_of_payment__c='014 - Prepaid',
+                                                Payment_Credit_Memo__c='014 - Prepaid',S_O_Sub_Group__c='AT - Austria',Reprice_Basis__c='C - Conf. Delivery Date',
+                                                 Distribution_Region__c='A1 - HK00',Cust_pric_proc__c='1 - OEM/EMS Pricing',Incoterms_1__c='CIP - Carriage & Insurance Paid To',
+                                                 Delivery_priority__c='10 - Priority 1', Zip__c = '188456');
+        insert objSapCmd;        
+        system.assert(objSapCmd.Id != null);
+        
+        //start the test
+        Test.startTest();
+        
+        PageReference pgRef = Page.TaxClassification;
+        pgRef.getParameters().put('Id',objSapCmd.Id);
+        Test.setCurrentPageReference(pgRef);
+        
+        ApexPages.StandardSetController stdController = new Apexpages.StandardSetController(new List<Tax_Classification__c>());
+        TaxClassificationController controller = new TaxClassificationController(stdController);
+        
+        System.assert(controller.lstTaxClassifications != null);
+        System.assert(controller.lstTaxClassifications.size() > 0);
+        
+        //invoke saveTaxClassification method
+        pgRef = controller.saveTaxClassification();
+        System.assert(pgRef != null);
+        System.assertEquals(pgRef.getUrl(), '/' + controller.objSapCmd.Id);
+        
+        //stop the test
+        Test.stopTest();   
+    }      
+    static testMethod void TaxClassificationSalesOrgDE42()
+    {
+        //prepare test data
+        fetchRecordTypes();
+        //inserting customer list 
+        customer__c objCustomer = createCustomer();
+        insert objCustomer;
+        system.assert(objCustomer.Id != null);
+        
+        SAP_CMD__c objSapCmd = new SAP_CMD__c(RecordTypeId=Z013_Payer_Bill_To.Id, HUB_Customer__c = objCustomer.Id, Status__c='Draft', 
+                                                Legal_Name__c = 'test legal name4' ,  City__c= 'ut_city', Street_1__c = 'ut_Street1', Country__c = 'ANDORRA',    
+                                                Language__c='E - English', FunLoc_Type__c='Internal',
+                                                End_Customer_NXP_Global_ID__c = objCustomer.Id, Grp_1_Sls_Channel_SP__c='DIS - Distributor',
+                                                Acct_assgmt_group__c='01 - Local 3rd Party',Currency__c='USD - US Dollar',Sales_Organisation__c = 'DE42 - NXP Hamburg Other', Transportation_Zone__c='AR1',
+                                                Customer_Factory_Calendar__c='1A - Customer Calendar ARROW NL',Fix_Price_Ind_SP__c='Y - Yes',
+                                                Reconciliation_Account__c='1200000 - Trade AR with domestic parties',Terms_of_payment__c='014 - Prepaid',
+                                                Payment_Credit_Memo__c='014 - Prepaid',S_O_Sub_Group__c='AT - Austria',Reprice_Basis__c='C - Conf. Delivery Date',
+                                                 Distribution_Region__c='A1 - HK00',Cust_pric_proc__c='1 - OEM/EMS Pricing',Incoterms_1__c='CIP - Carriage & Insurance Paid To',
+                                                 Delivery_priority__c='10 - Priority 1', Zip__c = '188456');
+        insert objSapCmd;        
+        system.assert(objSapCmd.Id != null);
+        
+        //start the test
+        Test.startTest();
+        
+        PageReference pgRef = Page.TaxClassification;
+        pgRef.getParameters().put('Id',objSapCmd.Id);
+        Test.setCurrentPageReference(pgRef);
+        
+        ApexPages.StandardSetController stdController = new Apexpages.StandardSetController(new List<Tax_Classification__c>());
+        TaxClassificationController controller = new TaxClassificationController(stdController);
+        
+        System.assert(controller.lstTaxClassifications != null);
+        System.assert(controller.lstTaxClassifications.size() > 0);
+        
+        //invoke saveTaxClassification method
+        pgRef = controller.saveTaxClassification();
+        System.assert(pgRef != null);
+        System.assertEquals(pgRef.getUrl(), '/' + controller.objSapCmd.Id);
+        
+        //stop the test
+        Test.stopTest();   
+    }      
+    static testMethod void TaxClassificationSalesORGEM61()
+    {
+        //prepare test data
+        fetchRecordTypes();
+        //inserting customer list 
+        customer__c objCustomer = createCustomer();
+        insert objCustomer;
+        system.assert(objCustomer.Id != null);
+        
+        SAP_CMD__c objSapCmd = new SAP_CMD__c(RecordTypeId=Z013_Payer_Bill_To.Id, HUB_Customer__c = objCustomer.Id, Status__c='Draft', 
+                                                Legal_Name__c = 'test legal name4' ,  City__c= 'ut_city', Street_1__c = 'ut_Street1', Country__c = 'ANDORRA',    
+                                                Language__c='E - English', FunLoc_Type__c='Internal',
+                                                End_Customer_NXP_Global_ID__c = objCustomer.Id, Grp_1_Sls_Channel_SP__c='DIS - Distributor',
+                                                Acct_assgmt_group__c='01 - Local 3rd Party',Currency__c='USD - US Dollar',Sales_Organisation__c = 'EM61 - NXP GEM', Transportation_Zone__c='AR1',
+                                                Customer_Factory_Calendar__c='1A - Customer Calendar ARROW NL',Fix_Price_Ind_SP__c='Y - Yes',
+                                                Reconciliation_Account__c='1200000 - Trade AR with domestic parties',Terms_of_payment__c='014 - Prepaid',
+                                                Payment_Credit_Memo__c='014 - Prepaid',S_O_Sub_Group__c='AT - Austria',Reprice_Basis__c='C - Conf. Delivery Date',
+                                                 Distribution_Region__c='A1 - HK00',Cust_pric_proc__c='1 - OEM/EMS Pricing',Incoterms_1__c='CIP - Carriage & Insurance Paid To',
+                                                 Delivery_priority__c='10 - Priority 1', Zip__c = '188456');
+        insert objSapCmd;        
+        system.assert(objSapCmd.Id != null);
+        
+        //start the test
+        Test.startTest();
+        
+        PageReference pgRef = Page.TaxClassification;
+        pgRef.getParameters().put('Id',objSapCmd.Id);
+        Test.setCurrentPageReference(pgRef);
+        
+        ApexPages.StandardSetController stdController = new Apexpages.StandardSetController(new List<Tax_Classification__c>());
+        TaxClassificationController controller = new TaxClassificationController(stdController);
+        
+        System.assert(controller.lstTaxClassifications != null);
+        System.assert(controller.lstTaxClassifications.size() > 0);
+        
+        //invoke saveTaxClassification method
+        pgRef = controller.saveTaxClassification();
+        System.assert(pgRef != null);
+        System.assertEquals(pgRef.getUrl(), '/' + controller.objSapCmd.Id);
+        
+        //stop the test
+        Test.stopTest();   
+    }      
+    static testMethod void TaxClassificationSalesOrgFR61()
+    {
+        //prepare test data
+        fetchRecordTypes();
+        //inserting customer list 
+        customer__c objCustomer = createCustomer();
+        insert objCustomer;
+        system.assert(objCustomer.Id != null);
+        
+        SAP_CMD__c objSapCmd = new SAP_CMD__c(RecordTypeId=Z013_Payer_Bill_To.Id, HUB_Customer__c = objCustomer.Id, Status__c='Draft', 
+                                                Legal_Name__c = 'test legal name4' ,  City__c= 'ut_city', Street_1__c = 'ut_Street1', Country__c = 'ANDORRA',    
+                                                Language__c='E - English', FunLoc_Type__c='Internal',
+                                                End_Customer_NXP_Global_ID__c = objCustomer.Id, Grp_1_Sls_Channel_SP__c='DIS - Distributor',
+                                                Acct_assgmt_group__c='01 - Local 3rd Party',Currency__c='USD - US Dollar',Sales_Organisation__c =  'FR61 - NXP Caen', Transportation_Zone__c='AR1',
+                                                Customer_Factory_Calendar__c='1A - Customer Calendar ARROW NL',Fix_Price_Ind_SP__c='Y - Yes',
+                                                Reconciliation_Account__c='1200000 - Trade AR with domestic parties',Terms_of_payment__c='014 - Prepaid',
+                                                Payment_Credit_Memo__c='014 - Prepaid',S_O_Sub_Group__c='AT - Austria',Reprice_Basis__c='C - Conf. Delivery Date',
+                                                 Distribution_Region__c='A1 - HK00',Cust_pric_proc__c='1 - OEM/EMS Pricing',Incoterms_1__c='CIP - Carriage & Insurance Paid To',
+                                                 Delivery_priority__c='10 - Priority 1', Zip__c = '188456');
+        insert objSapCmd;        
+        system.assert(objSapCmd.Id != null);
+        
+        //start the test
+        Test.startTest();
+        
+        PageReference pgRef = Page.TaxClassification;
+        pgRef.getParameters().put('Id',objSapCmd.Id);
+        Test.setCurrentPageReference(pgRef);
+        
+        ApexPages.StandardSetController stdController = new Apexpages.StandardSetController(new List<Tax_Classification__c>());
+        TaxClassificationController controller = new TaxClassificationController(stdController);
+        
+        System.assert(controller.lstTaxClassifications != null);
+        System.assert(controller.lstTaxClassifications.size() > 0);
+        
+        //invoke saveTaxClassification method
+        pgRef = controller.saveTaxClassification();
+        System.assert(pgRef != null);
+        System.assertEquals(pgRef.getUrl(), '/' + controller.objSapCmd.Id);
+        
+        //stop the test
+        Test.stopTest();   
+    }      
+    static testMethod void TaxClassificationSalesOrgIN61()
+    {
+        //prepare test data
+        fetchRecordTypes();
+        //inserting customer list 
+        customer__c objCustomer = createCustomer();
+        insert objCustomer;
+        system.assert(objCustomer.Id != null);
+        
+        SAP_CMD__c objSapCmd = new SAP_CMD__c(RecordTypeId=Z013_Payer_Bill_To.Id, HUB_Customer__c = objCustomer.Id, Status__c='Draft', 
+                                                Legal_Name__c = 'test legal name4' ,  City__c= 'ut_city', Street_1__c = 'ut_Street1', Country__c = 'ANDORRA',    
+                                                Language__c='E - English', FunLoc_Type__c='Internal',
+                                                End_Customer_NXP_Global_ID__c = objCustomer.Id, Grp_1_Sls_Channel_SP__c='DIS - Distributor',
+                                                Acct_assgmt_group__c='01 - Local 3rd Party',Currency__c='USD - US Dollar',Sales_Organisation__c = 'IN61 - NXP India', Transportation_Zone__c='AR1',
+                                                Customer_Factory_Calendar__c='1A - Customer Calendar ARROW NL',Fix_Price_Ind_SP__c='Y - Yes',
+                                                Reconciliation_Account__c='1200000 - Trade AR with domestic parties',Terms_of_payment__c='014 - Prepaid',
+                                                Payment_Credit_Memo__c='014 - Prepaid',S_O_Sub_Group__c='AT - Austria',Reprice_Basis__c='C - Conf. Delivery Date',
+                                                 Distribution_Region__c='A1 - HK00',Cust_pric_proc__c='1 - OEM/EMS Pricing',Incoterms_1__c='CIP - Carriage & Insurance Paid To',
+                                                 Delivery_priority__c='10 - Priority 1', Zip__c = '188456');
+        insert objSapCmd;        
+        system.assert(objSapCmd.Id != null);
+        
+        //start the test
+        Test.startTest();
+        
+        PageReference pgRef = Page.TaxClassification;
+        pgRef.getParameters().put('Id',objSapCmd.Id);
+        Test.setCurrentPageReference(pgRef);
+        
+        ApexPages.StandardSetController stdController = new Apexpages.StandardSetController(new List<Tax_Classification__c>());
+        TaxClassificationController controller = new TaxClassificationController(stdController);
+        
+        System.assert(controller.lstTaxClassifications != null);
+        System.assert(controller.lstTaxClassifications.size() > 0);
+        
+        //invoke saveTaxClassification method
+        pgRef = controller.saveTaxClassification();
+        System.assert(pgRef != null);
+        System.assertEquals(pgRef.getUrl(), '/' + controller.objSapCmd.Id);
+        
+        //stop the test
+        Test.stopTest();   
+    }      
+    static testMethod void TaxClassificationSalesOrgMX61()
+    {
+        //prepare test data
+        fetchRecordTypes();
+        //inserting customer list 
+        customer__c objCustomer = createCustomer();
+        insert objCustomer;
+        system.assert(objCustomer.Id != null);
+        
+        SAP_CMD__c objSapCmd = new SAP_CMD__c(RecordTypeId=Z013_Payer_Bill_To.Id, HUB_Customer__c = objCustomer.Id, Status__c='Draft', 
+                                                Legal_Name__c = 'test legal name4' ,  City__c= 'ut_city', Street_1__c = 'ut_Street1', Country__c = 'ANDORRA',    
+                                                Language__c='E - English', FunLoc_Type__c='Internal',
+                                                End_Customer_NXP_Global_ID__c = objCustomer.Id, Grp_1_Sls_Channel_SP__c='DIS - Distributor',
+                                                Acct_assgmt_group__c='01 - Local 3rd Party',Currency__c='USD - US Dollar',Sales_Organisation__c = 'MX61 - SOrg. Mexico', Transportation_Zone__c='AR1',
+                                                Customer_Factory_Calendar__c='1A - Customer Calendar ARROW NL',Fix_Price_Ind_SP__c='Y - Yes',
+                                                Reconciliation_Account__c='1200000 - Trade AR with domestic parties',Terms_of_payment__c='014 - Prepaid',
+                                                Payment_Credit_Memo__c='014 - Prepaid',S_O_Sub_Group__c='AT - Austria',Reprice_Basis__c='C - Conf. Delivery Date',
+                                                 Distribution_Region__c='A1 - HK00',Cust_pric_proc__c='1 - OEM/EMS Pricing',Incoterms_1__c='CIP - Carriage & Insurance Paid To',
+                                                 Delivery_priority__c='10 - Priority 1', Zip__c = '188456');
+        insert objSapCmd;        
+        system.assert(objSapCmd.Id != null);
+        
+        //start the test
+        Test.startTest();
+        
+        PageReference pgRef = Page.TaxClassification;
+        pgRef.getParameters().put('Id',objSapCmd.Id);
+        Test.setCurrentPageReference(pgRef);
+        
+        ApexPages.StandardSetController stdController = new Apexpages.StandardSetController(new List<Tax_Classification__c>());
+        TaxClassificationController controller = new TaxClassificationController(stdController);
+        
+        System.assert(controller.lstTaxClassifications != null);
+        System.assert(controller.lstTaxClassifications.size() > 0);
+        
+        //invoke saveTaxClassification method
+        pgRef = controller.saveTaxClassification();
+        System.assert(pgRef != null);
+        System.assertEquals(pgRef.getUrl(), '/' + controller.objSapCmd.Id);
+        
+        //stop the test
+        Test.stopTest();   
+    }      
+    static testMethod void TaxClassificationSalesOrgNL40()
+    {
+        //prepare test data
+        fetchRecordTypes();
+        //inserting customer list 
+        customer__c objCustomer = createCustomer();
+        insert objCustomer;
+        system.assert(objCustomer.Id != null);
+        
+        SAP_CMD__c objSapCmd = new SAP_CMD__c(RecordTypeId=Z013_Payer_Bill_To.Id, HUB_Customer__c = objCustomer.Id, Status__c='Draft', 
+                                                Legal_Name__c = 'test legal name4' ,  City__c= 'ut_city', Street_1__c = 'ut_Street1', Country__c = 'ANDORRA',    
+                                                Language__c='E - English', FunLoc_Type__c='Internal',
+                                                End_Customer_NXP_Global_ID__c = objCustomer.Id, Grp_1_Sls_Channel_SP__c='DIS - Distributor',
+                                                Acct_assgmt_group__c='01 - Local 3rd Party',Currency__c='USD - US Dollar',Sales_Organisation__c = 'NL40 - NXP Nijmegen Site Su', Transportation_Zone__c='AR1',
+                                                Customer_Factory_Calendar__c='1A - Customer Calendar ARROW NL',Fix_Price_Ind_SP__c='Y - Yes',
+                                                Reconciliation_Account__c='1200000 - Trade AR with domestic parties',Terms_of_payment__c='014 - Prepaid',
+                                                Payment_Credit_Memo__c='014 - Prepaid',S_O_Sub_Group__c='AT - Austria',Reprice_Basis__c='C - Conf. Delivery Date',
+                                                 Distribution_Region__c='A1 - HK00',Cust_pric_proc__c='1 - OEM/EMS Pricing',Incoterms_1__c='CIP - Carriage & Insurance Paid To',
+                                                 Delivery_priority__c='10 - Priority 1', Zip__c = '188456');
+        insert objSapCmd;        
+        system.assert(objSapCmd.Id != null);
+        
+        //start the test
+        Test.startTest();
+        
+        PageReference pgRef = Page.TaxClassification;
+        pgRef.getParameters().put('Id',objSapCmd.Id);
+        Test.setCurrentPageReference(pgRef);
+        
+        ApexPages.StandardSetController stdController = new Apexpages.StandardSetController(new List<Tax_Classification__c>());
+        TaxClassificationController controller = new TaxClassificationController(stdController);
+        
+        System.assert(controller.lstTaxClassifications != null);
+        System.assert(controller.lstTaxClassifications.size() > 0);
+        
+        //invoke saveTaxClassification method
+        pgRef = controller.saveTaxClassification();
+        System.assert(pgRef != null);
+        System.assertEquals(pgRef.getUrl(), '/' + controller.objSapCmd.Id);
+        
+        //stop the test
+        Test.stopTest();   
+    }      
+    static testMethod void TaxClassificationSalesOrgNL61()
+    {
+        //prepare test data
+        fetchRecordTypes();
+        //inserting customer list 
+        customer__c objCustomer = createCustomer();
+        insert objCustomer;
+        system.assert(objCustomer.Id != null);
+        
+        SAP_CMD__c objSapCmd = new SAP_CMD__c(RecordTypeId=Z013_Payer_Bill_To.Id, HUB_Customer__c = objCustomer.Id, Status__c='Draft', 
+                                                Legal_Name__c = 'test legal name4' ,  City__c= 'ut_city', Street_1__c = 'ut_Street1', Country__c = 'ANDORRA',    
+                                                Language__c='E - English', FunLoc_Type__c='Internal',
+                                                End_Customer_NXP_Global_ID__c = objCustomer.Id, Grp_1_Sls_Channel_SP__c='DIS - Distributor',
+                                                Acct_assgmt_group__c='01 - Local 3rd Party',Currency__c='USD - US Dollar',Sales_Organisation__c = 'NL61 - Nijmegen', Transportation_Zone__c='AR1',
+                                                Customer_Factory_Calendar__c='1A - Customer Calendar ARROW NL',Fix_Price_Ind_SP__c='Y - Yes',
+                                                Reconciliation_Account__c='1200000 - Trade AR with domestic parties',Terms_of_payment__c='014 - Prepaid',
+                                                Payment_Credit_Memo__c='014 - Prepaid',S_O_Sub_Group__c='AT - Austria',Reprice_Basis__c='C - Conf. Delivery Date',
+                                                 Distribution_Region__c='A1 - HK00',Cust_pric_proc__c='1 - OEM/EMS Pricing',Incoterms_1__c='CIP - Carriage & Insurance Paid To',
+                                                 Delivery_priority__c='10 - Priority 1', Zip__c = '188456');
+        insert objSapCmd;        
+        system.assert(objSapCmd.Id != null);
+        
+        //start the test
+        Test.startTest();
+        
+        PageReference pgRef = Page.TaxClassification;
+        pgRef.getParameters().put('Id',objSapCmd.Id);
+        Test.setCurrentPageReference(pgRef);
+        
+        ApexPages.StandardSetController stdController = new Apexpages.StandardSetController(new List<Tax_Classification__c>());
+        TaxClassificationController controller = new TaxClassificationController(stdController);
+        
+        System.assert(controller.lstTaxClassifications != null);
+        System.assert(controller.lstTaxClassifications.size() > 0);
+        
+        //invoke saveTaxClassification method
+        pgRef = controller.saveTaxClassification();
+        System.assert(pgRef != null);
+        System.assertEquals(pgRef.getUrl(), '/' + controller.objSapCmd.Id);
+        
+        //stop the test
+        Test.stopTest();   
+    }      
+    static testMethod void TaxClassificationSalesOrgNL68()
+    {
+        //prepare test data
+        fetchRecordTypes();
+        //inserting customer list 
+        customer__c objCustomer = createCustomer();
+        insert objCustomer;
+        system.assert(objCustomer.Id != null);
+        
+        SAP_CMD__c objSapCmd = new SAP_CMD__c(RecordTypeId=Z013_Payer_Bill_To.Id, HUB_Customer__c = objCustomer.Id, Status__c='Draft', 
+                                                Legal_Name__c = 'test legal name4' ,  City__c= 'ut_city', Street_1__c = 'ut_Street1', Country__c = 'ANDORRA',    
+                                                Language__c='E - English', FunLoc_Type__c='Internal',
+                                                End_Customer_NXP_Global_ID__c = objCustomer.Id, Grp_1_Sls_Channel_SP__c='DIS - Distributor',
+                                                Acct_assgmt_group__c='01 - Local 3rd Party',Currency__c='USD - US Dollar',Sales_Organisation__c = 'NL68 - NXP Software', Transportation_Zone__c='AR1',
+                                                Customer_Factory_Calendar__c='1A - Customer Calendar ARROW NL',Fix_Price_Ind_SP__c='Y - Yes',
+                                                Reconciliation_Account__c='1200000 - Trade AR with domestic parties',Terms_of_payment__c='014 - Prepaid',
+                                                Payment_Credit_Memo__c='014 - Prepaid',S_O_Sub_Group__c='AT - Austria',Reprice_Basis__c='C - Conf. Delivery Date',
+                                                 Distribution_Region__c='A1 - HK00',Cust_pric_proc__c='1 - OEM/EMS Pricing',Incoterms_1__c='CIP - Carriage & Insurance Paid To',
+                                                 Delivery_priority__c='10 - Priority 1', Zip__c = '188456');
+        insert objSapCmd;        
+        system.assert(objSapCmd.Id != null);
+        
+        //start the test
+        Test.startTest();
+        
+        PageReference pgRef = Page.TaxClassification;
+        pgRef.getParameters().put('Id',objSapCmd.Id);
+        Test.setCurrentPageReference(pgRef);
+        
+        ApexPages.StandardSetController stdController = new Apexpages.StandardSetController(new List<Tax_Classification__c>());
+        TaxClassificationController controller = new TaxClassificationController(stdController);
+        
+        System.assert(controller.lstTaxClassifications != null);
+        System.assert(controller.lstTaxClassifications.size() > 0);
+        
+        //invoke saveTaxClassification method
+        pgRef = controller.saveTaxClassification();
+        System.assert(pgRef != null);
+        System.assertEquals(pgRef.getUrl(), '/' + controller.objSapCmd.Id);
+        
+        //stop the test
+        Test.stopTest();   
+    }      
+    static testMethod void TaxClassificationSalesOrgRO61()
+    {
+        //prepare test data
+        fetchRecordTypes();
+        //inserting customer list 
+        customer__c objCustomer = createCustomer();
+        insert objCustomer;
+        system.assert(objCustomer.Id != null);
+        
+        SAP_CMD__c objSapCmd = new SAP_CMD__c(RecordTypeId=Z013_Payer_Bill_To.Id, HUB_Customer__c = objCustomer.Id, Status__c='Draft', 
+                                                Legal_Name__c = 'test legal name4' ,  City__c= 'ut_city', Street_1__c = 'ut_Street1', Country__c = 'ANDORRA',    
+                                                Language__c='E - English', FunLoc_Type__c='Internal',
+                                                End_Customer_NXP_Global_ID__c = objCustomer.Id, Grp_1_Sls_Channel_SP__c='DIS - Distributor',
+                                                Acct_assgmt_group__c='01 - Local 3rd Party',Currency__c='USD - US Dollar',Sales_Organisation__c = 'RO61 - SOrg. Romania', Transportation_Zone__c='AR1',
+                                                Customer_Factory_Calendar__c='1A - Customer Calendar ARROW NL',Fix_Price_Ind_SP__c='Y - Yes',
+                                                Reconciliation_Account__c='1200000 - Trade AR with domestic parties',Terms_of_payment__c='014 - Prepaid',
+                                                Payment_Credit_Memo__c='014 - Prepaid',S_O_Sub_Group__c='AT - Austria',Reprice_Basis__c='C - Conf. Delivery Date',
+                                                 Distribution_Region__c='A1 - HK00',Cust_pric_proc__c='1 - OEM/EMS Pricing',Incoterms_1__c='CIP - Carriage & Insurance Paid To',
+                                                 Delivery_priority__c='10 - Priority 1', Zip__c = '188456');
+        insert objSapCmd;        
+        system.assert(objSapCmd.Id != null);
+        
+        //start the test
+        Test.startTest();
+        
+        PageReference pgRef = Page.TaxClassification;
+        pgRef.getParameters().put('Id',objSapCmd.Id);
+        Test.setCurrentPageReference(pgRef);
+        
+        ApexPages.StandardSetController stdController = new Apexpages.StandardSetController(new List<Tax_Classification__c>());
+        TaxClassificationController controller = new TaxClassificationController(stdController);
+        
+        System.assert(controller.lstTaxClassifications != null);
+        System.assert(controller.lstTaxClassifications.size() > 0);
+        
+        //invoke saveTaxClassification method
+        pgRef = controller.saveTaxClassification();
+        System.assert(pgRef != null);
+        System.assertEquals(pgRef.getUrl(), '/' + controller.objSapCmd.Id);
+        
+        //stop the test
+        Test.stopTest();   
+    }      
+    static testMethod void TaxClassificationSalesOrgDE63()
+    {
+        //prepare test data
+        fetchRecordTypes();
+        //inserting customer list 
+        customer__c objCustomer = createCustomer();
+        insert objCustomer;
+        system.assert(objCustomer.Id != null);
+        
+        SAP_CMD__c objSapCmd = new SAP_CMD__c(RecordTypeId=Z013_Payer_Bill_To.Id, HUB_Customer__c = objCustomer.Id, Status__c='Draft', 
+                                                Legal_Name__c = 'test legal name4' ,  City__c= 'ut_city', Street_1__c = 'ut_Street1', Country__c = 'ANDORRA',    
+                                                Language__c='E - English', FunLoc_Type__c='Internal',
+                                                End_Customer_NXP_Global_ID__c = objCustomer.Id, Grp_1_Sls_Channel_SP__c='DIS - Distributor',
+                                                Acct_assgmt_group__c='01 - Local 3rd Party',Currency__c='USD - US Dollar',Sales_Organisation__c = 'DE63 - NXP Semi. Germany', Transportation_Zone__c='AR1',
+                                                Customer_Factory_Calendar__c='1A - Customer Calendar ARROW NL',Fix_Price_Ind_SP__c='Y - Yes',
+                                                Reconciliation_Account__c='1200000 - Trade AR with domestic parties',Terms_of_payment__c='014 - Prepaid',
+                                                Payment_Credit_Memo__c='014 - Prepaid',S_O_Sub_Group__c='AT - Austria',Reprice_Basis__c='C - Conf. Delivery Date',
+                                                 Distribution_Region__c='A1 - HK00',Cust_pric_proc__c='1 - OEM/EMS Pricing',Incoterms_1__c='CIP - Carriage & Insurance Paid To',
+                                                 Delivery_priority__c='10 - Priority 1', Zip__c = '188456');
+        insert objSapCmd;        
+        system.assert(objSapCmd.Id != null);
+        
+        //start the test
+        Test.startTest();
+        
+        PageReference pgRef = Page.TaxClassification;
+        pgRef.getParameters().put('Id',objSapCmd.Id);
+        Test.setCurrentPageReference(pgRef);
+        
+        ApexPages.StandardSetController stdController = new Apexpages.StandardSetController(new List<Tax_Classification__c>());
+        TaxClassificationController controller = new TaxClassificationController(stdController);
+        
+        System.assert(controller.lstTaxClassifications != null);
+        System.assert(controller.lstTaxClassifications.size() > 0);
+        
+        //invoke saveTaxClassification method
+        pgRef = controller.saveTaxClassification();
+        System.assert(pgRef != null);
+        System.assertEquals(pgRef.getUrl(), '/' + controller.objSapCmd.Id);
+        
+        //stop the test
+        Test.stopTest();   
+    }               
 }

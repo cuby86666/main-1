@@ -8,6 +8,10 @@
  @Last Modified By   : Shridevi Badiger
  @Last Modified Date : 20-Mar-2017
  @Description : SIR 324-test the functionality to Populate value for Contact Service Level field with new values and custom setting.
+**********************************************************************
+ @Last Modified By   : Shridevi Badiger
+ @Last Modified Date : 25-Aug-2017
+ @Description : SIR 828-Increased the code coverage of ContactClass
 
 **********************************************************************/
 @isTest
@@ -28,6 +32,8 @@ public class ContactClassTest{
         lstCSLC.add(new Contact_Service_Level_Criteria__c(Criteria_Field_Name__c='Email',Criteria_Field_Value__c='toni@zollikofer.eu',Contact_Service_Level__c='A-DirectCust'));
         lstCSLC.add(new Contact_Service_Level_Criteria__c(Criteria_Field_Name__c='Email',Criteria_Field_Value__c='CN.ABB.COM',Contact_Service_Level__c='A-DirectCust'));
         lstCSLC.add(new Contact_Service_Level_Criteria__c(Criteria_Field_Name__c='Email',Criteria_Field_Value__c='CN.BOSCH.COM',Contact_Service_Level__c='A-DirectCust'));
+        lstCSLC.add(new Contact_Service_Level_Criteria__c(Criteria_Field_Name__c='Email',Criteria_Field_Value__c='nxp.com',Contact_Service_Level__c='A1-Internal'));
+        lstCSLC.add(new Contact_Service_Level_Criteria__c(Criteria_Field_Name__c='Email',Criteria_Field_Value__c='abc.nxp.com',Contact_Service_Level__c='A1-InternalUser'));
         
         insert lstCSLC;
     
@@ -81,7 +87,7 @@ public class ContactClassTest{
     {
        
         objChildAccount = new Account(RecordTypeID= childAccount.ID,ParentId =parentAccountId,ownerId=objUser.id,  
-                                            Name = 'Bosch Japan', Region__c = 'Japan',
+                                            Name = 'Bosch Japan', Region__c = 'Japan',Role__c='Distributor',
                                              Sales_Area__c = 'Japan ID', Industry_Segment__c = 'Mobile',
                                              Country__c = 'Japan',customer_category__c=customerCategory);
         return objChildAccount;    
@@ -109,7 +115,7 @@ public class ContactClassTest{
             
             listCustomerCategorySetting.add(new TS_customer_category_with_CSL_values__c(Name='Tier4 - TMMA',contact_service_level__c='A1_NXP'));
             
-            listCustomerCategorySetting.add(new TS_customer_category_with_CSL_values__c(Name='Tier4 - RoM',contact_service_level__c='B1_Tier_4_ROM'));
+            listCustomerCategorySetting.add(new TS_customer_category_with_CSL_values__c(Name='Tier4 - ROM',contact_service_level__c='B1_Tier_4_ROM'));
             
             listCustomerCategorySetting.add(new TS_customer_category_with_CSL_values__c(Name='Tier4 - Long Tail',contact_service_level__c='B1_Tier_4_Longtail'));
             
@@ -129,33 +135,50 @@ public class ContactClassTest{
         
         lstChildAccount.add(createChildAccount(objParentAccount.id,'Tier1'));
         lstChildAccount.add(createChildAccount(objParentAccount.id,'Tier2'));
+        lstChildAccount.add(createChildAccount(objParentAccount.id,'Tier 4 - ROM'));
+       // lstChildAccount[2].Role__c='Distributor';
         insert lstChildAccount;
-        lstChildAccount=[select id,customer_category__c,name from account where id in:lstChildAccount];
+       //  lstChildAccount[2].Role__c='Distributor';
+      //   update lstChildAccount[2];
+        lstChildAccount=[select id,customer_category__c,Role__c,name from account where id in:lstChildAccount];
         
         system.debug(lstChildAccount);
         
         lstContact.add(createTestContact( lstChildAccount[0].id));
         lstContact.add(createTestContact( lstChildAccount[1].id));
         lstContact.add(createTestContact( lstChildAccount[0].id));
+        lstContact.add(createTestContact( lstChildAccount[0].id));
+        lstContact.add(createTestContact( lstChildAccount[2].id));
+        lstContact.add(createTestContact( lstChildAccount[2].id));
+       
         test.starttest();
         //system.debug('acc 2:'+lstChildAccount[1]);
         lstContact[0].Email='test@zollikofer.eu';
         lstContact[1].Email='toni@zollikofer.eu';
         lstContact[2].Email='shridevi@CN.ABB.COM';
         lstContact[2].AccountId=null;
+        lstContact[3].Email='shridevi@test.abc.nxp.com';
+        lstContact[3].AccountId=null;
+        lstContact[5].Email='shridevi@test.abc.nxp.com.in';
         
         insert lstContact;
         
         lstContact=[select id,name,Email,AccountID,contact_service_level__c from contact where id in:lstContact];
           
         System.debug(lstContact[0].contact_service_level__c);
+        System.debug(lstContact[3].contact_service_level__c);
         System.debug(lstContact[1].contact_service_level__c);
+        System.debug(lstContact[4].contact_service_level__c);
+        
         system.assert(lstContact[0].contact_service_level__c=='A1_Tier_1');
-      
         system.assert(lstContact[1].contact_service_level__c=='A-DirectCust');  
         system.assert(lstContact[2].contact_service_level__c=='A-DirectCust'); 
+        system.assert(lstContact[3].contact_service_level__c=='A1-InternalUser'); 
+        system.assert(lstContact[4].contact_service_level__c=='A3_Distributor'); 
+        
         lstContact[0].Email='test@test.eu';
         lstContact[0].AccountId=null;
+        lstContact[3].AccountId=null;
         update lstContact;
         lstContact=[select id,name,Email,AccountID,contact_service_level__c from contact where id in:lstContact];
         system.assert(lstContact[0].contact_service_level__c=='B2-OtherCompany'); 

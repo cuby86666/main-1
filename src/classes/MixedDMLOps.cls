@@ -5,8 +5,15 @@ PLEASE NOTE:
 ============
 methods are not named as delete, insert because they are reserved words by Apex
 */
+
+/******************************************************************************
+@Modified By 		Nisha Agrawal
+@Modified Date		Aug 22, 2017
+@Description		Commented up and del methods as not in use currently. 
+*******************************************************************************/
 public without sharing class MixedDMLOps {
-  // DML UPDATE operation
+ /* code block commented by Nisha Agrawal
+    // DML UPDATE operation
   public static Database.SaveResult[] up (Sobject[] objs) {
     Database.Saveresult[] updateRes;
      if (Test.isRunningTest()) {
@@ -31,7 +38,8 @@ public without sharing class MixedDMLOps {
         } 
     return delRes;
   }
-   
+  */
+    
   // DML INSERT
   public static Database.Saveresult[] ins (Sobject[] objs) {
     Database.Saveresult[] res;

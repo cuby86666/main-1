@@ -150,4 +150,18 @@ public class FeedItemTriggerCommunityHandler {
         
         System.debug('Limit queries aftr updateCase Handler 4*>'+System.limits.getQueries());
     }
+    
+    public static void updateLastQuestionNetworkId(List<FeedItem> lstFeedItemNew) {
+        
+        for(FeedItem objFeedItem : lstFeedItemNew) {
+            
+            if(objFeedItem.Type == 'QuestionPost') {
+                
+                update new User(Id = UserInfo.getUserId(),
+                    Last_Question_Posted_Network__c = objFeedItem.NetworkScope);
+                    
+                break;
+            }
+        }
+    }
 }

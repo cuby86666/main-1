@@ -3,6 +3,11 @@
 @CreatedDate :     13 September 2016
 Description :      controller class for CommunityContextIndividualController to show one context at a time 
 ****************************************************************************************************/
+/*********************************************************************************************
+@Created By :      Shridevi Badiegr
+@CreatedDate :     04 Aug 2017
+Description :      As part of SIR 750,removed the usage of the pages which are being deleted.
+****************************************************************************************************/
 public without sharing class CommunityContextIndividualController{
 
     Public Integer noOfRecords{get; set;}
@@ -14,7 +19,7 @@ public without sharing class CommunityContextIndividualController{
     public Map<Id, boolean> participantInviteSizeEmptyMap                                          {set;get;}   // to display message if there are no participants
     public Map<Id, boolean> observerinviteSizeEmptyMap                                             {set;get;}   // to display message if there are no observers
     public Entitlement_Contact__c ent                                                              {set;get;}
-  
+    public String RedirectionToLoginPage{get;set;}
     public Contact objCont                                                                         {set;get;}  // to capture contact information
     public User userRecord                                                                         {set;get;}   //to get the user's information
     
@@ -32,14 +37,18 @@ public without sharing class CommunityContextIndividualController{
     {
         if (UserInfo.getUserType()=='Guest') 
         {
-            return new PageReference('/communityLogin?pagename=CommunityContextIndividual');
+            return new PageReference(RedirectionToLoginPage);
             
         }
         return null;
        
+       
     }
     
     public CommunityContextIndividualController(){
+     //below line is added by shridevi for redirecting to login page instead of communityLogin page since the page has been deleted.
+        RedirectionToLoginPage=(Site.getPathPrefix()+Label.Community_Login_URL);
+   
            if (UserInfo.getUserType()!='Guest')
     {
        

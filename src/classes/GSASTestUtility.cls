@@ -33,7 +33,7 @@ public class GSASTestUtility{
         //RecordType RecType = [Select Id From RecordType  Where SobjectType = 'Opportunity' and DeveloperName = 'SFDC_Oppty' and IsActive=true Limit 1];
         String strCloseDate = Date.today().year() + '-05-10';
         String strProductionDate = Date.today().year() + '-06-10';
-        Opportunity opp = GSASTestUtility.createOpportunity(opptyName, childAcc.Id, 'Mobile','Mobile Handsets', 'Direct', 
+        Opportunity opp = GSASTestUtility.createOpportunity(opptyName, childAcc.Id,'Direct', 
                                                           strProductionDate, strCloseDate,'Commitment');
         opp.Design_Win_Approval_Process__c = 'Open';
         opp.Design_Win_Submission_Date__c = opp.CloseDate;
@@ -51,7 +51,7 @@ public class GSASTestUtility{
         //RecordType RecType = [Select Id From RecordType  Where SobjectType = 'Opportunity' and DeveloperName = 'SFDC_Oppty' and IsActive=true Limit 1];
         String strCloseDate = Date.today().year() + '-05-10';
         String strProductionDate = Date.today().year() + '-06-10';
-        Opportunity opp = GSASTestUtility.createOpportunity('test opportunity' + Date.today().format(), childAcc.Id, 'Mobile','Mobile Handsets', 'Direct', 
+        Opportunity opp = GSASTestUtility.createOpportunity('test opportunity' + Date.today().format(), childAcc.Id,'Direct', 
                                                           strProductionDate, strCloseDate,'Commitment');
         opp.Design_Win_Approval_Process__c = 'Approved';
         opp.Design_Win_Submission_Date__c = opp.CloseDate;
@@ -206,15 +206,12 @@ public class GSASTestUtility{
         return approver;
     }
     
-    public static Opportunity createOpportunity(String strName, String strAccountId, String strIndustrySegment, 
-                                         String strSubSegment, String strChannel, String strProductionDate,
-                                        String strCloseDate, String strStageName) {
+    public static Opportunity createOpportunity(String strName, String strAccountId, String strChannel, 
+                                                String strProductionDate, String strCloseDate, String strStageName) {
          //RecordType RecType = [Select Id From RecordType  Where SobjectType = 'Opportunity' and DeveloperName = 'SFDC_Oppty' and IsActive=true Limit 1];
         Opportunity opp = new Opportunity();
         opp.Name = strName;
         opp.AccountId = strAccountId;
-        opp.Industry_Segment__c = strIndustrySegment;
-        opp.Sub_Segment__c = strSubSegment;
         opp.Channel__c = strChannel;
         opp.Production_Date__c = Date.valueOf(strProductionDate);
         opp.CloseDate = Date.valueOf(strCloseDate);

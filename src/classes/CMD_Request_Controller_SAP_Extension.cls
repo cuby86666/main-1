@@ -59,6 +59,16 @@
 @Modified Date:      21 Jun 2017
 @Description:        1707 Release (SFDC 585) -  To add new fields 'Version ID for internationla addresses' & 'Tax Number 5' for MSO China project
                      1707 Release (SFDC 455) -  To generate ZORG SAP CMDs based on rule provided for new sales org CN60.
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+@Modified By :       Baji
+@Modified Date:      17 Jul 2017 
+@Description:        1708 Release (SFDC 684) - SAP CMD - BillCurrency-PY should be on SAP CMD layout
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+@Modified By :       Baji/Venkatesh
+@Modified Date:      31 Aug 2017 
+@Description:        1709 Release (SFDC 729) - To update CMD Request record type into new field: 'CMD Request Type' on SAP CMD as we need to exclude few validations on SAP CMD for MANU/SBE funloc.
+                                               - To set Credit control area on SAP CMD to 'NL60' for Non-MANU funloc requests.
+                                               - To carry the data for [UNLOADING POINT] for account group Z012 from CMD Request -> SAP CMD.
 *******************************************************************************************************************************************************************/
 public class CMD_Request_Controller_SAP_Extension {
     
@@ -78,7 +88,11 @@ public class CMD_Request_Controller_SAP_Extension {
     public SAP_CMD__c ZORGSAPCMD;//1604 Release SR 706 - Added by Scarlett
     public List<Tax_Classification__c> lstZORGTaxClassification;//1604 Release SR 706 - Added by Scarlett
     
-    private static final string Z001_RECORD_TYPE = 'Z001_SoldTo_ShipTo_BillTo_Payer';
+    private Static Final string TYPE_New_MANU_CmdReq='SAP_New_MANU_Funloc_request';// obj: CMD Request
+    private Static Final string TYPE_Edit_MANU_CmdReq='SAP_MANU_Funloc_Edit_request';// obj: CMD Request
+    private Static Final string TYPE_New_SBE_CmdReq='SAP_New_SBE_Funloc_request';
+    private Static Final string TYPE_Edit_SBE_CmdReq='SAP_SBE_Funloc_Edit_request';
+    private static final String Z001_RECORD_TYPE = 'Z001_SoldTo_ShipTo_BillTo_Payer';
     private static final string Z002_RECORD_TYPE = 'Z002_Ship_To';
     private static final string Z003_RECORD_TYPE = 'Z003_Payer';
     private static final string Z004_RECORD_TYPE = 'Z004_Bill_To';
@@ -114,6 +128,10 @@ public class CMD_Request_Controller_SAP_Extension {
     Public Static Id ZOthers_RECORD_TYPE_ID;
     Public Static Id ZA_ZS_RECORD_TYPE_ID;
     public static Id RE_RG_WE_AG_ZC_ZD_ZI_RECORD_TYPE_ID;//1604 Release SR 706 - Added by Scarlett
+    public static Id SAP_New_MANU_Funloc_request_ID;
+    public static Id SAP_MANU_Funloc_Edit_request_ID;
+    public static Id SAP_New_SBE_Funloc_request_ID;
+    public static Id SAP_SBE_Funloc_Edit_request_ID;
    
        
     public CMD_Request_Controller_SAP_Extension( ApexPages.StandardController stdController ) {
@@ -375,8 +393,10 @@ public class CMD_Request_Controller_SAP_Extension {
                     Order_Combination_ZORG__c,
                     Customer_Pricing_Procedure_ZORG__c,
             /**** SIR 534 - Modified By Shridevi************/
-                    No_of_days_for_Early_Shipment__c
+                    No_of_days_for_Early_Shipment__c,
             /*****SIR 534 - Modified By Shridevi -END*******/
+                    RecordTypeId,
+                    RecordType.name
             FROM    CMD_Request__c
             WHERE   Id = :theRequest.Id
         ];
@@ -395,13 +415,19 @@ public class CMD_Request_Controller_SAP_Extension {
 
     public pageReference New_SAP_CMD() {  
     
-     For(recordType rt:[Select Id, Name,DeveloperName From RecordType Where IsActive=true AND (SobjectType = 'SAP_CMD__c' AND
-                       (DeveloperName =:Z001_RECORD_TYPE OR DeveloperName =:Z002_RECORD_TYPE OR 
+    For(recordType rt:[Select Id, Name,DeveloperName From RecordType Where IsActive=true 
+                        AND(
+                        (SobjectType = 'SAP_CMD__c' AND
+                        (DeveloperName =:Z001_RECORD_TYPE OR DeveloperName =:Z002_RECORD_TYPE OR 
                         DeveloperName =:Z003_RECORD_TYPE OR DeveloperName =:Z004_RECORD_TYPE OR
                         DeveloperName =:Z005_RECORD_TYPE OR DeveloperName =:Z010_RECORD_TYPE OR
                         DeveloperName =:Z011_RECORD_TYPE OR DeveloperName =:Z012_RECORD_TYPE OR
                         DeveloperName =:Z013_RECORD_TYPE OR DeveloperName =:ZORG_RECORD_TYPE OR
-                        DeveloperName =:ZOTHERS_RECORD_TYPE))])
+                        DeveloperName =:ZOTHERS_RECORD_TYPE))
+                        OR (SobjectType = 'CMD_Request__c' AND 
+                        (DeveloperName =: TYPE_New_MANU_CmdReq OR DeveloperName =: TYPE_Edit_MANU_CmdReq OR
+                         DeveloperName =: TYPE_New_SBE_CmdReq OR DeveloperName =: TYPE_Edit_SBE_CmdReq)))])
+                    
                     
        {
          if(rt.DeveloperName == Z001_RECORD_TYPE) 
@@ -448,6 +474,22 @@ public class CMD_Request_Controller_SAP_Extension {
             {
                ZOthers_RECORD_TYPE_ID = rt.id;  
             }
+         else if(rt.DeveloperName == TYPE_New_MANU_CmdReq)
+            {
+               SAP_New_MANU_Funloc_request_ID = rt.id;  
+            }
+         else if(rt.DeveloperName == TYPE_Edit_MANU_CmdReq)
+            {
+               SAP_MANU_Funloc_Edit_request_ID = rt.id;  
+            }
+         else if(rt.DeveloperName == TYPE_New_SBE_CmdReq)
+            {
+               SAP_New_SBE_Funloc_request_ID = rt.id;  
+            }
+         else if(rt.DeveloperName == TYPE_Edit_SBE_CmdReq)
+            {
+               SAP_SBE_Funloc_Edit_request_ID = rt.id;  
+            }
        }
        
          
@@ -455,6 +497,7 @@ public class CMD_Request_Controller_SAP_Extension {
 //        FunLoc__c = 'a1UD0000000QhEjMAK',
             CMD_Request_Id__c = theRequest.Id ,
             CMD_Request_ID_Text__c = theRequest.Id , // for SIR 698: to copy 'title' based on CMD Request Id
+            CMD_Request_Type__c = theRequest.RecordType.name,
             // Distribution_Response__c
             // Distributed_at_least_once__c
 //            Transportation_Zone__c = theRequest.Transportation_Zone__c ,
@@ -534,6 +577,12 @@ public class CMD_Request_Controller_SAP_Extension {
 //            Matl_Det_Grp_SP__c = theRequest.Matl_Det_Grp_SP__c ,
 //            BillCurrency_PY__c = theRequest.BillCurrency_PY__c
         );
+        
+       /******* set the credit control area to 'None' for MANU New/Edit Funloc Request******/
+        if(theRequest.RecordTypeId != SAP_New_MANU_Funloc_request_ID && theRequest.RecordTypeId != SAP_MANU_Funloc_Edit_request_ID) { // added as part of SFDC-729 FeedBacks
+                theCMD.Cred_contr_area__c = 'NL60 - RSO Europe';
+       }
+      
 
 //        if( theAccountGroup == 'Z001' || theRequest.Account_Group__c == 'Z001' ){
         if( theAccountGroup == 'Z001' ){
@@ -771,6 +820,7 @@ public class CMD_Request_Controller_SAP_Extension {
              
             }
             //--------------------------------------------------------------------------------------------------------
+            
         }
         
       
@@ -1032,6 +1082,8 @@ public class CMD_Request_Controller_SAP_Extension {
             theCMD.Central_billing_block_for_customer__c = theRequest.Central_Billing_Block__c;
             theCMD.Acconting_Clerk__c = theRequest.Accounting_Clerk__c;
             theCMD.Acct_assgmt_group__c = theRequest.Acct_assgmt_group__c;
+            theCMD.BillCurrency_PY__c = theRequest.BillCurrency_PY__c ; // added as part of SFDC-684
+            
         }
 //        if( ( theAccountGroup == 'Z003' || theRequest.Account_Group__c == 'Z003' ) && !(theRequest.PY_Same_as_SP__c) ){
         if( theAccountGroup == 'Z003' && !(theRequest.PY_Same_as_SP__c) ){
@@ -1446,6 +1498,7 @@ public class CMD_Request_Controller_SAP_Extension {
             theCMD.Central_Order_Block__c = theRequest.Central_Order_Block__c;
             theCMD.Central_delivery_block__c = theRequest.Central_delivery_block__c;
             theCMD.Central_billing_block_for_customer__c = theRequest.Central_Billing_Block__c;
+           
         }
 
         
@@ -1579,7 +1632,7 @@ public class CMD_Request_Controller_SAP_Extension {
             theCMD.Grp_1_Sls_Channel_SP__c = theRequest.Grp_1_Sls_Channel_SP__c ;
             theCMD.Grp_2_Cus_Prce_Grp_SP__c = theRequest.Grp_2_Cus_Prce_Grp_SP__c ;
             theCMD.Matl_Det_Grp_SP__c = theRequest.Matl_Det_Grp_SP__c ;
-            theCMD.BillCurrency_PY__c = theRequest.BillCurrency_PY__c ;
+          //  theCMD.BillCurrency_PY__c = theRequest.BillCurrency_PY__c ; // commented as part of SFDC-684
 //Scarlett            theCMD.Industry_Segment__c = theRequest.Industry_Segment__c;
 //            theCMD.Industry_Sub_Segment__c = theRequest.Industry_Sub_Segment__c;
             theCMD.Region__c = theRequest.Sales_Area_Region__c;//New mapping field add by Scarlett on 2015.03.09
@@ -1756,7 +1809,7 @@ public class CMD_Request_Controller_SAP_Extension {
             theCMD.Grp_1_Sls_Channel_SP__c = theRequest.Grp_1_Sls_Channel_SP__c ;
             theCMD.Grp_2_Cus_Prce_Grp_SP__c = theRequest.Grp_2_Cus_Prce_Grp_SP__c ;
             theCMD.Matl_Det_Grp_SP__c = theRequest.Matl_Det_Grp_SP__c ;
-            theCMD.BillCurrency_PY__c = theRequest.BillCurrency_PY__c ;
+         //   theCMD.BillCurrency_PY__c = theRequest.BillCurrency_PY__c ; //commented as part of SFDC-684
 //Scarlett            theCMD.Industry_Segment__c = theRequest.Industry_Segment__c;
 //            theCMD.Industry_Sub_Segment__c = theRequest.Industry_Sub_Segment__c;
             /***Scarlett - 1508 Release***/      
@@ -1869,6 +1922,7 @@ public class CMD_Request_Controller_SAP_Extension {
             theCMD.Central_Order_Block__c = theRequest.Central_Order_Block__c;
             theCMD.Central_delivery_block__c = theRequest.Central_delivery_block__c;
             theCMD.Central_billing_block_for_customer__c = theRequest.Central_Billing_Block__c;
+            theCMD.Unloading_Point__c = theRequest.Unloading_Point__c;
             //----------------------------------added as part of SIR 534----------------------------------------------
             if(theRequest.No_of_days_for_Early_Shipment__c!=null)
             {
@@ -1991,6 +2045,8 @@ public class CMD_Request_Controller_SAP_Extension {
             theCMD.Central_Order_Block__c = theRequest.Central_Order_Block__c;
             theCMD.Central_delivery_block__c = theRequest.Central_delivery_block__c;
             theCMD.Central_billing_block_for_customer__c = theRequest.Central_Billing_Block__c;
+            theCMD.BillCurrency_PY__c = theRequest.BillCurrency_PY__c ; // added as part of SFDC-684
+           
         }
 //        if( ( theAccountGroup == 'Z013' || theRequest.Account_Group__c == 'Z013' ) && !(theRequest.PY_Same_as_SP__c) ){
         if( theAccountGroup == 'Z013' && !(theRequest.PY_Same_as_SP__c) ){
@@ -2092,7 +2148,7 @@ public class CMD_Request_Controller_SAP_Extension {
             theCMD.Additional_VAT_Number_6_Plants_Abroad__c = theRequest.Additional_VAT_Number_6__c;
             theCMD.Additional_VAT_Number_7_Plants_Abroad__c = theRequest.Additional_VAT_Number_7__c;
             theCMD.Additional_VAT_Number_8_Plants_Abroad__c = theRequest.Additional_VAT_Number_8__c;
-            theCMD.BillCurrency_PY__c = theRequest.BillCurrency_PY__c;
+       //     theCMD.BillCurrency_PY__c = theRequest.BillCurrency_PY__c; //SFDC-684
             theCMD.Billing_Block_Sales_area__c = theRequest.Billing_Block__c;
             theCMD.Brazil_Specific_Clause__c = theRequest.Brazil_Specific_Clause__c;
             theCMD.Central_billing_block_for_customer__c = theRequest.Central_Billing_Block__c;
@@ -2279,7 +2335,7 @@ public class CMD_Request_Controller_SAP_Extension {
                         lstZORGTaxClassification.add(new Tax_Classification__c(SAP_CMD_Tax_Classification__c = lstNewZORGSAPCMD[i].Id, Country__c = 'CN - China', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
                         lstZORGTaxClassification.add(new Tax_Classification__c(SAP_CMD_Tax_Classification__c = lstNewZORGSAPCMD[i].Id, Country__c = 'HK - Hong Kong', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
                     }*/
-                    if(lstNewZORGSAPCMD[i].Sales_Organisation__c == 'CN64 - Tianji'){
+                    if(lstNewZORGSAPCMD[i].Sales_Organisation__c == 'CN64 - Tianjin'){
                         lstZORGTaxClassification.add(new Tax_Classification__c(SAP_CMD_Tax_Classification__c = lstNewZORGSAPCMD[i].Id, Country__c = 'CN - China', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
                     }
                 /*    if(lstNewZORGSAPCMD[i].Sales_Organisation__c == 'MY61 - NXP Seremban'){

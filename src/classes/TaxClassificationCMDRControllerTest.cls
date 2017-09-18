@@ -20,6 +20,10 @@
 @Modified By :       Baji
 @Modified Date:      27 Jun 2017
 @Description:        1707 Release (SFDC 455) - Generate Tax Classifications for Sales Org. CN60
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+@Modified By :       Baji
+@Modified Date:      01 Aug 2017 
+@Description:        1708 Release (SFDC 729) - Generate Tax Classifications for MANU/SBE sales orgs.
 ****************************************************************************************/
 
 
@@ -27,8 +31,11 @@
 public class TaxClassificationCMDRControllerTest {
     private static final String TYPE_GLOBALENTERPRISE = 'Global_Enterprise';
     private static final String TYPE_SAP_New_Funloc_Request = 'SAP_New_Funloc_Request';
+    private static final String TYPE_SAP_New_MANU_Funloc_Request = 'SAP_New_MANU_Funloc_request';
+    
     
     private static RecordType SAP_New_Funloc_Request;
+    private static RecordType SAP_New_MANU_Funloc_Request;
     private static RecordType globalCustomer;
     
     private static Consolidated_Account_Code__c testCACC;
@@ -41,11 +48,14 @@ public class TaxClassificationCMDRControllerTest {
                              FROM   RecordType
                              WHERE  IsActive = TRUE AND  
                               ((SobjectType = 'CMD_Request__c' AND DeveloperName =: TYPE_SAP_New_Funloc_Request)
+                              OR (SobjectType = 'CMD_Request__c' AND DeveloperName =: TYPE_SAP_New_MANU_Funloc_Request)
                               OR (SobjectType = 'Customer__c' AND DeveloperName =: TYPE_GLOBALENTERPRISE))
                               ])
         {
             if(rt.DeveloperName == TYPE_SAP_New_Funloc_Request)
                 SAP_New_Funloc_Request = rt;
+            if(rt.DeveloperName == TYPE_SAP_New_MANU_Funloc_Request)
+                SAP_New_MANU_Funloc_Request = rt;
             if(rt.DeveloperName == TYPE_GLOBALENTERPRISE)
                 globalCustomer = rt;
         }
@@ -1095,6 +1105,1007 @@ public class TaxClassificationCMDRControllerTest {
         Test.startTest();
         
          PageReference pgRef = Page.TaxClassification;
+        pgRef.getParameters().put('Id',objCMDRequest.Id);
+        Test.setCurrentPageReference(pgRef);
+        
+        ApexPages.StandardSetController stdController = new Apexpages.StandardSetController(new List<Tax_Classification__c>());
+        TaxClassificationCMDRequestController controller = new TaxClassificationCMDRequestController(stdController);
+        
+        System.assert(controller.lstTaxClassifications != null);
+        System.assert(controller.lstTaxClassifications.size() > 0);
+        
+        //invoke saveTaxClassificationCMDRequest method
+        pgRef = controller.saveTaxClassification();
+        System.assert(pgRef != null);
+        System.assertEquals(pgRef.getUrl(), '/' + controller.objCMDRequest.Id);
+        
+        //stop the test
+        Test.stopTest();   
+    
+    }  
+    static testMethod void CMDRequestSALES_ORG_AT_61()
+    {
+        fetchRecordTypes();
+        prepareConsolidatedAccountCode();
+        createCustomer();
+        
+        CMD_Request__c objCMDRequest = new CMD_Request__c(
+            Sales_Organisation__c = 'AT61 - SOrg. GRK',
+            Reason_for_request__c = 'Test',
+            Account_Group__c = 'Z001',
+            RecordTypeId = SAP_New_MANU_Funloc_Request.Id,
+            Consolidated_Account_Code__c = testCACC.Id,
+            Ready_to_Submit__c = true,
+            Request_Status__c = 'Ready to Submit',
+            Business_Background_Comments__c = 'Test Business Background Comments',
+            Global_Account__c = 'Test Global Account',
+            SP_GID__c = '100000000',            
+            SP_Name__c = 'Test Name',
+            SP_Street__c = 'Test Street',
+            SP_City__c = 'Test City',
+            SP_Country__c = 'Netherlands',
+            SP_Postal_Code__c = '12345',
+            Postal_Code__c = '12345',
+            Region__c = 'EU - Europe',
+            SP_Telephone__c = '+1234567890',
+            SP_Fax__c = '+1234567890',
+            SP_Email__c = 'test@test.com',
+            SP_Funloc__c = '100000',            
+            Company_Code__c = 'Test',
+            Label_required__c = 'No',
+            Industry_Segment__c = 'Test',
+            Industry_Sub_Segment__c = 'Test',
+            Customer_Factory_Calendar__c = 'Test',
+            Customer_Service_ZA__c = 'Test',
+            Incoterms_1__c = 'Test',
+            Incoterms_2__c = 'Test',
+            Lockbox__c = 'Test',
+            Payment_Credit_Memo__c= 'Test',
+            Pull_Up_OK_SH__c = 'Test',
+            Rounding_Rule_SH__c = 'Test',
+            Terms_of_Payment__c = 'Test',
+            Terms_of_Payment_Sales__c = 'Test',
+            Con_Acct_SP_EMS__c = 'Test',
+            Cust_pric_proc__c = 'Test',
+            Grp_1_Sls_Channel_SP__c = 'Test',
+            Currency__c = 'Test Currency',
+            PD_Key_Account__c = 'Test PD Key Account',
+            Reprice_Basis__c = 'Test Reprice Basis',
+            Sales_Office__c = 'Test Sales_Office__c',
+            S_O_Sub_Group__c = 'Test S O Sub Group'
+           );
+            
+        insert objCMDRequest;        
+        system.assert(objCMDRequest.Id != null);
+        
+        //start the test
+        Test.startTest();
+        
+        PageReference pgRef = Page.TaxClassification;
+        pgRef.getParameters().put('Id',objCMDRequest.Id);
+        Test.setCurrentPageReference(pgRef);
+        
+        ApexPages.StandardSetController stdController = new Apexpages.StandardSetController(new List<Tax_Classification__c>());
+        TaxClassificationCMDRequestController controller = new TaxClassificationCMDRequestController(stdController);
+        
+        System.assert(controller.lstTaxClassifications != null);
+        System.assert(controller.lstTaxClassifications.size() > 0);
+        
+        //invoke saveTaxClassificationCMDRequest method
+        pgRef = controller.saveTaxClassification();
+        System.assert(pgRef != null);
+        System.assertEquals(pgRef.getUrl(), '/' + controller.objCMDRequest.Id);
+        
+        //stop the test
+        Test.stopTest();   
+    
+    }  
+    static testMethod void CMDRequestSALES_ORG_BE_61()
+    {
+        fetchRecordTypes();
+        prepareConsolidatedAccountCode();
+        createCustomer();
+        
+        CMD_Request__c objCMDRequest = new CMD_Request__c(
+            Sales_Organisation__c = 'BE61 - NXP Semicon. Leuven',
+            Reason_for_request__c = 'Test',
+            Account_Group__c = 'Z001',
+            RecordTypeId = SAP_New_MANU_Funloc_Request.Id,
+            Consolidated_Account_Code__c = testCACC.Id,
+            Ready_to_Submit__c = true,
+            Request_Status__c = 'Ready to Submit',
+            Business_Background_Comments__c = 'Test Business Background Comments',
+            Global_Account__c = 'Test Global Account',
+            SP_GID__c = '100000000',            
+            SP_Name__c = 'Test Name',
+            SP_Street__c = 'Test Street',
+            SP_City__c = 'Test City',
+            SP_Country__c = 'Netherlands',
+            SP_Postal_Code__c = '12345',
+            Postal_Code__c = '12345',
+            Region__c = 'EU - Europe',
+            SP_Telephone__c = '+1234567890',
+            SP_Fax__c = '+1234567890',
+            SP_Email__c = 'test@test.com',
+            SP_Funloc__c = '100000',            
+            Company_Code__c = 'Test',
+            Label_required__c = 'No',
+            Industry_Segment__c = 'Test',
+            Industry_Sub_Segment__c = 'Test',
+            Customer_Factory_Calendar__c = 'Test',
+            Customer_Service_ZA__c = 'Test',
+            Incoterms_1__c = 'Test',
+            Incoterms_2__c = 'Test',
+            Lockbox__c = 'Test',
+            Payment_Credit_Memo__c= 'Test',
+            Pull_Up_OK_SH__c = 'Test',
+            Rounding_Rule_SH__c = 'Test',
+            Terms_of_Payment__c = 'Test',
+            Terms_of_Payment_Sales__c = 'Test',
+            Con_Acct_SP_EMS__c = 'Test',
+            Cust_pric_proc__c = 'Test',
+            Grp_1_Sls_Channel_SP__c = 'Test',
+            Currency__c = 'Test Currency',
+            PD_Key_Account__c = 'Test PD Key Account',
+            Reprice_Basis__c = 'Test Reprice Basis',
+            Sales_Office__c = 'Test Sales_Office__c',
+            S_O_Sub_Group__c = 'Test S O Sub Group'
+           );
+            
+        insert objCMDRequest;        
+        system.assert(objCMDRequest.Id != null);
+        
+        //start the test
+        Test.startTest();
+        
+        PageReference pgRef = Page.TaxClassification;
+        pgRef.getParameters().put('Id',objCMDRequest.Id);
+        Test.setCurrentPageReference(pgRef);
+        
+        ApexPages.StandardSetController stdController = new Apexpages.StandardSetController(new List<Tax_Classification__c>());
+        TaxClassificationCMDRequestController controller = new TaxClassificationCMDRequestController(stdController);
+        
+        System.assert(controller.lstTaxClassifications != null);
+        System.assert(controller.lstTaxClassifications.size() > 0);
+        
+        //invoke saveTaxClassificationCMDRequest method
+        pgRef = controller.saveTaxClassification();
+        System.assert(pgRef != null);
+        System.assertEquals(pgRef.getUrl(), '/' + controller.objCMDRequest.Id);
+        
+        //stop the test
+        Test.stopTest();   
+    
+    }  
+     static testMethod void CMDRequestSALES_ORG_CN68()
+    {
+        fetchRecordTypes();
+        prepareConsolidatedAccountCode();
+        createCustomer();
+        
+        CMD_Request__c objCMDRequest = new CMD_Request__c(
+            Sales_Organisation__c = 'CN68 - NXP(China)Management',
+            Reason_for_request__c = 'Test',
+            Account_Group__c = 'Z001',
+            RecordTypeId = SAP_New_MANU_Funloc_Request.Id,
+            Consolidated_Account_Code__c = testCACC.Id,
+            Ready_to_Submit__c = true,
+            Request_Status__c = 'Ready to Submit',
+            Business_Background_Comments__c = 'Test Business Background Comments',
+            Global_Account__c = 'Test Global Account',
+            SP_GID__c = '100000000',            
+            SP_Name__c = 'Test Name',
+            SP_Street__c = 'Test Street',
+            SP_City__c = 'Test City',
+            SP_Country__c = 'Netherlands',
+            SP_Postal_Code__c = '12345',
+            Postal_Code__c = '12345',
+            Region__c = 'EU - Europe',
+            SP_Telephone__c = '+1234567890',
+            SP_Fax__c = '+1234567890',
+            SP_Email__c = 'test@test.com',
+            SP_Funloc__c = '100000',            
+            Company_Code__c = 'Test',
+            Label_required__c = 'No',
+            Industry_Segment__c = 'Test',
+            Industry_Sub_Segment__c = 'Test',
+            Customer_Factory_Calendar__c = 'Test',
+            Customer_Service_ZA__c = 'Test',
+            Incoterms_1__c = 'Test',
+            Incoterms_2__c = 'Test',
+            Lockbox__c = 'Test',
+            Payment_Credit_Memo__c= 'Test',
+            Pull_Up_OK_SH__c = 'Test',
+            Rounding_Rule_SH__c = 'Test',
+            Terms_of_Payment__c = 'Test',
+            Terms_of_Payment_Sales__c = 'Test',
+            Con_Acct_SP_EMS__c = 'Test',
+            Cust_pric_proc__c = 'Test',
+            Grp_1_Sls_Channel_SP__c = 'Test',
+            Currency__c = 'Test Currency',
+            PD_Key_Account__c = 'Test PD Key Account',
+            Reprice_Basis__c = 'Test Reprice Basis',
+            Sales_Office__c = 'Test Sales_Office__c',
+            S_O_Sub_Group__c = 'Test S O Sub Group'
+           );
+            
+        insert objCMDRequest;        
+        system.assert(objCMDRequest.Id != null);
+        
+        //start the test
+        Test.startTest();
+        
+        PageReference pgRef = Page.TaxClassification;
+        pgRef.getParameters().put('Id',objCMDRequest.Id);
+        Test.setCurrentPageReference(pgRef);
+        
+        ApexPages.StandardSetController stdController = new Apexpages.StandardSetController(new List<Tax_Classification__c>());
+        TaxClassificationCMDRequestController controller = new TaxClassificationCMDRequestController(stdController);
+        
+        System.assert(controller.lstTaxClassifications != null);
+        System.assert(controller.lstTaxClassifications.size() > 0);
+        
+        //invoke saveTaxClassificationCMDRequest method
+        pgRef = controller.saveTaxClassification();
+        System.assert(pgRef != null);
+        System.assertEquals(pgRef.getUrl(), '/' + controller.objCMDRequest.Id);
+        
+        //stop the test
+        Test.stopTest();   
+    
+    }  
+     static testMethod void CMDRequestSALES_ORG_DE42()
+    {
+        fetchRecordTypes();
+        prepareConsolidatedAccountCode();
+        createCustomer();
+        
+        CMD_Request__c objCMDRequest = new CMD_Request__c(
+            Sales_Organisation__c = 'DE42 - NXP Hamburg Other',
+            Reason_for_request__c = 'Test',
+            Account_Group__c = 'Z001',
+            RecordTypeId = SAP_New_MANU_Funloc_Request.Id,
+            Consolidated_Account_Code__c = testCACC.Id,
+            Ready_to_Submit__c = true,
+            Request_Status__c = 'Ready to Submit',
+            Business_Background_Comments__c = 'Test Business Background Comments',
+            Global_Account__c = 'Test Global Account',
+            SP_GID__c = '100000000',            
+            SP_Name__c = 'Test Name',
+            SP_Street__c = 'Test Street',
+            SP_City__c = 'Test City',
+            SP_Country__c = 'Netherlands',
+            SP_Postal_Code__c = '12345',
+            Postal_Code__c = '12345',
+            Region__c = 'EU - Europe',
+            SP_Telephone__c = '+1234567890',
+            SP_Fax__c = '+1234567890',
+            SP_Email__c = 'test@test.com',
+            SP_Funloc__c = '100000',            
+            Company_Code__c = 'Test',
+            Label_required__c = 'No',
+            Industry_Segment__c = 'Test',
+            Industry_Sub_Segment__c = 'Test',
+            Customer_Factory_Calendar__c = 'Test',
+            Customer_Service_ZA__c = 'Test',
+            Incoterms_1__c = 'Test',
+            Incoterms_2__c = 'Test',
+            Lockbox__c = 'Test',
+            Payment_Credit_Memo__c= 'Test',
+            Pull_Up_OK_SH__c = 'Test',
+            Rounding_Rule_SH__c = 'Test',
+            Terms_of_Payment__c = 'Test',
+            Terms_of_Payment_Sales__c = 'Test',
+            Con_Acct_SP_EMS__c = 'Test',
+            Cust_pric_proc__c = 'Test',
+            Grp_1_Sls_Channel_SP__c = 'Test',
+            Currency__c = 'Test Currency',
+            PD_Key_Account__c = 'Test PD Key Account',
+            Reprice_Basis__c = 'Test Reprice Basis',
+            Sales_Office__c = 'Test Sales_Office__c',
+            S_O_Sub_Group__c = 'Test S O Sub Group'
+           );
+            
+        insert objCMDRequest;        
+        system.assert(objCMDRequest.Id != null);
+        
+        //start the test
+        Test.startTest();
+        
+        PageReference pgRef = Page.TaxClassification;
+        pgRef.getParameters().put('Id',objCMDRequest.Id);
+        Test.setCurrentPageReference(pgRef);
+        
+        ApexPages.StandardSetController stdController = new Apexpages.StandardSetController(new List<Tax_Classification__c>());
+        TaxClassificationCMDRequestController controller = new TaxClassificationCMDRequestController(stdController);
+        
+        System.assert(controller.lstTaxClassifications != null);
+        System.assert(controller.lstTaxClassifications.size() > 0);
+        
+        //invoke saveTaxClassificationCMDRequest method
+        pgRef = controller.saveTaxClassification();
+        System.assert(pgRef != null);
+        System.assertEquals(pgRef.getUrl(), '/' + controller.objCMDRequest.Id);
+        
+        //stop the test
+        Test.stopTest();   
+    
+    }  
+     static testMethod void CMDRequestSALES_ORG_DE63()
+    {
+        fetchRecordTypes();
+        prepareConsolidatedAccountCode();
+        createCustomer();
+        
+        CMD_Request__c objCMDRequest = new CMD_Request__c(
+            Sales_Organisation__c = 'DE63 - NXP Semi. Germany',
+            Reason_for_request__c = 'Test',
+            Account_Group__c = 'Z001',
+            RecordTypeId = SAP_New_MANU_Funloc_Request.Id,
+            Consolidated_Account_Code__c = testCACC.Id,
+            Ready_to_Submit__c = true,
+            Request_Status__c = 'Ready to Submit',
+            Business_Background_Comments__c = 'Test Business Background Comments',
+            Global_Account__c = 'Test Global Account',
+            SP_GID__c = '100000000',            
+            SP_Name__c = 'Test Name',
+            SP_Street__c = 'Test Street',
+            SP_City__c = 'Test City',
+            SP_Country__c = 'Netherlands',
+            SP_Postal_Code__c = '12345',
+            Postal_Code__c = '12345',
+            Region__c = 'EU - Europe',
+            SP_Telephone__c = '+1234567890',
+            SP_Fax__c = '+1234567890',
+            SP_Email__c = 'test@test.com',
+            SP_Funloc__c = '100000',            
+            Company_Code__c = 'Test',
+            Label_required__c = 'No',
+            Industry_Segment__c = 'Test',
+            Industry_Sub_Segment__c = 'Test',
+            Customer_Factory_Calendar__c = 'Test',
+            Customer_Service_ZA__c = 'Test',
+            Incoterms_1__c = 'Test',
+            Incoterms_2__c = 'Test',
+            Lockbox__c = 'Test',
+            Payment_Credit_Memo__c= 'Test',
+            Pull_Up_OK_SH__c = 'Test',
+            Rounding_Rule_SH__c = 'Test',
+            Terms_of_Payment__c = 'Test',
+            Terms_of_Payment_Sales__c = 'Test',
+            Con_Acct_SP_EMS__c = 'Test',
+            Cust_pric_proc__c = 'Test',
+            Grp_1_Sls_Channel_SP__c = 'Test',
+            Currency__c = 'Test Currency',
+            PD_Key_Account__c = 'Test PD Key Account',
+            Reprice_Basis__c = 'Test Reprice Basis',
+            Sales_Office__c = 'Test Sales_Office__c',
+            S_O_Sub_Group__c = 'Test S O Sub Group'
+           );
+            
+        insert objCMDRequest;        
+        system.assert(objCMDRequest.Id != null);
+        
+        //start the test
+        Test.startTest();
+        
+        PageReference pgRef = Page.TaxClassification;
+        pgRef.getParameters().put('Id',objCMDRequest.Id);
+        Test.setCurrentPageReference(pgRef);
+        
+        ApexPages.StandardSetController stdController = new Apexpages.StandardSetController(new List<Tax_Classification__c>());
+        TaxClassificationCMDRequestController controller = new TaxClassificationCMDRequestController(stdController);
+        
+        System.assert(controller.lstTaxClassifications != null);
+        System.assert(controller.lstTaxClassifications.size() > 0);
+        
+        //invoke saveTaxClassificationCMDRequest method
+        pgRef = controller.saveTaxClassification();
+        System.assert(pgRef != null);
+        System.assertEquals(pgRef.getUrl(), '/' + controller.objCMDRequest.Id);
+        
+        //stop the test
+        Test.stopTest();   
+    
+    }  
+     static testMethod void CMDRequestSALES_ORG_EM61()
+    {
+        fetchRecordTypes();
+        prepareConsolidatedAccountCode();
+        createCustomer();
+        
+        CMD_Request__c objCMDRequest = new CMD_Request__c(
+            Sales_Organisation__c = 'EM61 - NXP GEM',
+            Reason_for_request__c = 'Test',
+            Account_Group__c = 'Z001',
+            RecordTypeId = SAP_New_MANU_Funloc_Request.Id,
+            Consolidated_Account_Code__c = testCACC.Id,
+            Ready_to_Submit__c = true,
+            Request_Status__c = 'Ready to Submit',
+            Business_Background_Comments__c = 'Test Business Background Comments',
+            Global_Account__c = 'Test Global Account',
+            SP_GID__c = '100000000',            
+            SP_Name__c = 'Test Name',
+            SP_Street__c = 'Test Street',
+            SP_City__c = 'Test City',
+            SP_Country__c = 'Netherlands',
+            SP_Postal_Code__c = '12345',
+            Postal_Code__c = '12345',
+            Region__c = 'EU - Europe',
+            SP_Telephone__c = '+1234567890',
+            SP_Fax__c = '+1234567890',
+            SP_Email__c = 'test@test.com',
+            SP_Funloc__c = '100000',            
+            Company_Code__c = 'Test',
+            Label_required__c = 'No',
+            Industry_Segment__c = 'Test',
+            Industry_Sub_Segment__c = 'Test',
+            Customer_Factory_Calendar__c = 'Test',
+            Customer_Service_ZA__c = 'Test',
+            Incoterms_1__c = 'Test',
+            Incoterms_2__c = 'Test',
+            Lockbox__c = 'Test',
+            Payment_Credit_Memo__c= 'Test',
+            Pull_Up_OK_SH__c = 'Test',
+            Rounding_Rule_SH__c = 'Test',
+            Terms_of_Payment__c = 'Test',
+            Terms_of_Payment_Sales__c = 'Test',
+            Con_Acct_SP_EMS__c = 'Test',
+            Cust_pric_proc__c = 'Test',
+            Grp_1_Sls_Channel_SP__c = 'Test',
+            Currency__c = 'Test Currency',
+            PD_Key_Account__c = 'Test PD Key Account',
+            Reprice_Basis__c = 'Test Reprice Basis',
+            Sales_Office__c = 'Test Sales_Office__c',
+            S_O_Sub_Group__c = 'Test S O Sub Group'
+           );
+            
+        insert objCMDRequest;        
+        system.assert(objCMDRequest.Id != null);
+        
+        //start the test
+        Test.startTest();
+        
+        PageReference pgRef = Page.TaxClassification;
+        pgRef.getParameters().put('Id',objCMDRequest.Id);
+        Test.setCurrentPageReference(pgRef);
+        
+        ApexPages.StandardSetController stdController = new Apexpages.StandardSetController(new List<Tax_Classification__c>());
+        TaxClassificationCMDRequestController controller = new TaxClassificationCMDRequestController(stdController);
+        
+        System.assert(controller.lstTaxClassifications != null);
+        System.assert(controller.lstTaxClassifications.size() > 0);
+        
+        //invoke saveTaxClassificationCMDRequest method
+        pgRef = controller.saveTaxClassification();
+        System.assert(pgRef != null);
+        System.assertEquals(pgRef.getUrl(), '/' + controller.objCMDRequest.Id);
+        
+        //stop the test
+        Test.stopTest();   
+    
+    }  
+     static testMethod void CMDRequestSALES_ORG_FR61()
+    {
+        fetchRecordTypes();
+        prepareConsolidatedAccountCode();
+        createCustomer();
+        
+        CMD_Request__c objCMDRequest = new CMD_Request__c(
+            Sales_Organisation__c = 'FR61 - NXP Caen',
+            Reason_for_request__c = 'Test',
+            Account_Group__c = 'Z001',
+            RecordTypeId = SAP_New_MANU_Funloc_Request.Id,
+            Consolidated_Account_Code__c = testCACC.Id,
+            Ready_to_Submit__c = true,
+            Request_Status__c = 'Ready to Submit',
+            Business_Background_Comments__c = 'Test Business Background Comments',
+            Global_Account__c = 'Test Global Account',
+            SP_GID__c = '100000000',            
+            SP_Name__c = 'Test Name',
+            SP_Street__c = 'Test Street',
+            SP_City__c = 'Test City',
+            SP_Country__c = 'Netherlands',
+            SP_Postal_Code__c = '12345',
+            Postal_Code__c = '12345',
+            Region__c = 'EU - Europe',
+            SP_Telephone__c = '+1234567890',
+            SP_Fax__c = '+1234567890',
+            SP_Email__c = 'test@test.com',
+            SP_Funloc__c = '100000',            
+            Company_Code__c = 'Test',
+            Label_required__c = 'No',
+            Industry_Segment__c = 'Test',
+            Industry_Sub_Segment__c = 'Test',
+            Customer_Factory_Calendar__c = 'Test',
+            Customer_Service_ZA__c = 'Test',
+            Incoterms_1__c = 'Test',
+            Incoterms_2__c = 'Test',
+            Lockbox__c = 'Test',
+            Payment_Credit_Memo__c= 'Test',
+            Pull_Up_OK_SH__c = 'Test',
+            Rounding_Rule_SH__c = 'Test',
+            Terms_of_Payment__c = 'Test',
+            Terms_of_Payment_Sales__c = 'Test',
+            Con_Acct_SP_EMS__c = 'Test',
+            Cust_pric_proc__c = 'Test',
+            Grp_1_Sls_Channel_SP__c = 'Test',
+            Currency__c = 'Test Currency',
+            PD_Key_Account__c = 'Test PD Key Account',
+            Reprice_Basis__c = 'Test Reprice Basis',
+            Sales_Office__c = 'Test Sales_Office__c',
+            S_O_Sub_Group__c = 'Test S O Sub Group'
+           );
+            
+        insert objCMDRequest;        
+        system.assert(objCMDRequest.Id != null);
+        
+        //start the test
+        Test.startTest();
+        
+        PageReference pgRef = Page.TaxClassification;
+        pgRef.getParameters().put('Id',objCMDRequest.Id);
+        Test.setCurrentPageReference(pgRef);
+        
+        ApexPages.StandardSetController stdController = new Apexpages.StandardSetController(new List<Tax_Classification__c>());
+        TaxClassificationCMDRequestController controller = new TaxClassificationCMDRequestController(stdController);
+        
+        System.assert(controller.lstTaxClassifications != null);
+        System.assert(controller.lstTaxClassifications.size() > 0);
+        
+        //invoke saveTaxClassificationCMDRequest method
+        pgRef = controller.saveTaxClassification();
+        System.assert(pgRef != null);
+        System.assertEquals(pgRef.getUrl(), '/' + controller.objCMDRequest.Id);
+        
+        //stop the test
+        Test.stopTest();   
+    
+    }  
+     static testMethod void CMDRequestSALES_ORG_IN61()
+    {
+        fetchRecordTypes();
+        prepareConsolidatedAccountCode();
+        createCustomer();
+        
+        CMD_Request__c objCMDRequest = new CMD_Request__c(
+            Sales_Organisation__c = 'IN61 - NXP India',
+            Reason_for_request__c = 'Test',
+            Account_Group__c = 'Z001',
+            RecordTypeId = SAP_New_MANU_Funloc_Request.Id,
+            Consolidated_Account_Code__c = testCACC.Id,
+            Ready_to_Submit__c = true,
+            Request_Status__c = 'Ready to Submit',
+            Business_Background_Comments__c = 'Test Business Background Comments',
+            Global_Account__c = 'Test Global Account',
+            SP_GID__c = '100000000',            
+            SP_Name__c = 'Test Name',
+            SP_Street__c = 'Test Street',
+            SP_City__c = 'Test City',
+            SP_Country__c = 'Netherlands',
+            SP_Postal_Code__c = '12345',
+            Postal_Code__c = '12345',
+            Region__c = 'EU - Europe',
+            SP_Telephone__c = '+1234567890',
+            SP_Fax__c = '+1234567890',
+            SP_Email__c = 'test@test.com',
+            SP_Funloc__c = '100000',            
+            Company_Code__c = 'Test',
+            Label_required__c = 'No',
+            Industry_Segment__c = 'Test',
+            Industry_Sub_Segment__c = 'Test',
+            Customer_Factory_Calendar__c = 'Test',
+            Customer_Service_ZA__c = 'Test',
+            Incoterms_1__c = 'Test',
+            Incoterms_2__c = 'Test',
+            Lockbox__c = 'Test',
+            Payment_Credit_Memo__c= 'Test',
+            Pull_Up_OK_SH__c = 'Test',
+            Rounding_Rule_SH__c = 'Test',
+            Terms_of_Payment__c = 'Test',
+            Terms_of_Payment_Sales__c = 'Test',
+            Con_Acct_SP_EMS__c = 'Test',
+            Cust_pric_proc__c = 'Test',
+            Grp_1_Sls_Channel_SP__c = 'Test',
+            Currency__c = 'Test Currency',
+            PD_Key_Account__c = 'Test PD Key Account',
+            Reprice_Basis__c = 'Test Reprice Basis',
+            Sales_Office__c = 'Test Sales_Office__c',
+            S_O_Sub_Group__c = 'Test S O Sub Group'
+           );
+            
+        insert objCMDRequest;        
+        system.assert(objCMDRequest.Id != null);
+        
+        //start the test
+        Test.startTest();
+        
+        PageReference pgRef = Page.TaxClassification;
+        pgRef.getParameters().put('Id',objCMDRequest.Id);
+        Test.setCurrentPageReference(pgRef);
+        
+        ApexPages.StandardSetController stdController = new Apexpages.StandardSetController(new List<Tax_Classification__c>());
+        TaxClassificationCMDRequestController controller = new TaxClassificationCMDRequestController(stdController);
+        
+        System.assert(controller.lstTaxClassifications != null);
+        System.assert(controller.lstTaxClassifications.size() > 0);
+        
+        //invoke saveTaxClassificationCMDRequest method
+        pgRef = controller.saveTaxClassification();
+        System.assert(pgRef != null);
+        System.assertEquals(pgRef.getUrl(), '/' + controller.objCMDRequest.Id);
+        
+        //stop the test
+        Test.stopTest();   
+    
+    }  
+     static testMethod void CMDRequestSALES_ORG_MX61()
+    {
+        fetchRecordTypes();
+        prepareConsolidatedAccountCode();
+        createCustomer();
+        
+        CMD_Request__c objCMDRequest = new CMD_Request__c(
+            Sales_Organisation__c = 'MX61 - SOrg. Mexico',
+            Reason_for_request__c = 'Test',
+            Account_Group__c = 'Z001',
+            RecordTypeId = SAP_New_MANU_Funloc_Request.Id,
+            Consolidated_Account_Code__c = testCACC.Id,
+            Ready_to_Submit__c = true,
+            Request_Status__c = 'Ready to Submit',
+            Business_Background_Comments__c = 'Test Business Background Comments',
+            Global_Account__c = 'Test Global Account',
+            SP_GID__c = '100000000',            
+            SP_Name__c = 'Test Name',
+            SP_Street__c = 'Test Street',
+            SP_City__c = 'Test City',
+            SP_Country__c = 'Netherlands',
+            SP_Postal_Code__c = '12345',
+            Postal_Code__c = '12345',
+            Region__c = 'EU - Europe',
+            SP_Telephone__c = '+1234567890',
+            SP_Fax__c = '+1234567890',
+            SP_Email__c = 'test@test.com',
+            SP_Funloc__c = '100000',            
+            Company_Code__c = 'Test',
+            Label_required__c = 'No',
+            Industry_Segment__c = 'Test',
+            Industry_Sub_Segment__c = 'Test',
+            Customer_Factory_Calendar__c = 'Test',
+            Customer_Service_ZA__c = 'Test',
+            Incoterms_1__c = 'Test',
+            Incoterms_2__c = 'Test',
+            Lockbox__c = 'Test',
+            Payment_Credit_Memo__c= 'Test',
+            Pull_Up_OK_SH__c = 'Test',
+            Rounding_Rule_SH__c = 'Test',
+            Terms_of_Payment__c = 'Test',
+            Terms_of_Payment_Sales__c = 'Test',
+            Con_Acct_SP_EMS__c = 'Test',
+            Cust_pric_proc__c = 'Test',
+            Grp_1_Sls_Channel_SP__c = 'Test',
+            Currency__c = 'Test Currency',
+            PD_Key_Account__c = 'Test PD Key Account',
+            Reprice_Basis__c = 'Test Reprice Basis',
+            Sales_Office__c = 'Test Sales_Office__c',
+            S_O_Sub_Group__c = 'Test S O Sub Group'
+           );
+            
+        insert objCMDRequest;        
+        system.assert(objCMDRequest.Id != null);
+        
+        //start the test
+        Test.startTest();
+        
+        PageReference pgRef = Page.TaxClassification;
+        pgRef.getParameters().put('Id',objCMDRequest.Id);
+        Test.setCurrentPageReference(pgRef);
+        
+        ApexPages.StandardSetController stdController = new Apexpages.StandardSetController(new List<Tax_Classification__c>());
+        TaxClassificationCMDRequestController controller = new TaxClassificationCMDRequestController(stdController);
+        
+        System.assert(controller.lstTaxClassifications != null);
+        System.assert(controller.lstTaxClassifications.size() > 0);
+        
+        //invoke saveTaxClassificationCMDRequest method
+        pgRef = controller.saveTaxClassification();
+        System.assert(pgRef != null);
+        System.assertEquals(pgRef.getUrl(), '/' + controller.objCMDRequest.Id);
+        
+        //stop the test
+        Test.stopTest();   
+    
+    }  
+     static testMethod void CMDRequestSALES_ORG_NL40()
+    {
+        fetchRecordTypes();
+        prepareConsolidatedAccountCode();
+        createCustomer();
+        
+        CMD_Request__c objCMDRequest = new CMD_Request__c(
+            Sales_Organisation__c = 'NL40 - NXP Nijmegen Site Su',
+            Reason_for_request__c = 'Test',
+            Account_Group__c = 'Z001',
+            RecordTypeId = SAP_New_MANU_Funloc_Request.Id,
+            Consolidated_Account_Code__c = testCACC.Id,
+            Ready_to_Submit__c = true,
+            Request_Status__c = 'Ready to Submit',
+            Business_Background_Comments__c = 'Test Business Background Comments',
+            Global_Account__c = 'Test Global Account',
+            SP_GID__c = '100000000',            
+            SP_Name__c = 'Test Name',
+            SP_Street__c = 'Test Street',
+            SP_City__c = 'Test City',
+            SP_Country__c = 'Netherlands',
+            SP_Postal_Code__c = '12345',
+            Postal_Code__c = '12345',
+            Region__c = 'EU - Europe',
+            SP_Telephone__c = '+1234567890',
+            SP_Fax__c = '+1234567890',
+            SP_Email__c = 'test@test.com',
+            SP_Funloc__c = '100000',            
+            Company_Code__c = 'Test',
+            Label_required__c = 'No',
+            Industry_Segment__c = 'Test',
+            Industry_Sub_Segment__c = 'Test',
+            Customer_Factory_Calendar__c = 'Test',
+            Customer_Service_ZA__c = 'Test',
+            Incoterms_1__c = 'Test',
+            Incoterms_2__c = 'Test',
+            Lockbox__c = 'Test',
+            Payment_Credit_Memo__c= 'Test',
+            Pull_Up_OK_SH__c = 'Test',
+            Rounding_Rule_SH__c = 'Test',
+            Terms_of_Payment__c = 'Test',
+            Terms_of_Payment_Sales__c = 'Test',
+            Con_Acct_SP_EMS__c = 'Test',
+            Cust_pric_proc__c = 'Test',
+            Grp_1_Sls_Channel_SP__c = 'Test',
+            Currency__c = 'Test Currency',
+            PD_Key_Account__c = 'Test PD Key Account',
+            Reprice_Basis__c = 'Test Reprice Basis',
+            Sales_Office__c = 'Test Sales_Office__c',
+            S_O_Sub_Group__c = 'Test S O Sub Group'
+           );
+            
+        insert objCMDRequest;        
+        system.assert(objCMDRequest.Id != null);
+        
+        //start the test
+        Test.startTest();
+        
+        PageReference pgRef = Page.TaxClassification;
+        pgRef.getParameters().put('Id',objCMDRequest.Id);
+        Test.setCurrentPageReference(pgRef);
+        
+        ApexPages.StandardSetController stdController = new Apexpages.StandardSetController(new List<Tax_Classification__c>());
+        TaxClassificationCMDRequestController controller = new TaxClassificationCMDRequestController(stdController);
+        
+        System.assert(controller.lstTaxClassifications != null);
+        System.assert(controller.lstTaxClassifications.size() > 0);
+        
+        //invoke saveTaxClassificationCMDRequest method
+        pgRef = controller.saveTaxClassification();
+        System.assert(pgRef != null);
+        System.assertEquals(pgRef.getUrl(), '/' + controller.objCMDRequest.Id);
+        
+        //stop the test
+        Test.stopTest();   
+    
+    }  
+     static testMethod void CMDRequestSALES_ORG_NL61()
+    {
+        fetchRecordTypes();
+        prepareConsolidatedAccountCode();
+        createCustomer();
+        
+        CMD_Request__c objCMDRequest = new CMD_Request__c(
+            Sales_Organisation__c = 'NL61 - Nijmegen',
+            Reason_for_request__c = 'Test',
+            Account_Group__c = 'Z001',
+            RecordTypeId = SAP_New_MANU_Funloc_Request.Id,
+            Consolidated_Account_Code__c = testCACC.Id,
+            Ready_to_Submit__c = true,
+            Request_Status__c = 'Ready to Submit',
+            Business_Background_Comments__c = 'Test Business Background Comments',
+            Global_Account__c = 'Test Global Account',
+            SP_GID__c = '100000000',            
+            SP_Name__c = 'Test Name',
+            SP_Street__c = 'Test Street',
+            SP_City__c = 'Test City',
+            SP_Country__c = 'Netherlands',
+            SP_Postal_Code__c = '12345',
+            Postal_Code__c = '12345',
+            Region__c = 'EU - Europe',
+            SP_Telephone__c = '+1234567890',
+            SP_Fax__c = '+1234567890',
+            SP_Email__c = 'test@test.com',
+            SP_Funloc__c = '100000',            
+            Company_Code__c = 'Test',
+            Label_required__c = 'No',
+            Industry_Segment__c = 'Test',
+            Industry_Sub_Segment__c = 'Test',
+            Customer_Factory_Calendar__c = 'Test',
+            Customer_Service_ZA__c = 'Test',
+            Incoterms_1__c = 'Test',
+            Incoterms_2__c = 'Test',
+            Lockbox__c = 'Test',
+            Payment_Credit_Memo__c= 'Test',
+            Pull_Up_OK_SH__c = 'Test',
+            Rounding_Rule_SH__c = 'Test',
+            Terms_of_Payment__c = 'Test',
+            Terms_of_Payment_Sales__c = 'Test',
+            Con_Acct_SP_EMS__c = 'Test',
+            Cust_pric_proc__c = 'Test',
+            Grp_1_Sls_Channel_SP__c = 'Test',
+            Currency__c = 'Test Currency',
+            PD_Key_Account__c = 'Test PD Key Account',
+            Reprice_Basis__c = 'Test Reprice Basis',
+            Sales_Office__c = 'Test Sales_Office__c',
+            S_O_Sub_Group__c = 'Test S O Sub Group'
+           );
+            
+        insert objCMDRequest;        
+        system.assert(objCMDRequest.Id != null);
+        
+        //start the test
+        Test.startTest();
+        
+        PageReference pgRef = Page.TaxClassification;
+        pgRef.getParameters().put('Id',objCMDRequest.Id);
+        Test.setCurrentPageReference(pgRef);
+        
+        ApexPages.StandardSetController stdController = new Apexpages.StandardSetController(new List<Tax_Classification__c>());
+        TaxClassificationCMDRequestController controller = new TaxClassificationCMDRequestController(stdController);
+        
+        System.assert(controller.lstTaxClassifications != null);
+        System.assert(controller.lstTaxClassifications.size() > 0);
+        
+        //invoke saveTaxClassificationCMDRequest method
+        pgRef = controller.saveTaxClassification();
+        System.assert(pgRef != null);
+        System.assertEquals(pgRef.getUrl(), '/' + controller.objCMDRequest.Id);
+        
+        //stop the test
+        Test.stopTest();   
+    
+    }  
+     static testMethod void CMDRequestSALES_ORG_NL68()
+    {
+        fetchRecordTypes();
+        prepareConsolidatedAccountCode();
+        createCustomer();
+        
+        CMD_Request__c objCMDRequest = new CMD_Request__c(
+            Sales_Organisation__c = 'NL68 - NXP Software',
+            Reason_for_request__c = 'Test',
+            Account_Group__c = 'Z001',
+            RecordTypeId = SAP_New_MANU_Funloc_Request.Id,
+            Consolidated_Account_Code__c = testCACC.Id,
+            Ready_to_Submit__c = true,
+            Request_Status__c = 'Ready to Submit',
+            Business_Background_Comments__c = 'Test Business Background Comments',
+            Global_Account__c = 'Test Global Account',
+            SP_GID__c = '100000000',            
+            SP_Name__c = 'Test Name',
+            SP_Street__c = 'Test Street',
+            SP_City__c = 'Test City',
+            SP_Country__c = 'Netherlands',
+            SP_Postal_Code__c = '12345',
+            Postal_Code__c = '12345',
+            Region__c = 'EU - Europe',
+            SP_Telephone__c = '+1234567890',
+            SP_Fax__c = '+1234567890',
+            SP_Email__c = 'test@test.com',
+            SP_Funloc__c = '100000',            
+            Company_Code__c = 'Test',
+            Label_required__c = 'No',
+            Industry_Segment__c = 'Test',
+            Industry_Sub_Segment__c = 'Test',
+            Customer_Factory_Calendar__c = 'Test',
+            Customer_Service_ZA__c = 'Test',
+            Incoterms_1__c = 'Test',
+            Incoterms_2__c = 'Test',
+            Lockbox__c = 'Test',
+            Payment_Credit_Memo__c= 'Test',
+            Pull_Up_OK_SH__c = 'Test',
+            Rounding_Rule_SH__c = 'Test',
+            Terms_of_Payment__c = 'Test',
+            Terms_of_Payment_Sales__c = 'Test',
+            Con_Acct_SP_EMS__c = 'Test',
+            Cust_pric_proc__c = 'Test',
+            Grp_1_Sls_Channel_SP__c = 'Test',
+            Currency__c = 'Test Currency',
+            PD_Key_Account__c = 'Test PD Key Account',
+            Reprice_Basis__c = 'Test Reprice Basis',
+            Sales_Office__c = 'Test Sales_Office__c',
+            S_O_Sub_Group__c = 'Test S O Sub Group'
+           );
+            
+        insert objCMDRequest;        
+        system.assert(objCMDRequest.Id != null);
+        
+        //start the test
+        Test.startTest();
+        
+        PageReference pgRef = Page.TaxClassification;
+        pgRef.getParameters().put('Id',objCMDRequest.Id);
+        Test.setCurrentPageReference(pgRef);
+        
+        ApexPages.StandardSetController stdController = new Apexpages.StandardSetController(new List<Tax_Classification__c>());
+        TaxClassificationCMDRequestController controller = new TaxClassificationCMDRequestController(stdController);
+        
+        System.assert(controller.lstTaxClassifications != null);
+        System.assert(controller.lstTaxClassifications.size() > 0);
+        
+        //invoke saveTaxClassificationCMDRequest method
+        pgRef = controller.saveTaxClassification();
+        System.assert(pgRef != null);
+        System.assertEquals(pgRef.getUrl(), '/' + controller.objCMDRequest.Id);
+        
+        //stop the test
+        Test.stopTest();   
+    
+    }  
+     static testMethod void CMDRequestSALES_ORG_RO61()
+    {
+        fetchRecordTypes();
+        prepareConsolidatedAccountCode();
+        createCustomer();
+        
+        CMD_Request__c objCMDRequest = new CMD_Request__c(
+            Sales_Organisation__c = 'RO61 - SOrg. Romania',
+            Reason_for_request__c = 'Test',
+            Account_Group__c = 'Z001',
+            RecordTypeId = SAP_New_MANU_Funloc_Request.Id,
+            Consolidated_Account_Code__c = testCACC.Id,
+            Ready_to_Submit__c = true,
+            Request_Status__c = 'Ready to Submit',
+            Business_Background_Comments__c = 'Test Business Background Comments',
+            Global_Account__c = 'Test Global Account',
+            SP_GID__c = '100000000',            
+            SP_Name__c = 'Test Name',
+            SP_Street__c = 'Test Street',
+            SP_City__c = 'Test City',
+            SP_Country__c = 'Netherlands',
+            SP_Postal_Code__c = '12345',
+            Postal_Code__c = '12345',
+            Region__c = 'EU - Europe',
+            SP_Telephone__c = '+1234567890',
+            SP_Fax__c = '+1234567890',
+            SP_Email__c = 'test@test.com',
+            SP_Funloc__c = '100000',            
+            Company_Code__c = 'Test',
+            Label_required__c = 'No',
+            Industry_Segment__c = 'Test',
+            Industry_Sub_Segment__c = 'Test',
+            Customer_Factory_Calendar__c = 'Test',
+            Customer_Service_ZA__c = 'Test',
+            Incoterms_1__c = 'Test',
+            Incoterms_2__c = 'Test',
+            Lockbox__c = 'Test',
+            Payment_Credit_Memo__c= 'Test',
+            Pull_Up_OK_SH__c = 'Test',
+            Rounding_Rule_SH__c = 'Test',
+            Terms_of_Payment__c = 'Test',
+            Terms_of_Payment_Sales__c = 'Test',
+            Con_Acct_SP_EMS__c = 'Test',
+            Cust_pric_proc__c = 'Test',
+            Grp_1_Sls_Channel_SP__c = 'Test',
+            Currency__c = 'Test Currency',
+            PD_Key_Account__c = 'Test PD Key Account',
+            Reprice_Basis__c = 'Test Reprice Basis',
+            Sales_Office__c = 'Test Sales_Office__c',
+            S_O_Sub_Group__c = 'Test S O Sub Group'
+           );
+            
+        insert objCMDRequest;        
+        system.assert(objCMDRequest.Id != null);
+        
+        //start the test
+        Test.startTest();
+        
+        PageReference pgRef = Page.TaxClassification;
         pgRef.getParameters().put('Id',objCMDRequest.Id);
         Test.setCurrentPageReference(pgRef);
         

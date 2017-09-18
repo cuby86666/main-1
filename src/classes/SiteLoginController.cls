@@ -6,7 +6,11 @@
 @Modified Date:      13 Feb 2015
 @Description:        Changes according to new requirement- new registration flow
 *******************************************************************************************************/
-
+/***************************************************************************************************
+@Modified By :       Shridevi
+@Modified Date:      27 July 2017
+@Description:        As part of SIR 750, added a varible to redirect to login page, commented the methods SignUpPage()and resendEmailVerification()
+*******************************************************************************************************/
 global with sharing class SiteLoginController 
 {
     global String username {get; set;}
@@ -19,9 +23,12 @@ global with sharing class SiteLoginController
     public Boolean isRedirect{get;set;}
     public String strPageName{get;set;}
     public Boolean isSent{get;set;}
-    
+    public String RedirectionToLoginPage{get;set;}
     global SiteLoginController () 
     {
+    //below line is added by shridevi for redirecting to login page instead of communityRegistration page since the page has been deleted.
+        RedirectionToLoginPage=(Site.getPathPrefix()+Label.Community_Login_URL);
+        
         isResend=false;
         strPageName=ApexPages.currentPage().getParameters().get('pagename');
         string returl= ApexPages.currentPage().getParameters().get('pagename');
@@ -65,7 +72,11 @@ global with sharing class SiteLoginController
         if(username.toLowercase().substringafter('@').equals('nxp.com'))
         {
             String InternalUserSignInUrl= cs.InternalUserSignInUrl__c;
+            System.debug('InternalUserSignInUrl::'+InternalUserSignInUrl);
             PageReference pg = new PageReference(InternalUserSignInUrl);
+            System.debug('PageReference::'+pg);
+            
+            
             pg.setRedirect(true);
             
             return pg;
@@ -120,7 +131,7 @@ global with sharing class SiteLoginController
             
             return pg;
     }*/
-    
+    /********resendEmailVerification() and SignUpPage() methods are commented by shridevi as part of SIR 750*****
     public void resendEmailVerification()
     {
         CommunitySettings__c cs=  CommunitySettings__c.getValues('CommunityUrl');
@@ -185,6 +196,6 @@ global with sharing class SiteLoginController
         return page;
     } 
     
-    
+    *****************************Ends Here************************************************/
     
 }

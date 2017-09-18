@@ -25,6 +25,10 @@
 @Modified Date:      27 Jun 2017
 @Description:        1707 Release (SFDC 585) -  To test new fields 'Version ID for internationla addresses' & 'Tax Number 5' for MSO China project
                      Improved code coverage from 93% - 98%
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+@Modified By :       Baji
+@Modified Date:      17 Jul 2017 
+@Description:        1708 Release (SFDC 684) - SAP CMD - BillCurrency-PY should be on SAP CMD layout
 ***************************************************************************************************************************/
 @isTest
 public class Convert_Request_to_SAP_CMD_Test {
@@ -285,7 +289,7 @@ public class Convert_Request_to_SAP_CMD_Test {
             Max_partial_deliveries__c = '9', Order_combination__c = TRUE, Shipping_conditions__c = '01 - Ship via Std Route', Incoterms_1__c = 'FCA - Free carrier',     
             Paym_guar_proc__c = 'Z001 - No guarantee required', Cred_contr_area__c = 'NL60 - RSO Europe', 
             Terms_of_Payment_Sales__c = '114 - 75 days after invoice date', Grp_2_Cus_Prce_Grp_SP__c = '042 - Motorola Mobility',
-            BillCurrency_PY__c = 'USD', Main_shipping_mark__c = 'NXP MOTOROLA(CHINA)', Additional_shipping_mark__c = 'C/NO.', City__c = 'Test', Country__c = 'Test', 
+            Main_shipping_mark__c = 'NXP MOTOROLA(CHINA)', Additional_shipping_mark__c = 'C/NO.', City__c = 'Test', Country__c = 'Test', 
             Street_1__c = 'Test'
         );
         lstSAPCMD.add(objSAPCMD);
@@ -321,7 +325,7 @@ public class Convert_Request_to_SAP_CMD_Test {
             Max_partial_deliveries__c = '9', Order_combination__c = TRUE, Shipping_conditions__c = '01 - Ship via Std Route', Incoterms_1__c = 'FCA - Free carrier',     
             Paym_guar_proc__c = 'Z001 - No guarantee required', Cred_contr_area__c = 'NL60 - RSO Europe', 
             Terms_of_Payment_Sales__c = '114 - 75 days after invoice date', Grp_2_Cus_Prce_Grp_SP__c = '042 - Motorola Mobility',
-            BillCurrency_PY__c = 'USD', Main_shipping_mark__c = 'NXP MOTOROLA(CHINA)', Additional_shipping_mark__c = 'C/NO.', City__c = 'Test', Country__c = 'Test', 
+            Main_shipping_mark__c = 'NXP MOTOROLA(CHINA)', Additional_shipping_mark__c = 'C/NO.', City__c = 'Test', Country__c = 'Test', 
             Street_1__c = 'Test'
         );
         lstSAPCMD.add(objSAPCMD);

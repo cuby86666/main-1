@@ -2,6 +2,10 @@
 @Created By :       Nisha Agrawal
 @Created Date:      12 Sep 2013
 @Description:       Test class for AfterTrigger_Customer and AfterTrigger_CustomerContact Trigger
+--------------------------------------------------------------------------------------------------
+@Modified By:       Nisha Agrawal
+@Modified Date:     Sep 08,2017
+@Description:       Updated code to solve unique username issue while creating test users
 *******************************************************************************************************/
 
 @isTest
@@ -71,10 +75,15 @@ private class Hub2CrmInterfaceTest
         system.assert(objProfile.Id != null);
         
         User objUser;
+        
         for(integer i=0; i < 20; i++)
         {
             objUser = new User(alias = 'nUser' + i, email= 'test.test' + i +'@test.com', emailencodingkey='UTF-8', lastname='test', languagelocalekey='en_US', localesidkey='en_US', 
-                                 profileid = objProfile.Id, timezonesidkey='America/Los_Angeles', username= 'test.test' + datetime.now().millisecond() + i +'@test.com' );
+                                 profileid = objProfile.Id, timezonesidkey='America/Los_Angeles', 
+                               // username= 'test.test' + datetime.now().millisecond() + i +'@test.com' //commented by Nisha Agrawal on Sep 08, 2017 to solve unique username issue
+                               username= 'ut.hub' + i + '@nxp.com' // added by Nisha Agrawal on Sep 08, 2017 to solve unique username issue
+                              );
+            
             lstUsers.add(objUser);                                          
         }
         return lstUsers;

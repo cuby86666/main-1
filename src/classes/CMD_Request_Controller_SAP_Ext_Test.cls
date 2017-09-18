@@ -38,11 +38,16 @@
 @Modified By :       Baji
 @Modified Date:      21 Jun 2017
 @Description:        1707 Release (SFDC 585) -  To test new fields 'Version ID for internationla addresses' & 'Tax Number 5' for MSO China project
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+@Modified By :       Baji
+@Modified Date:      17 Jul 2017 
+@Description:        1708 Release (SFDC 684) - SAP CMD - BillCurrency-PY should be on SAP CMD layout
 ******************************************************************************/
 @isTest
 private class CMD_Request_Controller_SAP_Ext_Test {
     
     private static RecordType newSAPrt;
+    private static Id newMANUSAPrt;
     private static String newSAPrtId = '012D0000000QlBaIAK';
 //    private static String newSAPrtId = '012M00000004ejsIAA';
     
@@ -62,15 +67,17 @@ private class CMD_Request_Controller_SAP_Ext_Test {
             WHERE SobjectType = 'CMD_Request__c' 
             AND DeveloperName LIKE '%SAP%' 
             AND IsActive=true
-            Limit 1
         ]){
             if( rt.DeveloperName == 'SAP New Funloc Request' ) {
                 newSAPrt = rt;
 //              newSAPrtId = String.valueOf(rt.Id);            
                 newSAPrtId = rt.Id;            
             }
-        }    
+           if( rt.DeveloperName == 'SAP_New_MANU_Funloc_request' ) {
+                newMANUSAPrt = rt.id;
+             }
     }
+  }
     private static List<Sales_Organisation_ZORG__c> lstCustomSalesOrgSetting;
     private static void createSalesOrgCustomSetting(){
     lstCustomSalesOrgSetting = new List<Sales_Organisation_ZORG__c>();
@@ -198,6 +205,7 @@ private class CMD_Request_Controller_SAP_Ext_Test {
             Deletion_Flag_Company_Code__c = 'Yes',
             Indicator_Record_Payment_History__c = 'Yes',
             Posting_Block_Company_Code__c = 'Yes',
+            BillCurrency_PY__c = 'Test',
             Sales_Rep_ZS__c = 'Test',
             Controller_Approver_Group__c = 'AP - South Asia-Pacific', //Line added by Nisha Agrawal for SFDC-477
             Version_ID_for_International_Addresses__c = 'C',
@@ -403,6 +411,111 @@ private class CMD_Request_Controller_SAP_Ext_Test {
         /*********************************************** modified for SIR534**********************************************************************/
         Test.stopTest();
     }  
+    
+    static testmethod void theZ001MANUReq(){
+        fetchRecordTypes();
+        prepareTestCustomer();
+        prepareConsolidatedAccountCode();
+        insertFunloc();
+        List<Customer__c> lstCustomer = [SELECT Id, Name FROM Customer__c];
+        system.assert(lstCustomer.size() > 0);
+        Test.startTest();
+        testRequest = new CMD_Request__c(
+            Account_Group__c = 'Z001',
+            RecordTypeId = newMANUSAPrt,
+            Ready_to_Submit__c = true,
+            Request_Status__c = 'Ready to Submit',
+            Business_Background_Comments__c = 'Test Business Background Comments',
+            Global_Account__c = 'Test Global Account',
+            Sales_Organisation__c = 'Test Sales Organisation',
+/*STAN needs to enhance*/           //Consolidated_Account_Code__c = 'a1rD0000007BKFfIAO', 
+/*Modified by Scarlett*/            Consolidated_Account_Code__c = testCACC.Id,
+            //SP_GID__c = testCustomer.Name,
+            SP_GID__c = string.valueof(lstCustomer[0].Name),
+//Scarlett
+//            SP_CustomerID__c = testCustomer.Id,
+//            SP_GID__c = '100000000',
+//            SP_CustomerID__c = 'a1ND0000001vB7GMAU',
+            SP_Name__c = 'Test Name',
+            SP_Street__c = 'Test Street',
+            SP_City__c = 'Test City',
+            SP_Country__c = 'Netherlands',
+            SP_Postal_Code__c = '12345',
+            Postal_Code__c = '12345',
+            Region__c = 'EU - Europe',
+            SP_Telephone__c = '+1234567890',
+            SP_Fax__c = '+1234567890',
+            SP_Email__c = 'test@test.com',
+            SP_Funloc__c = '100000',
+            SP_Funloc_Id__c = funLocId,
+            Company_Code__c = 'Test',
+            Label_required__c = 'No',
+            Industry_Segment__c = 'Test',
+            Industry_Sub_Segment__c = 'Test',
+            Customer_Factory_Calendar__c = 'Test',
+            Customer_Service_ZA__c = 'Test',
+            Incoterms_1__c = 'Test',
+            Incoterms_2__c = 'Test',
+            Lockbox__c = 'Test',
+            Payment_Credit_Memo__c= 'Test',
+            Pull_Up_OK_SH__c = 'Test',
+            Rounding_Rule_SH__c = 'Test',
+            Terms_of_Payment__c = 'Test',
+            Terms_of_Payment_Sales__c = 'Test',
+            Con_Acct_SP_EMS__c = 'Test',
+            Cust_pric_proc__c = 'Test',
+            Grp_1_Sls_Channel_SP__c = 'Test',
+            Currency__c = 'Test Currency',
+            PD_Key_Account__c = 'Test PD Key Account',
+            Reprice_Basis__c = 'Test Reprice Basis',
+            Sales_Office__c = 'Test Sales_Office__c',
+            S_O_Sub_Group__c = 'Test S O Sub Group',
+            Reconciliation_Account__c = 'Test',
+            No_of_days_for_Early_Shipment__c=50,
+            Order_combination__c='Yes',
+            Central_deletion_block__c= 'Yes',
+            Central_deletion_Flag__c = 'Yes',
+            Central_posting_block__c = 'Yes',
+            Deletion_Flag_Sales_Area__c = 'Yes',
+            Screened_for_SDI__c = 'Yes',
+            Deletion_Block_Company_Code__c = 'Yes',
+            Deletion_Flag_Company_Code__c = 'Yes',
+            Indicator_Record_Payment_History__c = 'Yes',
+            Posting_Block_Company_Code__c = 'Yes',
+            BillCurrency_PY__c = 'Test',
+            Sales_Rep_ZS__c = 'Test',
+            Controller_Approver_Group__c = 'AP - South Asia-Pacific', //Line added by Nisha Agrawal for SFDC-477
+            Version_ID_for_International_Addresses__c = 'C',
+            Tax_Number_5__c = 'Test Tax Number 5'
+        );
+        insert testRequest;
+        
+        testTaxClassification = new Tax_Classification__c(
+            CMD_Request__c = testRequest.Id,
+            Country__c = 'AT - Austria', 
+            Tax_Category__c = 'MWST', 
+            Tax_Classification__c = '1'
+        );
+        insert testTaxClassification;
+
+        ApexPages.StandardController theStandardController 
+            = new ApexPages.standardController(testRequest);
+        CMD_Request_Controller_SAP_Extension theControllerExt 
+            = new CMD_Request_Controller_SAP_Extension( theStandardController );
+        theControllerExt.theAccountGroup = 'Z001';
+//        theControllerExt.theCMD.HUB_Customer__c = 'a1ND0000001vB7GMAU'; 
+//        theControllerExt.theCMD.HUB_Customer__c = testCustomer.Id;
+        theControllerExt.New_SAP_CMD(); 
+      //  System.debug('theControllerExt::'+theControllerExt);
+       //  System.debug('theControllerExt.theRequest----'+ theControllerExt.theRequest);  
+       //   System.debug('theControllerExt.thecmd----'+ theControllerExt.thecmd); 
+        //  System.debug('theControllerExt.thecmd.No_of_days_for_Early_Shipment__c----'+theControllerExt.thecmd.No_of_days_for_Early_Shipment__c); 
+        /*********************************************** modified for SIR534**********************************************************************/
+        system.assertEquals(theControllerExt.thecmd.No_of_days_for_Early_Shipment__c,theControllerExt.theRequest.No_of_days_for_Early_Shipment__c);
+        /*********************************************** modified for SIR534**********************************************************************/
+       
+       Test.stopTest();
+    }  
 
     //@isTest(SeeAllData=true) 
     @isTest
@@ -529,6 +642,7 @@ private class CMD_Request_Controller_SAP_Ext_Test {
             Customer_Service_ZA__c = 'Test',
             Incoterms_1__c = 'Test',
             Incoterms_2__c = 'Test',
+            BillCurrency_PY__c = 'Test',
             Lockbox__c = 'Test',
             Payment_Credit_Memo__c= 'Test',
             Pull_Up_OK_SH__c = 'Test',
@@ -568,6 +682,88 @@ private class CMD_Request_Controller_SAP_Ext_Test {
         theControllerExt.New_SAP_CMD();
         Test.stopTest();
     }  
+    @isTest
+    static void theZ003MANUTest(){
+        fetchRecordTypes();
+        prepareTestCustomer();
+        prepareConsolidatedAccountCode();
+        insertFunloc();
+        Test.startTest();
+        testRequest = new CMD_Request__c(
+            Account_Group__c = 'Z003',
+            RecordTypeId = newMANUSAPrt,
+            Ready_to_Submit__c = true,
+            Request_Status__c = 'Ready to Submit',
+            Business_Background_Comments__c = 'Test Business Background Comments',
+            Global_Account__c = 'Test Global Account',
+            Sales_Organisation__c = 'Test Sales Organisation',
+/*STAN needs to enhance*/           //Consolidated_Account_Code__c = 'a1rD0000007BKFfIAO', 
+/*Modified by Scarlett*/            Consolidated_Account_Code__c = testCACC.Id,
+//            PY_GID__c = testCustomer.Name,
+            PY_CustomerID__c = testCustomer.Id,
+            PY_GID__c = '100000000',
+            //PY_CustomerID__c = 'a1ND0000001vB7GMAU',
+            PY_Name__c = 'Test Name',
+            PY_Street__c = 'Test Street',
+            PY_City__c = 'Test City',
+            PY_Country__c = 'Test Country',
+            PY_Postal_Code__c = '12345',
+            Region__c = 'EU - Europe',
+            PY_Telephone__c = '+1234567890',
+            PY_Fax__c = '+1234567890',
+            PY_Email__c = 'test@test.com',
+            PY_Funloc__c = '100000',
+            //PY_Funloc_Id__c = 'a1UD0000000QhEjMAK',
+            PY_Funloc_Id__c = funLocId,
+            Company_Code__c = 'Test',
+            Label_required__c = 'No',
+            Industry_Segment__c = 'Test',
+            Industry_Sub_Segment__c = 'Test',
+            Customer_Factory_Calendar__c = 'Test',
+            Customer_Service_ZA__c = 'Test',
+            Incoterms_1__c = 'Test',
+            Incoterms_2__c = 'Test',
+            BillCurrency_PY__c = 'Test',
+            Lockbox__c = 'Test',
+            Payment_Credit_Memo__c= 'Test',
+            Pull_Up_OK_SH__c = 'Test',
+            Rounding_Rule_SH__c = 'Test',
+            Terms_of_Payment__c = 'Test',
+            Terms_of_Payment_Sales__c = 'Test',
+            Con_Acct_SP_EMS__c = 'Test',
+            Cust_pric_proc__c = 'Test',
+            Grp_1_Sls_Channel_SP__c = 'Test',
+            Currency__c = 'Test Currency',
+            PD_Key_Account__c = 'Test PD Key Account',
+            Reprice_Basis__c = 'Test Reprice Basis',
+            Sales_Office__c = 'Test Sales_Office__c',
+            S_O_Sub_Group__c = 'Test S O Sub Group',
+            Reconciliation_Account__c = 'Test',
+            Central_deletion_block__c= 'Yes',
+            Central_deletion_Flag__c = 'Yes',
+            Central_posting_block__c = 'Yes',
+            Deletion_Flag_Sales_Area__c = 'Yes',
+            Screened_for_SDI__c = 'Yes',
+            Deletion_Block_Company_Code__c = 'Yes',
+            Deletion_Flag_Company_Code__c = 'Yes',
+            Indicator_Record_Payment_History__c = 'Yes',
+            Posting_Block_Company_Code__c = 'Yes',
+            Version_ID_for_International_Addresses__c = 'M',
+            Tax_Number_5__c = 'Test Tax Number 5',
+            Controller_Approver_Group__c = 'GC - Greater China; CO - Correction Region' //Line added by Nisha Agrawal for SFDC-477
+        );
+        insert testRequest;
+
+        ApexPages.StandardController theStandardController 
+            = new ApexPages.standardController(testRequest);
+        CMD_Request_Controller_SAP_Extension theControllerExt 
+            = new CMD_Request_Controller_SAP_Extension( theStandardController );
+        theControllerExt.theAccountGroup = 'Z003';
+//        theControllerExt.theCMD.HUB_Customer__c = 'a1ND0000001vB7GMAU';    
+        theControllerExt.New_SAP_CMD();
+        Test.stopTest();
+    }  
+
 
     //@isTest(SeeAllData=true) 
     @isTest
@@ -937,6 +1133,90 @@ private class CMD_Request_Controller_SAP_Ext_Test {
             Con_Acct_SP_EMS__c = 'Test',
             Cust_pric_proc__c = 'Test',
             Grp_1_Sls_Channel_SP__c = 'Test',
+            BillCurrency_PY__c = 'Test',
+            Currency__c = 'Test Currency',
+            PD_Key_Account__c = 'Test PD Key Account',
+            Reprice_Basis__c = 'Test Reprice Basis',
+            Sales_Office__c = 'Test Sales_Office__c',
+            S_O_Sub_Group__c = 'Test S O Sub Group',
+            Reconciliation_Account__c = 'Test',
+            Central_deletion_block__c= 'Yes',
+            Central_deletion_Flag__c = 'Yes',
+            Central_posting_block__c = 'Yes',
+            Deletion_Flag_Sales_Area__c = 'Yes',
+            Screened_for_SDI__c = 'Yes',
+            Deletion_Block_Company_Code__c = 'Yes',
+            Deletion_Flag_Company_Code__c = 'Yes',
+            Indicator_Record_Payment_History__c = 'Yes',
+            Posting_Block_Company_Code__c = 'Yes',
+            Version_ID_for_International_Addresses__c = 'C',
+            Tax_Number_5__c = 'Test Tax Number 5',
+            Controller_Approver_Group__c ='JP - Japan' //Line added by Nisha Agrawal for SFDC-477
+        );
+        insert testRequest;
+
+        ApexPages.StandardController theStandardController 
+            = new ApexPages.standardController(testRequest);
+        CMD_Request_Controller_SAP_Extension theControllerExt 
+            = new CMD_Request_Controller_SAP_Extension( theStandardController );
+        theControllerExt.theAccountGroup = 'Z005';
+//        theControllerExt.theCMD.HUB_Customer__c = 'a1ND0000001vB7GMAU';  
+        theControllerExt.New_SAP_CMD();  
+        Test.stopTest();
+    }  
+     static testmethod void theZ005MANUtest(){
+        fetchRecordTypes();
+        prepareTestCustomer();
+        prepareConsolidatedAccountCode();
+        insertFunloc();
+        List<Customer__c> lstCustomer = [SELECT Id, Name FROM Customer__c];
+        system.assert(lstCustomer.size() > 0);
+        Test.startTest();
+        testRequest = new CMD_Request__c(
+            Account_Group__c = 'Z005',
+            RecordTypeId = newMANUSAPrt,
+            Ready_to_Submit__c = true,
+            Request_Status__c = 'Ready to Submit',
+            Business_Background_Comments__c = 'Test Business Background Comments',
+            Global_Account__c = 'Test Global Account',
+            Sales_Organisation__c = 'Test Sales Organisation',
+/*STAN needs to enhance*/           //Consolidated_Account_Code__c = 'a1rD0000007BKFfIAO', 
+/*Modified by Scarlett*/            Consolidated_Account_Code__c = testCACC.Id,
+//            SP_GID__c = testCustomer.Name,
+//            SP_CustomerID__c = testCustomer.Id,
+//            SP_GID__c = '100000000',
+//            SP_CustomerID__c = 'a1ND0000001vB7GMAU',
+            SP_GID__c = string.valueof(lstCustomer[0].Name),
+            SP_Name__c = 'Test Name',
+            SP_Street__c = 'Test Street',
+            SP_City__c = 'Test City',
+            SP_Country__c = 'Test Country',
+            SP_Postal_Code__c = '12345',
+            Region__c = 'EU - Europe',
+            SP_Telephone__c = '+1234567890',
+            SP_Fax__c = '+1234567890',
+            SP_Email__c = 'test@test.com',
+            SP_Funloc__c = '100000',
+            //SP_Funloc_Id__c = 'a1UD0000000QhEjMAK',
+            SP_Funloc_ID__c=funlocId,
+            Company_Code__c = 'Test',
+            Label_required__c = 'No',
+            Industry_Segment__c = 'Test',
+            Industry_Sub_Segment__c = 'Test',
+            Customer_Factory_Calendar__c = 'Test',
+            Customer_Service_ZA__c = 'Test',
+            Incoterms_1__c = 'Test',
+            Incoterms_2__c = 'Test',
+            Lockbox__c = 'Test',
+            Payment_Credit_Memo__c= 'Test',
+            Pull_Up_OK_SH__c = 'Test',
+            Rounding_Rule_SH__c = 'Test',
+            Terms_of_Payment__c = 'Test',
+            Terms_of_Payment_Sales__c = 'Test',
+            Con_Acct_SP_EMS__c = 'Test',
+            Cust_pric_proc__c = 'Test',
+            Grp_1_Sls_Channel_SP__c = 'Test',
+            BillCurrency_PY__c = 'Test',
             Currency__c = 'Test Currency',
             PD_Key_Account__c = 'Test PD Key Account',
             Reprice_Basis__c = 'Test Reprice Basis',
@@ -1284,6 +1564,87 @@ private class CMD_Request_Controller_SAP_Ext_Test {
         theControllerExt.New_SAP_CMD();   
         Test.stopTest();
     }  
+    
+    static testmethod void theZ011Test1(){
+        fetchRecordTypes();
+        prepareTestCustomer();
+        prepareConsolidatedAccountCode();
+        insertFunloc();
+        Test.startTest();
+        List<Customer__c> lstCustomer = [SELECT Id, Name FROM Customer__c];
+        system.assert(lstCustomer.size() > 0);
+        
+        testRequest = new CMD_Request__c(
+            Account_Group__c = 'Z011',
+            RecordTypeId = newSAPrtId,
+            Ready_to_Submit__c = true,
+            Request_Status__c = 'Ready to Submit',
+            Business_Background_Comments__c = 'Test Business Background Comments',
+            Global_Account__c = 'Test Global Account',
+            Sales_Organisation__c = 'Test Sales Organisation',
+/*STAN needs to enhance*/           //Consolidated_Account_Code__c = 'a1rD0000007BKFfIAO', 
+/*Modified by Scarlett*/            Consolidated_Account_Code__c = testCACC.Id,
+//            SP_GID__c = testCustomer.Name,
+//            SP_CustomerID__c = testCustomer.Id,
+//            SP_GID__c = '100000000',
+//            SP_CustomerID__c = 'a1ND0000001vB7GMAU',
+            SP_GID__c = string.valueof(lstCustomer[0].Name),
+            SP_Name__c = 'Test Name',
+            SP_Street__c = 'Test Street',
+            SP_City__c = 'Test City',
+            SP_Country__c = 'Test Country',
+            SP_Postal_Code__c = '12345',
+            Region__c = 'EU - Europe',
+            SP_Telephone__c = '+1234567890',
+            SP_Fax__c = '+1234567890',
+            SP_Email__c = 'test@test.com',
+            SP_Funloc__c = '100000',
+            SP_Funloc_Id__c = 'a1UD0000000QhEjMAK',
+            Company_Code__c = 'Test',
+            Label_required__c = 'No',
+            Industry_Segment__c = 'Test',
+            Industry_Sub_Segment__c = 'Test',
+            Customer_Factory_Calendar__c = 'Test',
+            Customer_Service_ZA__c = 'Test',
+            Incoterms_1__c = 'Test',
+            Incoterms_2__c = 'Test',
+            Lockbox__c = 'Test',
+            Payment_Credit_Memo__c= 'Test',
+            Pull_Up_OK_SH__c = 'Test',
+            Rounding_Rule_SH__c = 'Test',
+            Terms_of_Payment__c = 'Test',
+            Terms_of_Payment_Sales__c = 'Test',
+            Con_Acct_SP_EMS__c = 'Test',
+            Cust_pric_proc__c = 'Test',
+            Grp_1_Sls_Channel_SP__c = 'Test',
+            Currency__c = 'Test Currency',
+            PD_Key_Account__c = 'Test PD Key Account',
+            Reprice_Basis__c = 'Test Reprice Basis',
+            Sales_Office__c = 'Test Sales_Office__c',
+            S_O_Sub_Group__c = 'Test S O Sub Group',
+            Reconciliation_Account__c = 'Test',
+            Central_deletion_block__c= 'No',
+            Central_deletion_Flag__c = 'No',
+            Central_posting_block__c = 'No',
+            Deletion_Flag_Sales_Area__c = 'No',
+            Screened_for_SDI__c = 'No',
+            Deletion_Block_Company_Code__c = 'No',
+            Deletion_Flag_Company_Code__c = 'No',
+            Indicator_Record_Payment_History__c = 'No',
+            Posting_Block_Company_Code__c = 'No',
+            Controller_Approver_Group__c ='JP - Japan' //Line added by Nisha Agrawal for SFDC-477
+        );
+        insert testRequest;
+
+        ApexPages.StandardController theStandardController 
+            = new ApexPages.standardController(testRequest);
+        CMD_Request_Controller_SAP_Extension theControllerExt 
+            = new CMD_Request_Controller_SAP_Extension( theStandardController );
+        theControllerExt.theAccountGroup = 'Z011';
+//        theControllerExt.theCMD.HUB_Customer__c = 'a1ND0000001vB7GMAU';   
+        theControllerExt.New_SAP_CMD();   
+        Test.stopTest();
+    }  
 
     //@isTest(SeeAllData=true) 
     //static void theZ012Test(){
@@ -1512,6 +1873,7 @@ private class CMD_Request_Controller_SAP_Ext_Test {
             Con_Acct_SP_EMS__c = 'Test',
             Cust_pric_proc__c = 'Test',
             Grp_1_Sls_Channel_SP__c = 'Test',
+            BillCurrency_PY__c = 'Test',
             Currency__c = 'Test Currency',
             PD_Key_Account__c = 'Test PD Key Account',
             Reprice_Basis__c = 'Test Reprice Basis',
@@ -1536,6 +1898,88 @@ private class CMD_Request_Controller_SAP_Ext_Test {
         System.debug('STAN:theRequest.PY_Same_as_SP__c=' + testRequest.PY_Same_as_SP__c);
 
         ApexPages.StandardController theStandardController 
+            = new ApexPages.standardController(testRequest);
+        CMD_Request_Controller_SAP_Extension theControllerExt 
+            = new CMD_Request_Controller_SAP_Extension( theStandardController );
+        theControllerExt.theAccountGroup = 'Z013';
+//        theControllerExt.theCMD.HUB_Customer__c = 'a1ND0000001vB7GMAU';    
+        theControllerExt.New_SAP_CMD();  
+        Test.stopTest();
+    }
+    
+     @isTest
+    static void theZ013MANUTest(){
+        fetchRecordTypes();
+        prepareTestCustomer();
+        prepareConsolidatedAccountCode();
+        insertFunloc();
+        Test.startTest();
+        testRequest = new CMD_Request__c(
+            Account_Group__c = 'Z013',
+            RecordTypeId = newMANUSAPrt,
+            Ready_to_Submit__c = true,
+            Request_Status__c = 'Ready to Submit',
+            Business_Background_Comments__c = 'Test Business Background Comments',
+            Global_Account__c = 'Test Global Account',
+            Sales_Organisation__c = 'Test Sales Organisation',
+/*STAN needs to enhance*/           //Consolidated_Account_Code__c = 'a1rD0000007BKFfIAO', 
+/*Modified by Scarlett*/            Consolidated_Account_Code__c = testCACC.Id,
+//            PY_GID__c = testCustomer.Name,
+            PY_CustomerID__c = testCustomer.Id,
+            PY_GID__c = '100000000',
+//            PY_CustomerID__c = 'a1ND0000001vB7GMAU',
+            PY_Name__c = 'Test Name',
+            PY_Street__c = 'Test Street',
+            PY_City__c = 'Test City',
+            PY_Country__c = 'Test Country',
+            PY_Postal_Code__c = '12345',
+            Region__c = 'EU - Europe',
+            PY_Telephone__c = '+1234567890',
+            PY_Fax__c = '+1234567890',
+            PY_Email__c = 'test@test.com',
+            PY_Funloc__c = '100000',
+            //PY_Funloc_Id__c = 'a1UD0000000QhEjMAK',
+            PY_Funloc_Id__c = funlocId,
+            PY_Same_as_SP__c = false,
+            Company_Code__c = 'Test',
+            Label_required__c = 'No',
+            Industry_Segment__c = 'Test',
+            Industry_Sub_Segment__c = 'Test',
+            Customer_Factory_Calendar__c = 'Test',
+            Customer_Service_ZA__c = 'Test',
+            Incoterms_1__c = 'Test',
+            Incoterms_2__c = 'Test',
+            Lockbox__c = 'Test',
+            Payment_Credit_Memo__c= 'Test',
+            Pull_Up_OK_SH__c = 'Test',
+            Rounding_Rule_SH__c = 'Test',
+            Terms_of_Payment__c = 'Test',
+            Terms_of_Payment_Sales__c = 'Test',
+            Con_Acct_SP_EMS__c = 'Test',
+            Cust_pric_proc__c = 'Test',
+            Grp_1_Sls_Channel_SP__c = 'Test',
+            BillCurrency_PY__c = 'Test',
+            Currency__c = 'Test Currency',
+            PD_Key_Account__c = 'Test PD Key Account',
+            Reprice_Basis__c = 'Test Reprice Basis',
+            Sales_Office__c = 'Test Sales_Office__c',
+            S_O_Sub_Group__c = 'Test S O Sub Group',
+            Reconciliation_Account__c = 'Test',
+            Central_deletion_block__c= 'Yes',
+            Central_deletion_Flag__c = 'Yes',
+            Central_posting_block__c = 'Yes',
+            Deletion_Flag_Sales_Area__c = 'Yes',
+            Screened_for_SDI__c = 'Yes',
+            Deletion_Block_Company_Code__c = 'Yes',
+            Deletion_Flag_Company_Code__c = 'Yes',
+            Indicator_Record_Payment_History__c = 'Yes',
+            Posting_Block_Company_Code__c = 'Yes',
+            Version_ID_for_International_Addresses__c = 'M',
+            Tax_Number_5__c = 'Test Tax Number 5',
+            Controller_Approver_Group__c = 'Channel - Channel' //Line added by Nisha Agrawal for SFDC-477
+        );
+        insert testRequest;
+      ApexPages.StandardController theStandardController 
             = new ApexPages.standardController(testRequest);
         CMD_Request_Controller_SAP_Extension theControllerExt 
             = new CMD_Request_Controller_SAP_Extension( theStandardController );
@@ -1698,7 +2142,7 @@ private class CMD_Request_Controller_SAP_Ext_Test {
             Additional_VAT_Number_6__c = '12345',
             Additional_VAT_Number_7__c = '12345',
             Additional_VAT_Number_8__c = '12345',
-            BillCurrency_PY__c = 'Test',
+            
             Billing_Block__c = 'Test',
             Brazil_Specific_Clause__c = 'Test',
             Central_Billing_Block__c = 'Test',
@@ -1858,7 +2302,7 @@ private class CMD_Request_Controller_SAP_Ext_Test {
             Additional_VAT_Number_6__c = '12345',
             Additional_VAT_Number_7__c = '12345',
             Additional_VAT_Number_8__c = '12345',
-            BillCurrency_PY__c = 'Test',
+            
             Billing_Block__c = 'Test',
             Brazil_Specific_Clause__c = 'Test',
             Central_Billing_Block__c = 'Test',
@@ -2031,7 +2475,6 @@ private class CMD_Request_Controller_SAP_Ext_Test {
             Additional_VAT_Number_6__c = '12345',
             Additional_VAT_Number_7__c = '12345',
             Additional_VAT_Number_8__c = '12345',
-            BillCurrency_PY__c = 'Test',
             Billing_Block__c = 'Test',
             Brazil_Specific_Clause__c = 'Test',
             Central_Billing_Block__c = 'Test',

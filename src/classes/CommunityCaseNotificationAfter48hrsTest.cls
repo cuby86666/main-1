@@ -4,29 +4,34 @@
 @Description:      Test class for CommunityCaseNotificationAfter48hrs.
 ****************************************************************************************************/
 // 3rdJan2017 Balaji - Repositioned StartTest() and StopTest() methods in CommunityCaseNotificationAfter48hrsTest3 method to fix the test failure
+/***************************************************************************************************
+@Last Modified By  :   Shridevi badiger
+@Last Modified Date:   24 Jul 2017
+@Description       :   Modified by shridevi as part of SIR 750-Improve code coverage for community classes
+****************************************************************************************************/
 @isTest
 public class CommunityCaseNotificationAfter48hrsTest 
 {
     //positive case: where email notification is sent to assigned to
     static testmethod void CommunityCaseNotificationAfter48hrsTest1()
     {
-        CommunityCaseControllerTest.fetchRecordTypes();
+        CommunityCaseCloneControllerTest.fetchRecordTypes();
         
         Test.startTest();
         User objStandardUser = [ select Id from User where Id = :UserInfo.getUserId() ];
         system.runAs(objStandardUser)
         {
-            Account objParentAccount = CommunityCaseControllerTest.createParentAccount();
+            Account objParentAccount = CommunityCaseCloneControllerTest.createParentAccount();
         
             insert objParentAccount;
             system.assert(objParentAccount.id!=null);
         
-            Account objChildAccount = CommunityCaseControllerTest.createChildAccount(objParentAccount.id);
+            Account objChildAccount = CommunityCaseCloneControllerTest.createChildAccount(objParentAccount.id);
         
             insert objChildAccount;
             system.assert(objChildAccount.id!=null);
             
-            Contact objContact= CommunityCaseControllerTest.createContact();
+            Contact objContact= CommunityCaseCloneControllerTest.createContact();
             objContact.AccountID = objChildAccount.Id;
             objContact.Phone='9988556622';
             objContact.Company__c='test';
@@ -37,7 +42,7 @@ public class CommunityCaseNotificationAfter48hrsTest
             insert objContact;
             system.assert(objContact.Id!=null);
         
-            User objUser= CommunityCaseControllerTest.createUser();
+            User objUser= CommunityCaseCloneControllerTest.createUser();
             objUser.contactId=objContact.Id;
             insert objUser;
             system.assert(objUser.Id!=null);
@@ -46,7 +51,7 @@ public class CommunityCaseNotificationAfter48hrsTest
             system.runAs(objStandardUser)
             {
                 
-                objCase= new Case(RecordTypeID = CommunityCaseControllerTest.tsCommunity.Id,contactId=objContact.Id, Status= 'New', Priority = 'Medium', 
+                objCase= new Case(RecordTypeID = CommunityCaseCloneControllerTest.tsCommunity.Id,contactId=objContact.Id, Status= 'New', Priority = 'Medium', 
                               Product_Category__c = 'RF', Product_Sub__c = 'Mixers', assigned_to__c=objStandardUser.id,
                               email__c = 'test1@test.com', JobTitle__c = 'Other', Facebook__c = 'test_fb',
                               Company__c = 'test_Company', Linkedin__c = 'test_lnk', Community_Web_Country__c = 'test_country',
@@ -73,23 +78,23 @@ public class CommunityCaseNotificationAfter48hrsTest
     //negative case: where email notification is not sent to assigned to
     static testmethod void CommunityCaseNotificationAfter48hrsTest2()
     {
-        CommunityCaseControllerTest.fetchRecordTypes();
+        CommunityCaseCloneControllerTest.fetchRecordTypes();
         
         Test.startTest();
         User objStandardUser = [ select Id from User where Id = :UserInfo.getUserId() ];
         system.runAs(objStandardUser)
         {
-            Account objParentAccount = CommunityCaseControllerTest.createParentAccount();
+            Account objParentAccount = CommunityCaseCloneControllerTest.createParentAccount();
         
             insert objParentAccount;
             system.assert(objParentAccount.id!=null);
         
-            Account objChildAccount = CommunityCaseControllerTest.createChildAccount(objParentAccount.id);
+            Account objChildAccount = CommunityCaseCloneControllerTest.createChildAccount(objParentAccount.id);
         
             insert objChildAccount;
             system.assert(objChildAccount.id!=null);
             
-            Contact objContact= CommunityCaseControllerTest.createContact();
+            Contact objContact= CommunityCaseCloneControllerTest.createContact();
             objContact.AccountID = objChildAccount.Id;
             objContact.Phone='9988556622';
             objContact.Company__c='test';
@@ -100,7 +105,7 @@ public class CommunityCaseNotificationAfter48hrsTest
             insert objContact;
             system.assert(objContact.Id!=null);
         
-            User objUser= CommunityCaseControllerTest.createUser();
+            User objUser= CommunityCaseCloneControllerTest.createUser();
             objUser.contactId=objContact.Id;
             insert objUser;
             system.assert(objUser.Id!=null);
@@ -109,7 +114,7 @@ public class CommunityCaseNotificationAfter48hrsTest
             system.runAs(objStandardUser)
             {
                 
-                objCase= new Case(RecordTypeID = CommunityCaseControllerTest.tsCommunity.Id,contactId=objContact.Id, Status= 'New', Priority = 'Medium', 
+                objCase= new Case(RecordTypeID = CommunityCaseCloneControllerTest.tsCommunity.Id,contactId=objContact.Id, Status= 'New', Priority = 'Medium', 
                               Product_Category__c = 'RF', Product_Sub__c = 'Mixers', 
                               email__c = 'test1@test.com', JobTitle__c = 'Other', Facebook__c = 'test_fb',
                               Company__c = 'test_Company', Linkedin__c = 'test_lnk', Community_Web_Country__c = 'test_country',
@@ -136,24 +141,24 @@ public class CommunityCaseNotificationAfter48hrsTest
     //bulk case: where email notification is sent to assigned to for one case and not sent to another case
     static testmethod void CommunityCaseNotificationAfter48hrsTest3()
     {
-        CommunityCaseControllerTest.fetchRecordTypes();
+        CommunityCaseCloneControllerTest.fetchRecordTypes();
         
         
         User objStandardUser = [ select Id from User where Id = :UserInfo.getUserId() ];
         system.runAs(objStandardUser)
         {
-            Account objParentAccount = CommunityCaseControllerTest.createParentAccount();
+            Account objParentAccount = CommunityCaseCloneControllerTest.createParentAccount();
         
             insert objParentAccount;
             system.assert(objParentAccount.id!=null);
         
-            Account objChildAccount = CommunityCaseControllerTest.createChildAccount(objParentAccount.id);
+            Account objChildAccount = CommunityCaseCloneControllerTest.createChildAccount(objParentAccount.id);
         
             insert objChildAccount;
             system.assert(objChildAccount.id!=null);
             
 //            Test.startTest();
-            Contact objContact= CommunityCaseControllerTest.createContact();
+            Contact objContact= CommunityCaseCloneControllerTest.createContact();
             objContact.AccountID = objChildAccount.Id;
             objContact.Phone='9988556622';
             objContact.Company__c='test';
@@ -164,14 +169,14 @@ public class CommunityCaseNotificationAfter48hrsTest
             insert objContact;
             system.assert(objContact.Id!=null);
         
-            User objUser= CommunityCaseControllerTest.createUser();
+            User objUser= CommunityCaseCloneControllerTest.createUser();
             objUser.contactId=objContact.Id;
             insert objUser;
             system.assert(objUser.Id!=null);
         
             Case objCase1,objcase2 ;
             Test.startTest();            
-            objCase1= new Case(RecordTypeID = CommunityCaseControllerTest.tsCommunity.Id,contactId=objContact.Id, Status= 'New', Priority = 'Medium', 
+            objCase1= new Case(RecordTypeID = CommunityCaseCloneControllerTest.tsCommunity.Id,contactId=objContact.Id, Status= 'New', Priority = 'Medium', 
                            Product_Category__c = 'RF', Product_Sub__c = 'Mixers', assigned_to__c=objStandardUser.id,
                            email__c = 'test1@test.com', JobTitle__c = 'Other', Facebook__c = 'test_fb',
                            Company__c = 'test_Company', Linkedin__c = 'test_lnk', Community_Web_Country__c = 'test_country',
@@ -182,7 +187,7 @@ public class CommunityCaseNotificationAfter48hrsTest
             Insert objCase1;
             Test.stopTest();            
             system.assert(objCase1.Id!=null);
-            objCase2= new Case(RecordTypeID = CommunityCaseControllerTest.tsCommunity.Id,contactId=objContact.Id, Status= 'New', Priority = 'Medium', 
+            objCase2= new Case(RecordTypeID = CommunityCaseCloneControllerTest.tsCommunity.Id,contactId=objContact.Id, Status= 'New', Priority = 'Medium', 
                            Product_Category__c = 'RF', Product_Sub__c = 'Mixers', 
                            email__c = 'test1@test.com', JobTitle__c = 'Other', Facebook__c = 'test_fb',
                               Company__c = 'test_Company', Linkedin__c = 'test_lnk', Community_Web_Country__c = 'test_country',

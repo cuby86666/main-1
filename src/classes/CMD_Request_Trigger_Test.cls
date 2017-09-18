@@ -38,6 +38,10 @@
 @Modified By :      Baji
 @Modified Date:     23 Mar 2017
 @Description:       1704 Release (SFDC 285) - to test the code related to CMD Request completion notification for new funloc request to S&P team.
+-----------------------------------------------------------------------------------------------------------
+@Modified By :      Baji
+@Modified Date:     26 Jul 2017
+@Description:       1708 Release (SFDC 729) - To test default value feature for few of the fieds on SAP CMD New SBE Funloc Request form.
 *********************************************************************************************************************************************/
 
 @isTest
@@ -55,6 +59,10 @@ public class CMD_Request_Trigger_Test {
     private static final String TYPE_Country_and_Region = 'Country_and_Region';//obj: Hub Foundation
     private static final String TYPE_SAP_New_Funloc_Request = 'SAP_New_Funloc_Request';// obj: CMD Request
     private static final String TYPE_SAP_Funloc_Edit_Request = 'SAP_Funloc_Edit_Request';// obj: CMD Request
+    private static final String TYPE_New_SBE_CmdReq = 'SAP_New_SBE_Funloc_request';// obj: CMD Request
+    private Static Final string TYPE_Edit_SBE_CmdReq='SAP_SBE_Funloc_Edit_request';// obj: CMD Request
+    private Static Final string TYPE_New_MANU_CmdReq='SAP_New_MANU_Funloc_request';// obj: CMD Request
+    private Static Final string TYPE_Edit_MANU_CmdReq='SAP_MANU_Funloc_Edit_request';// obj: CMD Request
     private static final String Profile_NXP_CMD_Officer = 'NXP CMD Officer';// Profile NXP CMD Officer
     
     private static RecordType Global_Enterprise;
@@ -62,6 +70,10 @@ public class CMD_Request_Trigger_Test {
     private static RecordType New_SFDC_Parent_Account;
     private static RecordType SAP_New_Funloc_Request;
     private static RecordType SAP_Funloc_Edit_Request;
+    private static RecordType SAP_New_SBE_Funloc_request;
+    private static RecordType SAP_SBE_Funloc_Edit_request;
+    private static RecordType SAP_New_MANU_Funloc_request;
+    private static RecordType SAP_MANU_Funloc_Edit_request;
     private static RecordType Parent_Account;
     private static RecordType Child_Account;
     private static RecordType Country_and_Region;
@@ -96,7 +108,11 @@ public class CMD_Request_Trigger_Test {
                                  OR (SobjectType = 'CMD_Request__c' and DeveloperName =: TYPE_New_SFDC_Parent_Account)
                                  OR (SobjectType = 'CMD_Request__c' and DeveloperName =: TYPE_SAP_New_Funloc_Request)
                                  OR (SobjectType = 'CMD_Request__c' and DeveloperName =: TYPE_SAP_Funloc_Edit_Request)
-                                 OR (SobjectType = 'Hub_Foundation__c' and DeveloperName =: TYPE_Country_and_Region ))
+                                 OR (SobjectType = 'Hub_Foundation__c' and DeveloperName =: TYPE_Country_and_Region )
+                                 OR (SobjectType = 'CMD_Request__c' and DeveloperName =: TYPE_New_SBE_CmdReq )
+                                 OR (SobjectType = 'CMD_Request__c' and DeveloperName =: TYPE_Edit_SBE_CmdReq )
+                                 OR (SobjectType = 'CMD_Request__c' and DeveloperName =: TYPE_New_MANU_CmdReq )
+                                 OR (SobjectType = 'CMD_Request__c' and DeveloperName =: TYPE_Edit_MANU_CmdReq ))
                               ])
         {
             if(rt.DeveloperName == TYPE_Global_Enterprise)
@@ -119,6 +135,14 @@ public class CMD_Request_Trigger_Test {
                 SAP_Funloc_Edit_Request = rt; 
             if(rt.DeveloperName == TYPE_Country_and_Region)
                 Country_and_Region = rt; 
+            if(rt.DeveloperName == TYPE_New_SBE_CmdReq)
+                SAP_New_SBE_Funloc_request = rt; 
+            if(rt.DeveloperName == TYPE_Edit_SBE_CmdReq)
+                SAP_SBE_Funloc_Edit_request = rt; 
+            if(rt.DeveloperName == TYPE_New_MANU_CmdReq)
+                SAP_New_MANU_Funloc_request = rt; 
+            if(rt.DeveloperName == TYPE_Edit_MANU_CmdReq)
+                SAP_MANU_Funloc_Edit_request = rt; 
         }
     }
     
@@ -485,6 +509,39 @@ public class CMD_Request_Trigger_Test {
         //lstRequest.add(theRequest1);
         insert theRequest4;
         
+        //Request with ZI
+        CMD_Request__c theRequest5 = new CMD_Request__c(
+            RecordTypeId = SAP_New_SBE_Funloc_Request.Id,
+            Street__c = 'TEST STREET' ,
+            City__c = 'TEST CITY' ,
+            Country__c = 'Czech Republic' ,//same with Hub_Foundation__c.Country__c, fetchRegion
+            Role__c = 'OEM' ,
+            //Parent_Account_in_CRM__c = objParentAccount.Id,//fetchParentCustomerCategory
+            Parent_Account_in_CRM__c = parentAccount.Id,
+            Sales_Organisation__c = 'NL60 - RSO Europe',// same with SAP_CMD__c.Sales_Organisation__c
+            Funloc__c = tempLstFunloc2[0].FunLoc_Number_Text__c,//fetchSAPCMDids
+            Consolidated_Account_Code__c = objCACC.Id,//fetchCACCs
+            Request_Status__c = 'Approved'
+        );
+        //lstRequest.add(theRequest1);
+        insert theRequest5;
+        
+         CMD_Request__c theRequest6 = new CMD_Request__c(
+            RecordTypeId = SAP_New_SBE_Funloc_Request.Id,
+            Street__c = 'TEST STREET' ,
+            City__c = 'TEST CITY' ,
+            Country__c = 'Czech Republic' ,//same with Hub_Foundation__c.Country__c, fetchRegion
+            Role__c = 'OEM' ,
+            //Parent_Account_in_CRM__c = objParentAccount.Id,//fetchParentCustomerCategory
+            Parent_Account_in_CRM__c = parentAccount.Id,
+            Sales_Organisation__c = 'US60 - RSO U.S.A.',// same with SAP_CMD__c.Sales_Organisation__c
+            Funloc__c = tempLstFunloc2[0].FunLoc_Number_Text__c,//fetchSAPCMDids
+            Consolidated_Account_Code__c = objCACC.Id,//fetchCACCs
+            Request_Status__c = 'Approved'
+        );
+        //lstRequest.add(theRequest1);
+        insert theRequest6;
+        
         test.stopTest();
     }
     
@@ -611,6 +668,103 @@ public class CMD_Request_Trigger_Test {
         {
         CMD_Request__c theRequest1 = new CMD_Request__c(
             RecordTypeId = SAP_New_Funloc_Request.Id,
+            Requester_Email__c = 'test@test.com' ,
+            Street__c = 'TEST STREET' ,
+            City__c = 'TEST CITY' ,
+            Country__c = 'Czech Republic' ,//same with Hub_Foundation__c.Country__c, fetchRegion
+            Role__c = 'OEM' ,
+            Recipient_List__c = 'Logistics 1',
+            Parent_Account_in_CRM__c = parentAccount.Id,
+            Sales_Organisation__c = 'NL60 - RSO Europe',// same with SAP_CMD__c.Sales_Organisation__c
+            Funloc__c = tempLstFunloc[0].FunLoc_Number_Text__c,//fetchSAPCMDids
+            SP_Funloc__c = tempLstFunloc[0].FunLoc_Number_Text__c,//fetchSAPCMDids
+            SH_Funloc__c = tempLstFunloc[0].FunLoc_Number_Text__c,
+            PY_Funloc__c = tempLstFunloc[0].FunLoc_Number_Text__c,
+            BP_Funloc__c = tempLstFunloc[0].FunLoc_Number_Text__c,
+            ZI_Funloc__c = tempLstFunloc[0].FunLoc_Number_Text__c,
+            GID__c = '100000130',
+            SP_GID__c = '100000130',
+            SH_GID__c = '100000130',
+            PY_GID__c = '100000130',
+            BP_GID__c = '100000130',
+            ZI_GID__c = '100000130',
+            Consolidated_Account_Code__c = objCACC.Id,//fetchCACCs
+            Request_Status__c = 'Approved'
+        );
+     
+        insert theRequest1; 
+
+        map <Id,CMD_Request__c> oldCMDReqMaptest= new map<Id, CMD_Request__c>();
+      
+        
+        tempLstSapCmd[0].Status__c = 'Approved and Distributed';
+        tempLstSapCmd[0].CMD_Request_ID_Text__c= theRequest1.Id;
+        update tempLstSapCmd[0];
+        
+        oldCMDReqMaptest.put(theRequest1.Id,theRequest1);
+        theRequest1.Request_Status__c = 'Completed';
+        update theRequest1; 
+        theRequest1=[Select Title__c, Output__c From CMD_Request__c where Request_Status__c='Completed'];      
+        system.assert(theRequest1.Title__c!= null);
+        system.assert(theRequest1.Output__c!=null);
+        }
+        }
+        SAPCMD_EraseTitleOutput erase = new SAPCMD_EraseTitleOutput();
+        System.schedule('Test', '0 0 12 ? * FRI *', erase);
+        erase.start( (Database.BatchableContext) null );
+        erase.execute( (Database.BatchableContext) null, tempLstSapCmd );
+        erase.finish( (Database.BatchableContext) null );
+        erase.execute((SchedulableContext)null);
+        SAPCMD_EraseTitleOutput.run();
+        SAP_CMD__c SapCmdRec = [SELECT Id, Output_Message__c,SAP_CMD_Title__c,FunLoc__c,Customer_FunLoc_Number__c, Sales_Organisation__c  FROM SAP_CMD__c WHERE Id =: tempLstSapCmd[0].id];
+        system.assert(SapCmdRec.SAP_CMD_Title__c==null);
+        system.assert(SapCmdRec.Output_Message__c==null); 
+       
+        test.stopTest();
+    
+    }
+    
+    
+     static testMethod void emailDispatchTest1(){
+        
+        //prepare data
+        fetchRecordType();
+        createCustomer();
+        createParentAccount();
+        createChildAccount();
+        createCACC();
+        createHubFundation();
+        createFunloc();
+        createSAPCMD();
+        createCustomEmailSetting();
+        createCustomOutputSetting();
+              
+        Profile objProfile = [SELECT Id FROM Profile WHERE Name =: Profile_NXP_CMD_Officer ];
+        List<SAP_CMD__c> tempLstSapCmd = [SELECT Id, Output_Message__c,SAP_CMD_Title__c,FunLoc__c,Customer_FunLoc_Number__c, Sales_Organisation__c  FROM SAP_CMD__c WHERE Id =: lstSAPCMD[0].Id];
+        
+        List<Funloc__c> tempLstFunloc = [SELECT Id, Funloc_Number_Text__c FROM Funloc__c WHERE Id =: lstFunloc[0].Id];
+        
+        Account parentAccount = [SELECT Id FROM Account WHERE RecordType.Name = 'Parent Account'];
+        test.startTest();
+        if(objProfile != null){
+            //Create CMD Officer
+        
+            User officer = new User(
+                Alias = 'newUser', Email='newuser.cmd@testorg.com', 
+                EmailEncodingKey='UTF-8', LastName='Testing', LanguageLocaleKey='en_US', 
+                LocaleSidKey='en_US', ProfileId = objProfile.Id, 
+                TimeZoneSidKey='America/Los_Angeles', UserName='newuser.cmd@testorg.com'
+            );
+        List<Customer__c> tempLstCustomer = [SELECT Id, Name FROM Customer__c];
+        system.assert(tempLstCustomer.size() > 0);
+        
+        
+        
+        //test.startTest();
+        system.runAs(officer)
+        {
+        CMD_Request__c theRequest1 = new CMD_Request__c(
+            RecordTypeId = SAP_SBE_Funloc_Edit_request.Id,
             Requester_Email__c = 'test@test.com' ,
             Street__c = 'TEST STREET' ,
             City__c = 'TEST CITY' ,

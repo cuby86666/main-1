@@ -1,32 +1,47 @@
 /** Stan Hsu
   * Sept 9, 2013
   * For CMD Project - Converting PreAccount to Parent and/or Child Accounts
-**/
+------------------------------------------------------------------------------
+@Modified By: 		Nisha Agrawal
+@Modified Date: 	08 Aug 2017
+@Description:		Modified class to optimize the code, remove hard coded Ids and 
+					improve the code coverage
+***************************************************************************************/
 public class PreAccountController {
-
+	/*
     private static final string PRE_ACCOUNT_RECORD_TYPE_ID = '012D0000000QjgkIAC' ;
     private static final string PARENT_ACCOUNT_RECORD_TYPE_ID = '01220000000E4JaAAK' ;
     private static final string CHILD_ACCOUNT_RECORD_TYPE_ID = '01220000000E4JYAA0' ;
     private static final string DATA_ADMIN_USER_ID = '00520000001EuBkAAK' ;
+  */ 
+    //Code block added by Nisha Agrawal on Aug 08, 2017 to remove hard coded Ids 
+    private static final string PRE_ACCOUNT_RECORD_TYPE_ID = AccountHelper.getPreAccountRecordTypeID(); 
+    private static final string PARENT_ACCOUNT_RECORD_TYPE_ID = AccountHelper.getParentRecordTypeID();
+    private static final string CHILD_ACCOUNT_RECORD_TYPE_ID = AccountHelper.getChildRecordTypeID() ;
+    private static final String DATA_ADMIN_USER = 'Data Admin';
     
     private final Account A;
     
+    //Commented by Nisha Agrawal on Aug 18 to remove extra code
+    /* 
     public PreAccountController( ApexPages.StandardController stdController ) {
         this.A = (Account)stdController.getRecord();
-    }
-     
+    } */
+        
     public PreAccountController( Account theA ){
         this.A = theA;
     }
-     
+    
+    //Code block Commented by Nisha Agrawal on Aug 18 to remove extra code
+    /*
     private static final string PRE_ACCOUNT = 'PreAccount';
     private static final string PARENT_ACCOUNT = 'Parent_Account';
     private static final string CHILD_ACCOUNT = 'Child Account';
-
+	    
     private static RecordType preAccountRecordType;
     private static RecordType parentAccountRecordType;
     private static RecordType childAccountRecordType;
-    
+    */
     private CMD_Request__c originalCMD_Request;
 
     private CMD_Request__c fetchCMD_Request( string theReqId ) {
@@ -40,7 +55,8 @@ public class PreAccountController {
         }
         return null ;               
     }
-        
+    
+    
     public PageReference makeParentAccount() {
         String theId = ApexPages.currentPage().getParameters().get('id');
         if (theId == null) {
@@ -66,6 +82,7 @@ public class PreAccountController {
         return pageRef;
     }
 
+   
     public PageReference makeChildAccount() {
         String theId = ApexPages.currentPage().getParameters().get('id');
         if (theId == null) {
@@ -94,11 +111,25 @@ public class PreAccountController {
         return pageRef;
     }
 
+   
     public PageReference makeAccountCombo() {
         String theId = ApexPages.currentPage().getParameters().get('id');
         if (theId == null) {
             return null;
         }
+        
+        //Code block added by Nisha Agrawal on Aug 08, 2017 to remove hard coded Ids
+        Id DATA_ADMIN_USER_ID ;
+    	List<User> lstUsers = [Select Id, Name from User Where Name = : DATA_ADMIN_USER ];
+        if(lstUsers.size() == 0 || lstUsers.size() > 1)
+        {
+            return null;
+        }
+        else if(lstUsers.size() == 1)
+        {
+            DATA_ADMIN_USER_ID = lstUsers[0].Id;
+        }
+        
         for( Account A : [ SELECT   Id, 
                                     Name, 
                                     RecordTypeId, 
@@ -217,4 +248,5 @@ public class PreAccountController {
         pageRef.setRedirect(true);
         return pageRef;
     }
+
 }

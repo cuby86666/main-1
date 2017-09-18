@@ -27,6 +27,7 @@ public class CommunityCaseSurveyController
     public String strLikeOurSupport{get;set;}
     public String strComment{get;set;}
     public List<case> lstCase{get;set;}
+    public String RedirectionToLoginPage{get;set;}
     Survey_Answer__c objSurveyAns;
     
     public CommunityCaseSurveyController(ApexPages.StandardSetController stdController) {
@@ -36,6 +37,8 @@ public class CommunityCaseSurveyController
     //Check if caseid in url null or not
     public CommunityCaseSurveyController()
     {
+    //below line is added by shridevi for redirecting to login page instead of communityRegistration page since the page has been deleted.
+        RedirectionToLoginPage=(Site.getPathPrefix()+Label.Community_Login_URL);
         if(ApexPages.currentPage().getParameters().get('caseId')==null || ApexPages.currentPage().getParameters().get('caseId')=='')
         {
             ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR,'Error in survey form'));

@@ -32,7 +32,6 @@ public class CustomerObjectSharingTest
        Opp.CurrencyIsoCode='USD';
        Opp.Probability_to_Win__c='80% - 100%';
        Opp.Account=Child;
-       opp.Industry_Segment__c='AFC';
        opp.Channel__c='Direct';
        opp.StageName='Discovery';
        opp.X2010_Pieces__c=1;

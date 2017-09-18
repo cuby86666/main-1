@@ -40,6 +40,7 @@ private class Test_FeedCommentTriggerHandler {
                                 PortalRole = 'Manager',
                                 FirstName = 'Genelia',
                                 LastName = 'Dsouza');
+        Test.startTest();                        
         insert portalUser;
         
         objUser = new User(alias = 'UTest', email='unit.test@test.com', emailencodingkey='UTF-8', lastname='test', languagelocalekey='en_US', localesidkey='en_US', 
@@ -52,6 +53,7 @@ private class Test_FeedCommentTriggerHandler {
             lstCG  = new List<CollaborationGroup>{  new CollaborationGroup(Name='TestCollGroup' + String.valueOf(System.now()), CollaborationType='public' ), 
                                                     new CollaborationGroup(Name='TestCollGroup-02' + String.valueOf(System.now()), CollaborationType='public')
                                                  };
+             
             insert lstCG;
              
             
@@ -71,7 +73,7 @@ private class Test_FeedCommentTriggerHandler {
                                              new FeedItem(ParentId = lstTopic[0].Id,Type = 'QuestionPost', Body='Test-02', Title = 'Test2', CreatedById = portalUser.Id),
                                              new FeedItem(ParentId = lstCG[1].Id,Type = 'QuestionPost', Body='Test-03', Title = 'Test3', CreatedById = portalUser.Id)
                                             };
-            Test.startTest();
+           
             insert lstFeedItem;
             Test.stopTest();
             
@@ -96,19 +98,25 @@ private class Test_FeedCommentTriggerHandler {
                 };
                 insert lstFeedCommentToInsert;    
             }
-            
-      }
+        }
     } 
     
 	private static testMethod void test() {
 	    
 	    createData();
 	   
-        //Test.startTest();
+        // Test.startTest();
         
         if(!lstCaseToUpdateStatus.isEmpty()) {
+          
+            if(!lstCaseToUpdateStatus.isEmpty()) {
+                //checking if status of case is updated when user posts a comment if status = close and close date is lessthan 30 days
+                system.assertEquals('Received Reply',[Select Id,status from case where Id=:lstCaseToUpdateStatus[0].Id].status);
+            }
+            
             lstCaseToUpdateStatus[0].status = 'close';
-            //update lstCaseToUpdateStatus;
+            // lstCaseToUpdateStatus[0].ClosedDate = Date.today().addDays(-31);
+            update lstCaseToUpdateStatus;
             
             FeedComment objFeedcomment = new FeedComment(FeedItemId = lstCaseToUpdateStatus[0].FeedItemId, CommentBody = 'Test Comment3');
             insert objFeedcomment;
@@ -118,15 +126,8 @@ private class Test_FeedCommentTriggerHandler {
             //checking if status of case is updated when user posts a comment if status = new
             system.assertEquals('Received Reply',[Select Id,status from case where Id=:lstCaseRelatedTogroup[0].Id].status );
         }
-        if(!lstCaseToUpdateStatus.isEmpty()) {
-            //checking if status of case is updated when user posts a comment if status = close and close date is lessthan 30 days
-            system.assertEquals('Received Reply',[Select Id,status from case where Id=:lstCaseToUpdateStatus[0].Id].status);
-        }
         
-        //Test.stopTest();
-
+        
 	}
-	
-	
 
 }

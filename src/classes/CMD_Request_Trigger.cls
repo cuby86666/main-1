@@ -20,6 +20,10 @@
 @Modified By :      Baji
 @Modified Date:     23 Mar 2017
 @Description:       1704 Release (SFDC 285) - to extend CMD Request completion notification for new funloc request to S&P team.
+-----------------------------------------------------------------------------------------------------------
+@Modified By :      Baji
+@Modified Date:     24 Jul 2017
+@Description:       1708 Release (SFDC 729) - To set default value for few of the fieds on SAP CMD New SBE Funloc Request form.
 ************************************************************************************************************************/
 public class CMD_Request_Trigger {
  /*public static List<SAP_CMD__c> liSapCmd {
@@ -51,10 +55,20 @@ public class CMD_Request_Trigger {
      Private Static Final String OrgWide_Address='Data Admin';
      Private Static Final String CMD_Team='CMD Team';
      Private Static Final String SP_Team ='S&P Team';
+     Private Static Final string TYPE_New_SBE_CmdReq='SAP_New_SBE_Funloc_request';
+     Private Static Final string TYPE_Edit_SBE_CmdReq='SAP_SBE_Funloc_Edit_request';
+     Private Static Final string TYPE_New_MANU_CmdReq='SAP_New_MANU_Funloc_request';
+     Private Static Final string TYPE_Edit_MANU_CmdReq='SAP_MANU_Funloc_Edit_request';
+     Private static final String SALES_ORG_NL60 = 'NL60 - RSO Europe';
+     Private static final String SALES_ORG_US60 = 'US60 - RSO U.S.A.';
+     Public Static Id sapNewSBEFun_Id;
+     Public Static Id sapEditSBEFun_Id;
+     Public Static Id sapNewMANUFun_Id;
+     Public Static Id sapEditMANUFun_Id;
      Public Static Id sapNewFun_Id;
      Public Static Id sapEditFun_Id;
      Public Static Id emailNewFun_Id;
-     Public Static Id emailEditFun_Id;   
+     Public Static Id emailEditFun_Id;
      
      
      public CMD_Request_Trigger()
@@ -137,6 +151,44 @@ public class CMD_Request_Trigger {
         
     }
     */
+    
+public static void fetchCMDReqRecordTypes()
+    {
+      if(sapNewFun_Id == null && sapEditFun_Id  ==null && sapNewSBEFun_Id == null && sapEditSBEFun_Id ==null && sapNewMANUFun_Id== null && sapEditMANUFun_Id == null)
+      {        
+         For(recordType rt:[Select Id, Name,DeveloperName From RecordType 
+                        Where IsActive=true AND (SobjectType = 'CMD_Request__c' and 
+                        (DeveloperName =:TYPE_New_CmdReq OR DeveloperName =:TYPE_Edit_CmdReq OR DeveloperName =:TYPE_New_SBE_CmdReq
+                         OR DeveloperName =:TYPE_Edit_SBE_CmdReq OR DeveloperName =:TYPE_New_MANU_CmdReq OR DeveloperName =:TYPE_Edit_MANU_CmdReq))])
+        {         
+            if(rt.DeveloperName ==TYPE_New_CmdReq) 
+            {
+               sapNewFun_Id=rt.id;  
+            }
+            else if(rt.DeveloperName ==TYPE_Edit_CmdReq)
+            {
+               sapEditFun_Id =rt.id;  
+            }
+            else if(rt.DeveloperName == TYPE_New_SBE_CmdReq)
+            {
+               sapNewSBEFun_Id = rt.id;
+            }
+            else if(rt.DeveloperName == TYPE_Edit_SBE_CmdReq)
+            {
+               sapEditSBEFun_Id = rt.id;
+            }
+            else if(rt.DeveloperName == TYPE_New_MANU_CmdReq)
+            {
+               sapNewMANUFun_Id = rt.id;
+            }
+            else if(rt.DeveloperName == TYPE_Edit_MANU_CmdReq)
+            {
+               sapEditMANUFun_Id = rt.id;
+            }
+           
+          }
+        }
+    }
     public static void fetchRegion( List<CMD_Request__c> listCMDRequests ) {
         Map<string , string> mapCountryRegion = new Map<string , string>();    
         for( Hub_Foundation__c theHub_Foundation : allHub_Foundations ) {
@@ -222,12 +274,11 @@ public class CMD_Request_Trigger {
         }
         
         for( CMD_Request__c theCMDRequest : listCMDRequests ) {
-            if( theCMDRequest.Parent_Account_in_CRM__c != null 
-                    && allParentCustomerCategory.containsKey(theCMDRequest.Parent_Account_in_CRM__c)    
-                    && ( theCMDRequest.Customer_Category__c == null
-                        || theCMDRequest.Customer_Category__c == '' )) {
-                theCMDRequest.Customer_Category__c 
-                    = allParentCustomerCategory.get(theCMDRequest.Parent_Account_in_CRM__c);
+            if(theCMDRequest.Parent_Account_in_CRM__c != null 
+               && allParentCustomerCategory.containsKey(theCMDRequest.Parent_Account_in_CRM__c)    
+               && ( theCMDRequest.Customer_Category__c == null
+               || theCMDRequest.Customer_Category__c == '' )) {
+             theCMDRequest.Customer_Category__c = allParentCustomerCategory.get(theCMDRequest.Parent_Account_in_CRM__c);
 //                    = allParentsForThisMethod.get(theCMDRequest.Parent_Account_in_CRM__c).Customer_Category__c;
             }
         }
@@ -511,7 +562,26 @@ public class CMD_Request_Trigger {
                 }
             }              
         }
-    }    
+    }  
+    // SFDC-729
+    public static void setDefaultValueForNewMANUandSBEFunloc( List<CMD_Request__c> listCMDRequests ){
+     fetchCMDReqRecordTypes();
+     for(CMD_Request__c theCMDRequest : listCMDRequests)
+     {
+         if(theCMDRequest.Lockbox__c == null && theCMDRequest.Sales_Organisation__c == SALES_ORG_NL60 && theCMDRequest.RecordtypeId==sapNewSBEFun_Id){
+             theCMDRequest.Lockbox__c = 'MUL.CUR';
+            }
+             if(theCMDRequest.Lockbox__c == null && theCMDRequest.Sales_Organisation__c == SALES_ORG_US60 && theCMDRequest.RecordtypeId==sapNewSBEFun_Id){
+             theCMDRequest.Lockbox__c = 'CIT-WIR';
+            }
+          if(theCMDRequest.Incoterms_2__c == null && theCMDRequest.RecordtypeId==sapNewSBEFun_Id){
+             theCMDRequest.Incoterms_2__c = 'Services';
+          }
+          if(theCMDRequest.Lockbox__c == null && theCMDRequest.RecordtypeId==sapNewMANUFun_Id){
+             theCMDRequest.Lockbox__c = 'NOREMIT';
+          }
+      }  
+   }
 
     /*
     public static void fetchCustomerType( List<CMD_Request__c> listCMDRequests ){
@@ -611,7 +681,7 @@ public class CMD_Request_Trigger {
 **/   
 
   
-    
+
   
   
   
@@ -620,9 +690,9 @@ public class CMD_Request_Trigger {
      
    public static void DispatchEmail(List<CMD_Request__c> listCMDRequests, map<Id, CMD_Request__c> mapOldCMDReq){
      system.debug('entered1');
-     For(recordType rt:[Select Id, Name,DeveloperName From RecordType 
+   /*  For(recordType rt:[Select Id, Name,DeveloperName From RecordType 
                         Where IsActive=true AND (SobjectType = 'CMD_Request__c' and 
-                        (DeveloperName =:TYPE_New_CmdReq OR DeveloperName =:TYPE_Edit_CmdReq))])
+                        (DeveloperName =:TYPE_New_CmdReq OR DeveloperName =:TYPE_Edit_CmdReq OR DeveloperName =:TYPE_New_SBE_CmdReq))])
        {
          if(rt.DeveloperName == TYPE_New_CmdReq) 
             {
@@ -632,21 +702,25 @@ public class CMD_Request_Trigger {
             {
                sapEditFun_Id = rt.id;  
             }
-       } 
-    
-     string[] lstCcEmailIds = new list<String> ();
-     List<List<String>> listStrEmailIds= new List<List<String>>();
+         else if(rt.DeveloperName == TYPE_New_SBE_CmdReq)
+            {
+               sapNewSBEFun_Id = rt.id;
+            }
+       } */
+    fetchCMDReqRecordTypes();
+    string[] lstCcEmailIds = new list<String> ();
+    List<List<String>> listStrEmailIds= new List<List<String>>();
+       
     for( CMD_Request__c objCMDReq : listCMDRequests)
     {
      string[] lstEmailIds = new list<String> ();
-     string[] lstFinalEmailIds = new list<String> ();
-     
+     string[] lstFinalEmailIds = new list<String> ();     
      CMD_Request__c oldobjCMDReq = mapOldCMDReq.get(objCMDReq.Id); 
-    
-     
+        
      If(objCMDReq.Request_Status__c=='Completed' && oldobjCMDReq.Request_Status__c!='Completed' )
      { 
-      If(objCMDReq.Recipient_List__c!= null &&(objCMDReq.RecordTypeId == sapEditFun_Id||objCMDReq.RecordTypeId ==sapNewFun_Id ))
+      If(objCMDReq.Recipient_List__c!= null &&
+        (objCMDReq.RecordTypeId == sapEditFun_Id||objCMDReq.RecordTypeId ==sapNewFun_Id||objCMDReq.RecordTypeId == sapNewSBEFun_Id||objCMDReq.RecordTypeId ==sapEditSBEFun_Id||objCMDReq.RecordTypeId == sapNewMANUFun_Id||objCMDReq.RecordTypeId ==sapEditMANUFun_Id))
       {    
       
        system.debug('entered2' + objCMDReq.RecordTypeId);          
@@ -666,7 +740,7 @@ public class CMD_Request_Trigger {
          } 
         }
         lstFinalEmailIds.add(objCMDReq.ownerid);
-       }
+      } 
        //only for new funloc request (SFDC 285)
        
        string[] lstSPEmailIds = new list<String> ();
@@ -687,8 +761,9 @@ public class CMD_Request_Trigger {
        } 
      } 
       listStrEmailIds.add(lstFinalEmailIds) ;
-     }
-  } 
+    
+  }
+ } 
     
      if(!hasEmailAlreadySent()){
         
@@ -700,14 +775,21 @@ public class CMD_Request_Trigger {
          
          for(Integer i=0;i<listCMDRequests.size();i++)
          {
-              
-              message = getEmail(listStrEmailIds[i],listCMDRequests[i],sapNewFun_Id,sapEditFun_Id ); 
-              if(message.getToAddresses()!=null)
-              {
-              mails.add(message); 
-              }
+          // Get the email message with the New Request Email Template
+          if(listCMDRequests[i].RecordTypeId == sapNewFun_Id ||listCMDRequests[i].RecordTypeId == sapNewSBEFun_Id||listCMDRequests[i].RecordTypeId == sapNewMANUFun_Id)
+          {
+            message = getEmail(listStrEmailIds[i],listCMDRequests[i],true);  
+          }
+          // Get the email message with the Edit Request Email Template   
+          else if(listCMDRequests[i].RecordTypeId == sapEditFun_Id ||listCMDRequests[i].RecordTypeId == sapEditSBEFun_Id||listCMDRequests[i].RecordTypeId == sapEditMANUFun_Id)
+          {
+            message = getEmail(listStrEmailIds[i],listCMDRequests[i],false);  
+          }
              
-              
+           if(message.getToAddresses()!=null)
+           {
+            mails.add(message); 
+           }              
          } 
      
        Savepoint sp = Database.setSavepoint();    
@@ -754,12 +836,10 @@ public class CMD_Request_Trigger {
   
      
      // Method to send email based the visualforce email template and email id's provided by dispatchemail method 
-    public static Messaging.SingleEmailMessage getEmail(String[] listEmailId,cmd_request__c cmdReqId,Id sapNewFunId,Id sapEditFunId ) {
-    
+   public static Messaging.SingleEmailMessage getEmail(String[] listEmailId,cmd_request__c cmdReqId, Boolean isNewRequest) {    
     Messaging.SingleEmailMessage mailMessage = new Messaging.SingleEmailMessage();
-    Id templateId ;
-   
-    For(EmailTemplate em:[Select Id, Name,DeveloperName From EmailTemplate 
+    Id templateId ;   
+    for(EmailTemplate em:[Select Id, Name,DeveloperName From EmailTemplate 
                           Where (DeveloperName =:New_Email_Template OR DeveloperName =:Edit_Email_Template )])
      {
          if(em.DeveloperName == New_Email_Template) 
@@ -772,46 +852,41 @@ public class CMD_Request_Trigger {
             }
          
      }
+       
+    if(isNewRequest == true)
+     {
+        templateId = emailNewFun_Id; //Get the "CMD_New_Request_Completed" Email Template for New Requests
+     }
     
-    if(cmdReqId.RecordTypeId == sapNewFunId)
+    if(isNewRequest == false )
      {
-        templateId = emailNewFun_Id;
+        templateId = emailEditFun_Id; //Get the "CMD_Edit_Request_Completed" Email Template for Edit Requests
      }
-     
-    if(cmdReqId.RecordTypeId == sapEditFunId )
-     {
-        templateId = emailEditFun_Id;
-     }
-     
-   
-     
+       
     OrgWideEmailAddress[] owea = [select Id,Address from OrgWideEmailAddress where displayname=: OrgWide_Address];
 
     String[] toAddresses = new List<String>();
     toAddresses= listEmailId ;
  
     if(toAddresses!= null &&toAddresses.size()>0)
-   {system.debug('entered5' + toAddresses);
-    mailMessage.setTargetObjectId(cmdReqId.ownerid);
-    mailMessage.setTemplateID(templateId);
-    mailMessage.setToAddresses(toAddresses);
-    mailMessage.setWhatID(cmdReqId.id);
-    mailMessage.setSaveAsActivity(false);
+    {system.debug('entered5' + toAddresses);
+     mailMessage.setTargetObjectId(cmdReqId.ownerid);
+     mailMessage.setTemplateID(templateId);
+     mailMessage.setToAddresses(toAddresses);
+     mailMessage.setWhatID(cmdReqId.id);
+     mailMessage.setSaveAsActivity(false);
     if ( owea.size() > 0 ) 
     {
      mailMessage.setOrgWideEmailAddressId(owea.get(0).Id);
     }
    }
-  return mailMessage;
- 
+   return mailMessage; 
   }
   
   /* Method to fetch the SAP CMD Title and Output Message from the SAP CMD record and to store the value in the CMD Request record   */  
   
  public static void fetchSapCmdTitle(list<CMD_Request__c> newCMDReqList, map<Id, CMD_Request__c> mapOldCMDReq )
-    {
-      
-     
+ {    
       set<string> setCmdReqId = new set<string>();
       map<string,map<id,string>>  mapCMDReqIdTitle = new map<string,map<id,string>>();
       map<string,map<id,string>>  mapCMDReqIdOutput = new map<string,map<id,string>>();
@@ -820,15 +895,13 @@ public class CMD_Request_Trigger {
        if(newCMDReqList!= null && newCMDReqList.size()>0)
        {
        for (CMD_Request__c  objCMDReq :newCMDReqList)
-        {
-          
+        {          
            CMD_Request__c oldObjCMDReqRec = mapOldCMDReq.get(objCMDReq.Id);
            If(objCMDReq.Request_Status__c=='Completed' && oldobjCMDReqRec.Request_Status__c!='Completed') 
             { 
                 setCmdReqId.add(objCMDReq.id);
                 
-            }
-         
+            }         
        }
         
        if(!setCmdReqId.isEmpty()) 
@@ -836,9 +909,7 @@ public class CMD_Request_Trigger {
        lstSapCmd = [select CMD_Request_ID_Text__c,SAP_CMD_Title__c,output_message__c from sap_cmd__c where CMD_Request_ID_Text__c = :setCmdReqId]; 
             
        }  
-          
-             
-            
+                      
         if(lstSapCmd!= null && lstSapCmd.size()>0)
        {     
            for(sap_cmd__c sapCmd:lstSapCmd)

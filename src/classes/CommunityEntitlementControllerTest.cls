@@ -2,6 +2,10 @@
 @Created By :      Avichal Kumar
 @Created Date:     29 jun 2015
 @Description:      Test Class for CommunityEntitlementController of Atfer update trigger on case to update related entitlement
+**********************************************************************
+@Last Modified By   : Shridevi Badiger
+@Last Modified Date : 25-Aug-2017
+@Description        : As part of SIR 828-Increased the code coverage of CommunityEntitlementController
 *******************************************************************************************************/
 @isTest
 private class CommunityEntitlementControllerTest 
@@ -521,7 +525,7 @@ private class CommunityEntitlementControllerTest
         objEntitlement.StartDate=date.today();
         objEntitlement.Total_Number_of_Hours__c = 20.00;
         objEntitlement.Used_number_of_Hours__c = 15.00;
-        objEntitlement.Remaining_Hours__c = 0.00;
+        objEntitlement.Remaining_Hours__c = 22.00;
         insert objEntitlement;
         
         system.assert(objEntitlement.id!=null);
@@ -677,7 +681,8 @@ private class CommunityEntitlementControllerTest
         objEntitlement.Used_number_of_Hours__c = null;
         objEntitlement.Remaining_Hours__c = 20.00;
         insert objEntitlement;
-        
+        objEntitlement.Remaining_Hours__c = 22.00;
+        update objEntitlement;
         system.assert(objEntitlement.id!=null);
         List<Entitlement> lstEntitlement =[select Entitlement_Pattern__c from Entitlement where id=:objEntitlement.id];
         
@@ -729,7 +734,10 @@ private class CommunityEntitlementControllerTest
         {
             System.assertEquals(lstContacts[0].accountId, lstCases.get(i).AccountID);
         }
-        Test.StopTest();
+         Test.StopTest();
+       
+        
+        
         
     
     }
@@ -829,7 +837,7 @@ private class CommunityEntitlementControllerTest
         objEntitlement.StartDate=date.today();
         objEntitlement.Total_Number_of_Hours__c = 20.00;
         objEntitlement.Used_number_of_Hours__c = 0.00;
-        objEntitlement.Remaining_Hours__c = 20.00;
+        objEntitlement.Remaining_Hours__c = 23.00;
         insert objEntitlement;
         
         system.assert(objEntitlement.id!=null);
@@ -883,8 +891,16 @@ private class CommunityEntitlementControllerTest
         {
             System.assertEquals(lstContacts[0].accountId, lstCases.get(i).AccountID);
         }
-        Test.StopTest();
-        
+       
+          Test.StopTest();
+          objEntitlement.Total_Number_of_Hours__c = 20.00;
+          objEntitlement.Used_number_of_Hours__c = NULL;
+      
+          update objEntitlement;
+         
+          lstCases[0].Hours_spent_by_Support_person__c=50;
+          update  lstCases;
+       
     
     }
 }

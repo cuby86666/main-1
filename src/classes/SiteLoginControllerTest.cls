@@ -3,6 +3,11 @@
 @Modified Date:      06 Apr 2016
 @Description:        Modified according to changes in siteLoginController
 ******************************************************************************************************/
+/***************************************************************************************************
+@Modified By :       Shridevi
+@Modified Date:      04 Aug 2017
+@Description:        Modified to remove the usage of the pages which are deleted as part of SIR 750
+******************************************************************************************************/
 @isTest
 public class SiteLoginControllerTest 
 {   
@@ -96,17 +101,19 @@ public class SiteLoginControllerTest
         
         SiteLoginController controller = new SiteLoginController ();
         controller.username = 'test@salesforce.com';
-        controller.password = '123456'; 
-        PageReference pageRef = Page.CustomCommunityLogin;
+        controller.password = '123456';
+        //Below line is modified by shridevi for redirecting to login page instead of CustomCommunityLogin page since the page has been deleted.
+        PageReference pageRef = new PageReference('/community'+Label.Community_Login_URL);
+        System.debug(pageRef);
         Test.setCurrentPage(pageRef);
         ApexPages.currentPage().getParameters().put('startUrl', '/CommunityMicrocontroller');      
         System.assertEquals(controller.login(),null); 
         
         User objUser1=[select id,email,Email_verification_status__c from user where Email_verification_status__c=null LIMIT 1];
         ApexPages.currentPage().getParameters().put('email', objUser1.Email);
-        controller.resendEmailVerification(); 
+        //controller.resendEmailVerification(); 
         
-        controller.SignUpPage();    
+        //controller.SignUpPage();    
         test.stopTest();
     }  
     
@@ -144,18 +151,20 @@ public class SiteLoginControllerTest
         SiteLoginController controller = new SiteLoginController ();
         controller.username = 'test@salesforce.com';
         controller.password = '123456'; 
-        PageReference pageRef = Page.CustomCommunityLogin;
-        Test.setCurrentPage(pageRef);
+       // PageReference pageRef = Page.CustomCommunityLogin;
+       //Below line is modified by shridevi for redirecting to login page instead of CustomCommunityLogin page since the page has been deleted.
+        PageReference pageRef = new PageReference('/community'+Label.Community_Login_URL);
+         Test.setCurrentPage(pageRef);
         ApexPages.currentPage().getParameters().put('startUrl', '/CommunityMicrocontroller');      
         System.assertEquals(controller.login(),null); 
         
         User objUser1=[select id,email,Email_verification_status__c from user where Email_verification_status__c='Activation pending' LIMIT 1];
         ApexPages.currentPage().getParameters().put('email', objUser1.Email);
-        controller.resendEmailVerification(); 
+       // controller.resendEmailVerification(); 
         test.stopTest();                       
     }  
      
-	public static testmethod void SiteLoginControllerTest3 () 
+    public static testmethod void SiteLoginControllerTest3 () 
     {
         fetchRecordTypes();
         Test.startTest();
@@ -169,7 +178,10 @@ public class SiteLoginControllerTest
         SiteLoginController controller = new SiteLoginController ();
         controller.username = 'test@nxp.com';
         controller.password = '123456'; 
-        PageReference pageRef = Page.CustomCommunityLogin;
+        //PageReference pageRef = Page.CustomCommunityLogin;
+        //Below line is modified by shridevi for redirecting to login page instead of CustomCommunityLogin page since the page has been deleted.
+         PageReference pageRef = new PageReference('/community'+Label.Community_Login_URL);
+         
         Test.setCurrentPage(pageRef);
         ApexPages.currentPage().getParameters().put('startUrl', '/CommunityMicrocontroller');      
         controller.login();
@@ -189,7 +201,10 @@ public class SiteLoginControllerTest
         SiteLoginController controller = new SiteLoginController ();
         controller.username = 'test@salesforce.com';
         controller.password = '123456'; 
-        PageReference pageRef = Page.CustomCommunityLogin;
+       // PageReference pageRef = Page.CustomCommunityLogin;
+       //Below line is modified by shridevi for redirecting to login page instead of CustomCommunityLogin page since the page has been deleted.
+         PageReference pageRef = new PageReference('/community'+Label.Community_Login_URL);
+        
         Test.setCurrentPage(pageRef);
         ApexPages.currentPage().getParameters().put('startUrl', '/_ui/chatter/service/ChatterAnswersUi');      
         System.assertEquals(controller.login(),null); 

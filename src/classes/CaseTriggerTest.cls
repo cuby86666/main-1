@@ -663,7 +663,7 @@ private class CaseTriggerTest
             system.assert(objCase.Id != null);
         }
         
-        lstCases = [Select Id, OwnerID, AccountID, BL__c, BL_Description__c, Basic_Type__c,
+        lstCases = [Select Id, OwnerID, AccountID, BL__c, BL_Description__c,Product_Mag_Description__c,Basic_Type__c,
                     BU__c, BU_Description__c, MAG__c, MAG_Description__c, Basic_Type_Description__c
                     From Case Where Email__c Like '%@prakhartest%'];
             
@@ -1058,6 +1058,207 @@ private class CaseTriggerTest
     }
     
     
-   
+    static testMethod void CaseTriggerTest10()
+    {
+        fetchRecordTypes();
+        List<User> lstUsers =  createManagerUsers();
+        List<Case> listCases = new List<Case>();
+        if(lstUsers.size() > 0)
+        {
+            insert lstUsers;        
+        }
+        
+        //assert record ids        
+        for(user objUser:lstUsers)
+        {
+            system.assert(objUser.Id != null);
+        }
+        
+        List<Account> lstParentAccount = new List<Account>();
+        //Insert parent account with all Service/Account manager to cover the code
+        lstParentAccount.add(new Account(RecordTypeID=parentAccount.Id, ownerId= lstUsers[0].id,Name = 'Parent1',
+                                         Customer_Category__c= 'TestCategory', NXP_GID__c = 'TestGID',
+                                         Account_Manager_SAP_3__c = lstUsers.get(0).ID));
+        
+        lstParentAccount.add(new Account(RecordTypeID=parentAccount.Id,ownerId= lstUsers[0].id, Name = 'Parent2',
+                                         Customer_Category__c= 'TestCategory', NXP_GID__c = 'TestGID',
+                                         Service_Manager_AMEC__c = lstUsers.get(1).ID));
+        
+        if(lstParentAccount.size() > 0)
+        {
+            insert lstParentAccount;        
+        }
+        
+        //assert record ids        
+        for(Account objParentAcc:lstParentAccount)
+        {
+            system.assert(objParentAcc.Id != null);
+        }
+        
+        Account objNxpCommunityAccount = createNxpCommunityAccountRecord();
+        insert objNxpCommunityAccount;
+        System.assert(objNxpCommunityAccount.Id != null);
+        
+        Account objOtherAccount = createOtherAccountRecord();
+        insert objOtherAccount;
+        System.assert(objOtherAccount.Id != null);
+        
+        Account objTechServiceAccount = createTechServiceAccountRecord(objOtherAccount.ID);
+        insert objTechServiceAccount;
+        System.assert(objTechServiceAccount.Id != null);
+        
+        List<Account> lstChildAccount = new List<Account>();
+        
+        for(integer i=1; i<RECORD_COUNT;i++)
+        {
+            lstChildAccount.add(new Account(RecordTypeID=childAccount.Id, Name = 'Child'+i, ParentID = lstParentAccount.get(0).Id, 
+                                             Region__c='TestRegion', Sales_Area__c ='TestArea', Industry_Segment__c = 'TestSegment', 
+                                             Sub_Segment__c='TestSubSegment', Country__c = 'TestCountry'));
+        }
+        
+        if(lstChildAccount.size() > 0)
+        {
+            insert lstChildAccount;        
+        }
+        
+        //assert record ids        
+        for(Account objChildAccount1:lstChildAccount)
+        {
+            system.assert(objChildAccount1.Id != null);
+        }
+        
+        List<Contact> lstContacts = new List<Contact>();
+        
+        For(integer i=1; i< RECORD_COUNT; i++)
+        {
+            lstContacts.add(new Contact(AccountID=lstChildAccount.get(i-1).Id, FirstName = 'test1', LastName = 'test', 
+                                        Title = 'title', Phone = '8123978919', email = 'test'+i+'@test.com'));  
+        }   
+        
+        if(lstContacts.size() > 0)
+        {
+            Insert lstContacts;
+        }
+        
+        //assert record ids        
+        for(Contact objContact1:lstContacts)
+        {
+            system.assert(objContact1.Id != null);
+        }
+        
+        Test.starttest();
+        List<Case> lstCases = new List<Case>();
+        For(integer i=1; i< 5; i++)
+        {
+           lstCases.add(new Case(RecordTypeID = tsCommunity.Id,contactId=lstContacts[0].id, Status= 'New', Priority = 'Medium', 
+                              Product_Category__c = 'RF', Product_Sub__c = 'Mixers', 
+                              email__c = 'test'+i+'@test.com', JobTitle__c = 'Other', Facebook__c = 'test_fb',
+                              Company__c = 'test_Company', Linkedin__c = 'test_lnk', Community_Web_Country__c = 'test_country',
+                              Twitter__c = 'test_twt', State_Province__c = 'test_state', Product_Type_Number__c = 'test',
+                              Subject = 'test_subject', My_Question_is_Related__c = 'test', Description = 'test_subject',
+                              Product_application__c = 'test', Expected_annual_unit_volume__c = 'test',
+                              Project_Stage__c = 'Development',Web_Region__c = 'Test_region',  origin = 'Email',Case_Owner_Name__c='test',SuppliedEmail = 'test@test.com')); 
+        }
+        
+        if(lstCases.size() > 0)
+        {
+            Insert lstCases;
+        }
+    
+       Test.stopTest();
+    
+       listCases=[select id,Description,Origin,EntitlementId,Contact_Service_Level__c,Product_Service_Level__c,Project_Service_Level__c,case_Service_Level__c,score__c,priority,due_date__C from case where id in:lstCases];
+       system.assert(listCases[0].origin=='Email');
+       system.assert(listCases[1].origin=='Email');
+    }
+    
+    
+    static testMethod void CaseTriggerTest11()
+    
+    {
+    
+    
+         fetchRecordTypes(); 
+          Account objParentAccount = createParentAccount();
+          insert objParentAccount;
+          system.assert(objParentAccount.id!=null);
+          
+          
+          Entitlement objEntitlement = new Entitlement(AccountId=objParentAccount.id, Name='testingname',Route_To_Case_Owner__c= null, Route_to_Assigned_to__c=null,Used_number_of_Hours__c=10,Total_Number_of_Hours__c=20,Remaining_Hours__c=10, Startdate=system.today());
+          insert objEntitlement;
+
+
+          Test.StartTest();
+          Case objCase = new Case();
+                objCase= new Case(RecordTypeID = tsCommunity.Id, Status= 'New', Priority = 'Medium', 
+                              Product_Category__c = 'RF', Product_Sub__c = 'Mixers', 
+                              email__c = 'test1@test.com', JobTitle__c = 'Other', Facebook__c = 'test_fb',
+                              Company__c = 'test_Company', Linkedin__c = 'test_lnk', Community_Web_Country__c = 'test_country',
+                              Twitter__c = 'test_twt', State_Province__c = 'test_state', Product_Type_Number__c = 'test',
+                              Subject = 'test_subject', My_Question_is_Related__c = 'test', Description = 'test_subject',
+                              Product_application__c = 'test', Expected_annual_unit_volume__c = 'test',
+                              Project_Stage__c = 'Development',Hours_spent_by_Support_person__c=5, Web_Region__c = 'Test_region',  origin = 'Community',Case_Owner_Name__c='test', EntitlementId=objEntitlement.id ); 
+ 
+                Insert objCase;
+                system.assert(objCase.Id!=null);
+                
+           Case C=[Select Hours_spent_by_Support_person__c from Case where id =:objCase.Id limit 1 ];
+           C.Hours_spent_by_Support_person__c =6;
+           update C;
+           
+             
+                
+       Test.StopTest();
+        
+        
+    
+    
+    
+    }
+    
+    
+    static testMethod void CaseTriggerTest12()
+    
+    {
+    
+    
+         fetchRecordTypes(); 
+          Account objParentAccount = createParentAccount();
+          insert objParentAccount;
+          system.assert(objParentAccount.id!=null);
+          
+          
+          Entitlement objEntitlement = new Entitlement(AccountId=objParentAccount.id,Used_number_of_Hours__c=null, Name='testingname',Route_To_Case_Owner__c= null, Route_to_Assigned_to__c=null,Total_Number_of_Hours__c=20,Remaining_Hours__c=10, Startdate=system.today());
+          insert objEntitlement;
+
+
+          Test.StartTest();
+          Case objCase = new Case();
+                objCase= new Case(RecordTypeID = tsCommunity.Id, Status= 'New', Priority = 'Medium', 
+                              Product_Category__c = 'RF', Product_Sub__c = 'Mixers', 
+                              email__c = 'test1@test.com', JobTitle__c = 'Other', Facebook__c = 'test_fb',
+                              Company__c = 'test_Company', Linkedin__c = 'test_lnk', Community_Web_Country__c = 'test_country',
+                              Twitter__c = 'test_twt', State_Province__c = 'test_state', Product_Type_Number__c = 'test',
+                              Subject = 'test_subject', My_Question_is_Related__c = 'test', Description = 'test_subject',
+                              Product_application__c = 'test', Expected_annual_unit_volume__c = 'test',
+                              Project_Stage__c = 'Development',Hours_spent_by_Support_person__c=6,Internal_Priority__c='Low', Web_Region__c = 'Test_region',  origin = 'Community',Case_Owner_Name__c='test', EntitlementId=objEntitlement.id ); 
+ 
+                Insert objCase;
+                system.assert(objCase.Id!=null);
+                
+           Case C=[Select Hours_spent_by_Support_person__c,Internal_Priority__c from Case where id =:objCase.Id limit 1 ];
+           C.Hours_spent_by_Support_person__c =5;
+           C.Internal_Priority__c='High';
+           update C;
+           
+             
+                
+       Test.StopTest();
+        
+        
+    
+    
+    
+    }
 
 }

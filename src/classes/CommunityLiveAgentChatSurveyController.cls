@@ -15,10 +15,12 @@ public class CommunityLiveAgentChatSurveyController
     public String strLikeOurSupport{get;set;}
     public String strComment{get;set;}
     public boolean flgChinese{get;set;}
-    
+    public String RedirectionToLoginPage{get;set;}
     public CommunityLiveAgentChatSurveyController()
     {
-        
+        //below line is added by shridevi for redirecting to login page upon logout.
+        RedirectionToLoginPage=(Site.getPathPrefix()+Label.Community_Login_URL);
+     
     }
        
     //create picklist values based on question value field

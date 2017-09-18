@@ -1,10 +1,22 @@
-@isTest(SeeAllData=true) 
+/*************************************************************************
+@Modified By: 		Nisha Agrawal
+@Modified Date: 	18 Aug 2017
+@Description:		Modified class to optimize the code, improve the code coverage 
+					and remove seealldata =true
+**************************************************************************/
+@isTest
 private class PreAccountController_Test 
 {
     private static final string PRE_ACCOUNT = 'PreAccount';
     private static final string PARENT_ACCOUNT = 'Parent_Account';
     private static final string CHILD_ACCOUNT = 'Child Account';
 
+    private static Id preAccountRecordTypeId;
+    private static Id parentAccountRecordTypeId;
+    private static Id childAccountRecordTypeId;
+
+    //code block commented by Nisha Agrawal on Aug 18, 2017 to optimize the code, use helper class methods
+    /*
     private static RecordType preAccountRecordType;
     private static RecordType parentAccountRecordType;
     private static RecordType childAccountRecordType;
@@ -50,7 +62,7 @@ private class PreAccountController_Test
 	        childAccountRecordType = rt;
 	    }		
 	}
-
+*/
     User testUser = new User(	FirstName = 'Test' ,
             					LastName = 'User' ,
             					Username = 'test@test.com' ,
@@ -59,10 +71,14 @@ private class PreAccountController_Test
 
     static testMethod void preAccountToParentTest()
     {
-    	fetchPreAccountRecordType();
-    	fetchParentAccountRecordType();
+    	//fetchPreAccountRecordType(); //commented by Nisha Agrawal to improve coverage
+    	//fetchParentAccountRecordType(); //commented by Nisha Agrawal to improve coverage
     	
-        Account testAccount = new Account(	RecordTypeId = preAccountRecordType.Id ,
+        // code block added by Nisha Agrawal to improve coverage
+    	preAccountRecordTypeId = AccountHelper.getPreAccountRecordTypeID();
+    	parentAccountRecordTypeId = AccountHelper.getParentRecordTypeID();
+        
+        Account testAccount = new Account(	RecordTypeId = preAccountRecordTypeId ,
             								NXP_GID__c = '88888888' ,
      										Name = 'TEST ACCOUNT' ,
      										Legal_Name__c = 'TEST LEGAL NAME' ,
@@ -91,16 +107,39 @@ private class PreAccountController_Test
         								);
         insert testAccount;
         
+        /* code commented by Nisha Agrawal to improve the coverage 
+         //preAccountController testController = new preAccountController( testAccount ); 
+        //testController.makeParentAccount();
+        */
+        
+        //code block added by Nisha Agrawal to improve code coverage
         preAccountController testController = new preAccountController( testAccount ); 
-        testController.makeParentAccount();
+        PageReference returnPage = testController.makeParentAccount();
+        system.assert(returnPage == null);
+        
+        PageReference objPage = Page.PreAccount_to_Parent_Account;
+        objPage.getParameters().put('Id', testAccount.Id);
+        Test.setCurrentPage(objPage);
+        
+        returnPage = testController.makeParentAccount();
+        //assert the results
+        system.assert(returnPage != null);
+        List<Account> lstAccounts = [Select Id, Name, RecordTypeId From Account Where Id =: testAccount.Id Limit 1];
+        system.assert(lstAccounts.size() == 1);
+        system.assert(lstAccounts[0].RecordTypeId == parentAccountRecordTypeId);
+        //code block ends here added by Nisha Agrawal
     }
 
     static testMethod void preAccountToChildTest()
     {
-    	fetchPreAccountRecordType();
-    	fetchParentAccountRecordType();
+    	//fetchPreAccountRecordType(); // commented by Nisha Agrawal to improve coverage
+    	//fetchParentAccountRecordType(); // commented by Nisha Agrawal to improve coverage
     	
-        Account testAccount = new Account(	RecordTypeId = preAccountRecordType.Id ,
+        //code block added by Nisha Agrawal
+    	preAccountRecordTypeId = AccountHelper.getPreAccountRecordTypeID();
+    	childAccountRecordTypeId = AccountHelper.getChildRecordTypeID();
+        
+        Account testAccount = new Account(	RecordTypeId = preAccountRecordTypeId ,
             								NXP_GID__c = '88888888' ,
      										Name = 'TEST ACCOUNT' ,
      										Legal_Name__c = 'TEST LEGAL NAME' ,
@@ -129,16 +168,38 @@ private class PreAccountController_Test
         								);
         insert testAccount;
         
+        /* code commented by Nisha Agrawal to improve the coverage 
+         //preAccountController testController = new preAccountController( testAccount ); 
+        //testController.makeChildAccount();
+        */
+        
+        //code block added by Nisha Agrawal to improve code coverage
         preAccountController testController = new preAccountController( testAccount ); 
-        testController.makeChildAccount();
+        PageReference returnPage = testController.makeChildAccount();
+        system.assert(returnPage == null);
+        
+        PageReference objPage = Page.PreAccount_to_Child_Account;
+        objPage.getParameters().put('Id', testAccount.Id);
+        Test.setCurrentPage(objPage);
+        
+        returnPage = testController.makeChildAccount();
+        //assert the results
+        system.assert(returnPage != null);
+        List<Account> lstAccounts = [Select Id, Name, RecordTypeId From Account Where Id =: testAccount.Id Limit 1];
+        system.assert(lstAccounts.size() == 1);
+        system.assert(lstAccounts[0].RecordTypeId == childAccountRecordTypeId);
+        //code block ends here added by Nisha Agrawal
     }
 
     static testMethod void preAccountToComboTest()
     {
-    	fetchPreAccountRecordType();
-    	fetchParentAccountRecordType();
-    	
-        Account testAccount = new Account(	RecordTypeId = preAccountRecordType.Id ,
+    	//fetchPreAccountRecordType();
+    	//fetchParentAccountRecordType();
+    	preAccountRecordTypeId = AccountHelper.getPreAccountRecordTypeID();
+    	parentAccountRecordTypeId = AccountHelper.getParentRecordTypeID();
+        childAccountRecordTypeId = AccountHelper.getChildRecordTypeID();
+        
+        Account testAccount = new Account(	RecordTypeId = preAccountRecordTypeId ,
             								NXP_GID__c = '88888888' ,
      										Name = 'TEST ACCOUNT' ,
      										Legal_Name__c = 'TEST LEGAL NAME' ,
@@ -166,8 +227,38 @@ private class PreAccountController_Test
             								NAICS_Code__c = '123 - NAICS TEST'         		
         								);
         insert testAccount;
+                
+        /* code commented by Nisha Agrawal to improve the coverage 
+         //preAccountController testController = new preAccountController( testAccount ); 
+        //testController.makeAccountCombo();
+        */
         
+        //code block added by Nisha Agrawal to improve code coverage
         preAccountController testController = new preAccountController( testAccount ); 
-        testController.makeAccountCombo();
+        PageReference returnPage = testController.makeAccountCombo();
+        system.assert(returnPage == null);
+        
+        PageReference objPage = Page.PreAccount_to_Account_Combo;
+        objPage.getParameters().put('Id', testAccount.Id);
+        Test.setCurrentPage(objPage);
+        
+        returnPage = testController.makeAccountCombo();
+        //assert the results
+        system.assert(returnPage != null);
+        List<Account> lstAccounts = [Select Id, Name, RecordTypeId From Account Where NXP_GId__c =: testAccount.NXP_GID__c];
+        system.assert(lstAccounts.size() == 2);
+        
+        if(lstAccounts[0].Id == testAccount.Id)
+        {
+        	system.assert(lstAccounts[0].RecordTypeId == parentAccountRecordTypeId);
+            system.assert(lstAccounts[1].RecordTypeId == childAccountRecordTypeId);
+        }
+        else
+        {
+            system.assert(lstAccounts[1].RecordTypeId == parentAccountRecordTypeId);
+            system.assert(lstAccounts[0].RecordTypeId == childAccountRecordTypeId);
+        }
+        
+        //code block ends here added by Nisha Agrawal
     }
 }

@@ -70,65 +70,118 @@ public class XrfCustomerUpdateBatchTest
         fxRates.put(CCY_CODE_USD, fxrs.get(0));
         fxRates.put(CCY_CODE_EUR, fxrs.get(1));
         
+        Map<Integer,Account> mapAccount = new Map<Integer,Account>();
+        
         // Insert an account
-        Account a = new Account(Name = 'Test Account', Region__c = 'EMEA');
+        Account a = new Account(Name = 'Test0 Account', Region__c = 'EMEA');
         a.CMD_Industry_Segment__c = CBG_DEFAULT; // CMD_Industry_Segment__c: One of the criteria to determine claim values
         a.Customer_Category__c = 'Tier 4 - TMMA';
         insert a;
+        mapAccount.put(0,a);
 
+        // Insert an account (Tier1)
+        Account a1 = new Account(Name = 'Test1 Account', Region__c = 'EMEA');
+        a1.CMD_Industry_Segment__c = CBG_DEFAULT; // CMD_Industry_Segment__c: One of the criteria to determine claim values
+        a1.Customer_Category__c = 'Tier 1';
+        insert a1;
+        mapAccount.put(1,a1);
+
+        // Insert an account (Tier2)
+        Account a2 = new Account(Name = 'Test2 Account', Region__c = 'EMEA');
+        a2.CMD_Industry_Segment__c = CBG_DEFAULT; // CMD_Industry_Segment__c: One of the criteria to determine claim values
+        a2.Customer_Category__c = 'Tier 2';
+        insert a2;
+        mapAccount.put(2,a2);
+
+        // Insert an account (Tier3)
+        Account a3 = new Account(Name = 'Test3 Account', Region__c = 'EMEA');
+        a3.CMD_Industry_Segment__c = CBG_DEFAULT; // CMD_Industry_Segment__c: One of the criteria to determine claim values
+        a3.Customer_Category__c = 'Tier 3';
+        insert a3;
+        mapAccount.put(3,a3);
+
+        // Insert an account
+        Account a4 = new Account(Name = 'Test4 Account', Region__c = 'EMEA');
+        a3.CMD_Industry_Segment__c = CBG_DEFAULT; // CMD_Industry_Segment__c: One of the criteria to determine claim values
+        a3.Customer_Category__c = 'Tier 4 - ROM';
+        insert a4;
+        
         // Insert an Unknown account
         Account b = new Account(Name = 'Unknown', Region__c = 'EMEA');
         b.CMD_Industry_Segment__c = CBG_DEFAULT; // CMD_Industry_Segment__c: One of the criteria to determine claim values
         insert b;
         
+        /*
         Cross_Reference_Customer__c cust=new Cross_Reference_Customer__c(Customer_Name__c='Test Account',
                                          Customer_Location__c='EMEA',Child_Account__c=a.Id);
-        insert cust;
+        */
+        List<Cross_Reference_Customer__c> lstCrossRef = new List<Cross_Reference_Customer__c>();
+        for (Integer i = 0; i <= 3; i++) {
+            System.debug('@@@@@ ' + 'Test' + i + ' Account' + '-EMEA');
+            Cross_Reference_Customer__c cust = new Cross_Reference_Customer__c(Customer_Name__c='Test' + i + ' Account',
+                                         Customer_Location__c='EMEA',Child_Account__c=mapAccount.get(i).Id);
+            lstCrossRef.add(cust);
+        }
+        
+        insert lstCrossRef;
         
         list<Opportunity> listOpp=new list<opportunity>();
-        listOpp.add(new Opportunity(Name = 'Test Oppty1',  Industry_Segment__c = 'AFC', 
-                                      StageName = 'Initial Engagement', Legacy_End_Customer_Name_and_Location__c='Test Account-EMEA',
+        listOpp.add(new Opportunity(Name = 'Test Oppty1', AccountId = a4.Id,
+                                      StageName = 'Initial Engagement', Legacy_End_Customer_Name_and_Location__c='Test1 Account-EMEA',
                                   RecordTypeId = OpportunityTrigger.mnRecordType_Id, Production_Date__c = PRODUCTION_DATE,
                                     CloseDate = PRODUCTION_DATE - 60,Locked_Exchange_Rate__c = LOCKED_EXCHANGE_RATE,
                                    Currency__c = fxRates.get(CCY_CODE_DEFAULT).Id,CurrencyIsoCode = CCY_CODE_DEFAULT,
-                                   X2010_Pieces__c = 0,X2011_Pieces__c = 0,X2012_Pieces__c = 0,X2013_Pieces__c = 0,
-                                X2014_Pieces__c = 0,X2015_Pieces__c = 0,X2016_Pieces__c = 1000,X2017_Pieces__c = 2000,
-                                    X2020_Pieces__c = 200,X2021_Pieces__c = 300,X2022_Pieces__c = 400,X2023_Pieces__c = 500,
-                                 X2024_Pieces__c = 600, X2025_Pieces__c = 700,X2026_Pieces__c = 800,X2027_Pieces__c = 900,
-                                 X2028_Pieces__c = 1000,X2029_Pieces__c = 1100,X2030_Pieces__c = 1200,One_Year_Pieces__c= ONE_YEAR_PIECES));
+                                    One_Year_Pieces__c= ONE_YEAR_PIECES));
         
-        listOpp.add(new Opportunity(Name = 'Test Oppty2',  Industry_Segment__c = 'AFC', 
-                                      StageName = 'Initial Engagement', Legacy_End_Customer_Name_and_Location__c='Test Account-EMEA',
+        listOpp.add(new Opportunity(Name = 'Test Oppty2', AccountId = a4.Id,
+                                      StageName = 'Initial Engagement', Legacy_End_Customer_Name_and_Location__c='Test2 Account-EMEA',
                                   RecordTypeId = OpportunityTrigger.mnRecordType_Id, Production_Date__c = PRODUCTION_DATE,
                                     CloseDate = PRODUCTION_DATE - 60,Locked_Exchange_Rate__c = LOCKED_EXCHANGE_RATE,
                                    Currency__c = fxRates.get(CCY_CODE_DEFAULT).Id,CurrencyIsoCode = CCY_CODE_DEFAULT,
-                                   X2010_Pieces__c = 0,X2011_Pieces__c = 0,X2012_Pieces__c = 0,X2013_Pieces__c = 0,
-                                X2014_Pieces__c = 0,X2015_Pieces__c = 0,X2016_Pieces__c = 1000,X2017_Pieces__c = 2000,
-                                    X2020_Pieces__c = 200,X2021_Pieces__c = 300,X2022_Pieces__c = 400,X2023_Pieces__c = 500,
-                                 X2024_Pieces__c = 600, X2025_Pieces__c = 700,X2026_Pieces__c = 800,X2027_Pieces__c = 900,
-                                 X2028_Pieces__c = 1000,X2029_Pieces__c = 1100,X2030_Pieces__c = 1200,One_Year_Pieces__c= ONE_YEAR_PIECES));
+                                   X2010_Pieces__c = 0,One_Year_Pieces__c= ONE_YEAR_PIECES));
 
-        listOpp.add(new Opportunity(Name = 'Test Oppty3',  Industry_Segment__c = 'AFC', AccountId = a.Id, MN_Account_Id_Old__c = null, 
+        listOpp.add(new Opportunity(Name = 'Test Oppty3',  AccountId = a.Id, MN_Account_Id_Old__c = null, 
                                       StageName = 'Discovery', Legacy_End_Customer_Name_and_Location__c='Unknown-EMEA',
                                   RecordTypeId = OpportunityTrigger.mnRecordType_Id, Production_Date__c = PRODUCTION_DATE,
                                     CloseDate = PRODUCTION_DATE - 60,Locked_Exchange_Rate__c = LOCKED_EXCHANGE_RATE,
                                    Currency__c = fxRates.get(CCY_CODE_DEFAULT).Id,CurrencyIsoCode = CCY_CODE_DEFAULT,
-                                   X2010_Pieces__c = 0,X2011_Pieces__c = 0,X2012_Pieces__c = 0,X2013_Pieces__c = 0,
-                                X2014_Pieces__c = 0,X2015_Pieces__c = 0,X2016_Pieces__c = 1000,X2017_Pieces__c = 2000,
-                                    X2020_Pieces__c = 200,X2021_Pieces__c = 300,X2022_Pieces__c = 400,X2023_Pieces__c = 500,
-                                 X2024_Pieces__c = 600, X2025_Pieces__c = 700,X2026_Pieces__c = 800,X2027_Pieces__c = 900,
-                                 X2028_Pieces__c = 1000,X2029_Pieces__c = 1100,X2030_Pieces__c = 1200,One_Year_Pieces__c= ONE_YEAR_PIECES));        
+                                    One_Year_Pieces__c= ONE_YEAR_PIECES));        
 
-        listOpp.add(new Opportunity(Name = 'Test Oppty4',  Industry_Segment__c = 'AFC', AccountId = a.Id, MN_Account_Id_Old__c = b.Id, 
+        listOpp.add(new Opportunity(Name = 'Test Oppty4',  AccountId = a.Id, MN_Account_Id_Old__c = b.Id, 
                                       StageName = 'Lost', Legacy_End_Customer_Name_and_Location__c='Unknown-EMEA',
                                   RecordTypeId = OpportunityTrigger.mnRecordType_Id, Production_Date__c = PRODUCTION_DATE,
                                     CloseDate = PRODUCTION_DATE - 60,Locked_Exchange_Rate__c = LOCKED_EXCHANGE_RATE,
                                    Currency__c = fxRates.get(CCY_CODE_DEFAULT).Id,CurrencyIsoCode = CCY_CODE_DEFAULT,
-                                   X2010_Pieces__c = 0,X2011_Pieces__c = 0,X2012_Pieces__c = 0,X2013_Pieces__c = 0,
-                                X2014_Pieces__c = 0,X2015_Pieces__c = 0,X2016_Pieces__c = 1000,X2017_Pieces__c = 2000,
-                                    X2020_Pieces__c = 200,X2021_Pieces__c = 300,X2022_Pieces__c = 400,X2023_Pieces__c = 500,
-                                 X2024_Pieces__c = 600, X2025_Pieces__c = 700,X2026_Pieces__c = 800,X2027_Pieces__c = 900,
-                                 X2028_Pieces__c = 1000,X2029_Pieces__c = 1100,X2030_Pieces__c = 1200,One_Year_Pieces__c= ONE_YEAR_PIECES));        
+                                   One_Year_Pieces__c= ONE_YEAR_PIECES));        
+
+        listOpp.add(new Opportunity(Name = 'Test Oppty11',  
+                                      StageName = 'Initial Engagement', AccountId = a1.Id, Legacy_End_Customer_Name_and_Location__c='Te Account-EMEA',
+                                  RecordTypeId = OpportunityTrigger.mnRecordType_Id, Production_Date__c = PRODUCTION_DATE,
+                                    CloseDate = PRODUCTION_DATE - 60,Locked_Exchange_Rate__c = LOCKED_EXCHANGE_RATE,
+                                   Currency__c = fxRates.get(CCY_CODE_DEFAULT).Id,CurrencyIsoCode = CCY_CODE_DEFAULT,
+                                    One_Year_Pieces__c= ONE_YEAR_PIECES));
+
+        listOpp.add(new Opportunity(Name = 'Test Oppty12',  
+                                      StageName = 'Initial Engagement', AccountId = a2.Id, Legacy_End_Customer_Name_and_Location__c='Te Account-EMEA',
+                                  RecordTypeId = OpportunityTrigger.mnRecordType_Id, Production_Date__c = PRODUCTION_DATE,
+                                    CloseDate = PRODUCTION_DATE - 60,Locked_Exchange_Rate__c = LOCKED_EXCHANGE_RATE,
+                                   Currency__c = fxRates.get(CCY_CODE_DEFAULT).Id,CurrencyIsoCode = CCY_CODE_DEFAULT,
+                                    One_Year_Pieces__c= ONE_YEAR_PIECES));
+
+        listOpp.add(new Opportunity(Name = 'Test Oppty13',  
+                                      StageName = 'Initial Engagement', AccountId = a3.Id, Legacy_End_Customer_Name_and_Location__c='Te Account-EMEA',
+                                  RecordTypeId = OpportunityTrigger.mnRecordType_Id, Production_Date__c = PRODUCTION_DATE,
+                                    CloseDate = PRODUCTION_DATE - 60,Locked_Exchange_Rate__c = LOCKED_EXCHANGE_RATE,
+                                   Currency__c = fxRates.get(CCY_CODE_DEFAULT).Id,CurrencyIsoCode = CCY_CODE_DEFAULT,
+                                    One_Year_Pieces__c= ONE_YEAR_PIECES));
+
+        listOpp.add(new Opportunity(Name = 'Test Remove Account Oppty', MN_Account_Id_Old__c = '001D000000j3LbOIAU',
+                                      StageName = 'Initial Engagement', AccountId = a3.Id, Legacy_End_Customer_Name_and_Location__c='Te Account-EMEA',
+                                  RecordTypeId = OpportunityTrigger.mnRecordType_Id, Production_Date__c = PRODUCTION_DATE,
+                                    CloseDate = PRODUCTION_DATE - 60,Locked_Exchange_Rate__c = LOCKED_EXCHANGE_RATE,
+                                   Currency__c = fxRates.get(CCY_CODE_DEFAULT).Id,CurrencyIsoCode = CCY_CODE_DEFAULT,
+                                    One_Year_Pieces__c= ONE_YEAR_PIECES));
+        
         insert listOpp;
         
         // Insert an OpportunityShare record
@@ -150,16 +203,12 @@ public class XrfCustomerUpdateBatchTest
         
         insert olis;
         
-        Opportunity opp2 = new Opportunity(Name = 'Test Oppty5',  Industry_Segment__c = 'AFC', AccountId = a.Id, MN_Account_Id_Old__c = b.Id, 
+        Opportunity opp2 = new Opportunity(Name = 'Test Oppty5',  AccountId = a.Id, MN_Account_Id_Old__c = b.Id, 
                                       StageName = 'Discovery', Legacy_End_Customer_Name_and_Location__c='Unknown-EMEA',
                                   RecordTypeId = OpportunityTrigger.mnRecordType_Id, Production_Date__c = PRODUCTION_DATE,
                                     CloseDate = PRODUCTION_DATE - 60,Locked_Exchange_Rate__c = LOCKED_EXCHANGE_RATE,
                                    Currency__c = fxRates.get(CCY_CODE_DEFAULT).Id,CurrencyIsoCode = CCY_CODE_DEFAULT,
-                                   X2010_Pieces__c = 0,X2011_Pieces__c = 0,X2012_Pieces__c = 0,X2013_Pieces__c = 0,
-                                X2014_Pieces__c = 0,X2015_Pieces__c = 0,X2016_Pieces__c = 1000,X2017_Pieces__c = 2000,
-                                    X2020_Pieces__c = 200,X2021_Pieces__c = 300,X2022_Pieces__c = 400,X2023_Pieces__c = 500,
-                                 X2024_Pieces__c = 600, X2025_Pieces__c = 700,X2026_Pieces__c = 800,X2027_Pieces__c = 900,
-                                 X2028_Pieces__c = 1000,X2029_Pieces__c = 1100,X2030_Pieces__c = 1200,One_Year_Pieces__c= ONE_YEAR_PIECES);
+                                           One_Year_Pieces__c= ONE_YEAR_PIECES);
         insert opp2;
         
         OpportunityLineItem oli2 = new OpportunityLineItem(OpportunityId = opp2.Id, PricebookEntryId = pbes[0].Id);
