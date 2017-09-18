@@ -14,12 +14,18 @@
 @Modified By:     Scarlett Kang
 @Modified Date:   25 Feb 2016
 @Description:     1602 Hot-fix, SIR 751 - Cannot insert Funloc (System create duplicate Funloc Number)
+-----------------------------------------------------------------------------------------------------------
+@Modified By:     Rex Lai
+@Modified Date:   08 Sep 2017
+@Description:     1709 Hot-fix, SFDC-923 - Modify NXP Funloc upper range from 440000 to 439960
 *******************************************************************************************************/
 
 trigger BeforeInsert_Funloc on FunLoc__c (before insert) 
 {
     static final integer FUNLOC_LOWER_NXP = 427055;
-    static final integer FUNLOC_UPPER_NXP = 440000;
+    /*** 1709 Hot Fix - SFDC-923, Modified by Rex ***/
+    //static final integer FUNLOC_UPPER_NXP = 440000;
+    static final integer FUNLOC_UPPER_NXP = 439960;
     /***1510 Hot Fix - SIR 567, Modified by Scarlett***/
     //static final integer FUNLOC_LOWER_JULIE = 742000;
     static final integer FUNLOC_LOWER_JULIE = 742100;
@@ -49,7 +55,7 @@ trigger BeforeInsert_Funloc on FunLoc__c (before insert)
                                      FunLoc_Number__c > : FUNLOC_LOWER_JULIE  and FunLoc_Number__c < : FUNLOC_UPPER_JULIE                                        
                                      Order By CreatedDate DESC
                                      Limit 1];
-	*/
+    */
     List<FunLoc__c> lstJulieFunlocs = [Select Id , FunLoc_Number__c
                                      From FunLoc__c 
                                      Where

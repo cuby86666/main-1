@@ -11,67 +11,19 @@ Description: Modifeid as per SIR 1318 which updates case fields as per contact r
 /*
 Modified By: Shridevi
 Created Date :30 May 2017
-Description: Modifeid as per SIR 439 to avoid updating the case fields if there is no change in contact fields 
+Description: Modified as per SIR 439 to avoid updating the case fields if there is no change in contact fields 
+*/
+/*
+Modified By: Shridevi
+Created Date :25 Aug 2017
+Description: As per SIR 828- Removed the functionality on AfterInsert event since it is not required.
 */
 trigger Contact_AfterTrigger on Contact (after insert,after update) 
 {
     Private Final String CASE_TSCOMMUNITY = 'TS_Community';
     Private Final String Case_Origin = 'Community';
     
-    if(trigger.isInsert){
-    MAP<string,List<case>>mapEmailTolstCases=new MAP<string,List<case>>();
 
-    List<Contact>lstContact = [select Id,name,account.name,email from Contact where ID IN : Trigger.New  ]; 
-    Set<string>setContactemails=new set<String>();
-    for(contact objcontact:lstContact)
-    {
-      setContactemails.add(objcontact.Email);  
-    }
-    List<Case>lstcases=[select id,recordtype.developername,Origin,SuppliedEmail,ContactId
-                        from case where recordtype.developername =:CASE_TSCOMMUNITY
-                        AND SuppliedEmail IN :setContactemails AND Origin=: Case_Origin ];
-    
-    
-     for(case objCase:lstcases)
-     {           
-            if(mapEmailTolstCases.containsKey(objCase.SuppliedEmail)) 
-            {
-                List<Case> lstCase = mapEmailTolstCases.get(objCase.SuppliedEmail);
-                lstCase.add(objCase);
-                mapEmailTolstCases.put(objCase.SuppliedEmail,lstCase);
-            }
-            else
-            {
-                mapEmailTolstCases.put(objCase.SuppliedEmail, new List<Case> { objCase });
-            }
-    
-     }
-    List<case>lstCaseToUpdate;
-    for(contact objcontact:lstContact)
-    {
-        if(objcontact.Account.name=='NXP Community')
-        {            
-            if(mapEmailTolstCases.containsKey(objcontact.email))
-            {                    
-                    lstCaseToUpdate=mapEmailTolstCases.get(objcontact.email);
-                    for(case objcase:lstCaseToUpdate)
-                    {
-                        objcase.ContactId=objcontact.Id;
-                        objCase.AccountId = objcontact.AccountId;
-                    }
-                    try
-                    {
-                        update lstCaseToUpdate;
-                    }
-                    catch (System.DmlException e)
-                    {
-                     //to display error msg   
-                    }
-            }         
-        }
- 
-    }    
- }
  if(trigger.isUpdate){
  Map<id,Contact> mapContact = new map<id,Contact>();
  

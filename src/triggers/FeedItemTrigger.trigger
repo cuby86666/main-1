@@ -1,4 +1,4 @@
-trigger FeedItemTrigger on FeedItem (After Update) {
+trigger FeedItemTrigger on FeedItem (before insert, After Update) {
     
     if(trigger.isAfter){
         
@@ -8,6 +8,15 @@ trigger FeedItemTrigger on FeedItem (After Update) {
             system.debug('updateTRigger -->'+Trigger.new);
             
             objFeedItemTriggerCommunityHandler.onAfterUpdate(Trigger.new, Trigger.oldMap);
+        }
+    } else if(Trigger.isBefore) {
+        
+        if(Trigger.isInsert) {
+            
+            if(UserInfo.getUserType() == 'Standard') {
+                
+                FeedItemTriggerCommunityHandler.updateLastQuestionNetworkId(Trigger.new);  
+            }
         }
     }
 }

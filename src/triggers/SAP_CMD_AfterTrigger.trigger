@@ -10,6 +10,10 @@
 @Modified By :     Baji
 @Modified Date :   16 Mar 2017
 @Description :     Modified as part of SFDC 363(Update SAP CMD - funloc under multiple Sales Orgs - to update General Data at once)
+**********************************************************************************************************
+@Modified By :     Baji
+@Modified Date :   27 Jul 2017
+@Description :     Modified as part of SFDC 729(to extend SFDC 363 functionlity for Version ID for International Addresses and Tax Number 5
 ************************************************************************************************************************/
 
 trigger SAP_CMD_AfterTrigger on SAP_CMD__c (after update, after insert) {
@@ -32,8 +36,8 @@ trigger SAP_CMD_AfterTrigger on SAP_CMD__c (after update, after insert) {
        oldObjSapCmd.Zip__c != ObjSapCmd.Zip__c ||oldObjSapCmd.PO_Box__c != ObjSapCmd.PO_Box__c ||oldObjSapCmd.PO_Box_City__c != ObjSapCmd.PO_Box_City__c ||oldObjSapCmd.PO_Box_Postal_Code__c != ObjSapCmd.PO_Box_Postal_Code__c ||
        oldObjSapCmd.Telephone__c != ObjSapCmd.Telephone__c ||oldObjSapCmd.Email__c != ObjSapCmd.Email__c ||oldObjSapCmd.Fax__c != ObjSapCmd.Fax__c ||oldObjSapCmd.Transportation_Zone__c != ObjSapCmd.Transportation_Zone__c ||
        oldObjSapCmd.Language__c != ObjSapCmd.Language__c ||oldObjSapCmd.Chinese_Name1__c != ObjSapCmd.Chinese_Name1__c ||oldObjSapCmd.Chinese_Name2__c != ObjSapCmd.Chinese_Name2__c ||oldObjSapCmd.Chinese_Street__c != ObjSapCmd.Chinese_Street__c ||
-       oldObjSapCmd.Chinese_City__c != ObjSapCmd.Chinese_City__c ||oldObjSapCmd.Trading_Partner__c != ObjSapCmd.Trading_Partner__c ||oldObjSapCmd.Tax_Number_1__c != ObjSapCmd.Tax_Number_1__c ||oldObjSapCmd.VAT_Registration_Number__c != ObjSapCmd.VAT_Registration_Number__c ||
-       oldObjSapCmd.Country_Additional_VAT_Number_1__c != ObjSapCmd.Country_Additional_VAT_Number_1__c ||oldObjSapCmd.Country_Additional_VAT_Number_2__c != ObjSapCmd.Country_Additional_VAT_Number_2__c ||oldObjSapCmd.Country_Additional_VAT_Number_3__c != ObjSapCmd.Country_Additional_VAT_Number_3__c ||
+       oldObjSapCmd.Chinese_City__c != ObjSapCmd.Chinese_City__c ||oldObjSapCmd.Version_ID_for_International_Addresses__c != ObjSapCmd.Version_ID_for_International_Addresses__c ||oldObjSapCmd.Trading_Partner__c != ObjSapCmd.Trading_Partner__c ||oldObjSapCmd.Tax_Number_1__c != ObjSapCmd.Tax_Number_1__c ||oldObjSapCmd.VAT_Registration_Number__c != ObjSapCmd.VAT_Registration_Number__c ||
+       oldObjSapCmd.Tax_Number_5__c != ObjSapCmd.Tax_Number_5__c ||oldObjSapCmd.Country_Additional_VAT_Number_1__c != ObjSapCmd.Country_Additional_VAT_Number_1__c ||oldObjSapCmd.Country_Additional_VAT_Number_2__c != ObjSapCmd.Country_Additional_VAT_Number_2__c ||oldObjSapCmd.Country_Additional_VAT_Number_3__c != ObjSapCmd.Country_Additional_VAT_Number_3__c ||
        oldObjSapCmd.Country_Additional_VAT_Number_4__c != ObjSapCmd.Country_Additional_VAT_Number_4__c ||oldObjSapCmd.Country_Additional_VAT_Number_5__c != ObjSapCmd.Country_Additional_VAT_Number_5__c ||oldObjSapCmd.Country_Additional_VAT_Number_6__c != ObjSapCmd.Country_Additional_VAT_Number_6__c ||
        oldObjSapCmd.Country_Additional_VAT_Number_7__c != ObjSapCmd.Country_Additional_VAT_Number_7__c ||oldObjSapCmd.Country_Additional_VAT_Number_8__c != ObjSapCmd.Country_Additional_VAT_Number_8__c ||oldObjSapCmd.Additional_VAT_Number_1_Plants_Abroad__c != ObjSapCmd.Additional_VAT_Number_1_Plants_Abroad__c ||
        oldObjSapCmd.Additional_VAT_Number_2_Plants_Abroad__c != ObjSapCmd.Additional_VAT_Number_2_Plants_Abroad__c ||oldObjSapCmd.Additional_VAT_Number_3_Plants_Abroad__c != ObjSapCmd.Additional_VAT_Number_3_Plants_Abroad__c ||oldObjSapCmd.Additional_VAT_Number_4_Plants_Abroad__c != ObjSapCmd.Additional_VAT_Number_4_Plants_Abroad__c ||
