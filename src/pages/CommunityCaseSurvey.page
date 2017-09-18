@@ -55,12 +55,12 @@ Description :      Community case survey form for users to submit feedback.
                         <div id="navbar" class="navbar-collapse collapse">
                             <ul class="nav navbar-nav">
                                <!-- <li ><a href="/community/CommunityOverview">{!$label.Community_tab_Overview}</a></li>
-                                <li ><a href="/community/CommunityForum">{!$label.Community_breadcrumb_Forum}</a></li>
-                                <li><a href="/community/CommunityFAQ">{!$label.Community_tab_FAQ}</a></li>-->
-                                <li class="active"><apex:outputLink rendered="{!If(($Profile.Name='NXP Community Profile'),false,true)}" value="/community/CommunityCaseList">{!$Label.Community_tab_Contactsupport}</apex:outputLink></li>
-                                <!--<li><a href="/community/CommunityStories">{!$Label.Community_tab_Stories}</a></li>
+                               <!-- <li ><a href="/community/CommunityForum">{!$label.Community_breadcrumb_Forum}</a></li>-->
+                               <!-- <li><a href="/community/CommunityFAQ">{!$label.Community_tab_FAQ}</a></li>-->
+                               <!-- <li class="active"><apex:outputLink rendered="{!If(($Profile.Name='NXP Community Profile'),false,true)}" value="/community/CommunityCaseList">{!$Label.Community_tab_Contactsupport}</apex:outputLink></li>
+                                <li><a href="/community/CommunityStories">{!$Label.Community_tab_Stories}</a></li>
                                 <li ><apex:outputLink rendered="{!InternalExternalUser}" value="/community/CommunityProjectIssueList">{!$Label.Community_tab_Project}</apex:outputLink></li> 
-								-->
+                                -->
                             </ul>
                         </div>
                     </div>
@@ -70,8 +70,9 @@ Description :      Community case survey form for users to submit feedback.
                     <div class="nav navbar-nav navbar-right">
                          <div class="login-holder" style="width:331px;">
                             <img class="hvr-grow" id="logo" src="/community/resource/1441788430000/Forum_Community_3/NXP-community/img/community-logo_small.png" />
-                            <a href="/community/communityLogin?pagename=CommunityForum">Login / </a>
-                            <a href="/community/communityRegistration">Register</a>
+                           <!-- <a href="/community/communityLogin?pagename=CommunityForum">Login / </a>-->
+                            <!--below line is commented by shridevi as part of SIR-750. Since the community registration is not used.-->
+                            <!-- <a href="/community/communityRegistration">Register</a>-->
                             <a href="http://www.nxp.com/support/communities:COMMUNITIES">| Communities </a>
 
                         </div>
@@ -225,8 +226,11 @@ Description :      Community case survey form for users to submit feedback.
 <!-- Menu for user configuration -->
     <div id="user-config-popover" style="display:none">
         <ul class='nav nav-pills nav-stacked'>
-            <li><apex:outputlink style="width:179px; margin-left: 0px;" value="/community/CommunitiesEditUserProfile" rendered="{!If(($Profile.Name='NXP Customer Community Login User'),true,false)}" > Edit profile</apex:outputlink></li>
-			<li ><apex:outputlink style="width:179px; margin-left: 0px;" value="/secur/logout.jsp?retUrl=https%3A%2F%2Fnxpcommunity.force.com%2Fcommunity%2FCommunityOverview">Logout</apex:outputlink></li>
+           <!-- <li><apex:outputlink style="width:179px; margin-left: 0px;" value="/community/CommunitiesEditUserProfile" rendered="{!If(($Profile.Name='NXP Customer Community Login User'),true,false)}" > Edit profile</apex:outputlink></li>
+                <li ><apex:outputlink style="width:179px; margin-left: 0px;" value="/secur/logout.jsp?retUrl=https%3A%2F%2Fnxpcommunity.force.com%2Fcommunity%2FCommunityOverview">Logout</apex:outputlink></li>-->
+            <li ><apex:outputlink style="width:179px; margin-left: 0px;" value="{!RedirectionToLoginPage}">Logout</apex:outputlink></li>
+      
+       
         </ul>
     </div>
       <!-- Bootstrap core JavaScript

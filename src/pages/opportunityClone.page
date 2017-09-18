@@ -1,0 +1,34 @@
+<apex:page Controller="OpportunityCloneController">
+    <apex:pageMessages ></apex:pageMessages>
+   <apex:includeLightning />
+    <div id="lightning" />
+    <script>        
+    var opptyId = "{!$CurrentPage.parameters.id}";
+    <!-- 4d: lightning, 3: classic
+    var envType = "{!$CurrentPage.parameters.env}";
+    var func = "{!$CurrentPage.parameters.func}";
+    $Lightning.use("c:opportunityClone", function(){
+        $Lightning.createComponent("c:opportunityCloneCmp",
+            {"opptyId" : opptyId,
+             "envType" : envType,
+             "func" : func
+            },
+            "lightning", function(component){
+                $A.eventService.addHandler({
+                    event: 'force:navigateToURL',
+                    handler: function (event) {
+                        if (typeof sforce != 'undefined' && sforce.one) {
+                            // VF page in S1 or Lightning Exp
+                            // VF page in Classic
+                            sforce.one.navigateToURL(event.getParams().url);
+            
+                        } else {
+                                window.parent.location.href = event.getParams().url;
+                        }
+            
+                    }
+                });
+            });
+        });
+    </script>
+</apex:page>

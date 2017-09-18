@@ -1,8 +1,5 @@
-<apex:page Controller="OpportunityScheduleController" >   
-<!--<apex:stylesheet value="{!URLFOR($Resource.SLDSv2, 'assets/styles/salesforce-lightning-design-system-vf.min.css')}" /> -->
-          <apex:pageMessages ></apex:pageMessages>
-  
-   <!-- <apex:includeScript value="/lightning/lightning.out.js"/>     --> 
+<apex:page standardController="Opportunity">
+ <apex:pageMessages ></apex:pageMessages>  
    <apex:includeLightning />
  
     <div id="lightning" />  
@@ -20,7 +17,6 @@
           );
   
                   
-        });     
-    </script>       
-      
+        }); 
+      </script>       
 </apex:page>

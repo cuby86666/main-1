@@ -2,9 +2,15 @@
 @ Modified By :      Amrutha
 @Modified Date:      24 feb 2016
 @Description:        Commented tabs and breadcrumb except contact support 
-*******************************************************************************************************-->
+*******************************************************************************************************
+***************************************************************************************************
+@ Modified By :      Shridevi
+@Modified Date:      4 Aug 2017
+@Description:        Removed the usage of the classes which are being deleted
+*******************************************************************************************************
+-->
 
-<apex:page standardStylesheets="false" controller="CommunityTabsController" cache="True" showHeader="false"
+<apex:page standardStylesheets="false" cache="True" showHeader="false"
     sidebar="false">
    <head>
     <meta charset="utf-8"/>
@@ -73,7 +79,7 @@
                     <div class="nav navbar-nav navbar-right">
                         <span>
                             <!--  <img src="{!URLFOR($Resource.Forum_Community_3,'NXP-community/img/avatar_round.png')}" class="avatar" alt="" />  -->
-                          <img src="{!largePhotoUrl}" height="42" width="42" />
+                         <!-- <img src="{!largePhotoUrl}" height="42" width="42" />-->
                      &nbsp;<a title="" data-toggle="popover" href="#" data-original-title="Profile properties">
                     {!$User.firstName}&nbsp;{!$User.Lastname} <i class="fa fa-gear"></i>
                     </a>
@@ -120,9 +126,9 @@
   <!-- Menu for user configuration -->
      <div id="user-config-popover" style="display:none">
         <ul class='nav nav-pills nav-stacked'>
-            <li><apex:outputlink style="width:179px; margin-left: 0px;" value="/community/CommunitiesEditUserProfile" rendered="{!If(($Profile.Name='NXP Customer Community Login User'),true,false)}" > Edit profile</apex:outputlink></li>
+           <!-- <li><apex:outputlink style="width:179px; margin-left: 0px;" value="/community/CommunitiesEditUserProfile" rendered="{!If(($Profile.Name='NXP Customer Community Login User'),true,false)}" > Edit profile</apex:outputlink></li>-->
             <li><apex:outputlink style="width:179px; margin-left: 0px;" value="http://www.nxp.com/support/communities:COMMUNITIES"> Communities</apex:outputlink></li>
-            <li ><apex:outputlink style="width:179px; margin-left: 0px;" value="/secur/logout.jsp?retUrl=https%3A%2F%2Fnxpcommunity.force.com%2Fcommunity%2FCommunityOverview">Logout</apex:outputlink></li>
+           <!-- <li ><apex:outputlink style="width:179px; margin-left: 0px;" value="/secur/logout.jsp?retUrl=https%3A%2F%2Fnxpcommunity.force.com%2Fcommunity%2FCommunityOverview">Logout</apex:outputlink></li>-->
         </ul>
     </div>
     <!-- Bootstrap core JavaScript
