@@ -48,6 +48,17 @@ public with sharing class OpportunityService {
         uow.commitWork();
 	}
 	
+	public static Set<Id> updateEndCustomerAccounts(List<Opportunity> oppties, Boolean uowRequired) {
+		p('updateEndCustomerAccounts');
+		fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+		
+		// If uowRequired is true, then add oppty to uow for updating by using uow.registerDirty(oppty)
+		
+		uow.commitWork();	
+		
+		return null;
+	}
+	
 	private static void p(String msg) {
 		CommonUtils.p(OpportunityService.class, '//-v', msg);
 	}

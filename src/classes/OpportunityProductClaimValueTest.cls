@@ -1137,14 +1137,6 @@ private class OpportunityProductClaimValueTest {
         opptyProdMN.Opportunity.TMMA_Override__c = true;
         update opptyProdMN.Opportunity;
         
-        opptyProdMN.Opportunity.Account.Customer_Category__c = 'Tier 4 - TMMA';
-        update opptyProdMN.Opportunity.Account;
-        
-        Opportunity oppty1 = [select AccountId from Opportunity where Id = :opptyProdMN.OpportunityId];
-        
-        Account a = new Account(Name = 'Test Account 2', Region__c = 'EMEA', Customer_Category__c = 'Tier 1');
-        insert a;
-        
         User u = [select Id from User where ProfileId = :CommonUtils.getIntegrationUserProfileID() and IsActive = true limit 1];
         
         System.runAs(u) {
@@ -1154,7 +1146,6 @@ private class OpportunityProductClaimValueTest {
         	
         	opptyProdMN.Opportunity.CloseDate = EXPECTED_CLOSE_DATE.addDays(2);
         	opptyProdMN.Opportunity.Production_Date__c = PRODUCTION_DATE.addDays(2);
-        	opptyProdMN.Opportunity.AccountId = a.Id;
         	update opptyProdMN.Opportunity;
         }
         Test.stopTest();
@@ -1165,13 +1156,12 @@ private class OpportunityProductClaimValueTest {
         System.assertEquals(COMP_MULT, opptyLineItem.Component_Multiplier__c);
         
         Opportunity oppty2 = 
-        	[select CloseDate, Production_Date__c, AccountId
+        	[select CloseDate, Production_Date__c
         	   from Opportunity 
         	  where Id = :opptyProdMN.OpportunityId];
       
         System.assertEquals(EXPECTED_CLOSE_DATE, oppty2.CloseDate);
         System.assertEquals(PRODUCTION_DATE, oppty2.Production_Date__c);
-        System.assertEquals(oppty1.AccountId, oppty2.AccountId);
     }
     
     @isTest

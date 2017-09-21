@@ -4,7 +4,11 @@
  *	   LT_Value__c
  *     Claim_Value__c
  *	   Lost_Cancelled_LT_Value__c
- *     Lost_Cancelled_Claim_Value__c 
+ *     Lost_Cancelled_Claim_Value__c
+ *   
+ *   Opportunity
+ *     AccountId
+ *     TMMA_Override__c
  */
 public class OpportunityProductClaimValue {
 	@TestVisible 
@@ -129,7 +133,7 @@ public class OpportunityProductClaimValue {
             claimValueType.setOpptyProdClaimValue(oppty, oli, opptyScheds);
                     
             setOpptyProdCancelledClaimValue(oli);
-			System.debug('//J SFDC type oppty prod => lost/cancelled: ' + oli.Prod_Lost_Cancelled__c + ', claim value: ' + oli.Claim_Value__c + ', cancelled claim value: ' + oli.Lost_Cancelled_Claim_Value__c + ', lifetime value: ' + oli.LT_Value__c + ', cancelled lifetime value: ' + oli.Lost_Cancelled_LT_Value__c);
+			p2('SFDC type oppty prod => lost/cancelled: ' + oli.Prod_Lost_Cancelled__c + ', claim value: ' + oli.Claim_Value__c + ', cancelled claim value: ' + oli.Lost_Cancelled_Claim_Value__c + ', lifetime value: ' + oli.LT_Value__c + ', cancelled lifetime value: ' + oli.Lost_Cancelled_LT_Value__c);
         }
     }
     
@@ -282,35 +286,42 @@ public class OpportunityProductClaimValue {
     	}
     }
     
-    public static void bypassOpportunityMnUpdateForTmmaOverride(Map<Id, Opportunity> opptysOld, Map<Id, Opportunity> opptysNew) {
-    	p2('bypassOpportunityMnUpdateForTmmaOverride');
+    public static void bypassOpportunityMnUpdateForAccountAndTmmaOverride(Map<Id, Opportunity> opptiesOld, Map<Id, Opportunity> opptiesNew) {
+    	p2('bypassOpportunityMnUpdateForAccountAndTmmaOverride');
     	Set<Id> opptyIds = new Set<Id>();
     	
-    	for (Opportunity oNew : opptysNew.values()) {
+    	for (Opportunity oNew : opptiesNew.values()) {
     		if (isMnRecordType(oNew)) opptyIds.add(oNew.Id);
     	}
     	
     	if (opptyIds.size() == 0) return;
     	
     	Map<Id, Opportunity> oppties = new Map<Id, Opportunity>(new OpportunitiesSelector().selectByIdWithAccountAndOwner(opptyIds));
+    	List<Opportunity> mnOppties = new List<Opportunity>();
     	
-    	for (Opportunity oNew : opptysNew.values()) {
-        	Opportunity oOld = opptysOld.get(oNew.Id);    
+    	for (Opportunity oNew : opptiesNew.values()) {
+        	Opportunity oOld = opptiesOld.get(oNew.Id);    
                         
-            if (isMnRecordType(oNew) && isTmma(oppties.get(oOld.Id)) && CommonUtils.isIntegrationUser()) {
-            	oNew.AccountId = oOld.AccountId;
+            if (isMnRecordType(oNew) && CommonUtils.isIntegrationUser()) {
+            	mnOppties.add(oNew);
             }
             
             if (isMnRecordType(oNew) && isTmmaOverride(oNew) && CommonUtils.isIntegrationUser()) {
             	setTmmaOverrideFields(oOld, oNew, TMMA_OVERRIDE_FIELDS_OPPTY);
             }
+        }
+        
+        Set<Id> acctOverrideBypassOpptyIds = OpportunityService.updateEndCustomerAccounts(mnOppties, false);
+        
+        for (Id oid : acctOverrideBypassOpptyIds) {
+        	opptiesNew.get(oid).AccountId = opptiesOld.get(oid).AccountId;	
         }	
     }
     
-    public static void updateTmmaOverrideIfOpportunityMnUpdatedByTmma(Map<Id, Opportunity> opptysOld, Map<Id, Opportunity> opptysNew) {
+    public static void updateTmmaOverrideIfOpportunityMnUpdatedByTmma(Map<Id, Opportunity> opptiesOld, Map<Id, Opportunity> opptiesNew) {
     	p2('updateTmmaOverrideIfOpportunityMnUpdatedByTmma');
-    	for (Opportunity oNew : opptysNew.values()) {
-        	Opportunity oOld = opptysOld.get(oNew.Id);
+    	for (Opportunity oNew : opptiesNew.values()) {
+        	Opportunity oOld = opptiesOld.get(oNew.Id);
         	
         	if (isMnRecordType(oNew) && !CommonUtils.isIntegrationUser() && isTmmaOverrideFieldsChanged(oOld, oNew, TMMA_OVERRIDE_FIELDS_OPPTY)) {
             	oNew.TMMA_Override__c = true;	
@@ -334,10 +345,6 @@ public class OpportunityProductClaimValue {
     	}
     	
     	return result;
-    }
-    
-    private static Boolean isTmma(Opportunity oppty) {
-    	return (oppty.Account.Customer_Category__c == 'Tier 4 - TMMA');
     }
     
     private static Boolean isTmmaOverride(Opportunity oppty) {

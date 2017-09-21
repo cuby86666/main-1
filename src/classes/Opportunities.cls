@@ -60,7 +60,7 @@ public class Opportunities extends ApplicationDomain {
 		
 		OpportunityProductClaimValue.updateTmmaOverrideIfOpportunityMnUpdatedByTmma((Map<Id, Opportunity>)existingRecords, new Map<Id, Opportunity>((List<Opportunity>)this.records));
 		
-		OpportunityProductClaimValue.bypassOpportunityMnUpdateForTmmaOverride((Map<Id, Opportunity>)existingRecords, new Map<Id, Opportunity>((List<Opportunity>)this.records));
+		OpportunityProductClaimValue.bypassOpportunityMnUpdateForAccountAndTmmaOverride((Map<Id, Opportunity>)existingRecords, new Map<Id, Opportunity>((List<Opportunity>)this.records));
 		
 		OpportunityTrigger.onBeforeUpdate((List<Opportunity>)this.records, (Map<Id, Opportunity>)existingRecords);
 	}
