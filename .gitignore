@@ -4,3 +4,5 @@
 salesforce.schema
 .settings
 Referenced Packages
+.sfdx/tools/apex.db
+.sfdx/tools/apex.log
