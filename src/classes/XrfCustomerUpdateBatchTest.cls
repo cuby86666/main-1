@@ -226,25 +226,12 @@ public class XrfCustomerUpdateBatchTest
     @isTest
     static void XrfCustomerUpdateBatchTest1()
     {
-        Integer crossRef = 0;
-        Integer NonCrossRef = 0;
-        
-        List<Opportunity> lstOppty = [Select Id, Name, MN_Account_Id_Old__c from Opportunity];
-        for (Opportunity o : lstOppty) {
-            if (o.MN_Account_Id_Old__c == null)
-                NonCrossRef++;
-            else
-                crossRef++;
-        }
-        System.assert(NonCrossRef == 3);
-        System.assert(crossRef == 6);
-
         Test.startTest();
         XrfCustomerUpdateBatch c = new XrfCustomerUpdateBatch();
         database.executebatch(c);
         Test.stopTest();
-        crossRef = 0;
-        NonCrossRef = 0;
+        Integer crossRef = 0;
+        Integer NonCrossRef = 0;
         List<Opportunity> lstOppty2 = [Select Id, Name, MN_Account_Id_Old__c from Opportunity];
         for (Opportunity o : lstOppty2) {
             if (o.MN_Account_Id_Old__c == null)
