@@ -19,9 +19,7 @@ global class XrfCustomerUpdateBatch implements Database.Batchable<sObject>, Data
 
     global Database.QueryLocator start(Database.BatchableContext BC)
     {        
-        String strQuery = 'Select id, AccountId, Account.Customer_Category__c, ' + 
-            'Legacy_End_Customer_Name_and_Location__c, MN_Account_Id_Old__c from Opportunity ' + 
-            'where RecordType.Name=\'' + TYPE_MN_OPPTY + '\'';
+        String strQuery = 'RecordType.Name=\'' + TYPE_MN_OPPTY + '\'';
             
         if (currentYear >= oppStartYear)
             strQuery = strQuery + ' and CloseDate >= ' + String.valueOf(Date.parse('1/1/' + currentYear));
@@ -29,7 +27,8 @@ global class XrfCustomerUpdateBatch implements Database.Batchable<sObject>, Data
         if (currentYear < oppEndYear)
             strQuery = strQuery + ' and CloseDate <= ' + String.valueOf(Date.parse('12/31/' + currentYear));
         //System.debug('@@@ ' + strQuery);
-        return Database.getQueryLocator(strQuery);
+        //return Database.getQueryLocator(strQuery);
+        return new OpportunitiesSelector().selectByConditionWithAccountAndOwnerQueryLocator(strQuery);
     }
     
     global void execute(Database.BatchableContext BC, List<sObject> scope)
