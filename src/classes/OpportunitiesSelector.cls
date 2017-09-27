@@ -23,11 +23,13 @@ public class OpportunitiesSelector extends ApplicationSelector {
 			Opportunity.BL_Approver_1__c, 
 			Opportunity.BL_Approver_2__c,
 			Opportunity.Expiration_Date__c,
+			Opportunity.Legacy_End_Customer_Name_and_Location__c,
 			Opportunity.Lost_Description__c,
 			Opportunity.Lost_Reason__c,
 			Opportunity.LT_Value_USD__c,
 			Opportunity.MAG_Approver_1__c, 
 			Opportunity.MAG_Approver_2__c,
+			Opportunity.MN_Account_Id_Old__c,
 			Opportunity.Production_Date__c,
 			Opportunity.Program__c,
 			Opportunity.Regional_VP_Approver__c,
@@ -77,15 +79,28 @@ public class OpportunitiesSelector extends ApplicationSelector {
 	
 	public List<Opportunity> selectByIdWithAccountAndOwner(Set<Id> ids) {
 		p('selectByIdWithAccountAndOwner');
-		fflib_QueryFactory opptiesQueryFactory = newQueryFactory();
-		
-		new AccountsSelector().configureQueryFactoryFields(opptiesQueryFactory, Opportunity.AccountId.getDescribe().getRelationshipName());
-		
-		opptiesQueryFactory.selectField(Opportunity.AccountId.getDescribe().getRelationshipName() + '.' + Account.ParentId.getDescribe().getRelationshipName() + '.' + Account.Name);
-		
-		new UsersSelector().configureQueryFactoryFields(opptiesQueryFactory, Opportunity.OwnerId.getDescribe().getRelationshipName());
+		fflib_QueryFactory opptiesQueryFactory = getOpptiesWithAccountAndOwnerQueryFactory();
 		
 		return (List<Opportunity>)Database.query(opptiesQueryFactory.setCondition('Id in :ids').toSOQL());	
 	}
+	
+	public Database.QueryLocator selectByConditionWithAccountAndOwnerQueryLocator(String condition) {
+		p('selectByConditionWithAccountAndOwnerQueryLocator');
+		fflib_QueryFactory opptiesQueryFactory = getOpptiesWithAccountAndOwnerQueryFactory();
+		
+		return Database.getQueryLocator(opptiesQueryFactory.setCondition(condition).toSOQL());        
+    }
+    
+    private fflib_QueryFactory getOpptiesWithAccountAndOwnerQueryFactory() {
+		fflib_QueryFactory result = newQueryFactory();
+		
+		new AccountsSelector().configureQueryFactoryFields(result, Opportunity.AccountId.getDescribe().getRelationshipName());
+		
+		result.selectField(Opportunity.AccountId.getDescribe().getRelationshipName() + '.' + Account.ParentId.getDescribe().getRelationshipName() + '.' + Account.Name);
+		
+		new UsersSelector().configureQueryFactoryFields(result, Opportunity.OwnerId.getDescribe().getRelationshipName());
+		
+		return result;	
+	} 
 	
 }
