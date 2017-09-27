@@ -58,60 +58,60 @@ public with sharing class OpportunityService {
 		fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
 		
 		// If uowRequired is true, then add oppty to uow for updating by using uow.registerDirty(oppty)
-		List<Opportunity> OpptyUpdates = new List<Opportunity>();
+		List<Opportunity> opptyUpdates = new List<Opportunity>();
 		//Oppty original AccountId
-        Map<Id,Id> AccountIdsByOpptyId = new Map<Id,Id>();
-		Set<Id> AccountIds = new Set<Id>();
+        Map<Id,Id> accountIdsByOpptyId = new Map<Id,Id>();
+		Set<Id> accountIds = new Set<Id>();
 		
-		Map<String, Cross_Reference_Customer__c> CrossRefCustsByEndCustNameLoc = 
+		Map<String, Cross_Reference_Customer__c> crossRefCustsByEndCustNameLoc = 
 			new CrossReferenceCustomersSelector().getByRecordTypeIdToMap(
 			new Set<Id>{CrossReferenceCustomersSelector.getModelNRecordTypeId()});
-		for (Opportunity opp : oppties) {
+		for (Opportunity oppty : oppties) {
 			//check oppty is TMMA child account by end customer name and location
-			if (CrossRefCustsByEndCustNameLoc.containsKey(opp.Legacy_End_Customer_Name_and_Location__c)) {
+			if (crossRefCustsByEndCustNameLoc.containsKey(oppty.Legacy_End_Customer_Name_and_Location__c)) {
 				//oppty account should be TMMA child account
-				Cross_Reference_Customer__c cust = CrossRefCustsByEndCustNameLoc.get(opp.Legacy_End_Customer_Name_and_Location__c);
-				if (opp.AccountId != cust.Child_Account__c) {
+				Cross_Reference_Customer__c cust = crossRefCustsByEndCustNameLoc.get(oppty.Legacy_End_Customer_Name_and_Location__c);
+				if (oppty.AccountId != cust.Child_Account__c) {
 					//current oppty account is not TMMA account
-                	if (opp.MN_Account_Id_Old__c == null) //backup original AccountId, if backup AccountId is null, do backup.
-                        opp.MN_Account_Id_Old__c = opp.AccountId;
+                	if (oppty.MN_Account_Id_Old__c == null) //backup original AccountId, if backup AccountId is null, do backup.
+                        oppty.MN_Account_Id_Old__c = oppty.AccountId;
 
-                    opp.AccountId = cust.Child_Account__c; //assign TMMA account to oppty
-                    OpptyUpdates.add(opp); //add oppty to update list
+                    oppty.AccountId = cust.Child_Account__c; //assign TMMA account to oppty
+                    opptyUpdates.add(oppty); //add oppty to update list
 				}
 			} else {
                 //oppty account should not be TMMA child account
                 /*** 2017-09-11 Modified by Rex Lai
                 SFDC-815: Including Tier 1, Tier 2, Tier3 ***/
-				if (opp.Account.Customer_Category__c == CUSTOMER_TMMA || 
-                    opp.Account.Customer_Category__c == CUSTOMER_TIER1 || 
-                    opp.Account.Customer_Category__c == CUSTOMER_TIER2 || 
-                    opp.Account.Customer_Category__c == CUSTOMER_TIER3) {
+				if (oppty.Account.Customer_Category__c == CUSTOMER_TMMA || 
+                    oppty.Account.Customer_Category__c == CUSTOMER_TIER1 || 
+                    oppty.Account.Customer_Category__c == CUSTOMER_TIER2 || 
+                    oppty.Account.Customer_Category__c == CUSTOMER_TIER3) {
                     //if current oppty account is TMMA
-                        if (opp.MN_Account_Id_Old__c != null && opp.MN_Account_Id_Old__c.length() > 0) {
+                        if (oppty.MN_Account_Id_Old__c != null && oppty.MN_Account_Id_Old__c.length() > 0) {
                             //backup oppty original account id
-                            AccountIdsByOpptyId.put(opp.Id, opp.AccountId);
-                            opp.AccountId = opp.MN_Account_Id_Old__c;
-                            opp.MN_Account_Id_Old__c = null;
+                            accountIdsByOpptyId.put(oppty.Id, oppty.AccountId);
+                            oppty.AccountId = oppty.MN_Account_Id_Old__c;
+                            oppty.MN_Account_Id_Old__c = null;
                         }
-                    OpptyUpdates.add(opp); //add oppty to update list
+                    opptyUpdates.add(oppty); //add oppty to update list
 				}
-				AccountIds.add(opp.AccountId);
+				accountIds.add(oppty.AccountId);
 			}
 		}
-		Set<Id> OpptyIds = new Set<Id>();
-		Map<ID, Account> AccountsByAccountId = new Map<ID, Account>(new AccountsSelector().selectById(AccountIds));
-        for (Opportunity o : OpptyUpdates) {
-            if (!AccountsByAccountId.containsKey(o.AccountId)) {
+		Set<Id> opptyIds = new Set<Id>();
+		Map<ID, Account> accountsByAccountId = new Map<ID, Account>(new AccountsSelector().selectById(accountIds));
+        for (Opportunity oppty : opptyUpdates) {
+            if (!accountsByAccountId.containsKey(oppty.AccountId)) {
                 //rollback original account id
-                o.AccountId = AccountIdsByOpptyId.get(o.Id);
+                oppty.AccountId = accountIdsByOpptyId.get(oppty.Id);
             }
-            OpptyIds.add(o.Id);
-            if (uowRequired) uow.registerDirty(o);
+            opptyIds.add(oppty.Id);
+            if (uowRequired) uow.registerDirty(oppty);
         }
 
 		if (uowRequired) uow.commitWork();
-		return OpptyIds;
+		return opptyIds;
 	}
 	
 	private static void p(String msg) {

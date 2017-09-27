@@ -34,8 +34,8 @@ global class XrfCustomerUpdateBatch implements Database.Batchable<sObject>, Data
     
     global void execute(Database.BatchableContext BC, List<sObject> scope)
     {
-        list<Opportunity> Opptys = (list<Opportunity>)scope;
-		OpportunityService.updateEndCustomerAccounts(Opptys, true);
+        list<Opportunity> opptys = (list<Opportunity>)scope;
+		OpportunityService.updateEndCustomerAccounts(opptys, true);
     }            
   	global void finish(Database.BatchableContext BC)
   	{

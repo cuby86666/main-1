@@ -41,13 +41,13 @@ public class CrossReferenceCustomersSelector extends ApplicationSelector {
     
     public Map<String, Cross_Reference_Customer__c> getByRecordTypeIdToMap(Set<Id> recTypeIds) {
     	p('selectByRecordTypeIdToMap');
-    	Map<String, Cross_Reference_Customer__c> CrossRefCustsByEndCustNameLoc = new Map<String, Cross_Reference_Customer__c>(); 
+    	Map<String, Cross_Reference_Customer__c> crossRefCustsByEndCustNameLoc = new Map<String, Cross_Reference_Customer__c>(); 
     	for (Cross_Reference_Customer__c cust : selectByRecordTypeId(recTypeIds)) {
-    		if(!CrossRefCustsByEndCustNameLoc.containskey(cust.End_Customer_Name_and_Location__c)) {
-                CrossRefCustsByEndCustNameLoc.put(cust.End_Customer_Name_and_Location__c,cust);
+    		if(!crossRefCustsByEndCustNameLoc.containskey(cust.End_Customer_Name_and_Location__c)) {
+                crossRefCustsByEndCustNameLoc.put(cust.End_Customer_Name_and_Location__c,cust);
             }
     	}
-    	return CrossRefCustsByEndCustNameLoc;
+    	return crossRefCustsByEndCustNameLoc;
     }
 
 }
