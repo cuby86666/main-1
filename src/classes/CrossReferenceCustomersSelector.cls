@@ -39,15 +39,15 @@ public class CrossReferenceCustomersSelector extends ApplicationSelector {
     	return (List<Cross_Reference_Customer__c>)Database.query(newQueryFactory().setCondition('RecordTypeId in :recTypeIds').toSOQL());
     }
     
-    public Map<String, Cross_Reference_Customer__c> selectByRecordTypeIdToMap(Id recTypeId) {
+    public Map<String, Cross_Reference_Customer__c> getByRecordTypeIdToMap(Set<Id> recTypeIds) {
     	p('selectByRecordTypeIdToMap');
-    	Map<String, Cross_Reference_Customer__c> mapResult = new Map<String, Cross_Reference_Customer__c>(); 
-    	for (Cross_Reference_Customer__c cust : selectByRecordTypeId(new Set<Id>{recTypeId})) {
-    		if(!mapResult.containskey(cust.End_Customer_Name_and_Location__c)) {
-                mapResult.put(cust.End_Customer_Name_and_Location__c,cust);
+    	Map<String, Cross_Reference_Customer__c> CrossRefCustsByEndCustNameLoc = new Map<String, Cross_Reference_Customer__c>(); 
+    	for (Cross_Reference_Customer__c cust : selectByRecordTypeId(recTypeIds)) {
+    		if(!CrossRefCustsByEndCustNameLoc.containskey(cust.End_Customer_Name_and_Location__c)) {
+                CrossRefCustsByEndCustNameLoc.put(cust.End_Customer_Name_and_Location__c,cust);
             }
     	}
-    	return mapResult;
+    	return CrossRefCustsByEndCustNameLoc;
     }
 
 }
