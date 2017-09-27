@@ -147,7 +147,7 @@ public class XrfCustomerUpdateBatchTest
                                    Currency__c = fxRates.get(CCY_CODE_DEFAULT).Id,CurrencyIsoCode = CCY_CODE_DEFAULT,
                                     One_Year_Pieces__c= ONE_YEAR_PIECES));        
 
-        listOpp.add(new Opportunity(Name = 'Test Oppty4',  AccountId = a.Id, MN_Account_Id_Old__c = b.Id, 
+        listOpp.add(new Opportunity(Name = 'Test Oppty4',  AccountId = a.Id, MN_Account_Id_Old__c = a4.Id, 
                                       StageName = 'Lost', Legacy_End_Customer_Name_and_Location__c='Unknown-EMEA',
                                   RecordTypeId = OpportunityTrigger.mnRecordType_Id, Production_Date__c = PRODUCTION_DATE,
                                     CloseDate = PRODUCTION_DATE - 60,Locked_Exchange_Rate__c = LOCKED_EXCHANGE_RATE,
@@ -155,21 +155,24 @@ public class XrfCustomerUpdateBatchTest
                                    One_Year_Pieces__c= ONE_YEAR_PIECES));        
 
         listOpp.add(new Opportunity(Name = 'Test Oppty11',  
-                                      StageName = 'Initial Engagement', AccountId = a1.Id, Legacy_End_Customer_Name_and_Location__c='Te Account-EMEA',
+                                      StageName = 'Initial Engagement', AccountId = a1.Id, MN_Account_Id_Old__c = a4.Id,
+                                    Legacy_End_Customer_Name_and_Location__c='Te Account-EMEA',
                                   RecordTypeId = OpportunityTrigger.mnRecordType_Id, Production_Date__c = PRODUCTION_DATE,
                                     CloseDate = PRODUCTION_DATE - 60,Locked_Exchange_Rate__c = LOCKED_EXCHANGE_RATE,
                                    Currency__c = fxRates.get(CCY_CODE_DEFAULT).Id,CurrencyIsoCode = CCY_CODE_DEFAULT,
                                     One_Year_Pieces__c= ONE_YEAR_PIECES));
 
         listOpp.add(new Opportunity(Name = 'Test Oppty12',  
-                                      StageName = 'Initial Engagement', AccountId = a2.Id, Legacy_End_Customer_Name_and_Location__c='Te Account-EMEA',
+                                      StageName = 'Initial Engagement', AccountId = a2.Id, MN_Account_Id_Old__c = a4.Id,
+                                    Legacy_End_Customer_Name_and_Location__c='Te Account-EMEA',
                                   RecordTypeId = OpportunityTrigger.mnRecordType_Id, Production_Date__c = PRODUCTION_DATE,
                                     CloseDate = PRODUCTION_DATE - 60,Locked_Exchange_Rate__c = LOCKED_EXCHANGE_RATE,
                                    Currency__c = fxRates.get(CCY_CODE_DEFAULT).Id,CurrencyIsoCode = CCY_CODE_DEFAULT,
                                     One_Year_Pieces__c= ONE_YEAR_PIECES));
 
         listOpp.add(new Opportunity(Name = 'Test Oppty13',  
-                                      StageName = 'Initial Engagement', AccountId = a3.Id, Legacy_End_Customer_Name_and_Location__c='Te Account-EMEA',
+                                      StageName = 'Initial Engagement', AccountId = a3.Id, MN_Account_Id_Old__c = a4.Id,
+                                    Legacy_End_Customer_Name_and_Location__c='Te Account-EMEA',
                                   RecordTypeId = OpportunityTrigger.mnRecordType_Id, Production_Date__c = PRODUCTION_DATE,
                                     CloseDate = PRODUCTION_DATE - 60,Locked_Exchange_Rate__c = LOCKED_EXCHANGE_RATE,
                                    Currency__c = fxRates.get(CCY_CODE_DEFAULT).Id,CurrencyIsoCode = CCY_CODE_DEFAULT,
@@ -186,11 +189,12 @@ public class XrfCustomerUpdateBatchTest
         
         // Insert an OpportunityShare record
         
-                      
+        
         Product2 prod=new Product2(Name = 'Test Product' , MAG__c = MAG_SHORT_LIVED, IsActive = true);        
         insert prod;
         
         List<PricebookEntry> pbes = [select Id from PricebookEntry where Product2Id =:prod.Id and CurrencyIsoCode = :CCY_CODE_DEFAULT];
+        
         List<OpportunityLineItem> olis = new List<OpportunityLineItem>();
 
         for (opportunity opp : listOpp) {
@@ -222,10 +226,34 @@ public class XrfCustomerUpdateBatchTest
     @isTest
     static void XrfCustomerUpdateBatchTest1()
     {
-        Test.startTest();                  
+        Integer crossRef = 0;
+        Integer NonCrossRef = 0;
+        
+        List<Opportunity> lstOppty = [Select Id, Name, MN_Account_Id_Old__c from Opportunity];
+        for (Opportunity o : lstOppty) {
+            if (o.MN_Account_Id_Old__c == null)
+                NonCrossRef++;
+            else
+                crossRef++;
+        }
+        System.assert(NonCrossRef == 3);
+        System.assert(crossRef == 6);
+
+        Test.startTest();
         XrfCustomerUpdateBatch c = new XrfCustomerUpdateBatch();
         database.executebatch(c);
         Test.stopTest();
+        crossRef = 0;
+        NonCrossRef = 0;
+        List<Opportunity> lstOppty2 = [Select Id, Name, MN_Account_Id_Old__c from Opportunity];
+        for (Opportunity o : lstOppty2) {
+            if (o.MN_Account_Id_Old__c == null)
+                NonCrossRef++;
+            else
+                crossRef++;
+        }
+        System.assert(NonCrossRef == 7);
+        System.assert(crossRef == 2);
     }
     
     @isTest
