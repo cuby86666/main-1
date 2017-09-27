@@ -84,14 +84,14 @@ public class OpportunitiesSelector extends ApplicationSelector {
 		return (List<Opportunity>)Database.query(opptiesQueryFactory.setCondition('Id in :ids').toSOQL());	
 	}
 	
-	public List<Opportunity> selectByConditionWithAccountAndOwner(String condition) {
-		p('selectByConditionWithAccountAndOwner');
+	public Database.QueryLocator selectByConditionWithAccountAndOwnerQueryLocator(String condition) {
+		p('selectByConditionWithAccountAndOwnerQueryLocator');
 		fflib_QueryFactory opptiesQueryFactory = getOpptiesWithAccountAndOwnerQueryFactory();
 		
-		return (List<Opportunity>)Database.query(opptiesQueryFactory.setCondition(condition).toSOQL());        
+		return Database.getQueryLocator(opptiesQueryFactory.setCondition(condition).toSOQL());        
     }
-	
-	private fflib_QueryFactory getOpptiesWithAccountAndOwnerQueryFactory() {
+    
+    private fflib_QueryFactory getOpptiesWithAccountAndOwnerQueryFactory() {
 		fflib_QueryFactory result = newQueryFactory();
 		
 		new AccountsSelector().configureQueryFactoryFields(result, Opportunity.AccountId.getDescribe().getRelationshipName());
