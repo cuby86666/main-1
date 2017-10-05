@@ -67,6 +67,9 @@ public with sharing class OpportunityService {
 			new CrossReferenceCustomersSelector().getByRecordTypeIdToMap(
 			new Set<Id>{CrossReferenceCustomersSelector.getModelNRecordTypeId()});
 		for (Opportunity oppty : oppties) {
+            //backup oppty original account id
+            accountIdsByOpptyId.put(oppty.Id, oppty.AccountId);
+            
 			//check oppty is TMMA child account by end customer name and location
 			if (crossRefCustsByEndCustNameLoc.containsKey(oppty.Legacy_End_Customer_Name_and_Location__c)) {
 				//oppty account should be TMMA child account
@@ -89,15 +92,13 @@ public with sharing class OpportunityService {
                     oppty.Account.Customer_Category__c == CUSTOMER_TIER3) {
                     //if current oppty account is TMMA
                         if (oppty.MN_Account_Id_Old__c != null && oppty.MN_Account_Id_Old__c.length() > 0) {
-                            //backup oppty original account id
-                            accountIdsByOpptyId.put(oppty.Id, oppty.AccountId);
                             oppty.AccountId = oppty.MN_Account_Id_Old__c;
                             oppty.MN_Account_Id_Old__c = null;
                         }
                     opptyUpdates.add(oppty); //add oppty to update list
 				}
-				accountIds.add(oppty.AccountId);
 			}
+			accountIds.add(oppty.AccountId);
 		}
 		Set<Id> opptyIds = new Set<Id>();
 		Map<ID, Account> accountsByAccountId = new Map<ID, Account>(new AccountsSelector().selectById(accountIds));
