@@ -108,10 +108,13 @@ public with sharing class OpportunityService {
                 oppty.AccountId = accountIdsByOpptyId.get(oppty.Id);
             }
             opptyIds.add(oppty.Id);
-            if (uowRequired) uow.registerDirty(oppty);
         }
-
-		if (uowRequired) uow.commitWork();
+        
+        if (uowRequired) {
+        	uow.registerDirty(opptyUpdates);
+        	uow.commitWork();
+        }
+		
 		return opptyIds;
 	}
 	
