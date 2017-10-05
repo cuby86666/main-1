@@ -286,6 +286,7 @@ public class OpportunityProductClaimValue {
     	}
     }
     
+    //To-Do: Separate logic for account override from TMMA override. Account override can happen in before insert and before update events, whereas TMMA override requires only before update event.
     public static void bypassOpportunityMnUpdateForAccountAndTmmaOverride(Map<Id, Opportunity> opptiesOld, Map<Id, Opportunity> opptiesNew) {
     	p2('bypassOpportunityMnUpdateForAccountAndTmmaOverride');
     	Set<Id> opptyIds = new Set<Id>();
