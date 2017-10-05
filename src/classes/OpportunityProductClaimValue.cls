@@ -311,11 +311,9 @@ public class OpportunityProductClaimValue {
             }
         }
         
-        Set<Id> acctOverrideBypassOpptyIds = OpportunityService.updateEndCustomerAccounts(mnOppties, false);
+        if (mnOppties.size() == 0) return;
         
-        for (Id oid : acctOverrideBypassOpptyIds) {
-        	opptiesNew.get(oid).AccountId = opptiesOld.get(oid).AccountId;	
-        }	
+        OpportunityService.updateEndCustomerAccounts(mnOppties, false);
     }
     
     public static void updateTmmaOverrideIfOpportunityMnUpdatedByTmma(Map<Id, Opportunity> opptiesOld, Map<Id, Opportunity> opptiesNew) {
