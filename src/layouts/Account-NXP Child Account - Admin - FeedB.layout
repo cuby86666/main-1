@@ -46,8 +46,6 @@
             </containers>
         </primaryTabComponents>
     </customConsoleComponents>
-    <excludeButtons>DataDotComClean</excludeButtons>
-    <excludeButtons>DataDotComCompanyHierarchy</excludeButtons>
     <feedLayout>
         <autocollapsePublisher>false</autocollapsePublisher>
         <compactFeed>true</compactFeed>
@@ -169,10 +167,6 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>CMD_Short_Name__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>House_Number__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>

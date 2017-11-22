@@ -3,7 +3,7 @@
     <customButtons>Request_New_Child_Account_from_Parent</customButtons>
     <customButtons>Request_Edit_Parent_Account</customButtons>
     <customButtons>OrgChartPlus__OrgChartPlus</customButtons>
-    <excludeButtons>DataDotComCompanyHierarchy</excludeButtons>
+    <excludeButtons>DataDotComClean</excludeButtons>
     <excludeButtons>DisableCustomerPortalAccount</excludeButtons>
     <excludeButtons>Submit</excludeButtons>
     <headers>PersonalTagging</headers>
@@ -76,10 +76,6 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>CMD_Sub_Segment__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>House_Number__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Readonly</behavior>

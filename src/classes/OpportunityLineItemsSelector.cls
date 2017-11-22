@@ -19,7 +19,9 @@ public class OpportunityLineItemsSelector extends ApplicationSelector {
 			OpportunityLineItem.Prod_Lost_Cancelled_Reason__c,
 			OpportunityLineItem.Prod_Lost_Reason__c, 
 			OpportunityLineItem.Program__c,
-			OpportunityLineItem.Share__c
+			OpportunityLineItem.Share__c,
+            OpportunityLineItem.Help_Needed__c,
+			OpportunityLineItem.Help_Needed_History__c
 		};
 	}
 	

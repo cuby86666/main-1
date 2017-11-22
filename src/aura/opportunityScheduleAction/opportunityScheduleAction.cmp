@@ -466,101 +466,91 @@
      </div>					
     </div>					
     <br/>
+    <br/>
     <!--Edit Oppty Schedules Header Fieldset Starts --> 
     
     <!--Edit Oppty Schedules Button Section Starts-->     
     <!--Edit Oppty Schedules - Classic, Lightning Button Section Starts-->		          					          					
     <aura:if isTrue="{!(v.UserTheme != 'Theme4t')}">					
-     <div class="slds-grid slds-grid--align-center">		
-      <div class="slds-p-horizontal--small slds-size--1-of-4"> 								
-       <div class="slds-align--absolute-left">								
+     <div class="slds-grid slds-grid--align-left">		         
+      <div class="slds-p-horizontal--small slds-size--2-of-12 slds-align--absolute-center"> 								
+       <div class="slds-align--absolute-center">								
         <div class="slds-form-element">								
          <div class="slds-form-element__control">								
     	  <ui:button aura:id="addQtr"							
            class="slds-button slds-button--neutral"								
-           labelClass="label"								
-           press="{!c.addQuater}">Add QTR</ui:button>	<!-- label="Add QTR" -->						
+           labelClass="label" press="{!c.addQuater}">Add QTR</ui:button>	<!-- label="Add QTR" -->						
          </div>								
         </div>
        </div>								
       </div>
 
-      <div class="slds-p-horizontal--small slds-size--1-of-4"> 								
+      <div class="slds-p-horizontal--small slds-size--2-of-12 slds-align--absolute-left"> 								
        <div class="slds-align--absolute-left">								
         <div class="slds-form-element">								
          <div class="slds-form-element__control">								
           <ui:button aura:id="reEstablish"								
            class="slds-button slds-button--neutral"								
-           labelClass="label"								
-           press="{!c.reEstablishAlert}">Re-Establish</ui:button>		<!-- label="Re-Establish" -->						
+           labelClass="label" press="{!c.reEstablishAlert}">Re-Establish</ui:button>		<!-- label="Re-Establish" -->						
+          </div>								
+         </div>								
+        </div>								
+      </div>	
+          
+      <div class="slds-p-horizontal--small  slds-align--absolute-left"/>
+     
+      <div class="slds-p-horizontal--small  slds-align--absolute-left"/>   
+          
+      <div class="slds-p-horizontal--small slds-size--1-of-12 slds-align--absolute-right"> 								
+       <div class="slds-align--absolute-center">								
+        <div class="slds-form-element">								
+         <div class="slds-form-element__control">								
+          <ui:button aura:id="cancel"								
+           class="slds-button slds-button--neutral"								
+           labelClass="label" press="{!c.backOpptySch}">Cancel</ui:button>		<!-- label="Cancel" -->	
          </div>								
         </div>								
        </div>								
-      </div>								
-
-      <div class="slds-p-horizontal--small slds-size--3-of-4"> 								             
-       <div class="slds-align--absolute-left">	
-        <div class="slds-grid slds-grid--align-center"> 
-         <div class="slds-p-horizontal--small slds-size--1-of-3">
-          <div class="slds-form-element">								
-           <div class="slds-form-element__control">    								
-            <ui:button aura:id="cancel"								
-             class="slds-button slds-button--neutral"								
-             labelClass="label"								
-             press="{!c.backOpptySch}">Cancel</ui:button>		<!-- label="Cancel" -->	
-           </div>
-          </div>
-         </div>
-                   
-         <div class="slds-p-horizontal--small slds-size--0-of-3">
-         </div>
-         <div class="slds-p-horizontal--small slds-size--0-of-3">
-         </div>
-                 <!--&nbsp; &nbsp;  &nbsp; &nbsp;-->
-         <div class="slds-p-horizontal--small slds-size--2-of-3">
-          <div class="slds-form-element">								
-           <div class="slds-form-element__control">
-            <ui:button aura:id="saveclose"  							
-             class="slds-button slds-button--neutral"								
-             labelClass="label" 								
-             press="{!c.saveClose}">Save and Close</ui:button>	<!-- label="Save and Close" -->
-                <!--&nbsp; &nbsp;  &nbsp; &nbsp;-->
-           </div>
-          </div>
-         </div>
-               
-         <div class="slds-p-horizontal--small slds-size--0-of-3">
-         </div>
-            
-         <div class="slds-p-horizontal--small slds-size--3-of-3">
-          <div class="slds-form-element">								
-           <div class="slds-form-element__control"> 
-            <ui:button aura:id="saveSch" 							
-             class="slds-button slds-button--brand"								
-             labelClass="label" 								
-             press="{!c.save}">Save</ui:button>    	<!-- label="Save" -->	
-           </div>								           								
-          </div>
-         </div>
-        </div>
-       </div>					
-      </div>						
-      								      								
-      <div class="slds-p-horizontal--small slds-size--1-of-4"> 								
-       <div class="slds-align--absolute-right">								
-        <div class="slds-grid slds-grid--align-center">								                           
-         <div class="slds-form-element">								
-          <div class="slds-form-element__control">								
-    	   <ui:button aura:id="setrdPm"							
-            class="slds-button slds-button--neutral"								
-            labelClass="label"								
-            press="{!c.setRedirectToPM}">Production Management</ui:button>  <!-- label="Production Management" -->								
-          </div>								
+      </div>
+         
+      <div class="slds-p-horizontal--small slds-size--2-of-12 slds-align--absolute-left"> 								
+       <div class="slds-align--absolute-center">								
+        <div class="slds-form-element">								
+         <div class="slds-form-element__control">								
+          <ui:button aura:id="saveclose"  							
+           class="slds-button slds-button--neutral"								
+           labelClass="label" press="{!c.saveClose}">Save and Close</ui:button>	<!-- label="Save and Close" -->
          </div>								
-        </div>	   							
+        </div>								
+       </div>								
+      </div>
+       
+      <div class="slds-p-horizontal--small slds-size--1-of-12 slds-align--absolute-center"> 								
+       <div class="slds-align--absolute-center">								
+        <div class="slds-form-element">								
+         <div class="slds-form-element__control">								
+          <ui:button aura:id="saveSch" 							
+           class="slds-button slds-button--brand"								
+           labelClass="label" press="{!c.save}">Save</ui:button>    	<!-- label="Save" -->	
+         </div>								
+        </div>								
        </div>								
       </div>	
-     </div>					
+		
+      <div class="slds-p-horizontal--small slds-size--1-of-12 slds-align--absolute-left"/>
+         
+      <div class="slds-p-horizontal--small slds-size--3-of-12 slds-align--absolute-left"> 								
+       <div class="slds-align--absolute-left">								       							                           
+        <div class="slds-form-element">								
+         <div class="slds-form-element__control">								
+    	  <ui:button aura:id="setrdPm"							
+           class="slds-button slds-button--neutral"								
+           labelClass="label" press="{!c.setRedirectToPM}">Production Management</ui:button>  <!-- label="Production Management" -->								
+         </div>								
+        </div>								           							
+       </div>								
+      </div>
+     </div>		
     </aura:if>   					
    <!--Edit Oppty Schedules - Classic, Lightning Button Section Ends-->
          

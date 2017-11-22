@@ -189,7 +189,7 @@ private class OpportunityLineItemTriggerTest {
 
     private static void insertTestUser()
     {
-        Profile theProfile = [Select p.Name, p.Id From Profile p where Name = 'NXP Sales'];
+        Profile theProfile = [Select p.Name, p.Id From Profile p where Name = 'NXP Sales Cloud User'];
 
         testUser = new User
             (

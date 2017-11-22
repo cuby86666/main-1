@@ -3,6 +3,10 @@
 @Modified Date: 	18 Aug 2017
 @Description:		Modified class to optimize the code, improve the code coverage 
 					and remove seealldata =true
+-------------------------------------------------------------------------------------
+@Modified By: 		Nisha Agrawal
+@Modified Date: 	27 Sep 2017
+@Description:		updated test class to cover the uncommented constrcutor
 **************************************************************************/
 @isTest
 private class PreAccountController_Test 
@@ -113,7 +117,7 @@ private class PreAccountController_Test
         */
         
         //code block added by Nisha Agrawal to improve code coverage
-        preAccountController testController = new preAccountController( testAccount ); 
+        preAccountController testController = new preAccountController( new ApexPages.StandardController (testAccount));  //modified to use another constructor to improve code coverage
         PageReference returnPage = testController.makeParentAccount();
         system.assert(returnPage == null);
         

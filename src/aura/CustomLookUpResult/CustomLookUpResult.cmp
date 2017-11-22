@@ -1,0 +1,20 @@
+<aura:component >
+	<aura:attribute name="oOpportunity" type="Opportunity" />
+            
+  <!--Register the component level event-->
+    <aura:registerEvent name="oselectedsObjectRecordEvent" type="c:selectedsObjectRecordEvent"/>
+       
+    <li role="presentation">        
+        <span class="slds-lookup__item-action slds-media slds-media--center" id="lookup-option-351" role="option">
+        <div class="slds-media__body">            
+            <div class="slds-lookup__result-text">                                                                                  
+                <a onclick="{!c.selectOpportunity}">
+                    {!v.oOpportunity.Name}
+                </a>                                                                       
+          </div> 
+            </div>
+        </span>
+    </li>
+    
+    
+</aura:component>

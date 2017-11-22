@@ -2,7 +2,7 @@
 public class OpportunityCloneControllerTest {
     private static final string TYPE_MN_OPPTY='Model N Oppty';
     private static final string TYPE_SFDC_OPPTY='SFDC Oppty';
-    private static final String TEST_USER_PROFILE = 'NXP Sales';
+    private static final String TEST_USER_PROFILE = 'NXP Sales Cloud User';
     private static final String TEST_USER_EMAIL = 'testuser@testorg.com.test';
     private static final String CBG_AUTOMOTIVE = 'Automotive';
     private static final String CBG_NON_AUTOMOTIVE = 'Non-Automotive';

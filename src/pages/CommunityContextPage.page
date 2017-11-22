@@ -1,5 +1,12 @@
+<!--*****************************************************************
+Last Modified By:Shridevi
+Last Modified Date:26-Sep-2017
+Description: SIR-524-Implement search and sort functionalities for the cases.
+*********************************************************************-->
+
 <apex:page sidebar="false" standardStylesheets="false" showChat="false" showHeader="false" applyBodyTag="false" applyHtmlTag="false" controller="CommunityContextController" action="{!getPageReference1}">
     <html lang="en">
+    
     <!--[if lte IE 9]>
         <div style="margin:5px;">
             <h4 style="color:#cc3333;margin-bottom:5px;">Your Browser Is Not Supported!</h4>
@@ -11,7 +18,10 @@
             </p>
         </div>
         <![endif]-->
-
+        <head>
+        <apex:stylesheet value="{!URLFOR($Resource.communityContextSearchStyles)}"/>
+    
+    </head>
     <body>
         <div id="nxp-wrapper">
             <!-- START OF HEADER -->
@@ -123,6 +133,7 @@
                             </div>
 
                         </div>
+                      
                         <div class="row addContext">
                             <div class="col-lg-6 col-lg-offset-1">
                             </div>
@@ -132,10 +143,132 @@
                                     <a class="btn btn-lg btn-orange" href="{!URLFOR($Page.CommunityNXPCreateCaseWizard)}"><span class="icon-plus"></span> {!$Label.CommunityNewCaseButton}</a>
                                 </div>
                             </apex:outputPanel>
-                        </div>
+                       </div>
                         <!-- /.row addContext-->
                         <!-- ===== ===== =====  Start First Context ===== ===== ===== -->
                         <!--Panel Content-->
+                          <!--added by shridevi to disply search results------------------------>
+                        
+                           <div class="row addContext">
+                             <div class="col-lg-6 col-lg-offset-1">
+                             </div>
+                             <div class="col-lg-4 text-right">
+                               <apex:outputPanel layout="block" id="searchButtonPanel">
+                                 <apex:form >
+                                    <apex:inputText id="searchText" value="{!searchText}" html-placeholder="Search..."/>
+                                    <apex:commandButton value="Search" style="width:18px;border:1px;"   image="{!$Resource.SearchIcon}" action="{!SearchCases}" rerender="searchResult2" status="status"/>
+                                 </apex:form>
+                               </apex:outputpanel>
+                              </div>
+                            </div>
+                          <apex:pageBlock >
+                          <apex:actionStatus id="status" startStyleClass="action-status-style"  startText="Searching... please wait..."/>
+                             <apex:outputPanel id="searchResult2"  layout="none">
+                              <apex:outputPanel rendered="{!If(rend1=='false',true,false)}" id="searchResult3"  layout="block">
+                               <div class="customMessage">
+                                 <apex:pageMessages ></apex:pageMessages>
+                               </div>
+                               </apex:outputPanel>
+                               <apex:outputPanel rendered="{!If(rend1=='true',true,false)}" id="searchResult4"  layout="block">
+                                   <div class="row panel-container">
+                                      <div class="col-lg-10 col-lg-offset-1">
+                                        <div class="panel-custom owner">
+                                         <div class="panel-heading owner">
+                                            <h2 class="context-header"> Search Results</h2> 
+                                            </div>
+                                           <div class="panel-custom-body row">
+                                          <apex:form >
+                                            <apex:pageBlockSection rendered="{!rend1}"  id="searchres"  >
+                                               <apex:variable var="i" value="{!0}"/>
+                                               <apex:pageBlockTable styleClass="page-block-table-style" value="{!listCasesSearch}" var="caseRec"   >
+                                                 <apex:column >
+                                                   <apex:variable var="i" value="{!i+1}"/>
+                                                 </apex:column>
+                                                
+                                                 <apex:column headerClass="column-header-style"  width="200" styleClass="{! IF((mod(i,2)) == 0,'column-style-even-row','column-style-odd-row')}">
+                                                  
+                                                      <apex:facet name="header">
+                                                        <apex:commandLink action="{!sortCases}" style="color:#626567;" value="Case Number{!IF(sortField=='CaseNumber',IF(Order='ASC','▼','▲'),'')}" reRender="searchResult2">
+                                                             <apex:param name="sortField" value="CaseNumber" assignTo="{!sortField}" />
+                                                             <apex:param name="Order" value="{!IF(Order == 'DESC', 'ASC','DESC')}" assignTo="{!Order}" />
+                                                              
+                                                             </apex:commandLink>
+                                                     </apex:facet>
+                                                    <!-- <a href="#{!caseRec.CaseNumber}"  >
+                                                      {!caseRec.CaseNumber}
+                                                     </a>-->
+                                                     <a target="_self" href="{!URLFOR($Page.CommunityNXPCaseDetail)}?caseId={!caseRec.Id}" >
+                                                                     {!caseRec.CaseNumber}</a>
+                                                           
+                                                 </apex:column>
+                                                
+                                                    <apex:column headerClass="column-header-style-1"  width="200"   styleClass="{! IF((mod(i,2)) == 0,'column-style-even-row-1','column-style-odd-row-1')}">
+                                                      
+                                                     <apex:facet name="header">
+                                                        <apex:commandLink action="{!sortCases}" style="color:#626567;" value="Folder{!IF(sortField=='Entitlement.name',IF(Order='ASC','▼','▲'),'')}" reRender="searchResult2">
+                                                             <apex:param name="sortField" value="Entitlement.name" assignTo="{!sortField}" />
+                                                             <apex:param name="Order" value="{!IF(Order == 'DESC', 'ASC','DESC')}" assignTo="{!Order}" />
+                                                        </apex:commandLink>
+                                                     </apex:facet>
+                                                     <a href="#{!caseRec.Entitlement.name}">
+                                                      {!caseRec.Entitlement.name}
+                                                     </a>
+                                                     
+                                                   </apex:column>
+                                                 
+                                                 <apex:column headerClass="column-header-style" width="200"    styleClass="{! IF((mod(i,2)) == 0,'column-style-even-row','column-style-odd-row')}">
+                                                     <!--<div class="hide-col">-->
+                                                     <apex:facet name="header">
+                                                        <apex:commandLink action="{!sortCases}" style="color:#626567;" value="Subject{!IF(sortField=='Subject',IF(Order='ASC','▼','▲'),'')}" reRender="searchResult2">
+                                                             <apex:param name="sortField" value="Subject" assignTo="{!sortField}" />
+                                                             <apex:param name="Order" value="{!IF(Order == 'DESC', 'ASC','DESC')}" assignTo="{!Order}" />
+                                                        </apex:commandLink>
+                                                   </apex:facet>
+                                                   {!caseRec.subject}
+                                                  <!-- </div>-->
+                                                   </apex:column>
+                                                   
+                                                 <apex:column headerClass="column-header-style-1" width="200" headerValue="Description"     styleClass="{! IF((mod(i,2)) == 0,'column-style-even-row-1','column-style-odd-row-1')}">
+                                                
+                                                 <apex:outputText value="{!left(caseRec.description,256)}"   />
+                                                 
+                                                 </apex:column>
+                                                 <apex:column headerClass="column-header-style-2" width="200"     styleClass="{! IF((mod(i,2)) == 0,'column-style-even-row-2','column-style-odd-row-2')}">
+                                                  
+                                                   <apex:facet name="header">
+                                                        <apex:commandLink action="{!sortCases}" style="color:#626567;" value="Status{!IF(sortField=='Status',IF(Order='ASC','▼','▲'),'')}" reRender="searchResult2">
+                                                             <apex:param name="sortField" value="Status" assignTo="{!sortField}" />
+                                                             <apex:param name="Order" value="{!IF(Order == 'DESC', 'ASC','DESC')}" assignTo="{!Order}" />
+                                                        </apex:commandLink>
+                                                   </apex:facet>
+                                                   {!caseRec.status}
+                                                  
+                                                 </apex:column>
+                                                 
+                                                 <apex:column headerClass="column-header-style-2"  width="200"  styleClass="{! IF((mod(i,2)) == 0,'column-style-even-row-2','column-style-odd-row-2')}">       
+                                                    
+                                                   <apex:facet name="header">
+                                                        <apex:commandLink action="{!sortCases}" style="color:#626567 ;" value="Created Date{!IF(sortField=='CreatedDate',IF(Order='ASC','▼','▲'),'')}" reRender="searchResult2">
+                                                             <apex:param name="sortField" value="CreatedDate" assignTo="{!sortField}" />
+                                                             <apex:param name="Order" value="{!IF(Order == 'DESC', 'ASC','DESC')}" assignTo="{!Order}" />
+                                                        </apex:commandLink>
+                                                   </apex:facet>
+                                                   {!caseRec.createddate}
+                                                  
+                                                 </apex:column>
+                                               </apex:pageBlockTable>
+                                              </apex:pageBlockSection>
+                                             </apex:form>  
+                                            </div>  
+                                          </div>      
+                                         </div>
+                                       </div>
+                                </apex:outputpanel>
+                              </apex:outputpanel>
+                            </apex:pageBlock>
+                          
+                        
+                        <!----------------------------------------------------------------------->
                         <apex:outputPanel layout="none" id="mainPage">
                             <div id="mainPanel">
                                 <apex:outputPanel layout="none" rendered="{!if(entitlementContactsList.size ==0, true, false)}">
@@ -163,7 +296,7 @@
                                 <apex:repeat value="{!entitlementContactsList }" var="ent" id="loadData">
                                     <!-- First Context--->
                                     <apex:outputPanel layout="none" rendered="{!if(OR(ent.Entitlement__r.name!=$Label.CommunityOthersname, AND(ent.Entitlement__r.name==$Label.CommunityOthersname, showOthersSection) ), true, false)}">
-
+                                        <a id="{!ent.Entitlement__r.name}"></a>
                                         <div class="row panel-container">
                                             <div class="col-lg-10 col-lg-offset-1">
                                                 <!-- Set Owner, Participant, or Observer here -->
@@ -305,7 +438,7 @@
                                                         <div class="hidden-panel clearfix" style="{!if(counter==1,'display:block', 'display:none')}">
                                                             <div class="case col-xs-12 clearfix">
                                                                 <div class="col-xs-8">
-                                                                    <a onclick="window.location.href='{!URLFOR($Page.CommunityNXPCaseDetail)}?caseId={!cse.Id}'" class="case-name">
+                                                                    <a id="{!cse.CaseNumber}" onclick="window.location.href='{!URLFOR($Page.CommunityNXPCaseDetail)}?caseId={!cse.Id}'" class="case-name">
                                                                     {!$Label.CommunityCase} {!cse.CaseNumber}</a>
                                                                 </div>
                                                                 <!-- <span class="col-xs-4 text-right plus1">

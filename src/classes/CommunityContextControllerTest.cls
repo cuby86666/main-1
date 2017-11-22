@@ -10,7 +10,7 @@ Public class CommunityContextControllerTest{
     static User userRecord;
     static Contact participantconRecord ;
     static Contact observerconRecord ;
-    
+    static User usr1;
     /*
     * @name         : saveRecord
     * @description  : saves the Case record with updated owner
@@ -67,7 +67,7 @@ Public class CommunityContextControllerTest{
          
             controller.addAttachment();            
 
-            Test.stopTest();
+            
             
             
             ApexPages.currentPage().getParameters().put('econtactId', [SELECT id from Entitlement_Contact__c limit 1].id);
@@ -75,12 +75,24 @@ Public class CommunityContextControllerTest{
             controller.acceptEntitlement();
             controller.rejectEntitlement();
             controller.removeEntitlementContact();
-            
-           
-            
+            controller.SearchText='testingname';
+            System.debug('map::'+controller.entitlementCases.values());
+            controller.SearchCases();
+            System.debug('search cases:::'+controller.listCasesSearch);
+            //System.assert(controller.listCasesSearch.size()>0);
+            controller.SortCases();
+            controller.SearchText=''; 
+            controller.SearchCases();
+            Test.stopTest();
             
         }
-       
+            usr1=createManagerUsers();
+            insert usr1;
+            System.runAs(usr1){
+            CommunityContextController controller1 = new CommunityContextController( ); 
+            controller1.getPageReference1();
+            controller1.createCaseRecord();
+            }
         
         
     } 
@@ -208,7 +220,11 @@ Public class CommunityContextControllerTest{
             conRecord.LastName = 'T';
             conRecord.Email = 'test@'+system.currentTimeMillis()+'.com';
             insert conRecord;
-            
+             Contact conRecord1 = new Contact();
+            conRecord1.accountId = accRecord.id;
+            conRecord1.LastName = 'T';
+            conRecord1.Email = 'test@'+system.currentTimeMillis()+'.com';
+            insert conRecord1;
             
             Profile p = [SELECT Id FROM Profile WHERE Name LIKE '%NXPCommunity Login User%' limit 1]; 
 
@@ -220,12 +236,37 @@ Public class CommunityContextControllerTest{
             userRecord.contactID = conRecord.id;
             insert userRecord;
             
+           /* usr1=new User(Alias = 'standt', Email='systemadmin@tsicleanup.com',
+            userName =  'systemadmin@tsicleanup1.com',firstName='New1',
+            EmailEncodingKey='UTF-8', LastName='Testing', LanguageLocaleKey='en_US', 
+            LocaleSidKey='en_US', ProfileId = p.Id, 
+            TimeZoneSidKey='America/Los_Angeles');
+            //usr1.contactID = conRecord1.id;
+            insert usr1;*/
             
             
         }
         
         
     }
+private Static User createManagerUsers() 
+    {
+        List<User> lstUsers = new List<User>();
+        
+        Profile objProfile = [SELECT Id FROM Profile WHERE Name='Standard User' LIMIT 1];
+        system.assert(objProfile.Id != null);
+        
+        User objUser;
+        
+            objUser = new User(alias = 'nUser', email= 'testing@test.com', emailencodingkey='UTF-8', 
 
+lastname='test',languagelocalekey='en_US', localesidkey='en_US', 
+                                 profileid = objProfile.Id, timezonesidkey='America/Los_Angeles', username= 'prakhartest' + 
+
+datetime.now().millisecond() +'@test.com' );
+                                                     
+        
+        return objUser;
+    }
     
 }

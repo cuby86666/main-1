@@ -1,0 +1,18 @@
+<aura:component >
+<aura:attribute name="accountList"  type="Account"/>
+ <aura:registerEvent name="oselectedAccRecordEvent" type="c:SelectedAccRecordEvent"/>   
+	<li role="presentation">        
+        <span class="slds-lookup__item-action slds-media slds-media--center" id="lookup-option-351" role="option">
+        <div class="slds-media__body">            
+            <div class="slds-lookup__result-text">                                                                                  
+                <a onclick="{!c.selectAccount}">
+                    {!v.accountList.Name},
+                    {!v.accountList.Country__c},
+                    {!v.accountList.City__c}
+                </a>                                                                       
+          </div> 
+            </div>
+        </span>
+    </li>
+
+</aura:component>

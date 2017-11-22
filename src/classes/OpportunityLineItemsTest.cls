@@ -42,7 +42,7 @@ private class OpportunityLineItemsTest {
         
         MAG_LIFETIME = claimValueMagSetting.MAG__c;
         
-        List<OpportunityLineItem> opptyLineItems = [select Id, OpportunityId, Program__c, Opportunity.Program__c, PricebookEntry.Product2.MAG__c from OpportunityLineItem]; 
+        List<OpportunityLineItem> opptyLineItems = [select Id, OpportunityId, Program__c, Opportunity.Program__c, PricebookEntry.Product2.MAG__c, Help_Needed__c, Help_Needed_History__c from OpportunityLineItem]; 
         
         for (OpportunityLineItem oli : opptyLineItems) {
         	opptyProds.add(oli);    
@@ -119,6 +119,7 @@ private class OpportunityLineItemsTest {
             OpportunityLineItem oli = new OpportunityLineItem(OpportunityId = o.Id, PricebookEntryId = pbe.Id);
             oli.UnitPrice = UNIT_PRICE;
             oli.Component_Multiplier__c = COMP_MULT;
+            oli.Help_Needed__c = 'Test Help Needed v1';
             olis.add(oli);
         }
         
@@ -147,6 +148,22 @@ private class OpportunityLineItemsTest {
 	@isTest
     static void testProgramSyncedWithOppty() {
         System.assertEquals(opptyProd.Opportunity.Program__c, opptyProd.Program__c);
+    }
+    
+    @isTest
+    static void testHelpNeededHistoryUpdate() {
+        OpportunityLineItem opptyProdUpdated;
+        
+        System.assertEquals('Test Help Needed v1', opptyProd.Help_Needed__c);
+    	System.assertEquals(null, opptyProd.Help_Needed_History__c);
+    	
+    	opptyProd.Help_Needed__c = 'Test Help Needed v2';
+    	update opptyProd;
+        
+        opptyProdUpdated = getOpportunityLineItem(opptyProd.Id);
+        
+        System.assertEquals('Test Help Needed v2', opptyProdUpdated.Help_Needed__c);
+    	System.assertEquals('Test Help Needed v1', opptyProdUpdated.Help_Needed_History__c);
     }
     
     static User createUser(String alias, String lastName, ID profileID, Boolean signedARIA) {
@@ -187,6 +204,12 @@ private class OpportunityLineItemsTest {
         			   Account.ParentId, Owner.MT_2__c
         		  from Opportunity 
         		 where Id = :opptyID];    
+    } 
+    
+    static OpportunityLineItem getOpportunityLineItem(ID opptyProdID){
+		return [select Id, Help_Needed__c, Help_Needed_History__c 
+                  from OpportunityLineItem
+                 where Id = :opptyProdID
+               ];
     }
-        
 }

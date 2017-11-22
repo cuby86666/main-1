@@ -8,14 +8,14 @@ Description :      Custom clone page to display clone case details and custom sa
     <br/>&nbsp;&nbsp;&nbsp;&nbsp;<h5>Case Edit</h5> <br/>
     &nbsp;&nbsp;&nbsp;&nbsp;{!case.casenumber} 
     <apex:pageMessages id="Error"></apex:pageMessages>
-	<apex:form id="pageForm" ><br/> 
+    <apex:form id="pageForm" ><br/> 
     <apex:pageBlock mode="edit" id="pageBlock">
         <apex:pageBlockButtons id="pageButton">
             <apex:commandButton value="Save" action="{!saveClonedCase}" id="buttonSave"/>
-        	<apex:commandButton value="Cancel" action="{!cancelClone}" id="buttonCancel" immediate="true"/>
+            <apex:commandButton value="Cancel" action="{!cancelClone}" id="buttonCancel" immediate="true"/>
         </apex:pageBlockButtons>
         <apex:pageBlockSection columns="2" id="pageBlockSection">
-    		<apex:outputField value="{!case.casenumber}" id="caseNumber"/>
+            <apex:outputField value="{!case.casenumber}" id="caseNumber"/>
             <apex:inputField value="{!case.priority}" required="true" id="casePriority"/>
             <apex:outputField value="{!case.owner.name}" label="Case Owner" id="caseOwner"/>
             <apex:inputField value="{!case.status}" required="true" id="caseStatus"/>
@@ -25,8 +25,11 @@ Description :      Custom clone page to display clone case details and custom sa
             <apex:inputField value="{!case.Resolution__c}" id="caseResolution"/>&nbsp;
             <apex:inputField value="{!case.Reference__c}" style="width:510px;height:80px;" id="caseReference"/>&nbsp;
         </apex:pageBlockSection>
+        <apex:pageBlockSection title="Entitlement Information">
+           <apex:inputField value="{!case.EntitlementId}"  id="caseOrigin"/> 
+        </apex:pageBlockSection>
         <apex:pageBlockSection title="Description Information">
-        	<apex:inputField value="{!case.contactID}" label="Contact Name" id="caseContact"/>
+            <apex:inputField value="{!case.contactID}" label="Contact Name" id="caseContact"/>
             <apex:inputField value="{!case.origin}"  id="caseOrigin"/>
             <apex:inputField value="{!case.JobTitle__c}" label="Contact Title" id="caseJobtitle"/>
             <apex:inputField value="{!case.Product_Type_Number__c}" id="caseProductType"/>

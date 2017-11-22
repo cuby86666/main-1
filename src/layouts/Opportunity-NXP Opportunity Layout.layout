@@ -209,6 +209,10 @@
                 <behavior>Edit</behavior>
                 <field>Schematic_Close_Date__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Discovery_Date__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -292,6 +296,10 @@
                 <behavior>Edit</behavior>
                 <field>Count_Product_Revenue__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>War_Room_Completed__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -311,6 +319,20 @@
                 <field>Cross_Selling_by_Owner__c</field>
             </layoutItems>
         </layoutColumns>
+        <style>TwoColumnsLeftToRight</style>
+    </layoutSections>
+    <layoutSections>
+        <customLabel>true</customLabel>
+        <detailHeading>true</detailHeading>
+        <editHeading>true</editHeading>
+        <label>Q Sales</label>
+        <layoutColumns>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>QSales_Oppty_Number__c</field>
+            </layoutItems>
+        </layoutColumns>
+        <layoutColumns/>
         <style>TwoColumnsLeftToRight</style>
     </layoutSections>
     <layoutSections>
@@ -618,6 +640,7 @@
         <fields>Account__c</fields>
         <fields>Opportunity_Owner__c</fields>
         <fields>OWNER.FIRST_NAME</fields>
+        <fields>OWNER.LAST_NAME</fields>
         <fields>Project_Status_Flag__c</fields>
         <fields>Project_Stage__c</fields>
         <relatedList>Customer_Project__c.Opportunity__c</relatedList>

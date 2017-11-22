@@ -110,7 +110,8 @@ public class LeadOwnerAssignmentHandler {
                       ldToUpdate.OwnerId=mapEmailToAccount.get(ldToUpdate.Email).OwnerId;
                   }                
                   string AccountId=mapEmailToAccount.get(ldToUpdate.Email).Id;
-                    ldToUpdate.Lead_Owner_Assignment__c='Owner is Assigned based on Contact Match of Account Id:' +AccountId;                                   
+                    ldToUpdate.Lead_Owner_Assignment__c='Owner is Assigned based on Contact Match of Account Id:' +AccountId;
+                  ldToUpdate.Account_Id__c=AccountId;
                 if(mapEmailToAccount.get(ldToUpdate.Email).customer_category__c=='Tier 4 - TMMA' ){                     
                             ldToUpdate.RecordTypeId=TMMA_LEAD_RECORD_TYPE;                     
                 } 
@@ -184,7 +185,8 @@ public class LeadOwnerAssignmentHandler {
                              }                           
                              string AccountId=mapGIdsToAccount.get(ld.NXP_Global_Customer_Master_ID__c).Id;                           
                              ld.Lead_Owner_Assignment__c='Owner is Assigned based on Global Id  Match of Account Id:' +AccountId;
-                            if(mapGIdsToAccount.get(ld.NXP_Global_Customer_Master_ID__c).customer_category__c=='Tier 4 - TMMA'){                    
+                            ld.Account_Id__c=AccountId;
+                             if(mapGIdsToAccount.get(ld.NXP_Global_Customer_Master_ID__c).customer_category__c=='Tier 4 - TMMA'){                    
                                 ld.RecordTypeId=TMMA_LEAD_RECORD_TYPE;                    
                             } 
                             else if(mapGIdsToAccount.get(ld.NXP_Global_Customer_Master_ID__c).customer_category__c=='Tier 4 - ROM'){
@@ -273,7 +275,7 @@ public class LeadOwnerAssignmentHandler {
                           }                        
                         string AccountId=mapAddressAccount.get(ldCountry).get(ldState).Id;
                       ld.Lead_Owner_Assignment__c='Owner is Assigned based on Address Match of Account Id:' +AccountId;
-                                                        
+                        ld.Account_Id__c=AccountId;                                
                         if(mapAddressAccount.get(ldCountry).get(ldState).customer_category__c=='Tier 4 - TMMA'){
                             ld.RecordTypeId=TMMA_LEAD_RECORD_TYPE; 
                         }
@@ -296,7 +298,8 @@ public class LeadOwnerAssignmentHandler {
                               ld.OwnerId=mapAddressCityAccount.get(ldCountry).get(ldCity).OwnerId;  
                           }                                              
                         string AccountId=mapAddressCityAccount.get(ldCountry).get(ldCity).Id;
-                      ld.Lead_Owner_Assignment__c='Owner is Assigned based on Address Match of Account Id:' +AccountId;                                                                               
+                      ld.Lead_Owner_Assignment__c='Owner is Assigned based on Address Match of Account Id:' +AccountId;
+                          ld.Account_Id__c=AccountId;
                         if(mapAddressCityAccount.get(ldCountry).get(ldCity).customer_category__c=='Tier 4 - TMMA'){
                             ld.RecordTypeId=TMMA_LEAD_RECORD_TYPE;                             
                         }
@@ -319,6 +322,7 @@ public class LeadOwnerAssignmentHandler {
                            }
                            string AccountId=mapCountryToAccount.get(ldCountry).Id;
                         ld.Lead_Owner_Assignment__c='Owner is Assigned based on Address Match of Account Id:' +AccountId;
+                           ld.Account_Id__c=AccountId;
                            if(mapCountryToAccount.get(ldCountry).customer_category__c=='Tier 4 - TMMA'){
                             ld.RecordTypeId=TMMA_LEAD_RECORD_TYPE; 
                             system.debug('listtest121::'+ld.RecordType.Name);
@@ -358,7 +362,7 @@ public class LeadOwnerAssignmentHandler {
         map<string,list<LeadOwnerAssignment__c>> mapCountryToLeadOwner=new map<string,list<LeadOwnerAssignment__c>>();
             
         list<LeadOwnerAssignment__c> listLeadOwnerAssignmt=[Select id,Country__c,city__c,End_ZIP_Code__c,Lead_Owner__c,
-                                                           Start_ZIP_Code__c,State__c from LeadOwnerAssignment__c];
+                                                           Start_ZIP_Code__c,State__c,CBG__c from LeadOwnerAssignment__c];
         
         if(listLeadOwnerAssignmt.size() !=0){
             for(LeadOwnerAssignment__c ldOwner:listLeadOwnerAssignmt){                               
@@ -391,20 +395,54 @@ public class LeadOwnerAssignmentHandler {
                 system.debug('city::'+ld.city);
             }
             if(mapCountryToLeadOwner.containskey(ldCountry)){
-                ld.RecordTypeId=ROM_LEAD_RECORD_TYPE;                
+                ld.RecordTypeId=ROM_LEAD_RECORD_TYPE; 
                 for(LeadOwnerAssignment__c ldOwner:mapCountryToLeadOwner.get(ldCountry)){
-                    if(ldOwner.Start_ZIP_Code__c !=null && ldOwner.End_ZIP_Code__c!=null &&
-                      ld.PostalCode !=null && ldOwner.Start_ZIP_Code__c.isNumeric() && ldOwner.End_ZIP_Code__c.isNumeric()
-                      && ld.PostalCode.isNumeric()){					                   
-                    	if(integer.ValueOf(ldOwner.Start_ZIP_Code__c)<=integer.ValueOf(ld.PostalCode) && 
-                       	integer.ValueOf(ldOwner.End_ZIP_Code__c)>=integer.ValueOf(ld.PostalCode) ){                      	                      
-                        	if(ldOwner.Lead_Owner__c !=null){
-                            	ld.ownerId=ldOwner.Lead_Owner__c;
-                            	leadIds.add(ld.Id);
-                            	system.debug('leadZip'+ld.Id);                            
-                       	 }                            
-                      }
-                    }
+                    if(ldOwner.CBG__c !=null && ld.Industry!=null ){                        
+                        if(ldOwner.CBG__c ==  ld.Industry ){
+                            if(ld.State!=null && ldOwner.State__c!=null && ldOwner.State__c.toUpperCase()==ldState){
+                                if(ldOwner.Lead_Owner__c !=null){
+                                ld.ownerId=ldOwner.Lead_Owner__c;
+                                leadIds.add(ld.Id);
+                                    system.debug('leadst'+ld.Id);
+                            	} 
+                         	}
+                            if(!leadIds.contains(ld.Id) && ld.city!=null && ldOwner.city__c!=null && 
+                               ldOwner.city__c.toUpperCase()==ldCity){
+                                if(ldOwner.Lead_Owner__c !=null){
+                                ld.ownerId=ldOwner.Lead_Owner__c;
+                                leadIds.add(ld.Id);                                
+                            	} 
+                            }
+                            if(!leadIds.contains(ld.Id) && ld.Country!=null && ldOwner.Country__c!=null && 
+                               ldOwner.Country__c.toUpperCase()==ldCountry){
+                                if(ldOwner.Lead_Owner__c !=null){
+                                ld.ownerId=ldOwner.Lead_Owner__c;
+                                leadIds.add(ld.Id);                                
+                            	} 
+                            }
+                     	}                                                                        
+                     }
+                }                
+                for(LeadOwnerAssignment__c ldOwner:mapCountryToLeadOwner.get(ldCountry)){
+                    if(!leadIds.contains(ld.Id) && ld.PostalCode !=null){
+                       	string ldPostalCode=ld.PostalCode;
+                        string splittedPostalCode;                        
+                                list<string> splitLdPostalCode=ldPostalCode.split('-');
+								splittedPostalCode=splitLdPostalCode[0]; 
+                        
+                        if(ldOwner.Start_ZIP_Code__c !=null && ldOwner.End_ZIP_Code__c!=null &&
+                      	splittedPostalCode !=null && ldOwner.Start_ZIP_Code__c.isNumeric() && ldOwner.End_ZIP_Code__c.isNumeric()
+                      	&& splittedPostalCode.isNumeric()){					                   
+                    		if(integer.ValueOf(ldOwner.Start_ZIP_Code__c)<=integer.ValueOf(splittedPostalCode) && 
+                       		integer.ValueOf(ldOwner.End_ZIP_Code__c)>=integer.ValueOf(splittedPostalCode) ){                      	                      
+                        		if(ldOwner.Lead_Owner__c !=null){
+                            		ld.ownerId=ldOwner.Lead_Owner__c;
+                            		leadIds.add(ld.Id);
+                            		system.debug('leadZip'+ld.Id);                            
+                       	 		}                            
+                      		}
+                    	}                        
+                    }                    
                 }
                     for(LeadOwnerAssignment__c ldOwner:mapCountryToLeadOwner.get(ldCountry)){
                         if(!leadIds.contains(ld.Id)){

@@ -63,9 +63,16 @@ public with sharing class OpportunityService {
         Map<Id,Id> accountIdsByOpptyId = new Map<Id,Id>();
 		Set<Id> accountIds = new Set<Id>();
 		
+        //create End Customer set
+        Set<String> endCustomers = new Set<String>();
+        for (Opportunity oppty : oppties) {
+            endCustomers.add(oppty.Legacy_End_Customer_Name_and_Location__c);
+        }
+        
 		Map<String, Cross_Reference_Customer__c> crossRefCustsByEndCustNameLoc = 
-			new CrossReferenceCustomersSelector().getByRecordTypeIdToMap(
-			new Set<Id>{CrossReferenceCustomersSelector.getModelNRecordTypeId()});
+			new CrossReferenceCustomersSelector().getByRecordTypeIdAndEndCustomerToMap(
+			new Set<Id>{CrossReferenceCustomersSelector.getModelNRecordTypeId()}, endCustomers);
+        
 		for (Opportunity oppty : oppties) {
             //backup oppty original account id
             accountIdsByOpptyId.put(oppty.Id, oppty.AccountId);

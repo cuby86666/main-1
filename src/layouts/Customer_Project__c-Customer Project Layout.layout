@@ -43,6 +43,10 @@
                 <behavior>Edit</behavior>
                 <field>Checklist_Uploaded__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>War_Room_Completed__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>

@@ -35,7 +35,12 @@ public class OpportunitiesSelector extends ApplicationSelector {
 			Opportunity.Regional_VP_Approver__c,
 			Opportunity.Sales_Director_Approver__c, 
 			Opportunity.TMMA_Override__c,
-			Opportunity.VP_Approver_2__c
+			Opportunity.VP_Approver_2__c,
+			Opportunity.Discovery_Date__c,
+			Opportunity.War_Room_Completed__c,
+			Opportunity.Claim_Value__c,
+			Opportunity.Claim_Value_USD_SYS__c,
+			Opportunity.Locked_Exchange_Rate__c
 		};
 	}
 	

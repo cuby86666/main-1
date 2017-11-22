@@ -394,6 +394,11 @@
         <unique>true</unique>
     </fields>
     <fields>
+        <fullName>StockKeepingUnit</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+    </fields>
+    <fields>
         <fullName>Thrust_Indicator__c</fullName>
         <defaultValue>false</defaultValue>
         <description>Thrust product indicator</description>

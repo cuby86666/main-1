@@ -44,7 +44,7 @@ private class AddGroup_Test
         //get NXP group
         List<Group> lstNXPGroups = [Select Id, Name from Group Where Name = 'All Internal NXP Users' Limit 1];
         //get NXP profile
-        List<Profile> lstNXPProfiles = [Select Id, Name from Profile Where Name = 'NXP Sales' Limit 1];
+        List<Profile> lstNXPProfiles = [Select Id, Name from Profile Where Name = 'NXP Sales Cloud User' Limit 1];
 
         test.startTest();
                

@@ -64,7 +64,7 @@ public class CustomerObjectSharingTest
        Customer_Project__c CP = new Customer_Project__c();
        CP.Name='Test Project';
        CP.Opportunity__c=opp.id;
-       CP.Project_Phase__c='Initial';
+       CP.Project_Phase__c='Development';
        CP.Project_Status__c='Green';
        insert CP;
        
@@ -87,29 +87,6 @@ public class CustomerObjectSharingTest
        
        delete team;
        
-
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    }
-
-
-
-
-
-
-
-
-
-
+ }
 
 }

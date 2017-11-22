@@ -1,11 +1,11 @@
-/**	
- * This  class will have the test methods written for the Opportunity Scheduling 	
-   and Production Management related operations.	
-------------------------------------------------------------------------------------	
- * Created By   : Venkateshwar G	
- * Created Date : MAR 09,2017	
- * Description  : This class will have the functionality written for the Opportunity Scheduling 	
-                  and Production Management related operations.	
+/** 
+ * This  class will have the test methods written for the Opportunity Scheduling    
+   and Production Management related operations.    
+------------------------------------------------------------------------------------    
+ * Created By   : Venkateshwar G    
+ * Created Date : MAR 09,2017   
+ * Description  : This class will have the functionality written for the Opportunity Scheduling     
+                  and Production Management related operations. 
 ------------------------------------------------------------------------------------
 */
 @isTest
@@ -16,7 +16,7 @@ private class OpportunityScheduleControllerTest {
     private static final ID MN_RECORD_TYPE_ID;
     private static ID PARENT_RECORD_TYPE_ID;
     private static ID CHILD_RECORD_TYPE_ID;
-    private static final String TEST_USER_PROFILE = 'NXP Sales';
+    private static final String TEST_USER_PROFILE = 'NXP Sales Cloud User';
     private static final String TEST_USER_EMAIL = 'testuser@testorg.com.test';
     private static final String CBG_AUTOMOTIVE = 'Automotive';
     private static final String CBG_NON_AUTOMOTIVE = 'Non-Automotive';

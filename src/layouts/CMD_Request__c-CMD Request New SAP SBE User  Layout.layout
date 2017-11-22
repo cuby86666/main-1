@@ -1088,6 +1088,10 @@
                 <field>FLAG_GSM_SBE__c</field>
             </layoutItems>
             <layoutItems>
+                <behavior>Edit</behavior>
+                <field>FLAG_Credit_Control__c</field>
+            </layoutItems>
+            <layoutItems>
                 <behavior>Readonly</behavior>
                 <field>FLAG_Export_Control__c</field>
             </layoutItems>
@@ -1141,7 +1145,7 @@
     <showRunAssignmentRulesCheckbox>false</showRunAssignmentRulesCheckbox>
     <showSubmitAndAttachButton>false</showSubmitAndAttachButton>
     <summaryLayout>
-        <masterLabel>00h4E000000GqsP</masterLabel>
+        <masterLabel>00h5700000kzDl1</masterLabel>
         <sizeX>4</sizeX>
         <sizeY>0</sizeY>
         <summaryLayoutStyle>Default</summaryLayoutStyle>

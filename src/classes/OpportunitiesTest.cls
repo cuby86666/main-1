@@ -188,6 +188,17 @@ private class OpportunitiesTest {
 	        } catch (Exception e) {
 	        	System.assert(true);
 	        }
+	        
+	        try {
+	        	// Only War Room Completed can be edited all the time.
+	        	oppty.War_Room_Completed__c = 'Yes';
+	        	//oppty.Name = 'Name 1';
+	        	update oppty;	
+	        	
+	        	System.assert(false);
+	        } catch (Exception e) {
+	        	System.assert(true);
+	        }
 	    }
 	    
 	    oppty.StageName = 'Commitment';
@@ -218,7 +229,53 @@ private class OpportunitiesTest {
 	        } catch (Exception e) {
 	        	System.assert(true);
 	        }	
+	        
+	        try {
+	        	// Only War Room Completed can be edited all the time.
+	        	oppty.War_Room_Completed__c = 'No';
+	        	//oppty.Name = 'Name 1';
+	        	update oppty;	
+	        	
+	        	System.assert(false);
+	        } catch (Exception e) {
+	        	System.assert(true);
+	        }
 	    }
+	    Test.stopTest();
+    }
+    
+    @isTest
+    static void testOpptyDiscoveryDate() {
+		Test.startTest();
+		// Case 1: update oppty to discovery stage
+    	Opportunity oppty = getOpportunity(opptyProd.OpportunityId);
+    	
+    	system.assertEquals(null, oppty.Discovery_Date__c);
+    	
+    	oppty.StageName = Opportunities.STAGES.get(Opportunities.Stage.CANCELLED);
+	    update oppty;
+    	
+    	oppty = getOpportunity(opptyProd.OpportunityId);
+	    system.assertEquals(null, oppty.Discovery_Date__c);
+    	
+	    oppty.StageName = Opportunities.STAGES.get(Opportunities.Stage.DISCOVERY);
+	    update oppty;
+	    
+	    oppty = getOpportunity(opptyProd.OpportunityId);
+	    system.assertEquals(date.today(), oppty.Discovery_Date__c);
+	    
+	    //Case 2: insert oppty with Discovery stage
+	    Opportunity opptyDiscovery = new Opportunity(
+	    	Name = 'Test Disc Oppty',
+	    	Production_Date__c = PRODUCTION_DATE,
+        	CloseDate = PRODUCTION_DATE - 60,
+	    	StageName = Opportunities.STAGES.get(Opportunities.Stage.DISCOVERY)
+	    );
+	    insert opptyDiscovery; 
+        
+        oppty = getOpportunity(opptyDiscovery.Id);
+	    system.assertEquals(date.today(), oppty.Discovery_Date__c);
+	    
 	    Test.stopTest();
     }
   
@@ -257,7 +314,7 @@ private class OpportunitiesTest {
     static Opportunity getOpportunity(ID opptyID) {
         return [select LT_Value_USD__c, Sales_Director_Approver__c, Regional_VP_Approver__c, VP_Approver_2__c, 
         			   MAG_Approver_1__c, MAG_Approver_2__c, BL_Approver_1__c, BL_Approver_2__c, Program__c,    
-        			   Account.ParentId, Owner.MT_2__c
+        			   Account.ParentId, Owner.MT_2__c, StageName, Discovery_Date__c
         		  from Opportunity 
         		 where Id = :opptyID];    
     }

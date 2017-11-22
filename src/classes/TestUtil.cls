@@ -6,6 +6,10 @@
 @Last Modified By : 	Nisha Agrawal 
 @Last Modified Date : 	26 Jul, 2017 
 @Description : 			Removed methods for Object_Description class
+--------------------------------------------------------------------------------
+@Last Modified By :     Nisha Agrawal 
+@Last Modified Date :   28 Sep, 2017 
+@Description :          Removed methods for OAuth_Token object
 *********************************************************************************/
 
 @isTest(SeeAllData=false)
@@ -103,24 +107,7 @@ public class TestUtil
     	}    	 
     	return lstCourses;
     }*/
-    
-    public static OAuth_Token__c createTestOAuthToken(Id ownerId) 
-    {
-        OAuth_Token__c objToken =  new OAuth_Token__c(Token__c = 'teststringastoken', Account_Key__c = 'testaccountkey', Organizer_Key__c = 'testorganizerkey', Expires_In__c = 37485 , Owner__c = ownerId);
-    	return objToken;
-    }
-    
-    public static List<OAuth_Token__c> createTestOAuthTokens(List<User> lstOwners) 
-    {
-    	List<OAuth_Token__c> lstTokens = new List<OAuth_Token__c>();
-    	
-    	for(User owner : lstOwners)
-    	{
-    		lstTokens.add(new OAuth_Token__c(Token__c = 'teststringastoken', Account_Key__c = 'testaccountkey', Organizer_Key__c = 'testorganizerkey', Expires_In__c = 37485 , Owner__c = owner.Id));
-    	}
-    	return lstTokens;
-    }
-    
+          
    /* public static My_Training__c createTestMyTraining(Id courseId, Id attendeeId)
     {
     	My_Training__c objTraining = new My_Training__c(Name = 'Training' , Course__c = courseId , Status__c = 'Open', Registrant_Id__c = 'RegistrantKey', Attendee__c = attendeeId);

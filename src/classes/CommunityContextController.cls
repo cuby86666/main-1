@@ -2,9 +2,20 @@
 @Created By :      Amit Rajan
 @CreatedDate :     26 June 2016
 Description :      controller class for creating Context (SIR-825)
+*****************************************************************
+Last Modified By:Shridevi
+Last Modified Date:26-Sep-2017
+Description: SIR-524-Implement search and sort functionalities for the cases.
 ****************************************************************************************************/
 public without sharing class CommunityContextController{
 
+    public list<Case> listCasesSearch{set;get;}//To save search results
+    public string rend1{set;get;}
+    public integer listsize{get;set;}
+    public String searchText{set;get;}
+    list<case> listcase{get;set;}
+    public String Order{set;get;}
+    public String sortField {set;get;}
     public Map<Id, List<Case>> entitlementCases                                                    {set;get;}   // to display cases against entitlements
    // public String currentStep {set;get;}
     public CommunityContextController parentController                                           {set;get;}
@@ -92,7 +103,12 @@ public without sharing class CommunityContextController{
     public CommunityContextController(){
         
     system.debug('>>>>>>>>>>apexpage()::'+ApexPages.currentPage().getUrl()); ///apex/CommunityContextPage
-    
+    listsize=0;
+    listcase=new list<Case>();
+    // rend1=false;
+    listCasesSearch=new list<case>();
+    sortfield='entitlement.name';
+    Order='ASC';
     if (UserInfo.getUserType()!='Guest')
     {
       // currentStep = 'step1';
@@ -353,7 +369,7 @@ public without sharing class CommunityContextController{
     */
     private void getEntitlementRecords(){ 
 
-       
+       System.debug('Contact ID::'+contactId);
         for(Entitlement_Contact__c eContact: [SELECT Entitlement__r.Name,Entitlement__r.Entitlement_Pattern__c,Entitlement__r.Additional_Description__c,Entitlement__r.Status, type__c,  Status__c, Entitlement__r.Total_Number_of_Hours__c, Entitlement__r.Type, Entitlement__r.Used_number_of_Hours__c from Entitlement_Contact__c 
         WHERE Status__c != :CommunityConstantsUtility.REJECTED_STATUS 
        AND contact__c = :contactId  ORDER BY CreatedDate DESC
@@ -716,6 +732,76 @@ public without sharing class CommunityContextController{
     system.debug('>>>>>>>>>>>>>results::'+results);
     
     }
-   
+    public PageReference SearchCases()
+   {
+         rend1='';
+         
+         list<entitlement> listEntitlement=new list<entitlement>();
+          System.debug(entitlementCases);
+           System.debug(entitlementCases.values());
+          
+         if(entitlementCases!=null)
+          {
+           for(list<case> listcase1:entitlementCases.values())
+             {
+                  System.debug(listcase1);
+                  listcase.addAll(listcase1);
+             }
+         }
+         System.debug(listCase);
+         searchText=searchText.trim(); 
+         if(searchText.length()>1 && searchText!=null && string.isnotBlank(searchText))
+            {
+               
+                listCasesSearch=new list<case>();
+                System.debug(searchText);
+                listEntitlement=[select id from entitlement where name=:searchText and id in:entitlementCases.keyset()];
+                for(entitlement ent:listEntitlement)
+                {
+                    listCasesSearch.addall(entitlementCases.get(ent.id));
+                                       
+                }
+                if(listCasesSearch!=null)
+                listCasesSearch.sort();
+                if(listEntitlement.size()==0 || listEntitlement==null)
+                {
+                    searchText='*'+searchText+'*';
+                    String query = 'FIND :searchText IN All fields RETURNING case(Id,CaseNumber,Subject,Description,createddate,Entitlement.name,status WHERE id IN :listcase';
+                    query+= ' Order by ' +  String.escapeSingleQuotes(sortField) + ' ' + Order + ' LIMIT 15) ';
+                    list<list<SObject>> searchList=search.query(query);
+                    listCasesSearch= ((list<case>)searchList[0]);
+                   
+                }
+                System.debug(listCasesSearch);
+                if(listCasesSearch.size()>0)
+                     rend1='true';
+                else
+                    {
+                     rend1='false';
+                     ApexPages.addmessage(new ApexPages.message(ApexPages.severity.WARNING,'Sorry!!!, No results found.'));
+        
+                     }
+          }
+          else
+          {    
+               rend1='false';
+               Apexpages.addMessage( new ApexPages.Message (ApexPages.Severity.WARNING, 'Please enter at least two characters to search. '));
+          }
+         
+       return null;
+                
+    }//End of SearchCases()
+     public PageReference sortCases()
+    {
+            System.debug(searchText);
+           if(listCasesSearch!=null && listCasesSearch.size()>0&& searchText!='' && searchText.length()>0)
+           {
+               String query = 'select Id,CaseNumber,Subject,Description,createddate,Entitlement.name,status from case WHERE id IN :listCasesSearch';
+               query+= ' Order by ' +  String.escapeSingleQuotes(sortField) + ' ' + Order + ' LIMIT 15';
+               listCasesSearch=Database.Query(query);
+               
+           }
+           return null;
+    }  
        
 }

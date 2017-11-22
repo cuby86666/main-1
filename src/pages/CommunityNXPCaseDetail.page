@@ -133,8 +133,8 @@
                                                                 </div>
                                                                   </div>    
                                                                 <div  class="hidden-panel clearfix">
-                                                                <apex:outputText value="{!emailMsg.htmlbody}" escape="false" /> 
-                                                                    
+                                                                <apex:outputText value="{!emailMsg.htmlbody}" escape="false" />
+                                                                <apex:outputText rendered="{!If(emailMsg.htmlbody=='' ,true,false)}" value="{!emailMsg.Textbody}" escape="false" style="white-space:pre;" />
                                                                  </div>
                                                                                                                     
                                                         </div>

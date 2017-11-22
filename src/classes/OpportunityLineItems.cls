@@ -40,10 +40,12 @@ public class OpportunityLineItems extends ApplicationDomain {
 		OpportunityProductClaimValue.setOpportunityProductClaimValues((List<OpportunityLineItem>)this.records);	
 		
 		updateOpptyProdLastBusinessModifiedInfo();
-		
+
 		updateOpptyProdLostCancelledInfo((List<OpportunityLineItem>)existingRecords.values());
 		
 		OpportunityLineItemTrigger.onBeforeUpdate((List<OpportunityLineItem>)this.records);
+		
+		updateOpptyProdHelpNeededHistory((List<OpportunityLineItem>)existingRecords.values());
 	}
 	
 	public override void onAfterInsert() {
@@ -605,4 +607,19 @@ public class OpportunityLineItems extends ApplicationDomain {
     	return LOST_CANCELLED.contains(opptyLineItem.Prod_Lost_Cancelled__c);	
     }
     
+    // SFDC-588
+    private void updateOpptyProdHelpNeededHistory(List<OpportunityLineItem> existingRecords) {
+    	p('updateOpptyProdHelpNeededHistory');
+    	for (OpportunityLineItem opptyProdOld : existingRecords) {
+    		for (OpportunityLineItem opptyProdNew : (List<OpportunityLineItem>)this.records) {
+    			if (opptyProdOld.Id == opptyProdNew.Id) {
+    				if(opptyProdOld.Help_Needed__c != opptyProdNew.Help_Needed__c && opptyProdOld.Help_Needed__c != '') {
+    					opptyProdNew.Help_Needed_History__c = opptyProdOld.Help_Needed__c;
+    				}
+                    
+                    break;
+    			}
+    		}
+    	}
+    }
 }

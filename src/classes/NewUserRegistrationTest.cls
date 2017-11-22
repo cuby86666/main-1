@@ -31,7 +31,7 @@ Public static pageReference pageRef{get;set;}
 //To create test user   
 public static user createNewUser()
 {
-   Profile theProfile = [Select p.Name, p.Id From Profile p where Name = 'NXP Sales Read Only'];
+   Profile theProfile = [Select p.Name, p.Id From Profile p where Name = 'NXP Sales Cloud User'];
    testUser = new User
         (
          Firstname='test',

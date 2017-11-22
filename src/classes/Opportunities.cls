@@ -108,7 +108,7 @@ public class Opportunities extends ApplicationDomain {
         
         return opptiesUpdated; 
 	}
-	
+		
 	private void bypassValidation(Map<Id, Opportunity> existingRecords) {
 		p('bypassValidation');
 		for (Opportunity oppty : (List<Opportunity>)this.records) {
@@ -116,13 +116,13 @@ public class Opportunities extends ApplicationDomain {
 			
 			Opportunity oldOppty = existingRecords.get(oppty.Id);
 			
-			if (oppty.Program__c != oldOppty.Program__c) {
+			if (oppty.Program__c != oldOppty.Program__c || oppty.War_Room_Completed__c != oldOppty.War_Room_Completed__c) {
 				// Check if any other field is changed. If no, bypass the validation.
 				Map<String, Schema.SObjectField> opptyFields = fflib_SObjectDescribe.getDescribe(getSObjectType()).getFieldsMap();
 				Boolean otherFieldsChanged = false; 	
 		
 				for (Schema.SObjectField field : opptyFields.values()) {
-					if (field != Opportunity.Program__c && field != Opportunity.Bypass_Validation__c && field.getDescribe().isUpdateable()) {
+					if (field != Opportunity.Program__c && field != Opportunity.War_Room_Completed__c && field != Opportunity.Bypass_Validation__c && field.getDescribe().isUpdateable()) {
 						String fieldName = field.getDescribe().getName();
 						
 						if (oppty.get(fieldName) != oldOppty.get(fieldName)) {
@@ -405,7 +405,7 @@ public class Opportunities extends ApplicationDomain {
 		
 		uow.registerDirty(opptyProdsUpdated);
 	}
-	
+		
 	private Map<Id, List<OpportunityLineItem>> getOpptyProds(List<Opportunity> oppties){
 		p('getOpptyProds');
 		Set<Id> opptyIds = new Set<Id>();
@@ -481,6 +481,11 @@ public class Opportunities extends ApplicationDomain {
 		            opptyNew.Last_Business_Modified_By_Id__c = UserInfo.getUserId();
 					opptyNew.Last_Business_Modified_Date__c = Datetime.now();
 	            }
+	            
+        		// Set Discovery Date
+                if (Trigger.isInsert && opptyNew.StageName == STAGES.get(Stage.DISCOVERY)) {
+                	opptyNew.Discovery_Date__c = date.today();
+                }
 	        }
         }
         else if ((List<Opportunity>)this.records != null) {           
@@ -558,6 +563,11 @@ public class Opportunities extends ApplicationDomain {
 	                    // Set Account Region Text (Account_Region_TEXT__c)
 		                if (accountParentIdAndRegion.containsKey(opptyNew.AccountId) && opptyOld.AccountId != opptyNew.AccountId) {
 		                	opptyNew.Account_Region_TEXT__c = accountParentIdAndRegion.get(opptyNew.AccountId).Region__c;
+		                }
+		                
+		        		// Set Discovery Date
+		                if (opptyOld.StageName != STAGES.get(Stage.DISCOVERY) && opptyNew.StageName == STAGES.get(Stage.DISCOVERY)) {
+		                	opptyNew.Discovery_Date__c = date.today();
 		                }
 	    			}
 	    		}

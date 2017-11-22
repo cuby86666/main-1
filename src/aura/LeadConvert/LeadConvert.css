@@ -1,0 +1,18 @@
+.THIS .uiInputDate .datePicker-openIcon {
+position: absolute;
+left: 95%;
+top: 50%;
+}
+.THIS .styleCls {
+    height:1000px;
+    width:1000px;
+}
+
+.THIS.slds-table-style {
+    table-layout: auto;
+    border-collapse: collapse;
+    width: 100%;
+    overflow: auto;	
+    overflow-x: auto;	
+    overflow-y: auto;
+}

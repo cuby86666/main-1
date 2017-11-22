@@ -1,0 +1,388 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId,force:appHostable,force:lightningQuickActionWithoutHeader"
+                controller="LeadConvertController">
+ 
+    <!--declare attributes--> 
+    <aura:attribute name="ErrorMessage" type="String"/> <!-- Exception -->
+    <aura:attribute name="selectedRecord" type="Opportunity"  default="{}" description="Use,for store SELECTED sObject Record"/>
+    <aura:attribute name="listOfSearchRecords" type="List" description="Use,for store the list of search records which returns from apex class"/>
+    <aura:attribute name="listOfSearchAccRecords" type="List" description="Use,for store the list of search records which returns from apex class"/>
+     <aura:attribute name="selectedAccRecord" type="Account"  default="{}" description="Use,for store SELECTED sObject Record"/>
+    <aura:attribute name="SearchKeyWord" type="string"/>
+    <aura:attribute name="SearchAccKeyWord" type="string"/>
+    <aura:attribute name="listOfIndSeg" type="List"  />
+    
+    <aura:attribute name="objectAPIName" type="string" default=""/>
+    <aura:attribute name="IconName" type="string" default=""/>
+    <aura:attribute name="label" type="string" default=""/>
+    <aura:attribute name="Message" type="String" default="Search Result.."/>
+    <aura:attribute type="Boolean" name="IsTag"/>
+	<aura:attribute type="Boolean" name="IsCreate"/>
+    <aura:attribute type="Boolean" name="isWarningFlag"/>
+    <aura:attribute type="Boolean" name="isRequiredFlag"/>
+    <aura:attribute type="Boolean" name="isLookUpResult"/>
+    <aura:attribute type="Boolean" name="isErrorMssge"/>
+    <aura:attribute type="Boolean" name="isAccValid"/>
+    <aura:attribute type="string" name="custMessage"/>
+    
+    <aura:attribute type="string" name="OpportunityName"/>
+    <aura:attribute type="string" name="OpportunityDesc"/> 
+    <aura:attribute type="string" name="accName"/> 
+    <aura:attribute type="string" name="OpportunitySeg"/> 
+    <aura:attribute type="string" name="OpportunitySubSeg"/> 
+    <aura:attribute type="string" name="OpportunityProdDate"/>
+    <aura:attribute type="string" name="OpportunityCloseDate"/>
+    <aura:attribute name="prodDate" type="Date" access="GLOBAL"/>
+    <aura:attribute name="closeDate" type="Date" access="GLOBAL"/>
+    
+    <aura:attribute name="objInfo" type="string" default="opportunity" />
+    <aura:attribute name="depnedentFieldMap" type="map" description="store controller(key)--> dependent(values) picklist value as a map." />
+    <aura:attribute name="isDependentDisable" type="boolean" default="true" description="use for, make disbale depandent field." />
+        
+  <!--declare events hendlers-->  				
+    <aura:handler name="oselectedsObjectRecordEvent" event="c:selectedsObjectRecordEvent" action="{!c.handleComponentEvent}"/> 
+    <aura:handler name="oselectedAccRecordEvent" event="c:SelectedAccRecordEvent" action="{!c.handleComponentAccEvent}"/> 
+    <!--<aura:handler event="aura:waiting" action="{!c.showSpinner}"/>
+    <aura:handler event="aura:doneWaiting" action="{!c.hideSpinner}"/>-->
+    <aura:attribute name="isSpinner" type="Boolean" />
+       	
+ <!-- Id of the Account the page hosting this component is showing -->   
+    <aura:attribute name="recordId" type="Id" />    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />    
+    <aura:attribute name="Leads" type="Lead"/>
+    
+    <aura:attribute name="LeadAccount" type="Account"/>
+    <aura:attribute name="LeadActivities" type="Lead_Activity__c[]"/>
+    <aura:attribute name="LeadOppty" type="Opportunity[]"/>    
+    <aura:attribute name="today" type="Date" default=""/>
+    <aura:handler name="change" value="{!v.prodDate}" action="{!c.prodDateChange}"/>
+    <aura:handler name="change" value="{!v.closeDate}" action="{!c.closeDateChange}"/>
+    
+     
+
+    		
+ <!-- PAGE HEADER -->
+    
+    <div class="Container" >  
+	<fieldset class="slds-box slds-theme--default slds-container">
+    
+	<h2 class="slds-section-title--divider"><b>Convert Lead</b></h2>
+        <aura:if isTrue="{!v.isWarningFlag}">
+            <div class="slds-col slds-has-flexi-truncate"> 
+     		<div class="slds-grid">
+     			<div class="slds-p-horizontal--small slds-size--1-of-2">
+           <div class="recordSaveError">								
+            <ui:message title="Error" severity="error" >								
+                Please Select an Account to Convert.
+            </ui:message>								
+           </div>
+                </div></div></div>            
+          </aura:if> 
+        <aura:if isTrue="{!v.custMessage !=''}">{!v.custMessage}                  
+         </aura:if>       
+        <aura:if isTrue="{!v.isRequiredFlag}">
+            <div class="slds-col slds-has-flexi-truncate"> 
+     		<div class="slds-grid">
+     			<div class="slds-p-horizontal--small slds-size--1-of-2">
+           <div class="recordSaveError">								
+            <ui:message title="Error" severity="error" >								
+                Please create or tag an Opportunity to Convert
+            </ui:message>								
+           </div>
+                </div></div></div>
+          </aura:if> 
+        <aura:if isTrue="{!v.isLookUpResult}">
+            <div class="slds-col slds-has-flexi-truncate"> 
+     		<div class="slds-grid">
+     			<div class="slds-p-horizontal--small slds-size--1-of-2">
+           <div class="recordSaveError">								
+            <ui:message title="Error" severity="error" >								
+                Please tag with an Opportunity to Convert
+            </ui:message>								
+           </div>
+                </div></div></div>
+          </aura:if>
+         <aura:if isTrue="{!v.isAccValid}">
+            <div class="slds-col slds-has-flexi-truncate"> 
+     		<div class="slds-grid">
+     			<div class="slds-p-horizontal--small slds-size--1-of-2">
+           <div class="recordSaveError">								
+            <ui:message title="Error" severity="error" >								
+                Please select a valid Account
+            </ui:message>								
+           </div>
+                </div></div></div>
+          </aura:if>
+        <aura:if isTrue="{!v.isSpinner}">	
+           <div class="slds-spinner_container">
+            <div role="status" class="slds-spinner slds-spinner--medium slds-spinner--brand">
+             <span class="slds-assistive-text">Loading</span>
+              <div class="slds-spinner__dot-a"></div>
+              <div class="slds-spinner__dot-b"></div>
+            </div>
+           </div>
+          </aura:if>	
+    <div class="slds-page-header" role="banner" onclick="{!c.toggleVisibility}">
+       <div class="slds-col slds-has-flexi-truncate" > 
+     		<div class="slds-grid">
+     			<div class="slds-p-horizontal--small slds-size--1-of-2">
+   					<div class="slds-form-element">	 
+            <div aura:id="AccsearchRes" class="slds-form-element slds-lookup slds-is-close " 
+                 data-select="single">
+              
+            <label class="uiLabel-left form-element__label uiLabel" for="lookup-349">
+                                Account Name
+                                
+            </label>
+                
+                            
+            <div class="slds-form-element__control"><br/>
+                                
+                            <div class="slds-input-has-icon slds-input-has-icon--right">    
+            					 <div aura:id="AcclookupFieldTag" class="slds-show">                                                                          
+                                     <ui:inputtext aura:Id="text-input-acc" class="slds-input"  click="{!c.hideDisplayList}" 
+                                                   placeholder="{!v.LeadAccount.Name}" value="{!v.SearchAccKeyWord}"
+                                                   updateOn="keyup" keyup="{!c.keyPressAccController}" change="{!c.fetchAccVal}"/>                                                                                                                                                              
+                                	<lightning:buttonIcon class="slds-button slds-input__icon slds-text-color--default"
+                                 		iconName="utility:search" variant="bare" onclick="{!c.displayAcclist}"
+                                            />                                     
+                                </div>
+                                
+                            </div>                                
+            				</div>
+               
+                        
+                               <!-- This markup is for when an record is selected -->
+                           <div aura:id="lookup-pill-1" class="slds-pill-container slds-hide">
+                               <span class="slds-pill"  style="width:100%">
+                                    <span class="slds-pill__label">{!v.selectedAccRecord.Name},
+                                        {!v.selectedAccRecord.Country__c},{!v.selectedAccRecord.City__c}
+                                   </span>
+                                   <button class="slds-button slds-button--icon slds-pill__remove" onclick="{!c.clearAcc}">                                       
+                                       <lightning:buttonIcon class="slds-button slds-input__icon slds-text-color--default"
+                                                             iconName="utility:close" variant="bare"/> 										                                                                     							
+                                  		<span class="slds-assistive-text">Remove</span>	
+                                        </button>
+                               </span>                                 
+                           </div>
+                                    
+                    <!--This part is for Display typehead lookup result List-->
+                           <div class="slds-lookup__menu slds slds-scrollable--y " id="lookup-349"  >                               
+                               <div class="form-element__label slds-text-body--small ">{!v.Message}                                     
+                                      <ul role="listbox" >       
+             							<aura:iteration items="{!v.listOfSearchAccRecords}" var="singleAccRec">             
+            							<c:CustomAccLookupResult accountList="{!singleAccRec}" />                                                    	                    
+                						</aura:iteration>                           
+                                          </ul>
+                                      
+                                  </div> 
+                               </div>
+            
+        </div>
+                    </div></div></div></div><br/>
+ 		<div class="slds-col slds-has-flexi-truncate"> 
+     		<div class="slds-grid">
+     			<div class="slds-p-horizontal--small slds-size--1-of-2">
+   					<div class="slds-form-element">									
+        				<div class="slds-form-element__control">
+                			<label class="uiLabel-left form-element__label uiLabel" for="globalId">
+                                <span>Convert Lead to a New SFDC Opportunity?
+                                </span>
+                            </label>
+   							&nbsp; <input type="radio" id="globalId" name="options" onclick="{!c.handleClickCreate}" >
+                			</input>                
+            			</div><br/>
+            			<aura:if isTrue="{!v.IsCreate}">
+                          <div class="slds-form-element__control">
+                            <label class="slds-form-element__label" for="text-input-id-1">Opportunity Name</label>                           
+                    		
+							
+                			</div>
+                           
+                            <div class="slds-form-element__control">
+                                <ui:inputtext aura:Id="text-input-id-1" class="slds-input "                                             
+                            	Placeholder="Enter Opportunity Name" change="{!c.SetOpptyName}" >
+                                 </ui:inputtext>
+                            </div>
+                              <div class="slds-form-element__control">
+                               
+         					<ui:inputDate aura:id="expclosedate1" label="Expected Close Date"									
+          					class="slds-input" labelClass="slds-form-element__label" 									
+          					displayDatePicker="true" keyup="{!c.restrictManualEntryOfCloseDate}"				
+           					keypress="{!c.restrictManualEntryOfCloseDate}"
+                            cut="{!c.restrictManualEntryOfCloseDate}" value="{!v.closeDate}"
+                            paste="{!c.restrictManualEntryOfCloseDate}" change="{!c.closeDateChange}"           					 
+              				updateOn="paste, cut"/> 
+                                
+        					</div>
+            				<div class="slds-form-element__control">
+                                <ui:inputTextArea change="{!c.SetOpptyDesc}" 
+                         		class="slds-input" label="Executive Summary" labelClass="slds-form-element__label"
+                         		maxlength="200" aura:id="text-input-id-2" />
+                                
+            					
+                                                               
+            				</div>
+                            <!--Controller Field-->
+                            <div class="slds-form-element__control"> 
+                                
+                                
+                             <ui:inputSelect aura:id="master" label="Industry Segment" change="{!c.onControllerFieldChange}"
+                             class="slds-select" labelClass="slds-form-element__label" > 
+                                <aura:iteration items="{!v.listOfIndSeg}" var="indSegVal" >
+                                    <ui:inputSelectOption text="{!indSegVal.value}" label="{!indSegVal.label}" />
+                                 </aura:iteration></ui:inputSelect>
+                            </div>
+                            
+                            <!--Dependent Field-->
+                            <div class="slds-form-element__control">
+                 			<ui:inputSelect aura:id="slave" label="Industry Sub-segment" disabled="{!v.isDependentDisable}"
+                            class="slds-select" labelClass="slds-form-element__label" change="{!c.onDepFieldChange}" />
+                            </div>
+                            <label class="slds-form-element__label">
+                                Note:The new Opportunity created will be in ‘Initial Engagement’ stage. 
+                                Once created, please open new opportunity and update as needed.
+                            </label>
+                          	
+            			</aura:if>
+         			</div>
+    			</div>
+    			<div class="slds-p-horizontal--small slds-size--1-of-2">
+   					<div class="slds-form-element">									
+        				<div class="slds-form-element__control">
+                			<label class="uiLabel-left form-element__label uiLabel" for="globalId">
+                            	<span>Match Lead to an Existing SFDC opportunity?
+                            	</span>
+                        	</label>
+   							&nbsp; <input type="radio" id="globalId" name="options" onclick="{!c.handleClickIsTag}">
+                			</input>
+            			</div><br/>
+            	<aura:if isTrue="{!v.IsTag}">                    
+                    
+                    <div aura:id="searchRes" class="slds-form-element slds-lookup slds-is-close" data-select="single">
+         			<label class="slds-form-element__label" for="lookup-348"> Opportunity Name </label>                                                
+                         
+                <!--This part is for display search bar for lookup-->
+                        <div class="slds-form-element__control">
+							<!--<div class="slds-combobox_container slds-size_small">-->
+                            	<div class="slds-input-has-icon slds-input-has-icon--right">
+                                	 <div aura:id="lookupField" class="slds-show">                                      
+                                         <ui:inputText aura:id="oppLookupField" updateOn="keyup" keyup="{!c.keyPressController}" 
+                                         class="slds-lookup__search-input slds-input " required="True"
+                                         value="{!v.SearchKeyWord}" placeholder="search.."  click="{!c.hidelist}"/>
+                                         <lightning:buttonIcon class="slds-button slds-input__icon slds-text-color--default"
+                                 		iconName="utility:search" variant="bare" onclick="{!c.displaylist}"  
+                                                               />                                                                              		
+                                	</div> 
+                                    
+                <!-- This markup is for when an record is selected -->
+                           <div aura:id="lookup-pill" class="slds-pill-container slds-hide">
+                               <span class="slds-pill"  style="width:100%">
+                                    <span class="slds-pill__label">{!v.selectedRecord.Name}
+                                                                				
+                                   </span>
+                                   <button class="slds-button slds-button--icon slds-pill__remove" onclick="{!c.clear}">                                       
+                                       <lightning:buttonIcon class="slds-button slds-input__icon slds-text-color--default"
+                                                             iconName="utility:close" variant="bare"/> 										                                                                     							
+                                  		<span class="slds-assistive-text">Remove</span>	
+                                        </button>
+                               </span>                                 
+                           </div>
+                                    
+                    <!--This part is for Display typehead lookup result List-->
+                          
+                                    <div class="slds-lookup__menu slds " id="lookup-348"  >                               
+                               <div class="form-element__label slds-text-body--small">{!v.Message}                                     
+                                      <ul role="listbox">   
+             							<aura:iteration items="{!v.listOfSearchRecords}" var="singleRec">             
+            							<c:CustomLookUpResult oOpportunity="{!singleRec}" />                                                    	                    
+                						</aura:iteration>                           
+                                          </ul>
+                                      
+                                  </div> 
+                               </div>
+                   </div>                       
+             </div>                                                                                                                                                                                                                                      
+         </div> 
+                 
+    </aura:if>        
+   </div>        
+    </div>         
+     </div><br/>
+     <div class="slds-grid slds-grid--align-center">
+      <div class="slds-form-element">									
+        <div class="slds-form-element__control">									    									
+         <ui:button aura:id="cancel"									
+          class="slds-button slds-button--neutral"									
+          labelClass="label"									
+                    press="{!c.convertLeadButton}">Convert</ui:button>	<!--label="Cancel"-->							        
+        &nbsp; &nbsp;  &nbsp; &nbsp;  &nbsp; &nbsp;		      	
+         <ui:button aura:id="save"									
+          class="slds-button slds-button--neutral"									
+          labelClass="label"								
+                    press="{!c.cancelLead}">Cancel</ui:button>		<!--label="Save"-->							
+        </div>
+       </div>
+     </div>
+            </div>
+        </div>
+        <h2 class="slds-section-title--divider"><b>Lead Information</b></h2>                        		
+			<div class="slds-page-header" role="banner">
+                <div class="slds-grid">
+                 <div class="slds-p-horizontal--small slds-size--1-of-2">
+                     <div class="slds-form-element">									
+        	<div class="slds-form-element__control">
+                <label class="slds-form-element__label"><b>Name: </b> {!v.Leads.Name}</label><br/>
+                <label class="slds-form-element__label"><b>Company: </b> {!v.Leads.Company}</label><br/>
+                <label class="slds-form-element__label"><b>Title: </b> {!v.Leads.Title}</label><br/>
+                <label class="slds-form-element__label"><b>Job Description: </b> {!v.Leads.Job_Description__c}</label><br/>
+				               
+                </div>                 
+                </div>
+                </div>
+                									        	
+                <div class="slds-p-horizontal--small slds-size--1-of-2">
+                    <div class="slds-form-element">
+                        <div class="slds-form-element__control">
+                <label class="slds-form-element__label"><b>Normalized Title: </b> {!v.Leads.Normalized_Title__c}</label> <br/>
+                <label class="slds-form-element__label"><b>Email: </b> {!v.Leads.Email}</label><br/>
+                <label class="slds-form-element__label"><b>Project Description: </b> {!v.Leads.Project_Description__c}</label><br/>
+                </div>
+                    </div>
+                    </div>
+                </div>
+        </div>
+        <h2 class="slds-section-title--divider"><b>Lead Activities</b></h2>
+        
+        <div class="slds-page-header" role="banner">
+        <table class="slds-table slds-table--bordered slds-max-medium-table--stacked-horizontal
+                      slds-table-style  slds-cell-shrink">
+        <thead>
+            <tr class="slds-text-heading--label  ">
+                <th class="" scope="col"><b>Response Date Created</b> </th>
+                <th class="slds-is-sortable slds-truncate" scope="col"><b>Action</b></th>
+                <th class="slds-is-sortable" scope="col"><b>Object</b></th>
+                <th class="slds-is-sortable" scope="col"><b>Specific Interest</b></th>
+                
+                <th class="slds-is-sortable" scope="col"><b>Order Status</b></th>
+            </tr>
+            </thead> 	
+            <tbody>
+            	<aura:iteration items="{!v.LeadActivities}" var="LdAct">
+                    <tr class="slds-hint-parent ">
+                        <td> {!LdAct.Response_Date_Created__c}</td>
+                        <td> {!LdAct.Action__c}</td>
+                        <td> {!LdAct.Object__c}</td>
+                        <td> {!LdAct.Specific_Interest__c}</td>
+                        
+                        <td> {!LdAct.Order_Status__c}</td>
+                    </tr>
+                </aura:iteration> 
+            </tbody>
+        </table>
+        </div>
+            
+        </fieldset>
+        </div>
+    
+    
+</aura:component>

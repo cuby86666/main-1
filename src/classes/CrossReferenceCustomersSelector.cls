@@ -33,14 +33,14 @@ public class CrossReferenceCustomersSelector extends ApplicationSelector {
     	}
     	return mnRecordTypeId;
     }
-    
+    /*
     public List<Cross_Reference_Customer__c> selectByRecordTypeId(Set<Id> recTypeIds) {
     	p('selectByRecordTypeId');
     	return (List<Cross_Reference_Customer__c>)Database.query(newQueryFactory().setCondition('RecordTypeId in :recTypeIds').toSOQL());
     }
     
     public Map<String, Cross_Reference_Customer__c> getByRecordTypeIdToMap(Set<Id> recTypeIds) {
-    	p('selectByRecordTypeIdToMap');
+    	p('getByRecordTypeIdToMap');
     	Map<String, Cross_Reference_Customer__c> crossRefCustsByEndCustNameLoc = new Map<String, Cross_Reference_Customer__c>(); 
     	for (Cross_Reference_Customer__c cust : selectByRecordTypeId(recTypeIds)) {
     		if(!crossRefCustsByEndCustNameLoc.containskey(cust.End_Customer_Name_and_Location__c)) {
@@ -48,6 +48,22 @@ public class CrossReferenceCustomersSelector extends ApplicationSelector {
             }
     	}
     	return crossRefCustsByEndCustNameLoc;
-    }
+    }*/
 
+    public List<Cross_Reference_Customer__c> selectByRecordTypeIdAndEndCustomer(Set<Id> recTypeIds, Set<String> endCustomers) {
+    	p('selectByRecordTypeIdAndEndCustomer');
+    	return (List<Cross_Reference_Customer__c>)Database.query(newQueryFactory().setCondition(
+            'RecordTypeId in :recTypeIds and End_Customer_Name_and_Location__c in :endCustomers').toSOQL());
+    }
+        
+    public Map<String, Cross_Reference_Customer__c> getByRecordTypeIdAndEndCustomerToMap(Set<Id> recTypeIds, Set<String> endCustomers) {
+    	p('getByRecordTypeIdAndEndCustomerToMap');
+    	Map<String, Cross_Reference_Customer__c> crossRefCustsByEndCustNameLoc = new Map<String, Cross_Reference_Customer__c>(); 
+    	for (Cross_Reference_Customer__c cust : selectByRecordTypeIdAndEndCustomer(recTypeIds, endCustomers)) {
+    		if(!crossRefCustsByEndCustNameLoc.containskey(cust.End_Customer_Name_and_Location__c)) {
+                crossRefCustsByEndCustNameLoc.put(cust.End_Customer_Name_and_Location__c,cust);
+            }
+    	}
+    	return crossRefCustsByEndCustNameLoc;    
+    }
 }

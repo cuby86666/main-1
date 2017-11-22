@@ -6,6 +6,10 @@
 @Modified Date: 	08 Aug 2017
 @Description:		Modified class to optimize the code, remove hard coded Ids and 
 					improve the code coverage
+-------------------------------------------------------------------------------------
+@Modified By: 		Nisha Agrawal
+@Modified Date: 	27 Sep 2017
+@Description:		uncomment the code which got commented in previous release and raising error
 ***************************************************************************************/
 public class PreAccountController {
 	/*
@@ -22,11 +26,9 @@ public class PreAccountController {
     
     private final Account A;
     
-    //Commented by Nisha Agrawal on Aug 18 to remove extra code
-    /* 
     public PreAccountController( ApexPages.StandardController stdController ) {
         this.A = (Account)stdController.getRecord();
-    } */
+    } 
         
     public PreAccountController( Account theA ){
         this.A = theA;
