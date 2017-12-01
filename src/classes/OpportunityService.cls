@@ -48,6 +48,53 @@ public with sharing class OpportunityService {
         uow.commitWork();
 	}
 	
+	public static Set<Id> updateModelNAccounts(List<Opportunity> oppties) {
+		p('updateModelNAccounts');
+		Set<String> gids = new Set<String>();
+		Set<String> legacyIds = new Set<String>();
+		for (Opportunity oppty : oppties) {
+			/*if (oppty.GID__c != null && !gids.contains(oppty.GID__c)) {
+				gids.add(oppty.GID__c);
+			}
+			if (oppty.Disti_Name__c != null && !legacyIds.contains(oppty.Disti_Name__c)) {
+				legacyIds.add(oppty.Disti_Name__c);
+			}*/
+		}
+		List<Account> accounts = new AccountsSelector().selectChildAccountsByGIDorLegacyId(gids, legacyIds);
+		
+		//convert List<Account> to Map<String,Account>
+		Map<String,Account> accountsByGIDorLegacyId = new Map<String,Account>();
+		for (Account account : accounts) {
+			if (account.NXP_GID__c != null && !accountsByGIDorLegacyId.containsKey(account.NXP_GID__c)) {
+				accountsByGIDorLegacyId.put(account.NXP_GID__c, account);
+			}
+			if (account.Legacy_Id__c != null && !accountsByGIDorLegacyId.containsKey(account.Legacy_Id__c)) {
+				accountsByGIDorLegacyId.put(account.Legacy_Id__c, account);
+			}
+		}
+		Set<Id> opptyIds = new Set<Id>();
+		List<Opportunity> opptyUpdates = new List<Opportunity>();
+		for (Opportunity oppty : oppties) {
+			/*if (accountsByGIDorLegacyId.containsKey(oppty.GID__c)) {
+				//By GID Account
+				Account newAccount = accountsByGIDorLegacyId.get(oppty.GID__c));
+				oppty.AccountId = newAccount.Id;
+				opptyIds.add(oppty.Id);
+				opptyUpdates.add(oppty);
+
+			} else if (accountsByGIDorLegacyId.containsKey(oppty.Disti_Name__c)) {
+				//By disti name + end customer region
+				opptyUpdates.add(oppty);
+
+			} else {
+				//Unknown Account
+
+			}*/
+		}
+
+		return null;
+	}
+
 	public static Set<Id> updateEndCustomerAccounts(List<Opportunity> oppties, Boolean uowRequired) {
 		p('updateEndCustomerAccounts');
 		String CUSTOMER_TMMA = 'Tier 4 - TMMA';
