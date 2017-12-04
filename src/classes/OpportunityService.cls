@@ -53,12 +53,14 @@ public with sharing class OpportunityService {
 		Set<String> gids = new Set<String>();
 		Set<String> legacyIds = new Set<String>();
 		for (Opportunity oppty : oppties) {
-			/*if (oppty.GID__c != null && !gids.contains(oppty.GID__c)) {
-				gids.add(oppty.GID__c);
+			if (oppty.End_Customer_GID__c != null && !gids.contains(oppty.End_Customer_GID__c)) {
+				gids.add(oppty.End_Customer_GID__c);
 			}
-			if (oppty.Disti_Name__c != null && !legacyIds.contains(oppty.Disti_Name__c)) {
-				legacyIds.add(oppty.Disti_Name__c);
-			}*/
+			if (oppty.Distributor_Name__c != null && oppty.End_Customer_Region__c != null) {
+				String legacyIdString = getModelNDistiAccountLegacyId(oppty);
+				if (legacyIds.contains(legacyIdString)) continue;
+				legacyIds.add(legacyIdString);
+			}
 		}
 		List<Account> accounts = new AccountsSelector().selectChildAccountsByGIDorLegacyId(gids, legacyIds);
 		
@@ -75,24 +77,27 @@ public with sharing class OpportunityService {
 		Set<Id> opptyIds = new Set<Id>();
 		List<Opportunity> opptyUpdates = new List<Opportunity>();
 		for (Opportunity oppty : oppties) {
-			/*if (accountsByGIDorLegacyId.containsKey(oppty.GID__c)) {
+			if (accountsByGIDorLegacyId.containsKey(oppty.End_Customer_GID__c)) {
 				//By GID Account
-				Account newAccount = accountsByGIDorLegacyId.get(oppty.GID__c));
-				oppty.AccountId = newAccount.Id;
+				Account accountByGID = accountsByGIDorLegacyId.get(oppty.End_Customer_GID__c);
+				oppty.AccountId = accountByGID.Id;
 				opptyIds.add(oppty.Id);
-				opptyUpdates.add(oppty);
-
-			} else if (accountsByGIDorLegacyId.containsKey(oppty.Disti_Name__c)) {
-				//By disti name + end customer region
-				opptyUpdates.add(oppty);
-
+			} else if (oppty.Distributor_Name__c != null && oppty.End_Customer_Region__c != null && 
+				accountsByGIDorLegacyId.containsKey(getModelNDistiAccountLegacyId(oppty))) {
+				Account accountByLegacyId = accountsByGIDorLegacyId.get(getModelNDistiAccountLegacyId(oppty));
+				oppty.AccountId = accountByLegacyId.Id;
 			} else {
 				//Unknown Account
 
-			}*/
+			}
+			opptyUpdates.add(oppty);
 		}
 
-		return null;
+		return opptyIds;
+	}
+
+	private static String getModelNDistiAccountLegacyId(Opportunity oppty) {
+		return oppty.Distributor_Name__c + ' - ' + oppty.End_Customer_Region__c;
 	}
 
 	public static Set<Id> updateEndCustomerAccounts(List<Opportunity> oppties, Boolean uowRequired) {
