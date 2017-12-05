@@ -52,6 +52,11 @@ public class AccountsSelector extends ApplicationSelector {
 		return (List<Account>)selectSObjectsById(ids);
 	}
 
+	public List<Account> selectByName(Set<String> names) {
+		p('selectByName');
+		return (List<Account>)Database.query(newQueryFactory().setCondition('Name in :names').toSOQL());
+	}
+
 	public List<Account> selectChildAccountsByGIDorLegacyId(Set<String> gids, Set<String> legacyIds) {
 		p('selectChildAccountsByGIDorLegacyId');
 		Id childRecTypeId = getChildRecordTypeId();

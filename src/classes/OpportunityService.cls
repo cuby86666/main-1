@@ -48,8 +48,8 @@ public with sharing class OpportunityService {
         uow.commitWork();
 	}
 	
-	public static Set<Id> updateModelNAccounts(List<Opportunity> oppties) {
-		p('updateModelNAccounts');
+	public static Set<Id> updateMNOpportunityAccounts(List<Opportunity> oppties, fflib_ISObjectUnitOfWork uow) {
+		p('updateMNOpportunityAccounts');
 		Set<String> gids = new Set<String>();
 		Set<String> legacyIds = new Set<String>();
 		for (Opportunity oppty : oppties) {
@@ -77,23 +77,44 @@ public with sharing class OpportunityService {
 		Set<Id> opptyIds = new Set<Id>();
 		List<Opportunity> opptyUpdates = new List<Opportunity>();
 		for (Opportunity oppty : oppties) {
-			if (accountsByGIDorLegacyId.containsKey(oppty.End_Customer_GID__c)) {
+			String newAccountId = null;
+			if (oppty.End_Customer_GID__c != null && accountsByGIDorLegacyId.containsKey(oppty.End_Customer_GID__c)) {
 				//By GID Account
 				Account accountByGID = accountsByGIDorLegacyId.get(oppty.End_Customer_GID__c);
-				oppty.AccountId = accountByGID.Id;
-				opptyIds.add(oppty.Id);
+				newAccountId = accountByGID.Id;
+				opptyIds.add(oppty.Id);					
 			} else if (oppty.Distributor_Name__c != null && oppty.End_Customer_Region__c != null && 
 				accountsByGIDorLegacyId.containsKey(getModelNDistiAccountLegacyId(oppty))) {
+				//By Legacy Id
 				Account accountByLegacyId = accountsByGIDorLegacyId.get(getModelNDistiAccountLegacyId(oppty));
-				oppty.AccountId = accountByLegacyId.Id;
+				newAccountId = accountByLegacyId.Id;
 			} else {
 				//Unknown Account
-
+				newAccountId = getUnknownAccountId();
 			}
-			opptyUpdates.add(oppty);
+
+			if (oppty.AccountId != newAccountId) {
+				oppty.AccountId = newAccountId;
+				opptyUpdates.add(oppty);
+			}
+		}
+
+		if (uow != null) {
+			uow.registerDirty(opptyUpdates);
 		}
 
 		return opptyIds;
+	}
+
+	static String UNKNOWN_ACCOUNT_ID = null;
+	private static String getUnknownAccountId() {
+		if (UNKNOWN_ACCOUNT_ID == null) {
+			List<Account> accounts = new AccountsSelector().selectByName(new Set<String> {'Unknown'});
+			if (accounts.size() > 0) {
+				UNKNOWN_ACCOUNT_ID = accounts.get(0).Id;
+			}
+		}
+		return UNKNOWN_ACCOUNT_ID;
 	}
 
 	private static String getModelNDistiAccountLegacyId(Opportunity oppty) {
