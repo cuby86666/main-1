@@ -12,3 +12,4 @@ config/.lightning
 config/.local_store
 *.sublime-project
 *.sublime-workspace
+src/package.xml
