@@ -2,49 +2,110 @@
 private class ModelNOpportunityAccountsUpdateJobTest {
 
 	@testsetup static void setup() {
-		TestAccount acc = new TestAccount('testAccount', 10);
+		Profile prf = [Select Id from Profile Where Name = 'Standard User'];
+		TestUser usr = new TestUser('myTest', 5, prf.Id);
+		List<User> users = (List<User>)usr.getSObject();
+		insert users;
+		
+		TestAccount acc = new TestAccount('testAccount', 5);
 		List<Account> accounts = acc.getSObject();
+		//setup Account gid and legacy id
+		Object[] gidObjs = new Object[] {'10001','10002','','',''};
+		Object[] legacyIdObjs = new Object[] {'','','AVNET ASIA PAC-EMEA','AVNET ASIA PAC-JAPAN',''};
+		acc.updateFieldByArray('NXP_GID__c', gidObjs);
+		acc.updateFieldByArray('Legacy_Id__c', legacyIdObjs);
+		//update distributor account name
+		accounts.get(2).Name = 'DistAccount1';
+		accounts.get(3).Name = 'DistAccount2';
+		//update Unknown account
+		accounts.get(4).Name = 'Unknown';
+		acc.updateFieldByValue('OwnerId', users.get(1).Id);
 		insert accounts;
 		
-		TestOpportunity opp = new TestOpportunity('testOppty', 10, OpportunitiesSelector.getMnRecordTypeId());
-		opp.updateOpportunityAccounts(accounts);
+		TestOpportunity opp = new TestOpportunity('testOppty', 5, OpportunitiesSelector.getMnRecordTypeId());
+		//opp.updateOpportunityAccounts(accounts);
+
+		//setup Oppty gid, distributr name and end customer region
+		Object[] opptyGids = new Object[] {'10001','10002','','',''};
+		opp.updateFieldByArray('End_Customer_GID__c', opptyGids);
+		
+		opp.updateFieldByValue('Distributor_Name__c','AVNET ASIA PAC');
+		opp.updateFieldByValue('OwnerId', users.get(0).Id);
+		
+		Object[] opptyRegions = new Object[] {'EMEA','EMEA','EMEA','EMEA','SAP'};
+		opp.updateFieldByArray('End_Customer_Region__c', opptyRegions);
+
 		List<Opportunity> opportunities = opp.getSObject();
 		insert opportunities;
 
-		Profile prf = [Select Id from Profile Where Name = 'Standard User'];
-		TestUser usr = new TestUser('myTestUser', 10, prf.Id);
-		List<User> users = (List<User>)usr.getSObject();
-		insert users;
 	}
 
+/*
 	@isTest static void testAccount() {
-		List<Account> accounts = [Select Id, Name, RecordType.Name from Account];
-		for (Account acc : accounts) {
-			System.debug('@@@@@ Name=' + acc.Name + ', RecordType=' + acc.RecordType.Name);
-		}
+		DumpAccounts();
 		//System.assert(accounts.size() == 10);
 	}
 	
 	@isTest static void testOpportunity() {
-		List<Opportunity> oppties = [Select Id, Name, CloseDate, Account.Name from Opportunity];
-		for (Opportunity opp : oppties) {
-			System.debug('@@@@@ Name=' + opp.Name + ', CloseDate=' + opp.CloseDate + ', Account=' + opp.Account.Name);
-		}
+		DumpOppties();
 		//system.assert(oppties.size() == 1);
 	}
 	
 	@isTest static void testUser() {
-		List<User> users = [Select Id, Name, UserName, Profile.Name from User Where FirstName = 'myTestUser'];
+		DumpUsers();
+	}*/
+
+	@isTest static void testModelNOpportunityAccountsUpdateJob1() {
+		Test.startTest();
+		ModelNOpportunityAccountsUpdateJob myJob = new ModelNOpportunityAccountsUpdateJob();
+		database.executebatch(myJob);
+		Test.stopTest();
+		DumpOppties();
+		DumpUsers();
+	}
+
+	@isTest static void testModelNOpportunityAccountsUpdateJob2() {
+		Test.startTest();
+        String CRON_EXP = '0 0 0 3 9 ? 2030';
+        //schedule the job
+        String jobId = System.schedule('testModelNOpportunityAccountsUpdateJob', CRON_EXP, new ModelNOpportunityAccountsUpdateJob());
+
+        List<CronTrigger> lstCrons = [SELECT Id, CronExpression, TimesTriggered, NextFireTime
+                    FROM CronTrigger WHERE id = :jobId Limit 1];
+
+        System.assert(lstCrons.size() > 0);
+        System.assert(lstCrons[0].CronExpression == CRON_EXP);        
+        System.assert(lstCrons[0].TimesTriggered == 0);
+	}
+
+	static void DumpUsers() {
+		List<User> users = [Select Id, Name, UserName, Profile.Name from User Where FirstName = 'myTestFirstName'];
 		for (User usr : users) {
-			System.debug('@@@@@ Name=' + usr.Name + ', Username=' + usr.UserName + ', profile=' + usr.Profile.Name);
+			System.debug('@@@@@ User Name=' + usr.Name + ', Username=' + usr.UserName + ', profile=' + usr.Profile.Name);
+		}
+	}
+
+	static void DumpAccounts() {
+		List<Account> accounts = [Select Id, Name, RecordType.Name, NXP_GID__c, Legacy_Id__c from Account];
+		for (Account acc : accounts) {
+			System.debug('@@@@@ Account Name=' + acc.Name + ', GID=' + acc.NXP_GID__c + ', Legacy_Id__c=' + acc.Legacy_Id__c);
+		}
+	}
+
+	static void DumpOppties() {
+		List<Opportunity> oppties = [Select Id, Name, CloseDate, Account.Name, End_Customer_GID__c, Distributor_Name__c, End_Customer_Region__c, Owner.Name from Opportunity];
+		for (Opportunity opp : oppties) {
+			System.debug('@@@@@ Oppty Name=' + opp.Name + ', Account=' + opp.Account.Name + ', GID=' + opp.End_Customer_GID__c + ', opp.Legacy_Id__c=' + opp.Distributor_Name__c + '-' + opp.End_Customer_Region__c + ', Owner=' + opp.Owner.Name);
 		}
 	}
 
 	interface TestSObject {
 		List<SObject> create(String objType, String name, Integer numOfObjs);
+		List<SObject> getSObject();
+		//List<SObject> dumpSObjects();
 		//void updateFieldByArray(String fieldName, Object[] values);
 		//void updateFieldBySeries(String fieldName);
-		List<SObject> getSObject();
+
 	}
 
 	abstract class AbstractTestSObject implements TestSObject {
@@ -86,7 +147,7 @@ private class ModelNOpportunityAccountsUpdateJobTest {
 
 		//update field with a array
 		public virtual void updateFieldByArray(String fieldName, Object[] values) {
-			for (Integer i = 0; i < sObjects.size(); i++) {
+			for (Integer i = 0; i < values.size(); i++) {
 				sObjects.get(i).put(fieldName, values[i]);
 			}
 		}
@@ -111,7 +172,7 @@ private class ModelNOpportunityAccountsUpdateJobTest {
 		public TestUser(String name, Integer numOfObjs, Id profileId) {
 			create('User', name, numOfObjs);
 			Map<String, Object> userDefaultValues = new Map<String, Object>();
-			userDefaultValues.put('FirstName', name);
+			userDefaultValues.put('FirstName', name + 'FirstName');
 			userDefaultValues.put('EmailEncodingKey', 'UTF-8');
 			userDefaultValues.put('LanguageLocaleKey', 'en_US');
 			userDefaultValues.put('LocaleSidKey', 'en_US');
@@ -126,12 +187,12 @@ private class ModelNOpportunityAccountsUpdateJobTest {
 			if (sObjType == null) {
 				throw new TypeException('Unsupported ObjectType ' + objType);
 			}
-
+			String emailName = CommonUtils.generateGUID();
 			for (Integer i = 0; i < numOfObjs; i++) {
 				SObject obj = sObjType.newSObject();
+				String email = emailName + i + '@nxptest.com.test';
 				obj.put('LastName', name + i);
 				obj.put('Alias', 'A-' + i); //Alias field max length=8
-				String email = CommonUtils.generateGUID() + '@nxptest.com.test';
 				obj.put('Email', email);
 				obj.put('UserName', email);
 				sObjects.add(obj);
@@ -162,7 +223,7 @@ private class ModelNOpportunityAccountsUpdateJobTest {
 
 		public void updateOpportunityAccounts(List<Account> accounts) {
 			Object[] objects = new Object[accounts.size()];
-			for (Integer i = 0; i < sObjects.size(); i++) {
+			for (Integer i = 0; i < objects.size(); i++) {
 				sObjects.get(i).put('AccountId', accounts.get(i).Id);
 			}
 		}

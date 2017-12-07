@@ -43,7 +43,8 @@ public class OpportunitiesSelector extends ApplicationSelector {
 			Opportunity.Locked_Exchange_Rate__c,
 			Opportunity.Distributor_Name__c,
 			Opportunity.End_Customer_Region__c,
-			Opportunity.End_Customer_GID__c
+			Opportunity.End_Customer_GID__c,
+			Opportunity.Legacy_Opportunity_Owner__c
 		};
 	}
 	
