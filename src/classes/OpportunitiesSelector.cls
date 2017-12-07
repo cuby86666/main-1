@@ -18,11 +18,13 @@ public class OpportunitiesSelector extends ApplicationSelector {
 		return new List<Schema.SObjectField> {
 			Opportunity.Id,
 			Opportunity.AccountId,
+			Opportunity.Name,
 			Opportunity.RecordTypeId,
 			Opportunity.StageName,
 			Opportunity.BL_Approver_1__c, 
 			Opportunity.BL_Approver_2__c,
 			Opportunity.Expiration_Date__c,
+			Opportunity.Lead_Id__c,
 			Opportunity.Legacy_End_Customer_Name_and_Location__c,
 			Opportunity.Lost_Description__c,
 			Opportunity.Lost_Reason__c,
@@ -79,21 +81,21 @@ public class OpportunitiesSelector extends ApplicationSelector {
 			
 		new OpportunitiesSelector().configureQueryFactoryFields(opptyLineItemsQueryFactory, OpportunityLineItem.OpportunityId.getDescribe().getRelationshipName());				
 		
-		return (List<Opportunity>)Database.query(opptiesQueryFactory.setCondition('Id in :ids').toSOQL());
+		return (List<Opportunity>)Database.query(opptiesQueryFactory.setCondition((ids != null) ? 'Id in :ids' : null).toSOQL());
 	}
 	
 	public List<Opportunity> selectByIdWithAccountAndOwner(Set<Id> ids) {
 		p('selectByIdWithAccountAndOwner');
 		fflib_QueryFactory opptiesQueryFactory = getOpptiesWithAccountAndOwnerQueryFactory();
 		
-		return (List<Opportunity>)Database.query(opptiesQueryFactory.setCondition('Id in :ids').toSOQL());	
+		return (List<Opportunity>)Database.query(opptiesQueryFactory.setCondition((ids != null) ? 'Id in :ids' : null).toSOQL());	
 	}
 	
 	public Database.QueryLocator selectByConditionWithAccountAndOwnerQueryLocator(String condition) {
 		p('selectByConditionWithAccountAndOwnerQueryLocator');
 		fflib_QueryFactory opptiesQueryFactory = getOpptiesWithAccountAndOwnerQueryFactory();
 		
-		return Database.getQueryLocator(opptiesQueryFactory.setCondition(condition).toSOQL());        
+		return Database.getQueryLocator(opptiesQueryFactory.setCondition((condition != null) ? condition : null).toSOQL());        
     }
     
     private fflib_QueryFactory getOpptiesWithAccountAndOwnerQueryFactory() {

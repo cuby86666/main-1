@@ -12,6 +12,7 @@ public class OpportunityLineItemsSelector extends ApplicationSelector {
 			OpportunityLineItem.Quantity,
 			OpportunityLineItem.UnitPrice,
 			OpportunityLineItem.Component_Multiplier__c,
+			OpportunityLineItem.Legacy_Id__c,
 			OpportunityLineItem.Price_Erosion_Rate__c,
 			OpportunityLineItem.Prod_Lost__c,
 			OpportunityLineItem.Prod_Lost_Cancelled__c,
@@ -43,6 +44,11 @@ public class OpportunityLineItemsSelector extends ApplicationSelector {
 		}
 		
 		return (List<OpportunityLineItem>)Database.query(opptyLineItemsQueryFactory.setCondition(condition).toSOQL());
+	}
+	
+	public List<OpportunityLineItem> selectByLegacyId(Set<String> legacyIds) {
+		p('selectByLegacyId');
+		return (List<OpportunityLineItem>)Database.query(newQueryFactory().setCondition('Legacy_Id__c in :legacyIds').toSOQL());
 	}
 	
 	public Map<Id, List<OpportunityProductValueSummary>> selectLifetimeValueByOpptyIdGroupByOpptyIdAndMag(Set<Id> opptyIds) {
