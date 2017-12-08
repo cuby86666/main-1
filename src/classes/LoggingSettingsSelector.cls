@@ -10,9 +10,4 @@ public class LoggingSettingsSelector extends ApplicationSelector {
 		};
 	}
 	
-	public List<Logging_Setting__mdt> selectWhere(String condition) {
-		p('selectWhere');
-        return (List<Logging_Setting__mdt>)Database.query(newQueryFactory().setCondition(condition).toSOQL());        
-    }
-    
 }

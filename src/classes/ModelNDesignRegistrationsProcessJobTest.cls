@@ -7,7 +7,7 @@ private class ModelNDesignRegistrationsProcessJobTest {
 	private static MnStage__c mnStage;
 	
 	static {
-		List<MnStage__c> mnStages = new MnStagesSelector().selectByStatus(null);
+		List<MnStage__c> mnStages = (List<MnStage__c>)new MnStagesSelector().selectAll();
 	
 		if (mnStages.size() > 0) {
 			mnStage = mnStages.get(0);
@@ -104,7 +104,7 @@ private class ModelNDesignRegistrationsProcessJobTest {
 		
 		insert mnStage;
 		
-		List<MnStage__c> mnStages = new MnStagesSelector().selectByStatus(null);
+		List<MnStage__c> mnStages = (List<MnStage__c>)new MnStagesSelector().selectAll();
 		System.assertEquals(STATUS_QUEUED, mnStages.get(0).Status__c);
 		
 		ModelNDesignRegistrationsProcessJob drProcessJob = new ModelNDesignRegistrationsProcessJob();
@@ -113,18 +113,12 @@ private class ModelNDesignRegistrationsProcessJobTest {
     
     @isTest
     static void testSetup() {
-    	/*
-    	Test.startTest();
-    	ModelNDesignRegistrationsProcessJob drProcessJob = new ModelNDesignRegistrationsProcessJob();
-    	Database.executeBatch(drProcessJob);
-    	Test.stopTest();
-    	*/
-    	List<Opportunity> oppties = new OpportunitiesSelector().selectByIdWithProducts(null);
+    	List<Opportunity> oppties = (List<Opportunity>)new OpportunitiesSelector().selectAll();
     	System.assertEquals(1, oppties.size());
     	
     	Opportunity oppty = oppties.get(0);
     	
-        List<OpportunityLineItem> opptyProds = oppty.OpportunityLineItems;
+        List<OpportunityLineItem> opptyProds = new OpportunityLineItemsSelector().selectByOpptyIdWithOpportunity(new Set<Id> {oppty.Id});
         System.assertEquals(1, opptyProds.size());
         
         System.assertEquals(STATUS_COMPLETED, mnStage.Status__c);
@@ -145,7 +139,7 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	insert mnStageClone;
     	
     	// There should be 2 records in the staging table.
-    	List<MnStage__c> mnStages = new MnStagesSelector().selectByStatus(null);
+    	List<MnStage__c> mnStages = (List<MnStage__c>)new MnStagesSelector().selectAll();
     	System.assertEquals(2, mnStages.size());
     	
     	// There should be only 1 record with Status = 'Queued'.
@@ -157,17 +151,48 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	Database.executeBatch(drProcessJob);
     	Test.stopTest();
     	
-    	List<Opportunity> oppties = new OpportunitiesSelector().selectByIdWithProducts(null);
+    	List<Opportunity> oppties = (List<Opportunity>)new OpportunitiesSelector().selectAll();
     	System.assertEquals(1, oppties.size());
     	
     	Opportunity oppty = oppties.get(0);
     	System.assertEquals(LEAD_ID, oppty.Lead_Id__c);
     	
-    	List<OpportunityLineItem> opptyProds = oppty.OpportunityLineItems;
+    	List<OpportunityLineItem> opptyProds = new OpportunityLineItemsSelector().selectByOpptyIdWithOpportunity(new Set<Id> {oppty.Id});
         System.assertEquals(1, opptyProds.size());	
         
         OpportunityLineItem opptyProd = opptyProds.get(0);
         System.assertEquals(QTY_PER_SYS, opptyProd.Component_Multiplier__c);
+    }
+    
+    @isTest
+    static void testInsert() {
+    	// Insert new oppty and oppty prod
+    	MnStage__c mnStageClone = mnStage.clone(false, true, false, false);
+    	mnStageClone.Status__c = STATUS_QUEUED;
+    	mnStageClone.Opportunity__c = null;
+    	mnStageClone.Reg_Oppty_Num__c = '819834';
+    	mnStageClone.Reg_Part_OID__c = '1048946';
+    	
+    	insert mnStageClone;	
+    	
+    	// There should be 2 records in the staging table.
+    	List<MnStage__c> mnStages = (List<MnStage__c>)new MnStagesSelector().selectAll();
+    	System.assertEquals(2, mnStages.size());
+    	
+    	// There should be only 1 record with Status = 'Queued'.
+    	mnStages = new MnStagesSelector().selectByStatus(new Set<String> {STATUS_QUEUED});
+    	System.assertEquals(1, mnStages.size());
+    	
+    	Test.startTest();
+    	ModelNDesignRegistrationsProcessJob drProcessJob = new ModelNDesignRegistrationsProcessJob();
+    	Database.executeBatch(drProcessJob);
+    	Test.stopTest();
+    	
+    	List<Opportunity> oppties = (List<Opportunity>)new OpportunitiesSelector().selectAll();
+    	System.assertEquals(2, oppties.size());
+    	
+    	List<OpportunityLineItem> opptyProds = (List<OpportunityLineItem>)new OpportunityLineItemsSelector().selectAll();
+    	System.assertEquals(2, opptyProds.size());
     }
     
 }

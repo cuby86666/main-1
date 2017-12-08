@@ -25,7 +25,8 @@ public class OpportunityProductClaimValue {
     public static Boolean isUpdatable = true;
     
     static {
-        Opportunity_Claim_Value_Setting__mdt claimValueSetting = new OpportunityClaimValueSettingsSelector().selectWhere('MasterLabel = \'Setting\'').get(0);
+        Opportunity_Claim_Value_Setting__mdt claimValueSetting = ((List<Opportunity_Claim_Value_Setting__mdt>)new OpportunityClaimValueSettingsSelector().selectWhere('MasterLabel = \'Setting\'')).get(0);
+        
         CROSS_UPDATE_ALLOWED = claimValueSetting.Cross_Update_Allowed__c;
         ACCOUNT_CBG = claimValueSetting.Account_CBG__c;
         

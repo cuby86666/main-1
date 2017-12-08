@@ -11,9 +11,4 @@ public class OpportunityClaimValueSettingsSelector extends ApplicationSelector {
 		};
 	}
 	
-	public List<Opportunity_Claim_Value_Setting__mdt> selectWhere(String condition) {
-		p('selectWhere');
-        return (List<Opportunity_Claim_Value_Setting__mdt>)Database.query(newQueryFactory().setCondition(condition).toSOQL());        
-    }
-    
 }

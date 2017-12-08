@@ -12,7 +12,7 @@ public class CommonUtils {
 	
 	static {
 		if (isLoggingActive == null) {
-			isLoggingActive = new LoggingSettingsSelector().selectWhere('MasterLabel = \'System Debug\'').get(0).IsActive__c;
+			isLoggingActive = ((List<Logging_Setting__mdt>)new LoggingSettingsSelector().selectWhere('MasterLabel = \'System Debug\'')).get(0).IsActive__c;
 		}
 		System.debug('//-c isLoggingActive: ' + isLoggingActive);		
 	}
