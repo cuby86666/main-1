@@ -23,7 +23,11 @@ public class OpportunitiesSelector extends ApplicationSelector {
 			Opportunity.StageName,
 			Opportunity.BL_Approver_1__c, 
 			Opportunity.BL_Approver_2__c,
+			Opportunity.Claim_Value__c,
+			Opportunity.Claim_Value_USD_SYS__c,
+			Opportunity.Discovery_Date__c,
 			Opportunity.Expiration_Date__c,
+			Opportunity.Locked_Exchange_Rate__c,
 			Opportunity.Lead_Id__c,
 			Opportunity.Legacy_End_Customer_Name_and_Location__c,
 			Opportunity.Lost_Description__c,
@@ -38,11 +42,7 @@ public class OpportunitiesSelector extends ApplicationSelector {
 			Opportunity.Sales_Director_Approver__c, 
 			Opportunity.TMMA_Override__c,
 			Opportunity.VP_Approver_2__c,
-			Opportunity.Discovery_Date__c,
-			Opportunity.War_Room_Completed__c,
-			Opportunity.Claim_Value__c,
-			Opportunity.Claim_Value_USD_SYS__c,
-			Opportunity.Locked_Exchange_Rate__c
+			Opportunity.War_Room_Completed__c
 		};
 	}
 	
