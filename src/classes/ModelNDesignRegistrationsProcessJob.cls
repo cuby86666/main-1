@@ -7,10 +7,12 @@ global class ModelNDesignRegistrationsProcessJob implements Database.Batchable<S
 	
 	global void execute(Database.BatchableContext bc, List<MnStage__c> scope) {
 		p('execute');
+		MnStages mnStages = new MnStages(scope.deepClone(true, true, true));
+		
+		Map<Id, Boolean> opptyProdExistedByMnStageId = mnStages.checkOpptyProdExisted();
+		
 		List<Opportunity> oppties = new List<Opportunity>();
 		List<OpportunityLineItem> opptyProds = new List<OpportunityLineItem>(); 
-		
-		Map<Id, Boolean> opptyProdExistedByMnStageId = checkOpptyProdExisted(scope);
 		
 		for (MnStage__c ms : scope) {
 			String opptyExtId = ms.Reg_Oppty_Num__c + '-' + ms.Reg_Part_OID__c;
@@ -55,29 +57,6 @@ global class ModelNDesignRegistrationsProcessJob implements Database.Batchable<S
 	
 	global void finish(Database.BatchableContext bc) {
 		p('finish');	
-	}
-	
-	private static Map<Id, Boolean> checkOpptyProdExisted(List<MnStage__c> mnStages) {
-		Map<Id, Boolean> result = new Map<Id, Boolean>(); // MnStage__c.Id -> Oppty Prod Existed
-		Set<String> legacyIds = new Set<String>();
-		
-		for (MnStage__c ms : mnStages) {
-			result.put(ms.Id, false);
-			legacyIds.add(ms.Reg_Part_OID__c);
-		}
-		
-		List<OpportunityLineItem> opptyProds = new OpportunityLineItemsSelector().selectByLegacyId(legacyIds);
-		
-		for (MnStage__c ms : mnStages) {
-			for (OpportunityLineItem oli : opptyProds) {
-				if (ms.Reg_Part_OID__c == oli.Legacy_Id__c) {
-					result.put(ms.Id, true);
-					break;
-				} 	
-			}	
-		}
-		
-		return result;
 	}
 	
 	private static void p(String msg) {

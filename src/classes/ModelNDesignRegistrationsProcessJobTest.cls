@@ -101,6 +101,8 @@ private class ModelNDesignRegistrationsProcessJobTest {
 		mnStage.Part_12NC__c = '935313895518';
 		mnStage.Part_Is_Root__c = false;
 		mnStage.Part_Root__c = 'MC9S08SG';
+		mnStage.Prod_Family_OID__c = '273';
+		mnStage.Prod_Family__c = 'RGP';
 		
 		insert mnStage;
 		

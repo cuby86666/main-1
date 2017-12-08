@@ -50,6 +50,8 @@ public class MnStagesSelector extends ApplicationSelector {
 			MnStage__c.Part_Name__c,
 			MnStage__c.Part_OID__c,
 			MnStage__c.Part_Root__c,
+			MnStage__c.Prod_Family__c,
+			MnStage__c.Prod_Family_OID__c,
 			MnStage__c.Prog_Name__c,
 			MnStage__c.Prog_OID__c,
 			MnStage__c.Reg_Action_Date__c,
