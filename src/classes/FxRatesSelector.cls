@@ -12,9 +12,4 @@ public class FxRatesSelector extends ApplicationSelector {
 		};
 	}
 	
-	public List<FX_Rates__c> selectAll() {
-		p('selectAll');
-        return (List<FX_Rates__c>)Database.query(newQueryFactory().toSOQL());        
-    }
-	 
 }

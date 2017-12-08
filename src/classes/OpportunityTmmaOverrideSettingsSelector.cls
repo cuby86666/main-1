@@ -10,10 +10,5 @@ public class OpportunityTmmaOverrideSettingsSelector extends ApplicationSelector
 			Opportunity_TMMA_Override_Setting__mdt.Object_Name__c 
 		};
 	}
-	
-	public List<Opportunity_TMMA_Override_Setting__mdt> selectAll() {
-		p('selectAll');
-        return (List<Opportunity_TMMA_Override_Setting__mdt>)Database.query(newQueryFactory().toSOQL());        
-    }
-    
+
 }

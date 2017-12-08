@@ -29,14 +29,14 @@ public class OpportunityProductClaimValue {
         CROSS_UPDATE_ALLOWED = claimValueSetting.Cross_Update_Allowed__c;
         ACCOUNT_CBG = claimValueSetting.Account_CBG__c;
         
-        List<Opportunity_Claim_Value_MAG_Setting__mdt> claimValueMagSettings = new OpportunityClaimValueMagSettingsSelector().selectAll();
+        List<Opportunity_Claim_Value_MAG_Setting__mdt> claimValueMagSettings = (List<Opportunity_Claim_Value_MAG_Setting__mdt>)new OpportunityClaimValueMagSettingsSelector().selectAll();
         
         for (Opportunity_Claim_Value_MAG_Setting__mdt ocvms : claimValueMagSettings) {
         	MAG_CLAIM_VALUE_QUARTERS.put(ocvms.MAG__c, ocvms.Claim_Value_Quarters__c);
         }
         
         // TMMA
-        List<Opportunity_TMMA_Override_Setting__mdt> tmmaOverrideSettings = new OpportunityTmmaOverrideSettingsSelector().selectAll();
+        List<Opportunity_TMMA_Override_Setting__mdt> tmmaOverrideSettings = (List<Opportunity_TMMA_Override_Setting__mdt>)new OpportunityTmmaOverrideSettingsSelector().selectAll();
         
         for (Opportunity_TMMA_Override_Setting__mdt otos : tmmaOverrideSettings) {
         	if (otos.Object_Name__c == 'Opportunity') {

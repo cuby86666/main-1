@@ -103,12 +103,12 @@ public class MnStagesSelector extends ApplicationSelector {
 	
 	public List<MnStage__c> selectByStatus(Set<String> statuses) {
 		p('selectByStatus');
-		return (List<MnStage__c>)Database.query(newQueryFactory().setCondition((statuses != null) ? 'Status__c in :statuses' : null).toSOQL());
+		return (List<MnStage__c>)Database.query(newQueryFactory().setCondition('Status__c in :statuses').toSOQL());
 	}
 	
 	public Database.QueryLocator selectByStatusQueryLocator(Set<String> statuses) {
 		p('selectByStatusQueryLocator');
-		return Database.getQueryLocator(newQueryFactory().setCondition((statuses != null) ? 'Status__c in :statuses' : null).toSOQL());
+		return Database.getQueryLocator(newQueryFactory().setCondition('Status__c in :statuses').toSOQL());
 	}
     
 }

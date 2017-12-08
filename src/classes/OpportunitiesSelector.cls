@@ -81,21 +81,21 @@ public class OpportunitiesSelector extends ApplicationSelector {
 			
 		new OpportunitiesSelector().configureQueryFactoryFields(opptyLineItemsQueryFactory, OpportunityLineItem.OpportunityId.getDescribe().getRelationshipName());				
 		
-		return (List<Opportunity>)Database.query(opptiesQueryFactory.setCondition((ids != null) ? 'Id in :ids' : null).toSOQL());
+		return (List<Opportunity>)Database.query(opptiesQueryFactory.setCondition('Id in :ids').toSOQL());
 	}
 	
 	public List<Opportunity> selectByIdWithAccountAndOwner(Set<Id> ids) {
 		p('selectByIdWithAccountAndOwner');
 		fflib_QueryFactory opptiesQueryFactory = getOpptiesWithAccountAndOwnerQueryFactory();
 		
-		return (List<Opportunity>)Database.query(opptiesQueryFactory.setCondition((ids != null) ? 'Id in :ids' : null).toSOQL());	
+		return (List<Opportunity>)Database.query(opptiesQueryFactory.setCondition('Id in :ids').toSOQL());	
 	}
 	
 	public Database.QueryLocator selectByConditionWithAccountAndOwnerQueryLocator(String condition) {
 		p('selectByConditionWithAccountAndOwnerQueryLocator');
 		fflib_QueryFactory opptiesQueryFactory = getOpptiesWithAccountAndOwnerQueryFactory();
 		
-		return Database.getQueryLocator(opptiesQueryFactory.setCondition((condition != null) ? condition : null).toSOQL());        
+		return Database.getQueryLocator(opptiesQueryFactory.setCondition(condition).toSOQL());        
     }
     
     private fflib_QueryFactory getOpptiesWithAccountAndOwnerQueryFactory() {
