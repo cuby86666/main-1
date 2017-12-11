@@ -80,10 +80,12 @@ public with sharing class OpportunityService {
 		for (Opportunity oppty : oppties) {
 			//System.debug('@@@@@ Owner=' + oppty.Owner.Name);
 			String newAccountId = null;
+			String newOwnerId = null;
 			if (oppty.End_Customer_GID__c != null && accountsByGIDorLegacyId.containsKey(oppty.End_Customer_GID__c)) {
 				//By GID Account
 				Account accountByGID = accountsByGIDorLegacyId.get(oppty.End_Customer_GID__c);
 				newAccountId = accountByGID.Id;
+				if (accountByGID.Owner.IsActive) newOwnerId = accountByGID.OwnerId;
 				opptyIds.add(oppty.Id);					
 			} else if (oppty.Distributor_Name__c != null && oppty.End_Customer_Region__c != null && 
 				accountsByGIDorLegacyId.containsKey(getModelNDistiAccountLegacyId(oppty))) {
@@ -92,12 +94,15 @@ public with sharing class OpportunityService {
 				newAccountId = accountByLegacyId.Id;
 			} else {
 				//Unknown Account
-				Account unknownAccount = getUnknownAccountId();
+				Account unknownAccount = getUnknownAccount();
 				newAccountId = unknownAccount.Id;
 			}
 
+			oppty.OwnerId = getModelNDROwnerId(oppty, newOwnerId);
+
 			if (oppty.AccountId != newAccountId) {
 				oppty.AccountId = newAccountId;
+				oppty.OwnerId = newOwnerId;
 				opptyUpdates.add(oppty);
 			}
 		}
@@ -109,8 +114,27 @@ public with sharing class OpportunityService {
 		return opptyIds;
 	}
 
+	//=========== Model N Account Update utility functions ========================================
+	private static String getModelNDROwnerId(Opportunity oppty, String newAccountOwnerId) {
+		String newOwnerId = null;
+		// Tier 1,2,3,4 - TMMA and Account Owner is Active
+		if (newAccountOwnerId != null) 
+			newOwnerId = newAccountOwnerId;
+		else {
+			if (oppty.OwnerId == null) {
+				if (oppty.Legacy_Opportunity_Owner__c == null) {
+					newOwnerId = getDataAdmin().Id;
+				} else {
+					List<User> opptyApprovers = 
+					new UsersSelector().selectWhere('Email =\'' + oppty.Legacy_Opportunity_Owner__c + '\' and Profile.UserLicense.Name like \'Salesforce%\'');
+				}
+			}
+		}
+		return newOwnerId;
+	}
+
 	static Account UNKNOWN_ACCOUNT = null;
-	private static Account getUnknownAccountId() {
+	private static Account getUnknownAccount() {
 		if (UNKNOWN_ACCOUNT == null) {
 			List<Account> accounts = new AccountsSelector().selectByName(new Set<String> {'Unknown'});
 			if (accounts.size() > 0) {
@@ -120,9 +144,21 @@ public with sharing class OpportunityService {
 		return UNKNOWN_ACCOUNT;
 	}
 
+	static User DATA_ADMIN = null;
+	private static User getDataAdmin() {
+		if (DATA_ADMIN == null) {
+			List<User> users = new UsersSelector().selectByName(new Set<String> {'Data Admin'});
+			if (users.size() > 0) {
+				DATA_ADMIN = users.get(0);
+			}
+		}
+		return DATA_ADMIN;
+	}
+
 	private static String getModelNDistiAccountLegacyId(Opportunity oppty) {
 		return oppty.Distributor_Name__c + '-' + oppty.End_Customer_Region__c;
 	}
+	//=============================================================================================
 
 	public static Set<Id> updateEndCustomerAccounts(List<Opportunity> oppties, Boolean uowRequired) {
 		p('updateEndCustomerAccounts');

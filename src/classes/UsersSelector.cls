@@ -9,7 +9,8 @@ public class UsersSelector extends ApplicationSelector {
 			User.Id,
 			User.Name,
 			User.MT_1__c,
-			User.MT_2__c 
+			User.MT_2__c,
+			User.IsActive 
 		};
 	}
 	
