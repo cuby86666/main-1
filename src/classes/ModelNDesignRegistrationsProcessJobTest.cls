@@ -5,13 +5,36 @@ private class ModelNDesignRegistrationsProcessJobTest {
 	private static final String STATUS_COMPLETED = MnStages.STATUSES.get(MnStages.Status.COMPLETED);
 	
 	private static MnStage__c mnStage;
+	private static String opptyExtId;
+	private static String opptyProdExtId;
+	private static PricebookEntry pricebookEntry12NC;
+	private static PricebookEntry pricebookEntryRoot;
+	private static Opportunity oppty;
+	private static OpportunityLineItem opptyProd;
 	
 	static {
 		List<MnStage__c> mnStages = (List<MnStage__c>)new MnStagesSelector().selectAll();
 	
 		if (mnStages.size() > 0) {
 			mnStage = mnStages.get(0);
-		}		
+			opptyExtId = mnStage.Reg_Oppty_Num__c + '-' + mnStage.Reg_Part_OID__c;
+			opptyProdExtId = mnStage.Reg_Part_OID__c;
+			
+			for (PricebookEntry pe : new PricebookEntriesSelector().selectByProdBasicTypeOrSalesItemWithProduct(new Set<String> {mnStage.Part_Root__c}, new Set<String> {mnStage.Part_12NC__c})) {
+					if (pricebookEntryRoot == null &&
+					    pe.Product2.Basic_Type__c == mnStage.Part_Root__c &&
+						pe.CurrencyIsoCode == mnStage.Currency_Code__c) {
+						pricebookEntryRoot = pe;
+					} else if (pricebookEntry12NC == null &&
+							   pe.Product2.Sales_Item__c == mnStage.Part_12NC__c &&
+							   pe.CurrencyIsoCode == mnStage.Currency_Code__c) {
+						pricebookEntry12NC = pe;
+					}	
+			}
+			
+			oppty = ((List<Opportunity>)new OpportunitiesSelector().selectAll()).get(0);
+    		opptyProd = new OpportunityLineItemsSelector().selectByOpptyIdWithOpportunity(new Set<Id> {oppty.Id}).get(0); 
+    	}		
 	}
     
     @testSetup
@@ -109,8 +132,23 @@ private class ModelNDesignRegistrationsProcessJobTest {
 		List<MnStage__c> mnStages = (List<MnStage__c>)new MnStagesSelector().selectAll();
 		System.assertEquals(STATUS_QUEUED, mnStages.get(0).Status__c);
 		
-		ModelNDesignRegistrationsProcessJob drProcessJob = new ModelNDesignRegistrationsProcessJob();
-    	Database.executeBatch(drProcessJob);
+		List<Product2> prods = new List<Product2>(); 
+		
+		Product2 prod = new Product2();
+		prod.Name = 'Test Prod 1';
+		prod.IsActive = true;
+		prod.Sales_Item__c = mnStage.Part_12NC__c;
+		prods.add(prod);
+		
+		prod = new Product2();
+		prod.Name = 'Test Prod 2';
+		prod.IsActive = true;
+		prod.Basic_Type__c = mnStage.Part_Root__c;
+		prods.add(prod);
+		
+		insert prods;
+	
+		runBatch();
 	}
     
     @isTest
@@ -149,8 +187,7 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	System.assertEquals(1, mnStages.size());
     	
     	Test.startTest();
-    	ModelNDesignRegistrationsProcessJob drProcessJob = new ModelNDesignRegistrationsProcessJob();
-    	Database.executeBatch(drProcessJob);
+    	runBatch();
     	Test.stopTest();
     	
     	List<Opportunity> oppties = (List<Opportunity>)new OpportunitiesSelector().selectAll();
@@ -186,8 +223,7 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	System.assertEquals(1, mnStages.size());
     	
     	Test.startTest();
-    	ModelNDesignRegistrationsProcessJob drProcessJob = new ModelNDesignRegistrationsProcessJob();
-    	Database.executeBatch(drProcessJob);
+    	runBatch();
     	Test.stopTest();
     	
     	List<Opportunity> oppties = (List<Opportunity>)new OpportunitiesSelector().selectAll();
@@ -196,5 +232,47 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	List<OpportunityLineItem> opptyProds = (List<OpportunityLineItem>)new OpportunityLineItemsSelector().selectAll();
     	System.assertEquals(2, opptyProds.size());
     }
+    
+    @isTest
+    static void testPricebookEntry() {
+    	// Not root part
+    	OpportunityLineItem opptyProd = new OpportunityLineItemsSelector().selectByLegacyId(new Set<String> {opptyProdExtId}).get(0);
+    	System.assertEquals(pricebookEntry12NC.Id, opptyProd.PricebookEntryId);
+    	
+    	// Root part
+    	MnStage__c mnStageClone = mnStage.clone(false, true, false, false);
+    	mnStageClone.Status__c = STATUS_QUEUED;
+    	mnStageClone.Opportunity__c = null;
+    	mnStageClone.Part_Is_Root__c = true;
+    	mnStageClone.Reg_Oppty_Num__c = '819834';
+    	mnStageClone.Reg_Part_OID__c = '1048946';
+    	
+    	insert mnStageClone;
+    	
+    	Test.startTest();
+    	runBatch();
+    	Test.stopTest();
+    	
+    	opptyProd = new OpportunityLineItemsSelector().selectByLegacyId(new Set<String> {mnStageClone.Reg_Part_OID__c}).get(0);
+    	System.assertEquals(pricebookEntryRoot.Id, opptyProd.PricebookEntryId);
+    }
+    
+    @isTest
+    static void testDerivedFields() {
+    	System.assertEquals('Automotive', oppty.Industry_Segment__c);
+    	System.assertEquals(mnStage.Reg_Oppty_Num__c + '-' + mnStage.Reg_Part_OID__c, oppty.Legacy_Id__c);
+    	System.assertEquals(Date.newInstance(2017, 02, 28), oppty.Lost_Date__c);
+    	System.assertEquals(mnStage.Reg_Oppty_Num__c + ' - ' + mnStage.Part_Name__c + ' - ' + mnStage.Prog_Name__c, oppty.Name);
+    	System.assertEquals(mnStage.User_First_Name__c + ' ' + mnStage.User_Last_Name__c, oppty.Rejected_by__c);
+    	System.assertEquals('Other', oppty.Sub_Segment__c);	
+    	System.assertEquals(mnStage.Reg_Part_POS_Resale_Value__c / mnStage.Reg_Exchange_Rate__c.setScale(6), opptyProd.POS_Resale_Value_USD__c);
+    	System.assertEquals('50% - 80%', opptyProd.Probability_to_Win__c);	
+    	System.assertEquals('Creation (FSL)', opptyProd.Registration_Effort_Description__c);
+    }
+    
+    private static void runBatch() {
+    	ModelNDesignRegistrationsProcessJob drProcessJob = new ModelNDesignRegistrationsProcessJob();
+    	Database.executeBatch(drProcessJob); 	
+    } 
     
 }
