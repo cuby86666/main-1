@@ -77,6 +77,11 @@ public class OpportunitiesSelector extends ApplicationSelector {
 		return (List<Opportunity>)selectSObjectsById(ids);
 	}
 	
+	public List<Opportunity> selectByLegacyId(Set<String> legacyIds) {
+		p('selectByLegacyId');
+		return (List<Opportunity>)Database.query(newQueryFactory().setCondition('Legacy_Id__c in :legacyIds').toSOQL());
+	}
+	
 	public List<Opportunity> selectByIdWithProducts(Set<Id> ids) {
 		p('selectByIdWithProducts');
 		fflib_QueryFactory opptiesQueryFactory = newQueryFactory();	

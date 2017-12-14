@@ -270,6 +270,79 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	System.assertEquals('Creation (FSL)', opptyProd.Registration_Effort_Description__c);
     }
     
+    @isTest
+    static void testInvalidMnStage() {
+    	MnStage__c mnStageClone = mnStage.clone(false, true, false, false);
+    	mnStageClone.Status__c = STATUS_QUEUED;
+    	mnStageClone.Opportunity__c = null;
+    	mnStageClone.Reg_Oppty_Num__c = '819834';
+    	mnStageClone.Reg_Part_OID__c = '1048946';
+    	mnStageClone.Reg_Production_Date__c = null;	
+    	mnStageClone.Reg_Exchange_Rate__c = 0;
+    	mnStageClone.Reg_Project_Units__c = null;
+    	mnStageClone.Reg_Part_Win_Status__c = 'ProdWin';
+    	mnStageClone.Reg_Part_Win_Date__c = null;
+    	
+    	insert mnStageClone;
+    	
+    	Test.startTest();
+    	runBatch();
+    	Test.stopTest();
+    	
+    	List<Opportunity> oppties = new OpportunitiesSelector().selectByLegacyId(new Set<String> {mnStageClone.Reg_Oppty_Num__c + '-' + mnStageClone.Reg_Part_OID__c});
+    	System.assertEquals(0, oppties.size());
+    	
+    	List<OpportunityLineItem> opptyProds = new OpportunityLineItemsSelector().selectByLegacyId(new Set<String> {mnStageClone.Reg_Part_OID__c});
+    	System.assertEquals(0, opptyProds.size());
+    }
+    
+    @isTest
+    static void testInvalidBookPart() {
+    	MnStage__c mnStageClone = mnStage.clone(false, true, false, false);
+    	mnStageClone.Status__c = STATUS_QUEUED;
+    	mnStageClone.Opportunity__c = null;
+    	mnStageClone.Reg_Oppty_Num__c = '819834';
+    	mnStageClone.Reg_Part_OID__c = '1048946';
+    	mnStageClone.Part_12NC__c = '000000000000';	
+    	
+    	insert mnStageClone;
+    	
+    	Test.startTest();
+    	runBatch();
+    	Test.stopTest();
+    	
+    	List<OpportunityLineItem> opptyProds = new OpportunityLineItemsSelector().selectByLegacyId(new Set<String> {mnStageClone.Reg_Part_OID__c});
+    	System.assertEquals(0, opptyProds.size());
+    	
+    	// If oppty prod is not created successfully, oppty should be deleted if already created. 
+    	List<Opportunity> oppties = new OpportunitiesSelector().selectByLegacyId(new Set<String> {mnStageClone.Reg_Oppty_Num__c + '-' + mnStageClone.Reg_Part_OID__c});
+    	System.assertEquals(0, oppties.size());
+    }
+    
+    @isTest
+    static void testInvalidRootPart() {
+    	MnStage__c mnStageClone = mnStage.clone(false, true, false, false);
+    	mnStageClone.Status__c = STATUS_QUEUED;
+    	mnStageClone.Opportunity__c = null;
+    	mnStageClone.Reg_Oppty_Num__c = '819834';
+    	mnStageClone.Reg_Part_OID__c = '1048946';
+    	mnStageClone.Part_Is_Root__c = true;
+    	mnStageClone.Part_Root__c = 'INVALID-BASIC_TYPE';	
+    	
+    	insert mnStageClone;
+    	
+    	Test.startTest();
+    	runBatch();
+    	Test.stopTest();
+    	
+    	List<OpportunityLineItem> opptyProds = new OpportunityLineItemsSelector().selectByLegacyId(new Set<String> {mnStageClone.Reg_Part_OID__c});
+    	System.assertEquals(0, opptyProds.size());
+    	
+    	// If oppty prod is not created successfully, oppty should be deleted if already created. 
+    	List<Opportunity> oppties = new OpportunitiesSelector().selectByLegacyId(new Set<String> {mnStageClone.Reg_Oppty_Num__c + '-' + mnStageClone.Reg_Part_OID__c});
+    	System.assertEquals(0, oppties.size());
+    }
+    
     private static void runBatch() {
     	ModelNDesignRegistrationsProcessJob drProcessJob = new ModelNDesignRegistrationsProcessJob();
     	Database.executeBatch(drProcessJob); 	

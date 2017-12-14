@@ -1,7 +1,9 @@
 global class ModelNDesignRegistrationsProcessJob implements Database.Batchable<SObject> {
 	
 	private static final String STATUS_QUEUED = MnStages.STATUSES.get(MnStages.Status.QUEUED);
+	private static final String STATUS_PROCESSING = MnStages.STATUSES.get(MnStages.Status.PROCESSING);
 	private static final String STATUS_COMPLETED = MnStages.STATUSES.get(MnStages.Status.COMPLETED);
+	private static final String STATUS_INVALID = MnStages.STATUSES.get(MnStages.Status.INVALID);
 	
 	global Database.QueryLocator start(Database.BatchableContext bc) {
 		p('start');
@@ -100,20 +102,95 @@ global class ModelNDesignRegistrationsProcessJob implements Database.Batchable<S
 			opptyProd.Win_Status__c = ms.Reg_Part_Win_Status__c;
 			
 			opptyProds.add(opptyProd);
-		}	
+			
+			String message = checkMnStageInvalid(ms); 
+			
+			if (message != '') {
+				ms.Status__c = STATUS_INVALID;
+				ms.Message__c = message;
+			} else {
+				ms.Status__c = STATUS_PROCESSING;	
+			}
+		}
 		
-		Database.UpsertResult[] opptiesUpsertResults = Database.upsert(oppties, Opportunity.Fields.Legacy_Id__c, false);
-		Database.UpsertResult[] opptyProdsUpsertResults = Database.upsert(opptyProds, OpportunityLineItem.Fields.Legacy_Id__c, false);
+		update scope; 	
 		
-		for (MnStage__c ms : scope) {
-			ms.Status__c = STATUS_COMPLETED;
+		List<Database.UpsertResult> opptiesUpsertResults = Database.upsert(oppties, Opportunity.Fields.Legacy_Id__c, false);
+		List<Database.UpsertResult> opptyProdsUpsertResults = Database.upsert(opptyProds, OpportunityLineItem.Fields.Legacy_Id__c, false);
+		
+		List<Id> opptyIdsDeleted = new List<Id>();
+		
+		for (Integer i = 0; i < scope.size(); i++) {
+			MnStage__c mnStage = scope.get(i);
+			Database.UpsertResult opptyUpsertResult = opptiesUpsertResults.get(i);
+			Database.UpsertResult opptyProdUpsertResult = opptyProdsUpsertResults.get(i);
+			
+			if (mnStage.Status__c == STATUS_INVALID && opptyUpsertResult.isSuccess()) {
+				opptyIdsDeleted.add(opptyUpsertResult.getId());	
+			}
+			
+			if (!opptyUpsertResult.isSuccess()) {
+				mnStage.Status__c = STATUS_INVALID; 
+				mnStage.Message__c = (mnStage.Message__c == null) ? processErrors(opptyUpsertResult.getErrors()) : mnStage.Message__c;	
+			} else {
+				mnStage.Status__c = STATUS_COMPLETED; 
+			}
+		
+			if (!opptyProdUpsertResult.isSuccess()) {
+				// If oppty prod is not created successfully, oppty should be deleted if already created.
+				if (opptyUpsertResult.isSuccess()) {
+					opptyIdsDeleted.add(opptyUpsertResult.getId());	
+				}
+				
+				mnStage.Status__c = STATUS_INVALID; 
+				mnStage.Message__c = (mnStage.Message__c == null) ? processErrors(opptyProdUpsertResult.getErrors()) : mnStage.Message__c; 	
+			} else {
+				mnStage.Status__c = STATUS_COMPLETED; 
+			}
+		}
+		
+		if (opptyIdsDeleted.size() > 0) {
+			List<Database.DeleteResult> opptiesDeleteResults = Database.delete(opptyIdsDeleted, false);
 		}
 		
 		update scope; 
+System.debug('///////// mnstages end: ' + new MnStagesSelector().selectAll());		
 	}
 	
 	global void finish(Database.BatchableContext bc) {
 		p('finish');	
+	}
+	
+	private String checkMnStageInvalid(MnStage__c mnStage) {
+		String result = '';
+		
+		if (mnStage.Reg_Production_Date__c == null) {
+			result += 'Reg_Production_Date__c is blank. ';	
+		}
+		
+		if (mnStage.Reg_Exchange_Rate__c == null || mnStage.Reg_Exchange_Rate__c == 0) {
+			result += 'Reg_Exchange_Rate__c is blank or 0. ';
+		}
+		
+		if (mnStage.Reg_Project_Units__c == null || mnStage.Reg_Project_Units__c == 0) {
+			result += 'Reg_Project_Units__c is blank or 0. ';
+		}
+		
+		if (mnStage.Reg_Part_Win_Status__c != null && mnStage.Reg_Part_Win_Status__c.contains('Win') && mnStage.Reg_Part_Win_Date__c == null) {
+			result += 'Reg_Part_Win_Status__c is "Win", but Reg_Part_Win_Date__c is blank. ';
+		} 
+		
+		return result;
+	}
+	
+	private String processErrors(List<Database.Error> errors) {
+		String result = '';
+		
+		for (Database.Error err : errors) {
+			result += err.getStatusCode() + ': ' + err.getMessage() + '. Fields that affected this error: ' + err.getFields() + '. ';
+		}	
+		
+		return result;
 	}
 	
 	private static void p(String msg) {
