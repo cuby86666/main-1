@@ -18,6 +18,7 @@ public class OpportunitiesSelector extends ApplicationSelector {
 		return new List<Schema.SObjectField> {
 			Opportunity.Id,
 			Opportunity.AccountId,
+			Opportunity.CloseDate,
 			Opportunity.Name,
 			Opportunity.RecordTypeId,
 			Opportunity.StageName,

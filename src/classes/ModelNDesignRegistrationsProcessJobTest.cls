@@ -1,8 +1,10 @@
 @isTest
 private class ModelNDesignRegistrationsProcessJobTest {
 	
-	private static final String STATUS_QUEUED = MnStages.STATUSES.get(MnStages.Status.QUEUED);
-	private static final String STATUS_COMPLETED = MnStages.STATUSES.get(MnStages.Status.COMPLETED);
+	private static final String STATUS_QUEUED = MnStages.STATUS_QUEUED;
+	private static final String STATUS_COMPLETED = MnStages.STATUS_COMPLETED;
+	private static final Date PRODUCTION_DATE = Date.newInstance(2014, 02, 16); 
+	private static final Date WIN_DATE = Date.newInstance(2012, 01, 08); 
 	
 	private static MnStage__c mnStage;
 	private static String opptyExtId;
@@ -50,7 +52,7 @@ private class ModelNDesignRegistrationsProcessJobTest {
 		mnStage.Reg_Is_Duplicated__c = false;
 		mnStage.Reg_Modified_Date__c = Date.newInstance(2017, 10, 02);
 		mnStage.Reg_Oppty_Num__c = '811152';
-		mnStage.Reg_Production_Date__c = Date.newInstance(2014, 02, 16);
+		mnStage.Reg_Production_Date__c = PRODUCTION_DATE;
 		mnStage.Reg_Project_Units__c = 2000000;
 		mnStage.Reg_Expiration_Date__c = Date.newInstance(2019, 09, 25);
 		mnStage.Reg_Num__c = '1-CDSPKP';
@@ -110,7 +112,7 @@ private class ModelNDesignRegistrationsProcessJobTest {
 		mnStage.Reg_Part_Qty_Per_Sys__c = 1;
 		mnStage.Reg_Part_Win_Status__c = 'ProdWin';
 		mnStage.Reg_Part_One_Year_Value__c = 660000;
-		mnStage.Reg_Part_Win_Date__c = Date.newInstance(2012, 01, 08);
+		mnStage.Reg_Part_Win_Date__c = WIN_DATE;
 		mnStage.Reg_Part_Created_Date__c = Date.newInstance(2017, 02, 03);
 		mnStage.Reg_Part_Modified_Date__c = Date.newInstance(2017, 09, 25);
 		mnStage.Reg_Part_Final_Phase__c = 'No';
@@ -148,7 +150,7 @@ private class ModelNDesignRegistrationsProcessJobTest {
 		
 		insert prods;
 	
-		runBatch();
+		processData();
 	}
     
     @isTest
@@ -162,6 +164,27 @@ private class ModelNDesignRegistrationsProcessJobTest {
         System.assertEquals(1, opptyProds.size());
         
         System.assertEquals(STATUS_COMPLETED, mnStage.Status__c);
+    }
+    
+    @isTest
+    static void testBatch() {
+    	MnStage__c mnStageClone = mnStage.clone(false, true, false, false);
+    	mnStageClone.Status__c = STATUS_QUEUED;
+    	mnStageClone.Opportunity__c = null;
+    	mnStageClone.Reg_Oppty_Num__c = '819834';
+    	mnStageClone.Reg_Part_OID__c = '1048946';
+    	
+    	insert mnStageClone;
+    	
+    	Test.startTest();
+    	runBatch();
+    	Test.stopTest();
+    	
+    	List<Opportunity> oppties = new OpportunitiesSelector().selectByLegacyId(new Set<String> {mnStageClone.Reg_Oppty_Num__c + '-' + mnStageClone.Reg_Part_OID__c});
+    	System.assertEquals(1, oppties.size());
+    	
+    	List<OpportunityLineItem> opptyProds = new OpportunityLineItemsSelector().selectByLegacyId(new Set<String> {mnStageClone.Reg_Part_OID__c});
+    	System.assertEquals(1, opptyProds.size());
     }
     
     @isTest
@@ -187,9 +210,9 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	System.assertEquals(1, mnStages.size());
     	
     	Test.startTest();
-    	runBatch();
+    	processData();
     	Test.stopTest();
-    	
+    	    	
     	List<Opportunity> oppties = (List<Opportunity>)new OpportunitiesSelector().selectAll();
     	System.assertEquals(1, oppties.size());
     	
@@ -222,10 +245,8 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	mnStages = new MnStagesSelector().selectByStatus(new Set<String> {STATUS_QUEUED});
     	System.assertEquals(1, mnStages.size());
     	
-    	Test.startTest();
-    	runBatch();
-    	Test.stopTest();
-    	
+    	processData();
+    	    	
     	List<Opportunity> oppties = (List<Opportunity>)new OpportunitiesSelector().selectAll();
     	System.assertEquals(2, oppties.size());
     	
@@ -249,10 +270,8 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	
     	insert mnStageClone;
     	
-    	Test.startTest();
-    	runBatch();
-    	Test.stopTest();
-    	
+    	processData();
+    	    	
     	opptyProd = new OpportunityLineItemsSelector().selectByLegacyId(new Set<String> {mnStageClone.Reg_Part_OID__c}).get(0);
     	System.assertEquals(pricebookEntryRoot.Id, opptyProd.PricebookEntryId);
     }
@@ -285,10 +304,8 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	
     	insert mnStageClone;
     	
-    	Test.startTest();
-    	runBatch();
-    	Test.stopTest();
-    	
+    	processData();
+    	    	
     	List<Opportunity> oppties = new OpportunitiesSelector().selectByLegacyId(new Set<String> {mnStageClone.Reg_Oppty_Num__c + '-' + mnStageClone.Reg_Part_OID__c});
     	System.assertEquals(0, oppties.size());
     	
@@ -307,10 +324,8 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	
     	insert mnStageClone;
     	
-    	Test.startTest();
-    	runBatch();
-    	Test.stopTest();
-    	
+    	processData();
+    	    	
     	List<OpportunityLineItem> opptyProds = new OpportunityLineItemsSelector().selectByLegacyId(new Set<String> {mnStageClone.Reg_Part_OID__c});
     	System.assertEquals(0, opptyProds.size());
     	
@@ -331,16 +346,50 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	
     	insert mnStageClone;
     	
-    	Test.startTest();
-    	runBatch();
-    	Test.stopTest();
-    	
+    	processData();
+    	    	
     	List<OpportunityLineItem> opptyProds = new OpportunityLineItemsSelector().selectByLegacyId(new Set<String> {mnStageClone.Reg_Part_OID__c});
     	System.assertEquals(0, opptyProds.size());
     	
     	// If oppty prod is not created successfully, oppty should be deleted if already created. 
     	List<Opportunity> oppties = new OpportunitiesSelector().selectByLegacyId(new Set<String> {mnStageClone.Reg_Oppty_Num__c + '-' + mnStageClone.Reg_Part_OID__c});
     	System.assertEquals(0, oppties.size());
+    }
+    
+    @isTest
+    static void testOpptyCloseDate() {
+    	// Reg_Part_Status__c: Pending, Requested, Approved, Rejected
+    	// Reg_Part_Win_Status__c: Pending, DesignWin, ProdWin, Win 
+    	// Reg_Status__c: Requested, Pending, Approved, Rejected
+    	mnStage.Status__c = STATUS_QUEUED;
+    	mnStage.Reg_Part_Status__c = 'Pending'; 
+    	mnStage.Reg_Part_Win_Status__c = 'DesignWin';
+    	mnStage.Reg_Status__c = 'Rejected';
+    	
+    	update mnStage;
+    	
+    	processData();
+    	
+    	Opportunity oppty = new OpportunitiesSelector().selectByLegacyId(new Set<String> {opptyExtId}).get(0); 
+    	System.assertEquals(PRODUCTION_DATE, oppty.CloseDate);
+    	
+    	mnStage.Status__c = STATUS_QUEUED;
+    	mnStage.Reg_Part_Status__c = 'Pending'; 
+    	mnStage.Reg_Part_Win_Status__c = 'DesignWin';
+    	mnStage.Reg_Status__c = 'Approved';
+    	
+    	update mnStage;
+    	
+    	Test.startTest();
+    	processData();
+    	Test.stopTest();
+    	
+    	oppty = new OpportunitiesSelector().selectByLegacyId(new Set<String> {opptyExtId}).get(0); 
+    	System.assertEquals(WIN_DATE, oppty.CloseDate);		
+    }
+    
+    private static void processData() {
+    	new MnStages(new MnStagesSelector().selectByStatus(new Set<String> {STATUS_QUEUED})).processData();	
     }
     
     private static void runBatch() {
