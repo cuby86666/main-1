@@ -48,8 +48,8 @@ public with sharing class OpportunityService {
         uow.commitWork();
 	}
 	
-	public static Set<Id> updateMNOpportunityAccounts(List<Opportunity> oppties, fflib_ISObjectUnitOfWork uow) {
-		p('updateMNOpportunityAccounts');
+	public static Set<Id> updateMnOpportunityAccounts(List<Opportunity> oppties, fflib_ISObjectUnitOfWork uow) {
+		p('updateMnOpportunityAccounts');
 		Set<String> gids = new Set<String>();
 		Set<String> legacyIds = new Set<String>();
 		Id modelNRecordTypeId = OpportunitiesSelector.getMnRecordTypeId();
@@ -59,22 +59,22 @@ public with sharing class OpportunityService {
 				gids.add(oppty.End_Customer_GID__c);
 			}
 			if (oppty.Distributor_Name__c != null && oppty.End_Customer_Region__c != null) {
-				String legacyIdString = getModelNDistiAccountLegacyId(oppty);
+				String legacyIdString = getMnDistiAccountLegacyId(oppty);
 				if (legacyIds.contains(legacyIdString)) continue;
 				legacyIds.add(legacyIdString);
 			}
 		}
-		List<Account> accounts = new AccountsSelector().selectChildAccountsWithOwnerByGIDorLegacyId(gids, legacyIds);
+		List<Account> accounts = new AccountsSelector().selectChildAccountsWithOwnerByGidOrLegacyId(gids, legacyIds);
 		
 		//convert List<Account> to Map<String,Account>
-		Map<String,Account> accountsByGIDorLegacyId = new Map<String,Account>();
+		Map<String,Account> accountsByGidOrLegacyId = new Map<String,Account>();
 		for (Account account : accounts) {
 			//System.debug('@@@@@ Account Owner=' + account.Owner.Name);
-			if (account.NXP_GID__c != null && !accountsByGIDorLegacyId.containsKey(account.NXP_GID__c)) {
-				accountsByGIDorLegacyId.put(account.NXP_GID__c, account);
+			if (account.NXP_GID__c != null && !accountsByGidOrLegacyId.containsKey(account.NXP_GID__c)) {
+				accountsByGidOrLegacyId.put(account.NXP_GID__c, account);
 			}
-			if (account.Legacy_Id__c != null && !accountsByGIDorLegacyId.containsKey(account.Legacy_Id__c)) {
-				accountsByGIDorLegacyId.put(account.Legacy_Id__c, account);
+			if (account.Legacy_Id__c != null && !accountsByGidOrLegacyId.containsKey(account.Legacy_Id__c)) {
+				accountsByGidOrLegacyId.put(account.Legacy_Id__c, account);
 			}
 		}
 		Set<Id> opptyIds = new Set<Id>();
@@ -84,16 +84,16 @@ public with sharing class OpportunityService {
 			//System.debug('@@@@@ Owner=' + oppty.Owner.Name);
 			String newAccountId = null;
 			String newOwnerId = null;
-			if (oppty.End_Customer_GID__c != null && accountsByGIDorLegacyId.containsKey(oppty.End_Customer_GID__c)) {
+			if (oppty.End_Customer_GID__c != null && accountsByGidOrLegacyId.containsKey(oppty.End_Customer_GID__c)) {
 				//By GID Account
-				Account accountByGID = accountsByGIDorLegacyId.get(oppty.End_Customer_GID__c);
+				Account accountByGID = accountsByGidOrLegacyId.get(oppty.End_Customer_GID__c);
 				newAccountId = accountByGID.Id;
 				if (accountByGID.Owner.IsActive) newOwnerId = accountByGID.OwnerId;
 				opptyIds.add(oppty.Id);					
 			} else if (oppty.Distributor_Name__c != null && oppty.End_Customer_Region__c != null && 
-				accountsByGIDorLegacyId.containsKey(getModelNDistiAccountLegacyId(oppty))) {
+				accountsByGidOrLegacyId.containsKey(getMnDistiAccountLegacyId(oppty))) {
 				//By Legacy Id
-				Account accountByLegacyId = accountsByGIDorLegacyId.get(getModelNDistiAccountLegacyId(oppty));
+				Account accountByLegacyId = accountsByGidOrLegacyId.get(getMnDistiAccountLegacyId(oppty));
 				newAccountId = accountByLegacyId.Id;
 			} else {
 				//Unknown Account
@@ -101,7 +101,7 @@ public with sharing class OpportunityService {
 				newAccountId = unknownAccount.Id;
 			}
 
-			newOwnerId = getModelNDROwnerId(oppty, newOwnerId);
+			newOwnerId = getMnDrOwnerId(oppty, newOwnerId);
 
 			if (oppty.AccountId != newAccountId || oppty.OwnerId != newOwnerId) {
 				oppty.AccountId = newAccountId;
@@ -118,7 +118,7 @@ public with sharing class OpportunityService {
 	}
 
 	//=========== Model N Account Update utility functions ========================================
-	private static String getModelNDROwnerId(Opportunity oppty, String newAccountOwnerId) {
+	private static String getMnDrOwnerId(Opportunity oppty, String newAccountOwnerId) {
 		String newOwnerId = oppty.OwnerId;
 		// Tier 1,2,3,4 - TMMA and Account Owner is Active
 		if (newAccountOwnerId != null) 
@@ -168,7 +168,7 @@ public with sharing class OpportunityService {
 		return DATA_ADMIN;
 	}
 
-	private static String getModelNDistiAccountLegacyId(Opportunity oppty) {
+	private static String getMnDistiAccountLegacyId(Opportunity oppty) {
 		return oppty.Distributor_Name__c + '-' + oppty.End_Customer_Region__c;
 	}
 	//=============================================================================================

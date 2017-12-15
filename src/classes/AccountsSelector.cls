@@ -57,12 +57,12 @@ public class AccountsSelector extends ApplicationSelector {
 		return (List<Account>)Database.query(newQueryFactory().setCondition('Name in :names').toSOQL());
 	}
 
-	public List<Account> selectChildAccountsWithOwnerByGIDorLegacyId(Set<String> gids, Set<String> legacyIds) {
+	public List<Account> selectChildAccountsWithOwnerByGidOrLegacyId(Set<String> gids, Set<String> legacyIds) {
 		p('selectChildAccountsByGIDorLegacyId');
 		Id childRecTypeId = getChildRecordTypeId();
 		fflib_QueryFactory accountsQueryFactory = newQueryFactory();
 		new UsersSelector().configureQueryFactoryFields(accountsQueryFactory, Account.OwnerId.getDescribe().getRelationshipName());
-		return (List<Account>)Database.query(accountsQueryFactory.setCondition('RecordTypeId =: childRecTypeId and (NXP_GID__c in :gids or Legacy_Id__c in :legacyIds)').toSOQL());
+		return (List<Account>)Database.query(accountsQueryFactory.setCondition('RecordTypeId = :childRecTypeId and (NXP_GID__c in :gids or Legacy_Id__c in :legacyIds)').toSOQL());
 	}
     
 }
