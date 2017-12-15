@@ -58,7 +58,7 @@ public class AccountsSelector extends ApplicationSelector {
 	}
 
 	public List<Account> selectChildAccountsWithOwnerByGidOrLegacyId(Set<String> gids, Set<String> legacyIds) {
-		p('selectChildAccountsByGIDorLegacyId');
+		p('selectChildAccountsWithOwnerByGidOrLegacyId');
 		Id childRecTypeId = getChildRecordTypeId();
 		fflib_QueryFactory accountsQueryFactory = newQueryFactory();
 		new UsersSelector().configureQueryFactoryFields(accountsQueryFactory, Account.OwnerId.getDescribe().getRelationshipName());
