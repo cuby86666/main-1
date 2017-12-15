@@ -5,7 +5,10 @@ private class ModelNOpportunityAccountsUpdateJobTest {
 		Profile prf = [Select Id from Profile Where Name = 'Standard User'];
 		TestUser usr = new TestUser('myTest', 5, prf.Id);
 		List<User> users = (List<User>)usr.getSObject();
+        users.get(4).FirstName = 'Data';
+        users.get(4).LastName = 'Admin';
 		insert users;
+		User dataAdmin = users.get(4); //[select Id, Name, Email from User Where Name = 'Data Admin' limit 1];
 		
 		TestAccount acc = new TestAccount('testAccount', 5);
 		List<Account> accounts = acc.getSObject();
@@ -27,17 +30,18 @@ private class ModelNOpportunityAccountsUpdateJobTest {
 
 		//setup Oppty gid, distributr name and end customer region
 		Object[] opptyGids = new Object[] {'10001','10002','','',''};
-		opp.updateFieldByArray('End_Customer_GID__c', opptyGids);
-		
+        opp.updateFieldByValue('OwnerId', dataAdmin.Id);
+		opp.updateFieldByArray('End_Customer_GID__c', opptyGids);		
 		opp.updateFieldByValue('Distributor_Name__c','AVNET ASIA PAC');
-		opp.updateFieldByValue('OwnerId', users.get(0).Id);
 		
 		Object[] opptyRegions = new Object[] {'EMEA','EMEA','EMEA','EMEA','SAP'};
 		opp.updateFieldByArray('End_Customer_Region__c', opptyRegions);
 
 		List<Opportunity> opportunities = opp.getSObject();
-		insert opportunities;
+        opportunities.get(2).Legacy_Opportunity_Owner__c = users.get(2).Email;       
+        opportunities.get(3).Legacy_Opportunity_Owner__c = 'aaa@bbb.com';
 
+		insert opportunities;
 	}
 
 /*
@@ -56,6 +60,7 @@ private class ModelNOpportunityAccountsUpdateJobTest {
 	}*/
 
 	@isTest static void testModelNOpportunityAccountsUpdateJob1() {
+		DumpOppties();
 		Test.startTest();
 		ModelNOpportunityAccountsUpdateJob myJob = new ModelNOpportunityAccountsUpdateJob();
 		database.executebatch(myJob);
@@ -79,7 +84,7 @@ private class ModelNOpportunityAccountsUpdateJobTest {
 	}
 
 	static void DumpUsers() {
-		List<User> users = [Select Id, Name, UserName, Profile.Name from User Where FirstName = 'myTestFirstName'];
+		List<User> users = [Select Id, Name, UserName, Profile.Name from User Where CreatedDate = Today];
 		for (User usr : users) {
 			System.debug('@@@@@ User Name=' + usr.Name + ', Username=' + usr.UserName + ', profile=' + usr.Profile.Name);
 		}

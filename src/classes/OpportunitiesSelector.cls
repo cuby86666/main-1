@@ -18,12 +18,21 @@ public class OpportunitiesSelector extends ApplicationSelector {
 		return new List<Schema.SObjectField> {
 			Opportunity.Id,
 			Opportunity.AccountId,
+			Opportunity.Name,
 			Opportunity.RecordTypeId,
 			Opportunity.StageName,
 			Opportunity.BL_Approver_1__c, 
 			Opportunity.BL_Approver_2__c,
+			Opportunity.Claim_Value__c,
+			Opportunity.Claim_Value_USD_SYS__c,
+			Opportunity.Discovery_Date__c,
+			Opportunity.Distributor_Name__c,
+			Opportunity.End_Customer_Region__c,
+			Opportunity.End_Customer_GID__c,
 			Opportunity.Expiration_Date__c,
 			Opportunity.Legacy_End_Customer_Name_and_Location__c,
+			Opportunity.Legacy_Opportunity_Owner__c,
+			Opportunity.Locked_Exchange_Rate__c,
 			Opportunity.Lost_Description__c,
 			Opportunity.Lost_Reason__c,
 			Opportunity.LT_Value_USD__c,
@@ -36,15 +45,7 @@ public class OpportunitiesSelector extends ApplicationSelector {
 			Opportunity.Sales_Director_Approver__c, 
 			Opportunity.TMMA_Override__c,
 			Opportunity.VP_Approver_2__c,
-			Opportunity.Discovery_Date__c,
-			Opportunity.War_Room_Completed__c,
-			Opportunity.Claim_Value__c,
-			Opportunity.Claim_Value_USD_SYS__c,
-			Opportunity.Locked_Exchange_Rate__c,
-			Opportunity.Distributor_Name__c,
-			Opportunity.End_Customer_Region__c,
-			Opportunity.End_Customer_GID__c,
-			Opportunity.Legacy_Opportunity_Owner__c
+			Opportunity.War_Room_Completed__c
 		};
 	}
 	

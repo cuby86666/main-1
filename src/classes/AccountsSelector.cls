@@ -20,9 +20,9 @@ public class AccountsSelector extends ApplicationSelector {
 			Account.ParentId,
 			Account.CMD_Industry_Segment__c,
 			Account.Customer_Category__c,
-			Account.Region__c,
+			Account.Legacy_Id__c,
 			Account.NXP_GID__c,
-			Account.Legacy_Id__c
+			Account.Region__c
 		};
 	}
 	
