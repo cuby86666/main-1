@@ -48,6 +48,131 @@ public with sharing class OpportunityService {
         uow.commitWork();
 	}
 	
+	public static Set<Id> updateMnOpportunityAccounts(List<Opportunity> oppties, fflib_ISObjectUnitOfWork uow) {
+		p('updateMnOpportunityAccounts');
+		Set<String> gids = new Set<String>();
+		Set<String> legacyIds = new Set<String>();
+		Id modelNRecordTypeId = OpportunitiesSelector.getMnRecordTypeId();
+		for (Opportunity oppty : oppties) {
+			if (oppty.RecordTypeId != modelNRecordTypeId) continue;
+			if (oppty.End_Customer_GID__c != null && !gids.contains(oppty.End_Customer_GID__c)) {
+				gids.add(oppty.End_Customer_GID__c);
+			}
+			if (oppty.Distributor_Name__c != null && oppty.End_Customer_Region__c != null) {
+				String legacyIdString = getMnDistiAccountLegacyId(oppty);
+				if (legacyIds.contains(legacyIdString)) continue;
+				legacyIds.add(legacyIdString);
+			}
+		}
+		List<Account> accounts = new AccountsSelector().selectChildAccountsWithOwnerByGidOrLegacyId(gids, legacyIds);
+		
+		//convert List<Account> to Map<String,Account>
+		Map<String,Account> accountsByGidOrLegacyId = new Map<String,Account>();
+		for (Account account : accounts) {
+			//System.debug('@@@@@ Account Owner=' + account.Owner.Name);
+			if (account.NXP_GID__c != null && !accountsByGidOrLegacyId.containsKey(account.NXP_GID__c)) {
+				accountsByGidOrLegacyId.put(account.NXP_GID__c, account);
+			}
+			if (account.Legacy_Id__c != null && !accountsByGidOrLegacyId.containsKey(account.Legacy_Id__c)) {
+				accountsByGidOrLegacyId.put(account.Legacy_Id__c, account);
+			}
+		}
+		Set<Id> opptyIds = new Set<Id>();
+		List<Opportunity> opptyUpdates = new List<Opportunity>();
+		for (Opportunity oppty : oppties) {
+			if (oppty.RecordTypeId != modelNRecordTypeId) continue;
+			//System.debug('@@@@@ Owner=' + oppty.Owner.Name);
+			String newAccountId = null;
+			String newOwnerId = null;
+			if (oppty.End_Customer_GID__c != null && accountsByGidOrLegacyId.containsKey(oppty.End_Customer_GID__c)) {
+				//By GID Account
+				Account accountByGID = accountsByGidOrLegacyId.get(oppty.End_Customer_GID__c);
+				newAccountId = accountByGID.Id;
+				if (accountByGID.Owner.IsActive) newOwnerId = accountByGID.OwnerId;
+				opptyIds.add(oppty.Id);					
+			} else if (oppty.Distributor_Name__c != null && oppty.End_Customer_Region__c != null && 
+				accountsByGidOrLegacyId.containsKey(getMnDistiAccountLegacyId(oppty))) {
+				//By Legacy Id
+				Account accountByLegacyId = accountsByGidOrLegacyId.get(getMnDistiAccountLegacyId(oppty));
+				newAccountId = accountByLegacyId.Id;
+			} else {
+				//Unknown Account
+				Account unknownAccount = getUnknownAccount();
+				newAccountId = unknownAccount.Id;
+			}
+
+			newOwnerId = getMnDrOwnerId(oppty, newOwnerId);
+
+			if (oppty.AccountId != newAccountId || oppty.OwnerId != newOwnerId) {
+				oppty.AccountId = newAccountId;
+				oppty.OwnerId = newOwnerId;
+				opptyUpdates.add(oppty);
+			}
+		}
+
+		if (uow != null) {
+			uow.registerDirty(opptyUpdates);
+		}
+
+		return opptyIds;
+	}
+
+	//=========== Model N Account Update utility functions ========================================
+	private static String getMnDrOwnerId(Opportunity oppty, String newAccountOwnerId) {
+		String newOwnerId = oppty.OwnerId;
+		// Tier 1,2,3,4 - TMMA and Account Owner is Active
+		if (newAccountOwnerId != null) 
+			newOwnerId = newAccountOwnerId;
+		else {
+			if (oppty.Legacy_Opportunity_Owner__c == null) {
+//				if (oppty.OwnerId == null) {	
+					newOwnerId = getDataAdmin().Id;
+//				}
+			} else {
+				List<User> legacyOpptyOwners = 
+					new UsersSelector().selectWhere('Email =\'' + oppty.Legacy_Opportunity_Owner__c + '\' and Profile.UserLicense.Name like \'Salesforce%\'');
+				if (legacyOpptyOwners.size() == 0) {
+//					if (oppty.OwnerId == null) {
+						newOwnerId = getDataAdmin().Id;
+//					}
+				} else {
+					System.debug('@@@@@ OpptyName=' + oppty.Name + ', Owner=' + oppty.Owner.Name);
+					if (oppty.Owner.Name == 'Data Admin') {
+						newOwnerId = legacyOpptyOwners.get(0).Id;
+					}
+				}
+			}
+		}
+		return newOwnerId;
+	}
+
+	static Account UNKNOWN_ACCOUNT = null;
+	private static Account getUnknownAccount() {
+		if (UNKNOWN_ACCOUNT == null) {
+			List<Account> accounts = new AccountsSelector().selectByName(new Set<String> {'Unknown'});
+			if (accounts.size() > 0) {
+				UNKNOWN_ACCOUNT = accounts.get(0);
+			}
+		}
+		return UNKNOWN_ACCOUNT;
+	}
+
+	static User DATA_ADMIN = null;
+	private static User getDataAdmin() {
+		if (DATA_ADMIN == null) {
+			List<User> users = new UsersSelector().selectByName(new Set<String> {'Data Admin'});
+			if (users.size() > 0) {
+				DATA_ADMIN = users.get(0);
+			}
+		}
+		return DATA_ADMIN;
+	}
+
+	private static String getMnDistiAccountLegacyId(Opportunity oppty) {
+		return oppty.Distributor_Name__c + '-' + oppty.End_Customer_Region__c;
+	}
+	//=============================================================================================
+
 	public static Set<Id> updateEndCustomerAccounts(List<Opportunity> oppties, Boolean uowRequired) {
 		p('updateEndCustomerAccounts');
 		String CUSTOMER_TMMA = 'Tier 4 - TMMA';

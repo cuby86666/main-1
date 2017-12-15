@@ -8,8 +8,9 @@ public class UsersSelector extends ApplicationSelector {
 		return new List<Schema.SObjectField> {
 			User.Id,
 			User.Name,
+			User.IsActive,
 			User.MT_1__c,
-			User.MT_2__c 
+			User.MT_2__c
 		};
 	}
 	

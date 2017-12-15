@@ -20,7 +20,9 @@ public class AccountsSelector extends ApplicationSelector {
 			Account.ParentId,
 			Account.CMD_Industry_Segment__c,
 			Account.Customer_Category__c,
-			Account.Region__c 
+			Account.Legacy_Id__c,
+			Account.NXP_GID__c,
+			Account.Region__c
 		};
 	}
 	
@@ -48,6 +50,19 @@ public class AccountsSelector extends ApplicationSelector {
 	public List<Account> selectById(Set<Id> ids) {
 		p('selectById');
 		return (List<Account>)selectSObjectsById(ids);
+	}
+
+	public List<Account> selectByName(Set<String> names) {
+		p('selectByName');
+		return (List<Account>)Database.query(newQueryFactory().setCondition('Name in :names').toSOQL());
+	}
+
+	public List<Account> selectChildAccountsWithOwnerByGidOrLegacyId(Set<String> gids, Set<String> legacyIds) {
+		p('selectChildAccountsByGIDorLegacyId');
+		Id childRecTypeId = getChildRecordTypeId();
+		fflib_QueryFactory accountsQueryFactory = newQueryFactory();
+		new UsersSelector().configureQueryFactoryFields(accountsQueryFactory, Account.OwnerId.getDescribe().getRelationshipName());
+		return (List<Account>)Database.query(accountsQueryFactory.setCondition('RecordTypeId = :childRecTypeId and (NXP_GID__c in :gids or Legacy_Id__c in :legacyIds)').toSOQL());
 	}
     
 }
