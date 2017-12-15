@@ -13,6 +13,13 @@ public class Opportunities extends ApplicationDomain {
 		Stage.CANCELLED => 'Cancelled'
 	};
 	
+	public static final String STAGE_INITIAL_ENGAGEMENT = STAGES.get(Stage.INITIAL_ENGAGEMENT);
+	public static final String STAGE_DISCOVERY = STAGES.get(Stage.DISCOVERY);
+	public static final String STAGE_DECISION = STAGES.get(Stage.DECISION);
+	public static final String STAGE_COMMITMENT = STAGES.get(Stage.COMMITMENT);
+	public static final String STAGE_LOST = STAGES.get(Stage.LOST);
+	public static final String STAGE_CANCELLED = STAGES.get(Stage.CANCELLED);
+	
 	public static final Set<String> OPEN_STAGES = new Set<String> {
 		STAGES.get(Stage.INITIAL_ENGAGEMENT),
 		STAGES.get(Stage.DISCOVERY),

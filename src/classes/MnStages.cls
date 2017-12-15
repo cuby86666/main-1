@@ -59,6 +59,12 @@ public class MnStages extends ApplicationDomain {
 	public static final String REG_STATUS_APPROVED = REG_STATUSES.get(RegStatus.APPROVED);
 	public static final String REG_STATUS_REJECTED = REG_STATUSES.get(RegStatus.REJECTED);
 	
+	private static final String STAGE_INITIAL_ENGAGEMENT = Opportunities.STAGE_INITIAL_ENGAGEMENT;
+	private static final String STAGE_DISCOVERY = Opportunities.STAGE_DISCOVERY;
+	private static final String STAGE_COMMITMENT = Opportunities.STAGE_COMMITMENT;
+	private static final String STAGE_LOST = Opportunities.STAGE_LOST;
+	private static final String STAGE_CANCELLED = Opportunities.STAGE_CANCELLED;
+	
 	private List<MnStage__c> mnStages;  
 	
 	public MnStages(List<MnStage__c> mnStages) {
@@ -90,7 +96,7 @@ public class MnStages extends ApplicationDomain {
 			oppty.CurrencyIsoCode = ms.Currency_Code__c;
 			oppty.Name = (ms.Reg_Oppty_Num__c + ' - ' + ms.Part_Name__c + ' - ' + ms.Prog_Name__c).left(120);
 			oppty.RecordTypeId = OpportunitiesSelector.getMnRecordTypeId();
-			oppty.StageName = 'Initial Engagement'; // todo
+			oppty.StageName = deriveOpptyStage(ms);
 			oppty.Assembly__c = ms.Assembly_Name__c;
 			oppty.Business_Created_Date__c = ms.Reg_Created_Date__c;
 			oppty.Design_Customer_City__c = ms.Addr_Design_Cust_City__c;
@@ -216,7 +222,6 @@ public class MnStages extends ApplicationDomain {
 		}
 		
 		update this.mnStages; 
-System.debug('///////// mnstages end: ' + new MnStagesSelector().selectAll());
 	}
 	
 	private Map<Id, Boolean> checkOpptyProdsExisted() {
@@ -277,6 +282,39 @@ System.debug('///////// mnstages end: ' + new MnStagesSelector().selectAll());
 				}
 			}	
 		} 	
+		
+		return result;
+	}
+	
+	private String deriveOpptyStage(MnStage__c mnStage) {
+		p('deriveOpptyStage');
+		String result = 'UNKNOWN';
+		Boolean isExpired = (mnStage.Reg_Expiration_Date__c != null && mnStage.Reg_Expiration_Date__c < System.today()) ? true : false;
+		
+		if (new Set<String> {REG_PART_STATUS_PENDING, REG_PART_STATUS_REQUESTED}.contains(mnStage.Reg_Part_Status__c) &&
+		    mnStage.Reg_Part_Win_Status__c == REG_PART_WIN_STATUS_PENDING &&
+		    new Set<String> {REG_STATUS_PENDING, REG_STATUS_REQUESTED, REG_STATUS_APPROVED}.contains(mnStage.Reg_Status__c) &&
+		    !isExpired) {
+			result = STAGE_INITIAL_ENGAGEMENT;    	
+		} else if (mnStage.Reg_Part_Status__c == REG_PART_STATUS_APPROVED &&
+    	           mnStage.Reg_Part_Win_Status__c == REG_PART_WIN_STATUS_PENDING &&
+    	           new Set<String> {REG_STATUS_PENDING, REG_STATUS_REQUESTED, REG_STATUS_APPROVED}.contains(mnStage.Reg_Status__c) &&
+    	           !isExpired) {
+			result = STAGE_DISCOVERY;	
+		} else if (new Set<String> {REG_PART_STATUS_PENDING, REG_PART_STATUS_REQUESTED, REG_PART_STATUS_APPROVED, REG_PART_STATUS_REJECTED}.contains(mnStage.Reg_Part_Status__c) &&
+    	           mnStage.Reg_Part_Win_Status__c.contains('Win') &&
+    	           new Set<String> {REG_STATUS_PENDING, REG_STATUS_REQUESTED, REG_STATUS_APPROVED}.contains(mnStage.Reg_Status__c)) {
+			result = STAGE_COMMITMENT;	
+		} else if (new Set<String> {REG_PART_STATUS_PENDING, REG_PART_STATUS_REQUESTED, REG_PART_STATUS_APPROVED}.contains(mnStage.Reg_Part_Status__c) &&
+    	           mnStage.Reg_Part_Win_Status__c == REG_PART_WIN_STATUS_PENDING &&
+    	           new Set<String> {REG_STATUS_PENDING, REG_STATUS_REQUESTED, REG_STATUS_APPROVED}.contains(mnStage.Reg_Status__c) &&
+    	           isExpired) {
+			result = STAGE_LOST;	
+		} else if ((new Set<String> {REG_PART_STATUS_PENDING, REG_PART_STATUS_REQUESTED}.contains(mnStage.Reg_Part_Status__c) && mnStage.Reg_Status__c == REG_STATUS_REJECTED) ||
+		           (mnStage.Reg_Part_Status__c == REG_PART_STATUS_APPROVED && mnStage.Reg_Part_Win_Status__c == REG_PART_WIN_STATUS_PENDING && mnStage.Reg_Status__c == REG_STATUS_REJECTED) ||
+    	           (mnStage.Reg_Part_Status__c == REG_PART_STATUS_REJECTED && mnStage.Reg_Part_Win_Status__c == REG_PART_WIN_STATUS_PENDING)) {
+			result = STAGE_CANCELLED;
+		}
 		
 		return result;
 	}

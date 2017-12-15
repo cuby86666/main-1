@@ -3,8 +3,15 @@ private class ModelNDesignRegistrationsProcessJobTest {
 	
 	private static final String STATUS_QUEUED = MnStages.STATUS_QUEUED;
 	private static final String STATUS_COMPLETED = MnStages.STATUS_COMPLETED;
+	
 	private static final Date PRODUCTION_DATE = Date.newInstance(2014, 02, 16); 
-	private static final Date WIN_DATE = Date.newInstance(2012, 01, 08); 
+	private static final Date WIN_DATE = Date.newInstance(2012, 01, 08);
+	
+	private static final String STAGE_INITIAL_ENGAGEMENT = Opportunities.STAGE_INITIAL_ENGAGEMENT;
+	private static final String STAGE_DISCOVERY = Opportunities.STAGE_DISCOVERY;
+	private static final String STAGE_COMMITMENT = Opportunities.STAGE_COMMITMENT;
+	private static final String STAGE_LOST = Opportunities.STAGE_LOST;
+	private static final String STAGE_CANCELLED = Opportunities.STAGE_CANCELLED; 
 	
 	private static MnStage__c mnStage;
 	private static String opptyExtId;
@@ -356,11 +363,13 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	System.assertEquals(0, oppties.size());
     }
     
+    /**
+     * Reg_Part_Status__c: Pending, Requested, Approved, Rejected
+     * Reg_Part_Win_Status__c: Pending, DesignWin, ProdWin, Win 
+     * Reg_Status__c: Pending, Requested, Approved, Rejected
+     */
     @isTest
     static void testOpptyCloseDate() {
-    	// Reg_Part_Status__c: Pending, Requested, Approved, Rejected
-    	// Reg_Part_Win_Status__c: Pending, DesignWin, ProdWin, Win 
-    	// Reg_Status__c: Requested, Pending, Approved, Rejected
     	mnStage.Status__c = STATUS_QUEUED;
     	mnStage.Reg_Part_Status__c = 'Pending'; 
     	mnStage.Reg_Part_Win_Status__c = 'DesignWin';
@@ -386,6 +395,114 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	
     	oppty = new OpportunitiesSelector().selectByLegacyId(new Set<String> {opptyExtId}).get(0); 
     	System.assertEquals(WIN_DATE, oppty.CloseDate);		
+    }
+    
+    @isTest
+    static void testOpptyStageInitialEngagement() {
+    	// Initial Engagement
+    	// Reg_Part_Status__c: Pending, Requested
+    	// Reg_Part_Win_Status__c: Pending
+    	// Reg_Status__c: Pending, Requested, Approved
+    	// isExpired: false
+    	mnStage.Status__c = STATUS_QUEUED;
+    	mnStage.Reg_Part_Status__c = 'Pending'; 
+    	mnStage.Reg_Part_Win_Status__c = 'Pending';
+    	mnStage.Reg_Status__c = 'Requested';
+    	mnStage.Reg_Expiration_Date__c = null;
+    	
+    	update mnStage;
+    	
+    	processData(); 
+    	
+    	Opportunity oppty = new OpportunitiesSelector().selectByLegacyId(new Set<String> {opptyExtId}).get(0); 
+    	System.assertEquals(STAGE_INITIAL_ENGAGEMENT, oppty.StageName);
+    }
+    
+    @isTest
+    static void testOpptyStageDiscovery() {
+    	// Discovery
+    	// Reg_Part_Status__c: Approved
+    	// Reg_Part_Win_Status__c: Pending
+    	// Reg_Status__c: Pending, Requested, Approved
+    	// isExpired: false
+    	mnStage.Status__c = STATUS_QUEUED;
+    	mnStage.Reg_Part_Status__c = 'Approved'; 
+    	mnStage.Reg_Part_Win_Status__c = 'Pending';
+    	mnStage.Reg_Status__c = 'Pending';
+    	mnStage.Reg_Expiration_Date__c = System.today();
+    	
+    	update mnStage;
+    	
+    	processData(); 
+    	
+    	Opportunity oppty = new OpportunitiesSelector().selectByLegacyId(new Set<String> {opptyExtId}).get(0); 
+    	System.assertEquals(STAGE_DISCOVERY, oppty.StageName);	
+    }
+    
+    @isTest
+    static void testOpptyStageCommitment() {
+    	// Commitment
+    	// Reg_Part_Status__c: Pending, Requested, Approved, Rejected
+    	// Reg_Part_Win_Status__c: DesignWin, ProdWin, Win
+    	// Reg_Status__c: Pending, Requested, Approved	
+    	mnStage.Status__c = STATUS_QUEUED;
+    	mnStage.Reg_Part_Status__c = 'Rejected'; 
+    	mnStage.Reg_Part_Win_Status__c = 'DesignWin';
+    	mnStage.Reg_Status__c = 'Approved';
+    	    	
+    	update mnStage;
+    	
+    	processData(); 
+    	
+    	Opportunity oppty = new OpportunitiesSelector().selectByLegacyId(new Set<String> {opptyExtId}).get(0); 
+    	System.assertEquals(STAGE_COMMITMENT, oppty.StageName);
+    }
+    
+    @isTest
+    static void testOpptyStageLost() {
+    	// Lost
+    	// Reg_Part_Status__c: Pending, Requested, Approved
+    	// Reg_Part_Win_Status__c: Pending
+    	// Reg_Status__c: Pending, Requested, Approved
+    	// isExpired: true	
+    	mnStage.Status__c = STATUS_QUEUED;
+    	mnStage.Reg_Part_Status__c = 'Requested'; 
+    	mnStage.Reg_Part_Win_Status__c = 'Pending';
+    	mnStage.Reg_Status__c = 'Approved';
+    	mnStage.Reg_Expiration_Date__c = (System.today() - 1);
+    	
+    	update mnStage;
+    	
+    	processData(); 
+    	
+    	Opportunity oppty = new OpportunitiesSelector().selectByLegacyId(new Set<String> {opptyExtId}).get(0); 
+    	System.assertEquals(STAGE_LOST, oppty.StageName);
+    }
+    
+    @isTest
+    static void testOpptyStageCancelled() {
+    	// Cancelled
+    	// #1
+    	// Reg_Part_Status__c: Pending, Requested
+    	// Reg_Status__c: Rejected
+    	// #2
+    	// Reg_Part_Status__c: Approved
+    	// Reg_Part_Win_Status__c: Pending
+    	// Reg_Status__c: Rejected
+    	// #3
+    	// Reg_Part_Status__c: Rejected
+    	// Reg_Part_Win_Status__c: Pending	
+    	mnStage.Status__c = STATUS_QUEUED;
+    	mnStage.Reg_Part_Status__c = 'Approved'; 
+    	mnStage.Reg_Part_Win_Status__c = 'Pending';
+    	mnStage.Reg_Status__c = 'Rejected';
+    	    	
+    	update mnStage;
+    	
+    	processData(); 
+    	
+    	Opportunity oppty = new OpportunitiesSelector().selectByLegacyId(new Set<String> {opptyExtId}).get(0); 
+    	System.assertEquals(STAGE_CANCELLED, oppty.StageName);
     }
     
     private static void processData() {
