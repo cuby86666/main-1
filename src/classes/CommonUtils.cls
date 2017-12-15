@@ -12,7 +12,7 @@ public class CommonUtils {
 	
 	static {
 		if (isLoggingActive == null) {
-			isLoggingActive = new LoggingSettingsSelector().selectWhere('MasterLabel = \'System Debug\'').get(0).IsActive__c;
+			isLoggingActive = ((List<Logging_Setting__mdt>)new LoggingSettingsSelector().selectWhere('MasterLabel = \'System Debug\'')).get(0).IsActive__c;
 		}
 		System.debug('//-c isLoggingActive: ' + isLoggingActive);		
 	}
@@ -101,7 +101,7 @@ public class CommonUtils {
     private static void setFxRatesByCurIsoCode() {
     	fxRatesByCurIsoCode = new Map<String, FX_Rates__c>();  
         
-        for (FX_Rates__c fr : new FxRatesSelector().selectAll()) {
+        for (FX_Rates__c fr : (List<FX_Rates__c>)new FxRatesSelector().selectAll()) {
             fxRatesByCurIsoCode.put(fr.Currency_Code__c, fr);
         }
     }

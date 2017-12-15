@@ -139,287 +139,230 @@
                 <value>
                     <fullName>ALLWINNER TECHNOLOGY</fullName>
                     <default>false</default>
-                    <label>ALLWINNER TECHNOLOGY</label>
                 </value>
                 <value>
                     <fullName>ALPHA &amp; OMEGA SEMICONDUCTOR</fullName>
                     <default>false</default>
-                    <label>ALPHA &amp; OMEGA SEMICONDUCTOR</label>
                 </value>
                 <value>
                     <fullName>AMAZING MICROELECTRONIC</fullName>
                     <default>false</default>
-                    <label>AMAZING MICROELECTRONIC</label>
                 </value>
                 <value>
                     <fullName>AMPLEON </fullName>
                     <default>false</default>
-                    <label>AMPLEON </label>
                 </value>
                 <value>
                     <fullName>ANALOG DEVICES </fullName>
                     <default>false</default>
-                    <label>ANALOG DEVICES </label>
                 </value>
                 <value>
                     <fullName>APPLIED MICRO CIRCUITS </fullName>
                     <default>false</default>
-                    <label>APPLIED MICRO CIRCUITS </label>
                 </value>
                 <value>
                     <fullName>AVAGO TECHNOLOGIES </fullName>
                     <default>false</default>
-                    <label>AVAGO TECHNOLOGIES </label>
                 </value>
                 <value>
                     <fullName>BOSCH GMBH </fullName>
                     <default>false</default>
-                    <label>BOSCH GMBH </label>
                 </value>
                 <value>
                     <fullName>Cambridge Silicon Radio</fullName>
                     <default>false</default>
-                    <label>Cambridge Silicon Radio</label>
                 </value>
                 <value>
                     <fullName>CAVIUM</fullName>
                     <default>false</default>
-                    <label>CAVIUM</label>
                 </value>
                 <value>
                     <fullName>CIRRUS LOGIC </fullName>
                     <default>false</default>
-                    <label>CIRRUS LOGIC </label>
                 </value>
                 <value>
                     <fullName>CYPRESS SEMICONDUCTOR </fullName>
                     <default>false</default>
-                    <label>CYPRESS SEMICONDUCTOR </label>
                 </value>
                 <value>
                     <fullName>DIALOG SEMICONDUCTOR </fullName>
                     <default>false</default>
-                    <label>DIALOG SEMICONDUCTOR </label>
                 </value>
                 <value>
                     <fullName>DIODES</fullName>
                     <default>false</default>
-                    <label>DIODES</label>
                 </value>
                 <value>
                     <fullName>EZCHIP SEMICONDUCTOR </fullName>
                     <default>false</default>
-                    <label>EZCHIP SEMICONDUCTOR </label>
                 </value>
                 <value>
                     <fullName>FAIRCHILD SEMICONDUCTOR</fullName>
                     <default>false</default>
-                    <label>FAIRCHILD SEMICONDUCTOR</label>
                 </value>
                 <value>
                     <fullName>FLIR SYSTEMS </fullName>
                     <default>false</default>
-                    <label>FLIR SYSTEMS </label>
                 </value>
                 <value>
                     <fullName>FUJITSU</fullName>
                     <default>false</default>
-                    <label>FUJITSU</label>
                 </value>
                 <value>
                     <fullName>HONEYWELL INTERNATIONAL </fullName>
                     <default>false</default>
-                    <label>HONEYWELL INTERNATIONAL </label>
                 </value>
                 <value>
                     <fullName>INFINEON TECHNOLOGIES </fullName>
                     <default>false</default>
-                    <label>INFINEON TECHNOLOGIES </label>
                 </value>
                 <value>
                     <fullName>INTEL </fullName>
                     <default>false</default>
-                    <label>INTEL </label>
                 </value>
                 <value>
                     <fullName>INTERNATIONAL RECTIFIER</fullName>
                     <default>false</default>
-                    <label>INTERNATIONAL RECTIFIER</label>
                 </value>
                 <value>
                     <fullName>INVENSENSE </fullName>
                     <default>false</default>
-                    <label>INVENSENSE </label>
                 </value>
                 <value>
                     <fullName>LINEAR TECHNOLOGY </fullName>
                     <default>false</default>
-                    <label>LINEAR TECHNOLOGY </label>
                 </value>
                 <value>
                     <fullName>LITTELFUSE</fullName>
                     <default>false</default>
-                    <label>LITTELFUSE</label>
                 </value>
                 <value>
                     <fullName>LRC</fullName>
                     <default>false</default>
-                    <label>LRC</label>
                 </value>
                 <value>
                     <fullName>MACOM </fullName>
                     <default>false</default>
-                    <label>MACOM </label>
                 </value>
                 <value>
                     <fullName>MARVELL TECHNOLOGY GROUP </fullName>
                     <default>false</default>
-                    <label>MARVELL TECHNOLOGY GROUP </label>
                 </value>
                 <value>
                     <fullName>MAXIM INTEGRATED PRODUCTS </fullName>
                     <default>false</default>
-                    <label>MAXIM INTEGRATED PRODUCTS </label>
                 </value>
                 <value>
                     <fullName>MEDIATEK</fullName>
                     <default>false</default>
-                    <label>MEDIATEK</label>
                 </value>
                 <value>
                     <fullName>MELEXIS </fullName>
                     <default>false</default>
-                    <label>MELEXIS </label>
                 </value>
                 <value>
                     <fullName>MICROCHIP TECHNOLOGY </fullName>
                     <default>false</default>
-                    <label>MICROCHIP TECHNOLOGY </label>
                 </value>
                 <value>
                     <fullName>MITSUBISHI ELECTRIC </fullName>
                     <default>false</default>
-                    <label>MITSUBISHI ELECTRIC </label>
                 </value>
                 <value>
                     <fullName>NONE</fullName>
                     <default>false</default>
-                    <label>NONE</label>
                 </value>
                 <value>
                     <fullName>NORDIC SEMICONDUCTOR </fullName>
                     <default>false</default>
-                    <label>NORDIC SEMICONDUCTOR </label>
                 </value>
                 <value>
                     <fullName>NVIDIA </fullName>
                     <default>false</default>
-                    <label>NVIDIA </label>
                 </value>
                 <value>
                     <fullName>ON SEMICONDUCTOR</fullName>
                     <default>false</default>
-                    <label>ON SEMICONDUCTOR</label>
                 </value>
                 <value>
                     <fullName>PANASONIC </fullName>
                     <default>false</default>
-                    <label>PANASONIC </label>
                 </value>
                 <value>
                     <fullName>PANJIT SEMICONDUCTOR</fullName>
                     <default>false</default>
-                    <label>PANJIT SEMICONDUCTOR</label>
                 </value>
                 <value>
                     <fullName>QORVO </fullName>
                     <default>false</default>
-                    <label>QORVO </label>
                 </value>
                 <value>
                     <fullName>QUALCOMM </fullName>
                     <default>false</default>
-                    <label>QUALCOMM </label>
                 </value>
                 <value>
                     <fullName>RENESAS</fullName>
                     <default>false</default>
-                    <label>RENESAS</label>
                 </value>
                 <value>
                     <fullName>ROHM SEMICONDUCTOR</fullName>
                     <default>false</default>
-                    <label>ROHM SEMICONDUCTOR</label>
                 </value>
                 <value>
                     <fullName>SAMSUNG ELECTRONICS</fullName>
                     <default>false</default>
-                    <label>SAMSUNG ELECTRONICS</label>
                 </value>
                 <value>
                     <fullName>SEMATECH</fullName>
                     <default>false</default>
-                    <label>SEMATECH</label>
                 </value>
                 <value>
                     <fullName>SENSATA TECHNOLOGIES </fullName>
                     <default>false</default>
-                    <label>SENSATA TECHNOLOGIES </label>
                 </value>
                 <value>
                     <fullName>SILICON LABORATORIES </fullName>
                     <default>false</default>
-                    <label>SILICON LABORATORIES </label>
                 </value>
                 <value>
                     <fullName>Skyworks Inc.</fullName>
                     <default>false</default>
-                    <label>Skyworks Inc.</label>
                 </value>
                 <value>
                     <fullName>STMICROELECTRONICS </fullName>
                     <default>false</default>
-                    <label>STMICROELECTRONICS </label>
                 </value>
                 <value>
                     <fullName>SUMITOMO ELECTRIC INDUSTRIES </fullName>
                     <default>false</default>
-                    <label>SUMITOMO ELECTRIC INDUSTRIES </label>
                 </value>
                 <value>
                     <fullName>TELECHIPS</fullName>
                     <default>false</default>
-                    <label>TELECHIPS</label>
                 </value>
                 <value>
                     <fullName>TEXAS INSTRUMENTS </fullName>
                     <default>false</default>
-                    <label>TEXAS INSTRUMENTS </label>
                 </value>
                 <value>
                     <fullName>TOSHIBA </fullName>
                     <default>false</default>
-                    <label>TOSHIBA </label>
                 </value>
                 <value>
                     <fullName>UNKNOWN</fullName>
                     <default>false</default>
-                    <label>UNKNOWN</label>
                 </value>
                 <value>
                     <fullName>VISHAY INTERTECHNOLOGY</fullName>
                     <default>false</default>
-                    <label>VISHAY INTERTECHNOLOGY</label>
                 </value>
                 <value>
                     <fullName>WILL SEMICONDUCTOR</fullName>
                     <default>false</default>
-                    <label>WILL SEMICONDUCTOR</label>
                 </value>
                 <value>
                     <fullName>Other</fullName>
                     <default>false</default>
-                    <label>Other</label>
                 </value>
             </valueSetDefinition>
         </valueSet>
@@ -520,12 +463,10 @@
                 <value>
                     <fullName>Yes</fullName>
                     <default>false</default>
-                    <label>Yes</label>
                 </value>
                 <value>
                     <fullName>No</fullName>
                     <default>false</default>
-                    <label>No</label>
                 </value>
             </valueSetDefinition>
         </valueSet>
@@ -809,17 +750,14 @@
                 <value>
                     <fullName>80% - 100%</fullName>
                     <default>false</default>
-                    <label>80% - 100%</label>
                 </value>
                 <value>
                     <fullName>50% - 80%</fullName>
                     <default>false</default>
-                    <label>50% - 80%</label>
                 </value>
                 <value>
                     <fullName>0% - 50%</fullName>
                     <default>true</default>
-                    <label>0% - 50%</label>
                 </value>
             </valueSetDefinition>
         </valueSet>
@@ -920,112 +858,90 @@ If Product Lost, volume = 0</inlineHelpText>
                 <value>
                     <fullName>Changing requirements</fullName>
                     <default>false</default>
-                    <label>Changing requirements</label>
                 </value>
                 <value>
                     <fullName>Lack of Technical Support Resources</fullName>
                     <default>false</default>
-                    <label>Lack of Technical Support Resources</label>
                 </value>
                 <value>
                     <fullName>Operational Performance</fullName>
                     <default>false</default>
-                    <label>Operational Performance</label>
                 </value>
                 <value>
                     <fullName>Price</fullName>
                     <default>false</default>
-                    <label>Price</label>
                 </value>
                 <value>
                     <fullName>Project not Lost but transferred to other SFDC Project</fullName>
                     <default>false</default>
-                    <label>Project not Lost but transferred to other SFDC Project</label>
                 </value>
                 <value>
                     <fullName>Quality</fullName>
                     <default>false</default>
-                    <label>Quality</label>
                 </value>
                 <value>
                     <fullName>Relation</fullName>
                     <default>false</default>
-                    <label>Relation</label>
                 </value>
                 <value>
                     <fullName>Software/Operating System</fullName>
                     <default>false</default>
-                    <label>Software/Operating System</label>
                 </value>
                 <value>
                     <fullName>Specification</fullName>
                     <default>false</default>
-                    <label>Specification</label>
                 </value>
                 <value>
                     <fullName>Stopped by Customer</fullName>
                     <default>false</default>
-                    <label>Stopped by Customer</label>
                 </value>
                 <value>
                     <fullName>Time to Market</fullName>
                     <default>false</default>
-                    <label>Time to Market</label>
                 </value>
                 <value>
                     <fullName>Wrong Entry</fullName>
                     <default>false</default>
-                    <label>Wrong Entry</label>
                 </value>
                 <value>
                     <fullName>Company Out of Business</fullName>
                     <default>false</default>
-                    <label>Company Out of Business</label>
                 </value>
                 <value>
                     <fullName>Duplicate of Existing Opty</fullName>
                     <default>false</default>
-                    <label>Duplicate of Existing Opty</label>
                 </value>
                 <value>
                     <fullName>MPN EOL</fullName>
                     <default>false</default>
-                    <label>MPN EOL</label>
                 </value>
                 <value>
                     <fullName>No Bid</fullName>
                     <default>false</default>
-                    <label>No Bid</label>
                 </value>
                 <value>
                     <fullName>No Commercial Relations</fullName>
                     <default>false</default>
-                    <label>No Commercial Relations</label>
                 </value>
                 <value>
                     <fullName>No Cust Contact Response</fullName>
                     <default>false</default>
-                    <label>No Cust Contact Response</label>
                 </value>
                 <value>
                     <fullName>Not a Valid Cust/Project</fullName>
                     <default>false</default>
-                    <label>Not a Valid Cust/Project</label>
                 </value>
                 <value>
                     <fullName>Project Cancelled by Cust</fullName>
                     <default>false</default>
-                    <label>Project Cancelled by Cust</label>
                 </value>
                 <value>
                     <fullName>Project Delayed by Cust</fullName>
                     <default>false</default>
-                    <label>Project Delayed by Cust</label>
                 </value>
                 <value>
                     <fullName>Other</fullName>
                     <default>false</default>
-                    <label>Other</label>
                 </value>
             </valueSetDefinition>
             <valueSettings>
@@ -1123,12 +1039,10 @@ If Product Lost, volume = 0</inlineHelpText>
                 <value>
                     <fullName>Lost</fullName>
                     <default>false</default>
-                    <label>Lost</label>
                 </value>
                 <value>
                     <fullName>Cancelled</fullName>
                     <default>false</default>
-                    <label>Cancelled</label>
                 </value>
             </valueSetDefinition>
         </valueSet>
@@ -1418,12 +1332,10 @@ If Non-Thrusted product, value = zero</inlineHelpText>
                 <value>
                     <fullName>Anchor - Main Product</fullName>
                     <default>false</default>
-                    <label>Anchor - Main Product</label>
                 </value>
                 <value>
                     <fullName>Attach - Additional Product</fullName>
                     <default>false</default>
-                    <label>Attach - Additional Product</label>
                 </value>
             </valueSetDefinition>
         </valueSet>

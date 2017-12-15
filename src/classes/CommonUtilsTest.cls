@@ -46,7 +46,7 @@ private class CommonUtilsTest {
     
     @isTest
     static void testLoggingSetting() {
-    	Boolean isLoggingActive = new LoggingSettingsSelector().selectWhere('MasterLabel = \'System Debug\'').get(0).IsActive__c;	
+    	Boolean isLoggingActive = ((List<Logging_Setting__mdt>)new LoggingSettingsSelector().selectWhere('MasterLabel = \'System Debug\'')).get(0).IsActive__c;	
     	
     	System.assertEquals(isLoggingActive, CommonUtils.isLoggingActive);
     }

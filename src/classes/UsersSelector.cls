@@ -18,10 +18,5 @@ public class UsersSelector extends ApplicationSelector {
 		p('selectByName');
 		return (List<User>)Database.query(newQueryFactory().setCondition('Name in :names').toSOQL());
 	}
-	
-	public List<User> selectWhere(String condition) {
-		p('selectWhere');
-        return (List<User>)Database.query(newQueryFactory().setCondition(condition).toSOQL());        
-    }
-    
+
 }

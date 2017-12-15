@@ -1,13 +1,15 @@
-public class LoggingSettingsSelector extends ApplicationSelector {
+public class ProductsSelector extends ApplicationSelector {
 	
 	public override Schema.SObjectType getSObjectType() {
-		return Logging_Setting__mdt.SObjectType;
+		return Product2.SObjectType;
 	}
 	
 	public List<Schema.SObjectField> getSObjectFieldList() {
 		return new List<Schema.SObjectField> {
-			Logging_Setting__mdt.IsActive__c 
+			Product2.Id,
+			Product2.Basic_Type__c,
+			Product2.Sales_Item__c
 		};
 	}
-	
+    
 }

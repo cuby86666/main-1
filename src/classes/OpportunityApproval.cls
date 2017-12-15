@@ -658,7 +658,7 @@ public class OpportunityApproval {
 	
 	private static void setUsers() {
 		p2('setUsers');
-		users = new Map<Id, User>(new UsersSelector().selectWhere('User_License__c not in (\'Customer Community Login\', \'Chatter Free\')'));	
+		users = new Map<Id, User>((List<User>)new UsersSelector().selectWhere('User_License__c not in (\'Customer Community Login\', \'Chatter Free\')'));	
 	}
 	
 	private static void setOpptyProdValMagSummariesByOpptyId(List<Opportunity> oppties) {

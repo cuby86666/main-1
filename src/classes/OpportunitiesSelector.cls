@@ -18,6 +18,7 @@ public class OpportunitiesSelector extends ApplicationSelector {
 		return new List<Schema.SObjectField> {
 			Opportunity.Id,
 			Opportunity.AccountId,
+			Opportunity.CloseDate,
 			Opportunity.Name,
 			Opportunity.RecordTypeId,
 			Opportunity.StageName,
@@ -30,9 +31,14 @@ public class OpportunitiesSelector extends ApplicationSelector {
 			Opportunity.End_Customer_Region__c,
 			Opportunity.End_Customer_GID__c,
 			Opportunity.Expiration_Date__c,
-			Opportunity.Legacy_End_Customer_Name_and_Location__c,
-			Opportunity.Legacy_Opportunity_Owner__c,
+			Opportunity.Industry_Segment__c,
 			Opportunity.Locked_Exchange_Rate__c,
+			Opportunity.Lead_Id__c,
+			Opportunity.Legacy_End_Customer_Name_and_Location__c,
+      Opportunity.Legacy_Id__c,
+			Opportunity.Legacy_Opportunity_Owner__c,
+			Opportunity.Locked_Exchange_Rate__c,			
+			Opportunity.Lost_Date__c,
 			Opportunity.Lost_Description__c,
 			Opportunity.Lost_Reason__c,
 			Opportunity.LT_Value_USD__c,
@@ -42,7 +48,9 @@ public class OpportunitiesSelector extends ApplicationSelector {
 			Opportunity.Production_Date__c,
 			Opportunity.Program__c,
 			Opportunity.Regional_VP_Approver__c,
-			Opportunity.Sales_Director_Approver__c, 
+			Opportunity.Rejected_by__c,
+			Opportunity.Sales_Director_Approver__c,
+			Opportunity.Sub_Segment__c,
 			Opportunity.TMMA_Override__c,
 			Opportunity.VP_Approver_2__c,
 			Opportunity.War_Room_Completed__c
@@ -73,6 +81,11 @@ public class OpportunitiesSelector extends ApplicationSelector {
 	public List<Opportunity> selectById(Set<Id> ids) {
 		p('selectById');
 		return (List<Opportunity>)selectSObjectsById(ids);
+	}
+	
+	public List<Opportunity> selectByLegacyId(Set<String> legacyIds) {
+		p('selectByLegacyId');
+		return (List<Opportunity>)Database.query(newQueryFactory().setCondition('Legacy_Id__c in :legacyIds').toSOQL());
 	}
 	
 	public List<Opportunity> selectByIdWithProducts(Set<Id> ids) {

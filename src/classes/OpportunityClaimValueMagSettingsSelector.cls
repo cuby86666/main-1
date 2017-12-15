@@ -11,9 +11,4 @@ public class OpportunityClaimValueMagSettingsSelector extends ApplicationSelecto
 		};
 	}
 	
-	public List<Opportunity_Claim_Value_MAG_Setting__mdt> selectAll() {
-		p('selectAll');
-        return (List<Opportunity_Claim_Value_MAG_Setting__mdt>)Database.query(newQueryFactory().toSOQL());        
-    }
-    
 }

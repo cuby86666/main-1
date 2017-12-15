@@ -278,827 +278,662 @@ IMAGE (&quot;/img/samples/flag_red.gif&quot;, &quot;STOP&quot;)
                 <value>
                     <fullName>AC DC Motor Drive</fullName>
                     <default>false</default>
-                    <label>AC DC Motor Drive</label>
                 </value>
                 <value>
                     <fullName>HMI</fullName>
                     <default>false</default>
-                    <label>HMI</label>
                 </value>
                 <value>
                     <fullName>Industrial PC</fullName>
                     <default>false</default>
-                    <label>Industrial PC</label>
                 </value>
                 <value>
                     <fullName>Industrial Control</fullName>
                     <default>false</default>
-                    <label>Industrial Control</label>
                 </value>
                 <value>
                     <fullName>Ruggedized Network</fullName>
                     <default>false</default>
-                    <label>Ruggedized Network</label>
                 </value>
                 <value>
                     <fullName>Bulk Machinery</fullName>
                     <default>false</default>
-                    <label>Bulk Machinery</label>
                 </value>
                 <value>
                     <fullName>Robotics</fullName>
                     <default>false</default>
-                    <label>Robotics</label>
                 </value>
                 <value>
                     <fullName>Lighting</fullName>
                     <default>false</default>
-                    <label>Lighting</label>
                 </value>
                 <value>
                     <fullName>HVAC</fullName>
                     <default>false</default>
-                    <label>HVAC</label>
                 </value>
                 <value>
                     <fullName>Building Sensors and Safety</fullName>
                     <default>false</default>
-                    <label>Building Sensors and Safety</label>
                 </value>
                 <value>
                     <fullName>Access Control</fullName>
                     <default>false</default>
-                    <label>Access Control</label>
                 </value>
                 <value>
                     <fullName>Security Surveillance and Alarm</fullName>
                     <default>false</default>
-                    <label>Security Surveillance and Alarm</label>
                 </value>
                 <value>
                     <fullName>ATE</fullName>
                     <default>false</default>
-                    <label>ATE</label>
                 </value>
                 <value>
                     <fullName>General purpose T&amp;M</fullName>
                     <default>false</default>
-                    <label>General purpose T&amp;M</label>
                 </value>
                 <value>
                     <fullName>Application Specific T&amp;M</fullName>
                     <default>false</default>
-                    <label>Application Specific T&amp;M</label>
                 </value>
                 <value>
                     <fullName>Diagnostic, Patient Monitoring</fullName>
                     <default>false</default>
-                    <label>Diagnostic, Patient Monitoring</label>
                 </value>
                 <value>
                     <fullName>Consumer medical</fullName>
                     <default>false</default>
-                    <label>Consumer medical</label>
                 </value>
                 <value>
                     <fullName>Medical imaging</fullName>
                     <default>false</default>
-                    <label>Medical imaging</label>
                 </value>
                 <value>
                     <fullName>Power Grid</fullName>
                     <default>false</default>
-                    <label>Power Grid</label>
                 </value>
                 <value>
                     <fullName>Power Generation</fullName>
                     <default>false</default>
-                    <label>Power Generation</label>
                 </value>
                 <value>
                     <fullName>Concentrator</fullName>
                     <default>false</default>
-                    <label>Concentrator</label>
                 </value>
                 <value>
                     <fullName>Gas Meter</fullName>
                     <default>false</default>
-                    <label>Gas Meter</label>
                 </value>
                 <value>
                     <fullName>Water/Flow Meter</fullName>
                     <default>false</default>
-                    <label>Water/Flow Meter</label>
                 </value>
                 <value>
                     <fullName>Electricity Meter</fullName>
                     <default>false</default>
-                    <label>Electricity Meter</label>
                 </value>
                 <value>
                     <fullName>UPS/Inverters</fullName>
                     <default>false</default>
-                    <label>UPS/Inverters</label>
                 </value>
                 <value>
                     <fullName>Drones/UAV</fullName>
                     <default>false</default>
-                    <label>Drones/UAV</label>
                 </value>
                 <value>
                     <fullName>Avionics</fullName>
                     <default>false</default>
-                    <label>Avionics</label>
                 </value>
                 <value>
                     <fullName>Missiles and Munitions</fullName>
                     <default>false</default>
-                    <label>Missiles and Munitions</label>
                 </value>
                 <value>
                     <fullName>Satellites</fullName>
                     <default>false</default>
-                    <label>Satellites</label>
                 </value>
                 <value>
                     <fullName>Homeland Security</fullName>
                     <default>false</default>
-                    <label>Homeland Security</label>
                 </value>
                 <value>
                     <fullName>Terrestrial transport</fullName>
                     <default>false</default>
-                    <label>Terrestrial transport</label>
                 </value>
                 <value>
                     <fullName>Industrial transport</fullName>
                     <default>false</default>
-                    <label>Industrial transport</label>
                 </value>
                 <value>
                     <fullName>Airline baggage tagging</fullName>
                     <default>false</default>
-                    <label>Airline baggage tagging</label>
                 </value>
                 <value>
                     <fullName>Whitegoods</fullName>
                     <default>false</default>
-                    <label>Whitegoods</label>
                 </value>
                 <value>
                     <fullName>Small kitchen appl</fullName>
                     <default>false</default>
-                    <label>Small kitchen appl</label>
                 </value>
                 <value>
                     <fullName>Personal care appl</fullName>
                     <default>false</default>
-                    <label>Personal care appl</label>
                 </value>
                 <value>
                     <fullName>Other home appl</fullName>
                     <default>false</default>
-                    <label>Other home appl</label>
                 </value>
                 <value>
                     <fullName>Trackers – sports &amp; Fitness</fullName>
                     <default>false</default>
-                    <label>Trackers – sports &amp; Fitness</label>
                 </value>
                 <value>
                     <fullName>Payment Wearables</fullName>
                     <default>false</default>
-                    <label>Payment Wearables</label>
                 </value>
                 <value>
                     <fullName>Smart clothing and footwear</fullName>
                     <default>false</default>
-                    <label>Smart clothing and footwear</label>
                 </value>
                 <value>
                     <fullName>Smart glasses</fullName>
                     <default>false</default>
-                    <label>Smart glasses</label>
                 </value>
                 <value>
                     <fullName>Smart watches</fullName>
                     <default>false</default>
-                    <label>Smart watches</label>
                 </value>
                 <value>
                     <fullName>VR</fullName>
                     <default>false</default>
-                    <label>VR</label>
                 </value>
                 <value>
                     <fullName>Hearables</fullName>
                     <default>false</default>
-                    <label>Hearables</label>
                 </value>
                 <value>
                     <fullName>Healthcare devices</fullName>
                     <default>false</default>
-                    <label>Healthcare devices</label>
                 </value>
                 <value>
                     <fullName>Wearable cameras</fullName>
                     <default>false</default>
-                    <label>Wearable cameras</label>
                 </value>
                 <value>
                     <fullName>Wearable scanners</fullName>
                     <default>false</default>
-                    <label>Wearable scanners</label>
                 </value>
                 <value>
                     <fullName>Weight scale</fullName>
                     <default>false</default>
-                    <label>Weight scale</label>
                 </value>
                 <value>
                     <fullName>Other wearable</fullName>
                     <default>false</default>
-                    <label>Other wearable</label>
                 </value>
                 <value>
                     <fullName>Video game consoles</fullName>
                     <default>false</default>
-                    <label>Video game consoles</label>
                 </value>
                 <value>
                     <fullName>Handheld video game players</fullName>
                     <default>false</default>
-                    <label>Handheld video game players</label>
                 </value>
                 <value>
                     <fullName>Toys and board games</fullName>
                     <default>false</default>
-                    <label>Toys and board games</label>
                 </value>
                 <value>
                     <fullName>TV</fullName>
                     <default>false</default>
-                    <label>TV</label>
                 </value>
                 <value>
                     <fullName>Set-top boxes</fullName>
                     <default>false</default>
-                    <label>Set-top boxes</label>
                 </value>
                 <value>
                     <fullName>Digital &amp; Video Cam</fullName>
                     <default>false</default>
-                    <label>Digital &amp; Video Cam</label>
                 </value>
                 <value>
                     <fullName>PMP/MP3 Players</fullName>
                     <default>false</default>
-                    <label>PMP/MP3 Players</label>
                 </value>
                 <value>
                     <fullName>Home audio and personal stereos</fullName>
                     <default>false</default>
-                    <label>Home audio and personal stereos</label>
                 </value>
                 <value>
                     <fullName>Headphones</fullName>
                     <default>false</default>
-                    <label>Headphones</label>
                 </value>
                 <value>
                     <fullName>Headsets</fullName>
                     <default>false</default>
-                    <label>Headsets</label>
                 </value>
                 <value>
                     <fullName>Smart Speakers</fullName>
                     <default>false</default>
-                    <label>Smart Speakers</label>
                 </value>
                 <value>
                     <fullName>Mobile Phone</fullName>
                     <default>false</default>
-                    <label>Mobile Phone</label>
                 </value>
                 <value>
                     <fullName>Mobile Accessories</fullName>
                     <default>false</default>
-                    <label>Mobile Accessories</label>
                 </value>
                 <value>
                     <fullName>Wireless Charging</fullName>
                     <default>false</default>
-                    <label>Wireless Charging</label>
                 </value>
                 <value>
                     <fullName>Distance Object Detection</fullName>
                     <default>false</default>
-                    <label>Distance Object Detection</label>
                 </value>
                 <value>
                     <fullName>Lane Departure</fullName>
                     <default>false</default>
-                    <label>Lane Departure</label>
                 </value>
                 <value>
                     <fullName>Blindspot Cocoon</fullName>
                     <default>false</default>
-                    <label>Blindspot Cocoon</label>
                 </value>
                 <value>
                     <fullName>Parking Assist</fullName>
                     <default>false</default>
-                    <label>Parking Assist</label>
                 </value>
                 <value>
                     <fullName>ADAS Fusion</fullName>
                     <default>false</default>
-                    <label>ADAS Fusion</label>
                 </value>
                 <value>
                     <fullName>Vehicle Dynamics</fullName>
                     <default>false</default>
-                    <label>Vehicle Dynamics</label>
                 </value>
                 <value>
                     <fullName>V2X</fullName>
                     <default>false</default>
-                    <label>V2X</label>
                 </value>
                 <value>
                     <fullName>Gateway Module</fullName>
                     <default>false</default>
-                    <label>Gateway Module</label>
                 </value>
                 <value>
                     <fullName>In-Vehicle Connectivity</fullName>
                     <default>false</default>
-                    <label>In-Vehicle Connectivity</label>
                 </value>
                 <value>
                     <fullName>Instrumentation Cluster</fullName>
                     <default>false</default>
-                    <label>Instrumentation Cluster</label>
                 </value>
                 <value>
                     <fullName>Navigation</fullName>
                     <default>false</default>
-                    <label>Navigation</label>
                 </value>
                 <value>
                     <fullName>Audio &amp; Entertainment</fullName>
                     <default>false</default>
-                    <label>Audio &amp; Entertainment</label>
                 </value>
                 <value>
                     <fullName>Telematics</fullName>
                     <default>false</default>
-                    <label>Telematics</label>
                 </value>
                 <value>
                     <fullName>Portable GPS</fullName>
                     <default>false</default>
-                    <label>Portable GPS</label>
                 </value>
                 <value>
                     <fullName>Engine control</fullName>
                     <default>false</default>
-                    <label>Engine Control</label>
                 </value>
                 <value>
                     <fullName>xEV Motor Control</fullName>
                     <default>false</default>
-                    <label>xEV Motor Control</label>
                 </value>
                 <value>
                     <fullName>Throttle control</fullName>
                     <default>false</default>
-                    <label>Throttle control</label>
                 </value>
                 <value>
                     <fullName>Battery Charging</fullName>
                     <default>false</default>
-                    <label>Battery Charging</label>
                 </value>
                 <value>
                     <fullName>Transmission</fullName>
                     <default>false</default>
-                    <label>Transmission</label>
                 </value>
                 <value>
                     <fullName>Traction &amp; Stability control</fullName>
                     <default>false</default>
-                    <label>Traction &amp; Stability control</label>
                 </value>
                 <value>
                     <fullName>Suspension</fullName>
                     <default>false</default>
-                    <label>Suspension</label>
                 </value>
                 <value>
                     <fullName>Braking</fullName>
                     <default>false</default>
-                    <label>Braking</label>
                 </value>
                 <value>
                     <fullName>Steering</fullName>
                     <default>false</default>
-                    <label>Steering</label>
                 </value>
                 <value>
                     <fullName>Tire Pressure Monitoring</fullName>
                     <default>false</default>
-                    <label>Tire Pressure Monitoring</label>
                 </value>
                 <value>
                     <fullName>Airbags</fullName>
                     <default>false</default>
-                    <label>Airbags</label>
                 </value>
                 <value>
                     <fullName>Driver Monitoring</fullName>
                     <default>false</default>
-                    <label>Driver Monitoring</label>
                 </value>
                 <value>
                     <fullName>Seat control</fullName>
                     <default>false</default>
-                    <label>Seat Control</label>
                 </value>
                 <value>
                     <fullName>mirrors</fullName>
                     <default>false</default>
-                    <label>mirrors</label>
                 </value>
                 <value>
                     <fullName>windows</fullName>
                     <default>false</default>
-                    <label>windows</label>
                 </value>
                 <value>
                     <fullName>doors, trunk, roof control</fullName>
                     <default>false</default>
-                    <label>doors, trunk, roof control</label>
                 </value>
                 <value>
                     <fullName>Body Control Module</fullName>
                     <default>false</default>
-                    <label>Body Control Module</label>
                 </value>
                 <value>
                     <fullName>Motorcycles &amp; Ebikes</fullName>
                     <default>false</default>
-                    <label>Motorcycles &amp; Ebikes</label>
                 </value>
                 <value>
                     <fullName>Trucks, Buses &amp; RVs</fullName>
                     <default>false</default>
-                    <label>Trucks, Buses &amp; RVs</label>
                 </value>
                 <value>
                     <fullName>Tractors</fullName>
                     <default>false</default>
-                    <label>Tractors</label>
                 </value>
                 <value>
                     <fullName>Agriculture &amp; Heavy Equipment</fullName>
                     <default>false</default>
-                    <label>Agriculture &amp; Heavy Equipment</label>
                 </value>
                 <value>
                     <fullName>Intelligent Roadside Unit</fullName>
                     <default>false</default>
-                    <label>Intelligent Roadside Unit</label>
                 </value>
                 <value>
                     <fullName>Deskbound PCs</fullName>
                     <default>false</default>
-                    <label>Deskbound PCs</label>
                 </value>
                 <value>
                     <fullName>Mobile PCs</fullName>
                     <default>false</default>
-                    <label>Mobile PCs</label>
                 </value>
                 <value>
                     <fullName>PC Servers</fullName>
                     <default>false</default>
-                    <label>PC Servers</label>
                 </value>
                 <value>
                     <fullName>Mainframe &amp; Supercomputers</fullName>
                     <default>false</default>
-                    <label>Mainframe &amp; Supercomputers</label>
                 </value>
                 <value>
                     <fullName>Workstations</fullName>
                     <default>false</default>
-                    <label>Workstations</label>
                 </value>
                 <value>
                     <fullName>PC Adders</fullName>
                     <default>false</default>
-                    <label>PC Adders</label>
                 </value>
                 <value>
                     <fullName>Tablet PC</fullName>
                     <default>false</default>
-                    <label>Tablet PC</label>
                 </value>
                 <value>
                     <fullName>Ereaders/EBooks</fullName>
                     <default>false</default>
-                    <label>Ereaders/EBooks</label>
                 </value>
                 <value>
                     <fullName>EPOS, ECT and Cash Drawer</fullName>
                     <default>false</default>
-                    <label>EPOS, ECT and Cash Drawer</label>
                 </value>
                 <value>
                     <fullName>Barcode Scanners</fullName>
                     <default>false</default>
-                    <label>Barcode Scanners</label>
                 </value>
                 <value>
                     <fullName>Portable Data Terminal/mPOS</fullName>
                     <default>false</default>
-                    <label>Portable Data Terminal/mPOS</label>
                 </value>
                 <value>
                     <fullName>Payment EMV cards (open loop)</fullName>
                     <default>false</default>
-                    <label>Payment EMV cards (open loop)</label>
                 </value>
                 <value>
                     <fullName>Inventory and Supply Chain Management</fullName>
                     <default>false</default>
-                    <label>Inventory and Supply Chain Management</label>
                 </value>
                 <value>
                     <fullName>Micro payment cards (closed loop)</fullName>
                     <default>false</default>
-                    <label>Micro payment cards (closed loop)</label>
                 </value>
                 <value>
                     <fullName>Loyalty Cards</fullName>
                     <default>false</default>
-                    <label>Loyalty Cards</label>
                 </value>
                 <value>
                     <fullName>Electronic shelf labels</fullName>
                     <default>false</default>
-                    <label>Electronic shelf labels</label>
                 </value>
                 <value>
                     <fullName>Portable Data Terminal</fullName>
                     <default>false</default>
-                    <label>Portable Data Terminal</label>
                 </value>
                 <value>
                     <fullName>ATM</fullName>
                     <default>false</default>
-                    <label>ATM</label>
                 </value>
                 <value>
                     <fullName>Currency Counter</fullName>
                     <default>false</default>
-                    <label>Currency Counter</label>
                 </value>
                 <value>
                     <fullName>Transportation Cards</fullName>
                     <default>false</default>
-                    <label>Transportation Cards</label>
                 </value>
                 <value>
                     <fullName>Access Cards</fullName>
                     <default>false</default>
-                    <label>Access Cards</label>
                 </value>
                 <value>
                     <fullName>eGov Documents</fullName>
                     <default>false</default>
-                    <label>eGov Documents</label>
                 </value>
                 <value>
                     <fullName>Authentication tokens</fullName>
                     <default>false</default>
-                    <label>Authentication tokens</label>
                 </value>
                 <value>
                     <fullName>Micro server</fullName>
                     <default>false</default>
-                    <label>Micro server</label>
                 </value>
                 <value>
                     <fullName>Network Attached Storage</fullName>
                     <default>false</default>
-                    <label>Network Attached Storage</label>
                 </value>
                 <value>
                     <fullName>Server Motherboard</fullName>
                     <default>false</default>
-                    <label>Server Motherboard</label>
                 </value>
                 <value>
                     <fullName>Server PSU</fullName>
                     <default>false</default>
-                    <label>Server PSU</label>
                 </value>
                 <value>
                     <fullName>Solid State Drive</fullName>
                     <default>false</default>
-                    <label>Solid State Drive</label>
                 </value>
                 <value>
                     <fullName>Video Analytics Server</fullName>
                     <default>false</default>
-                    <label>Video Analytics Server</label>
                 </value>
                 <value>
                     <fullName>Rigid Disk Drive for Compute</fullName>
                     <default>false</default>
-                    <label>Rigid Disk Drive for Compute</label>
                 </value>
                 <value>
                     <fullName>Optical Disk Drive for Compute</fullName>
                     <default>false</default>
-                    <label>Optical Disk Drive for Compute</label>
                 </value>
                 <value>
                     <fullName>Solid-State Drives</fullName>
                     <default>false</default>
-                    <label>Solid-State Drives</label>
                 </value>
                 <value>
                     <fullName>USB Flash Drive</fullName>
                     <default>false</default>
-                    <label>USB Flash Drive</label>
                 </value>
                 <value>
                     <fullName>Tape storage</fullName>
                     <default>false</default>
-                    <label>Tape storage</label>
                 </value>
                 <value>
                     <fullName>Flash Storage Cards</fullName>
                     <default>false</default>
-                    <label>Flash Storage Cards</label>
                 </value>
                 <value>
                     <fullName>Printers</fullName>
                     <default>false</default>
-                    <label>Printers</label>
                 </value>
                 <value>
                     <fullName>Graphic Card</fullName>
                     <default>false</default>
-                    <label>Graphic Card</label>
                 </value>
                 <value>
                     <fullName>Monitors</fullName>
                     <default>false</default>
-                    <label>Monitors</label>
                 </value>
                 <value>
                     <fullName>DRAM Upgrade Modules</fullName>
                     <default>false</default>
-                    <label>DRAM Upgrade Modules</label>
                 </value>
                 <value>
                     <fullName>Business Projectors</fullName>
                     <default>false</default>
-                    <label>Business Projectors</label>
                 </value>
                 <value>
                     <fullName>Battery Chargers for Personal DP</fullName>
                     <default>false</default>
-                    <label>Battery Chargers for Personal DP</label>
                 </value>
                 <value>
                     <fullName>Routers / Gateways</fullName>
                     <default>false</default>
-                    <label>Routers / Gateways</label>
                 </value>
                 <value>
                     <fullName>Ethernet Switches</fullName>
                     <default>false</default>
-                    <label>Ethernet Switches</label>
                 </value>
                 <value>
                     <fullName>WLAN Access Points</fullName>
                     <default>false</default>
-                    <label>WLAN Access Points</label>
                 </value>
                 <value>
                     <fullName>WLAN Controllers</fullName>
                     <default>false</default>
-                    <label>WLAN Controllers</label>
                 </value>
                 <value>
                     <fullName>Enterprise Network Security</fullName>
                     <default>false</default>
-                    <label>Enterprise Network Security</label>
                 </value>
                 <value>
                     <fullName>VoIP / IP-PBX</fullName>
                     <default>false</default>
-                    <label>VoIP / IP-PBX</label>
                 </value>
                 <value>
                     <fullName>Video Conferencing</fullName>
                     <default>false</default>
-                    <label>Video Conferencing</label>
                 </value>
                 <value>
                     <fullName>Fibre Channel SAN Switches &amp; HBAs</fullName>
                     <default>false</default>
-                    <label>Fibre Channel SAN Switches &amp; HBAs</label>
                 </value>
                 <value>
                     <fullName>TOR Switches</fullName>
                     <default>false</default>
-                    <label>TOR Switches</label>
                 </value>
                 <value>
                     <fullName>Virtual Networking</fullName>
                     <default>false</default>
-                    <label>Virtual Networking</label>
                 </value>
                 <value>
                     <fullName>Storage Networking</fullName>
                     <default>false</default>
-                    <label>Storage Networking</label>
                 </value>
                 <value>
                     <fullName>Security</fullName>
                     <default>false</default>
-                    <label>Security</label>
                 </value>
                 <value>
                     <fullName>Edge / Core Routers</fullName>
                     <default>false</default>
-                    <label>Edge / Core Routers</label>
                 </value>
                 <value>
                     <fullName>Optical/WDM transport</fullName>
                     <default>false</default>
-                    <label>Optical/WDM transport</label>
                 </value>
                 <value>
                     <fullName>Femto / Macro Basestations</fullName>
                     <default>false</default>
-                    <label>Femto / Macro Basestations</label>
                 </value>
                 <value>
                     <fullName>FTTH Aggregation Equipment</fullName>
                     <default>false</default>
-                    <label>FTTH Aggregation Equipment</label>
                 </value>
                 <value>
                     <fullName>DSL Aggregation Equipment (DSLAM)</fullName>
                     <default>false</default>
-                    <label>DSL Aggregation Equipment (DSLAM)</label>
                 </value>
                 <value>
                     <fullName>Cable Aggregation Equipment</fullName>
                     <default>false</default>
-                    <label>Cable Aggregation Equipment</label>
                 </value>
                 <value>
                     <fullName>Residential Gateway</fullName>
                     <default>false</default>
-                    <label>Residential Gateway</label>
                 </value>
                 <value>
                     <fullName>Virtual CPE (vCPE)</fullName>
                     <default>false</default>
-                    <label>Virtual CPE (vCPE)</label>
                 </value>
                 <value>
                     <fullName>Smart Home Gateways</fullName>
                     <default>false</default>
-                    <label>Smart Home Gateways</label>
                 </value>
                 <value>
                     <fullName>Low-Tier Consumer/SOHO Routers</fullName>
                     <default>false</default>
-                    <label>Low-Tier Consumer/SOHO Routers</label>
                 </value>
                 <value>
                     <fullName>Threat Mitigation Products</fullName>
                     <default>false</default>
-                    <label>Threat Mitigation Products</label>
                 </value>
                 <value>
                     <fullName>Enterprise UC &amp; Voice</fullName>
                     <default>false</default>
-                    <label>Enterprise UC &amp; Voice</label>
                 </value>
                 <value>
                     <fullName>Broadcast &amp; Streaming Video</fullName>
                     <default>false</default>
-                    <label>Broadcast &amp; Streaming Video</label>
                 </value>
             </valueSetDefinition>
             <valueSettings>
@@ -1807,202 +1642,162 @@ IMAGE (&quot;/img/samples/flag_red.gif&quot;, &quot;STOP&quot;)
                 <value>
                     <fullName>AUDI</fullName>
                     <default>false</default>
-                    <label>AUDI</label>
                 </value>
                 <value>
                     <fullName>Bajaj</fullName>
                     <default>false</default>
-                    <label>Bajaj</label>
                 </value>
                 <value>
                     <fullName>BMW</fullName>
                     <default>false</default>
-                    <label>BMW</label>
                 </value>
                 <value>
                     <fullName>CHERY</fullName>
                     <default>false</default>
-                    <label>CHERY</label>
                 </value>
                 <value>
                     <fullName>CHRYSLER</fullName>
                     <default>false</default>
-                    <label>CHRYSLER</label>
                 </value>
                 <value>
                     <fullName>DAF</fullName>
                     <default>false</default>
-                    <label>DAF</label>
                 </value>
                 <value>
                     <fullName>DAIHATSU</fullName>
                     <default>false</default>
-                    <label>DAIHATSU</label>
                 </value>
                 <value>
                     <fullName>DAIMLER</fullName>
                     <default>false</default>
-                    <label>DAIMLER</label>
                 </value>
                 <value>
                     <fullName>FAW</fullName>
                     <default>false</default>
-                    <label>FAW</label>
                 </value>
                 <value>
                     <fullName>FIAT</fullName>
                     <default>false</default>
-                    <label>FIAT</label>
                 </value>
                 <value>
                     <fullName>FORD</fullName>
                     <default>false</default>
-                    <label>FORD</label>
                 </value>
                 <value>
                     <fullName>Geely</fullName>
                     <default>false</default>
-                    <label>Geely</label>
                 </value>
                 <value>
                     <fullName>GM</fullName>
                     <default>false</default>
-                    <label>GM</label>
                 </value>
                 <value>
                     <fullName>Harley Davidson</fullName>
                     <default>false</default>
-                    <label>Harley Davidson</label>
                 </value>
                 <value>
                     <fullName>HERO Motors</fullName>
                     <default>false</default>
-                    <label>HERO Motors</label>
                 </value>
                 <value>
                     <fullName>Hino</fullName>
                     <default>false</default>
-                    <label>Hino</label>
                 </value>
                 <value>
                     <fullName>HONDA</fullName>
                     <default>false</default>
-                    <label>HONDA</label>
                 </value>
                 <value>
                     <fullName>HYUNDAI</fullName>
                     <default>false</default>
-                    <label>HYUNDAI</label>
                 </value>
                 <value>
                     <fullName>Isuzu</fullName>
                     <default>false</default>
-                    <label>Isuzu</label>
                 </value>
                 <value>
                     <fullName>IVECO</fullName>
                     <default>false</default>
-                    <label>IVECO</label>
                 </value>
                 <value>
                     <fullName>JAC</fullName>
                     <default>false</default>
-                    <label>JAC</label>
                 </value>
                 <value>
                     <fullName>JLR</fullName>
                     <default>false</default>
-                    <label>JLR</label>
                 </value>
                 <value>
                     <fullName>MAHINDRA</fullName>
                     <default>false</default>
-                    <label>MAHINDRA</label>
                 </value>
                 <value>
                     <fullName>MAN</fullName>
                     <default>false</default>
-                    <label>MAN</label>
                 </value>
                 <value>
                     <fullName>MARUTI SUZUKI</fullName>
                     <default>false</default>
-                    <label>MARUTI SUZUKI</label>
                 </value>
                 <value>
                     <fullName>MAZDA</fullName>
                     <default>false</default>
-                    <label>MAZDA</label>
                 </value>
                 <value>
                     <fullName>MITSUBISHI MOTOR</fullName>
                     <default>false</default>
-                    <label>MITSUBISHI MOTOR</label>
                 </value>
                 <value>
                     <fullName>NISSAN</fullName>
                     <default>false</default>
-                    <label>NISSAN</label>
                 </value>
                 <value>
                     <fullName>OPEL</fullName>
                     <default>false</default>
-                    <label>OPEL</label>
                 </value>
                 <value>
                     <fullName>PSA</fullName>
                     <default>false</default>
-                    <label>PSA</label>
                 </value>
                 <value>
                     <fullName>RENAULT</fullName>
                     <default>false</default>
-                    <label>RENAULT</label>
                 </value>
                 <value>
                     <fullName>SAIC</fullName>
                     <default>false</default>
-                    <label>SAIC</label>
                 </value>
                 <value>
                     <fullName>Scania</fullName>
                     <default>false</default>
-                    <label>Scania</label>
                 </value>
                 <value>
                     <fullName>Subaru</fullName>
                     <default>false</default>
-                    <label>Subaru</label>
                 </value>
                 <value>
                     <fullName>Suzuki</fullName>
                     <default>false</default>
-                    <label>Suzuki</label>
                 </value>
                 <value>
                     <fullName>TATA</fullName>
                     <default>false</default>
-                    <label>TATA</label>
                 </value>
                 <value>
                     <fullName>TOYOTA</fullName>
                     <default>false</default>
-                    <label>TOYOTA</label>
                 </value>
                 <value>
                     <fullName>TVS Motors</fullName>
                     <default>false</default>
-                    <label>TVS Motors</label>
                 </value>
                 <value>
                     <fullName>VOLVO</fullName>
                     <default>false</default>
-                    <label>VOLVO</label>
                 </value>
                 <value>
                     <fullName>VW</fullName>
                     <default>false</default>
-                    <label>VW</label>
                 </value>
             </valueSetDefinition>
             <valueSettings>
@@ -2557,27 +2352,22 @@ Field changed from Lookup to Free Text - SFDC52 Rel1612</description>
                 <value>
                     <fullName>Board Pilot</fullName>
                     <default>false</default>
-                    <label>Board Pilot</label>
                 </value>
                 <value>
                     <fullName>Direct</fullName>
                     <default>false</default>
-                    <label>Direct</label>
                 </value>
                 <value>
                     <fullName>Disti</fullName>
                     <default>false</default>
-                    <label>Disti</label>
                 </value>
                 <value>
                     <fullName>EMS</fullName>
                     <default>false</default>
-                    <label>EMS</label>
                 </value>
                 <value>
                     <fullName>ODM</fullName>
                     <default>false</default>
-                    <label>ODM</label>
                 </value>
             </valueSetDefinition>
         </valueSet>
@@ -2680,282 +2470,226 @@ Lost/Cancelled products are excluded from this calculation.</inlineHelpText>
                 <value>
                     <fullName>ALLWINNER TECHNOLOGY</fullName>
                     <default>false</default>
-                    <label>ALLWINNER TECHNOLOGY</label>
                 </value>
                 <value>
                     <fullName>ALPHA &amp; OMEGA SEMICONDUCTOR</fullName>
                     <default>false</default>
-                    <label>ALPHA &amp; OMEGA SEMICONDUCTOR</label>
                 </value>
                 <value>
                     <fullName>AMAZING MICROELECTRONIC</fullName>
                     <default>false</default>
-                    <label>AMAZING MICROELECTRONIC</label>
                 </value>
                 <value>
                     <fullName>AMPLEON </fullName>
                     <default>false</default>
-                    <label>AMPLEON </label>
                 </value>
                 <value>
                     <fullName>ANALOG DEVICES </fullName>
                     <default>false</default>
-                    <label>ANALOG DEVICES </label>
                 </value>
                 <value>
                     <fullName>APPLIED MICRO CIRCUITS </fullName>
                     <default>false</default>
-                    <label>APPLIED MICRO CIRCUITS </label>
                 </value>
                 <value>
                     <fullName>AVAGO TECHNOLOGIES </fullName>
                     <default>false</default>
-                    <label>AVAGO TECHNOLOGIES </label>
                 </value>
                 <value>
                     <fullName>BOSCH GMBH </fullName>
                     <default>false</default>
-                    <label>BOSCH GMBH </label>
                 </value>
                 <value>
                     <fullName>Cambridge Silicon Radio</fullName>
                     <default>false</default>
-                    <label>Cambridge Silicon Radio</label>
                 </value>
                 <value>
                     <fullName>CAVIUM</fullName>
                     <default>false</default>
-                    <label>CAVIUM</label>
                 </value>
                 <value>
                     <fullName>CIRRUS LOGIC </fullName>
                     <default>false</default>
-                    <label>CIRRUS LOGIC </label>
                 </value>
                 <value>
                     <fullName>CYPRESS SEMICONDUCTOR </fullName>
                     <default>false</default>
-                    <label>CYPRESS SEMICONDUCTOR </label>
                 </value>
                 <value>
                     <fullName>DIALOG SEMICONDUCTOR </fullName>
                     <default>false</default>
-                    <label>DIALOG SEMICONDUCTOR </label>
                 </value>
                 <value>
                     <fullName>DIODES</fullName>
                     <default>false</default>
-                    <label>DIODES</label>
                 </value>
                 <value>
                     <fullName>EZCHIP SEMICONDUCTOR </fullName>
                     <default>false</default>
-                    <label>EZCHIP SEMICONDUCTOR </label>
                 </value>
                 <value>
                     <fullName>FAIRCHILD SEMICONDUCTOR</fullName>
                     <default>false</default>
-                    <label>FAIRCHILD SEMICONDUCTOR</label>
                 </value>
                 <value>
                     <fullName>FLIR SYSTEMS </fullName>
                     <default>false</default>
-                    <label>FLIR SYSTEMS </label>
                 </value>
                 <value>
                     <fullName>FUJITSU</fullName>
                     <default>false</default>
-                    <label>FUJITSU</label>
                 </value>
                 <value>
                     <fullName>HONEYWELL INTERNATIONAL </fullName>
                     <default>false</default>
-                    <label>HONEYWELL INTERNATIONAL </label>
                 </value>
                 <value>
                     <fullName>INFINEON TECHNOLOGIES </fullName>
                     <default>false</default>
-                    <label>INFINEON TECHNOLOGIES </label>
                 </value>
                 <value>
                     <fullName>INTEL </fullName>
                     <default>false</default>
-                    <label>INTEL </label>
                 </value>
                 <value>
                     <fullName>INTERNATIONAL RECTIFIER</fullName>
                     <default>false</default>
-                    <label>INTERNATIONAL RECTIFIER</label>
                 </value>
                 <value>
                     <fullName>INVENSENSE </fullName>
                     <default>false</default>
-                    <label>INVENSENSE </label>
                 </value>
                 <value>
                     <fullName>LINEAR TECHNOLOGY </fullName>
                     <default>false</default>
-                    <label>LINEAR TECHNOLOGY </label>
                 </value>
                 <value>
                     <fullName>LITTELFUSE</fullName>
                     <default>false</default>
-                    <label>LITTELFUSE</label>
                 </value>
                 <value>
                     <fullName>LRC</fullName>
                     <default>false</default>
-                    <label>LRC</label>
                 </value>
                 <value>
                     <fullName>MACOM </fullName>
                     <default>false</default>
-                    <label>MACOM </label>
                 </value>
                 <value>
                     <fullName>MARVELL TECHNOLOGY GROUP </fullName>
                     <default>false</default>
-                    <label>MARVELL TECHNOLOGY GROUP </label>
                 </value>
                 <value>
                     <fullName>MAXIM INTEGRATED PRODUCTS </fullName>
                     <default>false</default>
-                    <label>MAXIM INTEGRATED PRODUCTS </label>
                 </value>
                 <value>
                     <fullName>MEDIATEK</fullName>
                     <default>false</default>
-                    <label>MEDIATEK</label>
                 </value>
                 <value>
                     <fullName>MELEXIS </fullName>
                     <default>false</default>
-                    <label>MELEXIS </label>
                 </value>
                 <value>
                     <fullName>MICROCHIP TECHNOLOGY </fullName>
                     <default>false</default>
-                    <label>MICROCHIP TECHNOLOGY </label>
                 </value>
                 <value>
                     <fullName>MITSUBISHI ELECTRIC </fullName>
                     <default>false</default>
-                    <label>MITSUBISHI ELECTRIC </label>
                 </value>
                 <value>
                     <fullName>NONE</fullName>
                     <default>false</default>
-                    <label>NONE</label>
                 </value>
                 <value>
                     <fullName>NORDIC SEMICONDUCTOR </fullName>
                     <default>false</default>
-                    <label>NORDIC SEMICONDUCTOR </label>
                 </value>
                 <value>
                     <fullName>NVIDIA </fullName>
                     <default>false</default>
-                    <label>NVIDIA </label>
                 </value>
                 <value>
                     <fullName>ON SEMICONDUCTOR</fullName>
                     <default>false</default>
-                    <label>ON SEMICONDUCTOR</label>
                 </value>
                 <value>
                     <fullName>PANASONIC </fullName>
                     <default>false</default>
-                    <label>PANASONIC </label>
                 </value>
                 <value>
                     <fullName>PANJIT SEMICONDUCTOR</fullName>
                     <default>false</default>
-                    <label>PANJIT SEMICONDUCTOR</label>
                 </value>
                 <value>
                     <fullName>QORVO </fullName>
                     <default>false</default>
-                    <label>QORVO </label>
                 </value>
                 <value>
                     <fullName>QUALCOMM </fullName>
                     <default>false</default>
-                    <label>QUALCOMM </label>
                 </value>
                 <value>
                     <fullName>RENESAS</fullName>
                     <default>false</default>
-                    <label>RENESAS</label>
                 </value>
                 <value>
                     <fullName>ROHM SEMICONDUCTOR</fullName>
                     <default>false</default>
-                    <label>ROHM SEMICONDUCTOR</label>
                 </value>
                 <value>
                     <fullName>SAMSUNG ELECTRONICS</fullName>
                     <default>false</default>
-                    <label>SAMSUNG ELECTRONICS</label>
                 </value>
                 <value>
                     <fullName>SEMATECH</fullName>
                     <default>false</default>
-                    <label>SEMATECH</label>
                 </value>
                 <value>
                     <fullName>SENSATA TECHNOLOGIES </fullName>
                     <default>false</default>
-                    <label>SENSATA TECHNOLOGIES </label>
                 </value>
                 <value>
                     <fullName>SILICON LABORATORIES </fullName>
                     <default>false</default>
-                    <label>SILICON LABORATORIES </label>
                 </value>
                 <value>
                     <fullName>Skyworks Inc.</fullName>
                     <default>false</default>
-                    <label>Skyworks Inc.</label>
                 </value>
                 <value>
                     <fullName>STMICROELECTRONICS </fullName>
                     <default>false</default>
-                    <label>STMICROELECTRONICS </label>
                 </value>
                 <value>
                     <fullName>SUMITOMO ELECTRIC INDUSTRIES </fullName>
                     <default>false</default>
-                    <label>SUMITOMO ELECTRIC INDUSTRIES </label>
                 </value>
                 <value>
                     <fullName>TELECHIPS</fullName>
                     <default>false</default>
-                    <label>TELECHIPS</label>
                 </value>
                 <value>
                     <fullName>TEXAS INSTRUMENTS </fullName>
                     <default>false</default>
-                    <label>TEXAS INSTRUMENTS </label>
                 </value>
                 <value>
                     <fullName>TOSHIBA </fullName>
                     <default>false</default>
-                    <label>TOSHIBA </label>
                 </value>
                 <value>
                     <fullName>UNKNOWN</fullName>
                     <default>false</default>
-                    <label>UNKNOWN</label>
                 </value>
                 <value>
                     <fullName>VISHAY INTERTECHNOLOGY</fullName>
                     <default>false</default>
-                    <label>VISHAY INTERTECHNOLOGY</label>
                 </value>
                 <value>
                     <fullName>WILL SEMICONDUCTOR</fullName>
                     <default>false</default>
-                    <label>WILL SEMICONDUCTOR</label>
                 </value>
             </valueSetDefinition>
         </valueSet>
@@ -3007,22 +2741,18 @@ If Compliance Risk is not applicable, please uncheck Compliance Assessment Evide
                 <value>
                     <fullName>High</fullName>
                     <default>false</default>
-                    <label>High</label>
                 </value>
                 <value>
                     <fullName>Medium</fullName>
                     <default>false</default>
-                    <label>Medium</label>
                 </value>
                 <value>
                     <fullName>Low</fullName>
                     <default>false</default>
-                    <label>Low</label>
                 </value>
                 <value>
                     <fullName>Not Applicable</fullName>
                     <default>false</default>
-                    <label>Not Applicable</label>
                 </value>
             </valueSetDefinition>
         </valueSet>
@@ -3043,32 +2773,26 @@ If Compliance Risk is not applicable, please uncheck Compliance Assessment Evide
                 <value>
                     <fullName>+3 Deal all but done</fullName>
                     <default>false</default>
-                    <label>+3 Deal all but done</label>
                 </value>
                 <value>
                     <fullName>+2 On inside Track</fullName>
                     <default>false</default>
-                    <label>+2 On inside Track</label>
                 </value>
                 <value>
                     <fullName>+1 Competitive Advantage</fullName>
                     <default>false</default>
-                    <label>+1 Competitive Advantage</label>
                 </value>
                 <value>
                     <fullName>-1 Competitive Disadvantage</fullName>
                     <default>false</default>
-                    <label>-1 Competitive Disadvantage</label>
                 </value>
                 <value>
                     <fullName>-2 Severe Politics</fullName>
                     <default>false</default>
-                    <label>-2 Severe Politics</label>
                 </value>
                 <value>
                     <fullName>-3 Deal all but lost</fullName>
                     <default>false</default>
-                    <label>-3 Deal all but lost</label>
                 </value>
             </valueSetDefinition>
             <valueSettings>
@@ -3424,22 +3148,18 @@ X2016_Value__c+ X2017_Value__c+X2018_Value__c, 0
                 <value>
                     <fullName>Open</fullName>
                     <default>true</default>
-                    <label>Open</label>
                 </value>
                 <value>
                     <fullName>Pending</fullName>
                     <default>false</default>
-                    <label>Pending</label>
                 </value>
                 <value>
                     <fullName>Approved</fullName>
                     <default>false</default>
-                    <label>Approved</label>
                 </value>
                 <value>
                     <fullName>Lost</fullName>
                     <default>false</default>
-                    <label>Lost</label>
                 </value>
             </valueSetDefinition>
         </valueSet>
@@ -3711,27 +3431,22 @@ Expected Close Date Quarter. Calculate the quarter of Expected Close Date. Syste
                 <value>
                     <fullName>Industrial</fullName>
                     <default>false</default>
-                    <label>Industrial</label>
                 </value>
                 <value>
                     <fullName>Consumer</fullName>
                     <default>false</default>
-                    <label>Consumer</label>
                 </value>
                 <value>
                     <fullName>Automotive</fullName>
                     <default>false</default>
-                    <label>Automotive</label>
                 </value>
                 <value>
                     <fullName>Data Processing</fullName>
                     <default>false</default>
-                    <label>Data Processing</label>
                 </value>
                 <value>
                     <fullName>Networking</fullName>
                     <default>false</default>
-                    <label>Networking</label>
                 </value>
             </valueSetDefinition>
         </valueSet>
@@ -4186,112 +3901,90 @@ Lost/Cancelled products are excluded from this calculation.</inlineHelpText>
                 <value>
                     <fullName>Changing requirements</fullName>
                     <default>false</default>
-                    <label>Changing requirements</label>
                 </value>
                 <value>
                     <fullName>Lack of Technical Support Resources</fullName>
                     <default>false</default>
-                    <label>Lack of Technical Support Resources</label>
                 </value>
                 <value>
                     <fullName>Operational Performance</fullName>
                     <default>false</default>
-                    <label>Operational Performance</label>
                 </value>
                 <value>
                     <fullName>Price</fullName>
                     <default>false</default>
-                    <label>Price</label>
                 </value>
                 <value>
                     <fullName>Project not Lost but transferred to other SFDC Project</fullName>
                     <default>false</default>
-                    <label>Project not Lost but transferred to other SFDC Project</label>
                 </value>
                 <value>
                     <fullName>Quality</fullName>
                     <default>false</default>
-                    <label>Quality</label>
                 </value>
                 <value>
                     <fullName>Relation</fullName>
                     <default>false</default>
-                    <label>Relation</label>
                 </value>
                 <value>
                     <fullName>Specification</fullName>
                     <default>false</default>
-                    <label>Specification</label>
                 </value>
                 <value>
                     <fullName>Stopped by Customer</fullName>
                     <default>false</default>
-                    <label>Stopped by Customer</label>
                 </value>
                 <value>
                     <fullName>Software/Operating System</fullName>
                     <default>false</default>
-                    <label>Software/Operating System</label>
                 </value>
                 <value>
                     <fullName>Time to Market</fullName>
                     <default>false</default>
-                    <label>Time to Market</label>
                 </value>
                 <value>
                     <fullName>Wrong Entry</fullName>
                     <default>false</default>
-                    <label>Wrong Entry</label>
                 </value>
                 <value>
                     <fullName>Company Out of Business</fullName>
                     <default>false</default>
-                    <label>Company Out of Business</label>
                 </value>
                 <value>
                     <fullName>Duplicate of Existing Opty</fullName>
                     <default>false</default>
-                    <label>Duplicate of Existing Opty</label>
                 </value>
                 <value>
                     <fullName>MPN EOL</fullName>
                     <default>false</default>
-                    <label>MPN EOL</label>
                 </value>
                 <value>
                     <fullName>No Bid</fullName>
                     <default>false</default>
-                    <label>No Bid</label>
                 </value>
                 <value>
                     <fullName>No Commercial Relations</fullName>
                     <default>false</default>
-                    <label>No Commercial Relations</label>
                 </value>
                 <value>
                     <fullName>No Cust Contact Response</fullName>
                     <default>false</default>
-                    <label>No Cust Contact Response</label>
                 </value>
                 <value>
                     <fullName>Not a Valid Cust/Project</fullName>
                     <default>false</default>
-                    <label>Not a Valid Cust/Project</label>
                 </value>
                 <value>
                     <fullName>Project Cancelled by Cust</fullName>
                     <default>false</default>
-                    <label>Project Cancelled by Cust</label>
                 </value>
                 <value>
                     <fullName>Project Delayed by Cust</fullName>
                     <default>false</default>
-                    <label>Project Delayed by Cust</label>
                 </value>
                 <value>
                     <fullName>Other</fullName>
                     <default>false</default>
-                    <label>Other</label>
                 </value>
             </valueSetDefinition>
             <valueSettings>
@@ -5110,17 +4803,14 @@ Opportunity with any Red Flag is not allowed to submit for approval.</inlineHelp
                 <value>
                     <fullName>80% - 100%</fullName>
                     <default>false</default>
-                    <label>80% - 100%</label>
                 </value>
                 <value>
                     <fullName>50% - 80%</fullName>
                     <default>false</default>
-                    <label>50% - 80%</label>
                 </value>
                 <value>
                     <fullName>0% - 50%</fullName>
                     <default>false</default>
-                    <label>0% - 50%</label>
                 </value>
             </valueSetDefinition>
         </valueSet>
@@ -5396,12 +5086,10 @@ Controlling Field of &quot;RC8_Sub_Segment__c&quot;</description>
                 <value>
                     <fullName>NFC Readers</fullName>
                     <default>false</default>
-                    <label>NFC Readers</label>
                 </value>
                 <value>
                     <fullName>SMR</fullName>
                     <default>false</default>
-                    <label>SMR</label>
                 </value>
             </valueSetDefinition>
         </valueSet>
@@ -5423,132 +5111,106 @@ Controlling Field of &quot;RC8_Sub_Segment__c&quot;</description>
                 <value>
                     <fullName>Transport Ticketing</fullName>
                     <default>false</default>
-                    <label>Transport Ticketing</label>
                 </value>
                 <value>
                     <fullName>Adjacent Mobility Services</fullName>
                     <default>false</default>
-                    <label>Adjacent Mobility Services</label>
                 </value>
                 <value>
                     <fullName>Loyalty</fullName>
                     <default>false</default>
-                    <label>Loyalty</label>
                 </value>
                 <value>
                     <fullName>Micropayments</fullName>
                     <default>false</default>
-                    <label>Micropayments</label>
                 </value>
                 <value>
                     <fullName>Payments (POS/mPOS)</fullName>
                     <default>false</default>
-                    <label>Payments (POS/mPOS)</label>
                 </value>
                 <value>
                     <fullName>Computing</fullName>
                     <default>false</default>
-                    <label>Computing</label>
                 </value>
                 <value>
                     <fullName>STB (Pay TV)</fullName>
                     <default>false</default>
-                    <label>STB (Pay TV)</label>
                 </value>
                 <value>
                     <fullName>Gaming/Toys</fullName>
                     <default>false</default>
-                    <label>Gaming/Toys</label>
                 </value>
                 <value>
                     <fullName>Payments (eMetering)</fullName>
                     <default>false</default>
-                    <label>Payments (eMetering)</label>
                 </value>
                 <value>
                     <fullName>AFC</fullName>
                     <default>false</default>
-                    <label>AFC</label>
                 </value>
                 <value>
                     <fullName>Mass Market</fullName>
                     <default>false</default>
-                    <label>Mass Market</label>
                 </value>
                 <value>
                     <fullName>eGovernment</fullName>
                     <default>false</default>
-                    <label>eGovernment</label>
                 </value>
                 <value>
                     <fullName>Consumer</fullName>
                     <default>false</default>
-                    <label>Consumer</label>
                 </value>
                 <value>
                     <fullName>Appliances</fullName>
                     <default>false</default>
-                    <label>Appliances</label>
                 </value>
                 <value>
                     <fullName>Others Infra.</fullName>
                     <default>false</default>
-                    <label>Others Infra.</label>
                 </value>
                 <value>
                     <fullName>Access Management</fullName>
                     <default>false</default>
-                    <label>Access Management</label>
                 </value>
                 <value>
                     <fullName>Gaming</fullName>
                     <default>false</default>
-                    <label>Gaming</label>
                 </value>
                 <value>
                     <fullName>Device Pairing</fullName>
                     <default>false</default>
-                    <label>Device Pairing</label>
                 </value>
                 <value>
                     <fullName>Others CI</fullName>
                     <default>false</default>
-                    <label>Others CI</label>
                 </value>
                 <value>
                     <fullName>Smart Media</fullName>
                     <default>false</default>
-                    <label>Smart Media</label>
                 </value>
                 <value>
                     <fullName>Inventory and Supply Chain Efficiency</fullName>
                     <default>false</default>
-                    <label>Inventory and Supply Chain Efficiency</label>
                 </value>
                 <value>
                     <fullName>Brand Protection</fullName>
                     <default>false</default>
-                    <label>Brand Protection</label>
                 </value>
                 <value>
                     <fullName>Livestock Management</fullName>
                     <default>false</default>
-                    <label>Livestock Management</label>
                 </value>
                 <value>
                     <fullName>Big data storage LTO</fullName>
                     <default>false</default>
-                    <label>Big data storage LTO</label>
                 </value>
                 <value>
                     <fullName>Secure Asset Tagging</fullName>
                     <default>false</default>
-                    <label>Secure Asset Tagging</label>
                 </value>
                 <value>
                     <fullName>Others RFID</fullName>
                     <default>false</default>
-                    <label>Others RFID</label>
                 </value>
             </valueSetDefinition>
             <valueSettings>
@@ -5686,47 +5348,38 @@ Controlling Field of &quot;RC8_Sub_Segment__c&quot;</description>
                 <value>
                     <fullName>Delivery Support</fullName>
                     <default>false</default>
-                    <label>Delivery Support</label>
                 </value>
                 <value>
                     <fullName>Other</fullName>
                     <default>false</default>
-                    <label>Other</label>
                 </value>
                 <value>
                     <fullName>Price</fullName>
                     <default>false</default>
-                    <label>Price</label>
                 </value>
                 <value>
                     <fullName>Production Capacity</fullName>
                     <default>false</default>
-                    <label>Production Capacity</label>
                 </value>
                 <value>
                     <fullName>Quality</fullName>
                     <default>false</default>
-                    <label>Quality</label>
                 </value>
                 <value>
                     <fullName>Relationship</fullName>
                     <default>false</default>
-                    <label>Relationship</label>
                 </value>
                 <value>
                     <fullName>Specification</fullName>
                     <default>false</default>
-                    <label>Specification</label>
                 </value>
                 <value>
                     <fullName>Technical Support</fullName>
                     <default>false</default>
-                    <label>Technical Support</label>
                 </value>
                 <value>
                     <fullName>Time to Market</fullName>
                     <default>false</default>
-                    <label>Time to Market</label>
                 </value>
             </valueSetDefinition>
             <valueSettings>
@@ -6000,157 +5653,126 @@ Controlling Field of &quot;RC8_Sub_Segment__c&quot;</description>
                 <value>
                     <fullName>Factory Automation</fullName>
                     <default>false</default>
-                    <label>Factory Automation</label>
                 </value>
                 <value>
                     <fullName>Home &amp; Building Control</fullName>
                     <default>false</default>
-                    <label>Home &amp; Building Control</label>
                 </value>
                 <value>
                     <fullName>Test &amp; Measurement</fullName>
                     <default>false</default>
-                    <label>Test &amp; Measurement</label>
                 </value>
                 <value>
                     <fullName>Medical Electronics</fullName>
                     <default>false</default>
-                    <label>Medical Electronics</label>
                 </value>
                 <value>
                     <fullName>Power &amp; Energy</fullName>
                     <default>false</default>
-                    <label>Power &amp; Energy</label>
                 </value>
                 <value>
                     <fullName>Aerospace &amp; Transportation</fullName>
                     <default>false</default>
-                    <label>Aerospace &amp; Transportation</label>
                 </value>
                 <value>
                     <fullName>Home Appliances</fullName>
                     <default>false</default>
-                    <label>Home Appliances</label>
                 </value>
                 <value>
                     <fullName>Wearable &amp; Fitness</fullName>
                     <default>false</default>
-                    <label>Wearable &amp; Fitness</label>
                 </value>
                 <value>
                     <fullName>Toys and Gaming</fullName>
                     <default>false</default>
-                    <label>Toys and Gaming</label>
                 </value>
                 <value>
                     <fullName>Home Audio Video</fullName>
                     <default>false</default>
-                    <label>Home Audio Video</label>
                 </value>
                 <value>
                     <fullName>Voice &amp; Music</fullName>
                     <default>false</default>
-                    <label>Voice &amp; Music</label>
                 </value>
                 <value>
                     <fullName>Mobile</fullName>
                     <default>false</default>
-                    <label>Mobile</label>
                 </value>
                 <value>
                     <fullName>ADAS</fullName>
                     <default>false</default>
-                    <label>ADAS</label>
                 </value>
                 <value>
                     <fullName>Infotainment &amp; connectivity</fullName>
                     <default>false</default>
-                    <label>Infotainment &amp; connectivity</label>
                 </value>
                 <value>
                     <fullName>Powertrain</fullName>
                     <default>false</default>
-                    <label>Powertrain</label>
                 </value>
                 <value>
                     <fullName>Chassis &amp; Safety</fullName>
                     <default>false</default>
-                    <label>Chassis &amp; Safety</label>
                 </value>
                 <value>
                     <fullName>Body &amp; Convenience</fullName>
                     <default>false</default>
-                    <label>Body &amp; Convenience</label>
                 </value>
                 <value>
                     <fullName>Other Automotive</fullName>
                     <default>false</default>
-                    <label>Other Automotive</label>
                 </value>
                 <value>
                     <fullName>Computers</fullName>
                     <default>false</default>
-                    <label>Computers</label>
                 </value>
                 <value>
                     <fullName>Tablets</fullName>
                     <default>false</default>
-                    <label>Tablets</label>
                 </value>
                 <value>
                     <fullName>Point-of-Sale</fullName>
                     <default>false</default>
-                    <label>Point-of-Sale</label>
                 </value>
                 <value>
                     <fullName>RFID Retail</fullName>
                     <default>false</default>
-                    <label>RFID Retail</label>
                 </value>
                 <value>
                     <fullName>RFID Transit, Access and Identification</fullName>
                     <default>false</default>
-                    <label>RFID Transit, Access and Identification</label>
                 </value>
                 <value>
                     <fullName>Enterprise Servers</fullName>
                     <default>false</default>
-                    <label>Enterprise Servers</label>
                 </value>
                 <value>
                     <fullName>Storage</fullName>
                     <default>false</default>
-                    <label>Storage</label>
                 </value>
                 <value>
                     <fullName>Other DP</fullName>
                     <default>false</default>
-                    <label>Other DP</label>
                 </value>
                 <value>
                     <fullName>Enterprise</fullName>
                     <default>false</default>
-                    <label>Enterprise</label>
                 </value>
                 <value>
                     <fullName>Data Center</fullName>
                     <default>false</default>
-                    <label>Data Center</label>
                 </value>
                 <value>
                     <fullName>Service Provider</fullName>
                     <default>false</default>
-                    <label>Service Provider</label>
                 </value>
                 <value>
                     <fullName>Broadband Access/ Home Network</fullName>
                     <default>false</default>
-                    <label>Broadband Access/ Home Network</label>
                 </value>
                 <value>
                     <fullName>Other Networking</fullName>
                     <default>false</default>
-                    <label>Other Networking</label>
                 </value>
             </valueSetDefinition>
             <valueSettings>
@@ -6389,17 +6011,14 @@ Calculate the quarter of Today. System used only, it&apos;s used for Likelihood_
                 <value>
                     <fullName>Yes</fullName>
                     <default>false</default>
-                    <label>Yes</label>
                 </value>
                 <value>
                     <fullName>No</fullName>
                     <default>false</default>
-                    <label>No</label>
                 </value>
                 <value>
                     <fullName>Not Applicable</fullName>
                     <default>false</default>
-                    <label>Not Applicable</label>
                 </value>
             </valueSetDefinition>
         </valueSet>
@@ -8272,7 +7891,7 @@ False
                 <default>false</default>
             </values>
             <values>
-                <fullName>Engine control</fullName>
+                <fullName>Engine Control</fullName>
                 <default>false</default>
             </values>
             <values>
@@ -8544,7 +8163,7 @@ False
                 <default>false</default>
             </values>
             <values>
-                <fullName>Seat control</fullName>
+                <fullName>Seat Control</fullName>
                 <default>false</default>
             </values>
             <values>

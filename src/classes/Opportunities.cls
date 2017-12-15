@@ -13,15 +13,22 @@ public class Opportunities extends ApplicationDomain {
 		Stage.CANCELLED => 'Cancelled'
 	};
 	
+	public static final String STAGE_INITIAL_ENGAGEMENT = STAGES.get(Stage.INITIAL_ENGAGEMENT);
+	public static final String STAGE_DISCOVERY = STAGES.get(Stage.DISCOVERY);
+	public static final String STAGE_DECISION = STAGES.get(Stage.DECISION);
+	public static final String STAGE_COMMITMENT = STAGES.get(Stage.COMMITMENT);
+	public static final String STAGE_LOST = STAGES.get(Stage.LOST);
+	public static final String STAGE_CANCELLED = STAGES.get(Stage.CANCELLED);
+	
 	public static final Set<String> OPEN_STAGES = new Set<String> {
-		STAGES.get(Stage.INITIAL_ENGAGEMENT),
-		STAGES.get(Stage.DISCOVERY),
-		STAGES.get(Stage.DECISION)		
+		STAGE_INITIAL_ENGAGEMENT,
+		STAGE_DISCOVERY,
+		STAGE_DECISION		
 	};
 	
 	public static final Set<String> LOST_STAGES = new Set<String> {
-		STAGES.get(Stage.LOST),
-		STAGES.get(Stage.CANCELLED)		
+		STAGE_LOST,
+		STAGE_CANCELLED		
 	}; 
 	
 	public static final Map<ApprovalStatus, String> APPROVAL_STATUSES = new Map<ApprovalStatus, String> {
@@ -97,7 +104,7 @@ public class Opportunities extends ApplicationDomain {
 		List<Opportunity> opptiesUpdated = new List<Opportunity>();
         
         for (Opportunity o : (List<Opportunity>)this.records) {
-       		o.StageName = STAGES.get(Stage.CANCELLED); 
+       		o.StageName = STAGE_CANCELLED; 
             o.Lost_Date__c = o.Expiration_Date__c;
             o.Lost_Reason__c = 'Expired';
             o.Design_Win_Approval_Process__c = APPROVAL_STATUSES.get(ApprovalStatus.LOST); 
@@ -347,7 +354,7 @@ public class Opportunities extends ApplicationDomain {
 						
 						if (opptyProds != null) {
 							if (opptyNew.RecordTypeId == OpportunitiesSelector.getSfdcRecordTypeId()) {
-								if ((OPEN_STAGES.contains(opptyOld.StageName) || opptyOld.StageName == STAGES.get(Stage.COMMITMENT)) && LOST_STAGES.contains(opptyNew.StageName)) {
+								if ((OPEN_STAGES.contains(opptyOld.StageName) || opptyOld.StageName == STAGE_COMMITMENT) && LOST_STAGES.contains(opptyNew.StageName)) {
 									for (OpportunityLineItem opptyProd : opptyProds) {
 										OpportunityLineItem opptyProdUpdate = new OpportunityLineItem(
 											Id = opptyProd.Id,
@@ -483,7 +490,7 @@ public class Opportunities extends ApplicationDomain {
 	            }
 	            
         		// Set Discovery Date
-                if (Trigger.isInsert && opptyNew.StageName == STAGES.get(Stage.DISCOVERY)) {
+                if (Trigger.isInsert && opptyNew.StageName == STAGE_DISCOVERY) {
                 	opptyNew.Discovery_Date__c = date.today();
                 }
 	        }
@@ -566,7 +573,7 @@ public class Opportunities extends ApplicationDomain {
 		                }
 		                
 		        		// Set Discovery Date
-		                if (opptyOld.StageName != STAGES.get(Stage.DISCOVERY) && opptyNew.StageName == STAGES.get(Stage.DISCOVERY)) {
+		                if (opptyOld.StageName != STAGE_DISCOVERY && opptyNew.StageName == STAGE_DISCOVERY) {
 		                	opptyNew.Discovery_Date__c = date.today();
 		                }
 	    			}
@@ -581,7 +588,7 @@ public class Opportunities extends ApplicationDomain {
         			opptyNew.Design_Win_Approval_Process__c = APPROVAL_STATUSES.get(ApprovalStatus.OPEN);
         		}
         		
-        		if (opptyNew.StageName == STAGES.get(Stage.COMMITMENT)) {
+        		if (opptyNew.StageName == STAGE_COMMITMENT) {
         			opptyNew.Design_Win_Approval_Process__c = APPROVAL_STATUSES.get(ApprovalStatus.APPROVED);
         		}
         		

@@ -12,17 +12,22 @@ public class OpportunityLineItemsSelector extends ApplicationSelector {
 			OpportunityLineItem.Quantity,
 			OpportunityLineItem.UnitPrice,
 			OpportunityLineItem.Component_Multiplier__c,
+			OpportunityLineItem.Help_Needed__c,
+			OpportunityLineItem.Help_Needed_History__c,
+			OpportunityLineItem.Legacy_Id__c,
+			OpportunityLineItem.POS_Resale_Value_USD__c,
 			OpportunityLineItem.Price_Erosion_Rate__c,
+			OpportunityLineItem.PricebookEntryId,
+			OpportunityLineItem.Probability_to_Win__c,
 			OpportunityLineItem.Prod_Lost__c,
 			OpportunityLineItem.Prod_Lost_Cancelled__c,
 			OpportunityLineItem.Prod_Lost_Cancelled_Date__c, 
 			OpportunityLineItem.Prod_Lost_Cancelled_Reason__c,
 			OpportunityLineItem.Prod_Lost_Reason__c, 
 			OpportunityLineItem.Program__c,
-			OpportunityLineItem.Share__c,
-            OpportunityLineItem.Help_Needed__c,
-			OpportunityLineItem.Help_Needed_History__c
-		};
+			OpportunityLineItem.Registration_Effort_Description__c,
+			OpportunityLineItem.Share__c
+        };
 	}
 	
 	public List<OpportunityLineItem> selectByOpptyIdWithOpportunity(Set<Id> opptyIds) {
@@ -43,6 +48,11 @@ public class OpportunityLineItemsSelector extends ApplicationSelector {
 		}
 		
 		return (List<OpportunityLineItem>)Database.query(opptyLineItemsQueryFactory.setCondition(condition).toSOQL());
+	}
+	
+	public List<OpportunityLineItem> selectByLegacyId(Set<String> legacyIds) {
+		p('selectByLegacyId');
+		return (List<OpportunityLineItem>)Database.query(newQueryFactory().setCondition('Legacy_Id__c in :legacyIds').toSOQL());
 	}
 	
 	public Map<Id, List<OpportunityProductValueSummary>> selectLifetimeValueByOpptyIdGroupByOpptyIdAndMag(Set<Id> opptyIds) {

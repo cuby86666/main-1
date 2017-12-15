@@ -17,6 +17,16 @@ public abstract class ApplicationSelector extends fflib_SObjectSelector {
         super(includeFieldSetFields, enforceCRUD, enforceFLS, false);
     }
     
+    public List<SObject> selectAll() {
+		p('selectAll');
+		return Database.query(newQueryFactory().toSOQL());
+	}
+	
+	public List<SObject> selectWhere(String condition) {
+		p('selectWhere');
+        return Database.query(newQueryFactory().setCondition(condition).toSOQL());        
+    }
+    
     protected abstract Schema.SObjectType getSObjectType();
     
     protected Id getRecordTypeId(String recTypeName) {
