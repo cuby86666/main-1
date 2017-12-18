@@ -10,6 +10,7 @@
 
 @isTest
 private class OpportunityTriggerTest{
+    /*
     private static final ID SFDC_RECORD_TYPE_ID;
     private static final ID MN_RECORD_TYPE_ID;
     private static final String TEST_USER_PROFILE = 'Standard User';
@@ -372,6 +373,6 @@ private class OpportunityTriggerTest{
       Test.startTest();
       update opptyProd.Opportunity;
       Test.stopTest();
-    }
+    }*/
     
 }

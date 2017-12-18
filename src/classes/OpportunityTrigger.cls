@@ -28,6 +28,7 @@
 
 public with sharing class OpportunityTrigger
 {
+  /*
     
     Private Static Final string TYPE_SFDC_OPPTY='SFDC_OPPTY';
     Private Static Final String TYPE_MN_OPPTY='Model_N_Oppty';
@@ -100,7 +101,7 @@ public with sharing class OpportunityTrigger
           }
         }
       }
-   }
+   }*/
    
 
      
@@ -116,7 +117,7 @@ public with sharing class OpportunityTrigger
        3.Update Last Modified and Last Update :  Update Last Modified By and Last Modified Date.                   
                   
    *********************************************************************************************************************/ 
-   
+   /*
     Public Static Void onBeforeInsert(List<Opportunity> newOppList)
     {
       
@@ -248,5 +249,5 @@ public with sharing class OpportunityTrigger
       }
     }         
    //SFDC 22: End of Feature to update standard owner field based on Legacy Oppty owner field (which is MN approver's email address)                                                                     
-   }    
+   }    */
  }

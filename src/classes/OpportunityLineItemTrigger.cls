@@ -70,7 +70,7 @@ public class OpportunityLineItemTrigger
     
     public static void onBeforeUpdate( List<OpportunityLineItem> listOpptyProds )
     {
-      OpportunityTrigger.fetchUserNameProfiles();     
+      //OpportunityTrigger.fetchUserNameProfiles();     
       /* Modified by Scarlett on Jan 03, 2017 */
       /* 
       for( OpportunityLineItem theOpportunityProduct : listOpptyProds )
