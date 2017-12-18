@@ -303,7 +303,7 @@ public class OpportunityProductClaimValue {
     	List<Opportunity> mnOppties = new List<Opportunity>();
     	
     	for (Opportunity o : oppties) {
-        	if (isMnRecordType(o) && CommonUtils.isDataAdminUser()) {
+        	if (isMnRecordType(o) && CommonUtils.isAdmin()) {
             	mnOppties.add(o);
             }
         }

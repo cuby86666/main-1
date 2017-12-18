@@ -160,8 +160,8 @@ public class MnStages extends ApplicationDomain {
 			opptyProd.Expert_Certified__c = ms.Reg_Part_Is_Expert_Certified__c;
 			opptyProd.Final_Registration_Item__c = ms.Reg_Part_Final_Phase__c;
 			opptyProd.Legacy_1_Year_Prod__c = ms.Reg_Part_One_Year_Value__c;
-			opptyProd.POS_Quantity__c = ms.Reg_Part_POS_Qty_Shipped__c; 
-			opptyProd.POS_Resale_Value_USD__c = (ms.Reg_Exchange_Rate__c != null && ms.Reg_Exchange_Rate__c != 0) ? (ms.Reg_Part_POS_Resale_Value__c / ms.Reg_Exchange_Rate__c.setScale(6)) : 0;
+			opptyProd.POS_Quantity__c = ms.Reg_Part_POS_Qty_Shipped__c;
+			opptyProd.POS_Resale_Value_USD__c = (ms.Reg_Part_POS_Resale_Value__c != null && ms.Reg_Exchange_Rate__c != null && ms.Reg_Exchange_Rate__c != 0) ? (ms.Reg_Part_POS_Resale_Value__c / ms.Reg_Exchange_Rate__c.setScale(6)) : 0;
 			opptyProd.Probability_to_Win__c = (ms.Design_Confidence__c == null || ms.Design_Confidence__c == 0.25) ? '0% - 50%' : (ms.Design_Confidence__c == 0.5 ? '50% - 80%' : (ms.Design_Confidence__c == 1 ? '80% - 100%' : null));
 			opptyProd.Registration_Effort_Description__c = (ms.Reg_Part_Margin_Qualification__c != null) ? ms.Reg_Part_Margin_Qualification__c : ms.Reg_Part_Effort_Desc__c;
 			opptyProd.Registration_Effort_Percentage__c = ms.Reg_Part_Effort_Pct__c;
