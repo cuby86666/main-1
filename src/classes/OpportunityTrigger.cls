@@ -28,7 +28,7 @@
 
 public with sharing class OpportunityTrigger
 {
-  /*
+  
     
     Private Static Final string TYPE_SFDC_OPPTY='SFDC_OPPTY';
     Private Static Final String TYPE_MN_OPPTY='Model_N_Oppty';
@@ -101,9 +101,8 @@ public with sharing class OpportunityTrigger
           }
         }
       }
-   }*/
+   }
    
-
      
 /******BEFORE TRIGGER(INSERT AND UPDATE) METHOD****************************************************************
        
