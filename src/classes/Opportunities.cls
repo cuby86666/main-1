@@ -52,6 +52,8 @@ public class Opportunities extends ApplicationDomain {
 		updateOpptyGeneralInfo(null);
 		
 		updateOpptyStarInfo();
+		
+		OpportunityProductClaimValue.updateMnOpportunityAccounts((List<Opportunity>)this.records);
 	}
 	
 	public override void onBeforeUpdate(Map<Id, SObject> existingRecords) {
@@ -65,7 +67,9 @@ public class Opportunities extends ApplicationDomain {
 		
 		OpportunityProductClaimValue.updateTmmaOverrideIfOpportunityMnUpdatedByTmma((Map<Id, Opportunity>)existingRecords, new Map<Id, Opportunity>((List<Opportunity>)this.records));
 		
-		OpportunityProductClaimValue.bypassOpportunityMnUpdateForAccountAndTmmaOverride((Map<Id, Opportunity>)existingRecords, new Map<Id, Opportunity>((List<Opportunity>)this.records));
+		OpportunityProductClaimValue.bypassOpportunityMnUpdateForTmmaOverride((Map<Id, Opportunity>)existingRecords, new Map<Id, Opportunity>((List<Opportunity>)this.records));
+		
+		OpportunityProductClaimValue.updateMnOpportunityAccounts((List<Opportunity>)this.records);
 	}
 	
 	public override void onAfterInsert() {
@@ -269,7 +273,7 @@ public class Opportunities extends ApplicationDomain {
 	
 	private Boolean isMnOpptySchedsUpdatable(Opportunity oppty) {
 		p('isMnOpptySchedsUpdatable');
-		return isMnRecordType(oppty) && !isTmmaOverride(oppty) && CommonUtils.isIntegrationUser();
+		return isMnRecordType(oppty) && !isTmmaOverride(oppty) && CommonUtils.isDataAdminUser();
 	}
 	
 	private List<OpportunitySchedule__c> updateMnOpptyScheds(Map<Id, Opportunity> opptiesOld, Map<Id, Opportunity> opptiesNew) {

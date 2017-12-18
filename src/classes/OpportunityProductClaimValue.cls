@@ -256,7 +256,7 @@ public class OpportunityProductClaimValue {
         	OpportunityLineItem oliOld = opptyLineItemsOld.get(oliNew.Id);    
             Opportunity oppty = opptys.get(oliNew.OpportunityId);
             
-            if (isMnRecordType(oppty) && isTmmaOverride(oppty) && CommonUtils.isIntegrationUser()) {
+            if (isMnRecordType(oppty) && isTmmaOverride(oppty) && CommonUtils.isDataAdminUser()) {
             	setTmmaOverrideFields(oliOld, oliNew, TMMA_OVERRIDE_FIELDS_OPPTY_PROD);
             }
         }	
@@ -280,42 +280,37 @@ public class OpportunityProductClaimValue {
     		OpportunityLineItem oliOld = opptyLineItemsOld.get(oliNew.Id);    
             Opportunity oppty = opptyMNs.get(oliNew.OpportunityId);
             
-            if (oppty != null && isMnRecordType(oppty) && !CommonUtils.isIntegrationUser() && isTmmaOverrideFieldsChanged(oliOld, oliNew, TMMA_OVERRIDE_FIELDS_OPPTY_PROD)) {
+            if (oppty != null && isMnRecordType(oppty) && !CommonUtils.isDataAdminUser() && isTmmaOverrideFieldsChanged(oliOld, oliNew, TMMA_OVERRIDE_FIELDS_OPPTY_PROD)) {
             	oppty.TMMA_Override__c = true;
             	uow.registerDirty(oppty);
             }		
     	}
     }
     
-    //To-Do: Separate logic for account override from TMMA override. Account override can happen in before insert and before update events, whereas TMMA override requires only before update event.
-    public static void bypassOpportunityMnUpdateForAccountAndTmmaOverride(Map<Id, Opportunity> opptiesOld, Map<Id, Opportunity> opptiesNew) {
-    	p2('bypassOpportunityMnUpdateForAccountAndTmmaOverride');
-    	Set<Id> opptyIds = new Set<Id>();
-    	
-    	for (Opportunity oNew : opptiesNew.values()) {
-    		if (isMnRecordType(oNew)) opptyIds.add(oNew.Id);
-    	}
-    	
-    	if (opptyIds.size() == 0) return;
-    	
-    	Map<Id, Opportunity> oppties = new Map<Id, Opportunity>(new OpportunitiesSelector().selectByIdWithAccountAndOwner(opptyIds));
-    	List<Opportunity> mnOppties = new List<Opportunity>();
-    	
+    public static void bypassOpportunityMnUpdateForTmmaOverride(Map<Id, Opportunity> opptiesOld, Map<Id, Opportunity> opptiesNew) {
+    	p2('bypassOpportunityMnUpdateForTmmaOverride');
     	for (Opportunity oNew : opptiesNew.values()) {
         	Opportunity oOld = opptiesOld.get(oNew.Id);    
                         
-            if (isMnRecordType(oNew) && CommonUtils.isIntegrationUser()) {
-            	mnOppties.add(oNew);
-            }
-            
-            if (isMnRecordType(oNew) && isTmmaOverride(oNew) && CommonUtils.isIntegrationUser()) {
+            if (isMnRecordType(oNew) && isTmmaOverride(oNew) && CommonUtils.isDataAdminUser()) {
             	setTmmaOverrideFields(oOld, oNew, TMMA_OVERRIDE_FIELDS_OPPTY);
             }
         }
+    }
+    
+    public static void updateMnOpportunityAccounts(List<Opportunity> oppties) {
+    	p2('updateMnOpportunityAccounts');	
+    	List<Opportunity> mnOppties = new List<Opportunity>();
+    	
+    	for (Opportunity o : oppties) {
+        	if (isMnRecordType(o) && CommonUtils.isDataAdminUser()) {
+            	mnOppties.add(o);
+            }
+        }
         
-        if (mnOppties.size() == 0) return;
-        
-        OpportunityService.updateEndCustomerAccounts(mnOppties, false);
+        if (mnOppties.size() > 0) {
+        	OpportunityService.updateMnOpportunityAccounts(mnOppties, null);	
+        }
     }
     
     public static void updateTmmaOverrideIfOpportunityMnUpdatedByTmma(Map<Id, Opportunity> opptiesOld, Map<Id, Opportunity> opptiesNew) {
@@ -323,7 +318,7 @@ public class OpportunityProductClaimValue {
     	for (Opportunity oNew : opptiesNew.values()) {
         	Opportunity oOld = opptiesOld.get(oNew.Id);
         	
-        	if (isMnRecordType(oNew) && !CommonUtils.isIntegrationUser() && isTmmaOverrideFieldsChanged(oOld, oNew, TMMA_OVERRIDE_FIELDS_OPPTY)) {
+        	if (isMnRecordType(oNew) && !CommonUtils.isDataAdminUser() && isTmmaOverrideFieldsChanged(oOld, oNew, TMMA_OVERRIDE_FIELDS_OPPTY)) {
             	oNew.TMMA_Override__c = true;	
             }
     	}	

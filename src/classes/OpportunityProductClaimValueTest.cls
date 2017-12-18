@@ -497,7 +497,7 @@ private class OpportunityProductClaimValueTest {
     }
     
     @isTest
-    static void testOpptyProdClaimValueMN() {
+    static void testOpptyProdClaimValueMn() {
         List<OpportunityLineItem> opptyLineItems = new List<OpportunityLineItem>{opptyProdMN};
         Map<ID, OpportunityLineItem> opptyProdClaimValues = getOpportunityProductClaimValues(opptyLineItems);
         
@@ -505,7 +505,7 @@ private class OpportunityProductClaimValueTest {
     }
     
     @isTest
-    static void testOpptyProdClaimValueExchRateChangedMN() {
+    static void testOpptyProdClaimValueExchRateChangedMn() {
         Test.startTest();
         Double exchRate = 2.00;
         opptyProdMN.Opportunity.Locked_Exchange_Rate__c = exchRate;
@@ -845,7 +845,7 @@ private class OpportunityProductClaimValueTest {
     }
     
     @isTest
-    static void testOpptyClaimValueExchRateChangedMN() {
+    static void testOpptyClaimValueExchRateChangedMn() {
         Test.startTest();
         List<OpportunityLineItem> opptyLineItems = new List<OpportunityLineItem>{opptyProdMN};
         Map<ID, Opportunity> opptyClaimValues = getOpportunityClaimValues(opptyLineItems);
@@ -862,7 +862,7 @@ private class OpportunityProductClaimValueTest {
     }
     
     @isTest
-    static void testOpptySchedCreatedMN() {
+    static void testOpptySchedCreatedMn() {
     	Test.startTest();
     	Opportunity oppty = getOpportunity(opptyProdMN.OpportunityId);
     	
@@ -876,9 +876,9 @@ private class OpportunityProductClaimValueTest {
     }
     
     @isTest
-    static void testOpptySchedUpdatedOpptyOneYearPiecesChangedMN() {
+    static void testOpptySchedUpdatedOpptyOneYearPiecesChangedMn() {
     	Test.startTest();
-    	User u = [select Id from User where ProfileId = :CommonUtils.getIntegrationUserProfileID() and IsActive = true limit 1];
+    	User u = [select Id from User where Id = :CommonUtils.getDataAdminUserId()];
         
         System.runAs(u) {
 	    	Opportunity oppty = getOpportunity(opptyProdMN.OpportunityId);
@@ -915,9 +915,9 @@ private class OpportunityProductClaimValueTest {
     }
     
     @isTest
-    static void testOpptySchedUpdatedOpptyProductionDateChangedMN() {
+    static void testOpptySchedUpdatedOpptyProductionDateChangedMn() {
     	Test.startTest();
-    	User u = [select Id from User where ProfileId = :CommonUtils.getIntegrationUserProfileID() and IsActive = true limit 1];
+    	User u = [select Id from User where Id = :CommonUtils.getDataAdminUserId()];
         
         System.runAs(u) {
 	    	Opportunity oppty = getOpportunity(opptyProdMN.OpportunityId);
@@ -1137,7 +1137,7 @@ private class OpportunityProductClaimValueTest {
         opptyProdMN.Opportunity.TMMA_Override__c = true;
         update opptyProdMN.Opportunity;
         
-        User u = [select Id from User where ProfileId = :CommonUtils.getIntegrationUserProfileID() and IsActive = true limit 1];
+        User u = [select Id from User where Id = :CommonUtils.getDataAdminUserId()];
         
         System.runAs(u) {
         	opptyProdMN.UnitPrice = UNIT_PRICE + 0.1;
@@ -1170,7 +1170,7 @@ private class OpportunityProductClaimValueTest {
         opptyProdMN.Opportunity.TMMA_Override__c = true;
         update opptyProdMN.Opportunity;	
         
-        User u = [select Id from User where ProfileId = :CommonUtils.getIntegrationUserProfileID() and IsActive = true limit 1];
+        User u = [select Id from User where Id = :CommonUtils.getDataAdminUserId()];
         
         System.runAs(u) {
         	opptyProdMN.Opportunity.One_Year_Pieces__c = ONE_YEAR_PIECES + 500;	
@@ -1188,7 +1188,7 @@ private class OpportunityProductClaimValueTest {
     }
     
     @isTest
-    static void testMnOpptyProdPriceUpdatedByTMMA() {
+    static void testMnOpptyProdPriceUpdatedByTmma() {
     	Test.startTest();
         opptyProdMN.UnitPrice = UNIT_PRICE + 0.1;
         update opptyProdMN;	
@@ -1212,9 +1212,9 @@ private class OpportunityProductClaimValueTest {
     }
     
     @isTest
-    static void testMnOpptyProdPriceUpdatedByIntegrationUser() {
+    static void testMnOpptyProdPriceUpdatedByDataAdminUser() {
     	Test.startTest();	
-    	User u = [select Id from User where ProfileId = :CommonUtils.getIntegrationUserProfileID() and IsActive = true limit 1];
+    	User u = [select Id from User where Id = :CommonUtils.getDataAdminUserId()];
         
         System.runAs(u) {
         	opptyProdMN.UnitPrice = UNIT_PRICE + 0.1;
@@ -1228,7 +1228,7 @@ private class OpportunityProductClaimValueTest {
     }
     
     @isTest
-    static void testMnOpptyProdQtyPerSysUpdatedByTMMA() {
+    static void testMnOpptyProdQtyPerSysUpdatedByTmma() {
     	Test.startTest();
         opptyProdMN.Component_Multiplier__c = COMP_MULT + 1;
         update opptyProdMN;	
@@ -1240,9 +1240,9 @@ private class OpportunityProductClaimValueTest {
     }
     
     @isTest
-    static void testMnOpptyProdQtyPerSysUpdatedByIntegrationUser() {
+    static void testMnOpptyProdQtyPerSysUpdatedByDataAdminUser() {
     	Test.startTest();	
-    	User u = [select Id from User where ProfileId = :CommonUtils.getIntegrationUserProfileID() and IsActive = true limit 1];
+    	User u = [select Id from User where Id = :CommonUtils.getDataAdminUserId()];
         
         System.runAs(u) {
         	opptyProdMN.Component_Multiplier__c = COMP_MULT + 1;
@@ -1256,7 +1256,7 @@ private class OpportunityProductClaimValueTest {
     }
     
     @isTest
-    static void testMnOpptyExpectedCloseDateUpdatedByTMMA() {
+    static void testMnOpptyExpectedCloseDateUpdatedByTmma() {
     	Test.startTest();
         opptyProdMN.Opportunity.CloseDate = EXPECTED_CLOSE_DATE.addDays(2);
         update opptyProdMN.Opportunity;	
@@ -1268,9 +1268,9 @@ private class OpportunityProductClaimValueTest {
     }
     
     @isTest
-    static void testMnOpptyExpectedCloseDateUpdatedByIntegrationUser() {
+    static void testMnOpptyExpectedCloseDateUpdatedByDataAdminUser() {
     	Test.startTest();
-        User u = [select Id from User where ProfileId = :CommonUtils.getIntegrationUserProfileID() and IsActive = true limit 1];
+        User u = [select Id from User where Id = :CommonUtils.getDataAdminUserId()];
         
         System.runAs(u) {
         	opptyProdMN.Opportunity.CloseDate = EXPECTED_CLOSE_DATE.addDays(2);
@@ -1284,7 +1284,7 @@ private class OpportunityProductClaimValueTest {
     }
     
     @isTest
-    static void testMnOpptyProdDateUpdatedByTMMA() {
+    static void testMnOpptyProdDateUpdatedByTmma() {
     	Test.startTest();
         opptyProdMN.Opportunity.Production_Date__c = PRODUCTION_DATE.addDays(2);
         update opptyProdMN.Opportunity;	
@@ -1296,9 +1296,9 @@ private class OpportunityProductClaimValueTest {
     }
     
     @isTest
-    static void testMnOpptyProdDateUpdatedByIntegrationUser() {
+    static void testMnOpptyProdDateUpdatedByDataAdminUser() {
     	Test.startTest();
-        User u = [select Id from User where ProfileId = :CommonUtils.getIntegrationUserProfileID() and IsActive = true limit 1];
+        User u = [select Id from User where Id = :CommonUtils.getDataAdminUserId()];
         
         System.runAs(u) {
         	opptyProdMN.Opportunity.Production_Date__c = PRODUCTION_DATE.addDays(2);
@@ -1312,7 +1312,7 @@ private class OpportunityProductClaimValueTest {
     }
     
     @isTest
-    static void testMnOpptyTMMA() {
+    static void testMnOpptyTmma() {
     	Test.startTest();
     	opptyProdMN.Opportunity.Locked_Exchange_Rate__c = EXCH_RATE_DEFAULT;
     	opptyProdMN.Opportunity.TMMA_Override__c = true;
@@ -1328,7 +1328,7 @@ private class OpportunityProductClaimValueTest {
     }
     
     @isTest
-    static void testMnOpptyProdTMMA() {
+    static void testMnOpptyProdTmma() {
     	Test.startTest();
     	opptyProdMN.Opportunity.Locked_Exchange_Rate__c = EXCH_RATE_DEFAULT;
     	opptyProdMN.Opportunity.TMMA_Override__c = true;

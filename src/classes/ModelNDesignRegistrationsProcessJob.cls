@@ -7,7 +7,6 @@ global class ModelNDesignRegistrationsProcessJob implements Database.Batchable<S
 	
 	global void execute(Database.BatchableContext bc, List<MnStage__c> scope) {
 		p('execute');
-		//MnStages mnStages = new MnStages(scope.deepClone(true, true, true));
 		MnStages mnStages = new MnStages(scope);
 		mnStages.processData();		
 	}

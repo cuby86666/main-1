@@ -46,6 +46,10 @@ public class CommonUtils {
     	return UserInfo.getProfileId() == getIntegrationUserProfileId();
     }
     
+    public static Boolean isDataAdminUser() {
+    	return UserInfo.getUserId() == getDataAdminUserId();
+    }
+    
     public static Boolean isAdmin() {
     	return UserInfo.getProfileId() == getSystemAdminProfileId();	
     }
