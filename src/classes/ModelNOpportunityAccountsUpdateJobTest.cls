@@ -69,6 +69,15 @@ private class ModelNOpportunityAccountsUpdateJobTest {
 		DumpUsers();
 	}
 
+	@isTest static void testMnOpportunityAccountUpdateNoUnknownAccount() {
+		List<Account> unknownAccounts = [Select Id from Account Where Name = 'Unknown'];
+		delete unknownAccounts;
+		Test.startTest();
+		ModelNOpportunityAccountsUpdateJob myJob = new ModelNOpportunityAccountsUpdateJob();
+		database.executebatch(myJob);
+		Test.stopTest();
+	}
+
 	@isTest static void testModelNOpportunityAccountsUpdateJob2() {
 		Test.startTest();
         String CRON_EXP = '0 0 0 3 9 ? 2030';

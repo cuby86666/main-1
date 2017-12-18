@@ -98,7 +98,8 @@ public with sharing class OpportunityService {
 			} else {
 				//Unknown Account
 				Account unknownAccount = getUnknownAccount();
-				newAccountId = unknownAccount.Id;
+				if (unknownAccount != null)
+					newAccountId = unknownAccount.Id;
 			}
 
 			newOwnerId = getMnDrOwnerId(oppty, newOwnerId);
@@ -120,21 +121,18 @@ public with sharing class OpportunityService {
 	//=========== Model N Account Update utility functions ========================================
 	private static String getMnDrOwnerId(Opportunity oppty, String newAccountOwnerId) {
 		String newOwnerId = oppty.OwnerId;
+		User dataAdminUser = getDataAdmin();
 		// Tier 1,2,3,4 - TMMA and Account Owner is Active
 		if (newAccountOwnerId != null) 
 			newOwnerId = newAccountOwnerId;
 		else {
 			if (oppty.Legacy_Opportunity_Owner__c == null) {
-//				if (oppty.OwnerId == null) {	
-					newOwnerId = getDataAdmin().Id;
-//				}
+				if (dataAdminUser != null) newOwnerId = dataAdminUser.Id;
 			} else {
 				List<User> legacyOpptyOwners = 
 					new UsersSelector().selectWhere('Email =\'' + oppty.Legacy_Opportunity_Owner__c + '\' and Profile.UserLicense.Name like \'Salesforce%\'');
 				if (legacyOpptyOwners.size() == 0) {
-//					if (oppty.OwnerId == null) {
-						newOwnerId = getDataAdmin().Id;
-//					}
+					if (dataAdminUser != null) newOwnerId = dataAdminUser.Id;
 				} else {
 					System.debug('@@@@@ OpptyName=' + oppty.Name + ', Owner=' + oppty.Owner.Name);
 					if (oppty.Owner.Name == 'Data Admin') {
