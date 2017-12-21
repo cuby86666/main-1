@@ -88,12 +88,12 @@ private class ModelNOpportunityAccountsUpdateJobTest {
                     FROM CronTrigger WHERE id = :jobId Limit 1];
 
         System.assert(lstCrons.size() > 0);
-        System.assert(lstCrons[0].CronExpression == CRON_EXP);        
+        System.assert(lstCrons[0].CronExpression == CRON_EXP);
         System.assert(lstCrons[0].TimesTriggered == 0);
 	}
 
 	static void DumpUsers() {
-		List<User> users = [Select Id, Name, UserName, Profile.Name from User Where CreatedDate = Today];
+		List<User> users = [Select Id, Name, UserName, Profile.Name, Email from User Where CreatedDate = Today];
 		for (User usr : users) {
 			System.debug('@@@@@ User Name=' + usr.Name + ', Username=' + usr.UserName + ', profile=' + usr.Profile.Name);
 		}
@@ -107,9 +107,9 @@ private class ModelNOpportunityAccountsUpdateJobTest {
 	}
 
 	static void DumpOppties() {
-		List<Opportunity> oppties = [Select Id, Name, CloseDate, Account.Name, End_Customer_GID__c, Distributor_Name__c, End_Customer_Region__c, Owner.Name from Opportunity];
+		List<Opportunity> oppties = [Select Id, Name, CloseDate, Account.Name, End_Customer_GID__c, Legacy_Opportunity_Owner__c, Distributor_Name__c, End_Customer_Region__c, Owner.Name from Opportunity];
 		for (Opportunity opp : oppties) {
-			System.debug('@@@@@ Oppty Name=' + opp.Name + ', Account=' + opp.Account.Name + ', GID=' + opp.End_Customer_GID__c + ', opp.Legacy_Id__c=' + opp.Distributor_Name__c + '-' + opp.End_Customer_Region__c + ', Owner=' + opp.Owner.Name);
+			System.debug('@@@@@ Oppty Name=' + opp.Name + ', Account=' + opp.Account.Name + ', GID=' + opp.End_Customer_GID__c + ', DR Approver=' + opp.Legacy_Opportunity_Owner__c + ', opp.Legacy_Id__c=' + opp.Distributor_Name__c + '-' + opp.End_Customer_Region__c + ', Owner=' + opp.Owner.Name);
 		}
 	}
 
