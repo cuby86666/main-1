@@ -62,7 +62,7 @@ public class AccountsSelector extends ApplicationSelector {
 		Id childRecTypeId = getChildRecordTypeId();
 		fflib_QueryFactory accountsQueryFactory = newQueryFactory();
 		new UsersSelector().configureQueryFactoryFields(accountsQueryFactory, Account.OwnerId.getDescribe().getRelationshipName());
-		return (List<Account>)Database.query(accountsQueryFactory.setCondition('RecordTypeId = :childRecTypeId and (NXP_GID__c in :gids or Legacy_Id__c in :legacyIds)').toSOQL());
+		return (List<Account>)Database.query(accountsQueryFactory.setCondition('RecordTypeId = :childRecTypeId and (NXP_GID__c in :gids or Legacy_Id__c in :legacyIds) order by IsInActive__c desc').toSOQL());
 	}
     
 }
