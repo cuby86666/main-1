@@ -135,6 +135,7 @@ public class MnStages extends ApplicationDomain {
 			oppty.Lost_Date__c = (ms.Reg_Status__c == 'Rejected') ? ms.Reg_Action_Date__c : null; 
 			oppty.One_Year_Pieces__c = ms.Reg_Project_Units__c;
 			oppty.Production_Date__c = ms.Reg_Production_Date__c;
+			oppty.Project__c = ms.Prog_Name__c;
 			oppty.Rejected_by__c = (ms.User_First_Name__c != null ? ms.User_First_Name__c : '') + ' ' + (ms.User_Last_Name__c != null ? ms.User_Last_Name__c : '');
 			oppty.Sub_Segment__c = (ms.Func_Name__c != null) ? ms.Func_Name__c.substringAfter('-') : null; 
 			
