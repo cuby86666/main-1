@@ -88,15 +88,17 @@ public class MnStages extends ApplicationDomain {
 		List<OpportunityLineItem> opptyProds = new List<OpportunityLineItem>(); 
 		
 		for (MnStage__c ms : this.mnStages) {
+			ms.Message__c = null;
+			
 			String opptyExtId = ms.Reg_Oppty_Num__c + '-' + ms.Reg_Part_OID__c;
 		
 			Opportunity oppty = new Opportunity();
 			oppty.Legacy_Id__c = opptyExtId;
-			oppty.CloseDate = deriveOpptyCloseDate(ms);
 			oppty.CurrencyIsoCode = ms.Currency_Code__c;
 			oppty.Name = (ms.Reg_Oppty_Num__c + ' - ' + ms.Part_Name__c + ' - ' + ms.Prog_Name__c).left(120);
 			oppty.RecordTypeId = OpportunitiesSelector.getMnRecordTypeId();
 			oppty.StageName = deriveOpptyStage(ms);
+			oppty.CloseDate = (oppty.StageName == STAGE_COMMITMENT) ? ms.Reg_Part_Win_Date__c : ms.Reg_Production_Date__c;
 			oppty.Assembly__c = ms.Assembly_Name__c;
 			oppty.Business_Created_Date__c = ms.Reg_Created_Date__c;
 			oppty.Design_Customer_City__c = ms.Addr_Design_Cust_City__c;
@@ -214,7 +216,8 @@ public class MnStages extends ApplicationDomain {
 				mnStage.Status__c = STATUS_INVALID; 
 				mnStage.Message__c = (mnStage.Message__c == null) ? processErrors(opptyProdUpsertResult.getErrors()) : mnStage.Message__c; 	
 			} else {
-				mnStage.Status__c = STATUS_COMPLETED; 
+				mnStage.Status__c = STATUS_COMPLETED;
+				mnStage.Opportunity__c = opptyUpsertResult.getId();
 			}
 		}
 		
@@ -302,9 +305,8 @@ public class MnStages extends ApplicationDomain {
     	           new Set<String> {REG_STATUS_PENDING, REG_STATUS_REQUESTED, REG_STATUS_APPROVED}.contains(mnStage.Reg_Status__c) &&
     	           !isExpired) {
 			result = STAGE_DISCOVERY;	
-		} else if (new Set<String> {REG_PART_STATUS_PENDING, REG_PART_STATUS_REQUESTED, REG_PART_STATUS_APPROVED, REG_PART_STATUS_REJECTED}.contains(mnStage.Reg_Part_Status__c) &&
-    	           mnStage.Reg_Part_Win_Status__c.contains('Win') &&
-    	           new Set<String> {REG_STATUS_PENDING, REG_STATUS_REQUESTED, REG_STATUS_APPROVED}.contains(mnStage.Reg_Status__c)) {
+		} else if ((new Set<String> {REG_PART_STATUS_PENDING, REG_PART_STATUS_REQUESTED}.contains(mnStage.Reg_Part_Status__c) && mnStage.Reg_Part_Win_Status__c.contains('Win') && new Set<String> {REG_STATUS_PENDING, REG_STATUS_REQUESTED, REG_STATUS_APPROVED}.contains(mnStage.Reg_Status__c)) ||
+		           (new Set<String> {REG_PART_STATUS_APPROVED, REG_PART_STATUS_REJECTED}.contains(mnStage.Reg_Part_Status__c) && mnStage.Reg_Part_Win_Status__c.contains('Win'))) {
 			result = STAGE_COMMITMENT;	
 		} else if (new Set<String> {REG_PART_STATUS_PENDING, REG_PART_STATUS_REQUESTED, REG_PART_STATUS_APPROVED}.contains(mnStage.Reg_Part_Status__c) &&
     	           mnStage.Reg_Part_Win_Status__c == REG_PART_WIN_STATUS_PENDING &&
@@ -318,11 +320,6 @@ public class MnStages extends ApplicationDomain {
 		}
 		
 		return result;
-	}
-	
-	private Date deriveOpptyCloseDate(MnStage__c mnStage) {
-		p('deriveOpptyCloseDate');
-		return (mnStage.Reg_Part_Win_Status__c.contains('Win') && mnStage.Reg_Status__c != REG_STATUS_REJECTED) ? mnStage.Reg_Part_Win_Date__c : mnStage.Reg_Production_Date__c;   
 	}
 	
 	private String checkMnStageInvalid(MnStage__c mnStage) {

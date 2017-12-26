@@ -383,8 +383,8 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	System.assertEquals(PRODUCTION_DATE, oppty.CloseDate);
     	
     	mnStage.Status__c = STATUS_QUEUED;
-    	mnStage.Reg_Part_Status__c = 'Pending'; 
-    	mnStage.Reg_Part_Win_Status__c = 'DesignWin';
+    	mnStage.Reg_Part_Status__c = 'Rejected'; 
+    	mnStage.Reg_Part_Win_Status__c = 'ProdWin';
     	mnStage.Reg_Status__c = 'Approved';
     	
     	update mnStage;
@@ -440,16 +440,33 @@ private class ModelNDesignRegistrationsProcessJobTest {
     }
     
     @isTest
-    static void testOpptyStageCommitment() {
-    	// Commitment
-    	// Reg_Part_Status__c: Pending, Requested, Approved, Rejected
+    static void testOpptyStageCommitment1() {
+    	// Commitment #1
+    	// Reg_Part_Status__c: Pending, Requested
     	// Reg_Part_Win_Status__c: DesignWin, ProdWin, Win
-    	// Reg_Status__c: Pending, Requested, Approved	
+    	// Reg_Status__c: Pending, Requested, Approved
     	mnStage.Status__c = STATUS_QUEUED;
-    	mnStage.Reg_Part_Status__c = 'Rejected'; 
+    	mnStage.Reg_Part_Status__c = 'Requested'; 
     	mnStage.Reg_Part_Win_Status__c = 'DesignWin';
-    	mnStage.Reg_Status__c = 'Approved';
-    	    	
+    	mnStage.Reg_Status__c = 'Pending';
+    	    	    	
+    	update mnStage;
+    	
+    	processData(); 
+    	
+    	Opportunity oppty = new OpportunitiesSelector().selectByLegacyId(new Set<String> {opptyExtId}).get(0); 
+    	System.assertEquals(STAGE_COMMITMENT, oppty.StageName);
+    }
+    
+    @isTest
+    static void testOpptyStageCommitment2() {
+    	// Commitment #2
+    	// Reg_Part_Status__c: Approved, Rejected
+    	// Reg_Part_Win_Status__c: DesignWin, ProdWin, Win
+    	mnStage.Status__c = STATUS_QUEUED;
+    	mnStage.Reg_Part_Status__c = 'Approved'; 
+    	mnStage.Reg_Part_Win_Status__c = 'DesignWin';
+    	    	    	
     	update mnStage;
     	
     	processData(); 
