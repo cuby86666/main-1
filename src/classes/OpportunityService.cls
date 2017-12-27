@@ -48,6 +48,63 @@ public with sharing class OpportunityService {
         uow.commitWork();
 	}
 	
+	public static Map<Id, String> deriveMnOpportunityStages(Set<Id> opptyIds) {
+		Map<Id, String> result = new Map<Id, String>();
+		
+		List<Opportunity> oppties = new OpportunitiesSelector().selectByIdWithProducts(opptyIds);
+		
+		for (Opportunity o : oppties) {
+			if (isMnRecordType(o)) {
+				String regStatus = o.Design_Reg_Status__c;
+				Date regExpirationDate = o.Expiration_Date__c;
+				String regPartStatus = null;
+				String regPartWinStatus = null;
+				
+				for (OpportunityLineItem oli : o.OpportunityLineItems) {
+					regPartStatus = oli.Registration_Status__c;
+					regPartWinStatus = oli.Win_Status__c;
+					break;	
+				}
+				
+				result.put(o.Id, deriveMnOpportunityStage(regPartStatus, regPartWinStatus, regStatus, regExpirationDate));
+			}
+		}		
+		
+		return result;
+	}
+	
+	public static String deriveMnOpportunityStage(String regPartStatus, String regPartWinStatus, String regStatus, Date regExpirationDate) {
+		p('deriveMnOpportunityStage');
+		String result = 'UNKNOWN';
+		Boolean isExpired = (regExpirationDate != null && regExpirationDate < System.today()) ? true : false;
+		
+		if (new Set<String> {MnStages.REG_PART_STATUS_PENDING, MnStages.REG_PART_STATUS_REQUESTED}.contains(regPartStatus) &&
+		    regPartWinStatus == MnStages.REG_PART_WIN_STATUS_PENDING &&
+		    new Set<String> {MnStages.REG_STATUS_PENDING, MnStages.REG_STATUS_REQUESTED, MnStages.REG_STATUS_APPROVED}.contains(regStatus) &&
+		    !isExpired) {
+			result = Opportunities.STAGE_INITIAL_ENGAGEMENT;    	
+		} else if (regPartStatus == MnStages.REG_PART_STATUS_APPROVED &&
+    	           regPartWinStatus == MnStages.REG_PART_WIN_STATUS_PENDING &&
+    	           new Set<String> {MnStages.REG_STATUS_PENDING, MnStages.REG_STATUS_REQUESTED, MnStages.REG_STATUS_APPROVED}.contains(regStatus) &&
+    	           !isExpired) {
+			result = Opportunities.STAGE_DISCOVERY;	
+		} else if ((new Set<String> {MnStages.REG_PART_STATUS_PENDING, MnStages.REG_PART_STATUS_REQUESTED}.contains(regPartStatus) && regPartWinStatus.contains('Win') && new Set<String> {MnStages.REG_STATUS_PENDING, MnStages.REG_STATUS_REQUESTED, MnStages.REG_STATUS_APPROVED}.contains(regStatus)) ||
+		           (new Set<String> {MnStages.REG_PART_STATUS_APPROVED, MnStages.REG_PART_STATUS_REJECTED}.contains(regPartStatus) && regPartWinStatus.contains('Win'))) {
+			result = Opportunities.STAGE_COMMITMENT;	
+		} else if (new Set<String> {MnStages.REG_PART_STATUS_PENDING, MnStages.REG_PART_STATUS_REQUESTED, MnStages.REG_PART_STATUS_APPROVED}.contains(regPartStatus) &&
+    	           regPartWinStatus == MnStages.REG_PART_WIN_STATUS_PENDING &&
+    	           new Set<String> {MnStages.REG_STATUS_PENDING, MnStages.REG_STATUS_REQUESTED, MnStages.REG_STATUS_APPROVED}.contains(regStatus) &&
+    	           isExpired) {
+			result = Opportunities.STAGE_LOST;	
+		} else if ((new Set<String> {MnStages.REG_PART_STATUS_PENDING, MnStages.REG_PART_STATUS_REQUESTED}.contains(regPartStatus) && regStatus == MnStages.REG_STATUS_REJECTED) ||
+		           (regPartStatus == MnStages.REG_PART_STATUS_APPROVED && regPartWinStatus == MnStages.REG_PART_WIN_STATUS_PENDING && regStatus == MnStages.REG_STATUS_REJECTED) ||
+    	           (regPartStatus == MnStages.REG_PART_STATUS_REJECTED && regPartWinStatus == MnStages.REG_PART_WIN_STATUS_PENDING)) {
+			result = Opportunities.STAGE_CANCELLED;
+		}
+		
+		return result;
+	}
+	
 	public static Set<Id> updateMnOpportunityAccounts(List<Opportunity> oppties, fflib_ISObjectUnitOfWork uow) {
 		p('updateMnOpportunityAccounts');
 		Set<String> gids = new Set<String>();
@@ -247,6 +304,10 @@ public with sharing class OpportunityService {
 		
 		return opptyIds;
 	}
+	
+	private static Boolean isMnRecordType(Opportunity oppty) {
+		return oppty.RecordTypeId == OpportunitiesSelector.getMnRecordTypeId();
+    }
 	
 	private static void p(String msg) {
 		CommonUtils.p(OpportunityService.class, '//-v', msg);

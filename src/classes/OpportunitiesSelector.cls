@@ -35,7 +35,7 @@ public class OpportunitiesSelector extends ApplicationSelector {
 			Opportunity.Locked_Exchange_Rate__c,
 			Opportunity.Lead_Id__c,
 			Opportunity.Legacy_End_Customer_Name_and_Location__c,
-      Opportunity.Legacy_Id__c,
+      		Opportunity.Legacy_Id__c,
 			Opportunity.Legacy_Opportunity_Owner__c,
 			Opportunity.Locked_Exchange_Rate__c,			
 			Opportunity.Lost_Date__c,

@@ -104,10 +104,10 @@ public class Opportunities extends ApplicationDomain {
 		List<Opportunity> opptiesUpdated = new List<Opportunity>();
         
         for (Opportunity o : (List<Opportunity>)this.records) {
-       		o.StageName = STAGE_CANCELLED; 
+       		o.StageName = STAGE_CANCELLED; //J only update oppties whose stage is 'Lost' 
             o.Lost_Date__c = o.Expiration_Date__c;
             o.Lost_Reason__c = 'Expired';
-            o.Design_Win_Approval_Process__c = APPROVAL_STATUSES.get(ApprovalStatus.LOST); 
+            o.Design_Win_Approval_Process__c = APPROVAL_STATUSES.get(ApprovalStatus.LOST); //J to be removed 
             opptiesUpdated.add(o);
         }
        	       

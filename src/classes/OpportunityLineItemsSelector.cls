@@ -15,6 +15,7 @@ public class OpportunityLineItemsSelector extends ApplicationSelector {
 			OpportunityLineItem.Help_Needed__c,
 			OpportunityLineItem.Help_Needed_History__c,
 			OpportunityLineItem.Legacy_Id__c,
+			OpportunityLineItem.MAG__c,
 			OpportunityLineItem.POS_Resale_Value_USD__c,
 			OpportunityLineItem.Price_Erosion_Rate__c,
 			OpportunityLineItem.PricebookEntryId,
@@ -28,6 +29,15 @@ public class OpportunityLineItemsSelector extends ApplicationSelector {
 			OpportunityLineItem.Registration_Effort_Description__c,
 			OpportunityLineItem.Share__c
         };
+	}
+	
+	public List<OpportunityLineItem> selectAllWithOpportunity() {
+		p('selectAllWithOpportunity');
+		fflib_QueryFactory opptyLineItemsQueryFactory = newQueryFactory();
+		
+		new OpportunitiesSelector().configureQueryFactoryFields(opptyLineItemsQueryFactory, OpportunityLineItem.OpportunityId.getDescribe().getRelationshipName());	
+		
+		return (List<OpportunityLineItem>)Database.query(opptyLineItemsQueryFactory.toSOQL());
 	}
 	
 	public List<OpportunityLineItem> selectByOpptyIdWithOpportunity(Set<Id> opptyIds) {
