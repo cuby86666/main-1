@@ -26,6 +26,10 @@ public class AccountsSelector extends ApplicationSelector {
 		};
 	}
 	
+	public override String getOrderBy() {
+		return 'IsInActive__c DESC';
+	}
+
 	public static Id getChildRecordTypeId() {
 		if (childRecordTypeId == null) {
 			childRecordTypeId = new AccountsSelector().getRecordTypeId(RecordType.CHILD_ACCOUNT); 
@@ -62,7 +66,7 @@ public class AccountsSelector extends ApplicationSelector {
 		Id childRecTypeId = getChildRecordTypeId();
 		fflib_QueryFactory accountsQueryFactory = newQueryFactory();
 		new UsersSelector().configureQueryFactoryFields(accountsQueryFactory, Account.OwnerId.getDescribe().getRelationshipName());
-		return (List<Account>)Database.query(accountsQueryFactory.setCondition('RecordTypeId = :childRecTypeId and (NXP_GID__c in :gids or Legacy_Id__c in :legacyIds) order by IsInActive__c desc').toSOQL());
+		return (List<Account>)Database.query(accountsQueryFactory.setCondition('RecordTypeId = :childRecTypeId and (NXP_GID__c in :gids or Legacy_Id__c in :legacyIds)').toSOQL());
 	}
     
 }
