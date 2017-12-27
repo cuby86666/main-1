@@ -20,11 +20,6 @@ public class UsersSelector extends ApplicationSelector {
 		return (List<User>)Database.query(newQueryFactory().setCondition('Name in :names').toSOQL());
 	}
 
-	public List<User> selectWhere(String condition) {
-		p('selectWhere');
-        return (List<User>)Database.query(newQueryFactory().setCondition(condition).toSOQL());        
-    }
-
     public List<User> selectSalesforceUsersByEmail(Set<String> emails) {
 		p('selectSalesforceUsersByEmail');
 		return (List<User>)Database.query(newQueryFactory().setCondition('Email in :emails and Profile.UserLicense.Name =\'Salesforce\'').toSOQL());
