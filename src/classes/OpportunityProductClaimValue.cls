@@ -159,7 +159,7 @@ public class OpportunityProductClaimValue {
     @TestVisible
     private static Boolean isLifetime(Opportunity oppty, OpportunityLineItem opptyLineItem) {  
     	p2('isLifetime');  	
-   		if (oppty.AccountId == null || oppty.Account.CMD_Industry_Segment__c == null) {
+   		if (oppty.AccountId == null || oppty.Account.CMD_Industry_Segment__c == null || opptyLineItem.MAG__c == null) {
     		return true;	
     	}
     	
