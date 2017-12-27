@@ -191,7 +191,10 @@ public with sharing class OpportunityService {
 		User dataAdminUser = getDataAdmin();
 		// Tier 1,2,3,4 - TMMA and Account Owner is Active
 		if (newAccountOwnerId != null) 
-			newOwnerId = newAccountOwnerId;
+           	if (oppty.Owner.Name == 'Data Admin')
+            	newOwnerId = newAccountOwnerId;
+        	else
+                newOwnerId = oppty.OwnerId;
 		else {
 			if (oppty.Legacy_Opportunity_Owner__c == null) {
 				if (dataAdminUser != null) newOwnerId = dataAdminUser.Id;
