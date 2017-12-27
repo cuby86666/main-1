@@ -109,20 +109,23 @@ public with sharing class OpportunityService {
 		p('updateMnOpportunityAccounts');
 		Set<String> gids = new Set<String>();
 		Set<String> legacyIds = new Set<String>();
+		Set<String> legacyOpptyOwners = new Set<String>();
 		Id modelNRecordTypeId = OpportunitiesSelector.getMnRecordTypeId();
 		for (Opportunity oppty : oppties) {
 			if (oppty.RecordTypeId != modelNRecordTypeId) continue;
+			if (oppty.Legacy_Opportunity_Owner__c != null) {
+				legacyOpptyOwners.add(oppty.Legacy_Opportunity_Owner__c);
+			}
 			if (oppty.End_Customer_GID__c != null && !gids.contains(oppty.End_Customer_GID__c)) {
 				gids.add(oppty.End_Customer_GID__c);
 			}
 			if (oppty.Distributor_Name__c != null && oppty.End_Customer_Region__c != null) {
 				String legacyIdString = getMnDistiAccountLegacyId(oppty);
-				if (legacyIds.contains(legacyIdString)) continue;
-				legacyIds.add(legacyIdString);
+				if (!legacyIds.contains(legacyIdString)) legacyIds.add(legacyIdString);
 			}
 		}
 		List<Account> accounts = new AccountsSelector().selectChildAccountsWithOwnerByGidOrLegacyId(gids, legacyIds);
-		
+		List<User> drApporvers = new UsersSelector().selectSalesforceUsersByEmail(legacyOpptyOwners);
 		//convert List<Account> to Map<String,Account>
 		Map<String,Account> accountsByGidOrLegacyId = new Map<String,Account>();
 		for (Account account : accounts) {
@@ -134,6 +137,13 @@ public with sharing class OpportunityService {
 				accountsByGidOrLegacyId.put(account.Legacy_Id__c, account);
 			}
 		}
+
+		//convert List<User> to Map<String,User>
+		Map<String,User> usersByEmail = new Map<String,User>();
+		for (User user : drApporvers) {
+			usersByEmail.put(user.Email, user);
+		}
+
 		Set<Id> opptyIds = new Set<Id>();
 		List<Opportunity> opptyUpdates = new List<Opportunity>();
 		for (Opportunity oppty : oppties) {
@@ -159,7 +169,7 @@ public with sharing class OpportunityService {
 					newAccountId = unknownAccount.Id;
 			}
 
-			newOwnerId = getMnDrOwnerId(oppty, newOwnerId);
+			newOwnerId = getMnDrOwnerId(oppty, newOwnerId, usersByEmail);
 
 			if (oppty.AccountId != newAccountId || oppty.OwnerId != newOwnerId) {
 				oppty.AccountId = newAccountId;
@@ -176,7 +186,7 @@ public with sharing class OpportunityService {
 	}
 
 	//=========== Model N Account Update utility functions ========================================
-	private static String getMnDrOwnerId(Opportunity oppty, String newAccountOwnerId) {
+	private static String getMnDrOwnerId(Opportunity oppty, String newAccountOwnerId, Map<String,User> usersByEmail) {
 		String newOwnerId = oppty.OwnerId;
 		User dataAdminUser = getDataAdmin();
 		// Tier 1,2,3,4 - TMMA and Account Owner is Active
@@ -186,14 +196,15 @@ public with sharing class OpportunityService {
 			if (oppty.Legacy_Opportunity_Owner__c == null) {
 				if (dataAdminUser != null) newOwnerId = dataAdminUser.Id;
 			} else {
-				List<User> legacyOpptyOwners = 
-					new UsersSelector().selectWhere('Email =\'' + oppty.Legacy_Opportunity_Owner__c + '\' and Profile.UserLicense.Name like \'Salesforce%\'');
-				if (legacyOpptyOwners.size() == 0) {
+//				List<User> legacyOpptyOwners = 
+//					new UsersSelector().selectWhere('Email =\'' + oppty.Legacy_Opportunity_Owner__c + '\' and Profile.UserLicense.Name like \'Salesforce%\'');
+				User drApprover = usersByEmail.get(oppty.Legacy_Opportunity_Owner__c);
+				if (drApprover == null) {
 					if (dataAdminUser != null) newOwnerId = dataAdminUser.Id;
 				} else {
 					System.debug('@@@@@ OpptyName=' + oppty.Name + ', Owner=' + oppty.Owner.Name);
 					if (oppty.Owner.Name == 'Data Admin') {
-						newOwnerId = legacyOpptyOwners.get(0).Id;
+						newOwnerId = drApprover.Id;
 					}
 				}
 			}

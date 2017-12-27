@@ -13,3 +13,5 @@ config/.local_store
 *.sublime-project
 *.sublime-workspace
 src/package.xml
+src/classes/UsersSelector.cls-meta.xml
+src/classes/UsersSelector.cls-meta.xml

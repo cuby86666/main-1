@@ -26,6 +26,10 @@ public class AccountsSelector extends ApplicationSelector {
 		};
 	}
 	
+	public override String getOrderBy() {
+		return 'IsInActive__c DESC';
+	}
+
 	public static Id getChildRecordTypeId() {
 		if (childRecordTypeId == null) {
 			childRecordTypeId = new AccountsSelector().getRecordTypeId(RecordType.CHILD_ACCOUNT); 
