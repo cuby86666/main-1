@@ -7,6 +7,8 @@ public class MnStagesSelector extends ApplicationSelector {
 	public List<Schema.SObjectField> getSObjectFieldList() {
 		return new List<Schema.SObjectField> {
 			MnStage__c.Id,
+			MnStage__c.CreatedDate,
+			MnStage__c.Name,
 			MnStage__c.Addr_Design_Cust_City__c,
 			MnStage__c.Addr_Design_Cust_Country__c,
 			MnStage__c.Addr_Design_Cust_OID__c,
@@ -100,7 +102,12 @@ public class MnStagesSelector extends ApplicationSelector {
 	}
 	
 	public override String getOrderBy() {
-		return 'CreatedDate';
+		return 'Name, CreatedDate';
+	}
+	
+	public List<MnStage__c> selectById(Set<Id> ids) {
+		p('selectById');
+		return (List<MnStage__c>)selectSObjectsById(ids);
 	}
 	
 	public List<MnStage__c> selectByStatus(Set<String> statuses) {

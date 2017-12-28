@@ -1,14 +1,15 @@
 public class MnStages extends ApplicationDomain {
 		
-	public enum Status {QUEUED, PROCESSING, COMPLETED, FAILED, INVALID, IGNORED, ABORTED}
+	public enum Status {QUEUED, PROCESSING, COMPLETED, INVALID, DUPLICATED, IGNORED, FAILED, ABORTED}
 		
 	public static final Map<Status, String> STATUSES = new Map<Status, String> {
 		Status.QUEUED => 'Queued',
 		Status.PROCESSING => 'Processing',
 		Status.COMPLETED => 'Completed',
-		Status.FAILED => 'Failed',
 		Status.INVALID => 'Invalid',
+		Status.DUPLICATED => 'Duplicated',
 		Status.IGNORED => 'Ignored',
+		Status.FAILED => 'Failed',
 		Status.ABORTED => 'Aborted'
 	};
 	
@@ -16,6 +17,8 @@ public class MnStages extends ApplicationDomain {
 	public static final String STATUS_PROCESSING = STATUSES.get(Status.PROCESSING);
 	public static final String STATUS_COMPLETED = STATUSES.get(Status.COMPLETED);
 	public static final String STATUS_INVALID = STATUSES.get(Status.INVALID);
+	public static final String STATUS_DUPLICATED = STATUSES.get(Status.DUPLICATED);
+	public static final String STATUS_IGNORED = STATUSES.get(Status.IGNORED);
 	
 	public enum RegPartStatus {PENDING, REQUESTED, APPROVED, REJECTED}
 	
@@ -71,6 +74,7 @@ public class MnStages extends ApplicationDomain {
 		super(mnStages);
 		
 		this.mnStages = (List<MnStage__c>)this.records;
+		deduplicate();
 	}
 
 	public class Constructor implements fflib_SObjectDomain.IConstructable {
@@ -81,6 +85,8 @@ public class MnStages extends ApplicationDomain {
 	
 	public void processData() {
 		p('processData');
+		if (this.mnStages.size() == 0) return;
+		
 		Map<Id, Boolean> opptyProdsExistedByMnStageId = checkOpptyProdsExisted();
 		Map<Id, Id> pricebookEntryIdsByMnStageId = findPricebookEntries();
 		
@@ -226,6 +232,29 @@ public class MnStages extends ApplicationDomain {
 		}
 		
 		update this.mnStages; 
+	}
+	
+	private void deduplicate() {
+		Map<String, MnStage__c> mnStagesDeduped = new Map<String, MnStage__c>();
+		
+		for (MnStage__c ms : this.mnStages) {
+			String opptyExtId = ms.Reg_Oppty_Num__c + '-' + ms.Reg_Part_OID__c;	
+			mnStagesDeduped.put(opptyExtId, ms);
+		}
+		
+		for (MnStage__c ms : this.mnStages) {
+			String opptyExtId = ms.Reg_Oppty_Num__c + '-' + ms.Reg_Part_OID__c;
+			
+			if (mnStagesDeduped.containsKey(opptyExtId) && mnStagesDeduped.get(opptyExtId) !== ms) {
+				ms.Status__c = STATUS_DUPLICATED;
+				ms.Message__c = 'Duplicated with record Id: ' + mnStagesDeduped.get(opptyExtId).Id;	 
+			}
+				
+		}
+		
+		update this.mnStages;
+		
+		this.mnStages = mnStagesDeduped.values();		
 	}
 	
 	private Map<Id, Boolean> checkOpptyProdsExisted() {

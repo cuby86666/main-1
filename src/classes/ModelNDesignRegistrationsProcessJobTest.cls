@@ -3,6 +3,8 @@ private class ModelNDesignRegistrationsProcessJobTest {
 	
 	private static final String STATUS_QUEUED = MnStages.STATUS_QUEUED;
 	private static final String STATUS_COMPLETED = MnStages.STATUS_COMPLETED;
+	private static final String STATUS_DUPLICATED = MnStages.STATUS_DUPLICATED;
+	private static final String STATUS_IGNORED = MnStages.STATUS_IGNORED;
 	
 	private static final Date PRODUCTION_DATE = Date.newInstance(2014, 02, 16); 
 	private static final Date WIN_DATE = Date.newInstance(2012, 01, 08);
@@ -259,6 +261,60 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	
     	List<OpportunityLineItem> opptyProds = (List<OpportunityLineItem>)new OpportunityLineItemsSelector().selectAll();
     	System.assertEquals(2, opptyProds.size());
+    }
+    
+    @isTest
+    static void testDeduplicate() {
+    	final String LEAD_ID = '12345';
+    	
+    	MnStage__c mnStageClone1 = mnStage.clone(false, true, false, false);
+    	mnStageClone1.Status__c = STATUS_QUEUED;
+    	mnStageClone1.Opportunity__c = null;
+    	mnStageClone1.Message__c = '';
+    	mnStageClone1.Reg_Oppty_Num__c = '819834';
+    	mnStageClone1.Reg_Part_OID__c = '1048946';
+    	insert mnStageClone1;
+    	
+    	MnStage__c mnStageClone2 = mnStage.clone(false, true, false, false);
+    	mnStageClone2.Status__c = STATUS_QUEUED;
+    	mnStageClone2.Opportunity__c = null;
+    	mnStageClone2.Message__c = '';	
+    	mnStageClone2.Reg_Oppty_Num__c = '819834';
+    	mnStageClone2.Reg_Part_OID__c = '1048946';
+    	mnStageClone2.Reg_Lead_Id__c = LEAD_ID;
+    	insert mnStageClone2;
+    	
+    	processData();
+    	
+    	MnStage__c ms = new MnStagesSelector().selectById(new Set<Id> {mnStageClone1.Id}).get(0);    	
+    	System.assertEquals(STATUS_DUPLICATED, ms.Status__c);
+    	
+    	List<Opportunity> oppties = new OpportunitiesSelector().selectByLegacyId(new Set<String> {mnStageClone2.Reg_Oppty_Num__c + '-' + mnStageClone2.Reg_Part_OID__c});
+    	System.assertEquals(1, oppties.size());
+    	System.assertEquals(LEAD_ID, oppties.get(0).Lead_Id__c);
+    	
+    	List<OpportunityLineItem> opptyProds = new OpportunityLineItemsSelector().selectByLegacyId(new Set<String> {mnStageClone2.Reg_Part_OID__c});
+    	System.assertEquals(1, opptyProds.size());
+    }
+    
+    @isTest
+    static void testIgnore() {
+    	MnStage__c mnStageClone = mnStage.clone(false, true, false, false);
+    	mnStageClone.Status__c = STATUS_QUEUED;
+    	mnStageClone.Opportunity__c = null;
+    	mnStageClone.Message__c = '';
+    	mnStageClone.Reg_Oppty_Num__c = '819834';
+    	mnStageClone.Reg_Part_OID__c = '1048946';
+    	mnStageClone.Prod_Family__c = 'R02';
+    	insert mnStageClone;
+    	
+    	processData();
+    	
+    	MnStage__c ms = new MnStagesSelector().selectById(new Set<Id> {mnStageClone.Id}).get(0);    	
+    	System.assertEquals(STATUS_IGNORED, ms.Status__c);
+    	
+    	List<Opportunity> oppties = new OpportunitiesSelector().selectByLegacyId(new Set<String> {mnStageClone.Reg_Oppty_Num__c + '-' + mnStageClone.Reg_Part_OID__c});
+    	System.assertEquals(0, oppties.size());	
     }
     
     @isTest
