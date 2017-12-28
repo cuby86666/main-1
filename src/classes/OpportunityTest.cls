@@ -695,7 +695,7 @@ private class OpportunityTest {
         
         system.assertNOTEquals(fxRates.get(opptySfdc.CurrencyIsoCode).Exchange_Rate__c, opptyFxRates.get(opptySfdc.Id).Locked_Exchange_Rate__c);
     }
-    
+    /* Removed for One Funnel 2.0 project
     @isTest
     static void testMNOpptyDesignWinApprovalStatus(){
         Map<ID, Opportunity> opptyDWApprovalStatus = new Map<ID, Opportunity>();
@@ -726,7 +726,7 @@ private class OpportunityTest {
         
         system.assertEquals(DW_APPROVAL_STATUS_LOST, opptyDWApprovalStatus.get(opptyMn.Id).Design_Win_Approval_Process__c);     
     }
-    
+    */
     @isTest
     static void testOpptyProdLostCancelledInfo(){
         Map<Id, OpportunityLineItem> opptyProdLostCancelledInfo = new Map<Id, OpportunityLineItem>();

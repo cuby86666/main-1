@@ -580,7 +580,7 @@ public class Opportunities extends ApplicationDomain {
 	    		}
 	    	}
         }
-        
+        /* Removed for One Funnel 2.0 project 
         // Set Design Win Approval Status for MN Oppty
         for (Opportunity opptyNew : (List<Opportunity>)this.records) {
         	if (opptyNew.RecordTypeId == OpportunitiesSelector.getMnRecordTypeId()) {
@@ -597,6 +597,7 @@ public class Opportunities extends ApplicationDomain {
         		}
         	}
         }
+        */
     }
     
 	private void setParentAccountIdText(Opportunity oppty, Id parentId) {
