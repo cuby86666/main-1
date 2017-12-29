@@ -1,5 +1,7 @@
-global class XrfCustomerUpdateBatch implements Database.Batchable<sObject>, Database.Stateful, Schedulable
+global class XrfCustomerUpdateBatch //implements Database.Batchable<sObject>, Database.Stateful, Schedulable
 {
+    /* After One FUnnel 2.0, Cross reference related code should be obsoleted.
+
     private static final String TYPE_MN_OPPTY = 'Model N Oppty';
     
     global static final Integer oppStartYear = 2015;
@@ -18,8 +20,8 @@ global class XrfCustomerUpdateBatch implements Database.Batchable<sObject>, Data
     }
 
     global Database.QueryLocator start(Database.BatchableContext BC)
-    {        
-        String strQuery = 'RecordType.Name=\'' + TYPE_MN_OPPTY + '\'';
+    {  
+       String strQuery = 'RecordType.Name=\'' + TYPE_MN_OPPTY + '\'';
             
         if (currentYear >= oppStartYear)
             strQuery = strQuery + ' and CloseDate >= ' + String.valueOf(Date.parse('1/1/' + currentYear));
@@ -50,5 +52,5 @@ global class XrfCustomerUpdateBatch implements Database.Batchable<sObject>, Data
     {
         XrfCustomerUpdateBatch c= new XrfCustomerUpdateBatch();
 	    database.executebatch(c);
-    }
+    }*/
 }

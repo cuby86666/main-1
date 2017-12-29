@@ -5,7 +5,7 @@
 
 @isTest
 public class XrfCustomerUpdateBatchTest
-{
+{/*
     private static final string TYPE_MN_OPPTY='Model N Oppty';
     private static final string TYPE_SFDC_OPPTY='SFDC Oppty';
     private static final String TEST_USER_PROFILE = 'Standard User';
@@ -111,10 +111,10 @@ public class XrfCustomerUpdateBatchTest
         b.CMD_Industry_Segment__c = CBG_DEFAULT; // CMD_Industry_Segment__c: One of the criteria to determine claim values
         insert b;
         
-        /*
-        Cross_Reference_Customer__c cust=new Cross_Reference_Customer__c(Customer_Name__c='Test Account',
-                                         Customer_Location__c='EMEA',Child_Account__c=a.Id);
-        */
+        
+        //Cross_Reference_Customer__c cust=new Cross_Reference_Customer__c(Customer_Name__c='Test Account',
+        //                              Customer_Location__c='EMEA',Child_Account__c=a.Id);
+        
         List<Cross_Reference_Customer__c> lstCrossRef = new List<Cross_Reference_Customer__c>();
         for (Integer i = 0; i <= 3; i++) {
             System.debug('@@@@@ ' + 'Test' + i + ' Account' + '-EMEA');
@@ -258,5 +258,5 @@ public class XrfCustomerUpdateBatchTest
         System.assert(lstCrons[0].CronExpression == CRON_EXP);        
         System.assert(lstCrons[0].TimesTriggered == 0);
         Test.stopTest();
-    }
+    }*/
 }
