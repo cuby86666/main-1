@@ -74,6 +74,7 @@ public class MnStages extends ApplicationDomain {
 		super(mnStages);
 		
 		this.mnStages = (List<MnStage__c>)this.records;
+		ignore();
 		deduplicate();
 	}
 
@@ -95,6 +96,7 @@ public class MnStages extends ApplicationDomain {
 		
 		for (MnStage__c ms : this.mnStages) {
 			ms.Message__c = null;
+			ms.Opportunity__c = null;
 			
 			String opptyExtId = ms.Reg_Oppty_Num__c + '-' + ms.Reg_Part_OID__c;
 		
@@ -234,7 +236,35 @@ public class MnStages extends ApplicationDomain {
 		update this.mnStages; 
 	}
 	
+	private void ignore() {
+		p('ignore');
+		Map<Id, MnStage__c> mnStagesById = new Map<Id, MnStage__c>(this.mnStages); 
+		
+		List<Model_N_Stage_Setting__mdt> mnStageSettings = (List<Model_N_Stage_Setting__mdt>)new ModelNStageSettingsSelector().selectAll();	
+		Set<String> ignoredMags = new Set<String>();
+		
+		for (Model_N_Stage_Setting__mdt mnss : mnStageSettings) {
+			if (mnss.Field_Name__c == MnStage__c.Prod_Family__c.getDescribe().getName()) {
+				ignoredMags.add(mnss.Field_Value__c);	
+			}
+		}
+		
+		for (MnStage__c ms : this.mnStages) {
+			if (ignoredMags.contains(ms.Prod_Family__c)) {
+				ms.Status__c = STATUS_IGNORED;
+				ms.Message__c = 'Prod Family (MAG): ' + ms.Prod_Family__c + ' is ignored.';
+				ms.Opportunity__c = null;
+				mnStagesById.remove(ms.Id);		
+			}
+		}
+		
+		update this.mnStages;
+		
+		this.mnStages = mnStagesById.values(); 
+	}
+	
 	private void deduplicate() {
+		p('deduplicate');
 		Map<String, MnStage__c> mnStagesDeduped = new Map<String, MnStage__c>();
 		
 		for (MnStage__c ms : this.mnStages) {
@@ -248,6 +278,7 @@ public class MnStages extends ApplicationDomain {
 			if (mnStagesDeduped.containsKey(opptyExtId) && mnStagesDeduped.get(opptyExtId) !== ms) {
 				ms.Status__c = STATUS_DUPLICATED;
 				ms.Message__c = 'Duplicated with record Id: ' + mnStagesDeduped.get(opptyExtId).Id;	 
+				ms.Opportunity__c = null;
 			}
 				
 		}

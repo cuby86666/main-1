@@ -179,7 +179,6 @@ private class ModelNDesignRegistrationsProcessJobTest {
     static void testBatch() {
     	MnStage__c mnStageClone = mnStage.clone(false, true, false, false);
     	mnStageClone.Status__c = STATUS_QUEUED;
-    	mnStageClone.Opportunity__c = null;
     	mnStageClone.Reg_Oppty_Num__c = '819834';
     	mnStageClone.Reg_Part_OID__c = '1048946';
     	
@@ -204,7 +203,6 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	// Update existing oppty and oppty prod
     	MnStage__c mnStageClone = mnStage.clone(false, true, false, false);
     	mnStageClone.Status__c = STATUS_QUEUED;
-    	mnStageClone.Opportunity__c = null;
     	mnStageClone.Reg_Lead_Id__c = LEAD_ID;
     	mnStageClone.Reg_Part_Qty_Per_Sys__c = QTY_PER_SYS;
     	
@@ -240,7 +238,6 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	// Insert new oppty and oppty prod
     	MnStage__c mnStageClone = mnStage.clone(false, true, false, false);
     	mnStageClone.Status__c = STATUS_QUEUED;
-    	mnStageClone.Opportunity__c = null;
     	mnStageClone.Reg_Oppty_Num__c = '819834';
     	mnStageClone.Reg_Part_OID__c = '1048946';
     	
@@ -264,12 +261,31 @@ private class ModelNDesignRegistrationsProcessJobTest {
     }
     
     @isTest
+    static void testIgnore() {
+    	MnStage__c mnStageClone = mnStage.clone(false, true, false, false);
+    	mnStageClone.Status__c = STATUS_QUEUED;
+    	mnStageClone.Message__c = '';
+    	mnStageClone.Reg_Oppty_Num__c = '819834';
+    	mnStageClone.Reg_Part_OID__c = '1048946';
+    	mnStageClone.Prod_Family__c = 'R02';
+    	insert mnStageClone;
+    	
+    	processData();
+    	
+    	MnStage__c ms = new MnStagesSelector().selectById(new Set<Id> {mnStageClone.Id}).get(0);    	
+    	System.assertEquals(STATUS_IGNORED, ms.Status__c);
+    	System.assertEquals(null, ms.Opportunity__c);
+    	
+    	List<Opportunity> oppties = new OpportunitiesSelector().selectByLegacyId(new Set<String> {mnStageClone.Reg_Oppty_Num__c + '-' + mnStageClone.Reg_Part_OID__c});
+    	System.assertEquals(0, oppties.size());	
+    }
+    
+    @isTest
     static void testDeduplicate() {
     	final String LEAD_ID = '12345';
     	
     	MnStage__c mnStageClone1 = mnStage.clone(false, true, false, false);
     	mnStageClone1.Status__c = STATUS_QUEUED;
-    	mnStageClone1.Opportunity__c = null;
     	mnStageClone1.Message__c = '';
     	mnStageClone1.Reg_Oppty_Num__c = '819834';
     	mnStageClone1.Reg_Part_OID__c = '1048946';
@@ -277,7 +293,6 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	
     	MnStage__c mnStageClone2 = mnStage.clone(false, true, false, false);
     	mnStageClone2.Status__c = STATUS_QUEUED;
-    	mnStageClone2.Opportunity__c = null;
     	mnStageClone2.Message__c = '';	
     	mnStageClone2.Reg_Oppty_Num__c = '819834';
     	mnStageClone2.Reg_Part_OID__c = '1048946';
@@ -298,26 +313,6 @@ private class ModelNDesignRegistrationsProcessJobTest {
     }
     
     @isTest
-    static void testIgnore() {
-    	MnStage__c mnStageClone = mnStage.clone(false, true, false, false);
-    	mnStageClone.Status__c = STATUS_QUEUED;
-    	mnStageClone.Opportunity__c = null;
-    	mnStageClone.Message__c = '';
-    	mnStageClone.Reg_Oppty_Num__c = '819834';
-    	mnStageClone.Reg_Part_OID__c = '1048946';
-    	mnStageClone.Prod_Family__c = 'R02';
-    	insert mnStageClone;
-    	
-    	processData();
-    	
-    	MnStage__c ms = new MnStagesSelector().selectById(new Set<Id> {mnStageClone.Id}).get(0);    	
-    	System.assertEquals(STATUS_IGNORED, ms.Status__c);
-    	
-    	List<Opportunity> oppties = new OpportunitiesSelector().selectByLegacyId(new Set<String> {mnStageClone.Reg_Oppty_Num__c + '-' + mnStageClone.Reg_Part_OID__c});
-    	System.assertEquals(0, oppties.size());	
-    }
-    
-    @isTest
     static void testPricebookEntry() {
     	// Not root part
     	OpportunityLineItem opptyProd = new OpportunityLineItemsSelector().selectByLegacyId(new Set<String> {opptyProdExtId}).get(0);
@@ -326,7 +321,6 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	// Root part
     	MnStage__c mnStageClone = mnStage.clone(false, true, false, false);
     	mnStageClone.Status__c = STATUS_QUEUED;
-    	mnStageClone.Opportunity__c = null;
     	mnStageClone.Part_Is_Root__c = true;
     	mnStageClone.Reg_Oppty_Num__c = '819834';
     	mnStageClone.Reg_Part_OID__c = '1048946';
@@ -356,7 +350,6 @@ private class ModelNDesignRegistrationsProcessJobTest {
     static void testInvalidMnStage() {
     	MnStage__c mnStageClone = mnStage.clone(false, true, false, false);
     	mnStageClone.Status__c = STATUS_QUEUED;
-    	mnStageClone.Opportunity__c = null;
     	mnStageClone.Reg_Oppty_Num__c = '819834';
     	mnStageClone.Reg_Part_OID__c = '1048946';
     	mnStageClone.Reg_Production_Date__c = null;	
@@ -380,7 +373,6 @@ private class ModelNDesignRegistrationsProcessJobTest {
     static void testInvalidBookPart() {
     	MnStage__c mnStageClone = mnStage.clone(false, true, false, false);
     	mnStageClone.Status__c = STATUS_QUEUED;
-    	mnStageClone.Opportunity__c = null;
     	mnStageClone.Reg_Oppty_Num__c = '819834';
     	mnStageClone.Reg_Part_OID__c = '1048946';
     	mnStageClone.Part_12NC__c = '000000000000';	
@@ -401,7 +393,6 @@ private class ModelNDesignRegistrationsProcessJobTest {
     static void testInvalidRootPart() {
     	MnStage__c mnStageClone = mnStage.clone(false, true, false, false);
     	mnStageClone.Status__c = STATUS_QUEUED;
-    	mnStageClone.Opportunity__c = null;
     	mnStageClone.Reg_Oppty_Num__c = '819834';
     	mnStageClone.Reg_Part_OID__c = '1048946';
     	mnStageClone.Part_Is_Root__c = true;
