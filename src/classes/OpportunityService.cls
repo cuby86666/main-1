@@ -183,7 +183,6 @@ public with sharing class OpportunityService {
 		}
 
 		//Scan MN Oppty Stages
-		/*
 		Map<Id, String> mnOpptyStages = deriveMnOpportunityStages(allMnOpptyIds);
 		for (Opportunity oppty : oppties) {
 			if (mnOpptyStages.containsKey(oppty.Id) && oppty.StageName != mnOpptyStages.get(oppty.Id)) {
@@ -193,7 +192,7 @@ public with sharing class OpportunityService {
 					opptyUpdates.add(oppty);
 				}
 			}
-		}*/
+		}
 
 		if (uow != null) {
 			uow.registerDirty(opptyUpdates);
@@ -204,8 +203,10 @@ public with sharing class OpportunityService {
 
 	//=========== Model N Account Update utility functions ========================================
 	private static String getMnDrOwnerId(Opportunity oppty, String newAccountOwnerId, Map<String,User> usersByEmail) {
+		p('getMnDrOwnerId');
 		String newOwnerId = oppty.OwnerId;
 		User dataAdminUser = getDataAdmin();
+		//System.debug('@@@@@ Data Admin id=' + dataAdminUser.Id);
 		// Tier 1,2,3,4 - TMMA and Account Owner is Active
 		if (newAccountOwnerId != null) 
            	if (oppty.OwnerId == dataAdminUser.Id)
@@ -232,6 +233,7 @@ public with sharing class OpportunityService {
 
 	static Account UNKNOWN_ACCOUNT = null;
 	private static Account getUnknownAccount() {
+		p('getUnknownAccount');
 		if (UNKNOWN_ACCOUNT == null) {
 			List<Account> accounts = new AccountsSelector().selectByName(new Set<String> {'Unknown'});
 			if (accounts.size() > 0) {
@@ -243,6 +245,7 @@ public with sharing class OpportunityService {
 
 	static User DATA_ADMIN = null;
 	private static User getDataAdmin() {
+		p('getDataAdmin');
 		if (DATA_ADMIN == null) {
 			List<User> users = new UsersSelector().selectByName(new Set<String> {'Data Admin'});
 			if (users.size() > 0) {
@@ -253,6 +256,7 @@ public with sharing class OpportunityService {
 	}
 
 	private static String getMnDistiAccountLegacyId(Opportunity oppty) {
+		p('getMnDistiAccountLegacyId');
 		return oppty.Distributor_Name__c + '-' + oppty.End_Customer_Region__c;
 	}
 	//=============================================================================================
