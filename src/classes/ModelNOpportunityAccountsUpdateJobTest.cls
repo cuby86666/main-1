@@ -2,14 +2,18 @@
 private class ModelNOpportunityAccountsUpdateJobTest {
 
 	@testsetup static void setup() {
+		User dataAdmin = [Select Id, Name, Email from User Where Name = 'Data Admin' limit 1];
 		Profile prf = [Select Id from Profile Where Name = 'Standard User'];
 		TestUser usr = new TestUser('myTest', 5, prf.Id);
 		List<User> users = (List<User>)usr.getSObject();
-        users.get(4).FirstName = 'Data';
-        users.get(4).LastName = 'Admin';
+		System.debug('@@@@@ Test Data Admin=' + dataAdmin.Id);
+		if (dataAdmin == null) {
+	        users.get(4).FirstName = 'Data';
+	        users.get(4).LastName = 'Admin';
+       		dataAdmin = users.get(4); //[select Id, Name, Email from User Where Name = 'Data Admin' limit 1];
+		}
 		insert users;
-		User dataAdmin = users.get(4); //[select Id, Name, Email from User Where Name = 'Data Admin' limit 1];
-		
+
 		TestAccount acc = new TestAccount('testAccount', 5);
 		List<Account> accounts = acc.getSObject();
 		//setup Account gid and legacy id
@@ -40,7 +44,10 @@ private class ModelNOpportunityAccountsUpdateJobTest {
 		List<Opportunity> opportunities = opp.getSObject();
         opportunities.get(2).Legacy_Opportunity_Owner__c = users.get(2).Email;       
         opportunities.get(3).Legacy_Opportunity_Owner__c = 'aaa@bbb.com';
-
+        
+        opportunities.get(0).AccountId = accounts.get(0).Id;
+        opportunities.get(0).OwnerId = users.get(3).Id;
+        
 		insert opportunities;
 	}
 
