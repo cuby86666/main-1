@@ -27,7 +27,9 @@ public class OpportunityLineItemsSelector extends ApplicationSelector {
 			OpportunityLineItem.Prod_Lost_Reason__c, 
 			OpportunityLineItem.Program__c,
 			OpportunityLineItem.Registration_Effort_Description__c,
-			OpportunityLineItem.Share__c
+            OpportunityLineItem.Registration_Status__c,
+			OpportunityLineItem.Share__c,
+            OpportunityLineItem.Win_Status__c
         };
 	}
 	
@@ -65,6 +67,21 @@ public class OpportunityLineItemsSelector extends ApplicationSelector {
 		return (List<OpportunityLineItem>)Database.query(newQueryFactory().setCondition('Legacy_Id__c in :legacyIds').toSOQL());
 	}
 	
+	public List<OpportunityLineItem> selectByOpptyIdWithProduct(Set<Id> opptyIds, Set<String> lostCancelled)  {
+		p('selectByOpptyIdWithProduct(opptyIds)');
+		fflib_QueryFactory opptyLineItemsQueryFactory = newQueryFactory();
+		
+		new ProductsSelector().configureQueryFactoryFields(opptyLineItemsQueryFactory, OpportunityLineItem.Product2Id.getDescribe().getRelationshipName());
+		
+		String condition = 'OpportunityId in :opptyIds';
+		
+		if (lostCancelled != null) {
+			condition += ' and Prod_Lost_Cancelled__c not in :lostCancelled';
+		}
+		
+		return (List<OpportunityLineItem>)Database.query(opptyLineItemsQueryFactory.setCondition(condition).toSOQL());
+	}
+
 	public Map<Id, List<OpportunityProductValueSummary>> selectLifetimeValueByOpptyIdGroupByOpptyIdAndMag(Set<Id> opptyIds) {
 		p('selectLifetimeValueByOpptyIdGroupByOpptyIdAndMag');
 		List<OpportunityProductValueSummary> opptyProdValSummaries = new List<OpportunityProductValueSummary>();

@@ -73,15 +73,17 @@ private class ModelNOpportunityAccountsUpdateJobTest {
 		database.executebatch(myJob);
 		Test.stopTest();
 		DumpOppties();
-		DumpUsers();
 	}
 
 	@isTest static void testMnOpportunityAccountUpdateNoUnknownAccount() {
 		List<Account> unknownAccounts = [Select Id from Account Where Name = 'Unknown'];
 		delete unknownAccounts;
 		Test.startTest();
-		ModelNOpportunityAccountsUpdateJob myJob = new ModelNOpportunityAccountsUpdateJob();
-		database.executebatch(myJob);
+		List<User> dataAdmins = new UsersSelector().selectByName(new Set<String>{'Data Admin'});
+		System.runAs(dataAdmins.get(0)) {
+			ModelNOpportunityAccountsUpdateJob myJob = new ModelNOpportunityAccountsUpdateJob();
+			database.executebatch(myJob);
+		}
 		Test.stopTest();
 	}
 
@@ -107,16 +109,16 @@ private class ModelNOpportunityAccountsUpdateJobTest {
 	}
 
 	static void DumpAccounts() {
-		List<Account> accounts = [Select Id, Name, RecordType.Name, NXP_GID__c, Legacy_Id__c from Account];
+		List<Account> accounts = new AccountsSelector().selectAll();
 		for (Account acc : accounts) {
 			System.debug('@@@@@ Account Name=' + acc.Name + ', GID=' + acc.NXP_GID__c + ', Legacy_Id__c=' + acc.Legacy_Id__c);
 		}
 	}
 
 	static void DumpOppties() {
-		List<Opportunity> oppties = [Select Id, Name, CloseDate, Account.Name, End_Customer_GID__c, Legacy_Opportunity_Owner__c, Distributor_Name__c, End_Customer_Region__c, Owner.Name from Opportunity];
+		List<Opportunity> oppties = new OpportunitiesSelector().selectAll();
 		for (Opportunity opp : oppties) {
-			System.debug('@@@@@ Oppty Name=' + opp.Name + ', Account=' + opp.Account.Name + ', GID=' + opp.End_Customer_GID__c + ', DR Approver=' + opp.Legacy_Opportunity_Owner__c + ', opp.Legacy_Id__c=' + opp.Distributor_Name__c + '-' + opp.End_Customer_Region__c + ', Owner=' + opp.Owner.Name);
+			System.debug('@@@@@ Oppty Name=' + opp.Name + ', Account=' + opp.AccountId + ', GID=' + opp.End_Customer_GID__c + ', DR Approver=' + opp.Legacy_Opportunity_Owner__c + ', opp.Legacy_Id__c=' + opp.Distributor_Name__c + '-' + opp.End_Customer_Region__c);
 		}
 	}
 
