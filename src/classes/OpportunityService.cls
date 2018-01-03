@@ -194,6 +194,10 @@ public with sharing class OpportunityService {
             for (Opportunity oppty : oppties) {
                 if (mnOpptyStages.containsKey(oppty.Id) && oppty.StageName != mnOpptyStages.get(oppty.Id)) {
                     oppty.StageName = mnOpptyStages.get(oppty.Id);
+                    if (oppty.StageName == Opportunities.STAGE_LOST) {
+	                    oppty.Lost_Date__c = oppty.Expiration_Date__c;
+            			oppty.Lost_Reason__c = 'Expired';
+                    }
                     if (!opptyUpdateIds.contains(oppty.Id)) {
                         opptyUpdateIds.add(oppty.Id);
                         opptyUpdates.add(oppty);
