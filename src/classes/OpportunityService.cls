@@ -189,7 +189,7 @@ public with sharing class OpportunityService {
 		//System.debug('@@@@@ current user:' + UserInfo.getName());
 
 		//Scan MN Oppty Stages
-        if (UserInfo.getName() == 'Data Admin') {
+        if (System.isBatch() && UserInfo.getProfileId() == '00e20000001Nc7gAAC') {
             Map<Id, String> mnOpptyStages = deriveMnOpportunityStages(allMnOpptyIds);
             for (Opportunity oppty : oppties) {
                 if (mnOpptyStages.containsKey(oppty.Id) && oppty.StageName != mnOpptyStages.get(oppty.Id)) {
