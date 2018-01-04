@@ -1,5 +1,6 @@
-global class ModelNExpiredOpportunitiesUpdateJob implements Database.Batchable<SObject>, System.Schedulable {
-    
+global class ModelNExpiredOpportunitiesUpdateJob //implements Database.Batchable<SObject>, System.Schedulable 
+{
+    /*
 	global Database.QueryLocator start(Database.BatchableContext BC) {
     	String openAndExpiredModelNOpptys = 'select Id, Name, StageName, Expiration_Date__c from Opportunity where RecordType.Name = \'Model N Oppty\' and StageName not in (\'Cancelled\', \'AOP\') and IsClosed = false and Expiration_Date__c < TODAY';  
       	return Database.getQueryLocator(openAndExpiredModelNOpptys);
@@ -29,5 +30,5 @@ global class ModelNExpiredOpportunitiesUpdateJob implements Database.Batchable<S
    
    private static void p(String msg) {
 		CommonUtils.p(ModelNExpiredOpportunitiesUpdateJob.class, '//-c', msg);
-   }
+   }*/
 }
