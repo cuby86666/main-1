@@ -229,9 +229,9 @@ private class OpportunityServiceTest {
     	opptyMn.Expiration_Date__c = (System.today() - 1);
     	update opptyMn;    	
     	
-    	//Map<Id, String> opptyStagesById = OpportunityService.deriveMnOpportunityStages(new List<Opportunity> {opptyMn});
+    	Map<Id, String> opptyStagesById = OpportunityService.deriveMnOpportunityStages(new Set<Id> {opptyMn.Id});
     	    	
-    	//System.assertEquals(STAGE_LOST, opptyStagesById.get(opptyMn.Id));
+    	System.assertEquals(STAGE_LOST, opptyStagesById.get(opptyMn.Id));
     }
     
 }

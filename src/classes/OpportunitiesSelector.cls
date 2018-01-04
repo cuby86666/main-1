@@ -26,6 +26,7 @@ public class OpportunitiesSelector extends ApplicationSelector {
 			Opportunity.BL_Approver_2__c,
 			Opportunity.Claim_Value__c,
 			Opportunity.Claim_Value_USD_SYS__c,
+			Opportunity.Design_Reg_Status__c,
 			Opportunity.Discovery_Date__c,
 			Opportunity.Distributor_Name__c,
 			Opportunity.End_Customer_Region__c,

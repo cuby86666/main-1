@@ -27,10 +27,10 @@ public class OpportunityLineItemsSelector extends ApplicationSelector {
 			OpportunityLineItem.Prod_Lost_Reason__c, 
 			OpportunityLineItem.Program__c,
 			OpportunityLineItem.Registration_Effort_Description__c,
-            OpportunityLineItem.Registration_Status__c,
+      OpportunityLineItem.Registration_Status__c,
 			OpportunityLineItem.Share__c,
-            OpportunityLineItem.Win_Status__c
-        };
+			OpportunityLineItem.Win_Status__c
+    };
 	}
 	
 	public List<OpportunityLineItem> selectAllWithOpportunity() {
