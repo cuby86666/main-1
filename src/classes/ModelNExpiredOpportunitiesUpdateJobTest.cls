@@ -5,6 +5,7 @@
 
 @istest
 private class ModelNExpiredOpportunitiesUpdateJobTest {
+    /*
     @testsetup
     public static void setupTestData(){
         //insert account
@@ -77,5 +78,5 @@ private class ModelNExpiredOpportunitiesUpdateJobTest {
             System.debug(oppty.Name+' opptys stage '+oppty.StageName+' date '+oppty.Expiration_Date__c);
         }
         System.assert(opptys== null || opptys.size()==0);
-    }    
+    } */
 }
