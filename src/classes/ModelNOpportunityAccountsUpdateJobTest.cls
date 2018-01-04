@@ -44,36 +44,11 @@ private class ModelNOpportunityAccountsUpdateJobTest {
 		List<Opportunity> opportunities = opp.getSObject();
         opportunities.get(2).Legacy_Opportunity_Owner__c = users.get(2).Email;       
         opportunities.get(3).Legacy_Opportunity_Owner__c = 'aaa@bbb.com';
-
-        opportunities.get(4).Design_Reg_Status__c = 'Requested';
-        opportunities.get(4).Expiration_Date__c = (System.today() - 1);
         
         opportunities.get(0).AccountId = accounts.get(0).Id;
         opportunities.get(0).OwnerId = users.get(3).Id;
         
 		insert opportunities;
-        
-        //products
-        TestProduct prod = new TestProduct('testProduct', 1);
-        List<Product2> products = prod.getSObject();
-        insert products;
-
-        List<OpportunitySchedule__c> opptyScheds = new List<OpportunitySchedule__c>();
-        List<OpportunityLineItem> opptyProds = new List<OpportunityLineItem>();
-        
-        List<Id> pbeIds = prod.selectPriceBookEntryIds('USD');
-        
-        TestOpportunitySchedule sched = new TestOpportunitySchedule(opportunities.get(4), 4, 1000);
-        opptyScheds.addAll((List<OpportunitySchedule__c>)sched.getSObject());
-        TestOpportunityLineItem opptyProd = new TestOpportunityLineItem(opportunities.get(4), 1);
-        opptyProd.updateFieldByValue('UnitPrice', 2);
-        opptyProd.updateFieldByValue('Component_Multiplier__c', 2);
-        opptyProd.updateFieldbyArray('PricebookEntryId', pbeIds);
-        opptyProds.addAll((List<OpportunityLineItem>)opptyProd.getSObject());
-		opptyProds.get(0).Registration_Status__c = 'Approved';
-        opptyProds.get(0).Win_Status__c = 'Pending';
-        insert opptyScheds;
-        insert opptyProds;
 	}
 
 /*
@@ -209,7 +184,7 @@ private class ModelNOpportunityAccountsUpdateJobTest {
 
 			for (Integer i = 0; i < numOfObjs; i++) {
 				SObject obj = sObjType.newSObject();
-				if (name != null) obj.put('Name', name + i);
+				obj.put('Name', name + i);
 				sObjects.add(obj);
 			}
 			return sObjects;
@@ -276,77 +251,4 @@ private class ModelNOpportunityAccountsUpdateJobTest {
 			}
 		}
 	}
-    
-    // TestProduct ============================================================================
-	public class TestProduct extends AbstractTestSObject {
-		public TestProduct(String name, Integer numOfObjs) {
-			create('Product2', name, numOfObjs);
-			updateFieldByValue('IsActive', true);
-		}
-
-		public List<PricebookEntry> selectPricebookEntries(String currencyIsoCode) {
-			List<Product2> prods = (List<Product2>)this.getSObject();
-			List<PriceBookEntry> pricebookEntries = [
-				Select Id, CurrencyIsoCode from PriceBookEntry Where CurrencyIsoCode = :currencyIsoCode and Product2Id in :prods
-			];
-			return pricebookEntries;
-		}
-
-		public List<Id> selectPricebookEntryIds(String currencyIsoCode) {
-			List<Product2> prods = (List<Product2>)this.getSObject();
-			List<PricebookEntry> pricebookEntries = [
-				Select Id from PriceBookEntry Where CurrencyIsoCode = :currencyIsoCode and Product2Id in :prods
-			];
-			List<Id> pricebookEntryIds = new List<Id>();
-			for (PricebookEntry pbe : pricebookEntries) {
-				pricebookEntryIds.add(pbe.Id);
-			}
-			return pricebookEntryIds;
-		}
-	}
-
-	// TestOpportunitySchedule ============================================================================
-	public class TestOpportunitySchedule extends AbstractTestSObject {
-		public TestOpportunitySchedule(Opportunity oppty, Integer numOfObjs, Integer quarterQty) {
-			Integer totalOpptySched = 4;
-			if (numOfObjs != null) totalOpptySched = numOfObjs;
-			create('OpportunitySchedule__c', null, totalOpptySched);
-			//set default value
-			Map<String, Object> schedDefaultValues = new Map<String, Object>();
-			schedDefaultValues.put('Opportunity__c', oppty.Id);
-			schedDefaultValues.put('Oppty_Sched_Qty__c', quarterQty);
-			schedDefaultValues.put('Frozen_Oppty_Sched_Qty__c', quarterQty);
-			updateFieldsByMap(schedDefaultValues);
-			//set oppty sched date
-			Date[] schedDates = getOpptySchedDates(oppty.Production_Date__c, totalOpptySched);
-			for (Integer i = 0; i < totalOpptySched; i++) {
-				sObjects.get(i).put('Sched_Date__c', schedDates[i]);
-			}
-		}
-
-	    private Date[] getOpptySchedDates(Date productionDate, Integer totalQarters) {
-	        Date[] result = new Date[totalQarters];
-	        for (Integer i = 0; i < totalQarters; i++) {
-	            if (i == 0) {
-	                result[0] = productionDate;
-	            }
-	            else {
-	                Date nextQuarter = result[i-1].addMonths(3);
-	                Integer nextQtr = Decimal.valueOf(nextQuarter.month()).divide(3.0, 0, System.RoundingMode.UP).intValue();
-	                result[i] = Date.newInstance(nextQuarter.year(), (nextQtr-1)*3+1, 1);
-	            }
-	            //System.debug('@@@@@ oppty sched date[' + i + ']=' + result[i]);
-	        }
-	        return result;
-	    }
-	}
-
-// TestOpportunityLineItem ============================================================================
-	public class TestOpportunityLineItem extends AbstractTestSObject {
-		public TestOpportunityLineItem(Opportunity oppty, Integer numOfObjs) {
-			create('OpportunityLineItem', null, numOfObjs);
-			updateFieldByValue('OpportunityId', oppty.Id);
-		}
-	}
-
 }
