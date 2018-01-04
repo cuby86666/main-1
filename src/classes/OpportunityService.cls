@@ -36,7 +36,7 @@ public with sharing class OpportunityService {
 		public String label;
 		public String name;
 	}
-	
+	/*
 	public static void updateModelNExpiredOpportunities(List<Opportunity> oppties) {
 		p('updateModelNExpiredOpportunities');
 		fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
@@ -47,7 +47,7 @@ public with sharing class OpportunityService {
         
         uow.commitWork();
 	}
-	
+	*/
 	public static Map<Id, String> deriveMnOpportunityStages(Set<Id> opptyIds) {
 		Map<Id, String> result = new Map<Id, String>();
 		

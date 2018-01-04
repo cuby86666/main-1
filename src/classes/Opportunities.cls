@@ -98,7 +98,7 @@ public class Opportunities extends ApplicationDomain {
 		p('updateDesignWinApprovers');
 		OpportunityApproval.setAllApprovers((List<Opportunity>)this.records, uow);
 	}
-	
+	/*
 	public List<Opportunity> updateModelNExpiredOpportunities(fflib_ISObjectUnitOfWork uow) {
 		p('updateModelNExpiredOpportunities');
 		List<Opportunity> opptiesUpdated = new List<Opportunity>();
@@ -115,7 +115,7 @@ public class Opportunities extends ApplicationDomain {
         
         return opptiesUpdated; 
 	}
-		
+	*/	
 	private void bypassValidation(Map<Id, Opportunity> existingRecords) {
 		p('bypassValidation');
 		for (Opportunity oppty : (List<Opportunity>)this.records) {
