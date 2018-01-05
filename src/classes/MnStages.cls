@@ -97,6 +97,7 @@ public class MnStages extends ApplicationDomain {
 		for (MnStage__c ms : this.mnStages) {
 			ms.Message__c = null;
 			ms.Opportunity__c = null;
+			ms.Batch_Job_ID__c = null;
 			
 			String opptyExtId = ms.Reg_Oppty_Num__c + '-' + ms.Reg_Part_OID__c;
 		
@@ -240,13 +241,11 @@ public class MnStages extends ApplicationDomain {
 		p('ignore');
 		Map<Id, MnStage__c> mnStagesById = new Map<Id, MnStage__c>(this.mnStages); 
 		
-		List<Model_N_Stage_Setting__mdt> mnStageSettings = (List<Model_N_Stage_Setting__mdt>)new ModelNStageSettingsSelector().selectAll();	
+		List<Model_N_Stage_Setting__mdt> mnStageSettings = (List<Model_N_Stage_Setting__mdt>)new ModelNStageSettingsSelector().selectWhere('Name__c = \'' + MnStage__c.Prod_Family__c.getDescribe().getName() + '\'');
 		Set<String> ignoredMags = new Set<String>();
 		
 		for (Model_N_Stage_Setting__mdt mnss : mnStageSettings) {
-			if (mnss.Field_Name__c == MnStage__c.Prod_Family__c.getDescribe().getName()) {
-				ignoredMags.add(mnss.Field_Value__c);	
-			}
+			ignoredMags.add(mnss.Value__c);	
 		}
 		
 		for (MnStage__c ms : this.mnStages) {
@@ -314,36 +313,23 @@ public class MnStages extends ApplicationDomain {
 	
 	private Map<Id, Id> findPricebookEntries() {
 		p('findPricebookEntries');
-		Map<Id, Id> result = new Map<Id, Id>(); // MnStage__c.Id -> PricebookEntry.Id
+		Map<Id, Id> result = new Map<Id, Id>(); // MnStage__c.Id => PricebookEntry.Id
 		
-		Set<String> prodBasicTypes = new Set<String>();
 		Set<String> prodSalesItems = new Set<String>();
 		
 		for (MnStage__c ms : this.mnStages) {
-			if (ms.Part_Is_Root__c) {
-				prodBasicTypes.add(ms.Part_Root__c);		
-			} else {
-				prodSalesItems.add(ms.Part_12NC__c);	
-			}
+			prodSalesItems.add(ms.Part_12NC__c);	
 		}
 		
-		List<PricebookEntry> pricebookEntries = new PricebookEntriesSelector().selectByProdBasicTypeOrSalesItemWithProduct(prodBasicTypes, prodSalesItems); 
+		List<PricebookEntry> pricebookEntries = new PricebookEntriesSelector().selectByProdSalesItemWithProduct(prodSalesItems); 
 		
 		for (MnStage__c ms : this.mnStages) {
 			for (PricebookEntry pe : pricebookEntries) {
-				if (ms.Part_Is_Root__c) {
-					if (ms.Part_Root__c == pe.Product2.Basic_Type__c && 
-				    	ms.Currency_Code__c == pe.CurrencyIsoCode) {
-						result.put(ms.Id, pe.Id);
-						break;    	
-					}
-				} else {
-					if (ms.Part_12NC__c == pe.Product2.Sales_Item__c && 
-				    	ms.Currency_Code__c == pe.CurrencyIsoCode) {
-						result.put(ms.Id, pe.Id);
-						break;    	
-					}	
-				}
+				if (ms.Part_12NC__c == pe.Product2.Sales_Item__c && 
+				   	ms.Currency_Code__c == pe.CurrencyIsoCode) {
+					result.put(ms.Id, pe.Id);
+					break;    	
+				}	
 			}	
 		} 	
 		
