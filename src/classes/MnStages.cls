@@ -97,6 +97,7 @@ public class MnStages extends ApplicationDomain {
 		for (MnStage__c ms : this.mnStages) {
 			ms.Message__c = null;
 			ms.Opportunity__c = null;
+			ms.Sched_Job_ID__c = null;
 			ms.Batch_Job_ID__c = null;
 			
 			String opptyExtId = ms.Reg_Oppty_Num__c + '-' + ms.Reg_Part_OID__c;
@@ -158,7 +159,12 @@ public class MnStages extends ApplicationDomain {
 			
 			// PricebookEntryId can be set only when an oppty prod is created.
 			if (!opptyProdsExistedByMnStageId.get(ms.Id)) { 
-				opptyProd.PricebookEntryId = pricebookEntryIdsByMnStageId.get(ms.Id);	
+				opptyProd.PricebookEntryId = pricebookEntryIdsByMnStageId.get(ms.Id);
+				
+				if (opptyProd.PricebookEntryId == null) {
+					ms.Status__c = STATUS_INVALID;
+					ms.Message__c = 'Product or Price Book Entry is not found. ';
+				}	
 			} 
 			
 			opptyProd.UnitPrice = ms.Reg_Part_ASP__c;
@@ -289,7 +295,7 @@ public class MnStages extends ApplicationDomain {
 	
 	private Map<Id, Boolean> checkOpptyProdsExisted() {
 		p('checkOpptyProdsExisted');
-		Map<Id, Boolean> result = new Map<Id, Boolean>(); // MnStage__c.Id -> Oppty Prod Existed
+		Map<Id, Boolean> result = new Map<Id, Boolean>(); // MnStage__c.Id => Oppty Prod Existed
 		Set<String> legacyIds = new Set<String>();
 		
 		for (MnStage__c ms : this.mnStages) {
@@ -338,7 +344,7 @@ public class MnStages extends ApplicationDomain {
 	
 	private String checkMnStageInvalid(MnStage__c mnStage) {
 		p('checkMnStageInvalid');
-		String result = '';
+		String result = mnStage.Message__c;
 		
 		if (mnStage.Reg_Production_Date__c == null) {
 			result += 'Reg_Production_Date__c is blank. ';	

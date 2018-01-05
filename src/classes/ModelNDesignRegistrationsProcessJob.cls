@@ -1,9 +1,17 @@
 global class ModelNDesignRegistrationsProcessJob implements Schedulable, Database.Batchable<SObject> {
 	
+	private Id schedJobId; 
+	
+	global ModelNDesignRegistrationsProcessJob() {} // Implement no-arg constructor in order for Job Scheduler to see it.
+	
+	global ModelNDesignRegistrationsProcessJob(Id schedJobId) {
+		this.schedJobId = schedJobId;
+	} 
+	
 	global void execute(SchedulableContext sc) {
 		p('execute(schedule)');
 		Integer batchSize = Integer.valueOf(((List<Model_N_Stage_Setting__mdt>)new ModelNStageSettingsSelector().selectWhere('Name__c = \'Batch_Size\'')).get(0).Value__c);
-		Database.executeBatch(new ModelNDesignRegistrationsProcessJob(), batchSize);	
+		Database.executeBatch(new ModelNDesignRegistrationsProcessJob(sc.getTriggerId()), batchSize);	
 	}
 	
 	global Database.QueryLocator start(Database.BatchableContext bc) {
@@ -17,6 +25,7 @@ global class ModelNDesignRegistrationsProcessJob implements Schedulable, Databas
 		mnStages.processData();
 		
 		for (MnStage__c ms : scope) {
+			ms.Sched_Job_ID__c = this.schedJobId;
 			ms.Batch_Job_ID__c = bc.getJobId();	
 		}
 		
