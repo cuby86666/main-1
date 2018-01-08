@@ -190,7 +190,7 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	System.assertEquals(1, opptyProds.size());
     }
     
-    //@isTest
+    @isTest
     static void testBatchException() {
     	MnStage__c mnStageClone = mnStage.clone(false, true, false, false);
     	mnStageClone.Status__c = STATUS_QUEUED;
@@ -200,8 +200,28 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	insert mnStageClone;
     	
     	Test.startTest();
-    	System.abortJob(runBatch());
+    	Id batchJobId = runBatch();
+    	System.abortJob(batchJobId);
     	Test.stopTest();	
+    }
+    
+    @isTest
+    static void testScheduler() {
+    	MnStage__c mnStageClone = mnStage.clone(false, true, false, false);
+    	mnStageClone.Status__c = STATUS_QUEUED;
+    	mnStageClone.Reg_Oppty_Num__c = '819834';
+    	mnStageClone.Reg_Part_OID__c = '1048946';
+    	
+    	insert mnStageClone;
+    	
+    	Datetime dt = Datetime.now().addDays(1);
+        String CRON_EXP = '0 0 0 ' + dt.day() + ' ' + dt.month() + ' ? ' + dt.year();
+    	
+    	String schedJobId = System.schedule('TestModelNDesignRegistrationsProcessJob', CRON_EXP, new ModelNDesignRegistrationsProcessJob());
+    	CronTrigger ct = [select Id, CronExpression, TimesTriggered, NextFireTime from CronTrigger where Id = :schedJobId];
+    	System.assertEquals(CRON_EXP, ct.CronExpression);
+    	System.assertEquals(0, ct.TimesTriggered);
+    	System.assertEquals(dt.format('yyyy-MM-dd 00:00:00'), String.valueOf(ct.NextFireTime));
     }
     
     @isTest
