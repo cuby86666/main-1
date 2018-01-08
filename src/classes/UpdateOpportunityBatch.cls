@@ -17,8 +17,8 @@
 @ Description: SIR1174 Commented usage of fields Level2_PM11__c and Level2_PM12__c to delete them
 *******************************************/
 
-global with sharing class UpdateOpportunityBatch /*implements Database.Batchable<sObject>*/{
- /*
+global with sharing class UpdateOpportunityBatch implements Database.Batchable<sObject>{
+ 
 global String ApproverId;
 
 //Start
@@ -80,5 +80,5 @@ global String ApproverId;
 //Finish
     global void finish(Database.BatchableContext BC){
     }
-    */
+    
 }
