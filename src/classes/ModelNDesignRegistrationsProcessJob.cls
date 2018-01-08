@@ -21,19 +21,24 @@ global class ModelNDesignRegistrationsProcessJob implements Schedulable, Databas
 	
 	global void execute(Database.BatchableContext bc, List<MnStage__c> scope) {
 		p('execute(batch)');
-		MnStages mnStages = new MnStages(scope);
-		mnStages.processData();
+		try {
+			MnStages mnStages = new MnStages(scope);
+			mnStages.processData();
 		
-		for (MnStage__c ms : scope) {
-			ms.Sched_Job_ID__c = this.schedJobId;
-			ms.Batch_Job_ID__c = bc.getJobId();	
+			for (MnStage__c ms : scope) {
+				ms.Sched_Job_ID__c = this.schedJobId;
+				ms.Batch_Job_ID__c = bc.getJobId();	
+			}
+		
+			update scope;	
+		} catch (Exception e) {
+			System.debug('///////// exception: ' + e);	
 		}
-		
-		update scope;		
 	}
 	
 	global void finish(Database.BatchableContext bc) {
 		p('finish');	
+		System.debug('///////// finish is called');
 	}
 	
 	private static void p(String msg) {

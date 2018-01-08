@@ -190,6 +190,20 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	System.assertEquals(1, opptyProds.size());
     }
     
+    //@isTest
+    static void testBatchException() {
+    	MnStage__c mnStageClone = mnStage.clone(false, true, false, false);
+    	mnStageClone.Status__c = STATUS_QUEUED;
+    	mnStageClone.Reg_Oppty_Num__c = '819834';
+    	mnStageClone.Reg_Part_OID__c = '1048946';
+    	
+    	insert mnStageClone;
+    	
+    	Test.startTest();
+    	System.abortJob(runBatch());
+    	Test.stopTest();	
+    }
+    
     @isTest
     static void testUpdate() {
     	final String LEAD_ID = '12345';
@@ -553,8 +567,8 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	new MnStages(new MnStagesSelector().selectByStatus(new Set<String> {STATUS_QUEUED})).processData();	
     }
     
-    private static void runBatch() {
-    	Database.executeBatch(new ModelNDesignRegistrationsProcessJob());
+    private static Id runBatch() {
+    	return Database.executeBatch(new ModelNDesignRegistrationsProcessJob());
     } 
     
 }

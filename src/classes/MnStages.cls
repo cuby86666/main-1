@@ -95,7 +95,7 @@ public class MnStages extends ApplicationDomain {
 		List<OpportunityLineItem> opptyProds = new List<OpportunityLineItem>(); 
 		
 		for (MnStage__c ms : this.mnStages) {
-			ms.Message__c = null;
+			ms.Message__c = '';
 			ms.Opportunity__c = null;
 			ms.Sched_Job_ID__c = null;
 			ms.Batch_Job_ID__c = null;
