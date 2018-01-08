@@ -83,7 +83,7 @@ public class LeadConvertControllerTest {
                                NXP_GID__c='12145',country__c='Test Country',state_province__c='Test State');        
         insert a;
         Account a1 = new Account(Name = 'Test Account1', Region__c = 'EMEA',OwnerId=u.Id,customer_category__c='Tier 4 - TMMA',
-                               NXP_GID__c='12145',country__c='Test Country',state_province__c='Test State');        
+                               NXP_GID__c='12146',country__c='Test Country',state_province__c='Test State');        
         insert a1;
         
         //Insert Contact   
