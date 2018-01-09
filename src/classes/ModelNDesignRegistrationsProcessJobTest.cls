@@ -190,8 +190,8 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	System.assertEquals(1, opptyProds.size());
     }
     
-    @isTest
-    static void testBatchException() {
+    //@isTest
+    static void testNotify() {
     	MnStage__c mnStageClone = mnStage.clone(false, true, false, false);
     	mnStageClone.Status__c = STATUS_QUEUED;
     	mnStageClone.Reg_Oppty_Num__c = '819834';
@@ -200,8 +200,7 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	insert mnStageClone;
     	
     	Test.startTest();
-    	Id batchJobId = runBatch();
-    	System.abortJob(batchJobId);
+    	runBatch();
     	Test.stopTest();	
     }
     
