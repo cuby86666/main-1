@@ -14,6 +14,7 @@ private class SAPCMDMassUpdateControllerTest
     private static final String SAP_MASS_UPDATE_REQUEST = 'SAP_Mass_Update_Request';
     private static RecordType sapMassUpdateRequest;
     private static RecordType Z001rt;
+    private static final integer FUNLOC_LOWER_NXP = 427055;
     private static string Z001rtId;
     private static final String TYPE_GLOBALENTERPRISE = 'Global_Enterprise';
     private static final String TYPE_Z001_SOLDTO_SHIPTO_BILLTO_PAYER = 'Z001_SoldTo_ShipTo_BillTo_Payer';
@@ -43,8 +44,7 @@ private class SAPCMDMassUpdateControllerTest
     static testmethod void thePositiveTest() 
     {
         fetchRecordTypes();
-        createData();
-        
+        createData();                
         list<SAP_CMD__c> listSAPCMD=new list<SAP_CMD__c>();
         for(funloc__c funloc:listFunlocs)
         {
@@ -74,13 +74,15 @@ private class SAPCMDMassUpdateControllerTest
         theController.rowToBeReplicated = '1';
         theController.columnToBeReplicated = 'ZA';
         theController.replicateColumn();
+        theController.columnToBeReplicated = 'ZS';
+        theController.replicateColumn();
         theController.columnToBeReplicated = 'Address';
         theController.replicateColumn();
         theController.rowToBeRemoved = '1';
         theController.removeRow();
         theController.getZSOptions();
         theController.getZAOptions();
-        //theController.getPDKeyOptions();
+      
         theController.getCountryOptions();
         theController.listFunlocWrapper[0].funloc =String.valueOf(listFunlocs[0].FunLoc_Number__c);// '100000';
         theController.listFunlocWrapper[1].funloc = String.valueOf(listFunlocs[1].FunLoc_Number__c);
@@ -91,9 +93,13 @@ private class SAPCMDMassUpdateControllerTest
         theController.listFunlocWrapper[2].funloc=String.valueOf(listFunlocs[2].FunLoc_Number__c);
         theController.save();
         listtestMassUpdate=new list<CMD_Request_SAP_Mass_Update_Detail__c>([select id,Funloc__c from CMD_Request_SAP_Mass_Update_Detail__c where CMD_Request__c=:testRequest.id]);
+       theController.getPDKeyOptions();
         system.assert(listtestMassUpdate.size()!=0);
         system.debug('listtestMassUpdate.size:'+listtestMassUpdate.size());
         system.debug('theController.listFunlocWrapper:'+theController.listFunlocWrapper);
+        
+        
+        
     }
     
    
@@ -203,7 +209,8 @@ private class SAPCMDMassUpdateControllerTest
         
         CMD_Request__c objCMDRequest = new CMD_Request__c( RecordTypeId = sapMassUpdateRequest.Id,
                                                         Mass_Update_Type__c='ZA');
-        insert objCMDRequest;
+        insert objCMDRequest;       
+        
         
         //Assert the inserted CMD Request Id
         system.assert(objCMDRequest.Id != null);
@@ -302,6 +309,26 @@ private class SAPCMDMassUpdateControllerTest
             //Assert if the list contains captured error messages
             System.assert(lstMsgs.size() > 0);
             
+            //Data with Delimiter - colon   and number of columns -2 with wrong header name            
+            csvContent = 'Customer FunLoc Number,Person Namee\n427863,HU165 - ESZTER LESKO';
+            SAPCMDMassUpdateController.contentFile =  blob.valueOf(csvContent);
+            currentPage=theController.uploadCSV();
+            lstMsgs.clear();
+            lstMsgs = ApexPages.getMessages();
+            //Assert if the list contains captured error messages
+            System.assert(lstMsgs.size() > 0);
+            
+            
+            //Data with Delimiter - colon   and number of columns -2 with wrong header name            
+            csvContent = 'Customer FunLoc Number,Person Namee\n427863,HU165 - ESZTER LESKO';
+            SAPCMDMassUpdateController.contentFile =  blob.valueOf(csvContent);
+            currentPage=theController.uploadCSV();
+            lstMsgs.clear();
+            lstMsgs = ApexPages.getMessages();
+            //Assert if the list contains captured error messages
+            System.assert(lstMsgs.size() > 0);
+            
+            
             //Data with Delimiter - colon   and number of columns -5 with wrong header name            
             csvContent = 'Customer FunLoc Number,SAP CMDDD,Legal Name,Person Name old,Person Name\n449471,SAP#00016519,Flextronics International KFT,HU225 - LASZLO BARANYAI,TW006 - OPEN';
             SAPCMDMassUpdateController.contentFile =  blob.valueOf(csvContent);
@@ -322,45 +349,46 @@ private class SAPCMDMassUpdateControllerTest
             
         }        
         
-        objCMDRequest = new CMD_Request__c( RecordTypeId = sapMassUpdateRequest.Id,Mass_Update_Type__c='Address');
-        insert objCMDRequest;
+        CMD_Request__c objCMDRequest2 = new CMD_Request__c( RecordTypeId = sapMassUpdateRequest.Id,Mass_Update_Type__c='Address');
+        insert objCMDRequest2;
         
         //Assert the inserted CMD Request Id
-        system.assert(objCMDRequest.Id != null);
+        system.assert(objCMDRequest2.Id != null);
+        system.debug('objCMDRequest2.Id+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'+objCMDRequest2.Id);
         
-        stdController = new ApexPages.StandardController(objCMDRequest);
-        theController = new SAPCMDMassUpdateController(stdController);
+        ApexPages.StandardController stdController2 = new ApexPages.StandardController(objCMDRequest2);
+        SAPCMDMassUpdateController theController2 = new SAPCMDMassUpdateController(stdController2);
         
         //Assert the SAPCMDMassUpdateController not null
-        system.assert(theController != null);
-        strMassUpdateType=[Select Mass_Update_Type__c 
+        system.assert(theController2 != null);
+        String strMassUpdateType2=[Select Mass_Update_Type__c 
                            From CMD_Request__c where Mass_Update_Type__c='Address' limit 1].Mass_Update_Type__c;
         
         //If Condition:Check the CSV Parsing when Mass Update Type is Address
-        if(strMassUpdateType.equalsIgnoreCase('Address'))
+        if(strMassUpdateType2.equalsIgnoreCase('Address'))
         {   
             /********************************************************
             Positive case:When delimitor is colon or semi colon and 
             no of headers is 12->Parse the data and upload the data
             ********************************************************/
-            
+            system.debug('strMassUpdateType2.equalsIgnoreCase+++++++++++++++++++++++++++++++++++++++'+strMassUpdateType2);
             //Data with Delimiter is colon and number of columns is 12
             string csvContent = 'Customer FunLoc Number,SAP CMD,Legal Name,Name 2,Name 3,Name 4,Street,Street 4,City,State,Country,Zip\n427863,test,"test,test",test,test,test,test,test,test,test,test,test';
             SAPCMDMassUpdateController.contentFile =  blob.valueOf(csvContent);
-             System.debug(' SAPCMDMassUpdateController.contentFile:: '+ SAPCMDMassUpdateController.contentFile );
-            PageReference currentPage=theController.uploadCSV();
+            System.debug(' SAPCMDMassUpdateController.contentFile:: '+ SAPCMDMassUpdateController.contentFile );
+            PageReference currentPage=theController2.uploadCSV();
             System.debug('currentPage::'+currentPage);
-            System.debug('theController.listFunlocWrapper::'+theController.listFunlocWrapper);
+            System.debug('theController2.listFunlocWrapper::'+theController2.listFunlocWrapper);
             //Assert if the list contains the parsed data
-            System.assert(theController.listFunlocWrapper != null);
+            System.assert(theController2.listFunlocWrapper != null);
            // System.assert(theController.listFunlocWrapper.size() > 0);
             
             //Data with Delimiter is semi colon and number of columns is 12
             csvContent = 'Customer FunLoc Number;SAP CMD;Legal Name;Name 2;Name 3;Name 4;Street;Street 4;City;State;Country;Zip\n427863;test1;"tttt;st";test;test;test;test;test;test;test;test;test';
             SAPCMDMassUpdateController.contentFile =  blob.valueOf(csvContent);
-            currentPage=theController.uploadCSV();
+            currentPage=theController2.uploadCSV();
             //Assert if the list contains the parsed data
-            System.assert(theController.listFunlocWrapper != null);
+            System.assert(theController2.listFunlocWrapper != null);
             //System.assert(theController.listFunlocWrapper.size() > 0);
             
             /********************************************************
@@ -372,7 +400,7 @@ private class SAPCMDMassUpdateControllerTest
             //Data with Delimiter is semi colon and number of columns is >12 and carriage return is \r
             csvContent = 'Customer FunLoc Number;SAP CMD;Legal Name;Name 2;Name 3;Name 4;Street;Street 4;City;State;Country;Zip;Zip\r427863;test1;test1;test;test;test;test;test;test;test;test;test;test';
             SAPCMDMassUpdateController.contentFile =  blob.valueOf(csvContent);
-            currentPage=theController.uploadCSV();
+            currentPage=theController2.uploadCSV();
             List<ApexPages.Message> lstMsgs = ApexPages.getMessages();
             //Assert if the list contains captured error messages
             System.assert(lstMsgs.size() > 0);
@@ -380,7 +408,7 @@ private class SAPCMDMassUpdateControllerTest
             //Data with Delimiter is colon and number of columns is <12
             csvContent = 'Customer FunLoc Number,SAP CMD,Legal Name,Name 2,Name 3,Name 4,Street,Street 4,City\n427863,test,test,test,test,test,test,test,test,test,test,test';
             SAPCMDMassUpdateController.contentFile =  blob.valueOf(csvContent);
-            currentPage=theController.uploadCSV();
+            currentPage=theController2.uploadCSV();
             lstMsgs.clear();
             lstMsgs = ApexPages.getMessages();
             //Assert if the list contains captured error messages
@@ -389,7 +417,7 @@ private class SAPCMDMassUpdateControllerTest
             //Data with Delimiter is semi colon and number of columns is 12 and wrong header name
             csvContent = 'Customer FunLoc Number;SAP CMD;Legal Name;Name 2;Name 3;Name 4;Street;Street 4;City;State;Country;Zipp\r427863;test1;test1;test;test;test;test;test;test;test;test;test';
             SAPCMDMassUpdateController.contentFile =  blob.valueOf(csvContent);
-            currentPage=theController.uploadCSV();
+            currentPage=theController2.uploadCSV();
             lstMsgs.clear();
             lstMsgs = ApexPages.getMessages();
             //Assert if the list contains captured error messages
@@ -398,16 +426,175 @@ private class SAPCMDMassUpdateControllerTest
             //Data with Delimiter is colon and number of columns is 12 and wrong header name
             csvContent = 'Customer FunLoc Number,SAP CMD,Legal Name,Name 2,Name 3,Name 4,Street,Street 4,City,State,Country,Zipp\n427863,test,test,test,test,test,test,test,test,test,test,test';
             SAPCMDMassUpdateController.contentFile =  blob.valueOf(csvContent);
-            currentPage=theController.uploadCSV();
+            currentPage=theController2.uploadCSV();
             lstMsgs.clear();
             lstMsgs = ApexPages.getMessages();
             //Assert if the list contains captured error messages
             System.assert(lstMsgs.size() > 0);
             
-            //Start the test
-            Test.stopTest();
+           
+           
         }
-    }
+        //827
+        CMD_Request__c objCMDRequest1 = new CMD_Request__c( RecordTypeId = sapMassUpdateRequest.Id,
+                                                        Mass_Update_Type__c='ZS',Request_Status__c='Pending on Requester');
+        insert objCMDRequest1;
+        
+        //Assert the inserted CMD Request Id
+        system.assert(objCMDRequest1.Id != null);
+        
+        ApexPages.StandardController stdController1 = new ApexPages.StandardController(objCMDRequest1);
+        SAPCMDMassUpdateController theController1 = new SAPCMDMassUpdateController(stdController1);
+        
+        //Assert the SAPCMDMassUpdateController not null
+        system.assert(theController1 != null);
+        
+        String strMassUpdateTypeZS=[Select Mass_Update_Type__c 
+                                  From CMD_Request__c where Mass_Update_Type__c='ZS' limit 1].Mass_Update_Type__c ;
+                                  
+         
+        
+        
+        //If Condition:Check the CSV Parsing when Mass Update Type is ZA
+        if(strMassUpdateTypeZS.equalsIgnoreCase('ZS'))
+        {
+           /********************************************************
+            Positive case:When delimitor is colon and no of headers 
+            is either two or five->Parse the data and upload the data
+            ********************************************************/
+            
+            //Data with Delimiter - colon   and number of columns -2
+            string csvContent = 'Customer FunLoc Number,Person Name\n427863,HU165 - ESZTER LESKO';
+            SAPCMDMassUpdateController.contentFile =  blob.valueOf(csvContent);
+            
+           
+            PageReference currentPage=theController1.uploadCSV();
+            //Assert if the list contains the parsed data
+            System.assert(theController1.listFunlocWrapper != null);
+            System.assert(theController1.listFunlocWrapper.size() > 0);
+            
+            //Data with Delimiter - semi colon  and number of columns -2            
+            csvContent = 'Customer FunLoc Number;Person Name\n427863;HU165 - ESZTER LESKO';
+            SAPCMDMassUpdateController.contentFile =  blob.valueOf(csvContent);
+            currentPage=theController.uploadCSV();            
+            //Assert if the list contains the parsed data
+            System.assert(theController1.listFunlocWrapper != null);
+            System.assert(theController1.listFunlocWrapper.size() > 0);
 
-   
+            //Data with Delimiter - colon   and number of columns -5
+            csvContent = 'Customer FunLoc Number,SAP CMD,Legal Name,Person Name old,Person Name\n449471,SAP#00016519,Flextronics International KFT,HU225 - LASZLO BARANYAI,TW006 - OPEN';
+            SAPCMDMassUpdateController.contentFile =  blob.valueOf(csvContent);
+            currentPage=theController1.uploadCSV();
+            //Assert if the list contains the parsed data
+            System.assert(theController1.listFunlocWrapper != null);
+            System.assert(theController1.listFunlocWrapper.size() > 0); 
+
+            //Data with Delimiter - semi colon  and number of columns -5
+            csvContent = 'Customer FunLoc Number;SAP CMD;Legal Name;Person Name old;Person Name\n449471;SAP#00016519;Flextronics International KFT;HU225 - LASZLO BARANYAI;TW006 - OPEN';
+            SAPCMDMassUpdateController.contentFile =  blob.valueOf(csvContent);
+            currentPage=theController1.uploadCSV();
+            //Assert if the list contains the parsed data
+            System.assert(theController1.listFunlocWrapper != null);
+            System.assert(theController1.listFunlocWrapper.size() > 0); 
+            
+            /********************************************************
+            Negative Case:When delimitor is colon or semicolon and no of headers 
+            is neither two nor five and order of column is not as per expected
+            ->Do not Parse the data and capture error in apex message
+            ********************************************************/
+            
+            //Data with Delimiter - semi colon  and number of columns -6            
+            csvContent = 'Customer FunLoc Number;SAP CMD;Legal Name;Person Name old;Person Name;Person Name\n449471;SAP#00016519;Flextronics International KFT;HU225 - LASZLO BARANYAI;TW006 - OPEN;TW006 - OPEN';
+            SAPCMDMassUpdateController.contentFile =  blob.valueOf(csvContent);
+            currentPage=theController1.uploadCSV();
+            List<ApexPages.Message> lstMsgs = ApexPages.getMessages();
+            lstMsgs = ApexPages.getMessages();
+            //Assert if the list contains captured error messages
+            System.assert(lstMsgs.size() > 0);
+            
+            //Data with Delimiter - colon   and number of columns -6           
+            csvContent = 'Customer FunLoc Number,SAP CMD,Legal Name,Person Name old,Person Name,Name\n449471,SAP#00016519,Flextronics International KFT,HU225 - LASZLO BARANYAI,TW006 - OPEN,TW006 - OPEN';
+            SAPCMDMassUpdateController.contentFile =  blob.valueOf(csvContent);
+            currentPage=theController1.uploadCSV();
+            lstMsgs.clear();
+            lstMsgs = ApexPages.getMessages();
+            System.assert(lstMsgs.size()>0);
+            
+            //Data with Delimiter - semi colon  and number of columns -2 with wrong header name            
+            csvContent = 'Customer FunLoc Number;Person Namee\n427863;HU165 - ESZTER LESKO';
+            SAPCMDMassUpdateController.contentFile =  blob.valueOf(csvContent);
+            currentPage=theController1.uploadCSV();
+            lstMsgs.clear();
+            lstMsgs = ApexPages.getMessages();
+            //Assert if the list contains captured error messages
+            System.assert(lstMsgs.size() > 0);
+            
+            //Data with Delimiter - colon   and number of columns -2 with wrong header name            
+            csvContent = 'Customer FunLoc Number,Person Namee\n427863,HU165 - ESZTER LESKO';
+            SAPCMDMassUpdateController.contentFile =  blob.valueOf(csvContent);
+            currentPage=theController1.uploadCSV();
+            lstMsgs.clear();
+            lstMsgs = ApexPages.getMessages();
+            //Assert if the list contains captured error messages
+            System.assert(lstMsgs.size() > 0);
+            
+            //Data with Delimiter - colon   and number of columns -5 with wrong header name            
+            csvContent = 'Customer FunLoc Number,SAP CMDDD,Legal Name,Person Name old,Person Name\n449471,SAP#00016519,Flextronics International KFT,HU225 - LASZLO BARANYAI,TW006 - OPEN';
+            SAPCMDMassUpdateController.contentFile =  blob.valueOf(csvContent);
+            currentPage=theController1.uploadCSV();
+            lstMsgs.clear();
+            lstMsgs = ApexPages.getMessages();
+            //Assert if the list contains captured error messages
+            System.assert(lstMsgs.size() > 0); 
+            
+            //Data with Delimiter - semi colon  and number of columns -5 with wrong header name         
+            csvContent = 'Customer FunLoc Number;SAP CMD;Legal Name;Person Name old;Person Nameee\n449471;SAP#00016519;Flextronics International KFT;HU225 - LASZLO BARANYAI;TW006 - OPEN';
+            SAPCMDMassUpdateController.contentFile =  blob.valueOf(csvContent);
+            currentPage=theController1.uploadCSV();
+            lstMsgs.clear();
+            lstMsgs = ApexPages.getMessages();
+            //Assert if the list contains captured error messages
+            System.assert(lstMsgs.size() > 0);  
+            Test.stopTest();         
+            
+        }        
+    }
+    static testmethod void partFunctions() 
+    {
+      list<Partner_Function__c> lstPartFuncs = new list<Partner_Function__c>();
+      string ZA_ZS_RECORD_TYPE = 'ZA_ZS';
+      Id ZA_ZS_RECORD_TYPE_ID;
+      string Partner_Function_Type_ZA = 'ZA - Customer Service Rep';
+      string Partner_Function_Type_ZS = 'ZS - Sales Person';
+      fetchRecordTypes();
+      createData();
+      funloc__c objTestFunloc = new funloc__c(Name__c='test name',  Call_Name__c='test call',Street_Name__c='test street',Place_Name__c='Test Place',Country_Name__c='test country');
+      insert objTestFunloc;
+     
+     /* testCustomer = new Customer__c(RecordTypeId = globalCustomer.Id, Account_Name__c = 'ut_Global_Enterprise ' ,
+                                          Legal_Name__c = 'ut_Global_Enterprise ' , DUNS__c = 'ut_123' , 
+                                          Status__c = 'Active' ,  DNB_Verified__c = 'D&B Accepted' ,
+                                          House_Number__c = 'ut' , Street__c = 'ut_street_1' ,
+                                          Zip__c = 'ut_zip'  , City__c = 'ut_city', Country__c = 'USA' ,  
+                                          Industry_Segment__c = 'CC - Computing' ,
+                                          Type__c = 'Customer' , Role__c = 'OEM',GSM_Classification__c = 'Global',
+                                          Fulfillment_Channel__c = 'Disti',  Street_2__c = 'ut_street_2'  ,
+                                          Street_3__c = 'ut_street_3'  ,State__c = 'test' ,Industry_Sub_Segment__c = 'F1 - Desktop',
+                                          SIC_Code__c = 't', NAICS_Code__c = 'ut_', 
+                                          Website__c = 'http://www.test.com', EMail__c  = 'test.test@test.com',
+                                          Fax__c = '+1234567890', Telephone__c = '+1234567890');
+        
+      insert testCustomer; */
+      
+      ZA_ZS_RECORD_TYPE_ID = [Select Id, Name,DeveloperName From RecordType Where IsActive=true AND 
+                                (SobjectType = 'Partner_Function__c' AND DeveloperName =:ZA_ZS_RECORD_TYPE) limit 1].id;
+      sap_cmd__c testSapCmd = createSAPCMD(objTestFunloc.id);
+      insert testSapCmd;
+      lstPartFuncs.add(new Partner_Function__c(RecordTypeId = ZA_ZS_RECORD_TYPE_ID,SAP_Customer__c = testSapCmd.Id,Partner_Function_Type__c = Partner_Function_Type_ZA,Person_Name__c = 'AP004 - Anca Lin'));
+      lstPartFuncs.add(new Partner_Function__c(RecordTypeId = ZA_ZS_RECORD_TYPE_ID,SAP_Customer__c = testSapCmd.Id,Partner_Function_Type__c = Partner_Function_Type_ZS,Person_Name__c = 'CN254 - Van Zhang')); 
+      insert lstPartFuncs;
+      
+      }
+      
+      
 }

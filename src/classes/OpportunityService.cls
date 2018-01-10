@@ -32,6 +32,17 @@ public with sharing class OpportunityService {
 		uow.commitWork();	
 	}
 	
+    //SFDC-1154
+    public static void updateProbabilityToWin(Set<Id> opptyIds){
+        p('updateProbabilityToWin');
+        fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+        
+        OpportunityLineItems opptyProds = new OpportunityLineItems(new OpportunityLineItemsSelector().selectByOpptyIdWithProduct(opptyIds, OpportunityLineItems.LOST_CANCELLED));
+    	opptyProds.updateOpptyProdProbabilityToWin(uow);	
+        
+        uow.commitWork();	
+    }
+	
 	public class DesignWinApprover {
 		public String label;
 		public String name;
@@ -275,7 +286,7 @@ public with sharing class OpportunityService {
 		return oppty.Distributor_Name__c + '-' + oppty.End_Customer_Region__c;
 	}
 	//=============================================================================================
-
+	
 	public static Set<Id> updateEndCustomerAccounts(List<Opportunity> oppties, Boolean uowRequired) {
 		p('updateEndCustomerAccounts');
 		String CUSTOMER_TMMA = 'Tier 4 - TMMA';
@@ -353,6 +364,36 @@ public with sharing class OpportunityService {
 		return opptyIds;
 	}
 	
+	public static void updateOpptyClaimValueHistoryTracking(List<Opportunity> oppties) {
+		List<Id> opptyIds = new List<Id>();
+		
+		for (Opportunity oppty : oppties) {
+			opptyIds.add(oppty.Id);
+		}
+		
+        if(System.isFuture() || System.isBatch()) {
+            return;
+        }
+        else {
+            updateOpptyClaimValueHistoryTracking(opptyIds);
+        }
+    }
+    
+	@future
+    public static void updateOpptyClaimValueHistoryTracking(List<Id> opptyIds) {        
+        List<Opportunity> oppties = new OpportunitiesSelector().selectById(new Set<Id>(opptyIds));
+        
+        for (Opportunity oppty : oppties) {
+            if (oppty.Locked_Exchange_Rate__c != null && oppty.Locked_Exchange_Rate__c != 0) {
+            	oppty.Claim_Value_USD_SYS__c = oppty.Claim_Value__c / oppty.Locked_Exchange_Rate__c;
+            }
+            else {
+                oppty.Claim_Value_USD_SYS__c = 0;
+            }
+        }
+        update oppties;
+    }
+    
 	private static Boolean isMnRecordType(Opportunity oppty) {
 		return oppty.RecordTypeId == OpportunitiesSelector.getMnRecordTypeId();
     }

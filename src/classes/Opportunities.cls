@@ -79,6 +79,8 @@ public class Opportunities extends ApplicationDomain {
 		createMnOpptyScheds(uow);
 		
 		uow.commitWork();
+        
+        OpportunityService.updateOpptyClaimValueHistoryTracking((List<Opportunity>)this.records);
 	}
 	
 	public override void onAfterUpdate(Map<Id, SObject> existingRecords) {
@@ -92,6 +94,8 @@ public class Opportunities extends ApplicationDomain {
 		updateOpptyProdPrograms((Map<Id, Opportunity>)existingRecords, uow);
 		
 		uow.commitWork();
+		
+		OpportunityService.updateOpptyClaimValueHistoryTracking((List<Opportunity>)existingRecords.values());
 	}
 	
 	public void updateDesignWinApprovers(fflib_ISObjectUnitOfWork uow) {

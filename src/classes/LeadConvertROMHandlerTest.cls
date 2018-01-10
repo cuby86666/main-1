@@ -26,10 +26,10 @@ public class LeadConvertROMHandlerTest {
     private static final Double EXCH_RATE_USD = 2.0;
     private static final Double EXCH_RATE_EUR = 0.9;
     private static final Double EXCH_RATE_DEFAULT = EXCH_RATE_USD; // @default
-    private static final Date PRODUCTION_DATE = Date.newInstance(2016, 04, 30);
+    private static final Date PRODUCTION_DATE = system.today()+30;
     private static final Double LOCKED_EXCHANGE_RATE = 1.5;
     private static final Double ONE_YEAR_PIECES = 1500;
-    private static final Date EXPECTED_CLOSE_DATE = Date.newInstance(2016, 05, 30);
+    private static final Date EXPECTED_CLOSE_DATE = system.today();
     private static final string DISTRIBUTOR_TRACKING_NUMBER= 'c014562';
 
     
@@ -127,7 +127,8 @@ public class LeadConvertROMHandlerTest {
         	Distributor_Tracking_Number__c=DISTRIBUTOR_TRACKING_NUMBER,
         	Lead_Id__c=ld.Id,
         	Production_Date__c = PRODUCTION_DATE,
-        	CloseDate = PRODUCTION_DATE - 60,
+        	CloseDate = EXPECTED_CLOSE_DATE,
+            createdDate=system.today()-10,
         	Locked_Exchange_Rate__c = LOCKED_EXCHANGE_RATE, // Enabled for MN type, hidden for SFDC type. Admin can edit it no matter what type it is.
         	Currency__c = fxRates.get(CCY_CODE_DEFAULT).Id, // Locked_Exchange_Rate__c will be set to this by workflow.
         	CurrencyIsoCode = CCY_CODE_DEFAULT, // CurrencyIsoCode and Currency__c are correlated.

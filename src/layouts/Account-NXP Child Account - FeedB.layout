@@ -127,10 +127,6 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Sales_Area__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>Automotive_OEM__c</field>
             </layoutItems>
         </layoutColumns>
@@ -266,6 +262,10 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>CMD_Sub_Segment__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Sales_Area__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsTopToBottom</style>

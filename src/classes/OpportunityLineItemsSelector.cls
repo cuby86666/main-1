@@ -30,7 +30,7 @@ public class OpportunityLineItemsSelector extends ApplicationSelector {
       		OpportunityLineItem.Registration_Status__c,
 			OpportunityLineItem.Share__c,
 			OpportunityLineItem.Win_Status__c
-    };
+		};
 	}
 	
 	public List<OpportunityLineItem> selectAllWithOpportunity() {

@@ -1,3 +1,8 @@
+<!--------------------------------------------------------------------------------------------------------------------
+@ Last Modified By  :Shridevi
+@ Last Modified date:29 Dec 2017
+@ Description       : As part of SIR 943-Made the latest public case comment visible.
+----------------------------------------------------------------------------------------------------------------------->
 <apex:page sidebar="false" standardStylesheets="false"  showChat="false" showHeader="false" applyBodyTag="false" applyHtmlTag="false" controller="CommunityNXPCaseDetailController" action="{!assignCaseRecord}">
     <html lang="en">
         <!--[if lte IE 9]>
@@ -11,6 +16,7 @@
             </p>
         </div>
         <![endif]-->
+         <apex:stylesheet value="{!URLFOR($Resource.communityContextSearchStyles)}"/>
         <apex:composition template="CommunityNXPContextTemplate" >
             <apex:define name="body" >
                 <body style= "background-color:#ffffff;">
@@ -59,9 +65,19 @@
                                                     <dd class="panel-info-content" id="">{!caseRecord.Subject}</dd>
                                                     <dt class="panel-title">{!$Label.CommunityDescription}</dt>
                                                     <dd class="panel-info-content" id="">{!caseRecord.Description}</dd>
+                                                    <!------ Added by Shridevi,SFDC-943-Display the case comment if the comment is marked as public----->
+                                                    <apex:outputPanel rendered="{!if(caseRecord.casecomments.size>0,true,false)}">
+                                                    <dt class="panel-title">Comment</dt>
+                                                    <dd class="panel-info-content" id="">
+                                                    <div class="panel-info-content-1">{!caseRecord.CaseComments[0].commentbody}</div>
+                                                    </dd>  
+                                                    </apex:outputPanel>  
+                                                    <!-- ---------------------------------ENDS HERE---------------------------------------------------->
+                                                     
                                                 </dl>
                                             </div>
                                         </div>
+                                        
                                         <!-- /.panel-body -->
                                         <!-- Additional Information -->
                                         <div class="panel-body additional-info">

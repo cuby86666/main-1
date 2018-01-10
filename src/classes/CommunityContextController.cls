@@ -484,7 +484,7 @@ public without sharing class CommunityContextController{
                                   'Product_application__c,Project_Stage__c,Expected_annual_unit_volume__c,Priority ,Sub_Topic__c,description,first_name__c, last_name__c,email__c,phone_number__c,'+
                                   'community_Web_Country__c,Hours_spent_by_Support_person__c,State_Province__c,Web_Region__c,Nature_of_Question__c,'+
                                   'company__c,jobtitle__c,Product_Type_Number__c,My_Question_is_Related__c, FeedItemId from Case '+ 
-                                   'where RecordTypeId IN :recordTypeIds ';
+                                   'where RecordTypeId IN :recordTypeIds AND (origin!=\'Forum\' AND origin!=\'Community_Question\')';
         
                                    
         if(isLightningCommunity){

@@ -32,6 +32,7 @@ public class OpportunitiesSelector extends ApplicationSelector {
 			Opportunity.End_Customer_Region__c,
 			Opportunity.End_Customer_GID__c,
 			Opportunity.Expiration_Date__c,
+			Opportunity.Global_Key_Account_Manager__c,
 			Opportunity.Industry_Segment__c,
 			Opportunity.Locked_Exchange_Rate__c,
 			Opportunity.Lead_Id__c,

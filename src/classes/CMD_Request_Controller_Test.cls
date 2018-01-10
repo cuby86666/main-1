@@ -162,7 +162,7 @@ private class CMD_Request_Controller_Test
             D_B_ZIP_Postal_Code__c = 'DB Zip' , 
             D_B_SIC_Code__c = 'DB Sic' , 
             D_B_SIC_Code_Description__c = 'DB Sic Desc',
-            Industry_Segment__c = 'AA - Appliances',
+            Industry_Segment__c = 'BB - C&I',
             House_Number__c = 'house',
             Street__c = 'Test street',
             Street2__c = 'Test Street 2',
@@ -210,6 +210,7 @@ private class CMD_Request_Controller_Test
         insert objChildAccount;
     }
     
+       
     private static void createCMDRequest(){
         objCMDRequest = new CMD_Request__c(
             RecordTypeId = New_SFDC_Parent_Account.Id,
@@ -221,11 +222,8 @@ private class CMD_Request_Controller_Test
             Request_Type__c = 'SFDC New Parent Account'
         );
         insert objCMDRequest;
-    }
-    
-    
-    
-    
+    }    
+  
     User testUser = new User
         (
             FirstName = 'Test' ,
@@ -305,7 +303,7 @@ private class CMD_Request_Controller_Test
         testRequest.Customer_Category = 'Focus';
         testRequest.Role = 'OEM';
         testRequest.Type = 'Customer';
-        testRequest.Industry_Segment = 'AA - Appliances';
+        testRequest.Industry_Segment = 'CC - Computing';
         testRequest.Website = 'www.test.com';
         testRequest.Email = 'stan@test.com';
         testRequest.Telephone = '+1234567890';
@@ -413,6 +411,9 @@ private class CMD_Request_Controller_Test
         testRequest.getIndustry_SegmentPicklist();
         //testRequest.getIndustry_Sub_SegmentPicklist();
         testRequest.getRegionPicklist();
+        string managerEmailAddress = 'abc.xyz@test.com';
+        CMD_Request_Controller objCmdReq = new CMD_Request_Controller();
+        objCmdReq.ValidateManagerEmail(managerEmailAddress);
     }
     
     /****Added by Scarlett****/
@@ -588,7 +589,7 @@ private class CMD_Request_Controller_Test
         testRequest.Customer_Category = 'Focus';
         testRequest.Role = 'OEM';
         testRequest.Type = 'Customer';
-        testRequest.Industry_Segment = 'AA - Appliances';
+        testRequest.Industry_Segment = 'AA - Automotive';
         testRequest.Website = 'www.test.com';
         testRequest.Email = 'stan@test.com';
         testRequest.Telephone = '+1234567890';
@@ -773,24 +774,24 @@ private class CMD_Request_Controller_Test
         testRequest.Customer_Category = 'Focus';
         testRequest.Role = 'OEM';
         testRequest.Type = 'Customer';
-        testRequest.Industry_Segment = 'AA - Appliances';
+        testRequest.Industry_Segment = 'AA - Automotive';
         testRequest.Industry_Sub_Segment = 'A1 - Major Home Appliances';
         testRequest.SubmitRequest();
-        testRequest.Industry_Segment = 'AA - Appliances';
+        testRequest.Industry_Segment = 'AA - Automotive';
         testRequest.getIndustry_Sub_SegmentPicklist();
-        testRequest.Industry_Segment = 'BB - Energy Management';
+        testRequest.Industry_Segment = 'BB - C&I';
         testRequest.getIndustry_Sub_SegmentPicklist();
-        testRequest.Industry_Segment = 'CC - Home/Building Automation (HABA)';
+        testRequest.Industry_Segment = 'CC - Computing';
         testRequest.getIndustry_Sub_SegmentPicklist();
-        testRequest.Industry_Segment = 'DD - Automotive & Transportation';
+        testRequest.Industry_Segment = 'DD - Distribution';
         testRequest.getIndustry_Sub_SegmentPicklist();
-        testRequest.Industry_Segment = 'EE - Consumer';
+        testRequest.Industry_Segment = 'EE - EMS';
         testRequest.getIndustry_Sub_SegmentPicklist();
-        testRequest.Industry_Segment = 'FF - Computing';
+        testRequest.Industry_Segment = 'FF - Infrastructure';
         testRequest.getIndustry_Sub_SegmentPicklist();
-        testRequest.Industry_Segment = 'GG - Secure Transactions';
+        testRequest.Industry_Segment = 'GG - Mobile';
         testRequest.getIndustry_Sub_SegmentPicklist();
-         testRequest.Industry_Segment = 'HH - Secure Identity';
+         testRequest.Industry_Segment = 'HH - Payment';
         testRequest.getIndustry_Sub_SegmentPicklist();
         testRequest.Industry_Segment = 'II - Tagging & Authentication';
         testRequest.getIndustry_Sub_SegmentPicklist();
@@ -821,6 +822,47 @@ private class CMD_Request_Controller_Test
          testRequest.getSales_AreaPicklist();
         testRequest.SubmitSAP();
         testRequest.ConfirmRequest();       
+    }
+    
+    
+    static testMethod void newChildRequestTest1()
+    {  
+        fetchRecordType();
+        //createCustomer();
+        createHubFundation();
+        createUser();
+        createParentAccount();
+        createChildAccount();
+        createCMDRequest();
+        ApexPages.StandardController stdCtrl = new ApexPages.StandardController(objCMDRequest);
+        CMD_Request_Controller testRequest = new CMD_Request_Controller(stdCtrl);
+        testRequest.RequestType = 'New SFDC Child Account';
+        testRequest.Requester_Name = 'Test User';
+        testRequest.Requester_Email = 'test@test.com';
+        testRequest.Account_Name = 'Test Child Account';
+        testRequest.Legal_Name = 'Test Child Account Company';
+        //testRequest.Parent_Account_Name = 'Test Parent Account';
+        testRequest.Parent_Account_GID = 'Test Parent Account Company';
+        testRequest.House_Number = 'House';
+        testRequest.Street = 'Test Street 1';
+        testRequest.Street_2 = 'Test Street 2';
+        testRequest.Street_3 = 'Test Street 3';
+        testRequest.City = 'Test Street 3';
+        testRequest.State = 'Test State Province';
+        testRequest.Postal_Code = 'Postal Zip';
+        testRequest.Country = 'Taiwan';
+        testRequest.Website = 'www.test.com';
+        testRequest.Email = 'stan@test.com';
+        testRequest.Telephone = '+1234567890';
+        testRequest.Fax = '+1234567890';
+        testRequest.Fulfillment_Channel = 'Direct';
+        testRequest.Customer_Category = 'Focus';
+        testRequest.Role = 'OEM';
+        testRequest.Type = 'Customer';
+        testRequest.Industry_Segment = 'AA - Automotive';
+        testRequest.Industry_Sub_Segment = '';
+        testRequest.SubmitRequest();        
+      
     }
     
     /***Added by Scarlett***/
@@ -1058,9 +1100,49 @@ private class CMD_Request_Controller_Test
         testRequest.New_Owner_Email = objUser.Email;
         testRequest.New_Owner_Name = objUser.Username;
         
+        
+        testRequest.New_Owner_Email = null;
+        
+        
         testRequest.SubmitRequest();
         //testRequest.SubmitSAP();
-        testRequest.ConfirmRequest();  
+        testRequest.ConfirmRequest(); 
+        CMD_Request_Controller.ConvertSubSegmentCode('test');
+        testRequest.EmailCMD();
+        //testRequest.Refresh();
+        String str = CMD_Request_Controller.ConvertRegionCode('EMEA');
+        String str1 = CMD_Request_Controller.ConvertRegionCode('Japan');
+        String str2 = CMD_Request_Controller.ConvertRegionCode('Korea');
+        String str3 = CMD_Request_Controller.ConvertRegionCode('Greater China');
+        String str4 = CMD_Request_Controller.ConvertRegionCode('South Asia Pacific');
+        String str5 = CMD_Request_Controller.ConvertRegionCode('test'); 
+        
+        List<CMD_Request__c> cmdList = new List<CMD_Request__c>();
+        
+            CMD_Request__c objCMDRequest1 = new CMD_Request__c(
+            RecordTypeId = New_SFDC_Parent_Account.Id,
+            Requester_SFDC__c = objUser.Id,
+            Request_Status__c = 'Submitted',
+            Requester_Email__c = objUser.Email,
+            country__c='India',
+            State_Province__c='kerala',
+            Request_Type__c = 'SFDC New Parent Account'
+        );
+        insert objCMDRequest1;
+        cmdList.add(objCMDRequest1);
+        
+            CMD_Request__c objCMDRequest2 = new CMD_Request__c(
+                RecordTypeId = New_SFDC_Parent_Account.Id,
+                Requester_SFDC__c = objUser.Id,
+                Request_Status__c = 'Submitted',
+                Requester_Email__c = objUser.Email,
+                country__c='',
+                State_Province__c='kerala',
+                Request_Type__c = 'SFDC New Parent Account'
+            );
+        insert objCMDRequest2;
+        cmdList.add(objCMDRequest2);
+    
     }
 
 }

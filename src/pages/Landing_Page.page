@@ -6,6 +6,10 @@ Description     :    SIR-848-To add URLs for the New Registration page.
 Modified By     :    Nisha Agrawal
 Modified Date   :    02 Dec 2016
 Description     :    SFDC-44-To replace hard coded URLs with generic URLs for CMD/User Registration
+--------------------------------------------------------------------------------------------------------
+Modified By     :    Nisha Agrawal
+Modified Date   :    20 Nov 2017
+Description     :    SFDC-1080-To update urls for outdated hyperlinks and remove GoToTraining Section and other updates
 **********************************************************************************************************************-->
 <apex:page id="thePage" sidebar="false" showHeader="false"  standardStylesheets="false" cache="false" controller="CaseControllerAttachment">
 
@@ -156,26 +160,10 @@ Description     :    SFDC-44-To replace hard coded URLs with generic URLs for CM
                     </div>  
                     <!-- Box 4 Ends here  -->
                 </td>
+                
                 <td valign="top" id="app5">
-                    <!-- Box 5 Starts here  -->
-                    <div class="box-1">
-                        <div class="grey-2">
-                            <div>
-                                <div>
-                                    <div>
-                                        <h3 class="nxp-darkorange" style="text-align:center;">Go To Meeting</h3>
-                                        <a href="https://www4.gotomeeting.com/island/login.tmpl?Portal=www.gotomeeting.com" title="GoToMeeting"  target="blank">
-                                            <div style="text-align:center;">
-                                              <img src="{!URLFOR($Resource.LandingPageStyle, 'img/gotomeeting.jpg')}" alt="Register with GoToMeeting" width="80" />
-                                            </div>
-                                        </a>
-                                    </div>                
-                                </div>                
-                            </div>                
-                        </div>
-                    </div>  
-                    <!-- Box 5 Ends here  -->
-                </td>
+                    
+               </td>
                 <td valign="top" id="app6">
                     <!-- Box 6 Starts here  -->
                     <div class="box-1">                       
@@ -267,13 +255,7 @@ Description     :    SFDC-44-To replace hard coded URLs with generic URLs for CM
                     </div>
                 </td>
                 <td valign="top" id="trng5">
-                   <div class="sub-container">
-                        <ul class="bullet-green-list">
-                            <li>
-                               <p><a href="/newuser/NewUserRegisteration?userRequestparam=GoToMeeting" title="GoToMeeting" target="blank">Click here to register</a></p>                     
-                            </li>
-                        </ul>
-                    </div>                    
+                   
                 </td>
 <!--               <td valign="top" id="trng6">
                     <div class="sub-container">
@@ -310,26 +292,16 @@ Description     :    SFDC-44-To replace hard coded URLs with generic URLs for CM
                    <div class="sub-container">
                         <ul class="bullet-green-list">
                             <li>
-<!--                                <a href="https://nxp.box.net/shared/q39rni68yb0sxkvug5k1" target="blank">SFDC User Guide</a>                        
---><!--                                <a href="https://nxp.box.com/s/vp611zwpkngp8sugjhui" target="blank">SFDC User Guide</a> 
---><!--                                <a href="https://nxp.my.salesforce.com/sfc/p/20000000NBgb/a/D0000000PY2q/awXQOvdUFdsqAki75mYK4q6SQrvkJzWwBVL5g2dyqFU=" target="blank">SFDC User Guide</a>                                        
--->
-                                    <a href="https://nxp.app.box.com/s/ne9s2mxndk4gr146iqce9fqrqc2mu91l" target="blank">SFDC Opportunity Management</a>
+                               <a href="https://nxp1.sharepoint.com/teams/ext10/gsap/GSASPublication/_layouts/15/doc.aspx?sourcedoc=%7B97CEB944-69FF-49FE-AD6F-8ADB89B32EF1%7D&file=SalesForce.com%20Fundamentals.pptx&action=edit&Source=https%3A%2F%2Fnxp1%2Esharepoint%2Ecom%2Fteams%2Fext10%2Fgsap%2FGSASPublication%2Fdefault%2Easpx%3FRootFolder%3D%252Fteams%252Fext10%252Fgsap%252FGSASPublication%252FDocuments%252FSales%2520Trainings%252FSalesforcecom%2520Fundamentals%26FolderCTID%3D0x01200078FAB24B6F2B1F4383D7629EBDDBF713%26View%3D%257BADFF1F61%252DFDF4%252D4C20%252D9890%252D6BF26551A01E%257D" target="blank">SFDC Fundamentals</a>
                             </li>
                             <li>
-<!--                                <a href="https://nxp.box.net/shared/9lalcp5v7cm3msh8tixq" target="blank">SFDC Reporting</a>
---><!--                                <a href="https://nxp.box.com/s/kpkekueosohklsfchepr" target="blank">SFDC Reporting</a>
---><!--                                <a href="https://nxp.my.salesforce.com/sfc/p/20000000NBgb/a/D0000000PY2l/92rt9WFe8g4osFLPVm1XkL4Japna_j0JIXrHeNWh_Pk=" target="blank">SFDC Reporting</a>
--->                                 <a href="https://nxp.box.com/s/zg0xln8redf2jdrvq8n7uukn0pwsv2oy" target="blank">SFDC Account Management</a>
+                                <a href="https://nxp1.sharepoint.com/teams/ext10/gsap/GSASPublication/_layouts/15/doc.aspx?sourcedoc=%7B52F0946F-E03D-49F1-B6C3-A67E0194DF67%7D&file=2.%20SFDC_Opportunity%202.0.pptx&action=edit&Source=https%3A%2F%2Fnxp1%2Esharepoint%2Ecom%2Fteams%2Fext10%2Fgsap%2FGSASPublication%2Fdefault%2Easpx%3FRootFolder%3D%252Fteams%252Fext10%252Fgsap%252FGSASPublication%252FDocuments%252FSales%2520Trainings%252FOpportunity%2520Management%26FolderCTID%3D0x01200078FAB24B6F2B1F4383D7629EBDDBF713%26View%3D%257BADFF1F61%252DFDF4%252D4C20%252D9890%252D6BF26551A01E%257D" target="blank">SFDC Opportunity Management</a>
                             </li>
                             <li>
-<!--                                <a href="https://nxp.box.com/s/dd08fe7e9c6d5a819968" target="blank">Mobile Setup</a>
---><!--                                <a href="https://nxp.my.salesforce.com/sfc/p/20000000NBgb/a/D0000000PY2v/63mIbPEiqV3FlWmW4c_zge5jXFdbd92R6.E1pU6fBwY=" target="blank">Mobile Setup</a>
--->                                 <a href="https://nxp.box.com/s/5f489eb0dxdscs1fe87escuahwkaq7gi" target="blank">SalesForce 1 Mobile</a>
+                                <a href="https://nxp1.sharepoint.com/teams/ext10/gsap/GSASPublication/_layouts/15/doc.aspx?sourcedoc=%7BC7B7B00E-7FB0-489C-A816-605AC37E90AE%7D&file=5.%20Direct%20DW%20Opportunity%20Managment%20on%20SFDC%20Mobile.pptx&action=edit&Source=https%3A%2F%2Fnxp1%2Esharepoint%2Ecom%2Fteams%2Fext10%2Fgsap%2FGSASPublication%2Fdefault%2Easpx%3FRootFolder%3D%252Fteams%252Fext10%252Fgsap%252FGSASPublication%252FDocuments%252FSales%2520Trainings%252FOpportunity%2520Management%26FolderCTID%3D0x01200078FAB24B6F2B1F4383D7629EBDDBF713%26View%3D%257BADFF1F61%252DFDF4%252D4C20%252D9890%252D6BF26551A01E%257D" target="blank">SalesForce 1 Mobile</a>
                             </li>
                             <li>
-<!--                                <a href="https://nxp.box.com/s/f81142c3a321bc9bc1d7" target="blank">More</a>
--->                                <a href="https://nxp.box.com/shared/q42192z074" target="blank">More</a>
+                                <a href="https://nxp1.sharepoint.com/teams/ext10/gsap/GSASPublication/default.aspx?RootFolder=%2Fteams%2Fext10%2Fgsap%2FGSASPublication%2FDocuments%2FSales%20Trainings&FolderCTID=0x01200078FAB24B6F2B1F4383D7629EBDDBF713&View=%7BADFF1F61-FDF4-4C20-9890-6BF26551A01E%7D" target="blank">More</a>
                             </li>
                         </ul>
                     </div>                    
@@ -376,7 +348,7 @@ Description     :    SFDC-44-To replace hard coded URLs with generic URLs for CM
                     <div class="sub-container">
                         <ul class="bullet-orange-list">
                             <li>
-                                <a href="https://nxp.box.com/s/zg0xln8redf2jdrvq8n7uukn0pwsv2oy" target="blank">Account Management</a>
+                                <a href="https://nxp1.sharepoint.com/teams/ext10/gsap/GSASPublication/_layouts/15/doc.aspx?sourcedoc=%7B87F30CA8-2B4C-4BFA-A7FC-6A5574A0ECF2%7D&file=3.%20Account%20Management%20Process%20on%20SFDC.pptx&action=edit&Source=https%3A%2F%2Fnxp1%2Esharepoint%2Ecom%2Fteams%2Fext10%2Fgsap%2FGSASPublication%2Fdefault%2Easpx%3FRootFolder%3D%252Fteams%252Fext10%252Fgsap%252FGSASPublication%252FDocuments%252FSales%2520Trainings%252FUnfiled%2520Training%2520Materials%26FolderCTID%3D0x01200078FAB24B6F2B1F4383D7629EBDDBF713%26View%3D%257BADFF1F61%252DFDF4%252D4C20%252D9890%252D6BF26551A01E%257D" target="blank">Account Management</a>
                             </li>
                             <!-- uncomment this section to add training                            
                             <li>
@@ -390,31 +362,10 @@ Description     :    SFDC-44-To replace hard coded URLs with generic URLs for CM
                     </div>
                 </td>
                 <td valign="top" id="trng5">
-                    <div class="sub-container">
-                        <ul class="bullet-green-list">
-                            <li>
-                                <a href="https://nxp.box.com/s/g9zcteoc9qr2s3degvj9" target="blank">GoToMeeting FAQ</a>
-                            </li>
-                            <li>
-                                <a href="http://support.citrixonline.com/en_US/GoToMeeting/video/GTMV00001" target="blank">GoToMeeting How To</a>
-                            </li>
-                            <li>
-                                <a href="http://support.citrixonline.com/en_US/gotomeeting/all_files/GTM040001" target="blank">Mobile Setup</a>
-                            </li>
-                            <!-- uncomment this section to add training
-                            <li>
-                                <a href="#" target="blank">more</a>
-                            </li> 
-                            -->
-                        </ul>
-                    </div>
                 </td>
                 <td valign="top" id="trng6">
                     <div class="sub-container">
                         <ul class="bullet-orange-list">                            
-                            <li>
-                                <a href="https://nxp.box.com/s/09a3ef81c66782e20505" target="blank">ModelN User Guide</a>                        
-                            </li>
                             <!-- uncomment this section to add training
                             <li>
                                 <a href="#" target="blank">T2</a>
@@ -462,7 +413,7 @@ Description     :    SFDC-44-To replace hard coded URLs with generic URLs for CM
                         <ul class="bullet-grey-list">
 <!--                            <li><a href="mailto:support@salesforce.com" title="globalsales.appsupport@nxp.com">Email</a></li>
 -->
-                            <li><a href="https://nxp.box.com/s/v96u10fksmarqecyleea" target="blank" title="Salesforce Support">Support Site</a></li>
+                            <li><a href="https://help.salesforce.com/home" target="blank" title="Salesforce Support">Support Site</a></li>
                             <li><a href="https://nxp.my.salesforce.com/_ui/core/chatter/groups/GroupProfilePage?g=0F9D00000004y9K" title="User Support Chatter Group">User Support Chatter Group</a></li>
                         </ul>
                     </div>
@@ -491,26 +442,19 @@ Description     :    SFDC-44-To replace hard coded URLs with generic URLs for CM
                         <ul class="bullet-grey-list">
 <!--                            <li><a href="mailto:globalsales.appsupport@nxp.com" title="globalsales.appsupport@nxp.com">Email</a></li>
 -->
-                            <li><a href="https://nxp.box.com/s/v96u10fksmarqecyleea" target="blank" title="Salesforce Support">Support Site</a></li>
+                            <li><a href="https://nxp1.sharepoint.com/teams/ext10/gsap/GSASPublication/default.aspx?RootFolder=%2Fteams%2Fext10%2Fgsap%2FGSASPublication%2FDocuments%2FCustomer%20Master%20Data%20Procedures%20%26%20Documentations&FolderCTID=0x01200078FAB24B6F2B1F4383D7629EBDDBF713&View=%7BADFF1F61-FDF4-4C20-9890-6BF26551A01E%7D" target="blank" title="Salesforce Support">Support Site</a></li>
                         </ul>
                     </div>
                 </td>
                 <td valign="top" id="support5">
-                    <div class="sub-container">
-                        <ul class="bullet-grey-list">
-<!--                            <li><a href="http://support.citrixonline.com/en_US/gotomeeting/case" target="blank" title="GoToMeeting">Email</a></li>
--->
-                            <li><a href="http://support.citrixonline.com/en_US/gotomeeting/contact?question=help" target="blank" title="GoToMeetSupport">Support Site - English</a></li>
-                            <li><a href="http://support.citrixonline.com/zh_CN/Meeting" target="blank" title="GoToMeetSupport">Support Site - Chinese</a></li>
-                        </ul>
-                    </div>
+                    
                 </td>
                 <td valign="top" id="support6">
                     <div class="sub-container">
                         <ul class="bullet-grey-list">
 <!--                            <li><a href="mailto:modeln.functionalsupport@nxp.com" title="modeln.functionalsupport@nxp.com">Email</a></li>
 -->
-                            <li><a href="https://nxp.box.com/s/f6ruv42yknnbycfbsspw" target="blank" title="Model N Support">Support Site</a></li>
+
                         </ul>
                     </div>
                 </td>

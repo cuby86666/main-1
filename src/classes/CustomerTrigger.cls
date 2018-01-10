@@ -62,7 +62,8 @@ public with sharing class CustomerTrigger
                                 newCustomer.Website__c != oldCustomer.Website__c ||
                                 newCustomer.EMail__c != oldCustomer.EMail__c ||
                                 newCustomer.Fax__c != oldCustomer.Fax__c ||
-                                newCustomer.Telephone__c != oldCustomer.Telephone__c
+                                newCustomer.Telephone__c != oldCustomer.Telephone__c ||
+                                newCustomer.Sales_Area__c != oldCustomer.Sales_Area__c
                             );
         return isChanged;
     }
@@ -93,6 +94,7 @@ public with sharing class CustomerTrigger
         objAccount.Role__c = objCustomer.Role__c;
         objAccount.Customer_Category__c = objCustomer.GSM_Classification__c;
         objAccount.FulFillment_Channel__c = objCustomer.Fulfillment_Channel__c;
+        objAccount.Sales_Area__c = objCustomer.Sales_Area__c;
         
         if(objCustomer.Region__c.indexOf('-') > -1)
         {
@@ -148,7 +150,8 @@ public with sharing class CustomerTrigger
                                             Email__c = objCustomer.EMail__c ,Fax = objCustomer.Fax__c , 
                                             Phone = objCustomer.Telephone__c, CMD_Request_Id__c = objCustomer.CMD_Request_Id__c,
                                             CMD_Short_Name__c = objCustomer.Account_Name__c, 
-                                            Status_of_D_B_Cleansing__c = objCustomer.DNB_Verified__c
+                                            Status_of_D_B_Cleansing__c = objCustomer.DNB_Verified__c,
+                                            Sales_Area__c = objCustomer.Sales_Area__c
                                         );
                                         
         if(objCustomer.Region__c.indexOf('-') > -1)
@@ -248,6 +251,8 @@ public with sharing class CustomerTrigger
 
     public static void syncCustomerOnUpdateToSfCrm(List<Customer__c> lstCustomers, Map<Id, Customer__c> oldCustomersMap)
     {   
+        system.debug('**[Scarlett] run syncCustomerOnUpdateToSfCrm...');
+        
         if((lstCustomers != null && lstCustomers.size() > 0) && ( oldCustomersMap != null && oldCustomersMap.size() > 0))
         {
             //fetch the record types for Account(Std Object) in SF-CRM
@@ -262,6 +267,8 @@ public with sharing class CustomerTrigger
                 //check if Sales checkbox checked and Type==Customer and Status <> 'Pending'
                 if((objCustomer.Sales__c) && (objCustomer.Type__c == TYPE_CUSTOMER) && (objCustomer.Status__c <> STATUS_PENDING))
                 {
+                    system.debug('**[Scarlett] collect GID info...');
+                    
                     Customer__c oldCustomer = oldCustomersMap.get(objCustomer.Id);
                     
                     //either Config Parameters changed or Customer specific parameters changed
@@ -270,6 +277,7 @@ public with sharing class CustomerTrigger
                     //check if any field out of those fields to be synced with SF-CRM modified
                     if(isConfigChanged || isCustomerChanged(objCustomer, oldCustomer))
                     {
+                        system.debug('**[Scarlett] isCustomerChanged...');
                         mapGidToCandidateCustomers.put(objCustomer.Name, objCustomer);
                     }
                 }
@@ -279,7 +287,7 @@ public with sharing class CustomerTrigger
             //for one NXP-GID, there could be multiple Account records regardless of record type (Parent/Child/PreAccount)
                         
             Map<String, Set<Account>> mapGidToAccount = new Map<String, Set<Account>>();
-            for(Account acc: [Select Id , Name, NXP_GID__c From Account 
+            for(Account acc: [Select Id , Name, NXP_GID__c, Sales_Area__c From Account 
                                 Where NXP_GID__c in : mapGidToCandidateCustomers.keySet()])
             {
                 if(mapGidToAccount.containsKey(acc.NXP_GID__c))
@@ -302,8 +310,13 @@ public with sharing class CustomerTrigger
                     //Account Records exists - update these record(s)
                     for(Account acc : mapGidToAccount.get(objCustomer.Name))
                     {
+                        system.debug('**[Scarlett] before updateAccount...' + 'acc.Sales_Area__c: ' + acc.Sales_Area__c);
+                        
                         updateAccount(objCustomer, acc);
                         lstAccountsToBeUpserted.add(acc);
+                        
+                        system.debug('**[Scarlett] after updateAccount...' + 'acc.Sales_Area__c: ' + acc.Sales_Area__c);
+                         system.debug('**[Scarlett] Account Id: ' + acc.Id);
                     }       
                 }
                 else
@@ -317,6 +330,7 @@ public with sharing class CustomerTrigger
             //upsert modified account records
             if(lstAccountsToBeUpserted.size() > 0)
             {
+                system.debug('**[Scarlett] upsert account...');
                 upsert lstAccountsToBeUpserted;
                 
 /*
@@ -427,7 +441,7 @@ public with sharing class CustomerTrigger
         }
         return sapCode;
     }
-    
+ 
     public static CMD_Request__c getCMDRequestById(String Id)
     {
         if (Id == '' || Id == null) return null;

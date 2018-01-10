@@ -862,8 +862,8 @@ for(Case objCase : lstCases)
                                   PSLTemp=PSLRec.Project_Service_Level__c;
                              }
                               System.debug('2.PSLRec.sub_type__c::'+PSLRec.sub_type__c);
-                            
-                         
+                              System.debug('2.PSLRec.priority::'+PSLRec.priority__c);
+                              System.debug('2.ent priority::'+mapEntitlement.get(caseRec.EntitlementId).Priority__c);
                              if(PSLRec.sub_type__c==null && PSLRec.Priority__c==mapEntitlement.get(caseRec.EntitlementId).Priority__c && (PSLTemp==null || PSLTemp==''))
                              {
                                   PSLTemp=PSLRec.Project_Service_Level__c;
@@ -1281,7 +1281,7 @@ for(Case objCase : lstCases)
             {
                  if(objcase.isClosed==false)
                  {
-                     if(objcase.origin=='Community_Question')
+                     if(objcase.origin=='Forum')
                      {
                           listCases.add(objCase);
                      }
@@ -1296,7 +1296,7 @@ for(Case objCase : lstCases)
      {
            for(case caseRec:CaseNewList)
         {
-              if(caseRec.description!=CaseOldMap.get(caseRec.id).description && caseRec.Isclosed==false && caseRec.origin=='Community_Question')
+              if(caseRec.description!=CaseOldMap.get(caseRec.id).description && caseRec.Isclosed==false && caseRec.origin=='Forum')
                 {
                     listCases.add(caseRec);
                 }
@@ -1594,7 +1594,10 @@ for(Case objCase : lstCases)
         for(Case caseRec:CaseList)
         
         {
-                if(caseRec.Origin=='Community'){
+        //Modified by shridevi-SIR 1015-replaced the case origin from community to Self Service Portal and  extended the functionlaity to case origin Forum 
+               
+                if(caseRec.Origin=='Self Service Portal' || caseRec.Origin=='Forum')
+                {
                 caseRec.SuppliedCompany=caseRec.Company__c;
                 caseRec.SuppliedPhone=caseRec.Phone_Number__c;
                 caseRec.SuppliedName=caseRec.First_Name__c+' '+caseRec.Last_Name__c;
@@ -1604,8 +1607,8 @@ for(Case objCase : lstCases)
                 caseRec.Contact_Title__c= caseRec.JobTitle__c;
                 caseRec.My_question_is_about__c=caseRec.My_Question_is_Related__c;
                 caseRec.Case_Owner_Name__c=caseRec.Owner.Name;
-        }
-        
+               }
+         
         }
   
   
@@ -2022,7 +2025,6 @@ public static void EntitlementUpdate(List<Case> CaseNewList,List<Case> CaseOldLi
     
     
     }
-
 
 
 

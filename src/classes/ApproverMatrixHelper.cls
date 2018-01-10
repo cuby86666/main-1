@@ -61,6 +61,19 @@ public class ApproverMatrixHelper {
     	return result;
     }
     
+    public static Approvers_Matrix__c getDirectOpptyGamGeneral(Id accountId) {
+    	Approvers_Matrix__c result;
+    	
+    	for (Approvers_Matrix__c am : directOpptyApproverMatrixes.values()) {
+    		if (am.Type__c == DIRECT_OPPTY_TYPE_GAM && am.Account__c == accountId) {
+    			result = am;
+    			break;	
+    		}
+    	}	
+    	
+    	return result;
+    }
+    
     public static Approvers_Matrix__c getDirectOpptyEvpStar() {
     	Approvers_Matrix__c result;
     	

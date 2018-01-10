@@ -464,13 +464,13 @@ public void visibility(CMD_Request__c theCMDRequest)
 
    public List<SelectOption> getPDKeyOptions() {
         List<SelectOption> theOptions = new List<SelectOption>();
-        List<AggregateResult> queriedPDKeys = [
+        List<SAP_CMD__c> queriedPDKeys = [
             SELECT PD_Key_Account__c 
             FROM SAP_CMD__c 
             WHERE PD_Key_Account__c != NULL 
-            GROUP BY PD_Key_Account__c LIMIT 1000
+            LIMIT 1000
         ];
-        for( AggregateResult CMD : queriedPDKeys ) {
+        for( SAP_CMD__c CMD : queriedPDKeys ) {
             theOptions.add(new SelectOption((String)CMD.get('PD_Key_Account__c'),(String)CMD.get('PD_Key_Account__c')));
         }            
         return theOptions;

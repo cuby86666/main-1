@@ -198,6 +198,10 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Readonly</behavior>
+                <field>Design_Reg_Part_Is_Obsolete__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
                 <field>Expert_Certified__c</field>
             </layoutItems>
         </layoutColumns>
@@ -209,10 +213,6 @@
             <layoutItems>
                 <behavior>Readonly</behavior>
                 <field>Legacy_1_Year_Prod__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>Guided_Expected_POS_USD__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Readonly</behavior>
@@ -228,7 +228,11 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Readonly</behavior>
-                <field>ASP_Based_On_POS__c</field>
+                <field>Design_Reg_Part_Created_Date__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Design_Reg_Part_Modified_Date__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsLeftToRight</style>

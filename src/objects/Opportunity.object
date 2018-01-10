@@ -935,6 +935,10 @@ IMAGE (&quot;/img/samples/flag_red.gif&quot;, &quot;STOP&quot;)
                     <fullName>Broadcast &amp; Streaming Video</fullName>
                     <default>false</default>
                 </value>
+                <value>
+                    <fullName>Therapy Adherence</fullName>
+                    <default>false</default>
+                </value>
             </valueSetDefinition>
             <valueSettings>
                 <controllingFieldValue>ADAS</controllingFieldValue>
@@ -1117,38 +1121,6 @@ IMAGE (&quot;/img/samples/flag_red.gif&quot;, &quot;STOP&quot;)
                 <valueName>Portable Data Terminal/mPOS</valueName>
             </valueSettings>
             <valueSettings>
-                <controllingFieldValue>RFID Retail</controllingFieldValue>
-                <valueName>Payment EMV cards (open loop)</valueName>
-            </valueSettings>
-            <valueSettings>
-                <controllingFieldValue>RFID Retail</controllingFieldValue>
-                <valueName>Inventory and Supply Chain Management</valueName>
-            </valueSettings>
-            <valueSettings>
-                <controllingFieldValue>RFID Retail</controllingFieldValue>
-                <valueName>Micro payment cards (closed loop)</valueName>
-            </valueSettings>
-            <valueSettings>
-                <controllingFieldValue>RFID Retail</controllingFieldValue>
-                <valueName>Loyalty Cards</valueName>
-            </valueSettings>
-            <valueSettings>
-                <controllingFieldValue>RFID Retail</controllingFieldValue>
-                <valueName>Electronic shelf labels</valueName>
-            </valueSettings>
-            <valueSettings>
-                <controllingFieldValue>RFID Retail</controllingFieldValue>
-                <valueName>Portable Data Terminal</valueName>
-            </valueSettings>
-            <valueSettings>
-                <controllingFieldValue>RFID Retail</controllingFieldValue>
-                <valueName>ATM</valueName>
-            </valueSettings>
-            <valueSettings>
-                <controllingFieldValue>RFID Retail</controllingFieldValue>
-                <valueName>Currency Counter</valueName>
-            </valueSettings>
-            <valueSettings>
                 <controllingFieldValue>RFID Transit, Access and Identification</controllingFieldValue>
                 <valueName>Transportation Cards</valueName>
             </valueSettings>
@@ -1299,6 +1271,10 @@ IMAGE (&quot;/img/samples/flag_red.gif&quot;, &quot;STOP&quot;)
             <valueSettings>
                 <controllingFieldValue>Medical Electronics</controllingFieldValue>
                 <valueName>Medical imaging</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Medical Electronics</controllingFieldValue>
+                <valueName>Therapy Adherence</valueName>
             </valueSettings>
             <valueSettings>
                 <controllingFieldValue>Power &amp; Energy</controllingFieldValue>
@@ -1591,6 +1567,38 @@ IMAGE (&quot;/img/samples/flag_red.gif&quot;, &quot;STOP&quot;)
             <valueSettings>
                 <controllingFieldValue>Other Networking</controllingFieldValue>
                 <valueName>Broadcast &amp; Streaming Video</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Retail and Logistics</controllingFieldValue>
+                <valueName>Payment EMV cards (open loop)</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Retail and Logistics</controllingFieldValue>
+                <valueName>Inventory and Supply Chain Management</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Retail and Logistics</controllingFieldValue>
+                <valueName>Micro payment cards (closed loop)</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Retail and Logistics</controllingFieldValue>
+                <valueName>Loyalty Cards</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Retail and Logistics</controllingFieldValue>
+                <valueName>Electronic shelf labels</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Retail and Logistics</controllingFieldValue>
+                <valueName>Portable Data Terminal</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Retail and Logistics</controllingFieldValue>
+                <valueName>ATM</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Retail and Logistics</controllingFieldValue>
+                <valueName>Currency Counter</valueName>
             </valueSettings>
             <valueSettings>
                 <controllingFieldValue>Mobile</controllingFieldValue>
@@ -2251,7 +2259,7 @@ Field changed from Lookup to Free Text - SFDC52 Rel1612</description>
     <fields>
         <fullName>BU_Description__c</fullName>
         <externalId>false</externalId>
-        <formula>Case( BU__c, &quot;510&quot;,&quot;Security &amp; Connectivity&quot;, &quot;511&quot;, &quot;Nexperia Business&quot;, &quot;525&quot;,&quot;Automotive&quot;, &quot;541&quot;, &quot;THIRD PARTY WAFERS&quot;, &quot;52N&quot;, &quot;Networking&quot;, &quot;52R&quot;, &quot;RF Power&quot;, &quot;51P&quot;, &quot;Standard Products FSL&quot;,NULL)</formula>
+        <formula>Case( BU__c, &quot;510&quot;,&quot;Security &amp; Connectivity&quot;, &quot;525&quot;,&quot;Automotive&quot;, &quot;541&quot;, &quot;THIRD PARTY WAFERS&quot;, &quot;52N&quot;, &quot;Networking&quot;, &quot;52R&quot;, &quot;RF Power&quot;, &quot;51P&quot;, &quot;Standard Products FSL&quot;,NULL)</formula>
         <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
         <label>BU Description</label>
         <required>false</required>
@@ -2264,26 +2272,24 @@ Field changed from Lookup to Free Text - SFDC52 Rel1612</description>
         <description>1511 Release - SIR 482. Translate BU Description for active BUs.</description>
         <externalId>false</externalId>
         <formula>SUBSTITUTE(
- SUBSTITUTE(
-  SUBSTITUTE(
-   SUBSTITUTE(
-    SUBSTITUTE(
-     SUBSTITUTE(
-      SUBSTITUTE(
-     BU__c,
-     &quot;510&quot;, &quot;Snc&quot;
-    ),
-   &quot;511&quot;, &quot;NB&quot;
-   ),
- &quot;52R&quot;, &quot;RF&quot;
- ),
- &quot;525&quot;, &quot;AUT&quot;
- ),
- &quot;541&quot;, &quot;THIRD PARTY WAFERS&quot;
- ),
- &quot;52N&quot;, &quot;NET&quot;
- ),
- &quot;51P&quot;, &quot;SP&quot;
+SUBSTITUTE(
+SUBSTITUTE(
+SUBSTITUTE(
+SUBSTITUTE(
+SUBSTITUTE(
+BU__c,
+&quot;510&quot;, &quot;SnC&quot;
+),
+
+&quot;52R&quot;, &quot;RF&quot;
+),
+&quot;525&quot;, &quot;AUT&quot;
+),
+&quot;541&quot;, &quot;THIRD PARTY WAFERS&quot;
+),
+&quot;52N&quot;, &quot;NET&quot;
+),
+&quot;51P&quot;, &quot;SP&quot;
 )</formula>
         <label>BU Short Name</label>
         <required>false</required>
@@ -2528,10 +2534,6 @@ Lost/Cancelled products are excluded from this calculation.</inlineHelpText>
                     <default>false</default>
                 </value>
                 <value>
-                    <fullName>FAIRCHILD SEMICONDUCTOR</fullName>
-                    <default>false</default>
-                </value>
-                <value>
                     <fullName>FLIR SYSTEMS </fullName>
                     <default>false</default>
                 </value>
@@ -2621,6 +2623,10 @@ Lost/Cancelled products are excluded from this calculation.</inlineHelpText>
                 </value>
                 <value>
                     <fullName>PANJIT SEMICONDUCTOR</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>POWER INTEGRATIONS</fullName>
                     <default>false</default>
                 </value>
                 <value>
@@ -3112,10 +3118,169 @@ X2016_Value__c+ X2017_Value__c+X2018_Value__c, 0
         <type>Currency</type>
     </fields>
     <fields>
-        <fullName>Design_Region__c</fullName>
-        <description>This field contains End customer Region.</description>
+        <fullName>Design_Customer_City__c</fullName>
+        <description>Design House Customer City</description>
         <externalId>false</externalId>
-        <label>Design Region</label>
+        <label>Design House Customer City</label>
+        <length>80</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Design_Customer_Country__c</fullName>
+        <description>Design House Customer Country</description>
+        <externalId>false</externalId>
+        <label>Design House Customer Country</label>
+        <length>80</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Design_Customer_GID__c</fullName>
+        <description>Design House Customer GID</description>
+        <externalId>false</externalId>
+        <label>Design House Customer GID</label>
+        <length>80</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Design_Customer_Location__c</fullName>
+        <description>Design House Customer Location</description>
+        <externalId>false</externalId>
+        <label>Design House Customer Location</label>
+        <length>80</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Design_Customer_Name__c</fullName>
+        <description>Design House Customer Name</description>
+        <externalId>false</externalId>
+        <label>Design House Customer Name</label>
+        <length>80</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Design_Customer_State__c</fullName>
+        <description>Design House Customer State</description>
+        <externalId>false</externalId>
+        <label>Design House Customer State</label>
+        <length>80</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Design_Customer_Zip__c</fullName>
+        <description>Design House Customer Zip</description>
+        <externalId>false</externalId>
+        <label>Design House Customer Zip</label>
+        <length>80</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Design_Reg_Is_Created_By_B2B__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Design Registration Created By B2B Flag</description>
+        <externalId>false</externalId>
+        <label>Design Reg Created By B2B</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Design_Reg_Is_Duplicated__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Design Registration Duplicate Flag</description>
+        <externalId>false</externalId>
+        <label>Design Reg Duplicated</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Design_Reg_Is_Expired__c</fullName>
+        <description>Design Registration Expiration Flag</description>
+        <externalId>false</externalId>
+        <formula>Expiration_Date__c &lt; TODAY()</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Design Reg Expired</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Design_Reg_Reject_Reason__c</fullName>
+        <description>Design Registration Reject Reason</description>
+        <externalId>false</externalId>
+        <label>Design Reg Reject Reason</label>
+        <length>80</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Design_Reg_Status__c</fullName>
+        <description>Design Registration Status</description>
+        <externalId>false</externalId>
+        <label>Design Reg Status</label>
+        <length>80</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Design_Reg_Win_Date__c</fullName>
+        <description>Design Registration Win Date</description>
+        <externalId>false</externalId>
+        <label>Design Reg Win Date</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Design_Reg_Win_Status__c</fullName>
+        <description>Design Registration Win Status</description>
+        <externalId>false</externalId>
+        <label>Design Reg Win Status</label>
+        <length>20</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Design_Region__c</fullName>
+        <externalId>false</externalId>
+        <label>Design House Customer Region</label>
         <length>255</length>
         <required>false</required>
         <trackFeedHistory>false</trackFeedHistory>
@@ -3233,10 +3398,10 @@ X2016_Value__c+ X2017_Value__c+X2018_Value__c, 0
         <unique>false</unique>
     </fields>
     <fields>
-        <fullName>Distributor_Tracking_Number__c</fullName>
-        <description>This field contains the Opportunity tracking number from a Distributor</description>
+        <fullName>Distributor_Name__c</fullName>
+        <description>Distributor Name</description>
         <externalId>false</externalId>
-        <label>Distributor Tracking Number</label>
+        <label>Distributor Name</label>
         <length>80</length>
         <required>false</required>
         <trackFeedHistory>false</trackFeedHistory>
@@ -3245,33 +3410,15 @@ X2016_Value__c+ X2017_Value__c+X2018_Value__c, 0
         <unique>false</unique>
     </fields>
     <fields>
-        <fullName>ECD_Months_of_Quarter__c</fullName>
-        <description>1608 Release SIR 1018. 
-Expected Close Date Months of Quarter. Calculate the nth month of the quarter. System used only, it&apos;s used for Likelihood__c calculation.</description>
+        <fullName>Distributor_Tracking_Number__c</fullName>
+        <description>This field contains the Opportunity tracking number from a Distributor</description>
         <externalId>false</externalId>
-        <formula>MONTH(CloseDate) - (CEILING(MONTH(CloseDate)/3) - 1)*3</formula>
-        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
-        <label>ECD Months of Quarter - SYSTEM USED</label>
-        <precision>18</precision>
+        <label>Project Disti Tracking Number</label>
+        <length>80</length>
         <required>false</required>
-        <scale>0</scale>
+        <trackFeedHistory>false</trackFeedHistory>
         <trackHistory>false</trackHistory>
-        <type>Number</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
-        <fullName>ECD_Quarter__c</fullName>
-        <description>1608 Release SIR 1018. 
-Expected Close Date Quarter. Calculate the quarter of Expected Close Date. System used only, it&apos;s used for Likelihood__c calculation.</description>
-        <externalId>false</externalId>
-        <formula>CEILING(MONTH(CloseDate)/3) + ( YEAR( CloseDate ) - YEAR( TODAY()) )*4</formula>
-        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
-        <label>ECD Quarter - SYSTEM USED</label>
-        <precision>18</precision>
-        <required>false</required>
-        <scale>0</scale>
-        <trackHistory>false</trackHistory>
-        <type>Number</type>
+        <type>Text</type>
         <unique>false</unique>
     </fields>
     <fields>
@@ -3321,10 +3468,70 @@ Expected Close Date Quarter. Calculate the quarter of Expected Close Date. Syste
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>End_Customer_GID__c</fullName>
+        <description>End Customer GID</description>
+        <externalId>false</externalId>
+        <label>End Customer GID</label>
+        <length>80</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>End_Customer_Location__c</fullName>
+        <description>End Customer Location</description>
+        <externalId>false</externalId>
+        <label>End Customer Location</label>
+        <length>80</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>End_Customer_Name__c</fullName>
+        <description>End Customer Name</description>
+        <externalId>false</externalId>
+        <label>End Customer Name</label>
+        <length>80</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>End_Customer_Region__c</fullName>
+        <description>End Customer Region</description>
+        <externalId>false</externalId>
+        <label>End Customer Region</label>
+        <length>80</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>End_Customer_Sales_Org_Code__c</fullName>
         <description>This field contains End customer&apos;s sales org code from Model N.</description>
         <externalId>false</externalId>
         <label>End Customer Sales Org Code</label>
+        <length>80</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>End_Customer_State__c</fullName>
+        <description>End Customer State</description>
+        <externalId>false</externalId>
+        <label>End Customer State</label>
         <length>80</length>
         <required>false</required>
         <trackFeedHistory>false</trackFeedHistory>
@@ -3393,6 +3600,18 @@ Expected Close Date Quarter. Calculate the quarter of Expected Close Date. Syste
         <trackHistory>false</trackHistory>
         <type>Number</type>
         <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Global_Key_Account_Manager__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Global Key Account Manager</label>
+        <referenceTo>User</referenceTo>
+        <relationshipName>Opportunities1zFn</relationshipName>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
     </fields>
     <fields>
         <fullName>Help_Needed__c</fullName>
@@ -3599,7 +3818,7 @@ Lost/Cancelled products are excluded from this calculation.</inlineHelpText>
         <fullName>Legacy_End_Customer_Name_and_Location__c</fullName>
         <description>This field contains End customer&apos;s Name and Location.</description>
         <externalId>false</externalId>
-        <label>End Customer Name and Location</label>
+        <label>z_OBSOLET_End Customer Name and Location</label>
         <length>255</length>
         <required>false</required>
         <trackFeedHistory>false</trackFeedHistory>
@@ -4434,6 +4653,49 @@ Lost/Cancelled products are excluded from this calculation.</inlineHelpText>
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Mobile_Processor__c</fullName>
+        <externalId>false</externalId>
+        <label>Mobile Processor</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Qualcomm</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Mediatek</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Samsung</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Apple</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>HiSilicon</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Nvidia</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Others</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
         <fullName>Name</fullName>
         <trackFeedHistory>true</trackFeedHistory>
         <trackHistory>false</trackHistory>
@@ -4589,14 +4851,14 @@ This value is converted to USD.</inlineHelpText>
         <externalId>false</externalId>
         <formula>IF( 
     AND(
-        Days_since_Created_Date__c &lt; 30, 
+        Days_since_Created_Date__c &lt; 90, 
         NOT(X90_Day_Maturity_Exception__c)
     ),
     IMAGE (&quot;/img/samples/flag_red.gif&quot;, &quot;STOP&quot;), 
     IMAGE (&quot;/img/samples/flag_green.gif&quot;, &quot;GO&quot;) 
 )</formula>
-        <inlineHelpText>Red Flag = Opportunity created less than 30 days 
-Green Flag = Opportunity created more than 30 days 
+        <inlineHelpText>Red Flag = Opportunity created less than 90 days 
+Green Flag = Opportunity created more than 90 days 
 Opportunity with any Red Flag is not allowed to submit for approval.</inlineHelpText>
         <label>Maturity</label>
         <required>false</required>
@@ -4791,7 +5053,7 @@ Opportunity with any Red Flag is not allowed to submit for approval.</inlineHelp
         <inlineHelpText>80-100%, Include in Most Likely for Qtr;					
 50-80%, Define what is needed to win this Qtr. Actively working to move to 80-100% cat. List actions needed to secure win this Qtr  in Help Needed;					
 0-50%, Unlikely to close this Qtr. Not counted in Most</inlineHelpText>
-        <label>Probability to Win</label>
+        <label>z_OBSOLETED_Probability to Win</label>
         <required>false</required>
         <trackFeedHistory>false</trackFeedHistory>
         <trackHistory>false</trackHistory>
@@ -4947,65 +5209,6 @@ IF(
         <length>80</length>
         <required>false</required>
         <trackFeedHistory>false</trackFeedHistory>
-        <trackHistory>false</trackHistory>
-        <type>Text</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
-        <fullName>Projection__c</fullName>
-        <description>1608 Release - SIR 1018.</description>
-        <externalId>false</externalId>
-        <formula>IF( 
-	ISPICKVAL( Design_Win_Approval_Process__c , &quot;Approved&quot; ), &quot;Approved&quot;, 
-	IF( 
-	ISPICKVAL( Design_Win_Approval_Process__c , &quot;Pending&quot; ), &quot;Pending&quot;, 
-	IF( 
-	ISPICKVAL( Design_Win_Approval_Process__c , &quot;Lost&quot; ), &quot;Lost&quot;, 
-        IF( ECD_Quarter__c - Today_Quarter__c &lt; 0 , &quot;Past Due&quot;,
-	IF( 
-	ECD_Quarter__c - Today_Quarter__c &gt;1, &quot;Undetermined&quot;, 
-	IF( 
-	ISPICKVAL( Probability_to_Win__c , &quot;0% - 50%&quot;), &quot;Unlikely&quot;, 
-	IF( 
-	ISPICKVAL( Probability_to_Win__c , &quot;80% - 100%&quot;), &quot;Most Likely&quot;, 
-	IF( 
-	AND( 
-	ISPICKVAL( Probability_to_Win__c , &quot;50% - 80%&quot;), 
-	ECD_Quarter__c - Today_Quarter__c = 1, 
-	ECD_Months_of_Quarter__c = 3 
-	), &quot;Most Likely&quot;, 
-	IF( 
-	AND( 
-	ISPICKVAL( Probability_to_Win__c , &quot;50% - 80%&quot;), 
-	ECD_Quarter__c - Today_Quarter__c = 1, 
-	ECD_Months_of_Quarter__c &lt; 3 
-	), &quot;Unlikely&quot;, 
-	IF( 
-	AND( 
-	ISPICKVAL( Probability_to_Win__c , &quot;50% - 80%&quot;), 
-	ECD_Quarter__c - Today_Quarter__c = 0, 
-	Today_Months_of_Quarter__c = 3 
-	), &quot;Unlikely&quot;, 
-	IF( 
-	AND( 
-	ISPICKVAL( Probability_to_Win__c , &quot;50% - 80%&quot;), 
-	ECD_Quarter__c - Today_Quarter__c = 0, 
-	Today_Months_of_Quarter__c &lt; 3 
-	), &quot;Most Likely&quot;, 
-	&quot;Undetermined&quot; 
-	) 
-	) 
-	) 
-	) 
-	) 
-	) 
-	) 
-	) 
-	) 
-	)
-)</formula>
-        <label>Projection</label>
-        <required>false</required>
         <trackHistory>false</trackHistory>
         <type>Text</type>
         <unique>false</unique>
@@ -5623,6 +5826,7 @@ Controlling Field of &quot;RC8_Sub_Segment__c&quot;</description>
     </fields>
     <fields>
         <fullName>StageName</fullName>
+        <inlineHelpText>The following rules apply to Model N Oppty only: If Stage=Lost, most likely the Design Reg has Expired. If Stage=Cancelled, most likely the Design Reg is Rejected from Model N. For other more stage logic, follow the link from Section &quot;Custom Links&quot; below.</inlineHelpText>
         <trackFeedHistory>true</trackFeedHistory>
         <trackHistory>true</trackHistory>
         <trackTrending>true</trackTrending>
@@ -5735,7 +5939,7 @@ Controlling Field of &quot;RC8_Sub_Segment__c&quot;</description>
                     <default>false</default>
                 </value>
                 <value>
-                    <fullName>RFID Retail</fullName>
+                    <fullName>Retail and Logistics</fullName>
                     <default>false</default>
                 </value>
                 <value>
@@ -5837,7 +6041,7 @@ Controlling Field of &quot;RC8_Sub_Segment__c&quot;</description>
             </valueSettings>
             <valueSettings>
                 <controllingFieldValue>Data Processing</controllingFieldValue>
-                <valueName>RFID Retail</valueName>
+                <valueName>Retail and Logistics</valueName>
             </valueSettings>
             <valueSettings>
                 <controllingFieldValue>Data Processing</controllingFieldValue>
@@ -5959,21 +6163,6 @@ Calculate the nth month of the quarter. System used only, it&apos;s used for Lik
         <unique>false</unique>
     </fields>
     <fields>
-        <fullName>Today_Quarter__c</fullName>
-        <description>1608 Release SIR 1018. 
-Calculate the quarter of Today. System used only, it&apos;s used for Likelihood__c calculation.</description>
-        <externalId>false</externalId>
-        <formula>CEILING(MONTH(TODAY())/3)</formula>
-        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
-        <label>Today Quarter - SYSTEM USED</label>
-        <precision>18</precision>
-        <required>false</required>
-        <scale>0</scale>
-        <trackHistory>false</trackHistory>
-        <type>Number</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
         <fullName>TotalOpportunityQuantity</fullName>
         <trackFeedHistory>false</trackFeedHistory>
         <trackHistory>false</trackHistory>
@@ -6039,7 +6228,7 @@ will be the selected partner is accepted as evidence.</inlineHelpText>
         <fullName>X2010_Pieces__c</fullName>
         <defaultValue>0</defaultValue>
         <externalId>false</externalId>
-        <label>2010 Pieces</label>
+        <label>z_OBSOLETED_2010 Pieces</label>
         <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
@@ -6052,7 +6241,7 @@ will be the selected partner is accepted as evidence.</inlineHelpText>
         <fullName>X2010_Value__c</fullName>
         <description>Adjusted for Product Lost Flags</description>
         <externalId>false</externalId>
-        <label>2010 Value</label>
+        <label>z_OBSOLETED_2010 Value</label>
         <summarizedField>OpportunityLineItem.X2010_Value__c</summarizedField>
         <summaryFilterItems>
             <field>OpportunityLineItem.Prod_Lost__c</field>
@@ -6068,7 +6257,7 @@ will be the selected partner is accepted as evidence.</inlineHelpText>
         <fullName>X2011_Pieces__c</fullName>
         <defaultValue>0</defaultValue>
         <externalId>false</externalId>
-        <label>2011 Pieces</label>
+        <label>z_OBSOLETED_2011 Pieces</label>
         <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
@@ -6081,7 +6270,7 @@ will be the selected partner is accepted as evidence.</inlineHelpText>
         <fullName>X2011_Value__c</fullName>
         <description>Adjusted for Product Lost Flags</description>
         <externalId>false</externalId>
-        <label>2011 Value</label>
+        <label>z_OBSOLETED_2011 Value</label>
         <summarizedField>OpportunityLineItem.X2011_Value__c</summarizedField>
         <summaryFilterItems>
             <field>OpportunityLineItem.Prod_Lost__c</field>
@@ -6097,7 +6286,7 @@ will be the selected partner is accepted as evidence.</inlineHelpText>
         <fullName>X2012_Pieces__c</fullName>
         <defaultValue>0</defaultValue>
         <externalId>false</externalId>
-        <label>2012 Pieces</label>
+        <label>z_OBSOLETED_2012 Pieces</label>
         <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
@@ -6110,7 +6299,7 @@ will be the selected partner is accepted as evidence.</inlineHelpText>
         <fullName>X2012_Value__c</fullName>
         <description>Adjusted for Product Lost Flags</description>
         <externalId>false</externalId>
-        <label>2012 Value</label>
+        <label>z_OBSOLETED_2012 Value</label>
         <summarizedField>OpportunityLineItem.X2012_Value__c</summarizedField>
         <summaryFilterItems>
             <field>OpportunityLineItem.Prod_Lost__c</field>
@@ -6126,7 +6315,7 @@ will be the selected partner is accepted as evidence.</inlineHelpText>
         <fullName>X2013_Pieces__c</fullName>
         <defaultValue>0</defaultValue>
         <externalId>false</externalId>
-        <label>2013 Pieces</label>
+        <label>z_OBSOLETED_2013 Pieces</label>
         <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
@@ -6139,7 +6328,7 @@ will be the selected partner is accepted as evidence.</inlineHelpText>
         <fullName>X2013_Value__c</fullName>
         <description>Adjusted for Product Lost Flags</description>
         <externalId>false</externalId>
-        <label>2013 Value</label>
+        <label>z_OBSOLETED_2013 Value</label>
         <summarizedField>OpportunityLineItem.X2013_Value__c</summarizedField>
         <summaryFilterItems>
             <field>OpportunityLineItem.Prod_Lost__c</field>
@@ -6155,7 +6344,7 @@ will be the selected partner is accepted as evidence.</inlineHelpText>
         <fullName>X2014_Pieces__c</fullName>
         <defaultValue>0</defaultValue>
         <externalId>false</externalId>
-        <label>2014 Pieces</label>
+        <label>z_OBSOLETED_2014 Pieces</label>
         <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
@@ -6168,7 +6357,7 @@ will be the selected partner is accepted as evidence.</inlineHelpText>
         <fullName>X2014_Value__c</fullName>
         <description>Adjusted for Product Lost Flags</description>
         <externalId>false</externalId>
-        <label>2014 Value</label>
+        <label>z_OBSOLETED_2014 Value</label>
         <summarizedField>OpportunityLineItem.X2014_Value__c</summarizedField>
         <summaryFilterItems>
             <field>OpportunityLineItem.Prod_Lost__c</field>
@@ -6184,7 +6373,7 @@ will be the selected partner is accepted as evidence.</inlineHelpText>
         <fullName>X2015_Pieces__c</fullName>
         <defaultValue>0</defaultValue>
         <externalId>false</externalId>
-        <label>2015 Pieces</label>
+        <label>z_OBSOLETED_2015 Pieces</label>
         <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
@@ -6198,7 +6387,7 @@ will be the selected partner is accepted as evidence.</inlineHelpText>
         <description>Adjusted for Product Lost Flags</description>
         <externalId>false</externalId>
         <inlineHelpText>Summary of all Products&apos; [2015 Product Value], in opportunity currency and excluding thrust calculation</inlineHelpText>
-        <label>2015 Value</label>
+        <label>z_OBSOLETED_2015 Value</label>
         <summarizedField>OpportunityLineItem.X2015_Value__c</summarizedField>
         <summaryFilterItems>
             <field>OpportunityLineItem.Prod_Lost__c</field>
@@ -6214,7 +6403,7 @@ will be the selected partner is accepted as evidence.</inlineHelpText>
         <fullName>X2016_Pieces__c</fullName>
         <defaultValue>0</defaultValue>
         <externalId>false</externalId>
-        <label>2016 Pieces</label>
+        <label>z_OBSOLETED_2016 Pieces</label>
         <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
@@ -6227,7 +6416,7 @@ will be the selected partner is accepted as evidence.</inlineHelpText>
         <fullName>X2016_Value__c</fullName>
         <description>Adjusted for Product Lost Flags</description>
         <externalId>false</externalId>
-        <label>2016 Value</label>
+        <label>z_OBSOLETED_2016 Value</label>
         <summarizedField>OpportunityLineItem.X2016_Value__c</summarizedField>
         <summaryFilterItems>
             <field>OpportunityLineItem.Prod_Lost__c</field>
@@ -6243,7 +6432,7 @@ will be the selected partner is accepted as evidence.</inlineHelpText>
         <fullName>X2017_Pieces__c</fullName>
         <defaultValue>0</defaultValue>
         <externalId>false</externalId>
-        <label>2017 Pieces</label>
+        <label>z_OBSOLETED_2017 Pieces</label>
         <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
@@ -6256,7 +6445,7 @@ will be the selected partner is accepted as evidence.</inlineHelpText>
         <fullName>X2017_Value__c</fullName>
         <description>Adjusted for Product Lost Flags</description>
         <externalId>false</externalId>
-        <label>2017 Value</label>
+        <label>z_OBSOLETED_2017 Value</label>
         <summarizedField>OpportunityLineItem.X2017_Value__c</summarizedField>
         <summaryFilterItems>
             <field>OpportunityLineItem.Prod_Lost__c</field>
@@ -6272,7 +6461,7 @@ will be the selected partner is accepted as evidence.</inlineHelpText>
         <fullName>X2018_Pieces__c</fullName>
         <defaultValue>0</defaultValue>
         <externalId>false</externalId>
-        <label>2018 Pieces</label>
+        <label>z_OBSOLETED_2018 Pieces</label>
         <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
@@ -6285,7 +6474,7 @@ will be the selected partner is accepted as evidence.</inlineHelpText>
         <fullName>X2018_Value__c</fullName>
         <description>Adjusted for Product Lost Flags</description>
         <externalId>false</externalId>
-        <label>2018 Value</label>
+        <label>z_OBSOLETED_2018 Value</label>
         <summarizedField>OpportunityLineItem.X2018_Value__c</summarizedField>
         <summaryFilterItems>
             <field>OpportunityLineItem.Prod_Lost__c</field>
@@ -6301,7 +6490,7 @@ will be the selected partner is accepted as evidence.</inlineHelpText>
         <fullName>X2019_Pieces__c</fullName>
         <defaultValue>0</defaultValue>
         <externalId>false</externalId>
-        <label>2019 Pieces</label>
+        <label>z_OBSOLETED_2019 Pieces</label>
         <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
@@ -6314,7 +6503,7 @@ will be the selected partner is accepted as evidence.</inlineHelpText>
         <fullName>X2019_Value__c</fullName>
         <description>Adjusted for Product Lost Flags</description>
         <externalId>false</externalId>
-        <label>2019 Value</label>
+        <label>z_OBSOLETED_2019 Value</label>
         <summarizedField>OpportunityLineItem.X2019_Value__c</summarizedField>
         <summaryFilterItems>
             <field>OpportunityLineItem.Prod_Lost__c</field>
@@ -6330,7 +6519,7 @@ will be the selected partner is accepted as evidence.</inlineHelpText>
         <fullName>X2020_Pieces__c</fullName>
         <defaultValue>0</defaultValue>
         <externalId>false</externalId>
-        <label>2020 Pieces</label>
+        <label>z_OBSOLETED_2020 Pieces</label>
         <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
@@ -6343,7 +6532,7 @@ will be the selected partner is accepted as evidence.</inlineHelpText>
         <fullName>X2020_Value__c</fullName>
         <description>Adjusted for Product Lost Flags</description>
         <externalId>false</externalId>
-        <label>2020 Value</label>
+        <label>z_OBSOLETED_2020 Value</label>
         <summarizedField>OpportunityLineItem.X2020_Value__c</summarizedField>
         <summaryFilterItems>
             <field>OpportunityLineItem.Prod_Lost__c</field>
@@ -6359,7 +6548,7 @@ will be the selected partner is accepted as evidence.</inlineHelpText>
         <fullName>X2021_Pieces__c</fullName>
         <defaultValue>0</defaultValue>
         <externalId>false</externalId>
-        <label>2021 Pieces</label>
+        <label>z_OBSOLETED_2021 Pieces</label>
         <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
@@ -6372,7 +6561,7 @@ will be the selected partner is accepted as evidence.</inlineHelpText>
         <fullName>X2021_Value__c</fullName>
         <description>Adjusted for Product Lost Flags</description>
         <externalId>false</externalId>
-        <label>2021 Value</label>
+        <label>z_OBSOLETED_2021 Value</label>
         <summarizedField>OpportunityLineItem.X2021_Value__c</summarizedField>
         <summaryFilterItems>
             <field>OpportunityLineItem.Prod_Lost__c</field>
@@ -6388,7 +6577,7 @@ will be the selected partner is accepted as evidence.</inlineHelpText>
         <fullName>X2022_Pieces__c</fullName>
         <defaultValue>0</defaultValue>
         <externalId>false</externalId>
-        <label>2022 Pieces</label>
+        <label>z_OBSOLETED_2022 Pieces</label>
         <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
@@ -6401,7 +6590,7 @@ will be the selected partner is accepted as evidence.</inlineHelpText>
         <fullName>X2022_Value__c</fullName>
         <description>Adjusted for Product Lost Flags</description>
         <externalId>false</externalId>
-        <label>2022 Value</label>
+        <label>z_OBSOLETED_2022 Value</label>
         <summarizedField>OpportunityLineItem.X2022_Value__c</summarizedField>
         <summaryFilterItems>
             <field>OpportunityLineItem.Prod_Lost__c</field>
@@ -6417,7 +6606,7 @@ will be the selected partner is accepted as evidence.</inlineHelpText>
         <fullName>X2023_Pieces__c</fullName>
         <defaultValue>0</defaultValue>
         <externalId>false</externalId>
-        <label>2023 Pieces</label>
+        <label>z_OBSOLETED_2023 Pieces</label>
         <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
@@ -6430,7 +6619,7 @@ will be the selected partner is accepted as evidence.</inlineHelpText>
         <fullName>X2023_Value__c</fullName>
         <description>Adjusted for Product Lost Flags</description>
         <externalId>false</externalId>
-        <label>2023 Value</label>
+        <label>z_OBSOLETED_2023 Value</label>
         <summarizedField>OpportunityLineItem.X2023_Value__c</summarizedField>
         <summaryFilterItems>
             <field>OpportunityLineItem.Prod_Lost__c</field>
@@ -6446,7 +6635,7 @@ will be the selected partner is accepted as evidence.</inlineHelpText>
         <fullName>X2024_Pieces__c</fullName>
         <defaultValue>0</defaultValue>
         <externalId>false</externalId>
-        <label>2024 Pieces</label>
+        <label>z_OBSOLETED_2024 Pieces</label>
         <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
@@ -6459,7 +6648,7 @@ will be the selected partner is accepted as evidence.</inlineHelpText>
         <fullName>X2024_Value__c</fullName>
         <description>Adjusted for Product Lost Flags</description>
         <externalId>false</externalId>
-        <label>2024 Value</label>
+        <label>z_OBSOLETED_2024 Value</label>
         <summarizedField>OpportunityLineItem.X2024_Value__c</summarizedField>
         <summaryFilterItems>
             <field>OpportunityLineItem.Prod_Lost__c</field>
@@ -6475,7 +6664,7 @@ will be the selected partner is accepted as evidence.</inlineHelpText>
         <fullName>X2025_Pieces__c</fullName>
         <defaultValue>0</defaultValue>
         <externalId>false</externalId>
-        <label>2025 Pieces</label>
+        <label>z_OBSOLETED_2025 Pieces</label>
         <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
@@ -6488,7 +6677,7 @@ will be the selected partner is accepted as evidence.</inlineHelpText>
         <fullName>X2025_Value__c</fullName>
         <description>Adjusted for Product Lost Flags</description>
         <externalId>false</externalId>
-        <label>2025 Value</label>
+        <label>z_OBSOLETED_2025 Value</label>
         <summarizedField>OpportunityLineItem.X2025_Value__c</summarizedField>
         <summaryFilterItems>
             <field>OpportunityLineItem.Prod_Lost__c</field>
@@ -6504,7 +6693,7 @@ will be the selected partner is accepted as evidence.</inlineHelpText>
         <fullName>X2026_Pieces__c</fullName>
         <defaultValue>0</defaultValue>
         <externalId>false</externalId>
-        <label>2026 Pieces</label>
+        <label>z_OBSOLETED_2026 Pieces</label>
         <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
@@ -6517,7 +6706,7 @@ will be the selected partner is accepted as evidence.</inlineHelpText>
         <fullName>X2026_Value__c</fullName>
         <description>Adjusted for Product Lost Flags</description>
         <externalId>false</externalId>
-        <label>2026 Value</label>
+        <label>z_OBSOLETED_2026 Value</label>
         <summarizedField>OpportunityLineItem.X2026_Value__c</summarizedField>
         <summaryFilterItems>
             <field>OpportunityLineItem.Prod_Lost__c</field>
@@ -6533,7 +6722,7 @@ will be the selected partner is accepted as evidence.</inlineHelpText>
         <fullName>X2027_Pieces__c</fullName>
         <defaultValue>0</defaultValue>
         <externalId>false</externalId>
-        <label>2027 Pieces</label>
+        <label>z_OBSOLETED_2027 Pieces</label>
         <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
@@ -6546,7 +6735,7 @@ will be the selected partner is accepted as evidence.</inlineHelpText>
         <fullName>X2027_Value__c</fullName>
         <description>Adjusted for Product Lost Flags</description>
         <externalId>false</externalId>
-        <label>2027 Value</label>
+        <label>z_OBSOLETED_2027 Value</label>
         <summarizedField>OpportunityLineItem.X2027_Value__c</summarizedField>
         <summaryFilterItems>
             <field>OpportunityLineItem.Prod_Lost__c</field>
@@ -6562,7 +6751,7 @@ will be the selected partner is accepted as evidence.</inlineHelpText>
         <fullName>X2028_Pieces__c</fullName>
         <defaultValue>0</defaultValue>
         <externalId>false</externalId>
-        <label>2028 Pieces</label>
+        <label>z_OBSOLETED_2028 Pieces</label>
         <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
@@ -6575,7 +6764,7 @@ will be the selected partner is accepted as evidence.</inlineHelpText>
         <fullName>X2028_Value__c</fullName>
         <description>Adjusted for Product Lost Flags</description>
         <externalId>false</externalId>
-        <label>2028 Value</label>
+        <label>z_OBSOLETED_2028 Value</label>
         <summarizedField>OpportunityLineItem.X2028_Value__c</summarizedField>
         <summaryFilterItems>
             <field>OpportunityLineItem.Prod_Lost__c</field>
@@ -6591,7 +6780,7 @@ will be the selected partner is accepted as evidence.</inlineHelpText>
         <fullName>X2029_Pieces__c</fullName>
         <defaultValue>0</defaultValue>
         <externalId>false</externalId>
-        <label>2029 Pieces</label>
+        <label>z_OBSOLETED_2029 Pieces</label>
         <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
@@ -6604,7 +6793,7 @@ will be the selected partner is accepted as evidence.</inlineHelpText>
         <fullName>X2029_Value__c</fullName>
         <description>Adjusted for Product Lost Flags</description>
         <externalId>false</externalId>
-        <label>2029 Value</label>
+        <label>z_OBSOLETED_2029 Value</label>
         <summarizedField>OpportunityLineItem.X2029_Value__c</summarizedField>
         <summaryFilterItems>
             <field>OpportunityLineItem.Prod_Lost__c</field>
@@ -6620,7 +6809,7 @@ will be the selected partner is accepted as evidence.</inlineHelpText>
         <fullName>X2030_Pieces__c</fullName>
         <defaultValue>0</defaultValue>
         <externalId>false</externalId>
-        <label>2030 Pieces</label>
+        <label>z_OBSOLETED_2030 Pieces</label>
         <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
@@ -6633,7 +6822,7 @@ will be the selected partner is accepted as evidence.</inlineHelpText>
         <fullName>X2030_Value__c</fullName>
         <description>Adjusted for Product Lost Flags</description>
         <externalId>false</externalId>
-        <label>2030 Value</label>
+        <label>z_OBSOLETED_2030 Value</label>
         <summarizedField>OpportunityLineItem.X2030_Value__c</summarizedField>
         <summaryFilterItems>
             <field>OpportunityLineItem.Prod_Lost__c</field>
@@ -7662,10 +7851,6 @@ False
                 <default>false</default>
             </values>
             <values>
-                <fullName>RFID Retail</fullName>
-                <default>false</default>
-            </values>
-            <values>
                 <fullName>RFID Transit%2C Access and Identification</fullName>
                 <default>false</default>
             </values>
@@ -8255,6 +8440,10 @@ False
                 <default>false</default>
             </values>
             <values>
+                <fullName>Therapy Adherence</fullName>
+                <default>false</default>
+            </values>
+            <values>
                 <fullName>Threat Mitigation Products</fullName>
                 <default>false</default>
             </values>
@@ -8644,10 +8833,6 @@ False
                 <default>false</default>
             </values>
             <values>
-                <fullName>FAIRCHILD SEMICONDUCTOR</fullName>
-                <default>false</default>
-            </values>
-            <values>
                 <fullName>FLIR SYSTEMS%C2%A0</fullName>
                 <default>false</default>
             </values>
@@ -8737,6 +8922,10 @@ False
             </values>
             <values>
                 <fullName>PANJIT SEMICONDUCTOR</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>POWER INTEGRATIONS</fullName>
                 <default>false</default>
             </values>
             <values>
@@ -9058,6 +9247,37 @@ False
             </values>
         </picklistValues>
         <picklistValues>
+            <picklist>Mobile_Processor__c</picklist>
+            <values>
+                <fullName>Apple</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>HiSilicon</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Mediatek</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Nvidia</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Others</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Qualcomm</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Samsung</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
             <picklist>Probability_to_Win__c</picklist>
             <values>
                 <fullName>0%25 - 50%25</fullName>
@@ -9320,10 +9540,6 @@ False
                 <default>false</default>
             </values>
             <values>
-                <fullName>RFID Retail</fullName>
-                <default>false</default>
-            </values>
-            <values>
                 <fullName>RFID Transit%2C Access and Identification</fullName>
                 <default>false</default>
             </values>
@@ -9422,7 +9638,15 @@ False
         <active>true</active>
         <description>If the Account is inactive ( Account.IsInactive__c == true ) 
 creation of new opportunity is not allowed.</description>
-        <errorConditionFormula>(Account.IsInactive__c == true) &amp;&amp;  ISNEW()</errorConditionFormula>
+        <errorConditionFormula>AND(
+((Account.IsInactive__c == true) &amp;&amp; ISNEW()), 
+NOT(
+OR(
+$User.ProfileId=&quot;00e20000001Nc7g&quot;,
+$User.ProfileId=&quot;00eD0000001oBDw&quot;
+)
+)
+)</errorConditionFormula>
         <errorMessage>This Account is inactive.  Creation of new opportunity is not allowed.</errorMessage>
     </validationRules>
     <validationRules>
@@ -9614,6 +9838,23 @@ NOT(ISCHANGED(Production_Date__c))
 ) 
 )</errorConditionFormula>
         <errorMessage>Only Open MN Oppty can be edited directly in Salesforce.com.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>Mobile_Processor_is_Mandatory</fullName>
+        <active>true</active>
+        <description>Mobile Processor is mandatory If Application is Mobile Phone.</description>
+        <errorConditionFormula>AND (
+ ISPICKVAL( Application__c , &quot;Mobile Phone&quot;),
+ ISPICKVAL( Mobile_Processor__c , &quot;&quot;),
+ RecordType.DeveloperName = &quot;SFDC_Oppty&quot;, 
+ NOT ( 
+ OR(
+  $User.ProfileId=&quot;00e20000001Nc7g&quot;, 
+  $User.ProfileId=&quot;00eD0000001oBDw&quot;) 
+ ) 
+)</errorConditionFormula>
+        <errorDisplayField>Mobile_Processor__c</errorDisplayField>
+        <errorMessage>Mobile Processor is mandatory If Application is Mobile Phone.</errorMessage>
     </validationRules>
     <validationRules>
         <fullName>Next_Steps_is_required_before_commitment</fullName>

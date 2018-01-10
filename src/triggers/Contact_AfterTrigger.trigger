@@ -21,7 +21,7 @@ Description: As per SIR 828- Removed the functionality on AfterInsert event sinc
 trigger Contact_AfterTrigger on Contact (after insert,after update) 
 {
     Private Final String CASE_TSCOMMUNITY = 'TS_Community';
-    Private Final String Case_Origin = 'Community';
+    Private Final String Case_Origin = 'Self Service Portal';
     
 
  if(trigger.isUpdate){

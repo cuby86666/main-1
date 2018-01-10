@@ -24,7 +24,16 @@
 @Modified By :      Baji
 @Modified Date:     24 Jul 2017
 @Description:       1708 Release (SFDC 729) - To set default value for few of the fieds on SAP CMD New SBE Funloc Request form.
+-----------------------------------------------------------------------------------------------------------
+@Modified By :      Baji
+@Modified Date:     20 Nov 2017
+@Description:       1712 Release (SFDC-1087) - To disable notification to SP team when New funloc request is completed
+-----------------------------------------------------------------------------------------------------------
+@Modified By :      Baji
+@Modified Date:     23 Nov 2017
+@Description:       1712 Release (SFDC-1068) - To erase SAP CMD Title & output after sending email when New/Edit request is completed.
 ************************************************************************************************************************/
+
 public class CMD_Request_Trigger {
  /*public static List<SAP_CMD__c> liSapCmd {
         get {
@@ -54,7 +63,7 @@ public class CMD_Request_Trigger {
      Private Static Final String Edit_Email_Template='CMD_Edit_Request_Completed';
      Private Static Final String OrgWide_Address='Data Admin';
      Private Static Final String CMD_Team='CMD Team';
-     Private Static Final String SP_Team ='S&P Team';
+    // Private Static Final String SP_Team ='S&P Team';
      Private Static Final string TYPE_New_SBE_CmdReq='SAP_New_SBE_Funloc_request';
      Private Static Final string TYPE_Edit_SBE_CmdReq='SAP_SBE_Funloc_Edit_request';
      Private Static Final string TYPE_New_MANU_CmdReq='SAP_New_MANU_Funloc_request';
@@ -742,8 +751,8 @@ public static void fetchCMDReqRecordTypes()
         lstFinalEmailIds.add(objCMDReq.ownerid);
       } 
        //only for new funloc request (SFDC 285)
-       
-       string[] lstSPEmailIds = new list<String> ();
+    //commented below code to disable notification to SP team when New funloc request is completed.   
+     /*  string[] lstSPEmailIds = new list<String> ();
        
       If(objCMDReq.RecordTypeId ==sapNewFun_Id)
        {   
@@ -759,7 +768,7 @@ public static void fetchCMDReqRecordTypes()
            system.debug('enteredSPteam2' + lstFinalEmailIds);      
          }  
        } 
-     } 
+     } */
       listStrEmailIds.add(lstFinalEmailIds) ;
     
   }
@@ -831,7 +840,30 @@ public static void fetchCMDReqRecordTypes()
        } 
       }
    }   
-        
+      
+  //SFDC-1068    
+  if(EmailAlreadySent){
+    set<string> setCMDIds = new set<string>();
+    List<Sap_cmd__c> lstSapCmdstoUpdate = new List<Sap_cmd__c>();
+    for( CMD_Request__c compCMDReq : listCMDRequests)
+    {
+      if(compCMDReq.Request_Status__c == 'Completed' && (compCMDReq.Title__c != null || compCMDReq.Output__c != null))
+      {
+          setCMDIds.add(compCMDReq.Id);
+      }
+    }  
+    List<Sap_cmd__c> lstSapCmds = [Select Id, SAP_CMD_Title__c, Output_Message__c, Name from SAP_CMD__c where ( Status__c ='Approved and Distributed' and CMD_Request_ID_Text__c In : setCMDIds) ];
+    for(SAP_CMD__c sapCmd : lstSapCmds)
+        {
+           If(sapCmd.SAP_CMD_Title__c !=null || sapCmd.Output_Message__c !=null)
+           {
+            sapCmd.SAP_CMD_Title__c= '';
+            sapCmd.Output_Message__c= '';
+            lstSapCmdstoUpdate.add(sapCmd);
+           }
+        }
+    update lstSapCmdstoUpdate;
+    }   
   }
   
      

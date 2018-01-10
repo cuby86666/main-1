@@ -85,7 +85,7 @@ public with Sharing class TrackingSheetController
         public Transient Decimal pricePerProgram {get;set;}
         public Transient Decimal entryVolume {get;set;}
         public Transient Decimal totalValue {get;set;}
-        public Transient String probToWin{get;set;}
+        //public Transient String probToWin{get;set;}
         //SIR1275 updates. Balaji G Date: 19-Oct-2016
         //public Transient String helpNeeded{get;set;}
         public Transient String nextStep{get;set;}        
@@ -197,7 +197,7 @@ public with Sharing class TrackingSheetController
         listDWwrapper = new List<DWwrapper>();
         String queryStringOpportunities = 
             'SELECT  Id, Name, StageName, CloseDate, OwnerId, Owner.Name, Account.NXP_GID__c, Percentage_to_DW_Completion__c, '+
-            ' LT_Value_USD__c, Claim_Value_USD__c, MAG__c, BU__c, Next_Steps__c, Probability_to_Win__c, Last_Business_Modified_Date__c  '+                   
+            ' LT_Value_USD__c, Claim_Value_USD__c, MAG__c, BU__c, Next_Steps__c, Last_Business_Modified_Date__c  '+                   
             '    FROM Opportunity '+
             '    WHERE Account.ParentId = \''+ String.valueOf(theParentAccount.Id) +'\' '+
             '    AND RecordTypeID = \''+ String.valueOf(sfdcRecordTypeId) +'\' '+

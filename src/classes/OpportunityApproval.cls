@@ -19,6 +19,7 @@ public class OpportunityApproval {
 		APPROVER_LABELS.put(ApproverLabel.SALES_DIRECTOR_APPROVER, Opportunity.Sales_Director_Approver__c.getDescribe().getLabel());	
 		APPROVER_LABELS.put(ApproverLabel.REGIONAL_VP_APPROVER, Opportunity.Regional_VP_Approver__c.getDescribe().getLabel());
 		APPROVER_LABELS.put(ApproverLabel.VP_APPROVER_2, Opportunity.VP_Approver_2__c.getDescribe().getLabel());
+		APPROVER_LABELS.put(ApproverLabel.GLOBAL_KEY_ACCOUNT_MANAGER, Opportunity.Global_Key_Account_Manager__c.getDescribe().getLabel()); 
 		APPROVER_LABELS.put(ApproverLabel.MAG_APPROVER_1, Opportunity.MAG_Approver_1__c.getDescribe().getLabel());
 		APPROVER_LABELS.put(ApproverLabel.MAG_APPROVER_2, Opportunity.MAG_Approver_2__c.getDescribe().getLabel());
 		APPROVER_LABELS.put(ApproverLabel.MAG_APPROVER_3, Opportunity.MAG_Approver_3__c.getDescribe().getLabel());
@@ -55,6 +56,7 @@ public class OpportunityApproval {
 		ALL_APPROVER_FIELDS.add(Opportunity.Sales_Director_Approver__c.getDescribe().getName());
 		ALL_APPROVER_FIELDS.add(Opportunity.Regional_VP_Approver__c.getDescribe().getName());
 		ALL_APPROVER_FIELDS.add(Opportunity.VP_Approver_2__c.getDescribe().getName());
+		ALL_APPROVER_FIELDS.add(Opportunity.Global_Key_Account_Manager__c.getDescribe().getName());
 		ALL_APPROVER_FIELDS.addAll(MAG_APPROVER_FIELDS);
 		ALL_APPROVER_FIELDS.addAll(BL_APPROVER_FIELDS);
 	}
@@ -63,7 +65,7 @@ public class OpportunityApproval {
 	enum ApproverLabel {SALES_DIRECTOR_APPROVER,
 						REGIONAL_VP_APPROVER, VP_APPROVER_2, 
 						MAG_APPROVER_1, MAG_APPROVER_2, MAG_APPROVER_3, MAG_APPROVER_4, MAG_APPROVER_5, MAG_APPROVER_6, MAG_APPROVER_7, MAG_APPROVER_8, MAG_APPROVER_9, MAG_APPROVER_10,
-						BL_APPROVER_1, BL_APPROVER_2, BL_APPROVER_3, BL_APPROVER_4, BL_APPROVER_5} 
+						BL_APPROVER_1, BL_APPROVER_2, BL_APPROVER_3, BL_APPROVER_4, BL_APPROVER_5, GLOBAL_KEY_ACCOUNT_MANAGER} 
 	
 	class OpportunityApprovalException extends Exception {}
 	
@@ -76,6 +78,10 @@ public class OpportunityApproval {
 		
 		Id getOpptyVpApprover2Id();
 		void setOpptyVpApprover2Id(fflib_ISObjectUnitOfWork uow);
+
+		Id getOpptyGlobalKeyAccountManagerId();
+       	Id getOpptyGlobalKeyAccountManagerIdDedup();
+		void setOpptyGlobalKeyAccountManagerId(fflib_ISObjectUnitOfWork uow);
 		
 		Map<String, Id> getOpptyVpApproverIds();
 		void setOpptyVpApproverIds(fflib_ISObjectUnitOfWork uow);
@@ -106,6 +112,14 @@ public class OpportunityApproval {
 		protected abstract List<Approvers_Matrix__c> getBlApprovers(Set<String> bls);
 				
 		public virtual Id getOpptyVpApprover2Id() {
+			return null;
+		}
+		
+		public virtual Id getOpptyGlobalKeyAccountManagerId() {
+			return null;
+		}
+        
+        public virtual Id getOpptyGlobalKeyAccountManagerIdDedup() {
 			return null;
 		}
 		
@@ -167,6 +181,16 @@ public class OpportunityApproval {
 			 
 			if (vpApproverIds.size() > 0) {
 				createOpptyShares(vpApproverIds.values(), uow);
+				updateOppty(uow);
+			}
+		}
+		
+		public void setOpptyGlobalKeyAccountManagerId(fflib_ISObjectUnitOfWork uow) {
+			p('setOpptyGlobalKeyAccountManagerId');
+			this.oppty.Global_Key_Account_Manager__c = getOpptyGlobalKeyAccountManagerIdDedup();
+			
+			if (this.oppty.Global_Key_Account_Manager__c != null) {
+				createOpptyShares(new List<Id>{this.oppty.Global_Key_Account_Manager__c}, uow);
 				updateOppty(uow);
 			}
 		}
@@ -315,6 +339,7 @@ public class OpportunityApproval {
 			
 			for (ApproverLabel al : approverIdsByLabel.keySet()) {
 				result.put(APPROVER_LABELS.get(al), (approvers.get(approverIdsByLabel.get(al)) != null) ? approvers.get(approverIdsByLabel.get(al)).Name : null);
+				string approverId = (approvers.get(approverIdsByLabel.get(al)) != null) ? approvers.get(approverIdsByLabel.get(al)).Name : null ;
 			}
 			
 			return result;	
@@ -328,6 +353,7 @@ public class OpportunityApproval {
 			
 			setOpptySalesDirectorApproverId(uow);
 			setOpptyVpApproverIds(uow);
+			setOpptyGlobalKeyAccountManagerId(uow);
 			setOpptyMagApproverIds(uow);
 			setOpptyBlApproverIds(uow);
 		}
@@ -368,21 +394,59 @@ public class OpportunityApproval {
 			
 			Map<String, Id> approverIds = new Map<String, Id>();
 			
+			Map<ApproverLabel, Id> resultDeduped = new Map<ApproverLabel, Id>();
+			
 			approverIds.putAll(getOpptyVpApproverIds());
+			
+			//approverIds.putAll(getOpptyMagApproverIds());
+			//approverIds.putAll(getOpptyBlApproverIds());
+						
+			for (String fieldName : approverIds.keySet()) {
+				for (ApproverLabel al : ApproverLabel.values()) {
+					if (fieldName.containsIgnoreCase(al.name())) {
+						result.put(al, approverIds.get(fieldName));
+						system.debug('***[Scarlett] Before de duplication' + result);
+						break;
+					}
+				}	
+			}
+			
+			result.put(ApproverLabel.GLOBAL_KEY_ACCOUNT_MANAGER, getOpptyGlobalKeyAccountManagerId());
+            
+			//de-duplication: Sales Director, VP1, VP2, GKAM
+			resultDeduped = deDupApprovers(result);
+			
 			approverIds.putAll(getOpptyMagApproverIds());
 			approverIds.putAll(getOpptyBlApproverIds());
 			
 			for (String fieldName : approverIds.keySet()) {
 				for (ApproverLabel al : ApproverLabel.values()) {
 					if (fieldName.containsIgnoreCase(al.name())) {
-						result.put(al, approverIds.get(fieldName));
+						resultDeduped.put(al, approverIds.get(fieldName));
 						break;
 					}
 				}	
 			}
-			
-			return result;
+					
+			return resultDeduped;
 		}
+        
+        private Map<ApproverLabel, Id> deDupApprovers(Map<ApproverLabel, Id> apporverIdsByLabel) {
+            Map<Id, ApproverLabel> tempMap = new Map<Id, ApproverLabel>();
+            Map<ApproverLabel, Id> result = new Map<ApproverLabel, Id>();
+
+            for (ApproverLabel key : apporverIdsByLabel.keySet()) {
+                Id approverId = apporverIdsByLabel.get(key);
+                
+                if (tempMap.containsKey(approverId) == false) {
+                    tempMap.put(approverId, key);
+                    result.put(key, approverId);
+                }
+            }
+            
+            return result;
+        } 
+	
 		
 		private void updateOppty(fflib_ISObjectUnitOfWork uow) {
 			p('updateOppty');
@@ -531,6 +595,38 @@ public class OpportunityApproval {
 			
 			return result;
 		}
+
+		public override Id getOpptyGlobalKeyAccountManagerId() {
+			p('getOpptyGlobalKeyAccountManagerId');
+			Id result;
+			
+			Approvers_Matrix__c gam = ApproverMatrixHelper.getDirectOpptyGamGeneral(this.oppty.Account.ParentId); 	
+			
+            if (gam != null && gam.Approver__c != this.oppty.OwnerId) {
+            	result = gam.Approver__c;
+            } else {
+                result = null;
+            }
+            
+			return result;
+		}
+        
+        public override Id getOpptyGlobalKeyAccountManagerIdDedup(){
+            p('getOpptyGlobalKeyAccountManagerIdDedup');
+            Map<String, Id> vpApproverIds = getOpptyVpApproverIds();
+            Id globalKeyAccountMangerId = getOpptyGlobalKeyAccountManagerId();
+                
+            this.oppty.Sales_Director_Approver__c = getOpptySalesDirectorApproverId();
+            this.oppty.Regional_VP_Approver__c = vpApproverIds.get(Opportunity.Regional_VP_Approver__c.getDescribe().getName());
+			this.oppty.VP_Approver_2__c = vpApproverIds.get(Opportunity.VP_Approver_2__c.getDescribe().getName());
+            
+            if(globalKeyAccountMangerId == this.oppty.Sales_Director_Approver__c || globalKeyAccountMangerId == this.oppty.Regional_VP_Approver__c || globalKeyAccountMangerId == this.oppty.VP_Approver_2__c) {
+                return null;
+            } 
+            else {
+                return globalKeyAccountMangerId;
+            }
+        }
 		
 		protected override List<Approvers_Matrix__c> getMagApprovers(Set<String> mags) {
 			p('getMagApprovers');
@@ -577,6 +673,13 @@ public class OpportunityApproval {
 		init(new List<Opportunity>{oppty});
 		
 		getApprover(oppty).setOpptySalesDirectorApproverId(uow);	
+	}
+	
+	@TestVisible
+	private static void setGlobalKeyAccountManagerApproverId(Opportunity oppty, fflib_ISObjectUnitOfWork uow) {
+		init(new List<Opportunity>{oppty});
+		
+		getApprover(oppty).setOpptyGlobalKeyAccountManagerId(uow);	
 	}
 	
 	@TestVisible

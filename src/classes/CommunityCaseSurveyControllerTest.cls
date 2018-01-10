@@ -86,7 +86,7 @@ public class CommunityCaseSurveyControllerTest
                               Twitter__c = 'test_twt', State_Province__c = 'test_state', Product_Type_Number__c = 'test',
                               Subject = 'test_subject', My_Question_is_Related__c = 'test', Description = 'test_subject',
                               Product_application__c = 'test', Expected_annual_unit_volume__c = 'test',
-                              Project_Stage__c = 'Development', Web_Region__c = 'Test_region',Survey_Flag__c='True', origin = 'Community',Case_Owner_Name__c='test'); 
+                              Project_Stage__c = 'Development', Web_Region__c = 'Test_region',Survey_Flag__c='True', origin = 'Self Service Portal',Case_Owner_Name__c='test'); 
             Test.startTest();
             Insert objCase;
             Test.stopTest();
@@ -237,7 +237,7 @@ public class CommunityCaseSurveyControllerTest
                               Twitter__c = 'test_twt', State_Province__c = 'test_state', Product_Type_Number__c = 'test',
                               Subject = 'test_subject', My_Question_is_Related__c = 'test', Description = 'test_subject',
                               Product_application__c = 'test', Expected_annual_unit_volume__c = 'test',
-                              Project_Stage__c = 'Development', Web_Region__c = 'Test_region',Survey_Flag__c='False', origin = 'Community',Case_Owner_Name__c='test'); 
+                              Project_Stage__c = 'Development', Web_Region__c = 'Test_region',Survey_Flag__c='False', origin = 'Self Service Portal',Case_Owner_Name__c='test'); 
  
             Insert objCase;
             system.assert(objCase.Id!=null);
@@ -327,7 +327,7 @@ public class CommunityCaseSurveyControllerTest
                               Twitter__c = 'test_twt', State_Province__c = 'test_state', Product_Type_Number__c = 'test',
                               Subject = 'test_subject', My_Question_is_Related__c = 'test', Description = 'test_subject',
                               Product_application__c = 'test', Expected_annual_unit_volume__c = 'test',
-                              Project_Stage__c = 'Development', Web_Region__c = 'Test_region', origin = 'Community',Case_Owner_Name__c='test'); 
+                              Project_Stage__c = 'Development', Web_Region__c = 'Test_region', origin = 'Self Service Portal',Case_Owner_Name__c='test'); 
             Test.startTest();
             Insert objCase;
             Test.stopTest();

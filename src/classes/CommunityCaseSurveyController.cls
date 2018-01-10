@@ -204,8 +204,8 @@ public class CommunityCaseSurveyController
             strSendTo= lstCase[0].owner.email;
             strSendToName= lstCase[0].owner.name;
         }
-        if(lstSurveyAns[0].answer__c.trim().equalsignorecase('Very Dissatisfied') || 
-           lstSurveyAns[0].answer__c.trim().equalsignorecase('Dissatisfied'))
+        if(lstSurveyAns[0].answer__c.trim().equalsignorecase('2 Dissatisfied') || 
+           lstSurveyAns[0].answer__c.trim().equalsignorecase('1 Very Dissatisfied'))
         {
             strSubject='Dissatisfied ' +strSubject;
         }
@@ -214,8 +214,8 @@ public class CommunityCaseSurveyController
             Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
             String[] toAddresses = new String[] {strSendTo};
             String strBody = 'Dear '+ strSendToName + ',\n\n'
-                            +((lstSurveyAns[0].answer__c.trim().equalsignorecase('Very Satisfied') || 
-                            lstSurveyAns[0].answer__c.trim().equalsignorecase('Satisfied'))?
+                            +((lstSurveyAns[0].answer__c.trim().equalsignorecase('4 Very Satisfied') || 
+                            lstSurveyAns[0].answer__c.trim().equalsignorecase('3 Satisfied'))?
                             'We recently received a customer satisfaction survey response from a customer. \n\n':  
                             'We recently received a customer satisfaction survey response from a dissatisfied customer. \n\n')
                             + 'The customers answers were: \n'
@@ -224,8 +224,8 @@ public class CommunityCaseSurveyController
                             + '\t Support Person :\t {'+lstSurveyAns[2].answer__c.trim() +'} \n'
                             + '\t Recommend us :\t {'+lstSurveyAns[3].answer__c.trim() +'} \n'
                             + '\t Comments :\t\t {'+lstSurveyAns[4].answer__c.trim() +'} \n\n'
-                            +((lstSurveyAns[0].answer__c.trim().equalsignorecase('Very Satisfied') || 
-                            lstSurveyAns[0].answer__c.trim().equalsignorecase('Satisfied'))?
+                            +((lstSurveyAns[0].answer__c.trim().equalsignorecase('4 Very Satisfied') || 
+                            lstSurveyAns[0].answer__c.trim().equalsignorecase('3 Satisfied'))?
                             + 'Please review the customer comments for any additional inputs or recommendations,' 
                             + 'and potential follow-ups on our side (fixing root causes, improving documentation etc.)':
                             + 'In most cases it is appropriate and expected to follow-up to the customer feedback.\n'

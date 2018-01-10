@@ -56,7 +56,7 @@ public class CommunityEmailNotificationControllerTest
                               Twitter__c = 'test_twt', State_Province__c = 'test_state', Product_Type_Number__c = 'test',
                               Subject = 'test_subject', My_Question_is_Related__c = 'test', Description = 'test_subject',
                               Product_application__c = 'test', Expected_annual_unit_volume__c = 'test',
-                              Project_Stage__c = 'Development', Web_Region__c = 'Test_region',  origin = 'Community',Case_Owner_Name__c='test'); 
+                              Project_Stage__c = 'Development', Web_Region__c = 'Test_region',  origin = 'Self Service Portal',Case_Owner_Name__c='test'); 
          return objCase;
      }
     public static EmailMessage CreateEmailMessage(id caseId)

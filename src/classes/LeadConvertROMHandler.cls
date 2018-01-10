@@ -42,9 +42,10 @@ public class LeadConvertROMHandler {
             }
         }        
         list<contact> listContact=[select id, email,AccountId from contact where email In:strLeadEmail];
-        list<Opportunity> listOpp=[Select id, Distributor_Tracking_Number__c,Lead_Id__c,AccountId from Opportunity where 
+        list<Opportunity> listOpp=[Select id, Distributor_Tracking_Number__c,Lead_Id__c,AccountId,CreatedDate from Opportunity where 
                                    (Distributor_Tracking_Number__c IN:strLeadDistiNum OR Lead_Id__c IN:strLeadIds)
-                                   AND RecordType.Name='Model N Oppty'];
+                                   AND RecordType.Name='Model N Oppty' AND 
+                                   (CreatedDate = LAST_N_DAYS:365 OR CreatedDate = TODAY)];
         for(opportunity opp:listOpp){
             if(opp.Distributor_Tracking_Number__c!=null){
                 if(!mapDistiNumToOppty.containskey(opp.Distributor_Tracking_Number__c)){

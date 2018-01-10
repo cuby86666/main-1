@@ -42,6 +42,10 @@
 @Modified By :      Baji
 @Modified Date:     26 Jul 2017
 @Description:       1708 Release (SFDC 729) - To test default value feature for few of the fieds on SAP CMD New SBE Funloc Request form.
+-----------------------------------------------------------------------------------------------------------
+@Modified By :      Baji
+@Modified Date:     20 Nov 2017
+@Description:       1712 Release (SFDC-1087) - To disable the code related to SP team notification when New funloc request is completed
 *********************************************************************************************************************************************/
 
 @isTest
@@ -206,7 +210,7 @@ public class CMD_Request_Trigger_Test {
     
     lstCustomEmailSetting.add(new CMD_Request_Completion_Mails__c(Name = 'Logistics 1',Email_Ids__c = 'testmail.@testorg.com'));
     lstCustomEmailSetting.add(new CMD_Request_Completion_Mails__c(Name = 'CMD Team',Email_Ids__c = 'testuser.@testorg.com'));
-    lstCustomEmailSetting.add(new CMD_Request_Completion_Mails__c(Name = 'S&P Team',Email_Ids__c = 'testemail.@testorg.com'));    
+  //  lstCustomEmailSetting.add(new CMD_Request_Completion_Mails__c(Name = 'S&P Team',Email_Ids__c = 'testemail.@testorg.com'));    
     
     insert lstCustomEmailSetting;
   }

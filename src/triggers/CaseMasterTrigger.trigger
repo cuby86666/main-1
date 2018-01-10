@@ -40,6 +40,10 @@ trigger CaseMasterTrigger on Case (before insert,before update,after insert,afte
                  
                  /**Calling Method to update certain case fields befor Inserting **/
                  caseTrigger.updateCaseFieldsonInsert(Trigger.New);
+                
+                 /**Calling a routine related to 7summits code **/
+                 MappingCaseRouting objMCR = new MappingCaseRouting();
+                 objMCR.onBeforeInsert(Trigger.new); 
             }
             
             else if(Trigger.isAfter)

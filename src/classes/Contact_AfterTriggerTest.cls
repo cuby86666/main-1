@@ -14,7 +14,7 @@ public class Contact_AfterTriggerTest {
     final static String CASE_TSWEBMASTER = 'TS_Webmaster';
     final static String ACCOUNT_CHILDACCOUNT = 'Child_Account';
     final static String ACCOUNT_ParentACCOUNT = 'Parent_Account';
-    Static Final String Case_Origin = 'Community';
+    Static Final String Case_Origin = 'Self Service Portal';
 
     public static RecordType ObjCaseTSCOMMUNITY;
     public static RecordType ObjCaseWebMaster;

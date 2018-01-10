@@ -17,7 +17,8 @@ public class ApproverMatrixesSelector extends ApplicationSelector {
 			Approvers_Matrix__c.Criteria_1__c, 
 			Approvers_Matrix__c.Criteria_2__c, 
 			Approvers_Matrix__c.Threshold_1__c, 
-			Approvers_Matrix__c.Type__c
+			Approvers_Matrix__c.Type__c,
+			Approvers_Matrix__c.Account__c
 		};
 	}
 	

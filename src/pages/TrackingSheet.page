@@ -24,15 +24,15 @@
     @Modified Date:   December 19, 2016
     @Description:     Adjusted charts due to YE changes
 
-	@Modified By:     Nisha Agrawal 
+    @Modified By:     Nisha Agrawal 
     @Modified Date:   May 15, 2017
     @Description:     various changes for performance improvement - SFDC-432
-						- moved all styles to css file
-						- removed duplicate components from data table which were added for styles only
-						- removed column Help Needed and DW to Completion conditionnaly visible, also adjusted data tablecolumn 
-							widths in styles for column removal
-						- removed standard header
-						- removed UI components for stage Recommendation and Assessment as well as dropdown values
+                        - moved all styles to css file
+                        - removed duplicate components from data table which were added for styles only
+                        - removed column Help Needed and DW to Completion conditionnaly visible, also adjusted data tablecolumn 
+                            widths in styles for column removal
+                        - removed standard header
+                        - removed UI components for stage Recommendation and Assessment as well as dropdown values
     --------------------------------------------------------------------------------------------------------------------->
     
     <apex:page standardController="Account" extensions="TrackingSheetController" tabStyle="Opportunity" showHeader="false" 
@@ -70,12 +70,12 @@
                 <table>
                     <tr>
                         <td colspan="2">
-                            <analytics:reportChart size="large" developerName="STAR_Funnel_Tracker_Charts_H1_2017" 
+                            <analytics:reportChart size="large" developerName="STAR_Funnel_Tracker_Charts_H1_2018" 
                                                     filter="{column:'PARENT_ID',operator:'equals',value: '{!Account.Id}'}"                                                
                                                     showRefreshButton="false" cacheResults="false"/>
                         </td>
                         <td colspan="2">
-                            <analytics:reportChart size="large" developerName="STAR_Funnel_Tracker_Charts_H2_2017" 
+                            <analytics:reportChart size="large" developerName="STAR_Funnel_Tracker_Charts_H2_2018" 
                                                     filter="{column:'PARENT_ID',operator:'equals',value: '{!Account.Id}'}"                                                
                                                     showRefreshButton="false" cacheResults="false"/>
                         </td>
@@ -608,7 +608,7 @@
                     </apex:outputText>
                     <apex:facet name="footer">  </apex:facet>
                 </apex:column>
-                
+<!--          
                 <apex:column onmousemove="this.parentNode.style.backgroundColor='#E5C130'" onmouseout="this.parentNode.style.backgroundColor =''">
                     <apex:facet name="header">Probability<br/>to Win</apex:facet>
                     <apex:outputPanel rendered="{!NOT(ISBLANK(dw.DW.Probability_to_Win__c))}">
@@ -616,6 +616,7 @@
                     </apex:outputPanel>
                     <apex:facet name="footer">  </apex:facet>
                 </apex:column>       
+-->
                 <!--
                 <apex:column onmousemove="this.parentNode.style.backgroundColor='#E5C130'" onmouseout="this.parentNode.style.backgroundColor =''">
                     <apex:facet name="header">Help<br/>needed</apex:facet>
