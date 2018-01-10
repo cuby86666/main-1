@@ -159,6 +159,9 @@ public with sharing class OpportunityService {
 		Set<Id> allMnOpptyIds = new Set<Id>();
 		List<Opportunity> opptyUpdates = new List<Opportunity>();
 		Set<Id> opptyUpdateIds = new Set<Id>();
+		
+		Account unknownAccount = getUnknownAccount();
+
 		for (Opportunity oppty : oppties) {
 			if (oppty.RecordTypeId != modelNRecordTypeId) continue;
 			allMnOpptyIds.add(oppty.Id);
@@ -180,7 +183,6 @@ public with sharing class OpportunityService {
                 //System.debug('@@@@@ Account change to ' + accountByLegacyId.Name);
 			} else {
 				//Unknown Account
-				Account unknownAccount = getUnknownAccount();
                 if (unknownAccount != null) {
                 	newAccountId = unknownAccount.Id;
                     //System.debug('@@@@@ Account change to Unknown.');
@@ -228,11 +230,11 @@ public with sharing class OpportunityService {
 	private static String getMnDrOwnerId(Opportunity oppty, String newAccountOwnerId, Map<String,User> usersByEmail) {
 		p('getMnDrOwnerId');
 		String finalOwnerId = oppty.OwnerId;
-		User dataAdminUser = getDataAdmin();
+		Id dataAdminUserId = CommonUtils.getDataAdminUserId();
 		//System.debug('@@@@@ Data Admin id=' + dataAdminUser.Id);
 		// Tier 1,2,3,4 - TMMA and Account Owner is Active
         if (newAccountOwnerId != null) {
-            if (oppty.OwnerId == dataAdminUser.Id) {
+            if (oppty.OwnerId == dataAdminUserId) {
                 finalOwnerId = newAccountOwnerId;
                 //System.debug('@@@@@ change owner to new account owner');
             } else {
@@ -241,13 +243,13 @@ public with sharing class OpportunityService {
             }            
         } else {
 			if (oppty.Legacy_Opportunity_Owner__c == null) {
-				if (dataAdminUser != null && oppty.OwnerId == null) finalOwnerId = dataAdminUser.Id;
+				if (dataAdminUserId != null && oppty.OwnerId == null) finalOwnerId = dataAdminUserId;
 			} else {
 				User drApprover = usersByEmail.get(oppty.Legacy_Opportunity_Owner__c);
 				if (drApprover == null) {
-					if (dataAdminUser != null && oppty.OwnerId == null) finalOwnerId = dataAdminUser.Id;
+					if (dataAdminUserId != null && oppty.OwnerId == null) finalOwnerId = dataAdminUserId;
 				} else {
-					if (oppty.OwnerId == dataAdminUser.Id) {
+					if (oppty.OwnerId == dataAdminUserId) {
 						finalOwnerId = drApprover.Id;
                         //System.debug('@@@@@ change owner to approver');
 					}
@@ -267,18 +269,6 @@ public with sharing class OpportunityService {
 			}
 		}
 		return UNKNOWN_ACCOUNT;
-	}
-
-	static User DATA_ADMIN = null;
-	private static User getDataAdmin() {
-		p('getDataAdmin');
-		if (DATA_ADMIN == null) {
-			List<User> users = new UsersSelector().selectByName(new Set<String> {'Data Admin'});
-			if (users.size() > 0) {
-				DATA_ADMIN = users.get(0);
-			}
-		}
-		return DATA_ADMIN;
 	}
 
 	private static String getMnDistiAccountLegacyId(Opportunity oppty) {
