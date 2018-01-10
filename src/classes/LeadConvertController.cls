@@ -14,8 +14,7 @@ public with sharing class LeadConvertController {
                       where Related_to_Lead__c =:LeadId];
               
         if(ldCurrent.Account_Id__c!=null){
-            ldAccountCurrent=[Select Id, Name,IsInactive__c from Account where id=:ldCurrent.Account_Id__c AND 
-                              IsInactive__c=false];
+            ldAccountCurrent=[Select Id, Name from Account where id=:ldCurrent.Account_Id__c];
         	listldOppty=[select Id,Name,AccountId from Opportunity where accountId=:ldCurrent.Account_Id__c];
         }        
         ldCurrentReturns.leadCurrent=ldCurrent;
@@ -34,7 +33,8 @@ public with sharing class LeadConvertController {
         List < Opportunity > returnList = new List < Opportunity > ();
         ldCurrent=[select id, email,Account_Id__c,status,firstName,LastName from Lead where Id=:LeadId];
         listOpp=[select id,AccountId, Name from Opportunity where Name LIKE: searchKey 
-                 AND  AccountId=:leadAccId AND RecordType.Name='SFDC Oppty' ORDER BY Name ASC ];         
+                 AND  AccountId=:leadAccId AND RecordType.Name='SFDC Oppty' AND
+                 (CreatedDate = LAST_N_DAYS:365 OR CreatedDate = TODAY) ORDER BY Name ASC ];         
         if(listOpp.size() !=0){
             for (Opportunity opp: listOpp) {
             returnList.add(opp);
@@ -51,7 +51,9 @@ public with sharing class LeadConvertController {
         List < Opportunity > returnList = new List < Opportunity > ();
         ldCurrent=[select id, email,Account_Id__c,status,firstName,LastName from Lead where Id=:LeadId];                 
         listOpp=[select id,AccountId, Name from Opportunity where 
-                AccountId=:leadAccId AND RecordType.Name='SFDC Oppty' ORDER BY Name ASC];         
+                AccountId=:leadAccId AND RecordType.Name='SFDC Oppty' AND 
+                 (CreatedDate = LAST_N_DAYS:365 OR CreatedDate = TODAY) ORDER BY Name ASC];                
+                          
         if(listOpp.size() !=0){
             for (Opportunity opp: listOpp) {
             returnList.add(opp);
@@ -64,8 +66,9 @@ public with sharing class LeadConvertController {
     public static list<Account> listLeadAccount(Id LeadId, string LeadOwnerId){
         list<account> listAccount;
         list<account> returListAccount=new list<Account>();
-        listAccount=[Select id,Name,IsInactive__c,country__c,city__c from account where OwnerId =:LeadOwnerId AND 
-                     IsInactive__c=False AND RecordType.Name='Child Account' ORDER BY Name ASC ];                                         
+        listAccount=[Select id,Name,country__c,city__c from account where OwnerId =:LeadOwnerId AND IsInactive__c=False
+                     AND RecordType.Name='Child Account' ORDER BY Name ASC ];
+                    
         if(listAccount.size()!=0){
             for(account acc:listAccount){
                 returListAccount.add(acc);
@@ -176,7 +179,7 @@ public with sharing class LeadConvertController {
         opportunity existingOppty;
         
         
-        ldToConvert=[select id, email,Manual_Update_Check__c,Account_Id__c,status,firstName,LastName from Lead where Id=:LeadId];        
+        ldToConvert=[select id,ownerid, email,Manual_Update_Check__c,Account_Id__c,status,firstName,LastName from Lead where Id=:LeadId];        
             
             system.debug('manualcheck::'+ldToConvert.Manual_Update_Check__c);
             if(ldToConvert.Email != null){
@@ -230,19 +233,19 @@ public with sharing class LeadConvertController {
                 mapEmailToContact.put(newConToConvert.email,newConToConvert);                
             } 
         }
-       
-      	/*if(mapLeadIdToContact.containskey(ldToConvert.Id) && mapLeadIdToOppty.containskey(ldToConvert.Id)){
-              listNewContactRole.add(new OpportunityContactRole(contactId=mapLeadIdToContact.get(ldToConvert.Id).Id,
-                                    OpportunityId=mapLeadIdToOppty.get(ldToConvert.Id).Id,Role='Consultant')); 
-              insert listNewContactRole;
-      	}*/
+             	
         try{
             Database.LeadConvert lc = new Database.LeadConvert();			            
-        	String convertedStatus = [SELECT MasterLabel FROM LeadStatus WHERE IsConverted = TRUE LIMIT 1].MasterLabel;        
+        	String convertedStatus = [SELECT MasterLabel FROM LeadStatus WHERE IsConverted = TRUE LIMIT 1].MasterLabel;            
         	lc.setLeadId(ldToConvert.Id);
         	lc.setContactId(mapEmailToContact.get(ldToConvert.email).Id);
         	lc.setAccountId(mapLeadIdToOppty.get(ldToConvert.Id).accountId);
-        	lc.setOpportunityId(mapLeadIdToOppty.get(ldToConvert.Id).Id);            
+        	lc.setOpportunityId(mapLeadIdToOppty.get(ldToConvert.Id).Id);
+			FeedItem post = new FeedItem();
+			post.ParentId = mapLeadIdToOppty.get(ldToConvert.Id).Id; //eg. Opportunity id, custom object id..
+			post.Body = 'converted a lead to this opportunity.';
+			insert post;
+            
         	lc.setConvertedStatus(convertedStatus);            
             Database.LeadConvertResult lcr = Database.convertLead(lc);
             

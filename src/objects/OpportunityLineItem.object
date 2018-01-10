@@ -197,10 +197,6 @@
                     <default>false</default>
                 </value>
                 <value>
-                    <fullName>FAIRCHILD SEMICONDUCTOR</fullName>
-                    <default>false</default>
-                </value>
-                <value>
                     <fullName>FLIR SYSTEMS </fullName>
                     <default>false</default>
                 </value>
@@ -285,11 +281,19 @@
                     <default>false</default>
                 </value>
                 <value>
+                    <fullName>Other</fullName>
+                    <default>false</default>
+                </value>
+                <value>
                     <fullName>PANASONIC </fullName>
                     <default>false</default>
                 </value>
                 <value>
                     <fullName>PANJIT SEMICONDUCTOR</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>POWER INTEGRATIONS</fullName>
                     <default>false</default>
                 </value>
                 <value>
@@ -360,12 +364,17 @@
                     <fullName>WILL SEMICONDUCTOR</fullName>
                     <default>false</default>
                 </value>
-                <value>
-                    <fullName>Other</fullName>
-                    <default>false</default>
-                </value>
             </valueSetDefinition>
         </valueSet>
+    </fields>
+    <fields>
+        <fullName>Competitor_s_Product__c</fullName>
+        <externalId>false</externalId>
+        <label>Competitor&apos;s Product</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
     </fields>
     <fields>
         <fullName>CompetitorsStrengths__c</fullName>
@@ -430,13 +439,37 @@
         <type>Checkbox</type>
     </fields>
     <fields>
+        <fullName>Design_Reg_Part_Created_Date__c</fullName>
+        <description>Design Registration Part Created Date</description>
+        <externalId>false</externalId>
+        <label>Design Reg Part Created Date</label>
+        <required>false</required>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Design_Reg_Part_Is_Obsolete__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Design Registration Part Obsolete Flag</description>
+        <externalId>false</externalId>
+        <label>Design Reg Part Obsolete</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Design_Reg_Part_Modified_Date__c</fullName>
+        <description>Design Registration Part Modified Date</description>
+        <externalId>false</externalId>
+        <label>Design Reg Part Modified Date</label>
+        <required>false</required>
+        <type>Date</type>
+    </fields>
+    <fields>
         <fullName>Discount</fullName>
     </fields>
     <fields>
         <fullName>Distributor_Tracking_Number__c</fullName>
         <description>This field contains the Distributor tracking number for part form Model N system.</description>
         <externalId>false</externalId>
-        <label>Distributor Tracking Number</label>
+        <label>Design Reg Part Disti Tracking Number</label>
         <length>80</length>
         <required>false</required>
         <type>Text</type>
@@ -1288,9 +1321,9 @@ If Non-Thrusted product, value = zero</inlineHelpText>
     </fields>
     <fields>
         <fullName>Registration_Status__c</fullName>
-        <description>Part Registration Status</description>
+        <description>Design Part Registration Status</description>
         <externalId>false</externalId>
-        <label>Reg Status</label>
+        <label>Design Reg Part Status</label>
         <length>80</length>
         <required>false</required>
         <type>Text</type>
@@ -1367,17 +1400,17 @@ If Non-Thrusted product, value = zero</inlineHelpText>
     </fields>
     <fields>
         <fullName>Win_Date__c</fullName>
-        <description>Design win date per part which is WIN_DATE from Model N.</description>
+        <description>Design Reg Part Win Date</description>
         <externalId>false</externalId>
-        <label>Win Date</label>
+        <label>Design Reg Part Win Date</label>
         <required>false</required>
         <type>Date</type>
     </fields>
     <fields>
         <fullName>Win_Status__c</fullName>
-        <description>Design win status per part which is STATUS from Model N.</description>
+        <description>Design Reg Part Win Status</description>
         <externalId>false</externalId>
-        <label>Win Status</label>
+        <label>Design Reg Part Win Status</label>
         <length>20</length>
         <required>false</required>
         <type>Text</type>
@@ -1386,7 +1419,7 @@ If Non-Thrusted product, value = zero</inlineHelpText>
     <fields>
         <fullName>X2010_Value__c</fullName>
         <externalId>false</externalId>
-        <label>2010 Product Value</label>
+        <label>z_OBSOLETED_2010 Product Value</label>
         <precision>18</precision>
         <required>false</required>
         <scale>2</scale>
@@ -1395,7 +1428,7 @@ If Non-Thrusted product, value = zero</inlineHelpText>
     <fields>
         <fullName>X2011_Value__c</fullName>
         <externalId>false</externalId>
-        <label>2011 Product Value</label>
+        <label>z_OBSOLETED_2011 Product Value</label>
         <precision>18</precision>
         <required>false</required>
         <scale>2</scale>
@@ -1404,7 +1437,7 @@ If Non-Thrusted product, value = zero</inlineHelpText>
     <fields>
         <fullName>X2012_Value__c</fullName>
         <externalId>false</externalId>
-        <label>2012 Product Value</label>
+        <label>z_OBSOLETED_2012 Product Value</label>
         <precision>18</precision>
         <required>false</required>
         <scale>2</scale>
@@ -1413,7 +1446,7 @@ If Non-Thrusted product, value = zero</inlineHelpText>
     <fields>
         <fullName>X2013_Value__c</fullName>
         <externalId>false</externalId>
-        <label>2013 Product Value</label>
+        <label>z_OBSOLETED_2013 Product Value</label>
         <precision>18</precision>
         <required>false</required>
         <scale>2</scale>
@@ -1422,7 +1455,7 @@ If Non-Thrusted product, value = zero</inlineHelpText>
     <fields>
         <fullName>X2014_Value__c</fullName>
         <externalId>false</externalId>
-        <label>2014 Product Value</label>
+        <label>z_OBSOLETED_2014 Product Value</label>
         <precision>18</precision>
         <required>false</required>
         <scale>2</scale>
@@ -1432,7 +1465,7 @@ If Non-Thrusted product, value = zero</inlineHelpText>
         <fullName>X2015_Value__c</fullName>
         <externalId>false</externalId>
         <inlineHelpText>Opportunity 2015 Pieces x Sales Price x Component Multiplier.This value excludes thrust calculation and is in opportunity currency.</inlineHelpText>
-        <label>2015 Product Value</label>
+        <label>z_OBSOLETED_2015 Product Value</label>
         <precision>18</precision>
         <required>false</required>
         <scale>2</scale>
@@ -1441,7 +1474,7 @@ If Non-Thrusted product, value = zero</inlineHelpText>
     <fields>
         <fullName>X2016_Value__c</fullName>
         <externalId>false</externalId>
-        <label>2016 Product Value</label>
+        <label>z_OBSOLETED_2016 Product Value</label>
         <precision>18</precision>
         <required>false</required>
         <scale>2</scale>
@@ -1450,7 +1483,7 @@ If Non-Thrusted product, value = zero</inlineHelpText>
     <fields>
         <fullName>X2017_Value__c</fullName>
         <externalId>false</externalId>
-        <label>2017 Product Value</label>
+        <label>z_OBSOLETED_2017 Product Value</label>
         <precision>18</precision>
         <required>false</required>
         <scale>2</scale>
@@ -1459,7 +1492,7 @@ If Non-Thrusted product, value = zero</inlineHelpText>
     <fields>
         <fullName>X2018_Value__c</fullName>
         <externalId>false</externalId>
-        <label>2018 Product Value</label>
+        <label>z_OBSOLETED_2018 Product Value</label>
         <precision>18</precision>
         <required>false</required>
         <scale>2</scale>
@@ -1468,7 +1501,7 @@ If Non-Thrusted product, value = zero</inlineHelpText>
     <fields>
         <fullName>X2019_Value__c</fullName>
         <externalId>false</externalId>
-        <label>2019 Product Value</label>
+        <label>z_OBSOLETED_2019 Product Value</label>
         <precision>18</precision>
         <required>false</required>
         <scale>2</scale>
@@ -1477,7 +1510,7 @@ If Non-Thrusted product, value = zero</inlineHelpText>
     <fields>
         <fullName>X2020_Value__c</fullName>
         <externalId>false</externalId>
-        <label>2020 Product Value</label>
+        <label>z_OBSOLETED_2020 Product Value</label>
         <precision>18</precision>
         <required>false</required>
         <scale>2</scale>
@@ -1486,7 +1519,7 @@ If Non-Thrusted product, value = zero</inlineHelpText>
     <fields>
         <fullName>X2021_Value__c</fullName>
         <externalId>false</externalId>
-        <label>2021 Product Value</label>
+        <label>z_OBSOLETED_2021 Product Value</label>
         <precision>18</precision>
         <required>false</required>
         <scale>2</scale>
@@ -1495,7 +1528,7 @@ If Non-Thrusted product, value = zero</inlineHelpText>
     <fields>
         <fullName>X2022_Value__c</fullName>
         <externalId>false</externalId>
-        <label>2022 Product Value</label>
+        <label>z_OBSOLETED_2022 Product Value</label>
         <precision>18</precision>
         <required>false</required>
         <scale>2</scale>
@@ -1504,7 +1537,7 @@ If Non-Thrusted product, value = zero</inlineHelpText>
     <fields>
         <fullName>X2023_Value__c</fullName>
         <externalId>false</externalId>
-        <label>2023 Product Value</label>
+        <label>z_OBSOLETED_2023 Product Value</label>
         <precision>18</precision>
         <required>false</required>
         <scale>2</scale>
@@ -1513,7 +1546,7 @@ If Non-Thrusted product, value = zero</inlineHelpText>
     <fields>
         <fullName>X2024_Value__c</fullName>
         <externalId>false</externalId>
-        <label>2024 Product Value</label>
+        <label>z_OBSOLETED_2024 Product Value</label>
         <precision>18</precision>
         <required>false</required>
         <scale>2</scale>
@@ -1522,7 +1555,7 @@ If Non-Thrusted product, value = zero</inlineHelpText>
     <fields>
         <fullName>X2025_Value__c</fullName>
         <externalId>false</externalId>
-        <label>2025 Product Value</label>
+        <label>z_OBSOLETED_2025 Product Value</label>
         <precision>18</precision>
         <required>false</required>
         <scale>2</scale>
@@ -1531,7 +1564,7 @@ If Non-Thrusted product, value = zero</inlineHelpText>
     <fields>
         <fullName>X2026_Value__c</fullName>
         <externalId>false</externalId>
-        <label>2026 Product Value</label>
+        <label>z_OBSOLETED_2026 Product Value</label>
         <precision>18</precision>
         <required>false</required>
         <scale>2</scale>
@@ -1540,7 +1573,7 @@ If Non-Thrusted product, value = zero</inlineHelpText>
     <fields>
         <fullName>X2027_Value__c</fullName>
         <externalId>false</externalId>
-        <label>2027 Product Value</label>
+        <label>z_OBSOLETED_2027 Product Value</label>
         <precision>18</precision>
         <required>false</required>
         <scale>2</scale>
@@ -1549,7 +1582,7 @@ If Non-Thrusted product, value = zero</inlineHelpText>
     <fields>
         <fullName>X2028_Value__c</fullName>
         <externalId>false</externalId>
-        <label>2028 Product Value</label>
+        <label>z_OBSOLETED_2028 Product Value</label>
         <precision>18</precision>
         <required>false</required>
         <scale>2</scale>
@@ -1558,7 +1591,7 @@ If Non-Thrusted product, value = zero</inlineHelpText>
     <fields>
         <fullName>X2029_Value__c</fullName>
         <externalId>false</externalId>
-        <label>2029 Product Value</label>
+        <label>z_OBSOLETED_2029 Product Value</label>
         <precision>18</precision>
         <required>false</required>
         <scale>2</scale>
@@ -1567,7 +1600,7 @@ If Non-Thrusted product, value = zero</inlineHelpText>
     <fields>
         <fullName>X2030_Value__c</fullName>
         <externalId>false</externalId>
-        <label>2030 Product Value</label>
+        <label>z_OBSOLETED_2030 Product Value</label>
         <precision>18</precision>
         <required>false</required>
         <scale>2</scale>

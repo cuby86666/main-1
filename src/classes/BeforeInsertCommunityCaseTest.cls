@@ -42,13 +42,13 @@ private class BeforeInsertCommunityCaseTest {
        Account community = new Account(Name='Community Members');
        insert community;
         
-       Case commCase1 = new Case(AccountId=community.id, Origin='Community');
+       Case commCase1 = new Case(AccountId=community.id, Origin='Self Service Portal');
        insert commCase1;
        
        // Test case where "Technical Services" Account is provided
        Account techservice = CaseRelatedTestingUtil.createTestAccount();
        insert techservice;
-       Case commCase2 = new Case(AccountId=community.id, Origin='Community');
+       Case commCase2 = new Case(AccountId=community.id, Origin='Self Service Portal');
        insert commCase2;
        
        Test.stopTest();

@@ -29,6 +29,7 @@ public class LeadTriggerHandlerTest {
                                                           Region__c='EMEA'));
         leadCountrySettings.add(new LeadCountrySettings__c(country_Code__c='TCT', Country__c='Test Country1',Name='TestCountry1',
                                                           Region__c='EMEA'));
+        leadCountrySettings.add(new LeadCountrySettings__c(Name='NovaSilva',NovaSilva_Email__c='test@test1.com'));
         insert leadCountrySettings;
         
         Profile p = [SELECT Id FROM Profile WHERE Name = :TEST_USER_PROFILE];
@@ -64,8 +65,8 @@ public class LeadTriggerHandlerTest {
                                   email = TEST_USER_EMAIL_0,AccountId=a.Id));                
         	listContact.add(new Contact(FirstName='Test1',LastName='Contact1',  Title = 'strTitle',
                                   email = TEST_USER_EMAIL_1,AccountId=a.Id));                
-        	listContact.add(new Contact(FirstName='Test2',LastName='Contact2',  Title = 'strTitle',
-                                  email = TEST_USER_EMAIL_2,AccountId=a.Id));
+        	//listContact.add(new Contact(FirstName='Test2',LastName='Contact2',  Title = 'strTitle',
+                                  //email = TEST_USER_EMAIL_2,AccountId=a.Id));
         }                
         insert listContact;
         
@@ -82,6 +83,9 @@ public class LeadTriggerHandlerTest {
         listLead.add(new lead(FirstName='Test',LastName='Lead', Company='Test company',RecordTypeId=LeadOwnerAssignmentHandler.UNCATEGORIZED_RECORD_TYPE, 
                               status='Accepted by Disti',country='TUP', state='TUS',email=TEST_USER_EMAIL_4
                              ));
+        listLead.add(new lead(FirstName='Test',LastName='Lead', Company='Test company',RecordTypeId=LeadOwnerAssignmentHandler.ROM_LEAD_RECORD_TYPE, 
+                              status='open',country='TUP', state='TUS',email=TEST_USER_EMAIL_0
+                             ));
         insert listLead;
     }
     @isTest
@@ -90,6 +94,7 @@ public class LeadTriggerHandlerTest {
         list<lead> countryUpLead=[SELECT id,name,NXP_Global_Customer_Master_ID__c,Email,Status,OwnerId,
                                           RecordTypeId,Description,street,city,country,state,company from Lead
                                           where RecordType.Name='Uncategorized Leads'];
+        
         for(lead ld:countryUpLead){
             ld.country='TCT';
         }
@@ -103,6 +108,7 @@ public class LeadTriggerHandlerTest {
         lead ranNumGenLead=[SELECT id,name,NXP_Global_Customer_Master_ID__c,Email,Status,OwnerId,
                                           RecordTypeId,Description,street,city,country,state,company from Lead
                                           where email=:TEST_USER_EMAIL_2];
+        
         contact con=new Contact(FirstName='Test2',LastName='Contact2',  Title = 'strTitle',
                                   email = TEST_USER_EMAIL_2);        
         ranNumGenLead.distributor_contact__c=con.Id;                    
@@ -139,5 +145,21 @@ public class LeadTriggerHandlerTest {
 		Database.LeadConvertResult lcr = Database.convertLead(lc);
 		System.assert(lcr.isSuccess());
             
+    }
+     @isTest
+    static void testemailToMultipleDistis(){
+        Test.starttest();
+        lead ldToDistis=[SELECT id,name,NXP_Global_Customer_Master_ID__c,Email,Status,OwnerId,
+                                          RecordTypeId,Description,street,city,country,state,company,
+                            			  Disti_Feedback_Email_Address__c,CC_Address__c,Note_To_Disti__c from Lead                            
+                                          where status='open' and RecordTypeId=:LeadOwnerAssignmentHandler.ROM_LEAD_RECORD_TYPE];
+        contact con=new Contact(FirstName='Test2',LastName='Contact2',  Title = 'strTitle',
+                                  email = TEST_USER_EMAIL_2);
+        insert Con;        
+        ldToDistis.Distributor_Contact__c=con.Id;
+        ldToDistis.CC_Address__c=TEST_USER_EMAIL_0;
+        ldToDistis.Note_To_Disti__c='Test';
+        update ldToDistis;
+        Test.stopTest(); 
     }
 }

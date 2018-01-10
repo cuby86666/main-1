@@ -278,6 +278,45 @@ private class OpportunitiesTest {
 	    
 	    Test.stopTest();
     }
+    
+    @isTest
+    static void testOpptyClaimValueHistoryTracking() {
+    	Test.startTest();
+    	
+        //Case 1: Locked Exchange Rate != null && Claim Value != null
+    	Opportunity oppty = getOpportunity(opptyProd.OpportunityId);
+    	
+    	system.assertNotEquals(null, oppty.Claim_Value__c);
+    	system.assertNotEquals(null, oppty.Locked_Exchange_Rate__c);
+    	system.assertEquals(oppty.Claim_Value__c/oppty.Locked_Exchange_Rate__c, oppty.Claim_Value_USD_SYS__c);
+    	
+    	//Case 2: Locked Exchange Rate == null && Claim Value == null
+    	Fx_Rates__c fxRate= [SELECT Id, Exchange_Rate__c, CurrencyIsoCode FROM Fx_Rates__c WHERE CurrencyIsoCode = :CCY_CODE_USD];
+	    fxRate.Exchange_Rate__c = 0;
+	    update fxRate;
+    	
+    	Opportunity opptyWoProduct = new Opportunity(
+	    	Name = 'Test Oppty w/o product',
+	    	Production_Date__c = PRODUCTION_DATE,
+        	CloseDate = PRODUCTION_DATE - 60,
+	    	StageName = Opportunities.STAGES.get(Opportunities.Stage.DISCOVERY),
+	    	CurrencyIsoCode = CCY_CODE_USD
+	    );
+	    insert opptyWoProduct; 
+	    	    
+	    oppty = getOpportunity(opptyWoProduct.Id);
+	    
+	    system.assertEquals(0, oppty.Locked_Exchange_Rate__c);
+	 	system.assertEquals(null, oppty.Claim_Value_USD_SYS__c);
+        
+        delete fxRate;
+        update oppty;
+        oppty = getOpportunity(opptyWoProduct.Id);
+	    
+	    system.assertEquals(0, oppty.Locked_Exchange_Rate__c);
+    	
+    	Test.stopTest();
+    }
   
     static User createUser(String alias, String lastName, ID profileID, Boolean signedARIA) {
     	User user = newUser(alias, lastName, profileID, signedARIA); 
@@ -314,7 +353,8 @@ private class OpportunitiesTest {
     static Opportunity getOpportunity(ID opptyID) {
         return [select LT_Value_USD__c, Sales_Director_Approver__c, Regional_VP_Approver__c, VP_Approver_2__c, 
         			   MAG_Approver_1__c, MAG_Approver_2__c, BL_Approver_1__c, BL_Approver_2__c, Program__c,    
-        			   Account.ParentId, Owner.MT_2__c, StageName, Discovery_Date__c
+        			   Account.ParentId, Owner.MT_2__c, StageName, Discovery_Date__c, Claim_Value__c, Locked_Exchange_Rate__c,
+        			   Claim_Value_USD_SYS__c, CurrencyIsoCode
         		  from Opportunity 
         		 where Id = :opptyID];    
     }

@@ -12,7 +12,7 @@ global class LeadConvertROMBatch implements Database.Batchable<Lead>  {
     global Iterable<Lead> start(Database.BatchableContext bc) {
         List<Lead> listLds = new List<Lead>([select id,name,NXP_Global_Customer_Master_ID__c,Email,Status,OwnerId,FirstName,
                                          Distributor_Tracking_Number__c,RecordTypeId,Account_Id__c,Description,street,city,
-                                         country,state,company,PostalCode,LastName,Manual_Update_Check__c 
+                                         country,state,company,PostalCode,LastName,Manual_Update_Check__c,CreatedDate 
                                          from lead where (recordtype.name ='ROM Leads' Or recordtype.name = 'TMMA Leads')
                                                           and status='Accepted by Disti']);
                                                                                     

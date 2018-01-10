@@ -36,6 +36,9 @@ public class LeadOwnerAssignmentHandlerTest {
         listUser.add(u2);
         insert listUser;
         
+        user u3=[Select id, name from User where name=:label.Lead_Default_Owner];
+        system.debug('username::'+u3);
+        
         
         // Insert  accounts
         List<account> listAcc=new list<Account>();
@@ -67,6 +70,7 @@ public class LeadOwnerAssignmentHandlerTest {
                                   email = TEST_USER_EMAIL_1,AccountId=a.Id));                
         	listContact.add(new Contact(FirstName='Test',LastName='Contact',  Title = 'strTitle',
                                   email = TEST_USER_EMAIL_2,AccountId=a.Id));
+            
         }                
         insert listContact;
         
@@ -78,6 +82,16 @@ public class LeadOwnerAssignmentHandlerTest {
                                                              Lead_Owner__c=u.Id,State__c='Test State'));
         listLeadOwnerAssignmt.add(new LeadOwnerAssignment__c(Country__c='Test Country',city__c='Test City',
                                                              Lead_Owner__c=u.Id,State__c='Test State 1'));
+        listLeadOwnerAssignmt.add(new LeadOwnerAssignment__c(Country__c='Test Country Ch',
+                                                             Lead_Owner__c=u.Id,CBG__c = 'Automotive'));                                                             
+        listLeadOwnerAssignmt.add(new LeadOwnerAssignment__c(Country__c='Test Country Ch',
+                                                             Lead_Owner__c=u.Id,city__c='Test City',State__c='Test State 2',
+                                                             CBG__c = 'Consumer'));
+        listLeadOwnerAssignmt.add(new LeadOwnerAssignment__c(Country__c='Test Country Ch',
+                                                             Lead_Owner__c=u.Id,city__c='Test City 2',State__c='Test State 2',
+                                                             CBG__c = 'Consumer'));
+        listLeadOwnerAssignmt.add(new LeadOwnerAssignment__c(Country__c='Test Country Ch',
+                                                             Lead_Owner__c=u.Id,city__c='Test City',CBG__c = 'Medical'));                                                             
         insert listLeadOwnerAssignmt;
         
         //Insert Leads
@@ -118,18 +132,38 @@ public class LeadOwnerAssignmentHandlerTest {
         listLead.add(new lead(FirstName='Test',LastName='Lead3', Company='Test compan3',RecordTypeId=LeadOwnerAssignmentHandler.UNCATEGORIZED_RECORD_TYPE, 
                               status='Open',country='TCN', state='TST',email=TEST_USER_EMAIL_3,createdDate=d));
         listLead.add(new lead(FirstName='Test',LastName='Lead3', Company='Test compan3',RecordTypeId=LeadOwnerAssignmentHandler.ROM_LEAD_RECORD_TYPE, 
-                              status='Open',country='Test Country', postalCode='12',email=TEST_USER_EMAIL_3,createdDate=d)); 
+                              status='Open',country='Test Country', postalCode='12',email=TEST_USER_EMAIL_3,createdDate=d));
+        listLead.add(new lead(FirstName='Test',LastName='Lead3', Company='Test compan3',RecordTypeId=LeadOwnerAssignmentHandler.ROM_LEAD_RECORD_TYPE, 
+                              status='Open',country='Test Country', postalCode='12-01',email=TEST_USER_EMAIL_3,createdDate=d));
                                                          
         listLead.add(new lead(FirstName='Test',LastName='Lead3', Company='Test compan3',RecordTypeId=LeadOwnerAssignmentHandler.ROM_LEAD_RECORD_TYPE, 
                               status='Open',country='Test Country', state='Test State',email=TEST_USER_EMAIL_3,createdDate=d));
                              
         listLead.add(new lead(FirstName='Test',LastName='Lead3', Company='Test compan3',RecordTypeId=LeadOwnerAssignmentHandler.ROM_LEAD_RECORD_TYPE, 
                               status='Open',country='Test Country', city='Test City',email=TEST_USER_EMAIL_3,createdDate=d                            
-                              ));      
-                             
+                              )); 
+                                    
+        listLead.add(new lead(FirstName='Test',LastName='Ind3', Company='Test compan3',RecordTypeId=LeadOwnerAssignmentHandler.ROM_LEAD_RECORD_TYPE, 
+                              status='Open',country='Test Country Ch', email=TEST_USER_EMAIL_3,createdDate=d,Industry='Automotive'                            
+                              )); 
+        listLead.add(new lead(FirstName='Test',LastName='Ind4', Company='Test compan3',RecordTypeId=LeadOwnerAssignmentHandler.ROM_LEAD_RECORD_TYPE, 
+                              status='Open',country='Test Country Ch',State='Test State 2', city='Test City',email=TEST_USER_EMAIL_3,createdDate=d,                            
+                              Industry='Consumer'));
+        listLead.add(new lead(FirstName='Test',LastName='Ind5', Company='Test compan3',RecordTypeId=LeadOwnerAssignmentHandler.ROM_LEAD_RECORD_TYPE, 
+                              status='Open',country='Test Country', email=TEST_USER_EMAIL_3,createdDate=d,Industry='consumer'                            
+                              ));
+        listLead.add(new lead(FirstName='Test',LastName='Ind5', Company='Test compan3',RecordTypeId=LeadOwnerAssignmentHandler.ROM_LEAD_RECORD_TYPE, 
+                              status='Open',country='Test Country ch',city='Test City', email=TEST_USER_EMAIL_3,createdDate=d,Industry='Medical'                            
+                              ));
+        insert listLead;
         
-                              
-        insert listLead;                                                                                   
+        system.runAs(U3){
+        lead nxpCreationLead=new lead(FirstName='Test',LastName='Lead3', Company='Test compan3',RecordTypeId=LeadOwnerAssignmentHandler.ROM_LEAD_RECORD_TYPE, 
+                              status='Open',country='Test Country', city='Test City',email=TEST_USER_EMAIL_3,createdDate=d);
+        insert nxpCreationLead;
+            system.debug('lead::'+nxpCreationLead.Owner.Name); 
+        }
+       
     }
     @isTest
     static void testContactBasedMapping(){
@@ -137,7 +171,7 @@ public class LeadOwnerAssignmentHandlerTest {
        
          DateTime d = System.now().addHours(-2);
         list<Lead> listLeadUncategorized=[SELECT id,name,NXP_Global_Customer_Master_ID__c,Email,Status,OwnerId,
-                                          RecordTypeId,Description,street,city,country,state,company from Lead
+                                          RecordTypeId,Description,street,city,country,state,company,Industry from Lead
                                           where RecordType.Name='Uncategorized Leads'And createdDate <=:d];
         system.assert(listLeadUncategorized.size()!=0);        
         LeadOwnerAssignmentBatch batchController = new LeadOwnerAssignmentBatch();
@@ -149,7 +183,7 @@ public class LeadOwnerAssignmentHandlerTest {
         Test.startTest();
         DateTime d = System.now().addHours(-2);
         list<Lead> listLeadUncategorized=[SELECT id,name,NXP_Global_Customer_Master_ID__c,Email,Status,OwnerId,
-                                          RecordTypeId,Description,street,city,country,state,company from Lead
+                                          RecordTypeId,Description,street,city,country,state,company,Industry from Lead
                                           where RecordType.Name='Uncategorized Leads'And createdDate <=:d];
         system.assert(listLeadUncategorized.size()!=0);        
         LeadOwnerAssignmentBatch batchController = new LeadOwnerAssignmentBatch();

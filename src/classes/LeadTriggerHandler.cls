@@ -10,10 +10,19 @@
 if disti contact is not same as Disti feedback email provided Disti feedback email exists in sfdc.
 **************************************************************************/
 
+/*************************************************************************
+@Modified By:     Jewelslyn
+@Modified Date:   4 Dec 2017
+@Description:    Modified trigger to include Sending emails to multiple distis
+**************************************************************************/
+
 public class LeadTriggerHandler {
+    Private Static Final string TMMA_LEAD='TMMA Leads';
+    private Static Final string ROM_LEAD='ROM Leads';
     public static map<string,string> mapCountryCodeToName;
     public static map<string,string> mapStateCodeToState;
-    public static map<string,string> mapCountryToRegion;
+    public static map<string,string> mapCountryToRegion;    
+    public static boolean recursionCheck=true;
     public static void assignCountryNames(List<Lead> listNewLeads){
         list<LeadCountrySettings__c> lstLeadCountrySettings=[select id,Country__c,country_Code__c,State__c,Region__c,State_Code__c 
                                                              from LeadCountrySettings__c];
@@ -23,13 +32,13 @@ public class LeadTriggerHandler {
         for(LeadCountrySettings__c settings:lstLeadCountrySettings){            
             if(settings.Country__c !=null && settings.country_Code__c!=null){
                 if(!mapCountryCodeToName.containskey(settings.country_Code__c.toUpperCase())){
-                	mapCountryCodeToName.put(settings.country_Code__c.toUpperCase(),settings.Country__c);
-            	}
+                    mapCountryCodeToName.put(settings.country_Code__c.toUpperCase(),settings.Country__c);
+                }
             }
             if(settings.State__c !=null && settings.state_Code__c!=null){
                 if(!mapStateCodeToState.containskey(settings.state_Code__c.toUpperCase())){
-                	mapStateCodeToState.put(settings.state_Code__c.toUpperCase(),settings.State__c);
-            	}
+                    mapStateCodeToState.put(settings.state_Code__c.toUpperCase(),settings.State__c);
+                }
             }
             if(settings.Region__c!=null && settings.country_Code__c !=null){
                 if(!mapCountryToRegion.containskey(settings.country_Code__c.toUpperCase())){
@@ -39,23 +48,23 @@ public class LeadTriggerHandler {
                 system.debug('settRe:'+mapCountryToRegion);
         }
         for(lead ld:listNewLeads){
-			 ld.Region__c=null;           
+             ld.Region__c=null;           
             if(ld.country!=null){
-				if(mapCountryToRegion.containsKey(ld.country.toUpperCase())){
+                if(mapCountryToRegion.containsKey(ld.country.toUpperCase())){
                     system.debug('settRe1:'+mapCountryToRegion);
                     if(mapCountryToRegion.get(ld.country.toUpperCase()) !=null){
                         ld.Region__c=mapCountryToRegion.get(ld.country.toUpperCase());                    
                     }
                 }   
                 if(mapCountryCodeToName.containsKey(ld.country.toUpperCase())){   
-                	if(mapCountryCodeToName.get(ld.country.toUpperCase()) !=null){
+                    if(mapCountryCodeToName.get(ld.country.toUpperCase()) !=null){
                         ld.country=mapCountryCodeToName.get(ld.country.toUpperCase());
                     }                    
-            	}                                                                
+                }                                                                
             }
             if(ld.State!=null){
                if(mapStateCodeToState.containskey(ld.State.toUpperCase()) && mapStateCodeToState.get(ld.State.toUpperCase()) !=null){                    
-                   ld.State=mapCountryCodeToName.get(ld.State.toUpperCase()); 
+                   ld.State=mapStateCodeToState.get(ld.State.toUpperCase()); 
                 } 
             }
             
@@ -64,12 +73,12 @@ public class LeadTriggerHandler {
     public static String generateRandomString(Integer len) {
     final String chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz';
     String randStr = '';
-    	while (randStr.length() < len) {
-       		Integer idx = Math.mod(Math.abs(Crypto.getRandomInteger()), chars.length());
-       		randStr += chars.substring(idx, idx+1);
-    	}
-   		 return randStr; 
-	}
+        while (randStr.length() < len) {
+            Integer idx = Math.mod(Math.abs(Crypto.getRandomInteger()), chars.length());
+            randStr += chars.substring(idx, idx+1);
+        }
+         return randStr; 
+    }
     
     public static void assignRandomString(list<Lead> listLeads){
         for(lead ld:listLeads){
@@ -118,7 +127,7 @@ public class LeadTriggerHandler {
         map<string, opportunityContactRole> mapOppConRole=new map<string, opportunityContactRole>();
         string oppConId;
         for(lead ld:listConvertedLeads){            
-            oppConId=ld.ConvertedOpportunityId +'*'+ ld.ConvertedContactId;			
+            oppConId=ld.ConvertedOpportunityId +'*'+ ld.ConvertedContactId;         
             if(!mapOppConRole.containskey(oppConId)){
                 mapOppConRole.put(oppConId,new OpportunityContactRole(opportunityId=ld.ConvertedOpportunityId,ContactId=
                                                                  ld.ConvertedContactId));
@@ -134,7 +143,79 @@ public class LeadTriggerHandler {
             }                        
         }
         if(!mapOppConRole.isEmpty()){
-          Database.insert(mapOppConRole.values());	     
+          Database.insert(mapOppConRole.values());       
         }               
+    }
+    public static void emailToMultipleDistis(list<lead> listLeads){
+        List<Messaging.SingleEmailMessage> emails = new List<Messaging.SingleEmailMessage>();        
+        set<string> distiEmail=new set<string>();
+        set<string> ownerEmail=new set<string>();        
+        string distEmailAdd;
+        string[] toaddress = New String[]{};
+        string[] CcEmails = New String[]{};        
+        string[] novaSilvaEmail = New String[]{};             
+        for(lead ld:listLeads){
+            if(ld.Distributor_Contact__c !=null){
+                distiEmail.add(ld.Distributor_Contact__c);
+                system.debug('disticon::'+ld.Distributor_Contact__c);
+            }
+            ownerEmail.add(ld.OwnerId);            
+        }
+        list<contact> listCon=[select id,email from contact where id IN:distiEmail];
+        list<user> listUser=[select id, email from user where Id In:ownerEmail];
+        map<id,string> mapConIdToDistiEmail=new map<id,string>();
+        map<id,string> mapUserIdToEmail=new map<id,string>();
+        for(contact con:listCon){
+            if(!mapConIdToDistiEmail.containskey(con.Id)){
+                mapConIdToDistiEmail.put(con.Id,con.email);
+            }
+        }
+        for(user u:listUser){
+            if(!mapUserIdToEmail.containskey(u.Id)){
+                mapUserIdToEmail.put(u.Id,u.email);
+            }
+        }
+        LeadCountrySettings__c leadSettings = LeadCountrySettings__c.getValues('NovaSilva');
+        if(leadSettings !=null){
+            novaSilvaEmail.add(leadSettings.NovaSilva_Email__c);
+            system.debug('bccadd1::'+novaSilvaEmail);
+        }                        
+        EmailTemplate emailTemp=[select id from EmailTemplate where DeveloperName='Contact_Details_of_Lead_to_Disti_V0'];        
+        for(lead ld:listLeads){                                                
+            Messaging.SingleEmailMessage sendEmail = new Messaging.SingleEmailMessage();
+            system.debug('sendemail::'+sendEmail);
+            if(ld.CC_Address__c !=null){
+                 CcEmails = ld.CC_Address__c.split(';');
+            }                               
+            if(mapConIdToDistiEmail.containskey(ld.Distributor_Contact__c) && 
+               mapUserIdToEmail.containskey(ld.OwnerId)){
+                   toaddress = New String[] {mapConIdToDistiEmail.get(ld.Distributor_Contact__c),
+                       mapUserIdToEmail.get(ld.OwnerId)};
+               }                                    
+                sendEmail.setToAddresses(toaddress);
+            	system.debug('ccadd::'+CcEmails);
+                sendEmail.setCCAddresses(CCEmails);
+            	system.debug('bccadd::'+novaSilvaEmail);
+                sendEmail.setBccAddresses(novaSilvaEmail);              
+                sendEmail.setTemplateID(emailTemp.Id);           	 	
+                sendEmail.setTargetObjectId(ld.Distributor_Contact__c);
+                sendEmail.setWhatId(ld.Id);
+                sendEmail.setSaveAsActivity(false);
+                emails.add(sendEmail);                      
+        }
+        if (emails != NULL && emails.size() > 0)
+        {
+            try{
+               Messaging.sendEmail(emails);
+                recursionCheck=false;
+            }
+            catch(exception e){
+                for(lead ld:listLeads){
+                    ld.addError('Please enter Valid email Address seperated by ;');
+                }
+                
+            }
+            
+        }                                    
     }
 }

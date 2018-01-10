@@ -46,6 +46,8 @@
             </containers>
         </primaryTabComponents>
     </customConsoleComponents>
+    <excludeButtons>DataDotComClean</excludeButtons>
+    <excludeButtons>DataDotComCompanyHierarchy</excludeButtons>
     <feedLayout>
         <autocollapsePublisher>false</autocollapsePublisher>
         <compactFeed>true</compactFeed>
@@ -115,10 +117,6 @@
             <layoutItems>
                 <behavior>Required</behavior>
                 <field>Region__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Sales_Area__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -253,6 +251,10 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>NAICS_Code__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Sales_Area__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsTopToBottom</style>

@@ -112,7 +112,7 @@ public with sharing class ProductTrigger {
         if (pricebookId != null) {
         	for (Product2 theProduct : lstProducts) {
 /* 2015.10 Hotfix SIR#520 ***** BEGIN ***/
-            if (theProduct.isActive == true) {
+            //if (theProduct.isActive == true) {
                 listPricebookEntries.add
                     (
                         new PricebookEntry
@@ -138,8 +138,8 @@ public with sharing class ProductTrigger {
                             UseStandardPrice=FALSE
                         )
                     ); 
-            }
-            
+            //}
+            /* SFDC-1094: set all pricebookentry items to active, remove the logic of setting pricebookentry to inactive
             if (theProduct.isActive == false) {
                 listPricebookEntries.add
                     (
@@ -164,7 +164,7 @@ public with sharing class ProductTrigger {
                             UseStandardPrice=FALSE
                         )
                     ); 
-            }
+            }*/
 /* 2015.10 Hotfix SIR#520 ***** END ***/
         }
     }

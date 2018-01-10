@@ -32,7 +32,7 @@ public class PricebookEntriesSelector extends ApplicationSelector {
 			condition += 'Pricebook2.IsStandard = true AND ';	
 		}
 		
-		condition += 'Product2.Sales_Item__c in :prodSalesItems';
+		condition += 'Product2.Sales_Item__c != null AND Product2.Sales_Item__c in :prodSalesItems';
 	
 		return (List<PricebookEntry>)Database.query(pricebookEntriesQueryFactory.setCondition(condition).toSOQL());
 	}

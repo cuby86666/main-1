@@ -169,7 +169,7 @@ public class CommunityCaseCloneControllerTest
                               Twitter__c = 'test_twt', State_Province__c = 'test_state', Product_Type_Number__c = 'test',
                               Subject = 'test_subject', My_Question_is_Related__c = 'test', Description = 'test_subject',
                               Product_application__c = 'test', Expected_annual_unit_volume__c = 'test',SuppliedEmail = 'test1@nxp.com',
-                              Project_Stage__c = 'Development', Web_Region__c = 'Test_region',  origin = 'Community',ownerid=userinfo.getuserid()); 
+                              Project_Stage__c = 'Development', Web_Region__c = 'Test_region',  origin = 'Self Service Portal',ownerid=userinfo.getuserid()); 
  
                 Insert objCase;
                 system.assert(objCase.Id!=null);
@@ -236,7 +236,7 @@ public class CommunityCaseCloneControllerTest
                               Twitter__c = 'test_twt', State_Province__c = 'test_state', Product_Type_Number__c = 'test',
                               Subject = 'test_subject', My_Question_is_Related__c = 'test', Description = 'test_subject',
                               Product_application__c = 'test', Expected_annual_unit_volume__c = 'test',
-                              Project_Stage__c = 'Development', Web_Region__c = 'Test_region',  origin = 'Community',Case_Owner_Name__c='test'); 
+                              Project_Stage__c = 'Development', Web_Region__c = 'Test_region',  origin = 'Self Service Portal',Case_Owner_Name__c='test'); 
  
                 Insert objCase;
                 system.assert(objCase.Id!=null);

@@ -1,10 +1,11 @@
 global class LeadOwnerAssignmentBatch implements Database.Batchable<Lead> {
     global Iterable<Lead> start(Database.BatchableContext bc) {
-        DateTime dt = System.now().addHours(-2);
-        List<Lead> lds = new List<Lead>([select id,name,NXP_Global_Customer_Master_ID__c,Email,Status,OwnerId,
-                                         RecordTypeId,Description,street,city,country,state,company,PostalCode
+    	DateTime dt = System.now().addHours(-2);
+        List<Lead> lds = new List<Lead>([select id,name,NXP_Global_Customer_Master_ID__c,Email,Status,OwnerId,Industry,
+                                         RecordTypeId,Account_Id__c,Description,street,city,country,state,company,PostalCode
                                          from lead where recordtype.name ='Uncategorized Leads' and status='Open' 
-                                         and createddate <= :dt]);
+                                         and createddate <= :dt ]);
+                                         
     	return lds;
                                              
     }

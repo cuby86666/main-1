@@ -54,10 +54,6 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Required</behavior>
-                <field>Probability_to_Win__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Required</behavior>
                 <field>CurrencyIsoCode</field>
             </layoutItems>
             <layoutItems>
@@ -93,6 +89,10 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Application__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Mobile_Processor__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Required</behavior>
@@ -453,10 +453,6 @@
             <layoutItems>
                 <behavior>Readonly</behavior>
                 <field>DW_Evidence_Check_Box__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>Product_Status__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>

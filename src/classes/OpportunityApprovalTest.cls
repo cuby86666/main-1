@@ -6,6 +6,7 @@ private class OpportunityApprovalTest {
 	private static final String TEST_USER_BL_STAR = 'uBlSTAR';
 	private static final String TEST_USER_GAM_STAR = 'uGamSTAR';
 	private static final String TEST_USER_GAM_SAMSUNG = 'uGamSAMS';
+	private static final String TEST_USER_GAM_GENERAL = 'uGamGen';//SFDC-954
 	private static final String TEST_USER_EVP_STAR = 'uEvpSTAR';
 	private static final String TEST_USER_EVP_SAMSUNG = 'uEvpSAMS';
 	private static final String TEST_USER_AUTO = 'userAUTO';
@@ -40,6 +41,7 @@ private class OpportunityApprovalTest {
     private static ID userIdBlSTAR;
     private static ID userIdGamSTAR;
     private static ID userIdGamSamsung;
+    private static ID userIdGamGeneral;//SFDC-954
     private static ID userIdEvpSTAR;
     private static ID userIdEvpSamsung;
     private static ID userIdAuto;
@@ -71,7 +73,7 @@ private class OpportunityApprovalTest {
         
         MAG_LIFETIME = claimValueMagSetting.MAG__c;
         
-        List<User> users = [select Alias, MT_1__c, MT_2__c from User where Alias in (:TEST_USER, :TEST_USER_MAG, :TEST_USER_BL, :TEST_USER_MAG_STAR, :TEST_USER_BL_STAR, :TEST_USER_GAM_STAR, :TEST_USER_GAM_SAMSUNG, :TEST_USER_EVP_STAR, :TEST_USER_EVP_SAMSUNG, :TEST_USER_AUTO)];
+        List<User> users = [select Alias, MT_1__c, MT_2__c from User where Alias in (:TEST_USER, :TEST_USER_MAG, :TEST_USER_BL, :TEST_USER_MAG_STAR, :TEST_USER_BL_STAR, :TEST_USER_GAM_STAR, :TEST_USER_GAM_SAMSUNG, :TEST_USER_GAM_GENERAL, :TEST_USER_EVP_STAR, :TEST_USER_EVP_SAMSUNG, :TEST_USER_AUTO)];
         
         for (User u : users) {
         	if (u.Alias == TEST_USER) {
@@ -89,6 +91,8 @@ private class OpportunityApprovalTest {
         		userIdGamSTAR = u.Id;
         	} else if (u.Alias == TEST_USER_GAM_SAMSUNG) {
         		userIdGamSamsung = u.Id;
+        	} else if (u.Alias == TEST_USER_GAM_GENERAL) {
+        		userIdGamGeneral = u.Id; //SFDC-954
         	} else if (u.Alias == TEST_USER_EVP_STAR) {
         		userIdEvpSTAR = u.Id;
         	} else if (u.Alias == TEST_USER_EVP_SAMSUNG) {
@@ -136,6 +140,7 @@ private class OpportunityApprovalTest {
     	users.add(newUser(TEST_USER_MT2, TEST_USER_MT2, p.Id, false));
     	users.add(newUser(TEST_USER_MAG, TEST_USER_MAG, p.Id, false));
     	users.add(newUser(TEST_USER_BL, TEST_USER_BL, p.Id, false));
+    	users.add(newUser(TEST_USER_GAM_GENERAL, TEST_USER_GAM_GENERAL, p.Id, false));//SFDC-954
     	insert users;
     	
     	User userMagSTAR = users.get(0);
@@ -149,32 +154,36 @@ private class OpportunityApprovalTest {
     	User userMT2 = users.get(8);
     	User userMAG = users.get(9);
     	User userBL = users.get(10);
+    	User userGamGeneral = users.get(11);//SFDC-954
     	
     	User u = createUser(TEST_USER, TEST_USER, p.Id, false);
         u.MT_1__c = userMT1.Id;
         u.MT_2__c = userMT2.Id;
         update u;
         
+        /*
         // insert approvers
         List<Approvers_Matrix__c> ams = new List<Approvers_Matrix__c>();
-        ams.add(newApproverMatrix('MAG Approver', MAG_SHORT_LIVED, null, THRESHOLD_MAG, userMAG.Id));
-        ams.add(newApproverMatrix('MAG Approver', MAG_LIFETIME, null, THRESHOLD_MAG, userMAG.Id));
-        ams.add(newApproverMatrix('BL Approver', BL1, null, THRESHOLD_BL, userBL.Id));
-        ams.add(newApproverMatrix('BL Approver', BL2, null, THRESHOLD_BL, userBL.Id));
-        ams.add(newApproverMatrix('MAG Approver', MAG_SHORT_LIVED, 'STAR', THRESHOLD_MAG, userMagSTAR.Id));
-        ams.add(newApproverMatrix('MAG Approver', MAG_LIFETIME, 'STAR', THRESHOLD_MAG, userMagSTAR.Id));
-        ams.add(newApproverMatrix('BL Approver', BL1, 'STAR', THRESHOLD_BL, userBlSTAR.Id));
-        ams.add(newApproverMatrix('BL Approver', BL2, 'STAR', THRESHOLD_BL, userBlSTAR.Id));
-        ams.add(newApproverMatrix('GAM', 'STAR', null, 0, userGamSTAR.Id));
-        ams.add(newApproverMatrix('GAM', 'Samsung', null, 0, userGamSamsung.Id));
-        ams.add(newApproverMatrix('EVP', 'STAR', null, THRESHOLD_VP, userEvpSTAR.Id));
-        ams.add(newApproverMatrix('EVP', 'Samsung', null, THRESHOLD_VP, userEvpSamsung.Id));
-        ams.add(newApproverMatrix('Segment VP', 'Automotive', null, THRESHOLD_VP, userAuto.Id));
-        ams.add(newApproverMatrix('GSM Sales Director', null, null, 0, u.Id));
-        ams.add(newApproverMatrix('GSM VP 1', null, null, THRESHOLD_VP, u.Id));
-        ams.add(newApproverMatrix('GSM VP 2', 'Automotive', 'Greater China', THRESHOLD_VP, u.Id));
-        ams.add(newApproverMatrix('GSM VP 2', 'Automotive', 'South Asia Pacific', THRESHOLD_VP, u.Id));
+        ams.add(newApproverMatrix('MAG Approver', MAG_SHORT_LIVED, null, THRESHOLD_MAG, userMAG.Id, null));
+        ams.add(newApproverMatrix('MAG Approver', MAG_LIFETIME, null, THRESHOLD_MAG, userMAG.Id, null));
+        ams.add(newApproverMatrix('BL Approver', BL1, null, THRESHOLD_BL, userBL.Id, null));
+        ams.add(newApproverMatrix('BL Approver', BL2, null, THRESHOLD_BL, userBL.Id, null));
+        ams.add(newApproverMatrix('MAG Approver', MAG_SHORT_LIVED, 'STAR', THRESHOLD_MAG, userMagSTAR.Id, null));
+        ams.add(newApproverMatrix('MAG Approver', MAG_LIFETIME, 'STAR', THRESHOLD_MAG, userMagSTAR.Id, null));
+        ams.add(newApproverMatrix('BL Approver', BL1, 'STAR', THRESHOLD_BL, userBlSTAR.Id, null));
+        ams.add(newApproverMatrix('BL Approver', BL2, 'STAR', THRESHOLD_BL, userBlSTAR.Id, null));
+        ams.add(newApproverMatrix('GAM', 'STAR', null, 0, userGamSTAR.Id, null));
+        ams.add(newApproverMatrix('GAM', 'Samsung', null, 0, userGamSamsung.Id, null));
+        ams.add(newApproverMatrix('EVP', 'STAR', null, THRESHOLD_VP, userEvpSTAR.Id, null));
+        ams.add(newApproverMatrix('EVP', 'Samsung', null, THRESHOLD_VP, userEvpSamsung.Id, null));
+        ams.add(newApproverMatrix('Segment VP', 'Automotive', null, THRESHOLD_VP, userAuto.Id, null));
+        ams.add(newApproverMatrix('GSM Sales Director', null, null, 0, u.Id, null));
+        ams.add(newApproverMatrix('GSM VP 1', null, null, THRESHOLD_VP, u.Id, null));
+        ams.add(newApproverMatrix('GSM VP 2', 'Automotive', 'Greater China', THRESHOLD_VP, u.Id, null));
+        ams.add(newApproverMatrix('GSM VP 2', 'Automotive', 'South Asia Pacific', THRESHOLD_VP, u.Id, null));
+        ams.add(newApproverMatrix('GAM', 'General Account', null, 0, userGamGeneral.Id, parentAccountIdGeneral));
         insert ams;
+        */
         
         // insert FX Rates
         // There is a workflow which sets Opportunity.Locked_Exchange_Rate__c to 
@@ -193,6 +202,29 @@ private class OpportunityApprovalTest {
         createAccount(PARENT_ACCOUNT_SAMSUNG, AccountsSelector.getParentRecordTypeID(), null, null);
         Account parentGeneral = createAccount('Parent Account - General', AccountsSelector.getParentRecordTypeID(), null, null);
         Account a = createAccount('Test Account', AccountsSelector.getChildRecordTypeID(), parentGeneral.Id, CBG_AUTOMOTIVE);
+         
+        // insert approvers
+        List<Approvers_Matrix__c> ams = new List<Approvers_Matrix__c>();
+        ams.add(newApproverMatrix('MAG Approver', MAG_SHORT_LIVED, null, THRESHOLD_MAG, userMAG.Id, null));
+        ams.add(newApproverMatrix('MAG Approver', MAG_LIFETIME, null, THRESHOLD_MAG, userMAG.Id, null));
+        ams.add(newApproverMatrix('BL Approver', BL1, null, THRESHOLD_BL, userBL.Id, null));
+        ams.add(newApproverMatrix('BL Approver', BL2, null, THRESHOLD_BL, userBL.Id, null));
+        ams.add(newApproverMatrix('MAG Approver', MAG_SHORT_LIVED, 'STAR', THRESHOLD_MAG, userMagSTAR.Id, null));
+        ams.add(newApproverMatrix('MAG Approver', MAG_LIFETIME, 'STAR', THRESHOLD_MAG, userMagSTAR.Id, null));
+        ams.add(newApproverMatrix('BL Approver', BL1, 'STAR', THRESHOLD_BL, userBlSTAR.Id, null));
+        ams.add(newApproverMatrix('BL Approver', BL2, 'STAR', THRESHOLD_BL, userBlSTAR.Id, null));
+        ams.add(newApproverMatrix('GAM', 'STAR', null, 0, userGamSTAR.Id, null));
+        ams.add(newApproverMatrix('GAM', 'Samsung', null, 0, userGamSamsung.Id, null));
+        ams.add(newApproverMatrix('EVP', 'STAR', null, THRESHOLD_VP, userEvpSTAR.Id, null));
+        ams.add(newApproverMatrix('EVP', 'Samsung', null, THRESHOLD_VP, userEvpSamsung.Id, null));
+        ams.add(newApproverMatrix('Segment VP', 'Automotive', null, THRESHOLD_VP, userAuto.Id, null));
+        ams.add(newApproverMatrix('GSM Sales Director', null, null, 0, u.Id, null));
+        ams.add(newApproverMatrix('GSM VP 1', null, null, THRESHOLD_VP, u.Id, null));
+        ams.add(newApproverMatrix('GSM VP 2', 'Automotive', 'Greater China', THRESHOLD_VP, u.Id, null));
+        ams.add(newApproverMatrix('GSM VP 2', 'Automotive', 'South Asia Pacific', THRESHOLD_VP, u.Id, null));
+        ams.add(newApproverMatrix('GAM', 'General Account', null, 0, userGamGeneral.Id, parentGeneral.Id));
+        insert ams; 
+         
          
         // Insert products
         List<Product2> prods = new List<Product2>();
@@ -254,7 +286,7 @@ private class OpportunityApprovalTest {
     	
     	insert opptyScheds;
     } 
-    
+
     @isTest
     static void testOpptyLifetimeValue() {
     	Opportunity oppty = getOpportunity(opptyProd.OpportunityId);
@@ -1932,6 +1964,158 @@ private class OpportunityApprovalTest {
     	testOpptyShare(new List<ID>{userIdGamSamsung, userIdEvpSamsung, userIdMAG, userIdBL});
     	Test.stopTest();
     }
+
+    @isTest
+    static void testGkamApproverIdGeneral() {
+    	Opportunity oppty = getOpportunity(opptyProd.OpportunityId);
+    	
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+    	
+    	OpportunityApproval.setGlobalKeyAccountManagerApproverId(oppty, uow);
+    	
+    	uow.commitWork();
+    	
+    	oppty = getOpportunity(opptyProd.OpportunityId);
+    	
+    	system.assertNotEquals(null, userIdGamGeneral);
+    	system.assertEquals(userIdGamGeneral, oppty.Global_Key_Account_Manager__c);
+    	
+    	testOpptyShare(new List<ID>{userIdGamGeneral});
+    }
+    
+    @isTest
+    static void testGkamApproverIdGeneralGkamSameWithOwner() {
+    	Opportunity oppty = getOpportunity(opptyProd.OpportunityId);
+    	
+		Test.startTest();
+    	Approvers_Matrix__c amGamGeneral = [SELECT Id, Approver__c, Account__c FROM Approvers_Matrix__c WHERE Account__c = :oppty.Account.ParentId];
+    	amGamGeneral.Approver__c = oppty.OwnerId;
+    	update amGamGeneral;
+    	Test.stopTest();
+    	
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+    	
+    	OpportunityApproval.setGlobalKeyAccountManagerApproverId(oppty, uow);
+    	
+    	uow.commitWork();
+    	
+    	oppty = getOpportunity(opptyProd.OpportunityId);
+    	
+    	system.assertEquals(null, oppty.Global_Key_Account_Manager__c);
+    }
+    
+    @isTest
+    static void testGkamApproverIdGeneralSameWithSalesDirector() {
+    	Test.startTest();
+        Opportunity oppty = getOpportunity(opptyProd.OpportunityId);
+        
+        Approvers_Matrix__c amGamGeneral = [SELECT Id, Approver__c, Account__c FROM Approvers_Matrix__c WHERE Account__c = :oppty.Account.ParentId];   	
+    	amGamGeneral.Approver__c = userIdMT2;
+    	update amGamGeneral;
+        Test.stopTest();
+    	
+    	System.assertEquals(userIdMT2, OpportunityApproval.getSalesDirectorApproverID(oppty));  
+    	
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+    	
+    	OpportunityApproval.setSalesDirectorApproverID(oppty, uow);
+    	OpportunityApproval.setGlobalKeyAccountManagerApproverId(oppty, uow);
+        
+    	uow.commitWork();
+    	
+    	oppty = getOpportunity(opptyProd.OpportunityId);
+    	
+    	System.assertEquals(userIdMT2, oppty.Sales_Director_Approver__c);
+        System.assertEquals(null, oppty.Global_Key_Account_Manager__c);
+    	
+    	testOpptyShare(new List<ID>{userIdMT2});        
+    }
+    
+    @isTest
+    static void testGkamApproverIdGeneralSameWithVpApprover1() {
+        Test.startTest();
+    	Opportunity oppty = getOpportunity(opptyProd.OpportunityId);
+    	oppty.Owner.MT_2__c = null;
+    	oppty.Account.CMD_Industry_Segment__c = CBG_AUTOMOTIVE; 
+    	update oppty.Owner;
+    	update oppty.Account;
+        Approvers_Matrix__c amGamGeneral = [SELECT Id, Approver__c, Account__c FROM Approvers_Matrix__c WHERE Account__c = :oppty.Account.ParentId];   	
+    	amGamGeneral.Approver__c = userIdAuto;
+    	update amGamGeneral;
+    	Test.stopTest();
+    	
+    	oppty = getOpportunity(opptyProd.OpportunityId);
+    	
+    	System.assertEquals(userIdAuto, OpportunityApproval.getVpApprover1ID(oppty)); 
+    	
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+    	
+    	OpportunityApproval.setVpApprover1ID(oppty, uow);
+        OpportunityApproval.setGlobalKeyAccountManagerApproverId(oppty, uow);
+    	
+    	uow.commitWork();
+    	
+    	oppty = getOpportunity(opptyProd.OpportunityId);
+    	
+    	System.assertEquals(userIdAuto, oppty.Regional_VP_Approver__c);
+    	System.assertEquals(null, oppty.Global_Key_Account_Manager__c);
+        
+    	testOpptyShare(new List<ID>{userIdAuto}); 
+    }
+    
+	@isTest
+    static void testGkamApproverIdGeneralSameWithVpApprover2() {
+        Test.startTest();
+    	Opportunity oppty = getOpportunity(opptyProd.OpportunityId);
+    	oppty.Owner.MT_2__c = null;
+    	oppty.Account.CMD_Industry_Segment__c = CBG_AUTOMOTIVE;
+    	oppty.Account.Region__c = REGION_GC; 
+    	update oppty.Owner;
+    	update oppty.Account;
+        
+        Approvers_Matrix__c amGamGeneral = [SELECT Id, Approver__c, Account__c FROM Approvers_Matrix__c WHERE Account__c = :oppty.Account.ParentId];   	
+    	amGamGeneral.Approver__c = userIdMT1;
+    	update amGamGeneral;
+    	Test.stopTest();
+    	
+    	oppty = getOpportunity(opptyProd.OpportunityId);
+    	
+    	System.assertEquals(userIdMT1, OpportunityApproval.getVpApprover2ID(oppty)); 
+    	
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+    	
+    	OpportunityApproval.setVpApprover2ID(oppty, uow);
+        OpportunityApproval.setGlobalKeyAccountManagerApproverId(oppty, uow);
+    	
+    	uow.commitWork();
+    	
+    	oppty = getOpportunity(opptyProd.OpportunityId);
+    	
+    	System.assertEquals(userIdMT1, oppty.VP_Approver_2__c);
+        System.assertEquals(null, oppty.Global_Key_Account_Manager__c);
+    	
+    	testOpptyShare(new List<ID>{userIdMT1});
+    }
+    
+    @isTest
+    static void testGkamApproverIdGeneralWithoutApproverMatrix() {
+        Test.startTest();
+        Opportunity oppty = getOpportunity(opptyProd.OpportunityId);
+        
+        Approvers_Matrix__c amGamGeneral = [SELECT Id, Approver__c, Account__c FROM Approvers_Matrix__c WHERE Account__c = :oppty.Account.ParentId];   	
+    	delete amGamGeneral;
+    	Test.stopTest();
+    	
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+    	
+    	OpportunityApproval.setGlobalKeyAccountManagerApproverId(oppty, uow);
+    	
+    	uow.commitWork();
+    	
+    	oppty = getOpportunity(opptyProd.OpportunityId);
+    	
+    	system.assertEquals(null, oppty.Global_Key_Account_Manager__c);
+    }
     
     static User createUser(String alias, String lastName, ID profileID, Boolean signedARIA) {
     	User user = newUser(alias, lastName, profileID, signedARIA); 
@@ -1965,7 +2149,7 @@ private class OpportunityApprovalTest {
     	return account;
     }
     
-    static Approvers_Matrix__c newApproverMatrix(String type, String criteria1, String criteria2, Double threshold1, ID approverID) {
+    static Approvers_Matrix__c newApproverMatrix(String type, String criteria1, String criteria2, Double threshold1, ID approverID, ID accountID) {//SFDC-954, Add Account ID
     	Approvers_Matrix__c approverMatrix = new Approvers_Matrix__c();
     	approverMatrix.RecordTypeId = new ApproverMatrixesSelector().getRecordTypeId(ApproverMatrixesSelector.RecordType.DIRECT_OPPTY);
     	approverMatrix.Type__c = type;
@@ -1973,6 +2157,7 @@ private class OpportunityApprovalTest {
     	approverMatrix.Criteria_2__c = criteria2;
     	approverMatrix.Threshold_1__c = threshold1;
     	approverMatrix.Approver__c = approverID;
+    	approverMatrix.Account__c = accountID;
     	    	
     	return approverMatrix;
     }

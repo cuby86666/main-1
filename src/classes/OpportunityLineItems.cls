@@ -3,6 +3,8 @@ public class OpportunityLineItems extends ApplicationDomain {
 	public static final Set<String> LOST_CANCELLED = new Set<String> {'Lost', 'Cancelled'};
 	
 	private static final Integer PRICE_EROSION_QUARTERS = 4;
+    
+    private static final String PROBABILITY_TO_WIN_80_100 = '80% - 100%';
 	
 	private static Set<Id> opptyProdSchedIds;
 	
@@ -113,7 +115,21 @@ public class OpportunityLineItems extends ApplicationDomain {
         
         uow.registerDirty(this.records);
 	}
-	
+
+    //SFDC-1154
+    public void updateOpptyProdProbabilityToWin(fflib_ISObjectUnitOfWork uow) {
+        p('updateProbabilityToWin');
+        List<OpportunityLineItem> opptyProdsUpdated = new List<OpportunityLineItem>();
+        
+        for (OpportunityLineItem opptyProd : (List<OpportunityLineItem>)this.records) {
+            if (!(LOST_CANCELLED.contains(opptyProd.Prod_Lost_Cancelled__c))) {
+                opptyProdsUpdated.add(new OpportunityLineItem(Id = opptyProd.Id, Probability_to_Win__c = PROBABILITY_TO_WIN_80_100));
+            }
+        }
+        
+        uow.registerDirty(opptyProdsUpdated);
+    }
+
 	private void updatePrograms() {
 		p('updatePrograms');
 		Set<Id> opptyIds = new Set<Id>();

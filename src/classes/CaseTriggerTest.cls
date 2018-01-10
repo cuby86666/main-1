@@ -385,7 +385,7 @@ private class CaseTriggerTest
                                 Twitter__c = 'test_twt', State_Province__c = 'test_state', Product_Type_Number__c = 'test',
                                 Subject = 'test_subject', My_Question_is_Related__c = 'test', Description = 'test_subject',
                                 Product_application__c = 'test', Expected_annual_unit_volume__c = 'test',
-                                Project_Stage__c = 'Development', Web_Region__c = 'Test_region', origin = 'Community'));
+                                Project_Stage__c = 'Development', Web_Region__c = 'Test_region', origin = 'Self Service Portal'));
         }
         
         if(lstCases.size() > 0)
@@ -649,7 +649,7 @@ private class CaseTriggerTest
                               Twitter__c = 'test_twt', State_Province__c = 'test_state', Product_Type_Number__c = 'Type'+i,
                               Subject = 'test_subject', My_Question_is_Related__c = 'test', Description = 'test_subject',
                               Product_application__c = 'test', Expected_annual_unit_volume__c = 'test', Web_Country__c = 'America',
-                              Project_Stage__c = 'Development', Web_Region__c = 'Test_region'+i, origin = 'Community',MAG__c = 'MAG1'));
+                              Project_Stage__c = 'Development', Web_Region__c = 'Test_region'+i, origin = 'Self Service Portal',MAG__c = 'MAG1'));
         }
         
         if(lstCases.size() > 0)
@@ -729,7 +729,7 @@ private class CaseTriggerTest
                               Twitter__c = 'test_twt', State_Province__c = 'test_state', Product_Type_Number__c = 'test',
                               Subject = 'test_subject', My_Question_is_Related__c = 'test', Description = 'test_subject',
                               Product_application__c = 'test', Expected_annual_unit_volume__c = 'test',
-                              Project_Stage__c = 'Development', Web_Region__c = 'Test_region',  origin = 'Community',Case_Owner_Name__c='test', EntitlementId=objEntitlement.id ); 
+                              Project_Stage__c = 'Development', Web_Region__c = 'Test_region',  origin = 'Self Service Portal',Case_Owner_Name__c='test', EntitlementId=objEntitlement.id ); 
  
                 Insert objCase;
                 system.assert(objCase.Id!=null);
@@ -796,7 +796,7 @@ private class CaseTriggerTest
                               Twitter__c = 'test_twt', State_Province__c = 'test_state', Product_Type_Number__c = 'test',
                               Subject = 'test_subject', My_Question_is_Related__c = 'test', Description = 'test_subject',
                               Product_application__c = 'test', Expected_annual_unit_volume__c = 'test',
-                              Project_Stage__c = 'Development', Web_Region__c = 'Test_region',  origin = 'Community',Case_Owner_Name__c='Test',OwnerID=objuser1.id,Assigned_to__c=objuser2.id, EntitlementId=objEntitlement.id ); 
+                              Project_Stage__c = 'Development', Web_Region__c = 'Test_region',  origin = 'Self Service Portal',Case_Owner_Name__c='Test',OwnerID=objuser1.id,Assigned_to__c=objuser2.id, EntitlementId=objEntitlement.id ); 
  
                 Insert objCase;
                 system.assert(objCase.Id!=null);
@@ -851,7 +851,7 @@ private class CaseTriggerTest
                               Twitter__c = 'test_twt', State_Province__c = 'test_state', Product_Type_Number__c = 'test',
                               Subject = 'test_subject', My_Question_is_Related__c = 'test', Description = 'test_subject',
                               Product_application__c = 'test', Expected_annual_unit_volume__c = 'test',
-                              Project_Stage__c = 'Development', Web_Region__c = 'Test_region',  origin = 'Community',Case_Owner_Name__c='lstUsers[0].id',OwnerID=lstUsers[0].id,Assigned_to__c=null, EntitlementId=objEntitlement.id ); 
+                              Project_Stage__c = 'Development', Web_Region__c = 'Test_region',  origin = 'Self Service Portal',Case_Owner_Name__c='lstUsers[0].id',OwnerID=lstUsers[0].id,Assigned_to__c=null, EntitlementId=objEntitlement.id ); 
  
                 Insert objCase;
                 system.assert(objCase.Id!=null);
@@ -906,12 +906,22 @@ private class CaseTriggerTest
                               Twitter__c = 'test_twt', State_Province__c = 'test_state', Product_Type_Number__c = 'test',
                               Subject = 'test_subject', My_Question_is_Related__c = 'test', Description = 'test_subject',
                               Product_application__c = 'test', Expected_annual_unit_volume__c = 'test',
-                              Project_Stage__c = 'Development', Web_Region__c = 'Test_region',  origin = 'Community',Case_Owner_Name__c='test',OwnerID=objGroup.Id,Assigned_to__c=lstUsers[1].id,EntitlementId=objEntitlement.id ); 
+                              Project_Stage__c = 'Development', Web_Region__c = 'Test_region',  origin = 'Self Service Portal',Case_Owner_Name__c='test',OwnerID=objGroup.Id,Assigned_to__c=lstUsers[1].id,EntitlementId=objEntitlement.id ); 
  
                 Insert objCase;
                 system.assert(objCase.Id!=null);
                 }
        Test.StopTest();
+    }
+    public static void createCustomSetting()
+    {
+            list<base_value_for_case_priority_calculation__c> listCustomerCategorySetting=new list<base_value_for_case_priority_calculation__c>(); //Custom Setting for Contact Fields
+            listCustomerCategorySetting.add(new base_value_for_case_priority_calculation__c(Name='Base',Base_Value__c=6000));
+            
+            listCustomerCategorySetting.add(new base_value_for_case_priority_calculation__c(Name='Negative_Zero_Score_Hours',Base_Value__c=336));
+            
+           
+            insert listCustomerCategorySetting;
     }
     public static list<Case_Service_Level_Criteria__c> createCaseServiceLevelCriteria()
     {
@@ -942,11 +952,11 @@ private class CaseTriggerTest
     public static list<Project_Service_Level_Criteria__c> createProjectServiceLevelCriteria()
     {
          list<Project_Service_Level_Criteria__c> listProjectSLC=new list<Project_Service_Level_Criteria__c>();
-         listProjectSLC.add(new Project_Service_Level_Criteria__c(Priority__c='high',Project_Service_Level__c='10',Sub_Type__c='',Type__c='paid'));
-         listProjectSLC.add(new Project_Service_Level_Criteria__c(Priority__c='critical',Project_Service_Level__c='3',Sub_Type__c='development project',Type__c='free'));
-         listProjectSLC.add(new Project_Service_Level_Criteria__c(Priority__c='',Project_Service_Level__c='4',Sub_Type__c='development project',Type__c='free'));
-         listProjectSLC.add(new Project_Service_Level_Criteria__c(Priority__c='',Project_Service_Level__c='5',Sub_Type__c='',Type__c='free'));
-         listProjectSLC.add(new Project_Service_Level_Criteria__c(Priority__c='high',Project_Service_Level__c='',Sub_Type__c='',Type__c='free'));
+         listProjectSLC.add(new Project_Service_Level_Criteria__c(Priority__c='high',Project_Service_Level__c='10',Sub_Type__c=null,Type__c='paid'));
+         listProjectSLC.add(new Project_Service_Level_Criteria__c(Priority__c='critical',Project_Service_Level__c='3',Sub_Type__c='development project',Type__c='Free'));
+         listProjectSLC.add(new Project_Service_Level_Criteria__c(Priority__c=null,Project_Service_Level__c='4',Sub_Type__c='development project',Type__c='Free'));
+         listProjectSLC.add(new Project_Service_Level_Criteria__c(Priority__c=null,Project_Service_Level__c='5',Sub_Type__c=null,Type__c='Free'));
+         listProjectSLC.add(new Project_Service_Level_Criteria__c(Priority__c='high',Project_Service_Level__c='6',Sub_Type__c=null,Type__c='Free'));
         
         insert listProjectSLC;
         return listProjectSLC;
@@ -957,11 +967,11 @@ private class CaseTriggerTest
         Account objParentAccount = createParentAccount();
           insert objParentAccount;
         list<Entitlement> listEntitlement=new list<Entitlement>();
-        listEntitlement.add(new Entitlement(AccountId=objParentAccount.id, Name='testingname', Startdate=system.today(),Type='free',Entitlement_Sub_Type__c='development project',Priority__c='critical'));
-        listEntitlement.add(new Entitlement(AccountId=objParentAccount.id, Name='testingname', Startdate=system.today(),Type='free',Entitlement_Sub_Type__c='development project',Priority__c='medium'));
-        listEntitlement.add(new Entitlement(AccountId=objParentAccount.id, Name='testingname', Startdate=system.today(),Type='free',Entitlement_Sub_Type__c='',Priority__c='low'));
-        listEntitlement.add(new Entitlement(AccountId=objParentAccount.id, Name='testingname', Startdate=system.today(),Type='',Entitlement_Sub_Type__c='',Priority__c='critical'));
-        listEntitlement.add(new Entitlement(AccountId=objParentAccount.id, Name='testingname', Startdate=system.today(),Type='free',Entitlement_Sub_Type__c='',Priority__c='high'));
+        listEntitlement.add(new Entitlement(AccountId=objParentAccount.id, Name='testingname1', Startdate=system.today(),Type='Free',Entitlement_Sub_Type__c='development project',Priority__c='critical'));
+        listEntitlement.add(new Entitlement(AccountId=objParentAccount.id, Name='testingname2', Startdate=system.today(),Type='Free',Entitlement_Sub_Type__c='development project',Priority__c='medium'));
+        listEntitlement.add(new Entitlement(AccountId=objParentAccount.id, Name='testingname3', Startdate=system.today(),Type='Free',Entitlement_Sub_Type__c='',Priority__c='low'));
+        listEntitlement.add(new Entitlement(AccountId=objParentAccount.id, Name='testingname4', Startdate=system.today(),Type=null,Entitlement_Sub_Type__c=null,Priority__c='high'));
+        listEntitlement.add(new Entitlement(AccountId=objParentAccount.id, Name='testingname5', Startdate=system.today(),Type='Free',Entitlement_Sub_Type__c=null,Priority__c='high'));
         insert listEntitlement;
         return listEntitlement;
     
@@ -997,11 +1007,11 @@ private class CaseTriggerTest
                                              Region__c='TestRegion', Sales_Area__c ='TestArea', Industry_Segment__c = 'TestSegment', 
                                              Sub_Segment__c='TestSubSegment', Country__c = 'TestCountry');
            insert childAcc;
-           contact testContact=new Contact(AccountID=childAcc.Id, FirstName = 'test1', LastName = 'test', 
+           contact testContact=new Contact(AccountID=childAcc.Id, FirstName = 'test1', LastName = 'test',
                                         Title = 'title', Phone = '8123978919', email = 'test@test.com'); 
         
             insert testContact;
-        
+        createCustomSetting();
         listPSLC=createProductServiceLevelCriteria();
         listProjectSLC=createProjectServiceLevelCriteria();
         listCaseSLC=createCaseServiceLevelCriteria();
@@ -1016,17 +1026,19 @@ private class CaseTriggerTest
         System.debug(listEntitlement);
            list<case> listCases=new list<case>();
            listCases.add(new case(RecordTypeID = tsCommunity.Id,contactId=testContact.id,EntitlementId=listEntitlement[0].id,Status= 'New', Priority = 'Medium',Product__c='Discretes and Logic',
-                                   Product_Category__c = 'Bipolar transistors', Product_Sub__c = 'General purpose bipolar transistors', Subject = 'test_subject',Description = 'test_subject',Web_Region__c = 'Test_region',  origin = 'Community'));
+                                   Product_Category__c = 'Bipolar transistors', Product_Sub__c = 'General purpose bipolar transistors', Subject = 'test_subject',Description = 'test_subject',Web_Region__c = 'Test_region',  origin = 'Self Service Portal'));
            listCases.add(new case(RecordTypeID = tsCommunity.Id,contactId=testContact.id,EntitlementId=listEntitlement[1].id,Status= 'New', Priority = 'High',Product__c='Audio and Media Processing',
-                                   Product_Category__c = 'Media processors', Product_Sub__c = 'Digital radio processors.', Subject = 'test_subject',Description = 'test_subject',Web_Region__c = 'Test_region',  origin = 'Community'));
-           listCases.add(new case(RecordTypeID = tsCommunity.Id,contactId=testContact.id,EntitlementId=listEntitlement[2].id, Status= 'Pending Customer Reply', Priority = 'Low',Product__c='Audio and Media Processing',
-                                   Product_Category__c = 'Media processors', Product_Sub__c = '', Subject = 'test_subject',Description = 'test_subject',Web_Region__c = 'Test_region',  origin = 'Community'));
+                                   Product_Category__c = 'Media processors', Product_Sub__c = 'Digital radio processors.', Subject = 'test_subject',Description = 'test_subject',Web_Region__c = 'Test_region',  origin = 'Self Service Portal'));
+           listCases.add(new case(RecordTypeID = tsCommunity.Id,Internal_Priority__c='Low',contactId=testContact.id,EntitlementId=listEntitlement[2].id, Status= 'Pending Customer Reply', Priority = 'Low',Product__c='Audio and Media Processing',
+                                   Product_Category__c = 'Media processors', Product_Sub__c = '',My_Question_is_Related__c='test', Contact_Title__c='test',Web_Country__c='United States of America',Subject = 'test_subject',Description = 'test_subject',Web_Region__c = 'Test_region',  origin = 'Self Service Portal'));
                
-           listCases.add(new case(RecordTypeID = tsCommunity.Id, Status= 'New', Priority = 'Medium',
-                                  Subject = 'test_subject',Description = 'test_subject',Web_Region__c = 'Test_region',  origin = 'Community'));
+           listCases.add(new case(RecordTypeID = tsCommunity.Id, Status= 'New', Priority = 'high', 
+                                  Subject = 'test_subject',Description = 'test_subject',Web_Region__c = 'Test_region',  origin = 'Self Service Portal'));
+           listCases.add(new case(RecordTypeID = tsCommunity.Id, Status= 'New', Priority = 'high', EntitlementId=listEntitlement[4].id,
+                                  Subject = 'test_subject',Description = 'test_subject',Web_Region__c = 'Test_region',  origin = 'Self Service Portal'));
                
            listCases.add(new case(RecordTypeID = tsCommunity.Id,Status= 'Pending Customer Reply', Priority = 'Medium',
-                                   Subject = 'test_subject',Description = 'CONTEXT::'+listEntitlement[4].Entitlement_Pattern__c,Web_Region__c = 'Test_region',  origin = 'Community_Question',Product__c='Audio and Media Processing',
+                                   Subject = 'test_subject',Description = 'CONTEXT::'+listEntitlement[4].Entitlement_Pattern__c,Web_Region__c = 'Test_region',  origin = 'Forum',Product__c='Audio and Media Processing',
                                    Product_Category__c = 'Media processors', Product_Sub__c = 'Digital radio processors.'));
            
             test.startTest();
@@ -1050,8 +1062,11 @@ private class CaseTriggerTest
             system.assert(listCases[4].EntitlementId==listEntitlement[4].id);
             
       
-            listCases[2].status='Pending Internal';
-            update  listCases[2];
+            listCases[2].status='Received Reply';
+            listCases[2].JobTitle__c='test1';
+            listCases[2].My_Question_is_Related__c='test1';
+            listCases[2].Internal_Priority__c='Critical';
+            update  listCases;
             system.debug(listCases);
        
         
@@ -1197,7 +1212,7 @@ private class CaseTriggerTest
                               Twitter__c = 'test_twt', State_Province__c = 'test_state', Product_Type_Number__c = 'test',
                               Subject = 'test_subject', My_Question_is_Related__c = 'test', Description = 'test_subject',
                               Product_application__c = 'test', Expected_annual_unit_volume__c = 'test',
-                              Project_Stage__c = 'Development',Hours_spent_by_Support_person__c=5, Web_Region__c = 'Test_region',  origin = 'Community',Case_Owner_Name__c='test', EntitlementId=objEntitlement.id ); 
+                              Project_Stage__c = 'Development',Hours_spent_by_Support_person__c=5, Web_Region__c = 'Test_region',  origin = 'Self Service Portal',Case_Owner_Name__c='test', EntitlementId=objEntitlement.id ); 
  
                 Insert objCase;
                 system.assert(objCase.Id!=null);
@@ -1241,7 +1256,7 @@ private class CaseTriggerTest
                               Twitter__c = 'test_twt', State_Province__c = 'test_state', Product_Type_Number__c = 'test',
                               Subject = 'test_subject', My_Question_is_Related__c = 'test', Description = 'test_subject',
                               Product_application__c = 'test', Expected_annual_unit_volume__c = 'test',
-                              Project_Stage__c = 'Development',Hours_spent_by_Support_person__c=6,Internal_Priority__c='Low', Web_Region__c = 'Test_region',  origin = 'Community',Case_Owner_Name__c='test', EntitlementId=objEntitlement.id ); 
+                              Project_Stage__c = 'Development',Hours_spent_by_Support_person__c=6,Internal_Priority__c='Low', Web_Region__c = 'Test_region',  origin = 'Self Service Portal',Case_Owner_Name__c='test', EntitlementId=objEntitlement.id ); 
  
                 Insert objCase;
                 system.assert(objCase.Id!=null);
@@ -1249,6 +1264,7 @@ private class CaseTriggerTest
            Case C=[Select Hours_spent_by_Support_person__c,Internal_Priority__c from Case where id =:objCase.Id limit 1 ];
            C.Hours_spent_by_Support_person__c =5;
            C.Internal_Priority__c='High';
+           
            update C;
            
              

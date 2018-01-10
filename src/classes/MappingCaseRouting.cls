@@ -1,5 +1,5 @@
 /*
-Class Name	  : MappingCaseRouting
+Class Name    : MappingCaseRouting
 JIRA Ticket   : NXP1-388
 Description   : Class which updates GroupName,TopicName And RelatedToId fields of case based on question created from either group or topic
 */
@@ -23,7 +23,7 @@ public class MappingCaseRouting {
         
         for(Case objcase : lstCaseNew ){
             
-            if(objcase.Description !=NULL && objCase.Origin == 'Community_Question'){
+            if(objcase.Description !=NULL && objCase.Origin == 'Forum'){
                 
                 //This is to handle new lines in description
                 objcase.Description = objcase.Description.replaceAll('<p>', '');
@@ -55,7 +55,7 @@ public class MappingCaseRouting {
         String strFeedItemCreatedById;
         
         for(Case objCase : lstCaseNew) {
-            
+            System.debug('FeedItemId ::'+objCase.FeedItemId);
             if(objCase.FeedItemId != null) {
                 
                 lstEscalatedCases.add(objCase);
@@ -95,10 +95,10 @@ public class MappingCaseRouting {
                 }else{ 
             
                     Contact userContact = new Contact( FirstName = objUser.FirstName,
-                                					   LastName = objUser.LastName,
-                                					   Email = objUser.Email,
-                                					   accountId = objUser.accountId
-                    					            );
+                                                       LastName = objUser.LastName,
+                                                       Email = objUser.Email,
+                                                       accountId = objUser.accountId
+                                                    );
                         insert userContact ;
                         
                         objUser.Contact_Id__c = userContact.id;
@@ -134,9 +134,10 @@ public class MappingCaseRouting {
             }
             
             //Checking if Question is created from community or not.
-            if(objCase.Origin == 'Community_Question' && objCase.FeedItemId != NULL){
+            if(objCase.Origin == 'Forum' && objCase.FeedItemId != NULL){
                 
                 mapFeedItemIdToCommunityCase.put(objCase.FeedItemId,objCase);
+                
             }           
         }
         

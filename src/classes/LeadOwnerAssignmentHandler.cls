@@ -360,13 +360,14 @@ public class LeadOwnerAssignmentHandler {
         map<string,map<string,LeadOwnerAssignment__c>> mapCountryToStateOwner=new map<string,map<string,LeadOwnerAssignment__c>>();
         map<string,map<string,LeadOwnerAssignment__c>> mapCountryToCityOwner=new map<string,map<string,LeadOwnerAssignment__c>>();
         map<string,list<LeadOwnerAssignment__c>> mapCountryToLeadOwner=new map<string,list<LeadOwnerAssignment__c>>();
-            
+        map<string,map<string,list<LeadOwnerAssignment__c>>> mapCountryToStateLeadOwner=new map<string,map<string,list<LeadOwnerAssignment__c>>>();
+                
         list<LeadOwnerAssignment__c> listLeadOwnerAssignmt=[Select id,Country__c,city__c,End_ZIP_Code__c,Lead_Owner__c,
                                                            Start_ZIP_Code__c,State__c,CBG__c from LeadOwnerAssignment__c];
         
         if(listLeadOwnerAssignmt.size() !=0){
             for(LeadOwnerAssignment__c ldOwner:listLeadOwnerAssignmt){                               
-                if(ldOwner.Country__c !=null){
+                if(ldOwner.Country__c !=null ){
                     if(!mapCountryToLeadOwner.containskey(ldOwner.Country__c.toUpperCase())){
                     	list<LeadOwnerAssignment__c> lst = new list<LeadOwnerAssignment__c>();
                     	lst.add(ldOwner);
@@ -374,8 +375,24 @@ public class LeadOwnerAssignmentHandler {
                 	}
                 	else if(mapCountryToLeadOwner.containskey(ldOwner.Country__c.toUpperCase())){
                    		mapCountryToLeadOwner.get(ldOwner.Country__c.toUpperCase()).add(ldOwner); 
-                	}                                                                               
-
+                	}                    
+                }
+                if(ldOwner.Country__c !=null && ldOwner.State__c != null && ldOwner.CBG__c!=null){
+                    list<LeadOwnerAssignment__c> lst = new list<LeadOwnerAssignment__c>();
+                    	lst.add(ldOwner);                    
+                    if(!mapCountryToStateLeadOwner.containsKey(ldOwner.Country__c.toUpperCase())){
+                       mapCountryToStateLeadOwner.put(ldOwner.Country__c.toUpperCase(),
+                 		new map<string,list<LeadOwnerAssignment__c>>{ldOwner.State__c.toUpperCase()=>lst}); 
+                    }
+                    else if(mapCountryToStateLeadOwner.containsKey(ldOwner.Country__c.toUpperCase())){
+                        if(!mapCountryToStateLeadOwner.get(ldOwner.Country__c.toUpperCase()).containskey(ldOwner.State__c.toUpperCase())){
+                            mapCountryToStateLeadOwner.get(ldOwner.Country__c.toUpperCase()).put(ldOwner.State__c.toUpperCase(),
+                                                                                            lst);
+                        }
+                        else if(mapCountryToStateLeadOwner.get(ldOwner.Country__c.toUpperCase()).containskey(ldOwner.State__c.toUpperCase())){
+                            mapCountryToStateLeadOwner.get(ldOwner.Country__c.toUpperCase()).get(ldOwner.State__c.toUpperCase()).add(ldOwner);
+                        }                        
+                    }
                 }
            }            
         }
@@ -393,43 +410,59 @@ public class LeadOwnerAssignmentHandler {
             if(ld.city!=null){
                 ldCity=ld.city.toUpperCase();
                 system.debug('city::'+ld.city);
+            }            
+            if(mapCountryToStateLeadOwner.containsKey(ldCountry)){
+                if(mapCountryToStateLeadOwner.get(ldCountry).containsKey(ldState)){
+                    for(LeadOwnerAssignment__c ldOwner:mapCountryToStateLeadOwner.get(ldCountry).get(ldState)){
+                        if(ldOwner.CBG__c !=null && ld.Industry!=null && ldCity!=null && ldOwner.city__c!=null){
+                            if(ldOwner.CBG__c.toUpperCase() ==  ld.Industry.toUpperCase() 
+                               && ldOwner.city__c.toUpperCase()==ldCity ){                                   
+                                   if(ldOwner.Lead_Owner__c !=null){
+                                       ld.ownerId=ldOwner.Lead_Owner__c;
+                                       leadIds.add(ld.Id);
+                                   }
+                            }                                                       
+                        }
+                    }
+					                   
+                } 
+            }
+            if(mapCountryToLeadOwner.containsKey(ldCountry)){                
+                for(LeadOwnerAssignment__c ldOwner:mapCountryToLeadOwner.get(ldCountry)){                     
+                    if(ldOwner.CBG__c !=null && ld.Industry!=null && !leadIds.contains(ld.Id) && ldCity!=null 
+                       && ldOwner.city__c!=null){
+                       if(ldOwner.CBG__c.toUpperCase() ==  ld.Industry.toUpperCase() 
+                         && ldOwner.city__c.toUpperCase()==ldCity){
+                              if(ldOwner.Lead_Owner__c !=null){                                  
+                                    ld.ownerId=ldOwner.Lead_Owner__c;
+                                    leadIds.add(ld.Id);
+                               }
+                          } 
+                    }
+                }                
+                for(LeadOwnerAssignment__c ldOwner:mapCountryToLeadOwner.get(ldCountry)){                    
+                    if(ldOwner.CBG__c !=null && ld.Industry!=null && !leadIds.contains(ld.Id) &&
+                      ldOwner.CBG__c.toUpperCase() ==  ld.Industry.toUpperCase() && ldOwner.state__c==null &&
+                      ldOwner.city__c== null){                          
+                        if(ldOwner.Lead_Owner__c !=null){
+                             ld.ownerId=ldOwner.Lead_Owner__c;
+                             leadIds.add(ld.Id);
+                        }
+                    }
+                }
             }
             if(mapCountryToLeadOwner.containskey(ldCountry)){
-                ld.RecordTypeId=ROM_LEAD_RECORD_TYPE; 
+                ld.RecordTypeId=ROM_LEAD_RECORD_TYPE;                                 
                 for(LeadOwnerAssignment__c ldOwner:mapCountryToLeadOwner.get(ldCountry)){
-                    if(ldOwner.CBG__c !=null && ld.Industry!=null ){                        
-                        if(ldOwner.CBG__c ==  ld.Industry ){
-                            if(ld.State!=null && ldOwner.State__c!=null && ldOwner.State__c.toUpperCase()==ldState){
-                                if(ldOwner.Lead_Owner__c !=null){
-                                ld.ownerId=ldOwner.Lead_Owner__c;
-                                leadIds.add(ld.Id);
-                                    system.debug('leadst'+ld.Id);
-                            	} 
-                         	}
-                            if(!leadIds.contains(ld.Id) && ld.city!=null && ldOwner.city__c!=null && 
-                               ldOwner.city__c.toUpperCase()==ldCity){
-                                if(ldOwner.Lead_Owner__c !=null){
-                                ld.ownerId=ldOwner.Lead_Owner__c;
-                                leadIds.add(ld.Id);                                
-                            	} 
-                            }
-                            if(!leadIds.contains(ld.Id) && ld.Country!=null && ldOwner.Country__c!=null && 
-                               ldOwner.Country__c.toUpperCase()==ldCountry){
-                                if(ldOwner.Lead_Owner__c !=null){
-                                ld.ownerId=ldOwner.Lead_Owner__c;
-                                leadIds.add(ld.Id);                                
-                            	} 
-                            }
-                     	}                                                                        
-                     }
-                }                
-                for(LeadOwnerAssignment__c ldOwner:mapCountryToLeadOwner.get(ldCountry)){
-                    if(!leadIds.contains(ld.Id) && ld.PostalCode !=null){
+                    if(!leadIds.contains(ld.Id) && ld.PostalCode !=null && ldOwner.CBG__c ==null){
                        	string ldPostalCode=ld.PostalCode;
-                        string splittedPostalCode;                        
-                                list<string> splitLdPostalCode=ldPostalCode.split('-');
-								splittedPostalCode=splitLdPostalCode[0]; 
-                        
+                        string splittedPostalCode;
+						list<string> splitLdPostalCode= new list<string> ();                        
+                        splitLdPostalCode=ldPostalCode.split('-');
+                        if(splitLdPostalCode.size( )>0){
+                            splittedPostalCode=splitLdPostalCode[0];
+                        }								 
+                        system.debug('leadZip1:::'+splittedPostalCode);  
                         if(ldOwner.Start_ZIP_Code__c !=null && ldOwner.End_ZIP_Code__c!=null &&
                       	splittedPostalCode !=null && ldOwner.Start_ZIP_Code__c.isNumeric() && ldOwner.End_ZIP_Code__c.isNumeric()
                       	&& splittedPostalCode.isNumeric()){					                   
@@ -445,7 +478,7 @@ public class LeadOwnerAssignmentHandler {
                     }                    
                 }
                     for(LeadOwnerAssignment__c ldOwner:mapCountryToLeadOwner.get(ldCountry)){
-                        if(!leadIds.contains(ld.Id)){
+                        if(!leadIds.contains(ld.Id) && ldOwner.CBG__c ==null){
                             if(ld.State!=null && ldOwner.State__c!=null && ldOwner.State__c.toUpperCase()==ldState){
                                 if(ldOwner.Lead_Owner__c !=null){
                                     ld.ownerId=ldOwner.Lead_Owner__c;
@@ -456,7 +489,7 @@ public class LeadOwnerAssignmentHandler {
                         }
                     }
                     for(LeadOwnerAssignment__c ldOwner:mapCountryToLeadOwner.get(ldCountry)){
-                        if(!leadIds.contains(ld.Id)){
+                        if(!leadIds.contains(ld.Id) && ldOwner.CBG__c ==null){
                             if(ld.city!=null && ldOwner.city__c!=null && ldOwner.city__c.toUpperCase()==ldCity){
                                 if(ldOwner.Lead_Owner__c !=null){
                                     ld.ownerId=ldOwner.Lead_Owner__c;
@@ -467,7 +500,7 @@ public class LeadOwnerAssignmentHandler {
                         }
                     }
                     for(LeadOwnerAssignment__c ldOwner:mapCountryToLeadOwner.get(ldCountry)){
-                        if(!leadIds.contains(ld.Id)){
+                        if(!leadIds.contains(ld.Id) && ldOwner.CBG__c ==null){
                             if(ld.Country!=null && ldOwner.Country__c!=null && ldOwner.Country__c.toUpperCase()==ldCountry){
                                 if(ldOwner.Lead_Owner__c !=null){
                                     ld.ownerId=ldOwner.Lead_Owner__c;

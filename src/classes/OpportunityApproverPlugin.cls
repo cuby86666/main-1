@@ -6,6 +6,7 @@ global class OpportunityApproverPlugin implements Process.Plugin {
 		APPROVER_LABELS.put(ApproverLabel.SALES_DIRECTOR_APPROVER, Opportunity.Sales_Director_Approver__c.getDescribe().getLabel());	
 		APPROVER_LABELS.put(ApproverLabel.REGIONAL_VP_APPROVER, Opportunity.Regional_VP_Approver__c.getDescribe().getLabel());
 		APPROVER_LABELS.put(ApproverLabel.VP_APPROVER_2, Opportunity.VP_Approver_2__c.getDescribe().getLabel());
+        APPROVER_LABELS.put(ApproverLabel.GLOBAL_KEY_ACCOUNT_MANAGER, Opportunity.Global_Key_Account_Manager__c.getDescribe().getLabel());
 		APPROVER_LABELS.put(ApproverLabel.MAG_APPROVER_1, Opportunity.MAG_Approver_1__c.getDescribe().getLabel());
 		APPROVER_LABELS.put(ApproverLabel.MAG_APPROVER_2, Opportunity.MAG_Approver_2__c.getDescribe().getLabel());
 		APPROVER_LABELS.put(ApproverLabel.MAG_APPROVER_3, Opportunity.MAG_Approver_3__c.getDescribe().getLabel());
@@ -28,7 +29,7 @@ global class OpportunityApproverPlugin implements Process.Plugin {
 						REGIONAL_VP_APPROVER, VP_APPROVER_2, 
 						MAG_APPROVER_1, MAG_APPROVER_2, MAG_APPROVER_3, MAG_APPROVER_4, MAG_APPROVER_5, 
         				MAG_APPROVER_6, MAG_APPROVER_7, MAG_APPROVER_8, MAG_APPROVER_9, MAG_APPROVER_10,
-						BL_APPROVER_1, BL_APPROVER_2, BL_APPROVER_3, BL_APPROVER_4, BL_APPROVER_5}
+						BL_APPROVER_1, BL_APPROVER_2, BL_APPROVER_3, BL_APPROVER_4, BL_APPROVER_5, GLOBAL_KEY_ACCOUNT_MANAGER}
     
     global Process.PluginResult invoke(Process.PluginRequest request) {
         String opptyId = (String) request.inputParameters.get('Id');
@@ -71,6 +72,8 @@ global class OpportunityApproverPlugin implements Process.Plugin {
                 Process.PluginDescribeResult.ParameterType.STRING),
    			new Process.PluginDescribeResult.OutputParameter(APPROVER_LABELS.get(ApproverLabel.VP_APPROVER_2),
                 Process.PluginDescribeResult.ParameterType.STRING),
+            new Process.PluginDescribeResult.OutputParameter(APPROVER_LABELS.get(ApproverLabel.GLOBAL_KEY_ACCOUNT_MANAGER),
+                Process.PluginDescribeResult.ParameterType.STRING),    
    			new Process.PluginDescribeResult.OutputParameter(APPROVER_LABELS.get(ApproverLabel.MAG_APPROVER_1),
                 Process.PluginDescribeResult.ParameterType.STRING),
    			new Process.PluginDescribeResult.OutputParameter(APPROVER_LABELS.get(ApproverLabel.MAG_APPROVER_2),

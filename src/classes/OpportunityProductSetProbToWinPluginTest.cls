@@ -1,12 +1,11 @@
 @isTest
-public class OpportunityApproverPluginTest {
+public class OpportunityProductSetProbToWinPluginTest {
 	private static final String TEST_USER_PROFILE = 'Standard User';
 	private static final String TEST_USER = 't_user_1';
 	private static final String TEST_USER_MAG_STAR = 'uMagSTAR';
 	private static final String TEST_USER_BL_STAR = 'uBlSTAR';
 	private static final String TEST_USER_GAM_STAR = 'uGamSTAR';
 	private static final String TEST_USER_GAM_SAMSUNG = 'uGamSAMS';
-    private static final String TEST_USER_GAM_GENERAL = 'uGamGen';
 	private static final String TEST_USER_EVP_STAR = 'uEvpSTAR';
 	private static final String TEST_USER_EVP_SAMSUNG = 'uEvpSAMS';
 	private static final String TEST_USER_AUTO = 'userAUTO';
@@ -41,7 +40,6 @@ public class OpportunityApproverPluginTest {
     private static ID userIdBlSTAR;
     private static ID userIdGamSTAR;
     private static ID userIdGamSamsung;
-    private static ID userIdGamGeneral;
     private static ID userIdEvpSTAR;
     private static ID userIdEvpSamsung;
     private static ID userIdAuto;
@@ -91,8 +89,6 @@ public class OpportunityApproverPluginTest {
         		userIdGamSTAR = u.Id;
         	} else if (u.Alias == TEST_USER_GAM_SAMSUNG) {
         		userIdGamSamsung = u.Id;
-            } else if (u.Alias == TEST_USER_GAM_GENERAL) {
-        		userIdGamGeneral = u.Id; //SFDC-954
         	} else if (u.Alias == TEST_USER_EVP_STAR) {
         		userIdEvpSTAR = u.Id;
         	} else if (u.Alias == TEST_USER_EVP_SAMSUNG) {
@@ -141,7 +137,6 @@ public class OpportunityApproverPluginTest {
     	users.add(newUser(TEST_USER_MT2, TEST_USER_MT2, p.Id));
     	users.add(newUser(TEST_USER_MAG, TEST_USER_MAG, p.Id));
     	users.add(newUser(TEST_USER_BL, TEST_USER_BL, p.Id));
-    	users.add(newUser(TEST_USER_GAM_GENERAL, TEST_USER_GAM_GENERAL, p.Id));//SFDC-954
     	insert users;
     	
     	User userMagSTAR = users.get(0);
@@ -155,12 +150,32 @@ public class OpportunityApproverPluginTest {
     	User userMT2 = users.get(8);
     	User userMAG = users.get(9);
     	User userBL = users.get(10);
-        User userGamGeneral = users.get(11);//SFDC-954
     	
     	User u = createUser(TEST_USER, TEST_USER, p.Id);
         u.MT_1__c = userMT1.Id;
         u.MT_2__c = userMT2.Id;
         update u;
+        
+        // insert approvers
+        List<Approvers_Matrix__c> ams = new List<Approvers_Matrix__c>();
+        ams.add(newApproverMatrix('MAG Approver', MAG_SHORT_LIVED, null, THRESHOLD_MAG, userMAG.Id));
+        ams.add(newApproverMatrix('MAG Approver', MAG_LIFETIME, null, THRESHOLD_MAG, userMAG.Id));
+        ams.add(newApproverMatrix('BL Approver', BL1, null, THRESHOLD_BL, userBL.Id));
+        ams.add(newApproverMatrix('BL Approver', BL2, null, THRESHOLD_BL, userBL.Id));
+        ams.add(newApproverMatrix('MAG Approver', MAG_SHORT_LIVED, 'STAR', THRESHOLD_MAG, userMagSTAR.Id));
+        ams.add(newApproverMatrix('MAG Approver', MAG_LIFETIME, 'STAR', THRESHOLD_MAG, userMagSTAR.Id));
+        ams.add(newApproverMatrix('BL Approver', BL1, 'STAR', THRESHOLD_BL, userBlSTAR.Id));
+        ams.add(newApproverMatrix('BL Approver', BL2, 'STAR', THRESHOLD_BL, userBlSTAR.Id));
+        ams.add(newApproverMatrix('GAM', 'STAR', null, 0, userGamSTAR.Id));
+        ams.add(newApproverMatrix('GAM', 'Samsung', null, 0, userGamSamsung.Id));
+        ams.add(newApproverMatrix('EVP', 'STAR', null, THRESHOLD_VP, userEvpSTAR.Id));
+        ams.add(newApproverMatrix('EVP', 'Samsung', null, THRESHOLD_VP, userEvpSamsung.Id));
+        ams.add(newApproverMatrix('Segment VP', 'Automotive', null, THRESHOLD_VP, userAuto.Id));
+        ams.add(newApproverMatrix('GSM Sales Director', null, null, 0, u.Id));
+        ams.add(newApproverMatrix('GSM VP 1', null, null, THRESHOLD_VP, u.Id));
+        ams.add(newApproverMatrix('GSM VP 2', 'Automotive', 'Greater China', THRESHOLD_VP, u.Id));
+        ams.add(newApproverMatrix('GSM VP 2', 'Automotive', 'South Asia Pacific', THRESHOLD_VP, u.Id));
+        insert ams;
         
         // insert FX Rates
         // There is a workflow which sets Opportunity.Locked_Exchange_Rate__c to 
@@ -180,28 +195,6 @@ public class OpportunityApproverPluginTest {
         Account parentGeneral = createAccount('Parent Account - General', AccountsSelector.getParentRecordTypeID(), null, null);
         Account a = createAccount('Test Account', AccountsSelector.getChildRecordTypeID(), parentGeneral.Id, CBG_AUTOMOTIVE);
          
-        // insert approvers
-        List<Approvers_Matrix__c> ams = new List<Approvers_Matrix__c>();
-        ams.add(newApproverMatrix('MAG Approver', MAG_SHORT_LIVED, null, THRESHOLD_MAG, userMAG.Id, null));
-        ams.add(newApproverMatrix('MAG Approver', MAG_LIFETIME, null, THRESHOLD_MAG, userMAG.Id, null));
-        ams.add(newApproverMatrix('MAG Approver', MAG_SHORT_LIVED, 'STAR', THRESHOLD_MAG, userMagSTAR.Id, null));
-        ams.add(newApproverMatrix('MAG Approver', MAG_LIFETIME, 'STAR', THRESHOLD_MAG, userMagSTAR.Id, null));
-        ams.add(newApproverMatrix('BL Approver', BL1, 'STAR', THRESHOLD_BL, userBlSTAR.Id, null));
-        ams.add(newApproverMatrix('BL Approver', BL2, 'STAR', THRESHOLD_BL, userBlSTAR.Id, null));
-        ams.add(newApproverMatrix('BL Approver', BL1, null, THRESHOLD_BL, userBL.Id, null));
-        ams.add(newApproverMatrix('BL Approver', BL2, null, THRESHOLD_BL, userBL.Id, null));
-        ams.add(newApproverMatrix('GAM', 'STAR', null, 0, userGamSTAR.Id, null));
-        ams.add(newApproverMatrix('GAM', 'Samsung', null, 0, userGamSamsung.Id, null));
-        ams.add(newApproverMatrix('EVP', 'STAR', null, THRESHOLD_VP, userEvpSTAR.Id, null));
-        ams.add(newApproverMatrix('EVP', 'Samsung', null, THRESHOLD_VP, userEvpSamsung.Id, null));
-        ams.add(newApproverMatrix('Segment VP', 'Automotive', null, THRESHOLD_VP, userAuto.Id, null));
-        ams.add(newApproverMatrix('GSM Sales Director', null, null, 0, u.Id, null));
-        ams.add(newApproverMatrix('GSM VP 1', null, null, THRESHOLD_VP, u.Id, null));
-        ams.add(newApproverMatrix('GSM VP 2', 'Automotive', 'Greater China', THRESHOLD_VP, u.Id, null));
-        ams.add(newApproverMatrix('GSM VP 2', 'Automotive', 'South Asia Pacific', THRESHOLD_VP, u.Id, null));
-        ams.add(newApproverMatrix('GAM', 'General Account', null, 0, userGamGeneral.Id, parentGeneral.Id));
-        insert ams;
-        
         // Insert products
         List<Product2> prods = new List<Product2>();
         
@@ -241,7 +234,7 @@ public class OpportunityApproverPluginTest {
             olis.add(oli);
         }
         
-        insert olis;        
+        insert olis;
         
         System.debug('//J ========== after insert oppty prods');
     }
@@ -280,7 +273,7 @@ public class OpportunityApproverPluginTest {
 		user.Email = email;
 		user.UserName = email;
         user.Signed_ARIA__c = true;
-		        
+        
         return user;	
     }
     
@@ -295,7 +288,7 @@ public class OpportunityApproverPluginTest {
     	return account;
     }
     
-    static Approvers_Matrix__c newApproverMatrix(String type, String criteria1, String criteria2, Double threshold1, ID approverID, ID accountID) {//SFDC-954, Add Account ID
+    static Approvers_Matrix__c newApproverMatrix(String type, String criteria1, String criteria2, Double threshold1, ID approverID) {
     	Approvers_Matrix__c approverMatrix = new Approvers_Matrix__c();
     	approverMatrix.RecordTypeId = new ApproverMatrixesSelector().getRecordTypeId(ApproverMatrixesSelector.RecordType.DIRECT_OPPTY);
     	approverMatrix.Type__c = type;
@@ -303,7 +296,6 @@ public class OpportunityApproverPluginTest {
     	approverMatrix.Criteria_2__c = criteria2;
     	approverMatrix.Threshold_1__c = threshold1;
     	approverMatrix.Approver__c = approverID;
-    	approverMatrix.Account__c = accountID;
     	    	
     	return approverMatrix;
     }
@@ -314,55 +306,15 @@ public class OpportunityApproverPluginTest {
         			   Account.ParentId, Owner.MT_2__c 
         		  from Opportunity 
         		 where Id = :opptyID];    
-    }
+    } 
     
-    static void createAdditionalProducts()
-    {
-        List<Product2> allDevProducts = [select Id, Name, BL__c, MAG__c from Product2 where Name like 'In-Development%' and IsActive = true];
-		// Insert products
-        List<Product2> prods = new List<Product2>();
-        Integer i = 1;
-        Product2 prevProd = null;
-        for (Product2 p : allDevProducts) {
-            if (prevProd == null) 
-                prevProd = p;
-            else {
-                if (prevProd.BL__c == p.BL__c) continue;
-            }
-	        prods.add(new Product2(Name = 'Test Dev Product' + i, MAG__c = p.MAG__c, BL__c = p.BL__c, IsActive = true));
-            i++;
-        }
-        System.debug('@@@ Product records: ' + prods.size());
-        insert prods;
-    }
-    
-    static void createAdditionalOpptyProds()
-    {
-        List<Product2> prods = [Select Id from Product2 Where Name like 'Test Dev Product%'];
-        List<PricebookEntry> pbes = [select Id from PricebookEntry where Product2Id in :prods and CurrencyIsoCode = :CCY_CODE_DEFAULT];
-        
-        Opportunity oppty = getOpportunity(opptyProd.OpportunityId);
-        
-        // Insert opportunity products
-        List<OpportunityLineItem> olis = new List<OpportunityLineItem>();
-        
-        for (PricebookEntry pbe : pbes) {
-            OpportunityLineItem oli = new OpportunityLineItem(OpportunityId = oppty.Id, PricebookEntryId = pbe.Id);
-            oli.UnitPrice = UNIT_PRICE;
-            oli.Component_Multiplier__c = COMP_MULT;
-            olis.add(oli);
-        }
-        System.debug('@@@ Oppty Prod records:' + olis.size());
-        insert olis;
-    }
-
     @isTest
     static void testPluginInvoke()
     {
-        OpportunityApproverPlugin plugin = new OpportunityApproverPlugin();
+        OpportunityProductSetProbToWinPlugin plugin = new OpportunityProductSetProbToWinPlugin();
         Map<String,String> parms = new Map<String,String>();
-        Test.startTest();
         Opportunity oppty = getOpportunity(opptyProd.OpportunityId);
+        Test.startTest();
         parms.put('Id', oppty.Id);
         Process.PluginRequest request = new Process.PluginRequest(parms);
         Process.PluginResult result = plugin.invoke(request);
@@ -373,20 +325,22 @@ public class OpportunityApproverPluginTest {
     static void testPluginDescribe()
     {
         Test.startTest();
-        OpportunityApproverPlugin plugin = new OpportunityApproverPlugin();
+        OpportunityProductSetProbToWinPlugin plugin = new OpportunityProductSetProbToWinPlugin();
         Process.PluginDescribeResult result = plugin.describe();
         Test.stopTest();
     }
-
+    
     @isTest
     static void testPluginInvokeException()
     {
-        OpportunityApproverPlugin plugin = new OpportunityApproverPlugin();
+        OpportunityProductSetProbToWinPlugin plugin = new OpportunityProductSetProbToWinPlugin();
         Map<String,String> parms = new Map<String,String>();
+        delete [Select Id from Approvers_Matrix__c Where Type__c = 'GSM Sales Director'];
         Opportunity oppty = getOpportunity(opptyProd.OpportunityId);
-        delete [Select Id from Approvers_Matrix__c where Type__c = 'GSM Sales Director'];
+        Test.startTest();
         parms.put('Id', oppty.Id);
         Process.PluginRequest request = new Process.PluginRequest(parms);
         Process.PluginResult result = plugin.invoke(request);
+        Test.stopTest();
     }
 }

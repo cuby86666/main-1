@@ -53,10 +53,6 @@
                 <field>Production_Date__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Required</behavior>
-                <field>Probability_to_Win__c</field>
-            </layoutItems>
-            <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Compliance_Risk__c</field>
             </layoutItems>
@@ -93,6 +89,10 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Application__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Mobile_Processor__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Required</behavior>
@@ -456,10 +456,6 @@
                 <behavior>Readonly</behavior>
                 <field>DW_Evidence_Check_Box__c</field>
             </layoutItems>
-            <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>Product_Status__c</field>
-            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -490,6 +486,10 @@
             <layoutItems>
                 <behavior>Readonly</behavior>
                 <field>Sales_Director_Approver__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Global_Key_Account_Manager__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Readonly</behavior>
@@ -872,10 +872,6 @@
         <fields>OPPORTUNITY.CLOSE_DATE</fields>
         <fields>CORE.USERS.FULL_NAME</fields>
         <relatedList>Opportunity.Spin_Off_Opportunity__c</relatedList>
-    </relatedLists>
-    <relatedLists>
-        <fields>NAME</fields>
-        <relatedList>MnStage__c.Opportunity__c</relatedList>
     </relatedLists>
     <relatedObjects>AccountId</relatedObjects>
     <showEmailCheckbox>false</showEmailCheckbox>

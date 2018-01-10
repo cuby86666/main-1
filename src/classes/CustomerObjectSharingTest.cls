@@ -30,7 +30,6 @@ public class CustomerObjectSharingTest
        Opp.CloseDate=mydate1;
        Opp.Production_Date__c=mydate2;
        Opp.CurrencyIsoCode='USD';
-       Opp.Probability_to_Win__c='80% - 100%';
        Opp.Account=Child;
        opp.Channel__c='Direct';
        opp.StageName='Discovery';

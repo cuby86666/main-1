@@ -54,7 +54,7 @@ public class FeedCommentTriggerHandler {
                                 FROM Case
                                 WHERE FeedItemId IN : mapFeedItemIdToCreatedDate.keyset()
                                 AND RelatedToId__c != NULL 
-                                AND Origin = 'Community_Question'
+                                AND Origin = 'Forum'
                             ]){ 
             
             if(objCase.Status != RECEIVED_REPLY_CASE_STATUS && objCase.Status!= CLOSED_CASE_STATUS ){

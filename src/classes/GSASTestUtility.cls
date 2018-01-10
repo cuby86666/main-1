@@ -21,6 +21,10 @@
    Last ModifiedDate : 02 Jun 2017
    Description : Updated to remove the test data related to Opportunity Approval Setting.
 */ 
+/* Last ModifiedBy : Baji
+   Last ModifiedDate : 01 Jan 2018
+   Description : Updated to remove the hardcoded profile Id.
+*/ 
 
 
 
@@ -83,9 +87,10 @@ public class GSASTestUtility{
     public static void createApproversMatrixAll() {
         //create User
         List<User> lstUsers = new List<User>();
-        User regionalVP = GSASTestUtility.createUser('Regional VP', 'regionalvp@nxp.com', 'RVP1', '00eD0000001GsojIAC');
+         
+        User regionalVP = GSASTestUtility.createUser('Regional VP', 'regionalvp@nxp.com', 'RVP1');
         lstUsers.add(regionalVP);
-        User regionalController = GSASTestUtility.createUser('Regional Controller', 'regionalctrl@nxp.com', 'RCtrl', '00eD0000001GsojIAC');
+        User regionalController = GSASTestUtility.createUser('Regional Controller', 'regionalctrl@nxp.com', 'RCtrl');
         lstUsers.add(regionalController);
         insert lstUsers;
 
@@ -146,10 +151,11 @@ public class GSASTestUtility{
         update opp;
     }
     
-   public static User createUser(String strName, String strEmail, String strAlias,  Id profileId)
+   public static User createUser(String strName, String strEmail, String strAlias)
    {
+    Profile objProfile = [SELECT Id FROM Profile WHERE Name='Standard User' LIMIT 1];
     User objUser = new User(alias = strAlias, email=strEmail, emailencodingkey='UTF-8', lastname=strName, languagelocalekey='en_US', localesidkey='en_US', 
-                                 profileid = profileId, timezonesidkey='America/Los_Angeles', username= strEmail);
+                                 profileid = objProfile.Id, timezonesidkey='America/Los_Angeles', username= strEmail);
                                  
     return objUser;
    }
