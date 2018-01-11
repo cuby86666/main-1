@@ -217,22 +217,22 @@ public class MnStages extends ApplicationDomain {
 			
 			if (!opptyUpsertResult.isSuccess()) {
 				mnStage.Status__c = STATUS_INVALID; 
-				mnStage.Message__c = (mnStage.Message__c == null) ? processErrors(opptyUpsertResult.getErrors()) : mnStage.Message__c;	
-			} else {
-				mnStage.Status__c = STATUS_COMPLETED; 
+				mnStage.Message__c = (mnStage.Message__c == '') ? processErrors(opptyUpsertResult.getErrors()) : mnStage.Message__c;	
 			}
 		
 			if (!opptyProdUpsertResult.isSuccess()) {
+				mnStage.Status__c = STATUS_INVALID; 
+				mnStage.Message__c = (mnStage.Message__c == '') ? processErrors(opptyProdUpsertResult.getErrors()) : mnStage.Message__c;
+				
 				// If oppty prod is not created successfully, oppty should be deleted if already created.
 				if (opptyUpsertResult.isSuccess()) {
 					opptyIdsDeleted.add(opptyUpsertResult.getId());	
 				}
-				
-				mnStage.Status__c = STATUS_INVALID; 
-				mnStage.Message__c = (mnStage.Message__c == null) ? processErrors(opptyProdUpsertResult.getErrors()) : mnStage.Message__c; 	
-			} else {
+			}
+			
+			if (mnStage.Status__c != STATUS_INVALID && opptyUpsertResult.isSuccess() && opptyProdUpsertResult.isSuccess()) {
 				mnStage.Status__c = STATUS_COMPLETED;
-				mnStage.Opportunity__c = opptyUpsertResult.getId();
+				mnStage.Opportunity__c = opptyUpsertResult.getId();	
 			}
 		}
 		
@@ -360,6 +360,10 @@ public class MnStages extends ApplicationDomain {
 		
 		if (mnStage.Reg_Part_Win_Status__c != null && mnStage.Reg_Part_Win_Status__c.contains('Win') && mnStage.Reg_Part_Win_Date__c == null) {
 			result += 'Reg_Part_Win_Status__c is "Win", but Reg_Part_Win_Date__c is blank. ';
+		}
+		
+		if (mnStage.Disti_Name__c == null || mnStage.Disti_Name__c == '') {
+			result += 'Disti_Name__c is blank. ';	
 		} 
 		
 		return result;

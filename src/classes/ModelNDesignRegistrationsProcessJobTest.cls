@@ -360,16 +360,89 @@ private class ModelNDesignRegistrationsProcessJobTest {
     }
     
     @isTest
-    static void testInvalidMnStage() {
+    static void testInvalidMnStageRegProductionDate() {
     	MnStage__c mnStageClone = mnStage.clone(false, true, false, false);
     	mnStageClone.Status__c = STATUS_QUEUED;
     	mnStageClone.Reg_Oppty_Num__c = '819834';
     	mnStageClone.Reg_Part_OID__c = '1048946';
     	mnStageClone.Reg_Production_Date__c = null;	
+    	
+    	insert mnStageClone;
+    	
+    	processData();
+    	    	
+    	List<Opportunity> oppties = new OpportunitiesSelector().selectByLegacyId(new Set<String> {mnStageClone.Reg_Oppty_Num__c + '-' + mnStageClone.Reg_Part_OID__c});
+    	System.assertEquals(0, oppties.size());
+    	
+    	List<OpportunityLineItem> opptyProds = new OpportunityLineItemsSelector().selectByLegacyId(new Set<String> {mnStageClone.Reg_Part_OID__c});
+    	System.assertEquals(0, opptyProds.size());
+    }
+    
+    @isTest
+    static void testInvalidMnStageRegExchangeRate() {
+    	MnStage__c mnStageClone = mnStage.clone(false, true, false, false);
+    	mnStageClone.Status__c = STATUS_QUEUED;
+    	mnStageClone.Reg_Oppty_Num__c = '819834';
+    	mnStageClone.Reg_Part_OID__c = '1048946';
     	mnStageClone.Reg_Exchange_Rate__c = 0;
+    	    	
+    	insert mnStageClone;
+    	
+    	processData();
+    	    	
+    	List<Opportunity> oppties = new OpportunitiesSelector().selectByLegacyId(new Set<String> {mnStageClone.Reg_Oppty_Num__c + '-' + mnStageClone.Reg_Part_OID__c});
+    	System.assertEquals(0, oppties.size());
+    	
+    	List<OpportunityLineItem> opptyProds = new OpportunityLineItemsSelector().selectByLegacyId(new Set<String> {mnStageClone.Reg_Part_OID__c});
+    	System.assertEquals(0, opptyProds.size());
+    }
+    
+    @isTest
+    static void testInvalidMnStageRegProjectUnits() {
+    	MnStage__c mnStageClone = mnStage.clone(false, true, false, false);
+    	mnStageClone.Status__c = STATUS_QUEUED;
+    	mnStageClone.Reg_Oppty_Num__c = '819834';
+    	mnStageClone.Reg_Part_OID__c = '1048946';
     	mnStageClone.Reg_Project_Units__c = null;
+    	    	
+    	insert mnStageClone;
+    	
+    	processData();
+    	    	
+    	List<Opportunity> oppties = new OpportunitiesSelector().selectByLegacyId(new Set<String> {mnStageClone.Reg_Oppty_Num__c + '-' + mnStageClone.Reg_Part_OID__c});
+    	System.assertEquals(0, oppties.size());
+    	
+    	List<OpportunityLineItem> opptyProds = new OpportunityLineItemsSelector().selectByLegacyId(new Set<String> {mnStageClone.Reg_Part_OID__c});
+    	System.assertEquals(0, opptyProds.size());
+    }
+    
+    @isTest
+    static void testInvalidMnStageRegPartWin() {
+    	MnStage__c mnStageClone = mnStage.clone(false, true, false, false);
+    	mnStageClone.Status__c = STATUS_QUEUED;
+    	mnStageClone.Reg_Oppty_Num__c = '819834';
+    	mnStageClone.Reg_Part_OID__c = '1048946';
     	mnStageClone.Reg_Part_Win_Status__c = 'ProdWin';
     	mnStageClone.Reg_Part_Win_Date__c = null;
+    	    	
+    	insert mnStageClone;
+    	
+    	processData();
+    	    	
+    	List<Opportunity> oppties = new OpportunitiesSelector().selectByLegacyId(new Set<String> {mnStageClone.Reg_Oppty_Num__c + '-' + mnStageClone.Reg_Part_OID__c});
+    	System.assertEquals(0, oppties.size());
+    	
+    	List<OpportunityLineItem> opptyProds = new OpportunityLineItemsSelector().selectByLegacyId(new Set<String> {mnStageClone.Reg_Part_OID__c});
+    	System.assertEquals(0, opptyProds.size());
+    }
+    
+    @isTest
+    static void testInvalidMnStageDistiName() {
+    	MnStage__c mnStageClone = mnStage.clone(false, true, false, false);
+    	mnStageClone.Status__c = STATUS_QUEUED;
+    	mnStageClone.Reg_Oppty_Num__c = '819834';
+    	mnStageClone.Reg_Part_OID__c = '1048946';
+    	mnStageClone.Disti_Name__c = null;
     	
     	insert mnStageClone;
     	
