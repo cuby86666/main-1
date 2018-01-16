@@ -20,7 +20,7 @@ public class AsyncApexJobsSelector extends ApplicationSelector {
 		
 		new UsersSelector().configureQueryFactoryFields(asyncApexJobsQueryFactory, AsyncApexJob.CreatedById.getDescribe().getRelationshipName());
 		
-		return (List<AsyncApexJob>)Database.query(asyncApexJobsQueryFactory.toSOQL());
+		return (List<AsyncApexJob>)Database.query(asyncApexJobsQueryFactory.setCondition('Id in :ids').toSOQL());
 	}
     
 }

@@ -1,7 +1,7 @@
 global class ModelNDesignRegistrationsProcessJob implements Schedulable, Database.Batchable<SObject> {
 	
 	private Id schedJobId; 
-	
+		
 	global ModelNDesignRegistrationsProcessJob() {} // Implement no-arg constructor in order for Job Scheduler to see it.
 	
 	global ModelNDesignRegistrationsProcessJob(Id schedJobId) {
@@ -46,24 +46,36 @@ global class ModelNDesignRegistrationsProcessJob implements Schedulable, Databas
 		
 			update scope;	
 		} catch (Exception e) {
-			System.debug('///////// exception: ' + e);	
+			String message = 'Exception type caught: ' + e.getTypeName() + '<br>' +
+			                 'Message: ' + e.getMessage() + '<br>' +
+			                 'Cause: ' + e.getCause() + '<br>' +
+			                 'Line number: ' + e.getLineNumber() + '<br>' +
+			                 'Stack trace: ' + e.getStackTraceString();
+			                 
+			notify(new List<String> {'globalsales.appsupport@nxp.com'}, message);
 		}
 	}
 	
 	global void finish(Database.BatchableContext bc) {
 		p('finish');	
-		System.debug('///////// finish is called');
-		//notify(this.schedJobId, bc.getJobId());
+		AsyncApexJob apexJob = new AsyncApexJobsSelector().selectByIdWithCreatedBy(new Set<Id> {bc.getJobId()}).get(0);
+		
+		if (apexJob.Status != 'Completed') {
+			String message = 'Scheduled Job Id: ' + this.schedJobId + ', Batch Job Id: ' + bc.getJobId() + '<br><br>' +
+		                 	 'Total Batches: ' + apexJob.TotalJobItems + ', Batches Processed: ' + apexJob.JobItemsProcessed + ', Failures: ' + apexJob.NumberOfErrors;
+		
+			notify(new List<String> {apexJob.CreatedBy.Email}, message);		
+		}
 	}
 	
-	private static void notify(Id schedJobId, Id batchJobId) {
+	@TestVisible
+	private static void notify(List<String> toAddresses, String message) {
 		Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
-        mail.setToAddresses(new String[] {'jason.mw.tsai@nxp.com'});
+        mail.setToAddresses(toAddresses);
         mail.setReplyTo('no.reply@nxp.com');
         mail.setSenderDisplayName('Model N Design Registrations Process Job');
         mail.setSubject('Model N Design Registrations Process Job Failed');
-        //mail.setPlainTextBody('Batch job has completed with '+ job.TotalJobItems + ' batches with ' + job.NumberOfErrors + ' failures.' );
-        mail.setPlainTextBody('This is a test. Scheduled Job Id: ' + schedJobId + ', Batch Job Id: ' + batchJobId);
+        mail.setHtmlBody(message);
         Messaging.sendEmail(new Messaging.SingleEmailMessage[] {mail});	
 	}
 	

@@ -190,18 +190,15 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	System.assertEquals(1, opptyProds.size());
     }
     
-    //@isTest
+    @isTest
     static void testNotify() {
-    	MnStage__c mnStageClone = mnStage.clone(false, true, false, false);
-    	mnStageClone.Status__c = STATUS_QUEUED;
-    	mnStageClone.Reg_Oppty_Num__c = '819834';
-    	mnStageClone.Reg_Part_OID__c = '1048946';
+    	try {
+    		new ModelNDesignRegistrationsProcessJob().execute(null, null);		
+    	} catch (Exception e) {
+    		// ignored
+    	}
     	
-    	insert mnStageClone;
-    	
-    	Test.startTest();
-    	runBatch();
-    	Test.stopTest();	
+    	ModelNDesignRegistrationsProcessJob.notify(new List<String> {'testuser@nxp.com.test'}, 'test');
     }
     
     @isTest
