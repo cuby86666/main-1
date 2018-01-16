@@ -242,47 +242,44 @@ public class OpportunitySchedules extends ApplicationDomain {
     
     	Map<Id, Opportunity> oppties = new Map<Id, Opportunity>(new OpportunitiesSelector().selectById(opptyIds));
     	Map<Id, Map<Id, OpportunityProductSchedule__c>> opptyProdSchedsByOpptySchedId = getOpptyProdSchedsByOpptySchedId(opptySchedsOld);
+    	Map<Id, OpportunitySchedule__c> opptySchedsNew = new Map<Id, OpportunitySchedule__c>((List<OpportunitySchedule__c>)this.records); 
     	
     	for (OpportunitySchedule__c opptySchedOld : opptySchedsOld) {
-	    	for (OpportunitySchedule__c opptySchedNew : (List<OpportunitySchedule__c>)this.records) {
-	    		if (opptySchedOld.Id == opptySchedNew.Id) {
-	    			for (Id opptyProdSchedId : opptyProdSchedIds) {
-	    				if (opptyProdSchedsByOpptySchedId.get(opptySchedOld.Id).containsKey(opptyProdSchedId)) {
-	    					if (opptySchedOld.Oppty_Sched_Qty__c != opptySchedNew.Oppty_Sched_Qty__c || opptySchedOld.Frozen_Oppty_Sched_Qty__c != opptySchedNew.Frozen_Oppty_Sched_Qty__c || opptySchedOld.Sched_Date__c != opptySchedNew.Sched_Date__c) {
-	    						opptyProdSchedUpdated = new OpportunityProductSchedule__c();
-	                            opptyProdSchedUpdated.Id = opptyProdSchedId;
-	                            
-	                            //Before DW
-	                            if(oppties.get(opptySchedNew.Opportunity__c).StageName != Opportunities.STAGES.get(Opportunities.Stage.COMMITMENT)) {
-	                                if(opptySchedOld.Oppty_Sched_Qty__c != opptySchedNew.Oppty_Sched_Qty__c) {
-	                                    opptyProdSchedUpdated.Oppty_Sched_Qty__c = opptySchedNew.Oppty_Sched_Qty__c;
-	                                    opptyProdSchedUpdated.Frozen_Oppty_Sched_Qty__c = opptySchedNew.Oppty_Sched_Qty__c;
-	                                }
-	                            }
-	                            
-	                            //After DW
-	                            if(oppties.get(opptySchedNew.Opportunity__c).StageName == Opportunities.STAGES.get(Opportunities.Stage.COMMITMENT)) {
-	                                if(opptySchedOld.Oppty_Sched_Qty__c != opptySchedNew.Oppty_Sched_Qty__c) {
-	                                    opptyProdSchedUpdated.Oppty_Sched_Qty__c = opptySchedNew.Oppty_Sched_Qty__c;
-	                                }
-	                                
-	                                if(opptySchedOld.Frozen_Oppty_Sched_Qty__c != opptySchedNew.Frozen_Oppty_Sched_Qty__c) {
-	                                    opptyProdSchedUpdated.Frozen_Oppty_Sched_Qty__c = opptySchedNew.Frozen_Oppty_Sched_Qty__c;
-	                                }
-	                            }
-	                            
-	                            if (opptySchedOld.Sched_Date__c != opptySchedNew.Sched_Date__c) {
-	                            	opptyProdSchedUpdated.Sched_Date__c = opptySchedNew.Sched_Date__c;
-	                            }
-	                            
-	                            opptyProdSchedsUpdated.add(opptyProdSchedUpdated);
-	    					}
-	    				}
-	    			}
-	    			
-	    			break;
-	    		}
-	    	}
+    		OpportunitySchedule__c opptySchedNew = opptySchedsNew.get(opptySchedOld.Id); 
+    		
+			for (Id opptyProdSchedId : opptyProdSchedIds) {
+				if (opptyProdSchedsByOpptySchedId.containsKey(opptySchedOld.Id) && opptyProdSchedsByOpptySchedId.get(opptySchedOld.Id).containsKey(opptyProdSchedId)) {
+					if (opptySchedOld.Oppty_Sched_Qty__c != opptySchedNew.Oppty_Sched_Qty__c || opptySchedOld.Frozen_Oppty_Sched_Qty__c != opptySchedNew.Frozen_Oppty_Sched_Qty__c || opptySchedOld.Sched_Date__c != opptySchedNew.Sched_Date__c) {
+						opptyProdSchedUpdated = new OpportunityProductSchedule__c();
+                        opptyProdSchedUpdated.Id = opptyProdSchedId;
+                        
+                        //Before DW
+                        if(oppties.get(opptySchedNew.Opportunity__c).StageName != Opportunities.STAGES.get(Opportunities.Stage.COMMITMENT)) {
+                            if(opptySchedOld.Oppty_Sched_Qty__c != opptySchedNew.Oppty_Sched_Qty__c) {
+                                opptyProdSchedUpdated.Oppty_Sched_Qty__c = opptySchedNew.Oppty_Sched_Qty__c;
+                                opptyProdSchedUpdated.Frozen_Oppty_Sched_Qty__c = opptySchedNew.Oppty_Sched_Qty__c;
+                            }
+                        }
+                        
+                        //After DW
+                        if(oppties.get(opptySchedNew.Opportunity__c).StageName == Opportunities.STAGES.get(Opportunities.Stage.COMMITMENT)) {
+                            if(opptySchedOld.Oppty_Sched_Qty__c != opptySchedNew.Oppty_Sched_Qty__c) {
+                                opptyProdSchedUpdated.Oppty_Sched_Qty__c = opptySchedNew.Oppty_Sched_Qty__c;
+                            }
+                            
+                            if(opptySchedOld.Frozen_Oppty_Sched_Qty__c != opptySchedNew.Frozen_Oppty_Sched_Qty__c) {
+                                opptyProdSchedUpdated.Frozen_Oppty_Sched_Qty__c = opptySchedNew.Frozen_Oppty_Sched_Qty__c;
+                            }
+                        }
+                        
+                        if (opptySchedOld.Sched_Date__c != opptySchedNew.Sched_Date__c) {
+                        	opptyProdSchedUpdated.Sched_Date__c = opptySchedNew.Sched_Date__c;
+                        }
+                        
+                        opptyProdSchedsUpdated.add(opptyProdSchedUpdated);
+					}
+				}
+			}
 	    }
 	    
 	    uow.registerDirty(opptyProdSchedsUpdated);
