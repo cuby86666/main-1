@@ -46,7 +46,8 @@ global class ModelNDesignRegistrationsProcessJob implements Schedulable, Databas
 		
 			update scope;	
 		} catch (Exception e) {
-			String message = 'Exception type caught: ' + e.getTypeName() + '<br>' +
+			String message = 'Scheduled Job Id: ' + this.schedJobId + '<br><br>' +
+							 'Exception type caught: ' + e.getTypeName() + '<br>' +
 			                 'Message: ' + e.getMessage() + '<br>' +
 			                 'Cause: ' + e.getCause() + '<br>' +
 			                 'Line number: ' + e.getLineNumber() + '<br>' +
