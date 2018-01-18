@@ -7,6 +7,7 @@ public class AsyncApexJobsSelector extends ApplicationSelector {
 	public List<Schema.SObjectField> getSObjectFieldList() {
 		return new List<Schema.SObjectField> {
 			AsyncApexJob.Id,
+			AsyncApexJob.ExtendedStatus,
 			AsyncApexJob.JobItemsProcessed,
 			AsyncApexJob.NumberOfErrors,
 			AsyncApexJob.Status,

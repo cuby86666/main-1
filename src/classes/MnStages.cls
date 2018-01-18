@@ -19,6 +19,8 @@ public class MnStages extends ApplicationDomain {
 	public static final String STATUS_INVALID = STATUSES.get(Status.INVALID);
 	public static final String STATUS_DUPLICATED = STATUSES.get(Status.DUPLICATED);
 	public static final String STATUS_IGNORED = STATUSES.get(Status.IGNORED);
+	public static final String STATUS_FAILED = STATUSES.get(Status.FAILED);
+	public static final String STATUS_ABORTED = STATUSES.get(Status.ABORTED);
 	
 	public enum RegPartStatus {PENDING, REQUESTED, APPROVED, REJECTED}
 	
