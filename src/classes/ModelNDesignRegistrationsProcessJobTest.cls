@@ -471,28 +471,7 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	List<Opportunity> oppties = new OpportunitiesSelector().selectByLegacyId(new Set<String> {mnStageClone.Reg_Oppty_Num__c + '-' + mnStageClone.Reg_Part_OID__c});
     	System.assertEquals(0, oppties.size());
     }
-    /*
-    @isTest
-    static void testInvalidRootPart() {
-    	MnStage__c mnStageClone = mnStage.clone(false, true, false, false);
-    	mnStageClone.Status__c = STATUS_QUEUED;
-    	mnStageClone.Reg_Oppty_Num__c = '819834';
-    	mnStageClone.Reg_Part_OID__c = '1048946';
-    	mnStageClone.Part_Is_Root__c = true;
-    	mnStageClone.Part_Root__c = 'INVALID-BASIC_TYPE';	
-    	
-    	insert mnStageClone;
-    	
-    	processData();
-    	    	
-    	List<OpportunityLineItem> opptyProds = new OpportunityLineItemsSelector().selectByLegacyId(new Set<String> {mnStageClone.Reg_Part_OID__c});
-    	System.assertEquals(0, opptyProds.size());
-    	
-    	// If oppty prod is not created successfully, oppty should be deleted if already created. 
-    	List<Opportunity> oppties = new OpportunitiesSelector().selectByLegacyId(new Set<String> {mnStageClone.Reg_Oppty_Num__c + '-' + mnStageClone.Reg_Part_OID__c});
-    	System.assertEquals(0, oppties.size());
-    }
-    */
+    
     /**
      * Reg_Part_Status__c: Pending, Requested, Approved, Rejected
      * Reg_Part_Win_Status__c: Pending, DesignWin, ProdWin, Win 

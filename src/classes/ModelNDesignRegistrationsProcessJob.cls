@@ -1,6 +1,9 @@
 global class ModelNDesignRegistrationsProcessJob implements Schedulable, Database.Batchable<SObject> {
 	
-	private Id schedJobId; 
+	private static final String STATUS_QUEUED = MnStages.STATUS_QUEUED;
+	private static final String STATUS_PROCESSING = MnStages.STATUS_PROCESSING;
+	
+	private Id schedJobId;
 		
 	global ModelNDesignRegistrationsProcessJob() {} // Implement no-arg constructor in order for Job Scheduler to see it.
 	
@@ -16,21 +19,24 @@ global class ModelNDesignRegistrationsProcessJob implements Schedulable, Databas
 	
 	global Database.QueryLocator start(Database.BatchableContext bc) {
 		p('start');
-		/*
-		Database.QueryLocator mnStageQueryLocator = new MnStagesSelector().selectByStatusQueryLocator(new Set<String> {MnStages.STATUS_QUEUED});
+		if (isSerialMode() && isJobActive()) return new MnStagesSelector().selectByStatusQueryLocator(new Set<String> {null}); // skip processing  	
+		
+		Database.QueryLocator result = new MnStagesSelector().selectByStatusQueryLocator(new Set<String> {STATUS_QUEUED});
 		List<MnStage__c> mnStages = new List<MnStage__c>(); 
 		
-		for (Database.QueryLocatorIterator it = mnStageQueryLocator.iterator(); it.hasNext();) {
+		for (Database.QueryLocatorIterator it = result.iterator(); it.hasNext();) {
 			MnStage__c mnStage = (MnStage__c)it.next();	
-		//	mnStage.Status__c = MnStages.STATUS_PROCESSING;
+			mnStage.Status__c = STATUS_PROCESSING;
+			mnStage.Message__c = null;
+			mnStage.Opportunity__c = null;
+			mnStage.Sched_Job_ID__c = this.schedJobId;
+			mnStage.Batch_Job_ID__c = bc.getJobId();
 			mnStages.add(mnStage);
 		} 
 		
 		update mnStages;
 		
-		return mnStageQueryLocator;
-		 */
-		return new MnStagesSelector().selectByStatusQueryLocator(new Set<String> {MnStages.STATUS_QUEUED});
+		return result;
 	}
 	
 	global void execute(Database.BatchableContext bc, List<MnStage__c> scope) {
@@ -38,13 +44,6 @@ global class ModelNDesignRegistrationsProcessJob implements Schedulable, Databas
 		try {
 			MnStages mnStages = new MnStages(scope);
 			mnStages.processData();
-		
-			for (MnStage__c ms : scope) {
-				ms.Sched_Job_ID__c = this.schedJobId;
-				ms.Batch_Job_ID__c = bc.getJobId();	
-			}
-		
-			update scope;	
 		} catch (Exception e) {
 			String message = 'Scheduled Job Id: ' + this.schedJobId + '<br><br>' +
 							 'Exception type caught: ' + e.getTypeName() + '<br>' +
@@ -61,7 +60,7 @@ global class ModelNDesignRegistrationsProcessJob implements Schedulable, Databas
 		p('finish');	
 		AsyncApexJob apexJob = new AsyncApexJobsSelector().selectByIdWithCreatedBy(new Set<Id> {bc.getJobId()}).get(0);
 		
-		if (apexJob.Status != 'Completed') {
+		if (apexJob.Status != 'Completed' || apexJob.NumberOfErrors > 0) {
 			String message = 'Scheduled Job Id: ' + this.schedJobId + ', Batch Job Id: ' + bc.getJobId() + '<br><br>' +
 		                 	 'Total Batches: ' + apexJob.TotalJobItems + ', Batches Processed: ' + apexJob.JobItemsProcessed + ', Failures: ' + apexJob.NumberOfErrors;
 		
@@ -69,8 +68,19 @@ global class ModelNDesignRegistrationsProcessJob implements Schedulable, Databas
 		}
 	}
 	
+	private Boolean isSerialMode() {
+		p('isSerialMode');
+		return Boolean.valueOf(((List<Model_N_Stage_Setting__mdt>)new ModelNStageSettingsSelector().selectWhere('Name__c = \'Serial_Mode\'')).get(0).Value__c);	
+	}
+	
+	private Boolean isJobActive() {
+		p('isJobActive');	
+		return new AsyncApexJobsSelector().selectWhere('JobType = \'BatchApex\' and ApexClass.Name = \'' + ModelNDesignRegistrationsProcessJob.class + '\' and Status = \'Processing\'').size() > 0;  
+	}
+	
 	@TestVisible
 	private static void notify(List<String> toAddresses, String message) {
+		p('notify');
 		Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
         mail.setToAddresses(toAddresses);
         mail.setReplyTo('no.reply@nxp.com');

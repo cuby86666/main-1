@@ -97,8 +97,6 @@ public class MnStages extends ApplicationDomain {
 		for (MnStage__c ms : this.mnStages) {
 			ms.Message__c = '';
 			ms.Opportunity__c = null;
-			ms.Sched_Job_ID__c = null;
-			ms.Batch_Job_ID__c = null;
 			
 			String opptyExtId = ms.Reg_Oppty_Num__c + '-' + ms.Reg_Part_OID__c;
 		
@@ -194,8 +192,6 @@ public class MnStages extends ApplicationDomain {
 			if (message != '') {
 				ms.Status__c = STATUS_INVALID;
 				ms.Message__c = message;
-			} else {
-				ms.Status__c = STATUS_PROCESSING;	
 			}
 		}
 		
@@ -282,8 +278,8 @@ public class MnStages extends ApplicationDomain {
 			
 			if (mnStagesDeduped.containsKey(opptyExtId) && mnStagesDeduped.get(opptyExtId) !== ms) {
 				ms.Status__c = STATUS_DUPLICATED;
-				ms.Message__c = 'Duplicated with record Id: ' + mnStagesDeduped.get(opptyExtId).Id;	 
-				ms.Opportunity__c = null;
+				ms.Message__c = 'Duplicated with record Id: ' + mnStagesDeduped.get(opptyExtId).Id;
+				ms.Opportunity__c = null;	 
 			}
 				
 		}

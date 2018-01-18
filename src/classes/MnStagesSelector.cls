@@ -21,6 +21,7 @@ public class MnStagesSelector extends ApplicationSelector {
 			MnStage__c.Addr_End_Cust_Zip__c,
 			MnStage__c.Assembly_Name__c,
 			MnStage__c.Assembly_OID__c,
+			MnStage__c.Batch_Job_ID__c,
 			MnStage__c.Competitor_Name__c,
 			MnStage__c.Competitor_OID__c,
 			MnStage__c.Currency_Code__c,
@@ -93,6 +94,7 @@ public class MnStagesSelector extends ApplicationSelector {
 			MnStage__c.Reg_Status__c,
 			MnStage__c.Reg_Win_Date__c,
 			MnStage__c.Reg_Win_Status__c,
+			MnStage__c.Sched_Job_ID__c,
 			MnStage__c.Status__c,
 			MnStage__c.User_Email__c,
 			MnStage__c.User_First_Name__c,
@@ -111,8 +113,13 @@ public class MnStagesSelector extends ApplicationSelector {
 	}
 	
 	public List<MnStage__c> selectByStatus(Set<String> statuses) {
-		p('selectByStatus');
-		return (List<MnStage__c>)Database.query(newQueryFactory().setCondition('Status__c in :statuses').toSOQL());
+		p('selectByStatus(statuses)');
+		return selectByStatus(statuses, null); 	
+	}
+	
+	public List<MnStage__c> selectByStatus(Set<String> statuses, Integer limitCount) {
+		p('selectByStatus(statuses, limitCount)');
+		return (List<MnStage__c>)Database.query(newQueryFactory().setCondition('Status__c in :statuses').setLimit(limitCount).toSOQL());
 	}
 	
 	public Database.QueryLocator selectByStatusQueryLocator(Set<String> statuses) {
