@@ -123,8 +123,13 @@ public class MnStagesSelector extends ApplicationSelector {
 	}
 	
 	public Database.QueryLocator selectByStatusQueryLocator(Set<String> statuses) {
-		p('selectByStatusQueryLocator');
-		return Database.getQueryLocator(newQueryFactory().setCondition('Status__c in :statuses').toSOQL());
+		p('selectByStatusQueryLocator(statuses)');
+		return selectByStatusQueryLocator(statuses, null);
+	}
+	
+	public Database.QueryLocator selectByStatusQueryLocator(Set<String> statuses, Integer limitCount) {
+		p('selectByStatusQueryLocator(statuses, limitCount)');
+		return Database.getQueryLocator(newQueryFactory().setCondition('Status__c in :statuses').setLimit(limitCount).toSOQL());
 	}
     
 }

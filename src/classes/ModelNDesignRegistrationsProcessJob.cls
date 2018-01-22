@@ -22,7 +22,7 @@ global class ModelNDesignRegistrationsProcessJob implements Schedulable, Databas
 		p('start');
 		if (isSerialMode() && isJobActive()) return new MnStagesSelector().selectByStatusQueryLocator(new Set<String> {null}); // Skip processing  	
 		
-		Database.QueryLocator result = new MnStagesSelector().selectByStatusQueryLocator(new Set<String> {STATUS_QUEUED});
+		Database.QueryLocator result = new MnStagesSelector().selectByStatusQueryLocator(new Set<String> {STATUS_QUEUED}, 10000); // Process 10000 records at a time to avoid hitting governors and limits
 		List<MnStage__c> mnStages = new List<MnStage__c>(); 
 		
 		for (Database.QueryLocatorIterator it = result.iterator(); it.hasNext();) {
