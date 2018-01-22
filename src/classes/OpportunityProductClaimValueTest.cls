@@ -1190,12 +1190,14 @@ private class OpportunityProductClaimValueTest {
     @isTest
     static void testMnOpptyProdPriceUpdatedByTmma() {
     	Test.startTest();
-        opptyProdMN.UnitPrice = UNIT_PRICE + 0.1;
-        update opptyProdMN;	
-        
-        Opportunity oppty = [select TMMA_Override__c from Opportunity where Id = :opptyProdMN.OpportunityId];
-        
-        System.assert(oppty.TMMA_Override__c);
+    	System.runAs(getSystemAdminUser()) {
+	        opptyProdMN.UnitPrice = UNIT_PRICE + 0.1;
+	        update opptyProdMN;	
+	        
+	        Opportunity oppty = [select TMMA_Override__c from Opportunity where Id = :opptyProdMN.OpportunityId];
+	        
+	        System.assert(oppty.TMMA_Override__c);
+    	}
         Test.stopTest();
     }
     
@@ -1230,12 +1232,14 @@ private class OpportunityProductClaimValueTest {
     @isTest
     static void testMnOpptyProdQtyPerSysUpdatedByTmma() {
     	Test.startTest();
-        opptyProdMN.Component_Multiplier__c = COMP_MULT + 1;
-        update opptyProdMN;	
-        
-        Opportunity oppty = [select TMMA_Override__c from Opportunity where Id = :opptyProdMN.OpportunityId];
-        
-        System.assert(oppty.TMMA_Override__c);
+    	System.runAs(getSystemAdminUser()) {
+	        opptyProdMN.Component_Multiplier__c = COMP_MULT + 1;
+	        update opptyProdMN;	
+	        
+	        Opportunity oppty = [select TMMA_Override__c from Opportunity where Id = :opptyProdMN.OpportunityId];
+	        
+	        System.assert(oppty.TMMA_Override__c);
+    	}
         Test.stopTest();
     }
     
@@ -1258,12 +1262,14 @@ private class OpportunityProductClaimValueTest {
     @isTest
     static void testMnOpptyExpectedCloseDateUpdatedByTmma() {
     	Test.startTest();
-        opptyProdMN.Opportunity.CloseDate = EXPECTED_CLOSE_DATE.addDays(2);
-        update opptyProdMN.Opportunity;	
-        
-        Opportunity oppty = [select TMMA_Override__c from Opportunity where Id = :opptyProdMN.OpportunityId];
-        
-        System.assert(oppty.TMMA_Override__c);
+    	System.runAs(getSystemAdminUser()) {
+	        opptyProdMN.Opportunity.CloseDate = EXPECTED_CLOSE_DATE.addDays(2);
+	        update opptyProdMN.Opportunity;	
+	        
+	        Opportunity oppty = [select TMMA_Override__c from Opportunity where Id = :opptyProdMN.OpportunityId];
+	        
+	        System.assert(oppty.TMMA_Override__c);
+    	}
         Test.stopTest();
     }
     
@@ -1286,12 +1292,14 @@ private class OpportunityProductClaimValueTest {
     @isTest
     static void testMnOpptyProdDateUpdatedByTmma() {
     	Test.startTest();
-        opptyProdMN.Opportunity.Production_Date__c = PRODUCTION_DATE.addDays(2);
-        update opptyProdMN.Opportunity;	
-        
-        Opportunity oppty = [select TMMA_Override__c from Opportunity where Id = :opptyProdMN.OpportunityId];
-        
-        System.assert(oppty.TMMA_Override__c);
+    	System.runAs(getSystemAdminUser()) {
+	        opptyProdMN.Opportunity.Production_Date__c = PRODUCTION_DATE.addDays(2);
+	        update opptyProdMN.Opportunity;	
+	        
+	        Opportunity oppty = [select TMMA_Override__c from Opportunity where Id = :opptyProdMN.OpportunityId];
+	        
+	        System.assert(oppty.TMMA_Override__c);
+    	}
         Test.stopTest();
     }
     
@@ -1448,4 +1456,9 @@ private class OpportunityProductClaimValueTest {
     static Product2 createShortLivedProduct() {
         return new Product2(Name = 'Test Product', MAG__c = MAG_SHORT_LIVED, IsActive = true);
     }
+    
+    static User getSystemAdminUser() {
+    	return [select Id from User where ProfileId = :CommonUtils.getSystemAdminProfileId() and IsActive = true limit 1];	
+    }
+    
 }
