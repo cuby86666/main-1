@@ -161,7 +161,7 @@ public class OpportunityLineItems extends ApplicationDomain {
         
         for (OpportunityLineItem opptyProd : (List<OpportunityLineItem>)this.records) {
             for (Id opptyProdSchedId : opptyProdSchedIds) {
-                if (opptyProdSchedsByOpptyProdId.ContainsKey(opptyProd.Id) && opptyProdSchedsByOpptyProdId.get(opptyProd.Id).ContainsKey(opptyProdSchedId)) {
+                if (opptyProdSchedsByOpptyProdId.containsKey(opptyProd.Id) && opptyProdSchedsByOpptyProdId.get(opptyProd.Id).containsKey(opptyProdSchedId)) {
                     opptyProdSchedsDeleted.add(opptyProdSchedsByOpptyProdId.get(opptyProd.Id).get(opptyProdSchedId));
 
                 }
@@ -274,7 +274,7 @@ public class OpportunityLineItems extends ApplicationDomain {
                 if(opptyProdOld.Id == opptyProdNew.Id) {
                     if (!LOST_CANCELLED.contains(opptyProdOld.Prod_Lost_Cancelled__c) && LOST_CANCELLED.contains(opptyProdNew.Prod_Lost_Cancelled__c)) {
                         for (Id opptyProdSchedId : opptyProdSchedIds) {
-                            if (opptyProdSchedsByOpptyProdId.ContainsKey(opptyProdNew.Id) && opptyProdSchedsByOpptyProdId.get(opptyProdNew.Id).ContainsKey(opptyProdSchedId)) { //updated by Scarlett on Jan 19
+                            if (opptyProdSchedsByOpptyProdId.containsKey(opptyProdNew.Id) && opptyProdSchedsByOpptyProdId.get(opptyProdNew.Id).containsKey(opptyProdSchedId)) { //updated by Scarlett on Jan 19
                                 opptyProdSchedsDeleted.add(opptyProdSchedsByOpptyProdId.get(opptyProdNew.Id).get(opptyProdSchedId));
                                 system.debug('=====[Scarlett] delete oppty prod scheds when product is changed to Lost...');
                             }
