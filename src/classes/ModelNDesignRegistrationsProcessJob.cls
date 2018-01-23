@@ -20,7 +20,7 @@ global class ModelNDesignRegistrationsProcessJob implements Schedulable, Databas
 	
 	global Database.QueryLocator start(Database.BatchableContext bc) {
 		p('start');
-		if (isSerialMode() && isJobActive()) return new MnStagesSelector().selectByStatusQueryLocator(new Set<String> {null}); // Skip processing  	
+		if (isSerialMode() && isJobActive(bc.getJobId())) return new MnStagesSelector().selectByStatusQueryLocator(new Set<String> {null}); // Skip processing  	
 		
 		Database.QueryLocator result = new MnStagesSelector().selectByStatusQueryLocator(new Set<String> {STATUS_QUEUED}, 10000); // Process 10000 records at a time to avoid hitting governors and limits
 		List<MnStage__c> mnStages = new List<MnStage__c>(); 
@@ -77,9 +77,9 @@ global class ModelNDesignRegistrationsProcessJob implements Schedulable, Databas
 		return Boolean.valueOf(((List<Model_N_Stage_Setting__mdt>)new ModelNStageSettingsSelector().selectWhere('Name__c = \'Serial_Mode\'')).get(0).Value__c);	
 	}
 	
-	private Boolean isJobActive() {
+	private Boolean isJobActive(Id jobId) {
 		p('isJobActive');	
-		return new AsyncApexJobsSelector().selectWhere('JobType = \'BatchApex\' and ApexClass.Name = \'' + ModelNDesignRegistrationsProcessJob.class + '\' and Status = \'Processing\'').size() > 0;  
+		return new AsyncApexJobsSelector().selectWhere('Id != \'' + jobId + '\' and ParentJobId != \'' + jobId + '\' and JobType = \'BatchApex\' and ApexClass.Name = \'' + ModelNDesignRegistrationsProcessJob.class + '\' and Status in (\'Holding\', \'Queued\', \'Preparing\', \'Processing\')').size() > 0;  
 	}
 	
 	private void updateStatus(Id jobId, String message) {
