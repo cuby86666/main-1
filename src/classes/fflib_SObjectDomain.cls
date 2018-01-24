@@ -90,9 +90,9 @@ public virtual with sharing class fflib_SObjectDomain
 	/**
      * Constructor required for Test.createStub
      **/
-    public fflib_SObjectDomain() 
+    public fflib_SObjectDomain()
     {
-        System.assert(System.Test.isRunningTest());
+        //System.assert(System.Test.isRunningTest());
     }
 	
 	/**
