@@ -1,8 +1,9 @@
 public class MnStages extends ApplicationDomain {
 		
-	public enum Status {QUEUED, PROCESSING, COMPLETED, INVALID, DUPLICATED, IGNORED, FAILED, ABORTED}
+	public enum Status {HOLDING, QUEUED, PROCESSING, COMPLETED, INVALID, DUPLICATED, IGNORED, FAILED, ABORTED}
 		
 	public static final Map<Status, String> STATUSES = new Map<Status, String> {
+		Status.HOLDING => 'Holding',
 		Status.QUEUED => 'Queued',
 		Status.PROCESSING => 'Processing',
 		Status.COMPLETED => 'Completed',
@@ -13,6 +14,7 @@ public class MnStages extends ApplicationDomain {
 		Status.ABORTED => 'Aborted'
 	};
 	
+	public static final String STATUS_HOLDING = STATUSES.get(Status.HOLDING);
 	public static final String STATUS_QUEUED = STATUSES.get(Status.QUEUED);
 	public static final String STATUS_PROCESSING = STATUSES.get(Status.PROCESSING);
 	public static final String STATUS_COMPLETED = STATUSES.get(Status.COMPLETED);
@@ -70,19 +72,37 @@ public class MnStages extends ApplicationDomain {
 	private static final String STAGE_LOST = Opportunities.STAGE_LOST;
 	private static final String STAGE_CANCELLED = Opportunities.STAGE_CANCELLED;
 	
-	private List<MnStage__c> mnStages;  
+	private List<MnStage__c> mnStages;
 	
-	public MnStages(List<MnStage__c> mnStages) {
-		super(mnStages);
-		
-		this.mnStages = (List<MnStage__c>)this.records;
-		ignore();
-		deduplicate();
+	private MnStages() {}   
+	
+	private MnStages(List<MnStage__c> mnStages) {
+		super(mnStages);	
 	}
 
 	public class Constructor implements fflib_SObjectDomain.IConstructable {
 		public fflib_SObjectDomain construct(List<SObject> sObjectList) {
 			return new MnStages(sObjectList);
+		}
+	}
+	
+	public static MnStages newInstance(List<MnStage__c> mnStages) {
+		MnStages newInstance = new MnStages();
+		newInstance.mnStages = mnStages;
+		newInstance.ignore();
+		newInstance.deduplicate();
+		
+		return newInstance; 	
+	} 
+	
+	public override void onBeforeInsert() {
+		p('onBeforeInsert');
+		for (MnStage__c ms : (List<MnStage__c>)this.records) {
+			if (!ModelNDesignRegistrationsProcessJob.isSerialMode() && CommonUtils.isIntegrationUser()) {
+				ms.Status__c = STATUS_HOLDING;	
+			} else {
+				ms.Status__c = STATUS_QUEUED;	
+			}
 		}
 	}
 	

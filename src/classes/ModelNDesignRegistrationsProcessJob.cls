@@ -1,8 +1,11 @@
 global class ModelNDesignRegistrationsProcessJob implements Schedulable, Database.Batchable<SObject> {
 	
+	private static final String STATUS_HOLDING = MnStages.STATUS_HOLDING;
 	private static final String STATUS_QUEUED = MnStages.STATUS_QUEUED;
 	private static final String STATUS_PROCESSING = MnStages.STATUS_PROCESSING;
 	private static final String STATUS_FAILED = MnStages.STATUS_FAILED;
+	
+	private static final Integer RECORD_COUNT_LIMIT = 10000; // Process 10000 records at a time to avoid hitting governors and limits 
 		
 	private Id schedJobId;
 			
@@ -22,7 +25,15 @@ global class ModelNDesignRegistrationsProcessJob implements Schedulable, Databas
 		p('start');
 		if (isJobActive(bc.getJobId())) return new MnStagesSelector().selectByStatusQueryLocator(new Set<String> {null}); // Skip processing
 		
-		Database.QueryLocator result = new MnStagesSelector().selectByStatusQueryLocator(new Set<String> {STATUS_QUEUED}, 10000); // Process 10000 records at a time to avoid hitting governors and limits
+		Database.QueryLocator result;
+		
+		if (isSerialMode()) {
+			result = new MnStagesSelector().selectByStatusQueryLocator(new Set<String> {STATUS_HOLDING, STATUS_QUEUED}, RECORD_COUNT_LIMIT); 	
+		} else {
+			result = new MnStagesSelector().selectByStatusQueryLocator(new Set<String> {STATUS_QUEUED}, RECORD_COUNT_LIMIT);
+		} 
+		
+		
 		List<MnStage__c> mnStages = new List<MnStage__c>(); 
 		
 		for (Database.QueryLocatorIterator it = result.iterator(); it.hasNext();) {
@@ -43,9 +54,7 @@ global class ModelNDesignRegistrationsProcessJob implements Schedulable, Databas
 	global void execute(Database.BatchableContext bc, List<MnStage__c> scope) {
 		p('execute(batch)');
 		try {
-			scope = (List<MnStage__c>)new MnStagesSelector().selectSObjectsById(new Map<Id, MnStage__c>(scope).keySet());
-			MnStages mnStages = new MnStages(scope);
-			mnStages.processData();
+			MnStages.newInstance((List<MnStage__c>)new MnStagesSelector().selectSObjectsById(new Map<Id, MnStage__c>(scope).keySet())).processData();
 		} catch (Exception e) {
 			String message = 'Scheduled Job Id: ' + this.schedJobId + '<br><br>' +
 							 'Exception type caught: ' + e.getTypeName() + '<br>' +
@@ -72,7 +81,7 @@ global class ModelNDesignRegistrationsProcessJob implements Schedulable, Databas
 		}
 	}
 	
-	private Boolean isSerialMode() {
+	public static Boolean isSerialMode() {
 		p('isSerialMode');
 		return Boolean.valueOf(((List<Model_N_Stage_Setting__mdt>)new ModelNStageSettingsSelector().selectWhere('Name__c = \'Serial_Mode\'')).get(0).Value__c);	
 	}

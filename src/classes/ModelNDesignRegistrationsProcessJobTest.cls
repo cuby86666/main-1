@@ -632,7 +632,7 @@ private class ModelNDesignRegistrationsProcessJobTest {
     }
     
     private static void processData() {
-    	new MnStages(new MnStagesSelector().selectByStatus(new Set<String> {STATUS_QUEUED})).processData();	
+    	MnStages.newInstance(new MnStagesSelector().selectByStatus(new Set<String> {STATUS_QUEUED})).processData();
     }
     
     private static Id runBatch() {
