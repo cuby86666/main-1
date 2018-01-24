@@ -2,9 +2,11 @@
 private class ModelNDesignRegistrationsProcessJobTest {
 	
 	private static final String STATUS_QUEUED = MnStages.STATUS_QUEUED;
+	private static final String STATUS_PROCESSING = MnStages.STATUS_PROCESSING;
 	private static final String STATUS_COMPLETED = MnStages.STATUS_COMPLETED;
 	private static final String STATUS_DUPLICATED = MnStages.STATUS_DUPLICATED;
 	private static final String STATUS_IGNORED = MnStages.STATUS_IGNORED;
+	private static final String STATUS_FAILED = MnStages.STATUS_FAILED;
 	
 	private static final Date PRODUCTION_DATE = Date.newInstance(2014, 02, 16); 
 	private static final Date WIN_DATE = Date.newInstance(2012, 01, 08);
@@ -188,6 +190,23 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	
     	List<OpportunityLineItem> opptyProds = new OpportunityLineItemsSelector().selectByLegacyId(new Set<String> {mnStageClone.Reg_Part_OID__c});
     	System.assertEquals(1, opptyProds.size());
+    }
+    
+    @isTest
+    static void testUpdateStatus() {
+    	String jobId = '7070E00000MlbZUQAZ';
+    	String message = 'some error';
+    	
+    	mnStage.Status__c = STATUS_PROCESSING;	
+    	mnStage.Batch_Job_ID__c = jobId;
+    	
+    	update mnStage;
+    	
+    	new ModelNDesignRegistrationsProcessJob().updateStatus(jobId, message);
+    	
+    	MnStage__c ms = new MnStagesSelector().selectById(new Set<Id> {mnStage.Id}).get(0);
+    	System.assertEquals(STATUS_FAILED, ms.Status__c);
+    	System.assertEquals(message, ms.Message__c);
     }
     
     @isTest
@@ -629,6 +648,11 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	
     	Opportunity oppty = new OpportunitiesSelector().selectByLegacyId(new Set<String> {opptyExtId}).get(0); 
     	System.assertEquals(STAGE_CANCELLED, oppty.StageName);
+    }
+    
+    @isTest
+    static void testSelectByStatusQueryLocator() {
+    	System.assertNotEquals(null, new MnStagesSelector().selectByStatusQueryLocator(new Set<String> {STATUS_QUEUED}));
     }
     
     private static void processData() {

@@ -97,6 +97,7 @@ global class ModelNDesignRegistrationsProcessJob implements Schedulable, Databas
 		}	
 	}
 	
+	@TestVisible 
 	private void updateStatus(Id jobId, String message) {
 		p('updateStatus');
 		List<MnStage__c> mnStages = new MnStagesSelector().selectByStatus(new Set<String> {STATUS_PROCESSING});
