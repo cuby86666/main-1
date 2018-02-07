@@ -308,7 +308,6 @@ private class ModelNDesignRegistrationsProcessJobTest {
     static void testIgnore() {
     	MnStage__c mnStageClone = mnStage.clone(false, true, false, false);
     	mnStageClone.Status__c = STATUS_QUEUED;
-    	mnStageClone.Message__c = '';
     	mnStageClone.Reg_Oppty_Num__c = '819834';
     	mnStageClone.Reg_Part_OID__c = '1048946';
     	mnStageClone.Prod_Family__c = 'R02';
@@ -321,6 +320,22 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	System.assertEquals(null, ms.Opportunity__c);
     	
     	List<Opportunity> oppties = new OpportunitiesSelector().selectByLegacyId(new Set<String> {mnStageClone.Reg_Oppty_Num__c + '-' + mnStageClone.Reg_Part_OID__c});
+    	System.assertEquals(0, oppties.size());	
+    	
+    	mnStageClone = mnStage.clone(false, true, false, false);
+    	mnStageClone.Status__c = STATUS_QUEUED;
+    	mnStageClone.Reg_Oppty_Num__c = '819835';
+    	mnStageClone.Reg_Part_OID__c = '1048947';
+    	mnStageClone.Reg_Status__c = 'Preparing';
+    	insert mnStageClone;
+    	
+    	processData();
+    	
+    	ms = new MnStagesSelector().selectById(new Set<Id> {mnStageClone.Id}).get(0);    	
+    	System.assertEquals(STATUS_IGNORED, ms.Status__c);
+    	System.assertEquals(null, ms.Opportunity__c);
+    	
+    	oppties = new OpportunitiesSelector().selectByLegacyId(new Set<String> {mnStageClone.Reg_Oppty_Num__c + '-' + mnStageClone.Reg_Part_OID__c});
     	System.assertEquals(0, oppties.size());	
     }
     

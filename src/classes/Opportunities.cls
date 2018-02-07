@@ -102,24 +102,7 @@ public class Opportunities extends ApplicationDomain {
 		p('updateDesignWinApprovers');
 		OpportunityApproval.setAllApprovers((List<Opportunity>)this.records, uow);
 	}
-	/*
-	public List<Opportunity> updateModelNExpiredOpportunities(fflib_ISObjectUnitOfWork uow) {
-		p('updateModelNExpiredOpportunities');
-		List<Opportunity> opptiesUpdated = new List<Opportunity>();
-        
-        for (Opportunity o : (List<Opportunity>)this.records) {
-       		o.StageName = STAGE_CANCELLED; //J only update oppties whose stage is 'Lost' 
-            o.Lost_Date__c = o.Expiration_Date__c;
-            o.Lost_Reason__c = 'Expired';
-            o.Design_Win_Approval_Process__c = APPROVAL_STATUSES.get(ApprovalStatus.LOST); //J to be removed 
-            opptiesUpdated.add(o);
-        }
-       	       
-        uow.registerDirty(opptiesUpdated);
-        
-        return opptiesUpdated; 
-	}
-	*/	
+	
 	private void bypassValidation(Map<Id, Opportunity> existingRecords) {
 		p('bypassValidation');
 		for (Opportunity oppty : (List<Opportunity>)this.records) {
@@ -376,7 +359,7 @@ public class Opportunities extends ApplicationDomain {
 							}
 							
 							if (opptyNew.RecordTypeId == OpportunitiesSelector.getMnRecordTypeId()) {
-								if (OPEN_STAGES.contains(opptyOld.StageName) && LOST_STAGES.contains(opptyNew.StageName)) {
+								if (!LOST_STAGES.contains(opptyOld.StageName) && LOST_STAGES.contains(opptyNew.StageName)) {
 									for (OpportunityLineItem opptyProd : opptyProds) {
 										OpportunityLineItem opptyProdUpdate = new OpportunityLineItem(
 											Id = opptyProd.Id,
@@ -391,7 +374,7 @@ public class Opportunities extends ApplicationDomain {
 									}
 								}
 								
-								if (LOST_STAGES.contains(opptyOld.StageName) && OPEN_STAGES.contains(opptyNew.StageName)) {
+								if (LOST_STAGES.contains(opptyOld.StageName) && !LOST_STAGES.contains(opptyNew.StageName)) {
 									for (OpportunityLineItem opptyProd : opptyProds) {
 										OpportunityLineItem opptyProdUpdate = new OpportunityLineItem(
 											Id = opptyProd.Id,
@@ -584,24 +567,6 @@ public class Opportunities extends ApplicationDomain {
 	    		}
 	    	}
         }
-        /* Removed for One Funnel 2.0 project 
-        // Set Design Win Approval Status for MN Oppty
-        for (Opportunity opptyNew : (List<Opportunity>)this.records) {
-        	if (opptyNew.RecordTypeId == OpportunitiesSelector.getMnRecordTypeId()) {
-        		if (OPEN_STAGES.contains(opptyNew.StageName)) {
-        			opptyNew.Design_Win_Approval_Process__c = APPROVAL_STATUSES.get(ApprovalStatus.OPEN);
-        		}
-        		
-        		if (opptyNew.StageName == STAGE_COMMITMENT) {
-        			opptyNew.Design_Win_Approval_Process__c = APPROVAL_STATUSES.get(ApprovalStatus.APPROVED);
-        		}
-        		
-        		if(LOST_STAGES.contains(opptyNew.StageName)) {
-        			opptyNew.Design_Win_Approval_Process__c = APPROVAL_STATUSES.get(ApprovalStatus.LOST);
-        		}
-        	}
-        }
-        */
     }
     
 	private void setParentAccountIdText(Opportunity oppty, Id parentId) {

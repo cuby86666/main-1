@@ -91,6 +91,7 @@ public class MnStages extends ApplicationDomain {
 		newInstance.mnStages = mnStages;
 		newInstance.ignore();
 		newInstance.deduplicate();
+		newInstance.invalidate();
 		
 		return newInstance; 	
 	} 
@@ -208,13 +209,6 @@ public class MnStages extends ApplicationDomain {
 			opptyProd.Win_Status__c = ms.Reg_Part_Win_Status__c;
 			
 			opptyProds.add(opptyProd);
-			
-			String message = checkMnStageInvalid(ms); 
-			
-			if (message != '') {
-				ms.Status__c = STATUS_INVALID;
-				ms.Message__c = message;
-			}
 		}
 		
 		update this.mnStages; 	
@@ -265,19 +259,17 @@ public class MnStages extends ApplicationDomain {
 		p('ignore');
 		Map<Id, MnStage__c> mnStagesById = new Map<Id, MnStage__c>(this.mnStages); 
 		
-		List<Model_N_Stage_Setting__mdt> mnStageSettings = (List<Model_N_Stage_Setting__mdt>)new ModelNStageSettingsSelector().selectWhere('Name__c = \'' + MnStage__c.Prod_Family__c.getDescribe().getName() + '\'');
-		Set<String> ignoredMags = new Set<String>();
-		
-		for (Model_N_Stage_Setting__mdt mnss : mnStageSettings) {
-			ignoredMags.add(mnss.Value__c);	
-		}
+		List<Model_N_Stage_Setting__mdt> mnStageSettings = (List<Model_N_Stage_Setting__mdt>)new ModelNStageSettingsSelector().selectAll();
 		
 		for (MnStage__c ms : this.mnStages) {
-			if (ignoredMags.contains(ms.Prod_Family__c)) {
-				ms.Status__c = STATUS_IGNORED;
-				ms.Message__c = 'Prod Family (MAG): ' + ms.Prod_Family__c + ' is ignored.';
-				ms.Opportunity__c = null;
-				mnStagesById.remove(ms.Id);		
+			for (Model_N_Stage_Setting__mdt mnss : mnStageSettings) {
+				if (mnss.Name__c.endsWithIgnoreCase('__c') && ms.get(mnss.Name__c) == mnss.Value__c) {
+					ms.Status__c = STATUS_IGNORED;
+					ms.Message__c = mnss.Name__c + ': ' + mnss.Value__c + ' is ignored.';
+					ms.Opportunity__c = null;
+					mnStagesById.remove(ms.Id);	
+					break;	
+				}
 			}
 		}
 		
@@ -309,6 +301,28 @@ public class MnStages extends ApplicationDomain {
 		update this.mnStages;
 		
 		this.mnStages = mnStagesDeduped.values();		
+	}
+	
+	private void invalidate() {
+		p('invalidate');
+		Map<Id, MnStage__c> mnStagesById = new Map<Id, MnStage__c>(this.mnStages); 
+		
+		for (MnStage__c ms : this.mnStages) {
+			ms.Message__c = '';
+			
+			String message = checkMnStageInvalid(ms);
+			
+			if (message != '') {
+				ms.Status__c = STATUS_INVALID;
+				ms.Message__c = message;
+				ms.Opportunity__c = null;
+				mnStagesById.remove(ms.Id);	
+			}
+		}
+		
+		update this.mnStages;
+		
+		this.mnStages = mnStagesById.values();	
 	}
 	
 	private Map<Id, Boolean> checkOpptyProdsExisted() {
