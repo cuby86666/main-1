@@ -67,8 +67,6 @@ public class OpportunityLineItems extends ApplicationDomain {
 		
 		OpportunityProductClaimValue.updateTmmaOverrideIfOpportunityProductMnUpdatedByTmma((Map<Id, OpportunityLineItem>)existingRecords, new Map<Id, OpportunityLineItem>((List<OpportunityLineItem>)this.records), uow);
 		
-		OpportunityLineItemTrigger.onAfterInsert_Update_Delete((List<OpportunityLineItem>)this.records);
-		
 		deleteLostCancelledOpptyProdScheds((List<OpportunityLineItem>)existingRecords.values(), uow);
 		
 		createReOpenOpptyProdScheds((List<OpportunityLineItem>)existingRecords.values(), uow);
@@ -76,6 +74,8 @@ public class OpportunityLineItems extends ApplicationDomain {
 		updateOpptyProdScheds((List<OpportunityLineItem>)existingRecords.values(), uow);
 		
 		uow.commitWork();
+		
+		OpportunityLineItemTrigger.onAfterInsert_Update_Delete((List<OpportunityLineItem>)this.records);
 	}
 	
 	public override void onAfterDelete() {
