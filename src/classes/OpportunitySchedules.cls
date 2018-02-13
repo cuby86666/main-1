@@ -24,42 +24,25 @@ public class OpportunitySchedules extends ApplicationDomain {
 	
 	public override void onAfterInsert() {
 		p('onAfterInsert');	
-		fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+		updateOpptyProdQty((List<OpportunitySchedule__c>)this.records);
 		
-		updateOpptyProdQty((List<OpportunitySchedule__c>)this.records, uow);
-		
-		createOpptyProdScheds(uow);
-		
-		uow.commitWork();
+		createOpptyProdScheds();
 	}
 	
 	public override void onAfterUpdate(Map<Id, SObject> existingRecords) {
 		p('onAfterUpdate');
-		fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+		updateOpptyProdQty((List<OpportunitySchedule__c>)existingRecords.values());
 		
-		updateOpptyProdQty((List<OpportunitySchedule__c>)existingRecords.values(), uow);
-		
-		updateOpptyProdScheds((List<OpportunitySchedule__c>)existingRecords.values(), uow);
-		
-		uow.commitWork();
+		updateOpptyProdScheds((List<OpportunitySchedule__c>)existingRecords.values());
 	}
 	
 	public override void onAfterDelete() {
 		p('onAfterDelete');	
-		fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+		updateOpptyProdQty((List<OpportunitySchedule__c>)this.records);
 		
-		updateOpptyProdQty((List<OpportunitySchedule__c>)this.records, uow);
+		Set<Id> opptyIds = deleteOpptyProdScheds();
 		
-		Set<Id> opptyIds = deleteOpptyProdScheds(uow);
-		
-		uow.commitWork();
-		
-		// Need to commit and start a new uow because updateAllOpptyProdSchedsPriceAndFrozenPrice depends on the result of deleteOpptyProdScheds.
-		uow = Application.UnitOfWork.newInstance();
-		
-		updateAllOpptyProdSchedsPriceAndFrozenPrice(opptyIds, uow);
-		
-		uow.commitWork();
+		updateAllOpptyProdSchedsPriceAndFrozenPrice(opptyIds);
 	}
 	
 	private void updateOpptyScheds(List<OpportunitySchedule__c> opptySchedsOld){
@@ -95,7 +78,7 @@ public class OpportunitySchedules extends ApplicationDomain {
         }
     }  
 	
-	private void updateOpptyProdQty(List<OpportunitySchedule__c> opptyScheds, fflib_ISObjectUnitOfWork uow) {
+	private void updateOpptyProdQty(List<OpportunitySchedule__c> opptyScheds) {
 		p('updateOpptyProdQty');
 		Set<Id> opptyIds = new Set<Id>();
         
@@ -125,10 +108,10 @@ public class OpportunitySchedules extends ApplicationDomain {
             }
         }          
         
-        uow.registerDirty(opptyProdsUpdated);
+        update opptyProdsUpdated;
     }
     
-    private void createOpptyProdScheds(fflib_ISObjectUnitOfWork uow){
+    private void createOpptyProdScheds(){
     	p('createOpptyProdScheds');
         Set<Id> opptyIds = new Set<Id>();
         OpportunityProductSchedule__c opptyProdSchedNew;
@@ -195,7 +178,7 @@ public class OpportunitySchedules extends ApplicationDomain {
         	}// has Opportunity Product
         }
         
-        uow.registerNew(opptyProdSchedsCreated);
+        insert opptyProdSchedsCreated;
     }
     
     private Map<Id, List<OpportunitySchedule__c>> getOpptySchedsByOpptyId(Set<Id> opptyIds){
@@ -230,7 +213,7 @@ public class OpportunitySchedules extends ApplicationDomain {
         return result;
     }
     
-    private void updateOpptyProdScheds(List<OpportunitySchedule__c> opptySchedsOld, fflib_ISObjectUnitOfWork uow) {
+    private void updateOpptyProdScheds(List<OpportunitySchedule__c> opptySchedsOld) {
     	p('updateOpptyProdScheds');
     	Set<Id> opptyIds = new Set<Id>();
         OpportunityProductSchedule__c opptyProdSchedUpdated;
@@ -282,7 +265,7 @@ public class OpportunitySchedules extends ApplicationDomain {
 			}
 	    }
 	    
-	    uow.registerDirty(opptyProdSchedsUpdated);
+	    update opptyProdSchedsUpdated;
     }
     
     private Map<Id, Map<Id, OpportunityProductSchedule__c>> getOpptyProdSchedsByOpptySchedId(List<OpportunitySchedule__c> opptyScheds){
@@ -313,7 +296,7 @@ public class OpportunitySchedules extends ApplicationDomain {
         return result;
     }
     
-    private Set<Id> deleteOpptyProdScheds(fflib_ISObjectUnitOfWork uow){
+    private Set<Id> deleteOpptyProdScheds(){
     	p('deleteOpptyProdScheds');
         //Oppty Sched Id -> (Oppty Prod Sched Id -> Oppty Prod Sched)
         List<OpportunityProductSchedule__c> opptyProdSchedsDeleted = new List<OpportunityProductSchedule__c>();
@@ -330,12 +313,12 @@ public class OpportunitySchedules extends ApplicationDomain {
             }
         }
         
-		uow.registerDeleted(opptyProdSchedsDeleted);
+		delete opptyProdSchedsDeleted;
 		
 		return opptyIds; 
 	}
     
-    private void updateAllOpptyProdSchedsPriceAndFrozenPrice(Set<Id> opptyIds, fflib_ISObjectUnitOfWork uow){
+    private void updateAllOpptyProdSchedsPriceAndFrozenPrice(Set<Id> opptyIds){
     	p('updateAllOpptyProdSchedsPriceAndFrozenPrice');
         Map<Id, List<OpportunityProductSchedule__c>> opptyProdAndOpptyProdSched = new Map<Id, List<OpportunityProductSchedule__c>>();
     	List<OpportunityLineItem> opptyProdList;
@@ -374,7 +357,7 @@ public class OpportunitySchedules extends ApplicationDomain {
 			}
 		}
 		
-		uow.registerDirty(opptyProdSchedsUpdated);
+		update opptyProdSchedsUpdated;
     }
     
     private Map<Id, List<OpportunityProductSchedule__c>> getOpptyProdSchedsByOpptyProdId(Set<Id> opptyIds, Map<Id, List<OpportunityLineItem>> opptyAndOpptyProdList){

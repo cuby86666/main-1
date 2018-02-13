@@ -74,26 +74,18 @@ public class Opportunities extends ApplicationDomain {
 	
 	public override void onAfterInsert() {
 		p('onAfterInsert');	
-		fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+		createMnOpptyScheds();
 		
-		createMnOpptyScheds(uow);
-		
-		uow.commitWork();
-        
-        OpportunityService.updateOpptyClaimValueHistoryTracking((List<Opportunity>)this.records);
+		OpportunityService.updateOpptyClaimValueHistoryTracking((List<Opportunity>)this.records);
 	}
 	
 	public override void onAfterUpdate(Map<Id, SObject> existingRecords) {
 		p('onAfterUpdate');
-		fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+		updateOpptyScheds((List<Opportunity>)existingRecords.values());
 		
-		updateOpptyScheds((List<Opportunity>)existingRecords.values(), uow);
+		updateOpptyProdLostCancelledInfo((List<Opportunity>)existingRecords.values());
 		
-		updateOpptyProdLostCancelledInfo((List<Opportunity>)existingRecords.values(), uow);
-		
-		updateOpptyProdPrograms((Map<Id, Opportunity>)existingRecords, uow);
-		
-		uow.commitWork();
+		updateOpptyProdPrograms((Map<Id, Opportunity>)existingRecords);
 		
 		OpportunityService.updateOpptyClaimValueHistoryTracking((List<Opportunity>)existingRecords.values());
 	}
@@ -133,7 +125,7 @@ public class Opportunities extends ApplicationDomain {
 		}
 	}
 	
-	private void updateOpptyProdPrograms(Map<Id, Opportunity> existingRecords, fflib_ISObjectUnitOfWork uow) {
+	private void updateOpptyProdPrograms(Map<Id, Opportunity> existingRecords) {
 		p('updateOpptyProdPrograms');
 		Set<Id> opptyIds = new Set<Id>();
 		
@@ -153,12 +145,12 @@ public class Opportunities extends ApplicationDomain {
 	        }
 	        
 	        if (opptyProds.size() > 0) {
-	        	new OpportunityLineItems(opptyProds).updatePrograms(uow);
+	        	new OpportunityLineItems(opptyProds).updateOpptyProdPrograms();
 	        }	
 		}	
 	}
 	
-	private void createMnOpptyScheds(fflib_ISObjectUnitOfWork uow) {
+	private void createMnOpptyScheds() {
 		p('createMnOpptyScheds(uow)');
 		List<SObject> opptiesMn = new List<SObject>();
 		
@@ -171,7 +163,7 @@ public class Opportunities extends ApplicationDomain {
 		if (opptiesMn.size() > 0) {
 			List<OpportunitySchedule__c> opptySchedsCreated = createMnOpptyScheds(opptiesMn);
 		    
-			uow.registerNew(opptySchedsCreated);	
+			insert opptySchedsCreated;
 		}	
 	}
 	
@@ -222,7 +214,7 @@ public class Opportunities extends ApplicationDomain {
 		return result;	
 	} 
 	
-	private void updateOpptyScheds(List<Opportunity> existingRecords, fflib_ISObjectUnitOfWork uow) {
+	private void updateOpptyScheds(List<Opportunity> existingRecords) {
 		p('updateOpptyScheds');
 		Map<Id, Opportunity> opptiesOldMn = new Map<Id, Opportunity>();
 		Map<Id, Opportunity> opptiesNewMn = new Map<Id, Opportunity>();
@@ -248,13 +240,13 @@ public class Opportunities extends ApplicationDomain {
 		if (opptiesOldMn.size() > 0 && opptiesNewMn.size() > 0) {
 			List<OpportunitySchedule__c> opptySchedsUpdated = updateMnOpptyScheds(opptiesOldMn, opptiesNewMn);
 			
-			uow.registerDirty(opptySchedsUpdated);	
+			update opptySchedsUpdated;	
 		}
 		
 		if (opptiesOldSfdc.size() > 0 && opptiesNewSfdc.size() > 0) {
 			List<OpportunitySchedule__c> opptySchedsUpdated = updateSfdcOpptyScheds(opptiesOldSfdc, opptiesNewSfdc);
 			
-			uow.registerDirty(opptySchedsUpdated);	
+			update opptySchedsUpdated;	
 		}
 	}
 	
@@ -325,7 +317,7 @@ public class Opportunities extends ApplicationDomain {
 		return result;	
 	}
 	
-	private void updateOpptyProdLostCancelledInfo(List<Opportunity> existingRecords, fflib_ISObjectUnitOfWork uow){
+	private void updateOpptyProdLostCancelledInfo(List<Opportunity> existingRecords){
 		p('updateOpptyProdLostCancelledInfo');
 		List<OpportunityLineItem> opptyProds;
 		List<OpportunityLineItem> opptyProdsUpdated = new List<OpportunityLineItem>();
@@ -397,7 +389,7 @@ public class Opportunities extends ApplicationDomain {
 			}
 		}
 		
-		uow.registerDirty(opptyProdsUpdated);
+		update opptyProdsUpdated; 
 	}
 		
 	private Map<Id, List<OpportunityLineItem>> getOpptyProds(List<Opportunity> oppties){

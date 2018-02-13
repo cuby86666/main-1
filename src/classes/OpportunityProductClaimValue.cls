@@ -262,7 +262,7 @@ public class OpportunityProductClaimValue {
         }	
     }
     
-    public static void updateTmmaOverrideIfOpportunityProductMnUpdatedByTmma(Map<Id, OpportunityLineItem> opptyLineItemsOld, Map<Id, OpportunityLineItem> opptyLineItemsNew, fflib_ISObjectUnitOfWork uow) {
+    public static void updateTmmaOverrideIfOpportunityProductMnUpdatedByTmma(Map<Id, OpportunityLineItem> opptyLineItemsOld, Map<Id, OpportunityLineItem> opptyLineItemsNew) {
     	p2('updateTmmaOverrideIfOpportunityProductMnUpdatedByTmma');
     	Map<Id, Opportunity> opptys = getOpptyRecordTypeIds(opptyLineItemsNew.values());
     	
@@ -276,14 +276,20 @@ public class OpportunityProductClaimValue {
     	
     	if (opptyMNs.size() == 0) return;
     	
+    	List<Opportunity> opptiesUpdated = new List<Opportunity>(); 
+    	
     	for (OpportunityLineItem oliNew : opptyLineItemsNew.values()) {
     		OpportunityLineItem oliOld = opptyLineItemsOld.get(oliNew.Id);    
             Opportunity oppty = opptyMNs.get(oliNew.OpportunityId);
             
             if (oppty != null && isMnRecordType(oppty) && !CommonUtils.isDataAdminUser() && isTmmaOverrideFieldsChanged(oliOld, oliNew, TMMA_OVERRIDE_FIELDS_OPPTY_PROD)) {
             	oppty.TMMA_Override__c = true;
-            	uow.registerDirty(oppty);
+            	opptiesUpdated.add(oppty);
             }		
+    	}
+    	
+    	if (opptiesUpdated.size() > 0) {
+    		update opptiesUpdated;
     	}
     }
     

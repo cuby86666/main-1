@@ -1458,7 +1458,7 @@ private class OpportunityProductClaimValueTest {
     }
     
     static User getSystemAdminUser() {
-    	return [select Id from User where ProfileId = :CommonUtils.getSystemAdminProfileId() and IsActive = true limit 1];	
+    	return [select Id from User where ProfileId = :CommonUtils.getSystemAdminProfileId() and Id != :CommonUtils.getDataAdminUserId() and IsActive = true limit 1];	
     }
     
 }

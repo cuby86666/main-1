@@ -52,41 +52,29 @@ public class OpportunityLineItems extends ApplicationDomain {
 	
 	public override void onAfterInsert() {
 		p('onAfterInsert');	
-		fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
-		
 		OpportunityLineItemTrigger.onAfterInsert_Update_Delete((List<OpportunityLineItem>)this.records);
 		
-		createOpptyProdScheds(uow);
-		
-		uow.commitWork();
+		createOpptyProdScheds();
 	}
 	
 	public override void onAfterUpdate(Map<Id, SObject> existingRecords) {
 		p('onAfterUpdate');
-		fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
-		
-		OpportunityProductClaimValue.updateTmmaOverrideIfOpportunityProductMnUpdatedByTmma((Map<Id, OpportunityLineItem>)existingRecords, new Map<Id, OpportunityLineItem>((List<OpportunityLineItem>)this.records), uow);
-		
-		deleteLostCancelledOpptyProdScheds((List<OpportunityLineItem>)existingRecords.values(), uow);
-		
-		createReOpenOpptyProdScheds((List<OpportunityLineItem>)existingRecords.values(), uow);
-		
-		updateOpptyProdScheds((List<OpportunityLineItem>)existingRecords.values(), uow);
-		
-		uow.commitWork();
+		OpportunityProductClaimValue.updateTmmaOverrideIfOpportunityProductMnUpdatedByTmma((Map<Id, OpportunityLineItem>)existingRecords, new Map<Id, OpportunityLineItem>((List<OpportunityLineItem>)this.records));
 		
 		OpportunityLineItemTrigger.onAfterInsert_Update_Delete((List<OpportunityLineItem>)this.records);
+		
+		createReOpenOpptyProdScheds((List<OpportunityLineItem>)existingRecords.values());
+		
+		updateOpptyProdScheds((List<OpportunityLineItem>)existingRecords.values());
+		
+		deleteLostCancelledOpptyProdScheds((List<OpportunityLineItem>)existingRecords.values());
 	}
 	
 	public override void onAfterDelete() {
 		p('onAfterDelete');
-		fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
-		
 		OpportunityLineItemTrigger.onAfterInsert_Update_Delete((List<OpportunityLineItem>)this.records);
 		
-		deleteOpptyProdScheds(uow);
-		
-		uow.commitWork();
+		deleteOpptyProdScheds();
 	}
 	
 	/**
@@ -97,13 +85,13 @@ public class OpportunityLineItems extends ApplicationDomain {
         return (unitPrice * Math.pow(Double.valueOf(1 - (priceErosionRate / 100)), schedDateIndex / PRICE_EROSION_QUARTERS)).setScale(6);
     }
 	 
-	public void updatePrograms(fflib_ISObjectUnitOfWork uow) {
-		p('updatePrograms(uow)');
+	public void updateOpptyProdPrograms() {
+		p('updateOpptyProdPrograms');
 		for (OpportunityLineItem opptyProd : (List<OpportunityLineItem>)this.records) {
 			opptyProd.Program__c = opptyProd.Opportunity.Program__c;
 		}
 		
-		uow.registerDirty(this.records);
+		update this.records;
 	}
 	
 	public void updateModelNExpiredOpportunityProducts(fflib_ISObjectUnitOfWork uow) {
@@ -138,14 +126,14 @@ public class OpportunityLineItems extends ApplicationDomain {
 			opptyIds.add(opptyProd.OpportunityId);
 		}
 		
-		Map<Id, Opportunity> opptys = new Map<Id, Opportunity>(new OpportunitiesSelector().selectById(opptyIds));
+		Map<Id, Opportunity> oppties = new Map<Id, Opportunity>(new OpportunitiesSelector().selectById(opptyIds));
 		
 		for (OpportunityLineItem opptyProd : (List<OpportunityLineItem>)this.records) {
-			opptyProd.Program__c = opptys.get(opptyProd.OpportunityId).Program__c;	
+			opptyProd.Program__c = oppties.get(opptyProd.OpportunityId).Program__c;	
 		}	
 	}
 	
-    private void deleteOpptyProdScheds(fflib_ISObjectUnitOfWork uow){
+    private void deleteOpptyProdScheds(){
     	p('deleteOpptyProdScheds');
         Set<Id> opptyProdIds = new Set<Id>();
         List<OpportunityProductSchedule__c> opptyProdSchedsDeleted;
@@ -168,7 +156,7 @@ public class OpportunityLineItems extends ApplicationDomain {
             }
         }
         
-        uow.registerDeleted(opptyProdSchedsDeleted);
+        delete opptyProdSchedsDeleted;
     }
     
     private Map<Id, Map<Id, OpportunityProductSchedule__c>> getOpptyProdSchedsByOpptyProdId(List<OpportunityLineItem> opptyProds, Set<Id> opptyProdIds){
@@ -194,7 +182,7 @@ public class OpportunityLineItems extends ApplicationDomain {
         return result;
     }
     
-	private void createOpptyProdScheds(fflib_ISObjectUnitOfWork uow) {
+	private void createOpptyProdScheds() {
 		p('createOpptyProdScheds');
         Set<Id> opptyIds = getOpptyIds((List<OpportunityLineItem>)this.records);
                      
@@ -241,10 +229,10 @@ public class OpportunityLineItems extends ApplicationDomain {
             }
         }
         
-        uow.registerNew(opptyProdSchedsCreated);
+        insert opptyProdSchedsCreated;
     }
     
-    private void deleteLostCancelledOpptyProdScheds(List<OpportunityLineItem> existingRecords, fflib_ISObjectUnitOfWork uow) {
+    private void deleteLostCancelledOpptyProdScheds(List<OpportunityLineItem> existingRecords) {
     	p('deleteLostCancelledOpptyProdScheds');
     	Set<Id> opptyProdIds = new Set<Id>();
         
@@ -286,10 +274,10 @@ public class OpportunityLineItems extends ApplicationDomain {
             }
         }
 
-    	uow.registerDeleted(opptyProdSchedsDeleted);
+    	delete opptyProdSchedsDeleted; 
     }
     
-    private void createReOpenOpptyProdScheds(List<OpportunityLineItem> existingRecords, fflib_ISObjectUnitOfWork uow) {
+    private void createReOpenOpptyProdScheds(List<OpportunityLineItem> existingRecords) {
     	p('createReOpenOpptyProdScheds');
     	Set<Id> opptyIds = new Set<Id>();
     	Set<Id> opptyProdIds = new Set<Id>();
@@ -351,7 +339,7 @@ public class OpportunityLineItems extends ApplicationDomain {
             } // re-open products
         }
     	
-    	uow.registerNew(opptyProdSchedsCreated);
+    	insert opptyProdSchedsCreated; 
 	}
 	
 	private Map<Id, List<OpportunitySchedule__c>> getOpptySchedsByOpptyId(Set<Id> opptyIds){
@@ -370,7 +358,7 @@ public class OpportunityLineItems extends ApplicationDomain {
         return result;
     }
     
-    private void updateOpptyProdScheds(List<OpportunityLineItem> existingRecords, fflib_ISObjectUnitOfWork uow) {
+    private void updateOpptyProdScheds(List<OpportunityLineItem> existingRecords) {
     	p('updateOpptyProdScheds');
         Set<Id> opptyProdIds = new Set<Id>();
         Set<Id> opptyIds = new Set<Id>();
@@ -447,7 +435,7 @@ public class OpportunityLineItems extends ApplicationDomain {
         	}
         }
         
-        uow.registerDirty(opptyProdSchedsUpdated);
+        update opptyProdSchedsUpdated;
     }
     
     private Map<Id, List<OpportunityProductSchedule__c>> getOpptyProdSchedsByOpptyProdId(Set<Id> opptyIds, Set<Id> opptyProdIds) {
