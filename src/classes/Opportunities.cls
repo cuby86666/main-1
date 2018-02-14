@@ -151,7 +151,7 @@ public class Opportunities extends ApplicationDomain {
 	}
 	
 	private void createMnOpptyScheds() {
-		p('createMnOpptyScheds(uow)');
+		p('createMnOpptyScheds');
 		List<SObject> opptiesMn = new List<SObject>();
 		
 		for (SObject o : (List<Opportunity>)this.records) {
