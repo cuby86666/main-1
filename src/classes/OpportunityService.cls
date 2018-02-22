@@ -164,14 +164,17 @@ public with sharing class OpportunityService {
 
 		for (Opportunity oppty : oppties) {
 			if (oppty.RecordTypeId != modelNRecordTypeId) continue;
+			
 			allMnOpptyIds.add(oppty.Id);
 			//System.debug('@@@@@ Owner=' + oppty.Owner.Name);
 			String newAccountId = oppty.AccountId;
 			String newOwnerId = null;
+
 			if (oppty.End_Customer_GID__c != null && accountsByGidOrLegacyId.containsKey(oppty.End_Customer_GID__c)) {
 				//By GID Account
 				Account accountByGID = accountsByGidOrLegacyId.get(oppty.End_Customer_GID__c);
 				newAccountId = accountByGID.Id;
+
 				if (accountByGID.Owner.IsActive) newOwnerId = accountByGID.OwnerId;
                 //System.debug('@@@@@ Account change to ' + accountByGID.Name + ', owner change to account owner.');
 				opptyIds.add(oppty.Id);					
@@ -201,29 +204,50 @@ public with sharing class OpportunityService {
         
 		//System.debug('@@@@@ current user:' + UserInfo.getName());
 
-		//Scan MN Oppty Stages
-        if (System.isBatch() && CommonUtils.isAdmin()) {
-            Map<Id, String> mnOpptyStages = deriveMnOpportunityStages(allMnOpptyIds);
-            for (Opportunity oppty : oppties) {
-                if (mnOpptyStages.containsKey(oppty.Id) && oppty.StageName != mnOpptyStages.get(oppty.Id)) {
-                    oppty.StageName = mnOpptyStages.get(oppty.Id);
-                    if (oppty.StageName == Opportunities.STAGE_LOST) {
-	                    oppty.Lost_Date__c = oppty.Expiration_Date__c;
-            			oppty.Lost_Reason__c = 'Expired';
-                    }
-                    if (!opptyUpdateIds.contains(oppty.Id)) {
-                        opptyUpdateIds.add(oppty.Id);
-                        opptyUpdates.add(oppty);
-                    }
-                }
-            }            
-        }
-
 		if (uow != null) {
 			uow.registerDirty(opptyUpdates);
 		}
 
 		return opptyIds;
+	}
+
+	public static Set<Id> updateMnOpportunityStages(List<Opportunity> oppties, fflib_ISObjectUnitOfWork uow) {
+		List<Opportunity> opptyUpdates = new List<Opportunity>();
+		Set<Id> opptyUpdateIds = new Set<Id>();
+		Set<Id> allMnOpptyIds = new Set<Id>();
+		Id modelNRecordTypeId = OpportunitiesSelector.getMnRecordTypeId();
+
+		for (Opportunity oppty : oppties) {
+			if (oppty.RecordTypeId != modelNRecordTypeId) continue;
+
+			allMnOpptyIds.add(oppty.Id);
+		}
+		//Scan MN Oppty Stages
+        //if (System.isBatch() && CommonUtils.isAdmin()) {
+        Map<Id, String> mnOpptyStages = deriveMnOpportunityStages(allMnOpptyIds);
+
+        for (Opportunity oppty : oppties) {
+            if (mnOpptyStages.containsKey(oppty.Id) && oppty.StageName != mnOpptyStages.get(oppty.Id)) {
+                oppty.StageName = mnOpptyStages.get(oppty.Id);
+
+                if (oppty.StageName == Opportunities.STAGE_LOST) {
+                    oppty.Lost_Date__c = oppty.Expiration_Date__c;
+        			oppty.Lost_Reason__c = 'Expired';
+                }
+
+                if (!opptyUpdateIds.contains(oppty.Id)) {
+                    opptyUpdateIds.add(oppty.Id);
+                    opptyUpdates.add(oppty);
+                }
+            }
+        }            
+        //}
+
+		if (uow != null) {
+			uow.registerDirty(opptyUpdates);
+		}
+
+		return opptyUpdateIds;
 	}
 
 	//=========== Model N Account Update utility functions ========================================
