@@ -69,6 +69,7 @@ public class MnStagesSelector extends ApplicationSelector {
 			MnStage__c.Reg_Num__c,
 			MnStage__c.Reg_OID__c,
 			MnStage__c.Reg_Oppty_Num__c,
+			MnStage__c.Reg_Part_Approved_Date__c,
 			MnStage__c.Reg_Part_ASP__c,
 			MnStage__c.Reg_Part_Created_Date__c,
 			MnStage__c.Reg_Part_Disti_Tracking_Num__c,

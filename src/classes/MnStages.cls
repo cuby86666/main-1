@@ -192,6 +192,7 @@ public class MnStages extends ApplicationDomain {
 			opptyProd.Competitor__c = ms.Competitor_Name__c;
 			opptyProd.Component_Multiplier__c = ms.Reg_Part_Qty_Per_Sys__c;
 			opptyProd.Design_Reg_Part_Active_Flag__c = ms.Reg_Part_Is_Active__c;
+			opptyProd.Design_Reg_Part_Approved_Date__c = ms.Reg_Part_Approved_Date__c;
 			opptyProd.Design_Reg_Part_Created_Date__c = ms.Reg_Part_Created_Date__c;
 			opptyProd.Design_Reg_Part_Modified_Date__c = ms.Reg_Part_Modified_Date__c;
 			opptyProd.Design_Reg_Part_Is_Obsolete__c = ms.Reg_Part_Is_Obsolete__c;
