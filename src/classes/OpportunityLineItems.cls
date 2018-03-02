@@ -572,10 +572,10 @@ public class OpportunityLineItems extends ApplicationDomain {
     }
     
     private void updateOpptyProdLostCancelledInfo(List<OpportunityLineItem> existingRecords) {
-    	p('updateOpptyProdLostCancelledInfo');
+    	p('updateOpptyProdLostCancelledInfo(existingRecords)');
     	for (OpportunityLineItem opptyProdOld : existingRecords) {
     		for (OpportunityLineItem opptyProdNew : (List<OpportunityLineItem>)this.records) {
-    			if (opptyProdOld.Id == opptyProdNew.Id) {
+    			if (opptyProdOld.Id == opptyProdNew.Id && opptyProdNew.Opportunity_Record_Type_Id__c == OpportunitiesSelector.getSfdcRecordTypeId()) {
     				// From Open to Lost/Cancelled
     				if (!LOST_CANCELLED.contains(opptyProdOld.Prod_Lost_Cancelled__c) && LOST_CANCELLED.contains(opptyProdNew.Prod_Lost_Cancelled__c)) {
     					opptyProdNew.Prod_Lost_Cancelled_Date__c = date.today();

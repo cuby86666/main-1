@@ -494,7 +494,7 @@ private class OpportunityProductTest {
     }
 
     @isTest
-    static void testUpdateOpptyProdLostCancelledInfo(){
+    static void testUpdateSfdcOpptyProdLostCancelledInfo(){
         Map<ID, OpportunityLineItem> opptyProdLostCancelledInfo= new Map<ID, OpportunityLineItem>();
         List<OpportunityLineItem> opptyProds;
 
@@ -657,7 +657,7 @@ private class OpportunityProductTest {
     }
     
     @isTest
-    static void testOpptyProdDefaultLostCancelledInfo(){
+    static void testMnOpptyProdDefaultLostCancelledInfo(){
         Map<ID, Opportunity> opptyLostCancelledInfo = new Map<ID, Opportunity>();
         List<OpportunityLineItem> opptyProds;
         
@@ -684,6 +684,25 @@ private class OpportunityProductTest {
         system.assertEquals(opptyLostCancelledInfo.get(opptyProdMn.OpportunityId).Expiration_Date__c, opptyProdMn.Prod_Lost_Cancelled_Date__c);
         system.assertEquals(opptyLostCancelledInfo.get(opptyProdMn.OpportunityId).Lost_Description__c, opptyProdMn.Prod_Lost_Reason__c);
         system.assertEquals(opptyLostCancelledInfo.get(opptyProdMn.OpportunityId).Lost_Reason__c, opptyProdMn.Prod_Lost_Cancelled_Reason__c);
+    }
+    
+    @isTest
+    static void testMnOpptyProdLostCancelledInfo() {
+    	final Date EXP_DATE = Date.newInstance(1970, 01, 01);
+    	 
+    	Test.startTest();
+    	Opportunity oppty = (Opportunity)new OpportunitiesSelector().selectWhere('Opportunity.RecordTypeId = \'' + OpportunitiesSelector.getMnRecordTypeId() + '\' and Opportunity.StageName = \'' + OPPTY_LOST + '\'').get(0);
+    	oppty.StageName = Opportunities.STAGE_DISCOVERY;
+    	oppty.Expiration_Date__c = EXP_DATE;
+    	update oppty;
+    	
+    	oppty = new OpportunitiesSelector().selectById(new Set<Id> {oppty.Id}).get(0);
+    	oppty.StageName = Opportunities.STAGE_LOST;
+    	update oppty;
+    	Test.stopTest();
+    	
+    	OpportunityLineItem opptyProd = new OpportunityLineItemsSelector().selectByOpptyIdWithOpportunity(new Set<Id> {oppty.Id}).get(0);
+    	System.assertEquals(EXP_DATE, opptyProd.Prod_Lost_Cancelled_Date__c);	
     }
     
     @isTest
