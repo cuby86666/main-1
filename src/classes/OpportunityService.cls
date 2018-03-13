@@ -1,5 +1,7 @@
 public with sharing class OpportunityService {
 	
+	private static final Date NIL_DATE = Date.newInstance(0, 0, 0);
+	
 	public static Map<Id, List<DesignWinApprover>> getDesignWinApprovers(Set<Id> opptyIds) {
 		p('getDesignWinApprovers');
 		Map<Id, List<DesignWinApprover>> result = new Map<Id, List<DesignWinApprover>>();
@@ -47,19 +49,9 @@ public with sharing class OpportunityService {
 		public String label;
 		public String name;
 	}
-	/*
-	public static void updateModelNExpiredOpportunities(List<Opportunity> oppties) {
-		p('updateModelNExpiredOpportunities');
-		fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
-		
-        List<Opportunity> opptiesUpdated = new Opportunities(oppties).updateModelNExpiredOpportunities(uow);
-        
-        new OpportunityLineItems(new OpportunityLineItemsSelector().selectByOpptyIdWithOpportunity(new Map<Id, Opportunity>(opptiesUpdated).keySet())).updateModelNExpiredOpportunityProducts(uow);
-        
-        uow.commitWork();
-	}
-	*/
+	
 	public static Map<Id, String> deriveMnOpportunityStages(Set<Id> opptyIds) {
+		p('deriveMnOpportunityStages');
 		Map<Id, String> result = new Map<Id, String>();
 		
 		List<Opportunity> oppties = new OpportunitiesSelector().selectByIdWithProducts(opptyIds);
@@ -210,6 +202,31 @@ public with sharing class OpportunityService {
 
 		return opptyIds;
 	}
+	
+	public static void setMnOpportunityLostCancelledInfo(Opportunity oppty, Date actionDate) {
+		p('setMnOpportunityLostCancelledInfo(oppty, actionDate)');	
+		setMnOpptyLostCancelledInfo(oppty, actionDate);
+	}
+	
+	private static void setMnOpportunityLostCancelledInfo(Opportunity oppty) {
+		p('setMnOpportunityLostCancelledInfo(oppty)');	
+		setMnOpptyLostCancelledInfo(oppty, NIL_DATE);
+	}
+	
+	private static void setMnOpptyLostCancelledInfo(Opportunity oppty, Date actionDate) {
+		p('setMnOpptyLostCancelledInfo');	
+		
+		if (oppty.StageName == Opportunities.STAGE_LOST) {
+			oppty.Lost_Date__c = oppty.Expiration_Date__c;
+			oppty.Lost_Reason__c = Opportunities.MN_LOST_REASON;
+		} else if (oppty.StageName == Opportunities.STAGE_CANCELLED && actionDate != NIL_DATE) { // actionDate can be null, so cannot use null as condition check.
+			oppty.Lost_Date__c = actionDate;
+			oppty.Lost_Reason__c = oppty.Design_Reg_Reject_Reason__c;		
+		} else {
+			oppty.Lost_Date__c = null;
+			oppty.Lost_Reason__c = null;	
+		}
+	}
 
 	public static Set<Id> updateMnOpportunityStages(List<Opportunity> oppties, fflib_ISObjectUnitOfWork uow) {
 		List<Opportunity> opptyUpdates = new List<Opportunity>();
@@ -230,11 +247,8 @@ public with sharing class OpportunityService {
             if (mnOpptyStages.containsKey(oppty.Id) && oppty.StageName != mnOpptyStages.get(oppty.Id)) {
                 oppty.StageName = mnOpptyStages.get(oppty.Id);
 
-                if (oppty.StageName == Opportunities.STAGE_LOST) {
-                    oppty.Lost_Date__c = oppty.Expiration_Date__c;
-        			oppty.Lost_Reason__c = 'Expired';
-                }
-
+				setMnOpportunityLostCancelledInfo(oppty); // SFDC-1407 
+				
                 if (!opptyUpdateIds.contains(oppty.Id)) {
                     opptyUpdateIds.add(oppty.Id);
                     opptyUpdates.add(oppty);

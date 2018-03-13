@@ -94,17 +94,7 @@ public class OpportunityLineItems extends ApplicationDomain {
 		update this.records;
 	}
 	
-	public void updateModelNExpiredOpportunityProducts(fflib_ISObjectUnitOfWork uow) {
-		p('updateModelNExpiredOpportunityProducts');
-		for (OpportunityLineItem oli : (List<OpportunityLineItem>)this.records) {
-        	oli.Prod_Lost_Cancelled__c = oli.Opportunity.StageName;
-        	oli.Prod_Lost_Cancelled_Date__c = oli.Opportunity.Expiration_Date__c; 			
-        }
-        
-        uow.registerDirty(this.records);
-	}
-
-    //SFDC-1154
+	//SFDC-1154
     public void updateOpptyProdProbabilityToWin(fflib_ISObjectUnitOfWork uow) {
         p('updateProbabilityToWin');
         List<OpportunityLineItem> opptyProdsUpdated = new List<OpportunityLineItem>();
@@ -551,13 +541,13 @@ public class OpportunityLineItems extends ApplicationDomain {
     			Opportunities.LOST_STAGES.contains(opptyLostCancelledInfo.get(opptyProd.OpportunityId).StageName)) {
     			opptyProd.Prod_Lost__c = true;
     			opptyProd.Prod_Lost_Cancelled__c = opptyLostCancelledInfo.get(opptyProd.OpportunityId).StageName;
-    			opptyProd.Prod_Lost_Cancelled_Date__c = opptyLostCancelledInfo.get(opptyProd.OpportunityId).Expiration_Date__c;
-    			opptyProd.Prod_Lost_Reason__c = opptyLostCancelledInfo.get(opptyProd.OpportunityId).Lost_Description__c;
+    			opptyProd.Prod_Lost_Cancelled_Date__c = opptyLostCancelledInfo.get(opptyProd.OpportunityId).Lost_Date__c;
     			opptyProd.Prod_Lost_Cancelled_Reason__c = opptyLostCancelledInfo.get(opptyProd.OpportunityId).Lost_Reason__c;
+    			opptyProd.Prod_Lost_Reason__c = opptyLostCancelledInfo.get(opptyProd.OpportunityId).Lost_Description__c;
     		}
     	}
     } 
-    
+ 
     private Map<Id, Opportunity> getOpptyLostCancelledInfo() {
     	p('getOpptyLostCancelledInfo');
     	Set<Id> opptyIds = new Set<Id>();

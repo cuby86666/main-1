@@ -8,7 +8,7 @@ global class ModelNDesignRegistrationsProcessJob implements Schedulable, Databas
 	private static final Integer RECORD_COUNT_LIMIT = 10000; // Process 10000 records at a time to avoid hitting governors and limits 
 		
 	private Id schedJobId;
-			
+	
 	global ModelNDesignRegistrationsProcessJob() {} // Added no-argument constructor for the Job Scheduler to see this class
 	
 	global ModelNDesignRegistrationsProcessJob(Id schedJobId) {
@@ -23,6 +23,8 @@ global class ModelNDesignRegistrationsProcessJob implements Schedulable, Databas
 	
 	global Database.QueryLocator start(Database.BatchableContext bc) {
 		p('start');
+		if (!Test.isRunningTest() && !CommonUtils.isDataAdminUser()) throw new SecurityException('Only Data Admin is allowed to execute ModelNDesignRegistrationsProcessJob.');    
+		
 		if (isJobActive(bc.getJobId())) return new MnStagesSelector().selectByStatusQueryLocator(new Set<String> {null}); // Skip processing
 		
 		Database.QueryLocator result;
@@ -75,7 +77,8 @@ global class ModelNDesignRegistrationsProcessJob implements Schedulable, Databas
 			updateStatus(bc.getJobId(), apexJob.ExtendedStatus);
 			
 			String message = 'Scheduled Job Id: ' + this.schedJobId + ', Batch Job Id: ' + bc.getJobId() + '<br><br>' +
-		                 	 'Total Batches: ' + apexJob.TotalJobItems + ', Batches Processed: ' + apexJob.JobItemsProcessed + ', Failures: ' + apexJob.NumberOfErrors;
+		                 	 'Total Batches: ' + apexJob.TotalJobItems + ', Batches Processed: ' + apexJob.JobItemsProcessed + ', Failures: ' + apexJob.NumberOfErrors + '<br><br>' +
+		                 	 'Message:<br><br>' + apexJob.ExtendedStatus;
 		
 			notify(new List<String> {apexJob.CreatedBy.Email}, message);		
 		}

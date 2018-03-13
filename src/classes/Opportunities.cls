@@ -37,6 +37,8 @@ public class Opportunities extends ApplicationDomain {
 		ApprovalStatus.LOST => 'Lost'	
 	};
 	
+	public static final String MN_LOST_REASON = 'Expired';
+	
     public Opportunities(List<Opportunity> oppties) {
 		super(oppties);
 	}
@@ -357,9 +359,9 @@ public class Opportunities extends ApplicationDomain {
 											Id = opptyProd.Id,
 											Prod_Lost__c = true,
 											Prod_Lost_Cancelled__c = opptyNew.StageName,
-											Prod_Lost_Cancelled_Date__c = opptyNew.Expiration_Date__c,
-											Prod_Lost_Reason__c = opptyNew.Lost_Description__c, // text area
-											Prod_Lost_Cancelled_Reason__c = opptyNew.Lost_Reason__c // picklist
+											Prod_Lost_Cancelled_Date__c = opptyNew.Lost_Date__c,
+											Prod_Lost_Cancelled_Reason__c = opptyNew.Lost_Reason__c, // picklist
+											Prod_Lost_Reason__c = opptyNew.Lost_Description__c // text area
 										);
 										
 										opptyProdsUpdated.add(opptyProdUpdate);
@@ -372,9 +374,9 @@ public class Opportunities extends ApplicationDomain {
 											Id = opptyProd.Id,
 											Prod_Lost__c = false,
 											Prod_Lost_Cancelled__c = null,
-											Prod_Lost_Cancelled_Date__c = null,
-											Prod_Lost_Reason__c = null, // text area
-											Prod_Lost_Cancelled_Reason__c = null // picklist
+											Prod_Lost_Cancelled_Date__c = opptyNew.Lost_Date__c,
+											Prod_Lost_Cancelled_Reason__c = opptyNew.Lost_Reason__c, // picklist
+											Prod_Lost_Reason__c = null // text area
 										);
 										
 										opptyProdsUpdated.add(opptyProdUpdate);

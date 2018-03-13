@@ -8,8 +8,11 @@ private class ModelNDesignRegistrationsProcessJobTest {
 	private static final String STATUS_IGNORED = MnStages.STATUS_IGNORED;
 	private static final String STATUS_FAILED = MnStages.STATUS_FAILED;
 	
-	private static final Date PRODUCTION_DATE = Date.newInstance(2014, 02, 16); 
+	private static final Date PRODUCTION_DATE = Date.newInstance(2014, 02, 16);
+	private static final Date ACTION_DATE = Date.newInstance(2017, 02, 28); 
 	private static final Date WIN_DATE = Date.newInstance(2012, 01, 08);
+	
+	private static final String REJECT_REASON = 'No Commercial Relation';
 	
 	private static final String STAGE_INITIAL_ENGAGEMENT = Opportunities.STAGE_INITIAL_ENGAGEMENT;
 	private static final String STAGE_DISCOVERY = Opportunities.STAGE_DISCOVERY;
@@ -49,7 +52,7 @@ private class ModelNDesignRegistrationsProcessJobTest {
     static void setup() {
 		MnStage__c mnStage = new MnStage__c();
 		mnStage.Reg_OID__c = '874047';
-		mnStage.Reg_Action_Date__c = Date.newInstance(2017, 02, 28);
+		mnStage.Reg_Action_Date__c = ACTION_DATE;
 		mnStage.Reg_Created_Date__c = Date.newInstance(2017, 02, 03);
 		mnStage.Reg_Lead_Id__c = null;
 		mnStage.Reg_Disti_Tracking_Num__c = '205069';
@@ -62,7 +65,7 @@ private class ModelNDesignRegistrationsProcessJobTest {
 		mnStage.Reg_Project_Units__c = 2000000;
 		mnStage.Reg_Expiration_Date__c = Date.newInstance(2019, 09, 25);
 		mnStage.Reg_Num__c = '1-CDSPKP';
-		mnStage.Reg_Reject_Reason__c = 'No Commercial Relation';
+		mnStage.Reg_Reject_Reason__c = REJECT_REASON;
 		mnStage.Reg_Win_Date__c = Date.newInstance(2012, 01, 08);
 		mnStage.Reg_Win_Status__c = 'DesignWin';
 		mnStage.Reg_Is_Created_By_B2B__c = false;
@@ -116,7 +119,7 @@ private class ModelNDesignRegistrationsProcessJobTest {
 		mnStage.Reg_Part_POS_Qty_Shipped__c = 225000;
 		mnStage.Reg_Part_POS_Resale_Value__c = 2356123.512539;
 		mnStage.Reg_Part_Qty_Per_Sys__c = 1;
-		mnStage.Reg_Part_Win_Status__c = 'ProdWin';
+		mnStage.Reg_Part_Win_Status__c = 'Pending';
 		mnStage.Reg_Part_One_Year_Value__c = 660000;
 		mnStage.Reg_Part_Win_Date__c = WIN_DATE;
 		mnStage.Reg_Part_Created_Date__c = Date.newInstance(2017, 02, 03);
@@ -381,7 +384,7 @@ private class ModelNDesignRegistrationsProcessJobTest {
     static void testDerivedFields() {
     	System.assertEquals('Automotive', oppty.Industry_Segment__c);
     	System.assertEquals(mnStage.Reg_Oppty_Num__c + '-' + mnStage.Reg_Part_OID__c, oppty.Legacy_Id__c);
-    	System.assertEquals(Date.newInstance(2017, 02, 28), oppty.Lost_Date__c);
+    	System.assertEquals(ACTION_DATE, oppty.Lost_Date__c);
     	System.assertEquals(mnStage.Reg_Oppty_Num__c + ' - ' + mnStage.Part_Name__c + ' - ' + mnStage.Prog_Name__c, oppty.Name);
     	System.assertEquals(mnStage.User_First_Name__c + ' ' + mnStage.User_Last_Name__c, oppty.Rejected_by__c);
     	System.assertEquals('Other', oppty.Sub_Segment__c);	
@@ -555,7 +558,9 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	
     	update mnStage;
     	
-    	processData(); 
+    	Test.startTest();
+    	processData();
+    	Test.stopTest(); 
     	
     	Opportunity oppty = new OpportunitiesSelector().selectByLegacyId(new Set<String> {opptyExtId}).get(0); 
     	System.assertEquals(STAGE_INITIAL_ENGAGEMENT, oppty.StageName);
@@ -576,10 +581,14 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	
     	update mnStage;
     	
-    	processData(); 
+    	Test.startTest();
+    	processData();
+    	Test.stopTest(); 
     	
     	Opportunity oppty = new OpportunitiesSelector().selectByLegacyId(new Set<String> {opptyExtId}).get(0); 
-    	System.assertEquals(STAGE_DISCOVERY, oppty.StageName);	
+    	System.assertEquals(STAGE_DISCOVERY, oppty.StageName);
+    	System.assertEquals(null, oppty.Lost_Date__c);
+    	System.assertEquals(null, oppty.Lost_Reason__c);	
     }
     
     @isTest
@@ -595,7 +604,9 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	    	    	
     	update mnStage;
     	
-    	processData(); 
+    	Test.startTest();
+    	processData();
+    	Test.stopTest(); 
     	
     	Opportunity oppty = new OpportunitiesSelector().selectByLegacyId(new Set<String> {opptyExtId}).get(0); 
     	System.assertEquals(STAGE_COMMITMENT, oppty.StageName);
@@ -612,7 +623,9 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	    	    	
     	update mnStage;
     	
-    	processData(); 
+    	Test.startTest();
+    	processData();
+    	Test.stopTest(); 
     	
     	Opportunity oppty = new OpportunitiesSelector().selectByLegacyId(new Set<String> {opptyExtId}).get(0); 
     	System.assertEquals(STAGE_COMMITMENT, oppty.StageName);
@@ -624,12 +637,14 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	// Reg_Part_Status__c: Pending, Requested, Approved
     	// Reg_Part_Win_Status__c: Pending
     	// Reg_Status__c: Pending, Requested, Approved
-    	// isExpired: true	
+    	// isExpired: true
+    	final Date EXP_DATE = (System.today() - 1); 
+    		
     	mnStage.Status__c = STATUS_QUEUED;
     	mnStage.Reg_Part_Status__c = 'Requested'; 
     	mnStage.Reg_Part_Win_Status__c = 'Pending';
     	mnStage.Reg_Status__c = 'Approved';
-    	mnStage.Reg_Expiration_Date__c = (System.today() - 1);
+    	mnStage.Reg_Expiration_Date__c = EXP_DATE;
     	
     	update mnStage;
     	
@@ -637,6 +652,8 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	
     	Opportunity oppty = new OpportunitiesSelector().selectByLegacyId(new Set<String> {opptyExtId}).get(0); 
     	System.assertEquals(STAGE_LOST, oppty.StageName);
+    	System.assertEquals(EXP_DATE, oppty.Lost_Date__c);
+    	System.assertEquals(Opportunities.MN_LOST_REASON, oppty.Lost_Reason__c);
     }
     
     @isTest
@@ -651,11 +668,11 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	// Reg_Status__c: Rejected
     	// #3
     	// Reg_Part_Status__c: Rejected
-    	// Reg_Part_Win_Status__c: Pending	
+    	// Reg_Part_Win_Status__c: Pending
     	mnStage.Status__c = STATUS_QUEUED;
-    	mnStage.Reg_Part_Status__c = 'Approved'; 
+    	mnStage.Reg_Part_Status__c = 'Rejected'; 
     	mnStage.Reg_Part_Win_Status__c = 'Pending';
-    	mnStage.Reg_Status__c = 'Rejected';
+    	mnStage.Reg_Status__c = 'Pending';
     	    	
     	update mnStage;
     	
@@ -663,6 +680,8 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	
     	Opportunity oppty = new OpportunitiesSelector().selectByLegacyId(new Set<String> {opptyExtId}).get(0); 
     	System.assertEquals(STAGE_CANCELLED, oppty.StageName);
+    	System.assertEquals(ACTION_DATE, oppty.Lost_Date__c);
+    	System.assertEquals(REJECT_REASON, oppty.Lost_Reason__c);
     }
     
     @isTest

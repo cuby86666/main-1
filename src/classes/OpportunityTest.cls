@@ -796,6 +796,8 @@ private class OpportunityTest {
         opptysUpdate.add(opptySfdc);
         
         opptyMn.StageName = STAGE_NAME;
+        opptyMn.Lost_Date__c = null;
+        opptyMn.Lost_Reason__c = null;
         opptysUpdate.add(opptyMn);
         
         update opptysUpdate;

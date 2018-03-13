@@ -203,7 +203,7 @@ private class OpportunityProductTest {
             One_Year_Pieces__c = 1000
         );
         
-        if (opptyStageName == OPPTY_LOST || opptyStageName == OPPTY_CANCELLED) {
+        if (opptyStageName == OPPTY_LOST) {
             oppty.Expiration_Date__c = Date.today();
             oppty.Lost_Reason__c = 'Lost';
             oppty.Lost_Description__c = 'Lost Description';
@@ -668,7 +668,7 @@ private class OpportunityProductTest {
                     Prod_Lost_Cancelled_Date__c,
                     Prod_Lost_Reason__c,
                     Prod_Lost_Cancelled_Reason__c,
-                    Opportunity.Expiration_Date__c,
+                    Opportunity.Lost_Date__c,
                     Opportunity.Lost_Description__c,
                     Opportunity.Lost_Reason__c
             FROM    OpportunityLineItem 
@@ -681,7 +681,7 @@ private class OpportunityProductTest {
         
         system.assert(opptyProdMn != null);
         system.assertEquals(true, opptyProdMn.Prod_Lost__c);
-        system.assertEquals(opptyLostCancelledInfo.get(opptyProdMn.OpportunityId).Expiration_Date__c, opptyProdMn.Prod_Lost_Cancelled_Date__c);
+        system.assertEquals(opptyLostCancelledInfo.get(opptyProdMn.OpportunityId).Lost_Date__c, opptyProdMn.Prod_Lost_Cancelled_Date__c);
         system.assertEquals(opptyLostCancelledInfo.get(opptyProdMn.OpportunityId).Lost_Description__c, opptyProdMn.Prod_Lost_Reason__c);
         system.assertEquals(opptyLostCancelledInfo.get(opptyProdMn.OpportunityId).Lost_Reason__c, opptyProdMn.Prod_Lost_Cancelled_Reason__c);
     }
@@ -693,7 +693,7 @@ private class OpportunityProductTest {
     	Test.startTest();
     	Opportunity oppty = (Opportunity)new OpportunitiesSelector().selectWhere('Opportunity.RecordTypeId = \'' + OpportunitiesSelector.getMnRecordTypeId() + '\' and Opportunity.StageName = \'' + OPPTY_LOST + '\'').get(0);
     	oppty.StageName = Opportunities.STAGE_DISCOVERY;
-    	oppty.Expiration_Date__c = EXP_DATE;
+    	oppty.Lost_Date__c = EXP_DATE;
     	update oppty;
     	
     	oppty = new OpportunitiesSelector().selectById(new Set<Id> {oppty.Id}).get(0);
@@ -868,7 +868,7 @@ private class OpportunityProductTest {
             [SELECT Id,
                     RecordTypeId,
                     StageName,
-                    Expiration_Date__c,
+                    Lost_Date__c,
                     Lost_Description__c,
                     Lost_Reason__c
              FROM   Opportunity
