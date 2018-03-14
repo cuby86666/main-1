@@ -20,8 +20,7 @@ private class OpportunityServiceTest {
     private static final String CBG_AUTOMOTIVE = 'Automotive';
     private static final Double ONE_YEAR_PIECES = 1500;
     private static final Double LOCKED_EXCHANGE_RATE = 1.5;
-    private static final String STAGE_LOST = Opportunities.STAGE_LOST;
-    
+        
     private static List<OpportunityLineItem> opptyProds = new List<OpportunityLineItem>();
     private static List<OpportunityLineItem> opptyProdsMn = new List<OpportunityLineItem>();
     private static OpportunityLineItem opptyProd;
@@ -231,7 +230,38 @@ private class OpportunityServiceTest {
     	
     	Map<Id, String> opptyStagesById = OpportunityService.deriveMnOpportunityStages(new Set<Id> {opptyMn.Id});
     	    	
-    	System.assertEquals(STAGE_LOST, opptyStagesById.get(opptyMn.Id));
+    	System.assertEquals(Opportunities.STAGE_LOST, opptyStagesById.get(opptyMn.Id));
+    }
+    
+    @isTest
+    static void testUpdateMnOpportunityStages() {
+    	opptyProdMn.Registration_Status__c = 'Requested';
+    	opptyProdMn.Win_Status__c = 'Pending';
+    	update opptyProdMn; 
+    	
+    	Opportunity opptyMn = new OpportunitiesSelector().selectById(new Set<Id> {opptyProdMn.OpportunityId}).get(0);
+    	opptyMn.Design_Reg_Status__c = 'Approved';
+    	opptyMn.Expiration_Date__c = (System.today() + 1);	
+    	update opptyMn;
+    	
+    	opptyMn = new OpportunitiesSelector().selectById(new Set<Id> {opptyProdMn.OpportunityId}).get(0);
+    	
+    	System.assertEquals(Opportunities.STAGE_INITIAL_ENGAGEMENT, opptyMn.StageName);
+    	
+    	Test.startTest();
+    	opptyMn.Expiration_Date__c = (System.today() - 1);  
+    	update opptyMn;
+    	
+    	List<Opportunity> oppties = new OpportunitiesSelector().selectById(new Set<Id> {opptyProdMn.OpportunityId}); 
+    	
+    	fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
+    	OpportunityService.updateMnOpportunityStages(oppties, uow);
+    	uow.commitWork();
+    	
+    	opptyMn = new OpportunitiesSelector().selectById(new Set<Id> {opptyProdMn.OpportunityId}).get(0);
+    	Test.stopTest();
+    	
+    	System.assertEquals(Opportunities.STAGE_LOST, opptyMn.StageName);
     }
     
 }

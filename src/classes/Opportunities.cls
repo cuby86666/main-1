@@ -353,15 +353,16 @@ public class Opportunities extends ApplicationDomain {
 							}
 							
 							if (opptyNew.RecordTypeId == OpportunitiesSelector.getMnRecordTypeId()) {
-								if (!LOST_STAGES.contains(opptyOld.StageName) && LOST_STAGES.contains(opptyNew.StageName)) {
+								if ((opptyOld.StageName != STAGE_LOST && opptyNew.StageName == STAGE_LOST) ||
+								    (opptyOld.StageName != STAGE_CANCELLED && opptyNew.StageName == STAGE_CANCELLED) ||
+								    (LOST_STAGES.contains(opptyNew.StageName) && (opptyOld.Lost_Date__c != opptyNew.Lost_Date__c || opptyOld.Lost_Reason__c != opptyNew.Lost_Reason__c))) {
 									for (OpportunityLineItem opptyProd : opptyProds) {
 										OpportunityLineItem opptyProdUpdate = new OpportunityLineItem(
 											Id = opptyProd.Id,
 											Prod_Lost__c = true,
 											Prod_Lost_Cancelled__c = opptyNew.StageName,
 											Prod_Lost_Cancelled_Date__c = opptyNew.Lost_Date__c,
-											Prod_Lost_Cancelled_Reason__c = opptyNew.Lost_Reason__c, // picklist
-											Prod_Lost_Reason__c = opptyNew.Lost_Description__c // text area
+											Prod_Lost_Cancelled_Reason__c = opptyNew.Lost_Reason__c
 										);
 										
 										opptyProdsUpdated.add(opptyProdUpdate);
@@ -375,8 +376,7 @@ public class Opportunities extends ApplicationDomain {
 											Prod_Lost__c = false,
 											Prod_Lost_Cancelled__c = null,
 											Prod_Lost_Cancelled_Date__c = opptyNew.Lost_Date__c,
-											Prod_Lost_Cancelled_Reason__c = opptyNew.Lost_Reason__c, // picklist
-											Prod_Lost_Reason__c = null // text area
+											Prod_Lost_Cancelled_Reason__c = opptyNew.Lost_Reason__c
 										);
 										
 										opptyProdsUpdated.add(opptyProdUpdate);

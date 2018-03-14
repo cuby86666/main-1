@@ -782,8 +782,7 @@ private class OpportunityTest {
         
         system.assertEquals(true, opptyProdLostCancelledInfo.get(opptyProdMn.Id).Prod_Lost__c);
         system.assertEquals('Lost', opptyProdLostCancelledInfo.get(opptyProdMn.Id).Prod_Lost_Cancelled_Reason__c);
-        system.assertEquals('Lost Description', opptyProdLostCancelledInfo.get(opptyProdMn.Id).Prod_Lost_Reason__c);
-        
+                
         system.assertEquals(true, opptyProdLostCancelledInfo.get(opptyProdSfdc.Id).Prod_Lost__c);
         system.assertEquals('Lost', opptyProdLostCancelledInfo.get(opptyProdSfdc.Id).Prod_Lost_Cancelled_Reason__c);
         system.assertEquals('Lost Description', opptyProdLostCancelledInfo.get(opptyProdSfdc.Id).Prod_Lost_Reason__c);
