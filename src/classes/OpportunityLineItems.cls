@@ -543,7 +543,6 @@ public class OpportunityLineItems extends ApplicationDomain {
     			opptyProd.Prod_Lost_Cancelled__c = opptyLostCancelledInfo.get(opptyProd.OpportunityId).StageName;
     			opptyProd.Prod_Lost_Cancelled_Date__c = opptyLostCancelledInfo.get(opptyProd.OpportunityId).Lost_Date__c;
     			opptyProd.Prod_Lost_Cancelled_Reason__c = opptyLostCancelledInfo.get(opptyProd.OpportunityId).Lost_Reason__c;
-    			opptyProd.Prod_Lost_Reason__c = opptyLostCancelledInfo.get(opptyProd.OpportunityId).Lost_Description__c;
     		}
     	}
     } 

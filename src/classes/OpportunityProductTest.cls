@@ -682,7 +682,6 @@ private class OpportunityProductTest {
         system.assert(opptyProdMn != null);
         system.assertEquals(true, opptyProdMn.Prod_Lost__c);
         system.assertEquals(opptyLostCancelledInfo.get(opptyProdMn.OpportunityId).Lost_Date__c, opptyProdMn.Prod_Lost_Cancelled_Date__c);
-        system.assertEquals(opptyLostCancelledInfo.get(opptyProdMn.OpportunityId).Lost_Description__c, opptyProdMn.Prod_Lost_Reason__c);
         system.assertEquals(opptyLostCancelledInfo.get(opptyProdMn.OpportunityId).Lost_Reason__c, opptyProdMn.Prod_Lost_Cancelled_Reason__c);
     }
     
