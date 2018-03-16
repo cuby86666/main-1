@@ -392,36 +392,6 @@ public with sharing class OpportunityService {
 		return opptyIds;
 	}
 	
-	public static void updateOpptyClaimValueHistoryTracking(List<Opportunity> oppties) {
-		List<Id> opptyIds = new List<Id>();
-		
-		for (Opportunity oppty : oppties) {
-			opptyIds.add(oppty.Id);
-		}
-		
-        if(System.isFuture() || System.isBatch()) {
-            return;
-        }
-        else {
-            updateOpptyClaimValueHistoryTracking(opptyIds);
-        }
-    }
-    
-	@future
-    public static void updateOpptyClaimValueHistoryTracking(List<Id> opptyIds) {        
-        List<Opportunity> oppties = new OpportunitiesSelector().selectById(new Set<Id>(opptyIds));
-        
-        for (Opportunity oppty : oppties) {
-            if (oppty.Locked_Exchange_Rate__c != null && oppty.Locked_Exchange_Rate__c != 0) {
-            	oppty.Claim_Value_USD_SYS__c = oppty.Claim_Value__c / oppty.Locked_Exchange_Rate__c;
-            }
-            else {
-                oppty.Claim_Value_USD_SYS__c = 0;
-            }
-        }
-        update oppties;
-    }
-    
 	private static Boolean isMnRecordType(Opportunity oppty) {
 		return oppty.RecordTypeId == OpportunitiesSelector.getMnRecordTypeId();
     }
