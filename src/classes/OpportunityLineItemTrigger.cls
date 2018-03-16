@@ -19,6 +19,7 @@ public class OpportunityLineItemTrigger
        The features Implemented are : 
        1.Update Thrust Indicator
    *********************************************************************************************************************/
+     /*
      public static void onBeforeInsertUpdate(List<OpportunityLineItem> opptyLineItemList) 
      {
          //Feature to update Thrust Indicator 
@@ -39,7 +40,7 @@ public class OpportunityLineItemTrigger
        //End of feature to update thrust Indicator
      
      }
-     
+     */
      /******BEFORE TRIGGER(INSERT) METHOD****************************************************************
        
        Method Name: OppLineItem_OnBeforeInsert
@@ -47,19 +48,17 @@ public class OpportunityLineItemTrigger
        1.LastupdateById/Date : Populating LastUpdatedById/Date on insert of opportunitylineitems
        
    *********************************************************************************************************************/  
+   /* Modified by Scarlett on Jan 03, 2017 */
+   /*
    public static void onBeforeInsert( List<OpportunityLineItem> listOpportunityProducts )
     {
-    	/* Modified by Scarlett on Jan 03, 2017 */
-    	/*
       for( OpportunityLineItem theOpportunityProduct : listOpportunityProducts )
         {
             theOpportunityProduct.LastUpdatedById__c = UserInfo.getUserId();
             theOpportunityProduct.LastUpdatedDate__c = Datetime.now();
         }
-       */
-        
     }
-    
+    */
     /******BEFORE TRIGGER(UPDATE) METHOD****************************************************************
        
        Method Name: OppLineItem_OnBeforeUpdate
@@ -67,12 +66,12 @@ public class OpportunityLineItemTrigger
        1.LastupdateById/Date : Updating LastUpdatedById/Date on update of opportunitylineitems
        
    ****************************************************************************************************/
-    
+    /* Modified by Scarlett on Jan 03, 2017 */
+    /*
     public static void onBeforeUpdate( List<OpportunityLineItem> listOpptyProds )
     {
       OpportunityTrigger.fetchUserNameProfiles();     
-      /* Modified by Scarlett on Jan 03, 2017 */
-      /* 
+       
       for( OpportunityLineItem theOpportunityProduct : listOpptyProds )
         {
             if( UserInfo.getUserId() != OpportunityTrigger.integUser_Id && UserInfo.getProfileId() != OpportunityTrigger.adminUserProfile_Id)
@@ -81,9 +80,8 @@ public class OpportunityLineItemTrigger
                 theOpportunityProduct.LastUpdatedDate__c = Datetime.now();
             }
         }
-       */
     }
-    
+    */
     /******BEFORE,AFTER TRIGGER(INSERT,UPDATE,DELETE) METHOD****************************************************************
        
        Method Name: OppLineItem_OnBeforeUpdate
@@ -92,7 +90,7 @@ public class OpportunityLineItemTrigger
        2.ROLL UP BU BL MAG
        
    ****************************************************************************************************/
-    
+  /*  
  Public Static Void onAfterInsert_Update_Delete(List<OpportunityLineItem> listOpptyProds)
 {
   //Summarize Mag Feature and Roll Up BU BL MAG feature                        
@@ -194,11 +192,12 @@ public class OpportunityLineItemTrigger
                                    
  } 
 //END of Summarize Mag Feature and Roll Up BU BL MAG feature 
-
+*/
   /**
      * This is a future handler method.
      * It will update the opportunity object based on the product trigger update.
-     */ 
+     */
+     /* 
     @future
     public static void executeProductUpdate(Set<Id> productIdSet) {         
         for(List<OpportunityLineItem> opportunityLineItemList : [ 
@@ -212,6 +211,7 @@ public class OpportunityLineItemTrigger
             onAfterInsert_Update_Delete(opportunityLineItemList);                                 
         }
     }
+    */
     /*
    Public Static Void validateNumOfMags(List<OpportunityLineItem> opptyLineItemList)
    {

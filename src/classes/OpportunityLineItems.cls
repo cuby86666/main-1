@@ -22,8 +22,6 @@ public class OpportunityLineItems extends ApplicationDomain {
 		p('onBeforeInsert');
 		checkOpptyScheds();
 		
-		OpportunityLineItemTrigger.onBeforeInsert((List<OpportunityLineItem>)this.records);
-		
 		updateOpptyProdLastBusinessModifiedInfo();
 		
 		updateOpptyProdQty();
@@ -45,23 +43,17 @@ public class OpportunityLineItems extends ApplicationDomain {
 
 		updateOpptyProdLostCancelledInfo((List<OpportunityLineItem>)existingRecords.values());
 		
-		OpportunityLineItemTrigger.onBeforeUpdate((List<OpportunityLineItem>)this.records);
-		
 		updateOpptyProdHelpNeededHistory((List<OpportunityLineItem>)existingRecords.values());
 	}
 	
 	public override void onAfterInsert() {
 		p('onAfterInsert');	
-		OpportunityLineItemTrigger.onAfterInsert_Update_Delete((List<OpportunityLineItem>)this.records);
-		
 		createOpptyProdScheds();
 	}
 	
 	public override void onAfterUpdate(Map<Id, SObject> existingRecords) {
 		p('onAfterUpdate');
 		OpportunityProductClaimValue.updateTmmaOverrideIfOpportunityProductMnUpdatedByTmma((Map<Id, OpportunityLineItem>)existingRecords, new Map<Id, OpportunityLineItem>((List<OpportunityLineItem>)this.records));
-		
-		OpportunityLineItemTrigger.onAfterInsert_Update_Delete((List<OpportunityLineItem>)this.records);
 		
 		createReOpenOpptyProdScheds((List<OpportunityLineItem>)existingRecords.values());
 		
@@ -72,8 +64,6 @@ public class OpportunityLineItems extends ApplicationDomain {
 	
 	public override void onAfterDelete() {
 		p('onAfterDelete');
-		OpportunityLineItemTrigger.onAfterInsert_Update_Delete((List<OpportunityLineItem>)this.records);
-		
 		deleteOpptyProdScheds();
 	}
 	
