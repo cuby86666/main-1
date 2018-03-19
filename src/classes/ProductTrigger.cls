@@ -31,7 +31,7 @@ public with sharing class ProductTrigger {
         
     public static Boolean IsFirstRun_AfterUpdate = true;
     public static Boolean IsFirstRun_AfterInsert = true;
-    
+    /*
     public static void updateOpptyLineItemProductStatus(Map<Id,Product2> productMap) {
         //J Added by Jason Tsai on April 26, 2016. 
         // To prevent claim value calculation if triggered from Product object change.
@@ -62,7 +62,7 @@ public with sharing class ProductTrigger {
             OpportunityProductClaimValue.isUpdatable = true;
         }       
     }
-    
+    */
     public static void updateOpportunityFields(List<Product2> lstNewProducts, List<Product2> lstOldProducts) {
         Set<Id> productIdSet = new Set<Id>();
         
@@ -90,7 +90,15 @@ public with sharing class ProductTrigger {
         }
         
         if (!productIdSet.isEmpty()) {
-            OpportuniLineItemTrigger.executeProductUpdate(productIdSet);    
+            //OpportuniLineItemTrigger.executeProductUpdate(productIdSet); 
+            
+            List<OpportunityLineItem> opptyProds = [select OpportunityId from OpportunityLineItem where PricebookEntry.Product2.Id in :productIdSet];
+            
+            if (opptyProds.size() > 0) {
+            	List<SObject> oppties = (List<SObject>)dlrs.RollupService.rollup(opptyProds);
+			
+				update oppties;	
+            }
         }
     }
     

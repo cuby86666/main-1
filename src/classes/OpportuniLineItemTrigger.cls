@@ -10,7 +10,7 @@
 
 */
 public class OpportuniLineItemTrigger {
-
+/*
     private static final String OPPORTUNITY_OBJ = 'Opportunity';
     
     //
@@ -31,12 +31,6 @@ public class OpportuniLineItemTrigger {
     
    
 
-    /**
-     * This method will perform an Opportunity update for the following fields:
-     *  - Business Unit
-     *  - Business Line
-     *  - MAG
-     **/
     public static void updateOpportunity(List<OpportunityLineItem> opportunityLineItemList) {       
         if(opportunityLineItemList != null && !opportunityLineItemList.isEmpty()) {
 
@@ -102,10 +96,6 @@ public class OpportuniLineItemTrigger {
         }
     }   
     
-    /**
-     * This is a future handler method.
-     * It will update the opportunity object based on the product trigger update.
-     */ 
     @future
     public static void executeProductUpdate(Set<Id> productIdSet) {         
         for(List<OpportunityLineItem> opportunityLineItemList : [ 
@@ -120,10 +110,6 @@ public class OpportuniLineItemTrigger {
         }
     }
     
-    /**
-     * Compare the Opportunity values with OpportunityLineItem value
-     * Return a string value for the result.
-     **/    
     private static String compareValue(String oppValue, String oppLineItemValue) {
         String result = oppValue;
         if((oppValue == null || oppValue.length() == 0) && oppLineItemValue != null) {
@@ -135,10 +121,6 @@ public class OpportuniLineItemTrigger {
         return result;
     }
     
-    /**
-     * Get the Opportunity records based on the OpportunityLineItem
-     * Set the record to Map object.
-     **/
     private static Map<Id,Opportunity> getOpportunityRecords(String opportunityIds) {
         Map<Id,Opportunity> opportunityMap = new Map<Id,Opportunity>();
         Map<String, Schema.SObjectField> fieldsMap = Schema.SobjectType.Opportunity.fields.getMap();
@@ -154,4 +136,5 @@ public class OpportuniLineItemTrigger {
         }
         return opportunityMap;
     }
+*/    
 }

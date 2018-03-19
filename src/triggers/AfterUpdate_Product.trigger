@@ -11,7 +11,7 @@ trigger AfterUpdate_Product on Product2 (after update)
     {   
         ProductTrigger.updateOpportunityFields(Trigger.new, Trigger.old);
         
-        ProductTrigger.updateOpptyLineItemProductStatus(Trigger.newMap);
+        //ProductTrigger.updateOpptyLineItemProductStatus(Trigger.newMap);
         
         ProductTrigger.IsFirstRun_AfterUpdate = false;
     }
