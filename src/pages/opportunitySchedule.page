@@ -10,13 +10,22 @@
         $Lightning.createComponent("c:opportunityScheduleAction",       
          {"recordId" : recordId
          },       
-         "lightning",       
-          function(cmp){
-                                      
-           }        
-          );
-  
-                  
+          "lightning", function(component){
+              $A.eventService.addHandler({
+                  event: 'force:navigateToURL',
+                  handler: function (event) {
+                      if (typeof sforce != 'undefined' && sforce.one) {
+                          // VF page in S1 or Lightning Exp
+                          // VF page in Classic
+                          sforce.one.navigateToURL(event.getParams().url);
+          
+                      } else {
+                              window.parent.location.href = event.getParams().url;
+                      }
+          
+                  }
+              });
+          });
         }); 
       </script>       
 </apex:page>

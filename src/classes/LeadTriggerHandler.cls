@@ -175,11 +175,15 @@ public class LeadTriggerHandler {
                 mapUserIdToEmail.put(u.Id,u.email);
             }
         }
-        LeadCountrySettings__c leadSettings = LeadCountrySettings__c.getValues('NovaSilva');
+        /*LeadCountrySettings__c leadSettings = LeadCountrySettings__c.getValues('NovaSilva');
         if(leadSettings !=null){
             novaSilvaEmail.add(leadSettings.NovaSilva_Email__c);
             system.debug('bccadd1::'+novaSilvaEmail);
-        }                        
+        }*/
+        string novaSilvaLabel=string.valueOf(System.Label.NovaSilva_Email);
+                                     if(novaSilvaLabel !=null){
+                                         novaSilvaEmail.add(novasilvaLabel); 
+                                     }
         EmailTemplate emailTemp=[select id from EmailTemplate where DeveloperName='Contact_Details_of_Lead_to_Disti_V0'];        
         for(lead ld:listLeads){                                                
             Messaging.SingleEmailMessage sendEmail = new Messaging.SingleEmailMessage();

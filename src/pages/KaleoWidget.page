@@ -1,0 +1,27 @@
+<apex:page >
+<apex:pageBlock >
+     
+<style>
+  body {
+      margin: 0 !important;
+  }
+  
+  .kw-container .kw-button {
+      display: block;
+  }
+  
+  .kw-container img {
+      width: 180px;
+      height: 50px;
+  }
+  
+  </style>
+
+  <div id="kw-widget" class="kw-container">
+        <a class="kw-button" href="https://nxp.kaleosoftware.com/v5/widget?widget_token=dc11a71f-a8d7-4e79-8280-698bcec63248" target="_blank">
+            <img src="https://production.kaleosoftware.com/assets/widgets/placeholder-closed.png" />
+        </a>
+  </div>
+
+</apex:pageBlock>
+</apex:page>

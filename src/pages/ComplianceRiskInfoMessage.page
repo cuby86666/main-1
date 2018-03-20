@@ -1,0 +1,6 @@
+<apex:page standardController="Compliance_Risk__c">
+<apex:pageMessage summary="The uploaded document file has to include the file identifier for the respective report in the file name safed: e.g. CR001 needs to be part of the file name of the risk assessment report for example like CR001_Compliance risk assessment Germany eID.xls"
+                  severity="info" 
+                  strength="3"
+                   />    
+</apex:page>

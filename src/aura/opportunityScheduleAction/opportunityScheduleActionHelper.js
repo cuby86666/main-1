@@ -1,4 +1,24 @@
-({					
+({
+    backOppty : function(component) {        
+        var urlEvent = $A.get("e.force:navigateToURL");
+        var recordId = component.get("v.recordId");
+        urlEvent.setParams({
+          "url" : "/" + recordId
+        });
+        urlEvent.fire();
+    },
+
+    checkNonIosAndBlurEvent : function(event) {
+    //filter out blur event on non-iOS environment (for ui:inputDate component)
+    //https://developer.salesforce.com/docs/atlas.en-us.lightning.meta/lightning/aura_compref_ui_inputDate.htm
+        var isIOS = !!navigator.userAgent.match(/iPhone|iPod|iPad/);
+        var eventType = event.getType();
+        if (!isIOS && eventType == "ui:blur") 
+          return(true); //non-iOS and blur event: skip blur event
+        else
+          return(false);//iOS and blur event: process blur event
+    },
+
     getOpptyValues: function(component) {					
     var action = component.get("c.getOpptyScheduleInfoClass");  //Onload dispatching					
     action.setParams({					

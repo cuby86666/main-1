@@ -35,7 +35,13 @@
 @Modified By :       Baji
 @Modified Date:      31 Jul 2017 
 @Description:        1708 Release (SFDC 729) - Generate Tax Classifications for MANU/SBE sales orgs.
-****************************************************************************************/
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+@Modified By :       Anil Somani
+@Modified Date:      19 Jan 2018
+@Description:        (SFDC 1231) - New Attributes(CN and PH) added on Tax Classification session for sales org NL61. 
+                     (SFDC 1235) - US63 - NXP San Jose Changed to US63 - NXP Austin for sales org US63.       
+
+**********************************************************************************************************************/
 public with sharing class TaxClassificationController 
 {
     private static final String SALES_ORG_NL60 = 'NL60 - RSO Europe';
@@ -45,7 +51,7 @@ public with sharing class TaxClassificationController
     /***1606 Release SIR 915 - START***/
     private static final String SALES_ORG_CN60 = 'CN60 - MSO China CN60';
     private static final String SALES_ORG_JP60 = 'JP60 - MSO Japan';//New Sales Org for FSL Order Miration, added by Scarlett on Mar 08
-    private static final String SALES_ORG_US63 = 'US63 - NXP San Jose';//New Sales Org for FSL Order Miration, added by Scarlett on May 31 2016
+    private static final String SALES_ORG_US63 = 'US63 - NXP Austin';//New Sales Org for FSL Order Miration, added by Scarlett on May 31 2016
  // private static final String SALES_ORG_CN61 = 'CN61 - MSO China';//New Sales Org for FSL Order Miration, added by Scarlett on May 31 2016
     private static final String SALES_ORG_CN64 = 'CN64 - Tianjin';//New Sales Org for FSL Order Miration, added by Scarlett on May 31 2016
  // private static final String SALES_ORG_MY61 = 'MY61 - NXP Seremban';//New Sales Org for FSL Order Miration, added by Scarlett on May 31 2016
@@ -206,7 +212,7 @@ public with sharing class TaxClassificationController
                     lstTaxClassifications.add(new Tax_Classification__c(SAP_CMD_Tax_Classification__c = objSapCmd.Id, Country__c = 'TW - Taiwan', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
                     lstTaxClassifications.add(new Tax_Classification__c(SAP_CMD_Tax_Classification__c = objSapCmd.Id, Country__c = 'US - USA', Tax_Category__c = 'UTXJ', Tax_Classification__c = '1'));
                 }
-              //New Tax Classification for Sales Org US63 - NXP San Jose
+              //New Tax Classification for Sales Org US63 - NXP Austin
               else if((objSapCmd.Sales_Organisation__c != null || objSapCmd.Sales_Organisation__c == '') && objSapCmd.Sales_Organisation__c.trim() == SALES_ORG_US63)
                 {                    
                     lstTaxClassifications.add(new Tax_Classification__c(SAP_CMD_Tax_Classification__c = objSapCmd.Id, Country__c = 'IN - India', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
@@ -296,11 +302,18 @@ public with sharing class TaxClassificationController
                     lstTaxClassifications.add(new Tax_Classification__c(SAP_CMD_Tax_Classification__c = objSapCmd.Id, Country__c = 'NL - Netherlands', Tax_Category__c = 'ZWRC', Tax_Classification__c = '1'));
                     lstTaxClassifications.add(new Tax_Classification__c(SAP_CMD_Tax_Classification__c = objSapCmd.Id, Country__c = 'PH - Philippines', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
                 }
-                else if((objSapCmd.Sales_Organisation__c != null || objSapCmd.Sales_Organisation__c == '') && (objSapCmd.Sales_Organisation__c.trim() == SALES_ORG_NL61 || objSapCmd.Sales_Organisation__c.trim() == SALES_ORG_NL68))
+                else if((objSapCmd.Sales_Organisation__c != null || objSapCmd.Sales_Organisation__c == '') && (objSapCmd.Sales_Organisation__c.trim() == SALES_ORG_NL61))
+                {   
+                    lstTaxClassifications.add(new Tax_Classification__c(SAP_CMD_Tax_Classification__c = objSapCmd.Id, Country__c = 'CN - China', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));  
+                    lstTaxClassifications.add(new Tax_Classification__c(SAP_CMD_Tax_Classification__c = objSapCmd.Id, Country__c = 'NL - Netherlands', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
+                    lstTaxClassifications.add(new Tax_Classification__c(SAP_CMD_Tax_Classification__c = objSapCmd.Id, Country__c = 'NL - Netherlands', Tax_Category__c = 'ZWRC', Tax_Classification__c = '1'));
+                    lstTaxClassifications.add(new Tax_Classification__c(SAP_CMD_Tax_Classification__c = objSapCmd.Id, Country__c = 'PH - Philippines', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
+                }
+                 else if((objSapCmd.Sales_Organisation__c != null || objSapCmd.Sales_Organisation__c == '') && (objSapCmd.Sales_Organisation__c.trim() == SALES_ORG_NL68))
                 {     
                     lstTaxClassifications.add(new Tax_Classification__c(SAP_CMD_Tax_Classification__c = objSapCmd.Id, Country__c = 'NL - Netherlands', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
                     lstTaxClassifications.add(new Tax_Classification__c(SAP_CMD_Tax_Classification__c = objSapCmd.Id, Country__c = 'NL - Netherlands', Tax_Category__c = 'ZWRC', Tax_Classification__c = '1'));
-                }
+                }    
                  else if((objSapCmd.Sales_Organisation__c != null || objSapCmd.Sales_Organisation__c == '') && objSapCmd.Sales_Organisation__c.trim() == SALES_ORG_RO61)
                 {     
                     lstTaxClassifications.add(new Tax_Classification__c(SAP_CMD_Tax_Classification__c = objSapCmd.Id, Country__c = 'CA - Canada', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));

@@ -2350,7 +2350,8 @@ public class CMD_Request_Controller_SAP_Extension {
                     if(lstNewZORGSAPCMD[i].Sales_Organisation__c == 'TW61 - NXP Kaohsiung'){
                         lstZORGTaxClassification.add(new Tax_Classification__c(SAP_CMD_Tax_Classification__c = lstNewZORGSAPCMD[i].Id, Country__c = 'TW - Taiwan', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
                     }
-                    if(lstNewZORGSAPCMD[i].Sales_Organisation__c == 'US63 - NXP San Jose'){
+                    if(lstNewZORGSAPCMD[i].Sales_Organisation__c == 'US63 - NXP Austin'){
+                    lstZORGTaxClassification.add(new Tax_Classification__c(SAP_CMD_Tax_Classification__c = lstNewZORGSAPCMD[i].Id, Country__c = 'IN - India', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
                         lstZORGTaxClassification.add(new Tax_Classification__c(SAP_CMD_Tax_Classification__c = lstNewZORGSAPCMD[i].Id, Country__c = 'US - USA', Tax_Category__c = 'UTXJ', Tax_Classification__c = '1'));
                     }
                 }

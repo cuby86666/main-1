@@ -20,7 +20,10 @@ public class CommunityLiveAgentChatSurveyController
     {
         //below line is added by shridevi for redirecting to login page upon logout.
         RedirectionToLoginPage=(Site.getPathPrefix()+Label.Community_Login_URL);
-     
+         strResolved=' 4 Very Satisfied';
+         strResolutionTime=' 4 Very Satisfied';
+         strSupportPerson=' 4 Very Satisfied';
+         strLikeOurSupport=string.valueof('10');
     }
        
     //create picklist values based on question value field
@@ -45,7 +48,7 @@ public class CommunityLiveAgentChatSurveyController
     {
         lstQuesValues = new List<SelectOption>();
         List<Survey_question__c> objSurveyQues= [Select id, name, question__c,type__c,value__c from survey_question__c 
-                                           where name='Chat Like Our Support ?' LIMIT 1];
+                                           where name='Chat Share with others ?' LIMIT 1];
         if(objSurveyQues.size()!=0 || objSurveyQues!=null)
         {
             List<String> lstStrQuesValue= objSurveyQues[0].value__c.split(',');
@@ -96,7 +99,7 @@ public class CommunityLiveAgentChatSurveyController
             lstSurveyAns.add(objAns);
         }
         lstSurveyQues= [Select id, name, question__c,type__c,value__c from survey_question__c 
-                                           where name='Chat Like Our Support ?' LIMIT 1];
+                                           where name='Chat Share with others ?' LIMIT 1];
         if(lstSurveyQues.size()!=0 || lstSurveyQues!=null)
         {
             Live_Chat_Survey_Answer__c objAns= new Live_Chat_Survey_Answer__c();

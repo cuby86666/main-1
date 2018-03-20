@@ -17,7 +17,6 @@
 
 @isTest
 private class UpdateOpportunityBatchTest {
-	
     private static final String TYPE_SFDC_Oppty = 'SFDC_Oppty';
     private static final String TYPE_Global_Enterprise = 'Global_Enterprise';//ojb: Customer
     private static final String TYPE_Parent_Account = 'Parent_Account';
@@ -224,5 +223,4 @@ private class UpdateOpportunityBatchTest {
         updateOpptyTest.ApproverId = string.valueof(objUser.Id);
         Database.executeBatch(updateOpptyTest);
     }
-    
 }

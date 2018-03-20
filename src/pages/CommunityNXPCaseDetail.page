@@ -66,12 +66,12 @@
                                                     <dt class="panel-title">{!$Label.CommunityDescription}</dt>
                                                     <dd class="panel-info-content" id="">{!caseRecord.Description}</dd>
                                                     <!------ Added by Shridevi,SFDC-943-Display the case comment if the comment is marked as public----->
-                                                    <apex:outputPanel rendered="{!if(caseRecord.casecomments.size>0,true,false)}">
+                                                    <!--apex:outputPanel rendered="{!if(caseRecord.casecomments.size>0,true,false)}">
                                                     <dt class="panel-title">Comment</dt>
                                                     <dd class="panel-info-content" id="">
                                                     <div class="panel-info-content-1">{!caseRecord.CaseComments[0].commentbody}</div>
                                                     </dd>  
-                                                    </apex:outputPanel>  
+                                                    </apex:outputPanel-->  
                                                     <!-- ---------------------------------ENDS HERE---------------------------------------------------->
                                                      
                                                 </dl>
@@ -109,6 +109,21 @@
                                                     <dd class="panel-info-content" id="">{!caseRecord.Product_sub__c}</dd>
                                                 </dl>
                                             </div>
+                                             <!------ Added by Shridevi,SFDC-943-Display the case comment if the comment is marked as public----->
+                                              <apex:outputPanel rendered="{!if(caseRecord.casecomments.size>0,true,false)}">
+                                                   <div class="col-xs-12">
+                                                    <h2 class="panel-body-title">Comment</h2>
+                                                   </div>
+                                                   <div Class="col-sm-12">
+                                                     <dl class="panel-info">
+                                                       <dd class="panel-info-content" id="">
+                                                        <div class="panel-info-content-1">{!caseRecord.CaseComments[0].commentbody}</div>
+                                                       </dd>  
+                                                     </dl> 
+                                                  </div>            
+                                              </apex:outputPanel> 
+                                          <!-- ---------------------------------ENDS HERE---------------------------------------------------->
+                                          
                                         </div>
                                         <div class="panel-body additional-info">
                                             <div class="col-xs-12">

@@ -1,0 +1,20 @@
+<aura:component >
+	<aura:attribute name="oAccount" type="Account" />
+            
+  <!--Register the component level event-->
+    <aura:registerEvent name="oAccsObjectRecordEvent" type="c:accSObjectRecordEvent"/>
+       
+    <li role="presentation">        
+        <span class="slds-lookup__item-action slds-media slds-media--center" id="lookup-option-351" role="option">
+        <div class="slds-media__body">            
+            <div class="slds-lookup__result-text">                                                                                  
+                <a onclick="{!c.selectDistiAcc}">
+                    {!v.oAccount.Name}
+                </a>                                                                       
+          </div> 
+            </div>
+        </span>
+    </li>
+    
+    
+</aura:component>

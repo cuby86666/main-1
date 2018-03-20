@@ -24,8 +24,13 @@
 @Modified By :       Baji
 @Modified Date:      01 Aug 2017 
 @Description:        1708 Release (SFDC 729) - Generate Tax Classifications for MANU/SBE sales orgs.
-****************************************************************************************/
-
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+@Modified By :       Anil Somani
+@Modified Date:      19 Jan 2018
+@Description:        (SFDC 1231) - New Attributes(CN and PH) added on Tax Classification session for sales org NL61. 
+                     (SFDC 1235) - US63 - NXP San Jose Changed to US63 - NXP Austin for sales org US63.
+                     
+********************************************************************************************************/
 
 @isTest
 public class TaxClassificationCMDRControllerTest {
@@ -584,7 +589,7 @@ public class TaxClassificationCMDRControllerTest {
         createCustomer();
         
         CMD_Request__c objCMDRequest = new CMD_Request__c(
-            Sales_Organisation__c = 'US63 - NXP San Jose',
+            Sales_Organisation__c = 'US63 - NXP Austin',
             Reason_for_request__c = 'Test',
             Account_Group__c = 'Z001',
             RecordTypeId = SAP_New_Funloc_Request.Id,

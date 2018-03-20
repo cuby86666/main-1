@@ -237,7 +237,7 @@
                             <div class="slds-form-element__control">
                  			<ui:inputSelect aura:id="slave" label="Industry Sub-segment" disabled="{!v.isDependentDisable}"
                             class="slds-select" labelClass="slds-form-element__label" change="{!c.onDepFieldChange}" />
-                            </div>
+                            </div><br/>
                             <label class="slds-form-element__label">
                                 Note:The new Opportunity created will be in ‘Initial Engagement’ stage. 
                                 Once created, please open new opportunity and update as needed.

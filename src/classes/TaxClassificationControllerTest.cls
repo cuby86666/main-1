@@ -39,7 +39,13 @@
 @Modified By :       Baji
 @Modified Date:      01 Aug 2017 
 @Description:        1708 Release (SFDC 729) - Generate Tax Classifications for MANU/SBE sales orgs.
-******************************************************************************************************************/
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+@Modified By :       Anil Somani
+@Modified Date:      19 Jan 2018
+@Description:        (SFDC 1231) - New Attributes(CN and PH) added on Tax Classification session for sales org NL61. 
+                     (SFDC 1235) - US63 - NXP San Jose Changed to US63 - NXP Austin for sales org US63.
+
+***********************************************************************************************************************************/
 
 @isTest
 private class TaxClassificationControllerTest
@@ -374,7 +380,7 @@ private class TaxClassificationControllerTest
         //stop the test
         Test.stopTest();   
     }     
-        //Case - Sales Organisation ->  US63 - NXP San Jose
+        //Case - Sales Organisation ->  US63 - NXP Austin
     static testMethod void TaxClassificationControllerTest6()
     {
         //prepare test data
@@ -388,7 +394,7 @@ private class TaxClassificationControllerTest
                                                 Legal_Name__c = 'test legal name4' ,  City__c= 'ut_city', Street_1__c = 'ut_Street1', Country__c = 'ANDORRA',    
                                                 Language__c='E - English', FunLoc_Type__c='Internal',
                                                 End_Customer_NXP_Global_ID__c = objCustomer.Id, Grp_1_Sls_Channel_SP__c='DIS - Distributor',
-                                                Acct_assgmt_group__c='01 - Local 3rd Party',Currency__c='USD - US Dollar',Sales_Organisation__c = 'US63 - NXP San Jose', Transportation_Zone__c='AR1',
+                                                Acct_assgmt_group__c='01 - Local 3rd Party',Currency__c='USD - US Dollar',Sales_Organisation__c = 'US63 - NXP Austin', Transportation_Zone__c='AR1',
                                                 Customer_Factory_Calendar__c='1A - Customer Calendar ARROW NL',Fix_Price_Ind_SP__c='Y - Yes',
                                                 Reconciliation_Account__c='1200000 - Trade AR with domestic parties',Terms_of_payment__c='014 - Prepaid',
                                                 Payment_Credit_Memo__c='014 - Prepaid',S_O_Sub_Group__c='AT - Austria',Reprice_Basis__c='C - Conf. Delivery Date',
@@ -418,7 +424,7 @@ private class TaxClassificationControllerTest
         //stop the test
         Test.stopTest();   
     } 
-            //Case - Sales Organisation ->  US63 - NXP San Jose
+            //Case - Sales Organisation ->  US63 - NXP Austin
     static testMethod void TaxClassificationControllerTest7()
     {
         //prepare test data
@@ -432,7 +438,7 @@ private class TaxClassificationControllerTest
                                                 Legal_Name__c = 'test legal name4' ,  City__c= 'ut_city', Street_1__c = 'ut_Street1', Country__c = 'ANDORRA',    
                                                 Language__c='E - English', FunLoc_Type__c='Internal',
                                                 End_Customer_NXP_Global_ID__c = objCustomer.Id, Grp_1_Sls_Channel_SP__c='DIS - Distributor',
-                                                Acct_assgmt_group__c='01 - Local 3rd Party',Currency__c='USD - US Dollar',Sales_Organisation__c = 'US63 - NXP San Jose', Transportation_Zone__c='AR1',
+                                                Acct_assgmt_group__c='01 - Local 3rd Party',Currency__c='USD - US Dollar',Sales_Organisation__c = 'US63 - NXP Austin', Transportation_Zone__c='AR1',
                                                 Customer_Factory_Calendar__c='1A - Customer Calendar ARROW NL',Fix_Price_Ind_SP__c='Y - Yes',
                                                 Reconciliation_Account__c='1200000 - Trade AR with domestic parties',Terms_of_payment__c='014 - Prepaid',
                                                 Payment_Credit_Memo__c='014 - Prepaid',S_O_Sub_Group__c='AT - Austria',Reprice_Basis__c='C - Conf. Delivery Date',

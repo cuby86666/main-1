@@ -9,7 +9,7 @@
             alert('New Child Account Creation Is Not Allowed.');
             window.history.back();
         } else {
-            document.getElementById("iframe1").src="https://nxp.my.salesforce.com/apex/CMD?src=sfdc&rt=New%20SFDC%20Child%20Account&uid={!$User.Id}&rn={!$User.FirstName}%20{!$User.LastName}&re={!$User.Email}&pn={!Account.Name}&pgid={!Account.NXP_GID__c}&pid={!Account.Id}&00ND0000004e9Ma={!Account.Customer_Category__c}";
+            document.getElementById("iframe1").src="/apex/CMD?src=sfdc&rt=New%20SFDC%20Child%20Account&uid={!$User.Id}&rn={!$User.FirstName}%20{!$User.LastName}&re={!$User.Email}&pn={!Account.Name}&pgid={!Account.NXP_GID__c}&pid={!Account.Id}&00ND0000004e9Ma={!Account.Customer_Category__c}";
         }
     }
 </script>

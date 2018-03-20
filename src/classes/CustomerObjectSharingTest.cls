@@ -1,12 +1,22 @@
+/* Createdby : Sumanth
+   CreatedDate :
+   Description : to share customer record with CAS engineers
+*/ 
 /* Last ModifiedBy : Baji
    Last ModifiedDate : 02 Jun 2017
    Description : Updated to remove the test data related to Opportunity Approval Setting.
 */ 
+/* Last ModifiedBy : Anil Somani
+   Last ModifiedDate : 24 Jan 2018
+   Description : Selecting Standard User directly instead of randomly selecting user from the org.
+*/
 
 @istest
 public class CustomerObjectSharingTest
 {
-
+    private static final String TEST_USER_PROFILE = 'Standard User';
+    private static final String TEST_USER = 'T_user';
+    
     static testmethod void CustomerObjectSharingTest1()
     {
        date mydate1 = date.parse('05/24/2017');
@@ -67,25 +77,42 @@ public class CustomerObjectSharingTest
        CP.Project_Status__c='Green';
        insert CP;
        
+       
        //Insert Techincal Project Team
-       List<User> users = [SELECT Id FROM User WHERE IsActive = true LIMIT 2];
-       Id User1Id = users[0].Id;
-       Id User2Id = users[1].Id;
+       Profile p = [select Id from Profile where Name = :TEST_USER_PROFILE];
+       // insert a test user
+       List<User> listUser=new list<user>();
+       listUser.add(createUser(TEST_USER,TEST_USER , p.Id,'test@test.com'));
+       listUser.add(createUser(TEST_USER,TEST_USER , p.Id,'test1@test1.com'));
+       
+       insert listUser;
+       listUser= [SELECT Id FROM User where Id in:listUser and IsActive = true LIMIT 2 ];
        
        Technical_Support_Team__c Team = new Technical_Support_Team__c();
        Team.Customer_Project__c=CP.Id;
-       Team.CAS_1_Engineer__c=User1Id ;
-       Team.CAS_2_Engineer__c=User2Id ;
+       Team.CAS_1_Engineer__c=listUser[0].id;
+       Team.CAS_2_Engineer__c=listUser[1].id;
        
        insert Team;
        
-       list<Customer_Project__share> shares=[SELECT Id, UserOrGroupId, AccessLevel,RowCause FROM Customer_Project__share WHERE ParentId = :CP.Id AND (UserOrGroupId= :user2Id OR UserOrGroupId= :user1Id) ];
+       list<Customer_Project__share> shares=[SELECT Id, UserOrGroupId, AccessLevel,RowCause FROM Customer_Project__share WHERE ParentId = :CP.Id AND (UserOrGroupId= :listUser[0].id OR UserOrGroupId= :listUser[1].id) ];
        
        System.assertEquals(shares.size(), 2);
        //for delete condition
        
        delete team;
        
- }
+    }
 
+    static User createUser(String alias, String lastName, ID profileID, String email)
+    {
+       User user = new User(EmailEncodingKey = 'UTF-8', LanguageLocaleKey = 'en_US', LocaleSidKey = 'en_US', TimeZoneSidKey = 'America/Los_Angeles');
+       user.Alias = alias;
+       user.LastName = lastName;
+       user.ProfileId = profileID;
+       user.Email = email;
+       user.UserName = 'abcd'+email;
+       
+       return user;  
+    }
 }

@@ -85,7 +85,7 @@ private class CMD_Request_Controller_SAP_Ext_Test {
     lstCustomSalesOrgSetting.add(new Sales_Organisation_ZORG__c(Name = 'CN64 - Tianji'));
     lstCustomSalesOrgSetting.add(new Sales_Organisation_ZORG__c(Name = 'TH61 - NXP Thailand'));
     lstCustomSalesOrgSetting.add(new Sales_Organisation_ZORG__c(Name = 'TW61 - NXP Kaohsiung'));
-    lstCustomSalesOrgSetting.add(new Sales_Organisation_ZORG__c(Name = 'US63 - NXP San Jose')); 
+    lstCustomSalesOrgSetting.add(new Sales_Organisation_ZORG__c(Name = 'US63 - NXP Austin'));
         
     insert lstCustomSalesOrgSetting;
   }

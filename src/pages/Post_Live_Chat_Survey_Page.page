@@ -1,3 +1,9 @@
+<!--***************************************************************************************************
+Last Modified By : Shridevi
+Last Modified Date:01-Feb-2018
+Description:Satisfaction Survey Changes
+*******************************************************************************************************-->
+
 <apex:page id="thepage" sidebar="false" showHeader="false" standardStylesheets="false" controller="CommunityLiveAgentChatSurveyController">
  <div id="thepage" style="overflow:auto;height:450px;"> 
   <head>
@@ -11,6 +17,7 @@
     <apex:stylesheet value="{!URLFOR($Resource.Forum_Community_3, 'NXP-community/css/font-awesome.css')}" ></apex:stylesheet>      
     <apex:stylesheet value="{!URLFOR($Resource.Forum_Community_3, 'NXP-community/css/hover.css')}" ></apex:stylesheet>
     <apex:stylesheet value="{!URLFOR($Resource.Forum_Community_3, 'NXP-community/css/main.css')}" ></apex:stylesheet>
+    <apex:stylesheet value="{!URLFOR($Resource.communityContextSearchStyles)}"/>
 </head>
   
   <body class="new-case">
@@ -51,69 +58,109 @@ Please, do not hesitate to contact us again! </b>
                 <h5>Satisfaction Survey</h5></div>
         </div>
         <br/>
+         <!-----------------------------Modified by Shridevi:SFDC-1107:Disply all survery answers in radio buttons instead of dropdown---->
+       
         <div class="row">
                 <div class="col-md-8 col-xs-8">
                     <div class="form-group">
                         <label class="control-label col-md-4"><b>Resolved ?</b></label>
-                        <div class="col-md-5">
+                        <div class="col-md-12">
                             <apex:outputPanel styleClass="requiredInput"  layout="block" id="inputPanelResolved">                 
                                 <apex:outputPanel styleClass="requiredBlock" layout="block" id="inputBlockResolved"/>
-                                <apex:selectList size="1" value="{!strResolved}" required="true" id="inputResolved" styleclass="btn btn-default dropdown-toggle input-form">
-                                    <apex:selectOptions value="{!quesValues}" />
-                                </apex:selectList>
-                            </apex:outputPanel>
+                                 <apex:inputHidden value="{!strResolved}" id="resolved"/> 
+                            <label class="radio-inline ">
+                              <input type="radio" class="label-content-4 radio-button-y" id="radio1" onchange="document.getElementById('{!$Component.resolved}').value=' 1 Very Dissatisfied';" value="{!quesValues[0].value}" name="optradio"/><b>{!quesValues[0].label}</b>
+                            </label>
+                            <label class="radio-inline label-content-4">
+                              <input type="radio"  id="radio2" class="radio-button-y" onchange="document.getElementById('{!$Component.resolved}').value=' 2 Dissatisfied';" value="{!quesValues[1].value}" name="optradio"/><b>{!quesValues[1].label}</b>
+                            </label>
+                            <label class="radio-inline label-content-4">
+                              <input type="radio" id="radio3" class="radio-button-y" onchange="document.getElementById('{!$Component.resolved}').value=' 3 Satisfied';" value="{!quesValues[2].value}" name="optradio"/><b>{!quesValues[2].label}</b>
+                            </label>
+                            <label class="radio-inline label-content-4">
+                              <input type="radio" id="radio4" class="radio-button-y" onchange="document.getElementById('{!$Component.resolved}').value=' 4 Very Satisfied';" value="{!quesValues[3].value}" name="optradio" checked="checked"/><b>{!quesValues[3].label}</b>
+                            </label>     
+                              </apex:outputPanel>
                         </div>
-                        <div class="col-md-3">
+                        <div style="margin-top: 0px;" class="col-md-12">
                         <apex:outputtext value="How satisfied are you with the answer you received in this chat?" id="resolvedQuestion" style="color:Black" />
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-md-4"><b>Resolution Time?</b></label>
-                        <div class="col-md-5">
+                        <div class="col-md-12">
                             <apex:outputPanel styleClass="requiredInput"  layout="block" id="inputPanelResolution">                 
                                 <apex:outputPanel styleClass="requiredBlock" layout="block" id="inputBlockResolution"/>
-                                <apex:selectList size="1" value="{!strResolutionTime}" required="true" id="inputResolution" styleclass="btn btn-default dropdown-toggle input-form">
-                                    <apex:selectOptions value="{!quesValues}" />
-                                </apex:selectList>
+                               <apex:inputHidden value="{!strResolutionTime}" id="resolutionTime"/> 
+                                    <label class="radio-inline">
+                                         <input type="radio" class="label-content-4 radio-button-y" id="radio5" onchange="document.getElementById('{!$Component.resolutionTime}').value=' 1 Very Dissatisfied';" value="{!quesValues[0].value}" name="optradio1"/><b>{!quesValues[0].label}</b>
+                                    </label>
+                                    <label class="radio-inline label-content-4">
+                                      <input type="radio"  id="radio6" class="radio-button-y" onchange="document.getElementById('{!$Component.resolutionTime}').value=' 2 Dissatisfied';" value="{!quesValues[1].value}" name="optradio1"/><b>{!quesValues[1].label}</b>
+                                    </label>
+                                    <label class="radio-inline label-content-4">
+                                      <input type="radio" id="radio7" class="radio-button-y" onchange="document.getElementById('{!$Component.resolutionTime}').value=' 3 Satisfied';" value="{!quesValues[2].value}" name="optradio1"/><b>{!quesValues[2].label}</b>
+                                    </label>
+                                    <label class="radio-inline label-content-4">
+                                      <input type="radio" id="radio8" class="radio-button-y" onchange="document.getElementById('{!$Component.resolutionTime}').value=' 4 Very Satisfied';" value="{!quesValues[3].value}" name="optradio1" checked="checked"/><b>{!quesValues[3].label}</b>
+                                    </label>
                             </apex:outputPanel>
                         </div>
-                        <div class="col-md-3">
+                        <div style="margin-top: 0px;" class="col-md-12">
                         <apex:outputtext value="How satisfied are you with the request resolution time of the chat?" id="resolutionQuestion" style="color:Black" />
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-md-4"><b>Support Person?</b></label>
-                        <div class="col-md-5">
+                        <div class="col-md-12">
                         <apex:outputPanel styleClass="requiredInput"  layout="block" id="inputPanelSupport">                 
                                 <apex:outputPanel styleClass="requiredBlock" layout="block" id="inputBlockSupport"/>
-                                <apex:selectList size="1" value="{!strSupportPerson}" required="true" id="inputSupport" styleclass="btn btn-default dropdown-toggle input-form">
-                                    <apex:selectOptions value="{!quesValues}" />
-                                </apex:selectList>
+                                <apex:inputHidden value="{!strSupportPerson}" id="supportPerson"/> 
+                                <label class="radio-inline">
+                                     <input type="radio" class="label-content-4 radio-button-y" id="radio9" onchange="document.getElementById('{!$Component.supportPerson}').value=' 1 Very Dissatisfied';" value="{!quesValues[0].value}" name="optradio2"/><b>{!quesValues[0].label}</b>
+                                </label>
+                                <label class="radio-inline label-content-4">
+                                  <input type="radio"  id="radio10" class="radio-button-y" onchange="document.getElementById('{!$Component.supportPerson}').value=' 2 Dissatisfied';" value="{!quesValues[1].value}" name="optradio2"/><b>{!quesValues[1].label}</b>
+                                </label>
+                                <label class="radio-inline label-content-4">
+                                  <input type="radio" id="radio11" class="radio-button-y" onchange="document.getElementById('{!$Component.supportPerson}').value=' 3 Satisfied';" value="{!quesValues[2].value}" name="optradio2"/><b>{!quesValues[2].label}</b>
+                                </label>
+                                <label class="radio-inline label-content-4 ">
+                                  <input type="radio" id="radio12" class="radio-button-y" onchange="document.getElementById('{!$Component.supportPerson}').value=' 4 Very Satisfied';" value="{!quesValues[3].value}" name="optradio2" checked="checked"/><b>{!quesValues[3].label}</b>
+                                </label>
                         </apex:outputPanel>
                         </div>
-                        <div class="col-md-3">
+                        <div style="margin-top: 0px;" class="col-md-12">
                         <apex:outputtext id="supportQuestion" value="How satisfied are you with the support person’s ability to answer your question in the chat?" style="color:Black"/>
                         </div>
                     </div>
                     
                     <div class="form-group">
-                        <label class="control-label col-md-4"><b>Like Our Support?</b></label>
-                        <div class="col-md-5">
+                        <label class="control-label col-md-4"><b>Share with others?</b></label>
+                        <div class="col-md-12">
                         <apex:outputPanel styleClass="requiredInput"  layout="block" id="inputPanelLike">                 
                                 <apex:outputPanel styleClass="requiredBlock" layout="block" id="inputBlockLike"/>
-                                <apex:selectList size="1" value="{!strLikeOurSupport}" id="inputLike" required="true" styleclass="btn btn-default dropdown-toggle input-form">
-                                    <apex:selectOptions value="{!quesValues1}" />
-                                </apex:selectList>
+                                <apex:selectRadio id="inputLike" styleClass="col-xs-12 col-sm-7 col-md-5"    value="{!strLikeOurSupport}"   layout="lineDirection">
+                                                <apex:selectOptions value="{!quesValues1}" />
+                                 </apex:selectRadio>
                         </apex:outputPanel>
                         </div>
-                        <div class="col-md-3">
-                        <apex:outputtext id="likeQuestion" value="If someone asks you about our support, would you say “Yes, you should use it” ?" style="color:Black"/>
+                        <table class="col-xs-12  col-md-12" >
+                         <td  class="col-xs-8 col-sm-4 col-md-3">Not likely at all</td>
+                         <td ></td>
+                         <td ></td>
+                         <td Class="col-xs-12 col-sm-10 col-md-9 "><span class="label-content-3 ">Extremely Likely</span></td>
+                        </table>
+                        <div style="margin-top: 0px;" class="col-md-12">
+                        <apex:outputtext id="likeQuestion" value="Based on your experience with our support, would you tell others  “You should use it” ?" />
                         </div>
                     </div>
                     
                 </div>
                 </div>
         <br/>
+        <!-------------------------------------------------Ends Here------------------------------------------------>
+        
                 <div class="row">
             <div class="col-md-12 col-xs-12 bg-color-bar padding-left-10">
                 <h5>Any additional comments would you like to share with us regading the chat?</h5></div>

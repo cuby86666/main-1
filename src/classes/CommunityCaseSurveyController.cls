@@ -54,6 +54,10 @@ public class CommunityCaseSurveyController
                 strCaseSubject= lstcase[0].Subject;       
             }
         }
+         strResolved=' 4 Very Satisfied';
+         strResolutionTime=' 4 Very Satisfied';
+         strSupportPerson=' 4 Very Satisfied';
+         strLikeOurSupport=string.valueof('10');
     }
     
     public String getLargePhotoUrl() 
@@ -77,6 +81,7 @@ public class CommunityCaseSurveyController
                 lstQuesValues.add(new SelectOption(strValue,strValue));
             }            
         }
+         
         return lstQuesValues;
     }
     
@@ -85,7 +90,7 @@ public class CommunityCaseSurveyController
     {
         lstQuesValues = new List<SelectOption>();
         List<Survey_question__c> objSurveyQues= [Select id, name, question__c,type__c,value__c from survey_question__c 
-                                           where name='Like Our Support ?' LIMIT 1];
+                                           where name='Share with others ?' LIMIT 1];
         if(objSurveyQues.size()!=0 || objSurveyQues!=null)
         {
             List<String> lstStrQuesValue= objSurveyQues[0].value__c.split(',');
@@ -94,6 +99,7 @@ public class CommunityCaseSurveyController
                 lstQuesValues.add(new SelectOption(strValue,strValue));
             }            
         }
+         
         return lstQuesValues;
     }
        
@@ -143,7 +149,7 @@ public class CommunityCaseSurveyController
             lstSurveyAns.add(objAns);
         }
         lstSurveyQues= [Select id, name, question__c,type__c,value__c from survey_question__c 
-                                           where name='Like Our Support ?' LIMIT 1];
+                                           where name='Share with others ?' LIMIT 1];
         if(lstSurveyQues.size()!=0 || lstSurveyQues!=null)
         {
             Survey_answer__c objAns= new Survey_answer__c();
@@ -165,6 +171,7 @@ public class CommunityCaseSurveyController
         
         try 
         {
+        System.debug('^^^^^^^survey answers::'+lstSurveyAns);
             insert lstSurveyAns;
             lstCase[0].Survey_Flag__c='False';
             update lstCase; 

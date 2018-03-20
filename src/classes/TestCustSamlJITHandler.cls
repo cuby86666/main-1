@@ -49,7 +49,7 @@ public class TestCustSamlJITHandler {
         attributes.put('User.LastName','UserLastName');
         attributes.put('User.CompanyName','NXP');
         attributes.put('User.Country','USA');
-        jitHandler.createUser(Id.valueOf('00D4E0000008kQF'),Id.valueOf('00D4E0000008kQF'),Id.valueOf('00D4E0000008kQF'), '', attributes, 'true');
+        jitHandler.createUser(Id.valueOf('00D4E0000008kQF'),Id.valueOf('00D4E0000008kQF'),Id.valueOf('00D4E0000008kQF'), 'notblankvalue', attributes, 'true');
         jitHandler.createUser(Id.valueOf('00D4E0000008kQF'),Id.valueOf('00D4E0000008kQF'),Id.valueOf('00D4E0000008kQF'), 'test@test.com', attributes, 'true');
         
     }
@@ -92,7 +92,7 @@ public class TestCustSamlJITHandler {
         attributes.put('User.LastName','UserLastName');
         attributes.put('User.CompanyName','NXP');
         attributes.put('User.Country','USA');
-        jitHandler.updateUser(usr.Id,Id.valueOf('00D4E0000008kQF'),Id.valueOf('00D4E0000008kQF'),Id.valueOf('00D4E0000008kQF'), '', attributes, 'true');
+        jitHandler.updateUser(usr.Id,Id.valueOf('00D4E0000008kQF'),Id.valueOf('00D4E0000008kQF'),Id.valueOf('00D4E0000008kQF'), 'fedidnoblank', attributes, 'true');
         //jitHandler.createUser(Id.valueOf('00D4E0000008kQF'),Id.valueOf('00D4E0000008kQF'),Id.valueOf('00D4E0000008kQF'), 'test@test.com', attributes, 'true');
         
     }

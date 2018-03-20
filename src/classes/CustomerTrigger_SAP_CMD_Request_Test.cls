@@ -2,6 +2,10 @@
 @Modified By :    Scarlett Kang
 @Modified Date :   26 Sep 2014
 @Description :     Updated test methods to fix it due to new mandatory field - Postal Code
+******************************************************************************************
+@Modified By :    Baji
+@Modified Date :   13 Mar 2018
+@Description :     Commented seealldata = true at line #86
 *******************************************************************************************/
 
 @isTest
@@ -83,7 +87,7 @@ private class CustomerTrigger_SAP_CMD_Request_Test{
         insert testCustomer;
     }
 
-    @isTest(SeeAllData=true)
+    @isTest //(SeeAllData=true)
     static void thePositiveUnitTest(){
         fetchNewSAPRecordType();
         insertTestRequest();

@@ -39,6 +39,12 @@
 @Modified For : SIR 1013
 @Description :  Update New Sub CBG on Account request form
 ********************************************************************************/
+/*****************************************************************************************
+@Modified By :   Anil Somani
+@Modified Date:  15 Feb 2018
+@Description:    Validation done for "Street" & "City" field as part of SFDC-1369 & SFDC-731. 
+*******************************************************************************************/
+
 public without sharing class CMD_Request_Controller
 {
     private static final string WEB_FORM_URL = 'http://nxpsemiconductors.force.com/cmd';
@@ -175,6 +181,7 @@ public without sharing class CMD_Request_Controller
     public boolean Street_3_too_Long {get;set;}
     public string City {get;set;}
     public boolean City_empty {get;set;}
+    public boolean City_too_Long {get;set;}
     public string State {get;set;}
     public string Country {get;set;}
     public boolean Country_Empty {get;set;}
@@ -1253,23 +1260,24 @@ public CMD_Request_Controller()
             }
             else    
                 House_Number_too_Long = false;
+                
 
-            if( Street == null || Street == '' )
+           if( Street == null || Street == '' )
             {
                 Street_Empty = true;
                 ReqFieldsEmpty++;
             }
-            else
-            {    
-                Street_Empty = false;
-                if( Street.length() > 35 )
-                {
-                    Street_too_Long = true;
-                    ReqFieldsEmpty++;
-                }
-                else Street_too_Long = false;                   
-            }
-
+           else 
+                 Street_Empty = false;
+            
+           if(Street != null && Street.length() > 35 )
+             {
+                Street_too_Long = true;
+                ReqFieldsEmpty++;
+             }
+           else 
+                 Street_too_Long = false; 
+     
             if( Street_2 != null && Street_2 != '' )
             {
                 if( Street_2.length() > 35 )
@@ -1299,9 +1307,17 @@ public CMD_Request_Controller()
                 City_Empty = true;
                 ReqFieldsEmpty++;
             }
-            else    
-                City_Empty = false;
+            else   
+            City_Empty = false;
             
+            if(City != null && City.length() > 30 )
+            {
+                 City_too_Long = true;
+                 ReqFieldsEmpty++;
+            }
+            else 
+            City_too_Long = false;
+                    
             if( objCMDreq.country__c== null || objCMDreq.country__c== '' )
             {
                 Country_Empty = true;
@@ -1380,7 +1396,8 @@ public CMD_Request_Controller()
                 Region_Empty = false;
 
             /********************Modified by Shridevi-SIR 866- To make sales area field optional for New SFDC Child Account *************************/
-            if( (RequestType == 'New SFDC Child Account') 
+          /**
+             if( (RequestType == 'New SFDC Child Account') 
                 && (Sales_Area == null || Sales_Area == '') )
             {
                 Sales_Area_Empty = true;
@@ -1397,6 +1414,7 @@ public CMD_Request_Controller()
             }
             else
                 Sales_Area_Empty = false;
+          */      
          /*****************************************************************************************************/
 
             if( Background_of_This_Request == null || Background_of_This_Request == '' )

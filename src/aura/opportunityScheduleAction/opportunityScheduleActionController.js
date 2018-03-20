@@ -28,8 +28,9 @@
     				
     //Redirect back to record detail page				
     backOppty : function(component, event, helper) {				
-         var recordId = component.get("v.recordId");				
-         window.location.href = '/'+recordId;				
+        var recordId = component.get("v.recordId");				
+        //window.location.href = '/'+recordId;
+        helper.backOppty(component);
     },				
     				
     // Function to load the Opportunity Schedule display window 				
@@ -88,7 +89,8 @@
        var recordId = component.get("v.recordId");				
        var flgbtnDisable = saveSchBtn.get("v.disabled");				
        if(flgbtnDisable == true || flgException == true){				
-          window.location.href = '/'+recordId;				
+          //window.location.href = '/'+recordId;
+          helper.backOppty(component);	
         }				
         else{				
              component.set("v.flagCancelAlert", true);  				
@@ -132,7 +134,8 @@
                     component.set("v.isChanged",false);				
                     component.set("v.checkChange",false);
                     component.set("v.isSpinner", false);    
-                    window.location.href = '/'+recordId;                    				
+                      //window.location.href = '/'+recordId;
+                      helper.backOppty(component);
                     } 				
                   			
                     else{				
@@ -250,9 +253,11 @@ save : function(component, event, helper) {
         helper.delQuarter(component, index); 				
         component.set("v.checkChange", true);				
     },				
-    
+
     // Close Date Change events
     changeCloseDate : function(component, event, helper) {
+        if (helper.checkNonIosAndBlurEvent(event)) return;
+
         var expClsDate = component.find("expclosedate");
         var OldCloseDate =  component.get("v.OldCloseDate");
         var checkChange =  component.get("v.checkChange");        
@@ -269,15 +274,18 @@ save : function(component, event, helper) {
 
     // Production Date Change events				
     changeProdDateAlert : function(component, event, helper) {
+       if (helper.checkNonIosAndBlurEvent(event)) return;
+
        var checkChange =  component.get("v.checkChange");
        var prodDate = component.find("proddate"); 
        helper.disableButton(component); 
        component.set("v.flagSaveSuccess", false);				
-       var NewProdDateValue= component.find("proddate").get("v.value"); 
-        var NewProdDateValueStg = String(NewProdDateValue);
+       var NewProdDateValue= component.find("proddate").get("v.value");
+       var NewProdDateValueStg = String(NewProdDateValue);
        var OldProdDateValue = component.get("v.OldProdDate");	
-        var OldProdDateValueStg = String(OldProdDateValue);
-       if(NewProdDateValue != OldProdDateValue && NewProdDateValue!= null && OldProdDateValue !=null){				
+       var OldProdDateValueStg = String(OldProdDateValue);
+       
+       if(NewProdDateValue != OldProdDateValue && NewProdDateValue!= null && OldProdDateValue !=null){
        var lstPositions = component.get("v.lstPositions");				
        if(!$A.util.isEmpty(lstPositions) && !$A.util.isUndefined(lstPositions)){
        var action = component.get("c.checkIfSameQuarterProdDateChange");				
@@ -323,7 +331,7 @@ save : function(component, event, helper) {
     				
     // If the Production Date is not changed post the confirmation then retain the old production date.				
     handleValueChange : function (component, event, helper) {				
-        component.set("v.OldProdDate", event.getParam("oldValue"));				
+        component.set("v.OldProdDate", event.getParam("oldValue"));
     },
 			
    // Re Establish events				
@@ -469,7 +477,8 @@ save : function(component, event, helper) {
                         component.set("v.hasErrors2", false);				
                         helper.disableProdMgmtButton(component);
                         component.set("v.isSpinner", false);
-                        window.location.href = '/'+recordId;                   				
+                          //window.location.href = '/'+recordId;
+                          helper.backOppty(component);
                        } 				
                 }                 				
                 else if(state == "ERROR"){				

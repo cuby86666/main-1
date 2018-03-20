@@ -1,5 +1,5 @@
-<aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId,force:appHostable,force:lightningQuickActionWithoutHeader"   controller="OpportunityScheduleController">  					
-	
+<aura:component implements="force:appHostable,flexipage:availableForRecordHome,flexipage:availableForAllPageTypes,force:hasRecordId,force:lightningQuickActionWithoutHeader"   controller="OpportunityScheduleController">  					
+	  
     <aura:attribute name="ErrorMessage" type="String"/> <!-- Exception -->					
     <aura:attribute name="UserTheme" type="String"/>					
     <aura:attribute name="toggleCompDisplayCreate" type="Boolean"/>					
@@ -21,7 +21,7 @@
     <aura:attribute name="flagReEstablishAlert" type="Boolean" />					
     <aura:attribute name="flagAlert" type="Boolean" /> 					
     <aura:attribute name="flagCancelAlert" type="Boolean" /> 	<!-- Alert to confirm Cancel if there is unsaved chnages -->				
-    <aura:attribute name="OldProdDate" type="Date"/>  					
+    <aura:attribute name="OldProdDate" type="Date"/>
     <aura:attribute name="flagSaveSuccess" type="Boolean" />					
     <aura:attribute name="isChanged" type="Boolean"					
         description="Indicate if there is change in the values and is still saved" />	    				
@@ -68,9 +68,10 @@
 					
 <!-- Create New Opportunity Schedules Display Starts-->	
         
-   <aura:if isTrue="{!v.toggleCompDisplayCreate}">					
-    <div class="container">    					
-     <form class="slds-form--stacked">
+   <aura:if isTrue="{!v.toggleCompDisplayCreate}">
+    <ui:scrollerWrapper >
+    <div class="container slds-scrollable"  style="height: 50rem;">
+     <form class="slds-form slds-form_stacked">
          
      <aura:if isTrue="{!(v.UserTheme == 'Theme4t')}">					
       <h1 class="slds-page-header__title slds-m-right--small slds-truncate slds-align-left">Create Opportunity Schedule</h1>					
@@ -224,8 +225,9 @@
      <!--Create Schedule Page Button section - SF1 Ends -->      
           					
      </div>					
-     </form>					
-    </div>					
+     </form>
+    </div>
+    </ui:scrollerWrapper>
    </aura:if>	
     
 <!-- Create New Opportunity Schedules Display Ends-->					
@@ -233,10 +235,11 @@
     					
 <!-- Edit Opportunity Schedules Display Starts-->
     
-  <aura:if isTrue="{!v.toggleCompDisplay}">										
-   <div class="container">					
-    <form class="slds-form--stacked"> 					
-     <aura:if isTrue="{!(v.UserTheme == 'Theme4t')}">					
+  <aura:if isTrue="{!v.toggleCompDisplay}">
+   <ui:scrollerWrapper >						
+    <div class="container slds-scrollable"  style="height: 50rem;">
+    <form class="slds-form--stacked slds-scrollable"> 					
+     <aura:if isTrue="{!(v.UserTheme == 'Theme4t')}">	
       <h1 class="slds-page-header__title slds-m-right--small slds-truncate slds-align-left">Opportunity Schedule</h1>					
      </aura:if>					
           					
@@ -423,7 +426,7 @@
         <ui:inputDate aura:id="expclosedate" label="Expected Close Date"					
          class="slds-input"					
          labelClass="slds-form-element__label"					
-         value="{!v.opp1.CloseDate}"	focus="{!c.changeCloseDate}" change="{!c.changeCloseDate}"				
+         value="{!v.opp1.CloseDate}"	focus="{!c.changeCloseDate}" change="{!c.changeCloseDate}"	blur="{!c.changeCloseDate}" 			
          displayDatePicker="true"
          keyup="{!c.restrictManualEntryOfCloseDate}" keypress="{!c.restrictManualEntryOfCloseDate}" cut="{!c.restrictManualEntryOfCloseDate}"  paste="{!c.restrictManualEntryOfCloseDate}" updateOn="paste, cut"/>              					         
        </div>					
@@ -431,11 +434,11 @@
      </div>   
      <div class="slds-col--padded slds-size--1-of-1 slds-medium-size--1-of-2">					
       <div class="slds-form-element">					
-       <div class="slds-form-element__control">        
+       <div class="slds-form-element__control">
         <ui:inputDate aura:id="proddate" label="Production Date"					
          class="slds-input"					
          labelClass="slds-form-element__label"					
-         value="{!v.opp1.Production_Date__c}"  focus="{!c.changeProdDateAlert}"	change="{!c.changeProdDateAlert}"				
+         value="{!v.opp1.Production_Date__c}" focus="{!c.changeProdDateAlert}"  change="{!c.changeProdDateAlert}" blur="{!c.changeProdDateAlert}" 
          displayDatePicker="true"
          keyup="{!c.restrictManualEntryOfProdDate}" keypress="{!c.restrictManualEntryOfProdDate}" cut="{!c.restrictManualEntryOfProdDate}"  paste="{!c.restrictManualEntryOfProdDate}" updateOn="paste, cut"/>    
        </div>				
@@ -736,15 +739,17 @@
    <!-- Oppty Sched Table ends -->					
         					
      </div>					           					
-    </form>					
-   </div>					
+    </form>
+   </div>
+   </ui:scrollerWrapper>
   </aura:if>					
 <!-- Edit Opportunity Schedules Display Ends-->					
     					
     					
 <!-- Opportunity Product Schedules Display Starts-->					
-     <aura:if isTrue="{!v.toggleCompPMDisplay}">					
-      <div class="container">					
+     <aura:if isTrue="{!v.toggleCompPMDisplay}">
+      <ui:scrollerWrapper >
+      <div class="container slds-scrollable"  style="height: 50rem;">
        <form class="slds-form--stacked">
         <legend id="FFform" class="slds-text-heading--small"><h1 class="slds-page-header__title slds-m-right--small slds-truncate slds-align-left">Production Management</h1></legend>        					
          <div class="borderdiv">  
@@ -1024,7 +1029,8 @@
             
     </div>					
    </form>    					
-  </div>					
+  </div>
+  </ui:scrollerWrapper>
  </aura:if>					
 <!-- Opportunity Product Schedule display Ends -->					
 </aura:component>

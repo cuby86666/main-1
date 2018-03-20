@@ -18,7 +18,12 @@
 @Modified By :       Shridevi Badiger
 @Modified Date:       6 Jun 2016
 @Description:        Remove sales Area from Layout-New SFDC Child Account
------------------------------------------------------------------------------------>
+-----------------------------------------------------------------------------------
+@Modified By :       Anil Somani
+@Modified Date:      15 Feb 2018
+@Description:        Display the error message right next to the field "City" 
+------------------------------------------------------------------------------>
+
 <apex:page extensions="CMD_Request_Controller"  standardController="CMD_Request__c" cache="false" standardStylesheets="false" showHeader="false" sidebar="false" 
     title="NXP CMD Request" applyBodyTag="true" applyHtmlTag="true">
 
@@ -254,11 +259,18 @@
                 </apex:pageBlockSectionItem>
                 <apex:pageBlockSectionItem >
                     <apex:pageBlockSectionItem >
-                        <apex:inputText value="{!City}" rendered="{!NOT(City_Empty)}"/>
+                     <apex:outputPanel layout="none">   
+                   <!--     <apex:inputText value="{!City}" rendered="{!NOT(City_Empty)}"/>  -->
+                        <apex:inputText value="{!City}" rendered="{!AND(NOT(City_Empty),NOT(City_too_Long))}"/>      
                         <apex:inputText value="{!City}" styleClass="required" rendered="{!City_Empty}"/>
+                          <apex:inputText value="{!City}" styleClass="required" rendered="{!City_too_Long}"/>   
+                      </apex:outputPanel>     
                     </apex:pageBlockSectionItem>
                     <apex:pageBlockSectionItem >
+                       <apex:outputPanel layout="none">     
                         <apex:outputText value="REQUIRED" rendered="{!City_Empty}" styleClass="invalid" />
+                        <apex:outputText value="Cannot be more than 30 characters" rendered="{!City_too_Long}" styleClass="invalid" />  
+                   </apex:outputPanel>        
                     </apex:pageBlockSectionItem>
                 </apex:pageBlockSectionItem>
             </apex:pageBlockSectionItem>
@@ -859,11 +871,18 @@
                 </apex:pageBlockSectionItem>
                 <apex:pageBlockSectionItem >
                     <apex:pageBlockSectionItem >
-                        <apex:inputText value="{!City}" rendered="{!NOT(City_Empty)}"/>
+                     <apex:outputPanel layout="none">   
+                     
+                        <apex:inputText value="{!City}" rendered="{!AND(NOT(City_Empty),NOT(City_too_Long))}"/>   
                         <apex:inputText value="{!City}" styleClass="required" rendered="{!City_Empty}"/>
+                        <apex:inputText value="{!City}" styleClass="required" rendered="{!City_too_Long}"/>   
+                      </apex:outputPanel>       
                     </apex:pageBlockSectionItem>
                     <apex:pageBlockSectionItem >
+                      <apex:outputPanel layout="none">   
                         <apex:outputText value="REQUIRED" rendered="{!City_Empty}" styleClass="invalid" />
+                        <apex:outputText value="Cannot be more than 30 characters" rendered="{!City_too_Long}" styleClass="invalid" />  
+                   </apex:outputPanel>        
                     </apex:pageBlockSectionItem>
                 </apex:pageBlockSectionItem>
             </apex:pageBlockSectionItem>
@@ -1455,11 +1474,17 @@
                 </apex:pageBlockSectionItem>
                 <apex:pageBlockSectionItem >
                     <apex:pageBlockSectionItem >
-                        <apex:inputText value="{!City}" rendered="{!NOT(City_Empty)}"/>
+                      <apex:outputPanel layout="none">   
+                        <apex:inputText value="{!City}" rendered="{!AND(NOT(City_Empty),NOT(City_too_Long))}"/>      
                         <apex:inputText value="{!City}" styleClass="required" rendered="{!City_Empty}"/>
+                      <apex:inputText value="{!City}" styleClass="required" rendered="{!City_too_Long}"/>   
+                      </apex:outputPanel>       
                     </apex:pageBlockSectionItem>
                     <apex:pageBlockSectionItem >
+                      <apex:outputPanel layout="none">   
                         <apex:outputText value="REQUIRED" rendered="{!City_Empty}" styleClass="invalid" />
+                        <apex:outputText value="Cannot be more than 30 characters" rendered="{!City_too_Long}" styleClass="invalid" />  
+                   </apex:outputPanel>     
                     </apex:pageBlockSectionItem>
                 </apex:pageBlockSectionItem>
             </apex:pageBlockSectionItem>
@@ -1988,11 +2013,18 @@
                 </apex:pageBlockSectionItem>
                 <apex:pageBlockSectionItem >
                     <apex:pageBlockSectionItem >
-                        <apex:inputText value="{!City}" rendered="{!NOT(City_Empty)}"/>
+                      <apex:outputPanel layout="none">   
+                        
+                        <apex:inputText value="{!City}" rendered="{!AND(NOT(City_Empty),NOT(City_too_Long))}"/>    
                         <apex:inputText value="{!City}" styleClass="required" rendered="{!City_Empty}"/>
+                        <apex:inputText value="{!City}" styleClass="required" rendered="{!City_too_Long}"/>   
+                      </apex:outputPanel>      
                     </apex:pageBlockSectionItem>
                     <apex:pageBlockSectionItem >
+                        <apex:outputPanel layout="none">   
                         <apex:outputText value="REQUIRED" rendered="{!City_Empty}" styleClass="invalid" />
+                        <apex:outputText value="Cannot be more than 30 characters" rendered="{!City_too_Long}" styleClass="invalid" />  
+                   </apex:outputPanel>     
                     </apex:pageBlockSectionItem>
                 </apex:pageBlockSectionItem>
             </apex:pageBlockSectionItem>

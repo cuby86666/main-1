@@ -46,36 +46,37 @@ public class CommunityCaseSurveyControllerTest
         objSurveyQues1.Name='Resolved ?';
         objSurveyQues1.Question__c='How satisfied are you with the answer you received?';
         objSurveyQues1.Type__c='Picklist';
-        objSurveyQues1.Value__c='Very Satisfied, Satisfied, Dissatisfied, Very Dissatisfied';
+        objSurveyQues1.Value__c='1 Very Dissatisfied, 2 Dissatisfied, 3 Satisfied, 4 Very Satisfied';
         insert objSurveyQues1;
         
         Survey_question__c objSurveyQues2= new Survey_question__c();
         objSurveyQues2.Name='Resolution Time ?';
         objSurveyQues2.Question__c='How satisfied are you with the request resolution time?';
         objSurveyQues2.Type__c='Picklist';
-        objSurveyQues2.Value__c='Very Satisfied, Satisfied, Dissatisfied, Very Dissatisfied';
+        objSurveyQues2.Value__c='1 Very Dissatisfied, 2 Dissatisfied, 3 Satisfied, 4 Very Satisfied';
         insert objSurveyQues2;
         
         Survey_question__c objSurveyQues3= new Survey_question__c();
         objSurveyQues3.Name='Support Person ?';
         objSurveyQues3.Question__c='How satisfied are you with the support person’s ability to answer your question?';
         objSurveyQues3.Type__c='Picklist';
-        objSurveyQues3.Value__c='Very Satisfied, Satisfied, Dissatisfied, Very Dissatisfied';
+        objSurveyQues3.Value__c='1 Very Dissatisfied, 2 Dissatisfied, 3 Satisfied, 4 Very Satisfied';
         insert objSurveyQues3;
         
         Survey_question__c objSurveyQues4= new Survey_question__c();
-        objSurveyQues4.Name='Like Our Support ?';
-        objSurveyQues4.Question__c='If someone asks you about our support, would you say “Yes, you should use it” ?';
+        objSurveyQues4.Name='Share with others ?';
+        objSurveyQues4.Question__c='Based on your experience with our support, would you tell others  “You should use it” ?';
         objSurveyQues4.Type__c='Picklist';
-        objSurveyQues4.Value__c='Yes, Probably Yes, Probably No, No';
+        objSurveyQues4.Value__c='0,1,2,3,4,5,6,7,8,9,10';
         insert objSurveyQues4;
         
         Survey_question__c objSurveyQues5= new Survey_question__c();
         objSurveyQues5.Name='Comments';
         objSurveyQues5.Question__c='Any additional comments you would like to share with us?';
-        objSurveyQues5.Type__c='Textarea';
+        objSurveyQues5.Type__c='Picklist';
+        objSurveyQues5.Value__c='Very Satisfied, Satisfied, Dissatisfied, Very Dissatisfied';
         insert objSurveyQues5;
-                
+                 
         system.runAs(objUser)
         {
             Case objCase = new Case();
@@ -97,10 +98,10 @@ public class CommunityCaseSurveyControllerTest
             CommunityCaseSurveyController comSurvey= new CommunityCaseSurveyController();
             comSurvey.getQuesValues();
             comSurvey.getQuesValues1();
-            comSurvey.strResolved='Satisfied';
-            comSurvey.strResolutionTime='Satisfied';
-            comSurvey.strSupportPerson='Satisfied';
-            comSurvey.strLikeOurSupport='Yes';
+            comSurvey.strResolved='3 Satisfied';
+            comSurvey.strResolutionTime='3 Satisfied';
+            comSurvey.strSupportPerson='3 Satisfied';
+            comSurvey.strLikeOurSupport='9';
             comSurvey.strComment='test';
             comSurvey.submitSurvey();
         }
@@ -117,32 +118,32 @@ public class CommunityCaseSurveyControllerTest
         timezonesidkey='America/Los_Angeles',username='testingnew7@test.com');
         insert objUser;
         
-        Survey_question__c objSurveyQues1= new Survey_question__c();
+       Survey_question__c objSurveyQues1= new Survey_question__c();
         objSurveyQues1.Name='Resolved ?';
         objSurveyQues1.Question__c='How satisfied are you with the answer you received?';
         objSurveyQues1.Type__c='Picklist';
-        objSurveyQues1.Value__c='Very Satisfied, Satisfied, Dissatisfied, Very Dissatisfied';
+        objSurveyQues1.Value__c='1 Very Dissatisfied, 2 Dissatisfied, 3 Satisfied, 4 Very Satisfied';
         insert objSurveyQues1;
         
         Survey_question__c objSurveyQues2= new Survey_question__c();
         objSurveyQues2.Name='Resolution Time ?';
         objSurveyQues2.Question__c='How satisfied are you with the request resolution time?';
         objSurveyQues2.Type__c='Picklist';
-        objSurveyQues2.Value__c='Very Satisfied, Satisfied, Dissatisfied, Very Dissatisfied';
+        objSurveyQues2.Value__c='1 Very Dissatisfied, 2 Dissatisfied, 3 Satisfied, 4 Very Satisfied';
         insert objSurveyQues2;
         
         Survey_question__c objSurveyQues3= new Survey_question__c();
         objSurveyQues3.Name='Support Person ?';
         objSurveyQues3.Question__c='How satisfied are you with the support person’s ability to answer your question?';
         objSurveyQues3.Type__c='Picklist';
-        objSurveyQues3.Value__c='Very Satisfied, Satisfied, Dissatisfied, Very Dissatisfied';
+        objSurveyQues3.Value__c='1 Very Dissatisfied, 2 Dissatisfied, 3 Satisfied, 4 Very Satisfied';
         insert objSurveyQues3;
         
         Survey_question__c objSurveyQues4= new Survey_question__c();
-        objSurveyQues4.Name='Like Our Support ?';
-        objSurveyQues4.Question__c='If someone asks you about our support, would you say “Yes, you should use it” ?';
+        objSurveyQues4.Name='Share with others ?';
+        objSurveyQues4.Question__c='Based on your experience with our support, would you tell others  “You should use it” ?';
         objSurveyQues4.Type__c='Picklist';
-        objSurveyQues4.Value__c='Yes, Probably Yes, Probably No, No';
+        objSurveyQues4.Value__c='0,1,2,3,4,5,6,7,8,9,10';
         insert objSurveyQues4;
         
         Survey_question__c objSurveyQues5= new Survey_question__c();
@@ -151,16 +152,16 @@ public class CommunityCaseSurveyControllerTest
         objSurveyQues5.Type__c='Picklist';
         objSurveyQues5.Value__c='Very Satisfied, Satisfied, Dissatisfied, Very Dissatisfied';
         insert objSurveyQues5;
-                
+                 
         system.runAs(objUser)
         {
             CommunityCaseSurveyController comSurvey= new CommunityCaseSurveyController();
             comSurvey.getQuesValues();
             comSurvey.getQuesValues1();
-            comSurvey.strResolved='Satisfied';
-            comSurvey.strResolutionTime='Satisfied';
-            comSurvey.strSupportPerson='Satisfied';
-            comSurvey.strLikeOurSupport='Yes';
+            comSurvey.strResolved='3 Satisfied';
+            comSurvey.strResolutionTime='3 Satisfied';
+            comSurvey.strSupportPerson='3 Satisfied';
+            comSurvey.strLikeOurSupport='9';
             comSurvey.strComment='test';
             comSurvey.submitSurvey();
         }
@@ -196,28 +197,28 @@ public class CommunityCaseSurveyControllerTest
         objSurveyQues1.Name='Resolved ?';
         objSurveyQues1.Question__c='How satisfied are you with the answer you received?';
         objSurveyQues1.Type__c='Picklist';
-        objSurveyQues1.Value__c='Very Satisfied, Satisfied, Dissatisfied, Very Dissatisfied';
+        objSurveyQues1.Value__c='1 Very Dissatisfied, 2 Dissatisfied, 3 Satisfied, 4 Very Satisfied';
         insert objSurveyQues1;
         
         Survey_question__c objSurveyQues2= new Survey_question__c();
         objSurveyQues2.Name='Resolution Time ?';
         objSurveyQues2.Question__c='How satisfied are you with the request resolution time?';
         objSurveyQues2.Type__c='Picklist';
-        objSurveyQues2.Value__c='Very Satisfied, Satisfied, Dissatisfied, Very Dissatisfied';
+        objSurveyQues2.Value__c='1 Very Dissatisfied, 2 Dissatisfied, 3 Satisfied, 4 Very Satisfied';
         insert objSurveyQues2;
         
         Survey_question__c objSurveyQues3= new Survey_question__c();
         objSurveyQues3.Name='Support Person ?';
         objSurveyQues3.Question__c='How satisfied are you with the support person’s ability to answer your question?';
         objSurveyQues3.Type__c='Picklist';
-        objSurveyQues3.Value__c='Very Satisfied, Satisfied, Dissatisfied, Very Dissatisfied';
+        objSurveyQues3.Value__c='1 Very Dissatisfied, 2 Dissatisfied, 3 Satisfied, 4 Very Satisfied';
         insert objSurveyQues3;
         
         Survey_question__c objSurveyQues4= new Survey_question__c();
-        objSurveyQues4.Name='Like Our Support ?';
-        objSurveyQues4.Question__c='If someone asks you about our support, would you say “Yes, you should use it” ?';
+        objSurveyQues4.Name='Share with others ?';
+        objSurveyQues4.Question__c='Based on your experience with our support, would you tell others  “You should use it” ?';
         objSurveyQues4.Type__c='Picklist';
-        objSurveyQues4.Value__c='Yes, Probably Yes, Probably No, No';
+        objSurveyQues4.Value__c='0,1,2,3,4,5,6,7,8,9,10';
         insert objSurveyQues4;
         
         Survey_question__c objSurveyQues5= new Survey_question__c();
@@ -226,7 +227,7 @@ public class CommunityCaseSurveyControllerTest
         objSurveyQues5.Type__c='Picklist';
         objSurveyQues5.Value__c='Very Satisfied, Satisfied, Dissatisfied, Very Dissatisfied';
         insert objSurveyQues5;
-                
+                 
         system.runAs(objUser)
         {
             Case objCase = new Case();
@@ -247,10 +248,10 @@ public class CommunityCaseSurveyControllerTest
             CommunityCaseSurveyController comSurvey= new CommunityCaseSurveyController();
             comSurvey.getQuesValues();
             comSurvey.getQuesValues1();
-            comSurvey.strResolved='Satisfied';
-            comSurvey.strResolutionTime='Satisfied';
-            comSurvey.strSupportPerson='Satisfied';
-            comSurvey.strLikeOurSupport='Yes';
+            comSurvey.strResolved='3 Satisfied';
+            comSurvey.strResolutionTime='3 Satisfied';
+            comSurvey.strSupportPerson='3 Satisfied';
+            comSurvey.strLikeOurSupport='9';
             comSurvey.strComment='test';
             comSurvey.submitSurvey();
         }
@@ -286,28 +287,28 @@ public class CommunityCaseSurveyControllerTest
         objSurveyQues1.Name='Resolved ?';
         objSurveyQues1.Question__c='How satisfied are you with the answer you received?';
         objSurveyQues1.Type__c='Picklist';
-        objSurveyQues1.Value__c='Very Satisfied, Satisfied, Dissatisfied, Very Dissatisfied';
+        objSurveyQues1.Value__c='1 Very Dissatisfied, 2 Dissatisfied, 3 Satisfied, 4 Very Satisfied';
         insert objSurveyQues1;
         
         Survey_question__c objSurveyQues2= new Survey_question__c();
         objSurveyQues2.Name='Resolution Time ?';
         objSurveyQues2.Question__c='How satisfied are you with the request resolution time?';
         objSurveyQues2.Type__c='Picklist';
-        objSurveyQues2.Value__c='Very Satisfied, Satisfied, Dissatisfied, Very Dissatisfied';
+        objSurveyQues2.Value__c='1 Very Dissatisfied, 2 Dissatisfied, 3 Satisfied, 4 Very Satisfied';
         insert objSurveyQues2;
         
         Survey_question__c objSurveyQues3= new Survey_question__c();
         objSurveyQues3.Name='Support Person ?';
         objSurveyQues3.Question__c='How satisfied are you with the support person’s ability to answer your question?';
         objSurveyQues3.Type__c='Picklist';
-        objSurveyQues3.Value__c='Very Satisfied, Satisfied, Dissatisfied, Very Dissatisfied';
+        objSurveyQues3.Value__c='1 Very Dissatisfied, 2 Dissatisfied, 3 Satisfied, 4 Very Satisfied';
         insert objSurveyQues3;
         
         Survey_question__c objSurveyQues4= new Survey_question__c();
-        objSurveyQues4.Name='Like Our Support ?';
-        objSurveyQues4.Question__c='If someone asks you about our support, would you say “Yes, you should use it” ?';
+        objSurveyQues4.Name='Share with others ?';
+        objSurveyQues4.Question__c='Based on your experience with our support, would you tell others  “You should use it” ?';
         objSurveyQues4.Type__c='Picklist';
-        objSurveyQues4.Value__c='Yes, Probably Yes, Probably No, No';
+        objSurveyQues4.Value__c='0,1,2,3,4,5,6,7,8,9,10';
         insert objSurveyQues4;
         
         Survey_question__c objSurveyQues5= new Survey_question__c();
@@ -338,10 +339,10 @@ public class CommunityCaseSurveyControllerTest
             CommunityCaseSurveyController comSurvey= new CommunityCaseSurveyController();
             comSurvey.getQuesValues();
             comSurvey.getQuesValues1();
-            comSurvey.strResolved='Dissatisfied';
-            comSurvey.strResolutionTime='Satisfied';
-            comSurvey.strSupportPerson='Satisfied';
-            comSurvey.strLikeOurSupport='Yes';
+            comSurvey.strResolved='2 Dissatisfied';
+            comSurvey.strResolutionTime='3 Satisfied';
+            comSurvey.strSupportPerson='3 Satisfied';
+            comSurvey.strLikeOurSupport='8';
             comSurvey.strComment='test';
             comSurvey.submitSurvey();
         }
