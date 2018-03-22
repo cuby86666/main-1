@@ -158,6 +158,7 @@ public with sharing class OpportunityService {
 			if (oppty.RecordTypeId != modelNRecordTypeId) continue;
 			
 			allMnOpptyIds.add(oppty.Id);
+			Account newAccount = null;
 			//System.debug('@@@@@ Owner=' + oppty.Owner.Name);
 			String newAccountId = oppty.AccountId;
 			String newOwnerId = null;
@@ -169,12 +170,14 @@ public with sharing class OpportunityService {
 
 				if (accountByGID.Owner.IsActive) newOwnerId = accountByGID.OwnerId;
                 //System.debug('@@@@@ Account change to ' + accountByGID.Name + ', owner change to account owner.');
-				opptyIds.add(oppty.Id);					
+				opptyIds.add(oppty.Id);
+				newAccount = accountByGID;
 			} else if (oppty.Distributor_Name__c != null && oppty.End_Customer_Region__c != null && 
 				accountsByGidOrLegacyId.containsKey(getMnDistiAccountLegacyId(oppty))) {
 				//By Legacy Id
 				Account accountByLegacyId = accountsByGidOrLegacyId.get(getMnDistiAccountLegacyId(oppty));
 				newAccountId = accountByLegacyId.Id;
+				newAccount = accountByLegacyId;
                 //System.debug('@@@@@ Account change to ' + accountByLegacyId.Name);
 			} else {
 				//Unknown Account
@@ -191,6 +194,12 @@ public with sharing class OpportunityService {
 				oppty.OwnerId = newOwnerId;
 				opptyUpdates.add(oppty);
 				opptyUpdateIds.add(oppty.Id);
+			}
+
+			//check Account_Region_TEXT__c is empty or not
+			if (oppty.Account_Region_TEXT__c == null && newAccount != null) {
+				oppty.Account_Region_TEXT__c = newAccount.Region__c;
+				opptyUpdates.add(oppty);
 			}
 		}
         
