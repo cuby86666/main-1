@@ -137,4 +137,125 @@ private class TestUserRegistrationController{
         urcdemo.usertype = '';
         urcdemo.Registration();
     }
+
+    private static void setupData(UserRegistrationController urc) {
+        urc.getitems();
+        /*urc.ModelN.name='Test';*/
+        urc.accesstype= 'New User';
+        urc.nextAType();
+        urc.usertype = 'NXP User';
+        urc.Registration();
+        urc.modelN.CurrencyIsoCode = String.valueOf('EUR');
+
+        urc.modelN.WBI_account__c = 'Test';
+        urc.modelN.Region__c = 'Americas';
+        urc.modelN.Country__c = 'United States';
+        urc.modelN.Manager_Name__c = 'Test';
+        urc.modelN.Manager_email_address__c = 'test@mail.com';
+        urc.modelN.Tel_Mobile__c = '123456789';
+        urc.modelN.Roles_Category__c = 'Business Lines';
+        urc.modelN.Role_Sub_Category__c = 'Test';
+        urc.modelN.Read_Org__c = 'Worldwide distribution';
+        urc.modelN.Read_Org_Sub_Category__c = 'Test';
+        urc.modelN.Requester_Email_Address__c = 'test@mail.com';
+        urc.modelN.Edit_Org__c = 'Americas';
+        urc.modelN.User_Type__c = 'NXP User';
+        urc.modelN.First_Name__c = 'Test';
+        urc.modelN.Last_Name__c = 'Test';
+        urc.modelN.Email_Address__c = 'test@mail.com';
+        urc.modelN.Role_Sub_Category__c = 'Field Sales Engineer';
+        urc.modelN.BU__c = 'BU Automotive';
+        urc.modelN.MAGS__c = 'R32 CAR ENT SOL UNDIVIDED';
+        urc.modelN.Job_Title__c = 'Test';
+        urc.modelN.Roles_Disti_new__c = 'Test';
+        urc.modelN.Disti_Role_Hierarchy__c = 'Test';
+        urc.modelN.Company_Name__c = 'Test';
+        urc.modelN.Company_Address__c = 'Test';
+
+        urc.modelN.Role_Hierarchy_Region__c = 'Americas';
+        urc.modelN.Role_Hierarchy_Sub_Region__c = 'Test';
+        urc.modelN.Role_Hierarchy_Country_Region__c = 'Test';
+        urc.modelN.Role_Hierarchy_Country_Sub_Region__c = 'Test';
+        
+        urc.modelN.Assigned_Org_VAR__c = 'Test';
+    }
+
+    @isTest
+    private static void testExceptionAll() {
+        UserRegistrationController urc = new UserRegistrationController();
+        urc.getitems();
+        urc.accesstype= 'New User';
+        urc.nextAType();
+        urc.Registration();
+        urc.modelN.CurrencyIsoCode = String.valueOf('EUR');
+
+        urc.nxtNxp();
+
+        urc.nxtSales();
+
+        urc.nxtDisti();
+
+        urc.nxtVar();
+
+        urc.modelN.User_Type__c = 'NXP User';
+        urc.save();
+
+        urc.accesstype = 'Change Access';
+        urc.backnxp();
+        
+        urc.modelN.User_Type__c = 'Disti User';
+        urc.save();
+
+        urc.modelN.User_Type__c = 'Sales Rep';
+        urc.save();
+
+        urc.modelN.User_Type__c = 'Var';
+        urc.save();
+
+    }
+
+    @isTest
+    private static void testValidAll() {
+        UserRegistrationController urc = new UserRegistrationController();
+        setupData(urc);
+
+        urc.nxtNxp();
+
+        urc.nxtSales();
+
+        urc.nxtDisti();
+
+        urc.nxtVar();
+
+        urc.save();  
+
+        urc.accesstype = 'Change Access';
+        urc.backnxp();
+    }
+
+    @isTest
+    private static void testSalesValid() {
+        UserRegistrationController urc = new UserRegistrationController();
+        setupData(urc);
+
+        PageReference myPage = Page.UserRegistration;
+        Test.setCurrentPage(myPage);
+        myPage.getParameters().put('j_id0:frm:Sales:pbs3:RHSS', '__');
+        myPage.getParameters().put('j_id0:frm:Sales:pbs3:RHCS', '__');
+        myPage.getParameters().put('j_id0:frm:Sales:pbs3:RHCSS', '__');
+
+        urc.nxtSales();
+    }
+    
+    @isTest
+    private static void testNxpException() {
+        UserRegistrationController urc = new UserRegistrationController();
+        setupData(urc);
+        urc.modelN.BU__c = null;
+        urc.modelN.MAGS__c = null;
+        urc.modelN.Edit_Org__c = 'Worldwide distribution';
+        urc.modelN.Edit_Org_Sub_Category__c = null;
+
+        urc.nxtNxp();
+    }
 }
