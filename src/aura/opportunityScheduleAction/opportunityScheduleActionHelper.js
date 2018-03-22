@@ -407,15 +407,24 @@ $A.enqueueAction(action);
          var count = response.getReturnValue().length;					
          component.set("v.OpptyProdSchldCount",count);  					
          component.set("v.flagSaveSuccessPM", false);
-        
-         if(opptyValue.StageName != 'Commitment' || opptyValue.Design_Win_Approval_Process__c !='Approved'|| (opptyValue.RecordType.DeveloperName =='Model_N_Oppty' && (opptyValue.Account.Customer_Category__c !='Tier 4 - TMMA' || opptyValue.StageName == 'Cancelled'))){					
-           component.set("v.flagNonTmmaPMDisabling",true); 					
-          }					
-            component.set("v.isSpinner", false);					
-        }					
-    else if (response.getState() === "ERROR") {					
-            $A.log("Errors", response.getError());					
-            component.set("v.isNoProductAdded", true);					
+         //SFDC Oppty
+         if (opptyValue.RecordType.DeveloperName == 'SFDC_Oppty') {
+           if (opptyValue.Design_Win_Approval_Process__c == 'Approved') {
+             component.set("v.flagNonTmmaPMDisabling", false);
+           } else {
+             component.set("v.flagNonTmmaPMDisabling", true);
+           }
+         } else if (opptyValue.RecordType.DeveloperName == 'Model_N_Oppty') {
+           if (opptyValue.Account.Customer_Category__c == 'Tier 4 - TMMA' && opptyValue.StageName == 'Commitment') {
+             component.set("v.flagNonTmmaPMDisabling", false);
+           } else {
+             component.set("v.flagNonTmmaPMDisabling", true);
+           }
+         }
+         //Model N Oppty
+         //if(opptyValue.StageName != 'Commitment' || opptyValue.Design_Win_Approval_Process__c !='Approved'|| (opptyValue.RecordType.DeveloperName =='Model_N_Oppty' && (opptyValue.Account.Customer_Category__c !='Tier 4 - TMMA' || opptyValue.StageName == 'Cancelled'))){          
+         //  component.set("v.flagNonTmmaPMDisabling",true);          
+         //}          
             component.set("v.isSpinner", false);					
         }					
     });					
