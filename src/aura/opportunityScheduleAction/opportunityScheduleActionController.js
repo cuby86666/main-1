@@ -219,13 +219,31 @@ save : function(component, event, helper) {
                   }  				
              				
              else if(state == "ERROR"){
-                    console.log(a.getError());				
-                    var errors = a.getError();                				
-                    if(errors[0] && errors[0].pageErrors) // To show DML exceptions				
-                    {				
-                    component.set("v.ErrorMessage", errors[0].pageErrors[0].message); 				
-                    component.set("v.isExceptionFlag", true);				                         				
-                    }				                 				
+                    console.log(a.getError());
+                    var errorMessage = "";
+                    var errors = a.getError();
+                    for (var i=0; i < errors.length; i++) {
+                      var error = errors[i];
+                      if (error.fieldErrors) {
+                        for (var fieldName in error.fieldErrors) {
+                          //each field could have multiple errors
+                          error.fieldErrors[fieldName].forEach( function (errorList){ 
+                            errorMessage += ("Field Error on " + fieldName + ": \n" + errorList.message);
+                          });                                
+                        };  //end of field errors forLoop
+                      } 
+                      if(error.message) {
+                        errorMessage += error.message;
+                      } 
+                      if(error.pageErrors) {
+                        for (var j=0; j < error.pageErrors.length; j++) {
+                          var pageError = error.pageErrors[j];
+                          errorMessage += pageError.message;
+                        }
+                      }
+                    }
+                    component.set("v.ErrorMessage", errorMessage);
+                    component.set("v.isExceptionFlag", true);
                  helper.enableButton(component);
                 }				
              component.set("v.isSpinner", false);				
