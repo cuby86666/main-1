@@ -54,8 +54,6 @@ public class Opportunities extends ApplicationDomain {
 		updateOpptyGeneralInfo(null);
 		
 		updateOpptyStarInfo();
-		
-		OpportunityProductClaimValue.updateMnOpportunityAccounts((List<Opportunity>)this.records);
 	}
 	
 	public override void onBeforeUpdate(Map<Id, SObject> existingRecords) {
@@ -70,8 +68,6 @@ public class Opportunities extends ApplicationDomain {
 		OpportunityProductClaimValue.updateTmmaOverrideIfOpportunityMnUpdatedByTmma((Map<Id, Opportunity>)existingRecords, new Map<Id, Opportunity>((List<Opportunity>)this.records));
 		
 		OpportunityProductClaimValue.bypassOpportunityMnUpdateForTmmaOverride((Map<Id, Opportunity>)existingRecords, new Map<Id, Opportunity>((List<Opportunity>)this.records));
-		
-		OpportunityProductClaimValue.updateMnOpportunityAccounts((List<Opportunity>)this.records);
 	}
 	
 	public override void onAfterInsert() {

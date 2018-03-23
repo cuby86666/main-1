@@ -213,6 +213,8 @@ public class MnStages extends ApplicationDomain {
 			opptyProds.add(opptyProd);
 		}
 		
+		OpportunityService.updateMnOpportunityAccounts(oppties, null);
+		
 		update this.mnStages; 	
 		
 		List<Database.UpsertResult> opptiesUpsertResults = Database.upsert(oppties, Opportunity.Fields.Legacy_Id__c, false);

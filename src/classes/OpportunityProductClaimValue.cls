@@ -304,21 +304,6 @@ public class OpportunityProductClaimValue {
         }
     }
     
-    public static void updateMnOpportunityAccounts(List<Opportunity> oppties) {
-    	p2('updateMnOpportunityAccounts');	
-    	List<Opportunity> mnOppties = new List<Opportunity>();
-    	
-    	for (Opportunity o : oppties) {
-        	if (isMnRecordType(o) && CommonUtils.isAdmin()) {
-            	mnOppties.add(o);
-            }
-        }
-        
-        if (mnOppties.size() > 0) {
-        	OpportunityService.updateMnOpportunityAccounts(mnOppties, null);	
-        }
-    }
-    
     public static void updateTmmaOverrideIfOpportunityMnUpdatedByTmma(Map<Id, Opportunity> opptiesOld, Map<Id, Opportunity> opptiesNew) {
     	p2('updateTmmaOverrideIfOpportunityMnUpdatedByTmma');
     	for (Opportunity oNew : opptiesNew.values()) {
