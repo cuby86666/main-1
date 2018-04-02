@@ -92,14 +92,21 @@ public with sharing class ProductTrigger {
         if (!productIdSet.isEmpty()) {
             //OpportuniLineItemTrigger.executeProductUpdate(productIdSet); 
             
-            List<OpportunityLineItem> opptyProds = [select OpportunityId from OpportunityLineItem where PricebookEntry.Product2.Id in :productIdSet];
-            
-            if (opptyProds.size() > 0) {
-            	List<SObject> oppties = (List<SObject>)dlrs.RollupService.rollup(opptyProds);
-			
-				update oppties;	
-            }
+        	updateOppties(productIdSet);    
         }
+    }
+    
+    @future
+    private static void updateOppties(Set<Id> prodIds) {
+    	for (List<OpportunityLineItem> olis : [select OpportunityId from OpportunityLineItem where PricebookEntry.Product2.Id in :prodIds]) {
+            if (olis.size() > 0) {
+            	List<SObject> oppties = (List<SObject>)dlrs.RollupService.rollup(olis);
+				
+				if (oppties != null && oppties.size() > 0) {
+					update oppties;	
+				}	
+        	}
+        }	
     }
     
     public static void insertProductIntoStandardPB(List<Product2> lstProducts) {
