@@ -6,31 +6,55 @@ public with sharing class OpportunityCloneController {
     public class OpportunityWrapper {
         @AuraEnabled public Opportunity oppty {get; set;}
         @AuraEnabled public String newOpptyName {get; set;}
+        @AuraEnabled public String message {get; set;}
         @AuraEnabled public List<OpportunitySpinOffWrapper> lstWrappers {get; set;}
     }
     
     public class OpportunitySpinOffWrapper {
         @AuraEnabled public OpportunityLineItem opptyLineItem {get; set;}
         @AuraEnabled public Boolean isSelected {get; set;}
+        @AuraEnabled public Double qtyPerSys {get; set;}
+        @AuraEnabled public Boolean qtyPerSysChanged {get; set;}
     }
 
     @AuraEnabled
     public static OpportunityCloneController.OpportunityWrapper getOpptyProdsByOpptyId(String opptyId, String func) {
-        Opportunity oppty = [Select Id, Name, StageName, Design_Win_Approval_Process__c from Opportunity Where Id =: opptyId];
+        Opportunity oppty = [Select Id, Name, StageName, Design_Win_Approval_Process__c, OwnerId from Opportunity Where Id =: opptyId];
         List<OpportunityLineItem> lstOpptyProds = 
             [Select Id, Product2.Name, MAG__c, Product_Active_Flags__c, UnitPrice, Component_Multiplier__c, Claim_Value_USD__c, Product2.IsActive, Prod_Lost_Cancelled__c 
              from OpportunityLineItem Where OpportunityId =: opptyId];
         List<OpportunitySpinOffWrapper> lstWrappers = new List<OpportunitySpinOffWrapper>();
         
+        String message = null;
         for (OpportunityLineItem item : lstOpptyProds) {
             OpportunitySpinOffWrapper wrapper = new OpportunitySpinOffWrapper();
+            //check Qty Per Sys
+            Double qtyPerSys = item.Component_Multiplier__c * 100;
+            if (Math.mod(qtyPerSys.intValue(), 100) > 0) {
+                wrapper.qtyPerSys = 1;
+                wrapper.qtyPerSysChanged = true;
+                message = 'Qty per Sys is not integer in ' + func + ' OpportunityLineItem, Qty per Sys will be set to 1 and Prod Claim Value will be recalculated afterwards. \nPlease review Qty per Sys once Opportunity been created.';
+            } else {
+                wrapper.qtyPerSys = item.Component_Multiplier__c;
+                wrapper.qtyPerSysChanged = false;
+            }
             wrapper.opptyLineItem = item;
             wrapper.isSelected = (func == OpportunityCloneController.FUNC_SPINOFF || !item.Product2.IsActive) ? false : true;
             lstWrappers.add(wrapper);
         }
         OpportunityWrapper opptyWrapper = new OpportunityWrapper();
         opptyWrapper.oppty = oppty;
+        opptyWrapper.message = message;
         opptyWrapper.lstWrappers = lstWrappers;
+        //check current user is oppty owner or not
+        if (func == OpportunityCloneController.FUNC_SPINOFF) {
+            if (oppty.Design_Win_Approval_Process__c != 'Open') {
+                throw new AuraHandledException('Only open opportunity can be spun off.');
+            }
+            if (!CommonUtils.isAdmin() && oppty.OwnerId != UserInfo.getUserId()) {
+                throw new AuraHandledException('Only opportunity owner can do spin off.');
+            }            
+        } 
         return opptyWrapper;
     }
     
@@ -136,56 +160,85 @@ public with sharing class OpportunityCloneController {
         }
         
         public Opportunity resetOpptyFields() {
-            Opportunity clonedOppty = (Opportunity)clonedSObjectOppty.get(0);
-            //reset fields
-            clonedOppty.Id = null;
-            clonedOppty.Legacy_Id__c = null;
-            clonedOppty.StageName = 'Initial Engagement';
-            clonedOppty.Amount = 0;
-            
-            clonedOppty.Design_Win_Approval_Process__c = 'Open';
-            clonedOppty.X90_Day_Maturity_Exception__c = false;
-            clonedOppty.Design_Win_Approval_Date__c = null;
-            clonedOppty.Design_Win_Submission_Date__c = null;
-            
-            clonedOppty.Lost_Date__c = null;
-            clonedOppty.Lost_Description__c = null;
-            clonedOppty.Lost_Reason__c = null;
-            
-            clonedOppty.Reason_Won__c = null;
-            clonedOppty.ReasonWon_Description__c = null;
-            
-            clonedOppty.Compliance_Assessment_Evidence__c = false;
-            clonedOppty.Compliance_Risk__c = null;
-            
-            clonedOppty.Contract_Letter_of_intent__c = false;
-            clonedOppty.Purchase_Order_Pre_Production_Order__c = false;
-            clonedOppty.Written_Confirmation_from_Customer__c = false;
-            
+            Map<String, Schema.SObjectField> fieldMap = Schema.SObjectType.Opportunity.fields.getMap();
+            sObject myOppty = clonedSObjectOppty.get(0);
+            Opportunity_Clone_Reset_Field__mdt[] resetFields = [
+                Select Field_Name__c, Value__c from Opportunity_Clone_Reset_Field__mdt Where Object_Type__c = 'Opportunity'];
+            for (Opportunity_Clone_Reset_Field__mdt resetField : resetFields) {
+                Schema.SObjectField field = fieldMap.get(resetField.Field_Name__c);
+                Schema.DisplayType displayType = field.getDescribe().getType();
+                Object resetValue = convertValue(resetField, displayType);
+                myOppty.put(resetField.Field_Name__c, resetValue);
+            }
+            //reset owner
+            myOppty.put('OwnerId', UserInfo.getUserId());
             //update opportunity name
-            clonedOppty.Name = clonedOppty.Name + '(cloned)';
+            myOppty.put('Name', (String)myOppty.get('Name') + '(cloned)');
             
             //check close date & production date
             Date today = Date.today();
-            Date closeDate = clonedOppty.CloseDate;
+            Date closeDate = (Date)myOppty.get('CloseDate');
             if (today > closeDate) {
-                clonedOppty.CloseDate = today.addDays(1);
+                myOppty.put('CloseDate', today.addDays(1));
             }
    
-            Date productionDate = clonedOppty.Production_Date__c;
+            Date productionDate = (Date)myOppty.get('Production_Date__c');
             if (today > productionDate) {
-                clonedOppty.Production_Date__c = today.addDays(1);
-                
+                myOppty.put('Production_Date__c', today.addDays(1));
+                //process oppty sched data
                 if (clonedSObjectOpptyScheds != null) {
                     //reset opportunity schedule
                     OpportunitySchedule__c opptySched = new OpportunitySchedule__c();
                     opptySched.Oppty_Sched_Qty__c = 1000;
                     opptySched.Frozen_Oppty_Sched_Qty__c = 1000;
-                    opptySched.Sched_Date__c = clonedOppty.Production_Date__c;
+                    opptySched.Sched_Date__c = (Date)myOppty.get('Production_Date__c');
                     clonedSObjectOpptyScheds = new List<sObject>{(sObject)opptySched};                    
                 }
             }
-            return clonedOppty;
+            return (Opportunity)myOppty;
+        }
+        
+        public void resetOpptyProdFields() {
+            Opportunity clonedOppty = (Opportunity)clonedSObjectOppty.get(0);
+            if (clonedSObjectOpptyProds != null) {
+                Map<String, Schema.SObjectField> fieldMap = Schema.SObjectType.OpportunityLineItem.fields.getMap();
+                Opportunity_Clone_Reset_Field__mdt[] resetFields = [
+                    Select Field_Name__c, Value__c from Opportunity_Clone_Reset_Field__mdt Where Object_Type__c = 'OpportunityLineItem'];
+                for(sObject obj : clonedSObjectOpptyProds) {
+                    for (Opportunity_Clone_Reset_Field__mdt resetField : resetFields) {
+                        Schema.SObjectField field = fieldMap.get(resetField.Field_Name__c);
+                        Schema.DisplayType displayType = field.getDescribe().getType();
+                        Object resetValue = convertValue(resetField, displayType);
+                        obj.put(resetField.Field_Name__c, resetValue);
+                    }
+                    //update OpportunityId
+                    obj.put('OpportunityId', clonedOppty.Id);
+                    
+                    //reset component multiplier
+                    Double qtyPerSys = (Double)obj.get('Component_Multiplier__c') * 100;
+                    if (Math.mod(qtyPerSys.intValue(), 100) > 0) {
+                        obj.put('Component_Multiplier__c', 1);
+                    }                   
+                }                
+            }
+        }
+        
+        private Object convertValue(Opportunity_Clone_Reset_Field__mdt obj, Schema.DisplayType displayType) {
+            Object resetValue;
+            if (obj.Value__c == null) {
+                //System.debug('@@@@@ 1type=' + displayType + ', ' + obj.Field_Name__c + ' = null');
+                resetValue = null;
+            } else if (displayType == Schema.DisplayType.DOUBLE || displayType == Schema.DisplayType.CURRENCY) {
+                //System.debug('@@@@@ 2type=' + displayType + ', ' + obj.Field_Name__c);
+                resetValue = Decimal.valueOf(obj.Value__c);
+            } else if (displayType == Schema.DisplayType.BOOLEAN) {
+                //System.debug('@@@@@ 3type=' + displayType + ', ' + obj.Field_Name__c);
+                resetValue = Boolean.valueOf(obj.Value__c);
+            } else {
+                //System.debug('@@@@@ 4type=' + displayType + ', ' + obj.Field_Name__c);
+                resetValue = obj.Value__c;
+            }
+            return resetValue;
         }
         
         public void resetOpptySchedFields() {
@@ -198,51 +251,6 @@ public with sharing class OpportunityCloneController {
                 }
             }
         }
-        
-        public void resetOpptyProdFields() {
-            Opportunity clonedOppty = (Opportunity)clonedSObjectOppty.get(0);
-            //update OpportunityId
-            if (clonedSObjectOpptyProds != null) {
-                for(sObject obj : clonedSObjectOpptyProds) {
-                    obj.put('Id', null);
-                    obj.put('OpportunityId', clonedOppty.Id);
-                    obj.put('Legacy_Id__c', null);
-                    obj.put('Prod_Lost__c', false);
-                    obj.put('Prod_Lost_Cancelled__c', null);
-                    obj.put('Prod_Lost_Cancelled_Date__c', null);
-                    obj.put('Prod_Lost_Reason__c', null);
-                    obj.put('Prod_Lost_Cancelled_Reason__c', null);
-                }                
-            }
-        }
-        /*
-        public String insertCloneOppty() {
-            //keep savepoint
-            Savepoint sp = Database.setSavepoint();
-            try {
-                //reset oppty fields
-                Opportunity clonedOppty = resetOpptyFields();                
-                insert clonedOppty;
-                
-                //update opportunity__c
-                resetOpptySchedFields();
-                if (clonedSObjectOpptyScheds != null) {
-                    insert clonedSObjectOpptyScheds;
-                }
-
-                //reset oppty prod fields
-                resetOpptyProdFields();
-                if (clonedSObjectOpptyProds != null) {
-                    insert clonedSObjectOpptyProds;
-                }
-                
-                return clonedOppty.Id;
-            } catch (Exception err) {
-                system.debug('@@@@@ ' + err.getMessage());
-                Database.rollback(sp);
-                throw err;
-            }
-        }*/
     }
         
   // Clone a list of objects to a particular object type

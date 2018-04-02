@@ -6,6 +6,7 @@
     <aura:attribute name="func" type="String"/>
     <aura:attribute name="funcString" type="String"/>
     <aura:attribute name="errorMessage" type="String"/>
+    <aura:attribute name="warningMessage" type="String"/>
     <aura:attribute name="isProcessing" type="Boolean"/>
     <aura:attribute name="isPreview" type="Boolean"/>
     <aura:attribute name="isError" type="Boolean"/>
@@ -42,6 +43,15 @@
         </div>
     </aura:if>
 
+    <!-- Display form Warning message, if any -->
+    <aura:if isTrue="{!(v.warningMessage != null)}">
+        <div class="recordSaveError">
+            <ui:message title="Warning" severity="warning" closable="false">
+                <ui:outputText value="{!v.warningMessage}"/>
+            </ui:message>
+        </div>
+    </aura:if>
+    
     <!-- Label -->
     <h1 class="slds-page-header__title slds-m-right--small slds-truncate slds-align-left">{!v.funcString}</h1>
 
@@ -83,8 +93,8 @@
                         <td>{!w.opptyLineItem.Product2.Name}</td>
                         <td>{!w.opptyLineItem.MAG__c}</td>
                         <td><ui:outputNumber value="{!w.opptyLineItem.UnitPrice}" format=".00"/></td>
-                        <td><ui:outputNumber value="{!w.opptyLineItem.Component_Multiplier__c}" format=".00"/></td>
-                        <td><ui:outputNumber value="{!w.opptyLineItem.Claim_Value_USD__c}"/></td>
+                        <td><ui:outputNumber value="{!w.opptyLineItem.Component_Multiplier__c}" format=".00" class="{! w.qtyPerSysChanged ? 'slds-theme_warning' : ''}"/></td>
+                        <td><ui:outputNumber value="{!w.opptyLineItem.Claim_Value_USD__c}" class="{! w.qtyPerSysChanged ? 'slds-theme_warning' : ''}"/></td>
                         <td><ui:outputText value="{!w.opptyLineItem.Prod_Lost_Cancelled__c}"/></td>
                         <td><ui:outputCheckbox value="{!w.opptyLineItem.Product2.IsActive}"/></td>
                         <td>
@@ -100,8 +110,8 @@
                             <td>{!w.opptyLineItem.Product2.Name}</td>
                             <td>{!w.opptyLineItem.MAG__c}</td>
                             <td><ui:outputNumber value="{!w.opptyLineItem.UnitPrice}" format=".00"/></td>
-                            <td><ui:outputNumber value="{!w.opptyLineItem.Component_Multiplier__c}" format=".00"/></td>
-                            <td><ui:outputNumber value="{!w.opptyLineItem.Claim_Value_USD__c}"/></td>
+                            <td><ui:outputNumber value="{!w.opptyLineItem.Component_Multiplier__c}" format=".00" class="{! w.qtyPerSysChanged ? 'slds-theme_warning' : ''}"/></td>
+                            <td><ui:outputNumber value="{!w.opptyLineItem.Claim_Value_USD__c}" class="{! w.qtyPerSysChanged ? 'slds-theme_warning' : ''}"/></td>
                             <td><ui:outputText value="{!w.opptyLineItem.Prod_Lost_Cancelled__c}"/></td>
                             <td><ui:outputCheckbox value="{!w.opptyLineItem.Product2.IsActive}"/></td>
                             <td>
@@ -155,8 +165,9 @@
                         <td>{!w.opptyLineItem.Product2.Name}</td>
                         <td>{!w.opptyLineItem.MAG__c}</td>
                         <td><ui:outputNumber value="{!w.opptyLineItem.UnitPrice}" format=".00"/></td>
-                        <td><ui:outputNumber value="{!w.opptyLineItem.Component_Multiplier__c}" format=".00"/></td>
-                        <td><ui:outputNumber value="{!w.opptyLineItem.Claim_Value_USD__c}"/></td>
+                        <!--<td><ui:outputNumber value="{!w.opptyLineItem.Component_Multiplier__c}" format=".00"/></td>-->
+                        <td><ui:outputNumber value="{!w.qtyPerSys}" format=".00" class="{! w.qtyPerSysChanged ? 'slds-theme_warning' : ''}"/></td>
+                        <td><ui:outputNumber value="{!w.opptyLineItem.Claim_Value_USD__c}" class="{! w.qtyPerSysChanged ? 'slds-theme_warning' : ''}"/></td>
                         <td><ui:outputText value="{!w.opptyLineItem.Prod_Lost_Cancelled__c}"/></td>
                         <td><ui:outputCheckbox value="{!w.opptyLineItem.Product2.IsActive}"/></td>
                         <td><div class="slds-truncate">

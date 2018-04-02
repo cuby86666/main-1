@@ -9,7 +9,38 @@
 			var state = response.getState();
 			if (state == "SUCCESS") {
 				component.set("v.wrapper", response.getReturnValue());
-			}
+                var message = component.get("v.wrapper.message");
+                if (message != null) {
+                    component.set("v.warningMessage", message);
+                }
+            } else if (state == "ERROR") {
+                console.log(response.getError());
+                var errors = response.getError();
+                var errorMessage = "";
+                for (var i=0; i < errors.length; i++) {
+                    var error = errors[i];
+                    if (error.fieldErrors) {
+                        for (var fieldName in error.fieldErrors) {
+                            //each field could have multiple errors
+                            error.fieldErrors[fieldName].forEach( function (errorList){	
+                                errorMessage += ("Field Error on " + fieldName + "; " + errorList.message);
+                            });                                
+                        };  //end of field errors forLoop
+                    } 
+                    if(error.message) {
+                        errorMessage += error.message;
+                    } 
+                    if(error.pageErrors) {
+                        for (var j=0; j < error.pageErrors.length; j++) {
+                            var pageError = error.pageErrors[j];
+                            errorMessage += pageError.message;
+                        }
+                    }
+                }
+                component.set("v.errorMessage", errorMessage);
+                component.set("v.isError", true);
+                component.set("v.isProcessing", false);
+            }
 		});
         $A.enqueueAction(action);
 	},
