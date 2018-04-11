@@ -276,8 +276,9 @@ public with sharing class OpportunityService {
 	//=========== Model N Account Update utility functions ========================================
 	private static String getMnDrOwnerId(Opportunity oppty, String newAccountOwnerId, Map<String,User> usersByEmail) {
 		p('getMnDrOwnerId');
-		String finalOwnerId = oppty.OwnerId;
 		Id dataAdminUserId = CommonUtils.getDataAdminUserId();
+		if (oppty.OwnerId == null) oppty.OwnerId = dataAdminUserId;
+		String finalOwnerId = oppty.OwnerId;
 		//System.debug('@@@@@ Data Admin id=' + dataAdminUser.Id);
 		// Tier 1,2,3,4 - TMMA and Account Owner is Active
         if (newAccountOwnerId != null) {
