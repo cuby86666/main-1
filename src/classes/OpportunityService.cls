@@ -158,7 +158,6 @@ public with sharing class OpportunityService {
 			if (oppty.RecordTypeId != modelNRecordTypeId) continue;
 			
 			allMnOpptyIds.add(oppty.Id);
-			Account newAccount = null;
 			//System.debug('@@@@@ Owner=' + oppty.Owner.Name);
 			String newAccountId = oppty.AccountId;
 			String newOwnerId = null;
@@ -170,14 +169,12 @@ public with sharing class OpportunityService {
 
 				if (accountByGID.Owner.IsActive) newOwnerId = accountByGID.OwnerId;
                 //System.debug('@@@@@ Account change to ' + accountByGID.Name + ', owner change to account owner.');
-				opptyIds.add(oppty.Id);
-				newAccount = accountByGID;
+				opptyIds.add(oppty.Id);					
 			} else if (oppty.Distributor_Name__c != null && oppty.End_Customer_Region__c != null && 
 				accountsByGidOrLegacyId.containsKey(getMnDistiAccountLegacyId(oppty))) {
 				//By Legacy Id
 				Account accountByLegacyId = accountsByGidOrLegacyId.get(getMnDistiAccountLegacyId(oppty));
 				newAccountId = accountByLegacyId.Id;
-				newAccount = accountByLegacyId;
                 //System.debug('@@@@@ Account change to ' + accountByLegacyId.Name);
 			} else {
 				//Unknown Account
@@ -194,12 +191,6 @@ public with sharing class OpportunityService {
 				oppty.OwnerId = newOwnerId;
 				opptyUpdates.add(oppty);
 				opptyUpdateIds.add(oppty.Id);
-			}
-
-			//check Account_Region_TEXT__c is empty or not
-			if (oppty.Account_Region_TEXT__c == null && newAccount != null) {
-				oppty.Account_Region_TEXT__c = newAccount.Region__c;
-				opptyUpdates.add(oppty);
 			}
 		}
         
@@ -277,7 +268,7 @@ public with sharing class OpportunityService {
 	private static String getMnDrOwnerId(Opportunity oppty, String newAccountOwnerId, Map<String,User> usersByEmail) {
 		p('getMnDrOwnerId');
 		Id dataAdminUserId = CommonUtils.getDataAdminUserId();
-		if (oppty.OwnerId == null) oppty.OwnerId = dataAdminUserId;
+        if (oppty.OwnerId == null) oppty.OwnerId = dataAdminUserId;
 		String finalOwnerId = oppty.OwnerId;
 		//System.debug('@@@@@ Data Admin id=' + dataAdminUser.Id);
 		// Tier 1,2,3,4 - TMMA and Account Owner is Active

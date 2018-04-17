@@ -171,8 +171,10 @@ global class CustSamlJitHandler implements Auth.SamlJitHandler {
         }
         //set active community user flag as true
         c.Is_Active_Community_User__c = true;
+        //set new checkbox to false here
+        c.Not_Found_In_Marketing__c = false;
         if(newContact) {
-        	c.AccountId = accountId;
+            c.AccountId = accountId;
             System.debug('Account Id in HandleContact method: '+ accountId);
             System.debug('INSERTING new CONTACT: '+ c);
             try{

@@ -1,0 +1,103 @@
+<!--/*********************************************************************************************************
+Name            :    BrainsharkNewUserRegisteration
+Author          :    Harish Gowda N
+Date            :    22 Feb, 2018
+Description     :    This vf page is used to Register New user For Brainshark. 
+
+*********************************************************************************************************/-->
+
+<apex:page applyHtmlTag="true"  controller="BrainsharkNewUserRegisterationController" sidebar="false" showHeader="true">
+
+ <head>
+    <style>
+        .startStyle{
+                    width:350px;
+                    height:110px;
+                   }
+      .bPageHeader {
+                    display:none;
+                   }
+      .bPageFooter{
+                    display:none;
+                   }
+    </style>
+    
+  </head>  
+<apex:image id="logo" value="{!$Resource.NXP_logo}" style="align: left;" height="100" width="233"/>
+
+<apex:sectionHeader subtitle="User Registration Form"/>
+  <apex:form style="background-color:white;height:100%;" >    
+  
+  <div style="width:710px; height:100%;padding-left:25%; " >
+    <apex:pageBlock rendered="{!Step1}" title="Step - I : User Registration" mode="Edit"  >
+       <apex:pageMessages /> 
+       <apex:pageBlockSection id="NewRequest" columns="1">  
+          <apex:actionStatus id="status" StartText="Fetching data..." startStyle="font-color:red;">
+             <apex:facet name="start">
+                <apex:image value="/img/loading.gif" />
+              </apex:facet>
+          </apex:actionStatus>
+              
+          <apex:inputField value="{!user.First_Name__c}"/>
+          <apex:inputField value="{!user.Last_Name__c}"/>
+          <apex:inputField value="{!user.Email_Address__c}"/>
+          <apex:inputField value="{!user.Region__c}"/>
+          <apex:inputField value="{!user.Country__c}"/>
+          <apex:inputField value="{!user.Job_Title__c}"/>
+          <apex:inputField value="{!user.Phone_Number__c}"/>
+          <apex:inputField value="{!user.Manager_Name__c}"/>
+          <apex:inputField value="{!user.Manager_s_email__c}"/>
+          <apex:inputField value="{!user.Are_You_A_Manager__c}"/>
+          <apex:inputField value="{!user.Anticipate_Creating_Content__c}"/>
+          <apex:inputField value="{!user.Are_You_On_Sales_Incentive_Plan__c}"/>
+          <apex:inputField value="{!user.Main_Function_Area__c}"/>
+          <apex:inputField value="{!user.NXP_Role__c}" label="Role"/>
+          <apex:inputField value="{!user.Reason_for_Request__c}"/>
+          <apex:inputField value="{!user.Related_Groups__c}"/>
+          <!--<apex:inputField value="{!user.WBI_Id__c}"/>-->
+      </apex:pageBlockSection>
+       <center>
+         <!-- <apex:commandButton value="Back" action="{!backToStep1}"/> -->
+          <apex:commandButton value="Confirm" action="{!save}"/>
+      </center>
+     </apex:pageBlock>
+  </div>
+        
+  <div style="width:710px; height:320px;padding-left:25%; ">
+    <apex:pageBlock rendered="{!Step2}" title="Step - II : Confirmation">
+        <apex:pageblockSection columns="1" >
+            <apex:outputField value="{!user.First_Name__c}"/>
+            <apex:outputField value="{!user.Last_Name__c}"/>
+            <apex:outputField value="{!user.Email_Address__c}"/>
+            <apex:outputField value="{!user.Region__c}"/>
+            <apex:outputField value="{!user.Country__c}"/>
+            <apex:outputField value="{!user.Job_Title__c}"/>
+            <apex:outputField value="{!user.Phone_Number__c}"/>
+            <apex:outputField value="{!user.Manager_Name__c}"/>
+            <apex:outputField value="{!user.Manager_s_email__c}"/>
+            <apex:outputField value="{!user.Are_You_A_Manager__c}"/>
+            <apex:outputField value="{!user.Anticipate_Creating_Content__c}"/>
+            <apex:outputField value="{!user.Are_You_On_Sales_Incentive_Plan__c}"/>
+            <apex:outputField value="{!user.Main_Function_Area__c}"/>
+            <apex:outputField value="{!user.NXP_Role__c}" label="Role"/>
+            <apex:outputField value="{!user.Reason_for_Request__c}"/>
+            <apex:outputField value="{!user.Related_Groups__c}"/>
+           <!-- <apex:outputField value="{!user.WBI_Id__c}"/> -->
+            
+        </apex:pageblockSection>
+            <center>
+          <apex:commandButton value="Back" action="{!backToStep1}"/>
+          <apex:commandButton value="Confirm" action="{!save}"/>
+      </center>  
+    </apex:pageBlock>
+  </div>  
+   
+  <div style="width:710px; padding-left:25%;" >
+    <apex:pageBlock title="STEP - III : Final Step" rendered="{!success }">
+        <apex:pageMessages />
+        <center><apex:commandButton value="New Registration"   action="{!register}" oncomplete="window.top.location='{!pg}'"  /></center>
+    </apex:pageBlock>
+ </div>  
+  </apex:form>
+ 
+</apex:page>

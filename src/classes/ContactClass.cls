@@ -10,11 +10,37 @@ Created date: 20-Mar-2017
 Description : SIR SFDC374-calculate the contact service level for the account's having role as Distributors and 
                customer category as Tier 4-ROM. Also removed coustomer category value from code and introduced custom setting.
 **********************************************************************/
+
+/*****************************************************************************************
+@Modified By :   Ranganath C N
+@Modified Date:  22 Mar 2018
+@Description:    To Convert ISO-3 country values to full country names as part of SFDC-1387. 
+*******************************************************************************************/
 public class ContactClass
 {
       //  private static String CASE_TSCOMMUNITY = 'TS_Community';
       //  private static String CASE_TECH_SUPPORT = 'Tech_Support'; 
            
+  public static void convertISONameToFullName(List<Contact> contacts)
+    {
+        map<String,String> mapOdCodes= new map<String,String>(); 
+        List<Hub_Foundation__c> allCodes =[select Alpha_2_Code__c,Alpha_3_Code__c,Country__c,Region__c from Hub_Foundation__c]; 
+    
+        for(Hub_Foundation__c hc: allCodes)
+        {
+            mapOdCodes.put( hc.Alpha_3_Code__c ,hc.Country__c);
+        }   
+        for(contact ct : contacts)
+        {
+        String fullCountryName = mapOdCodes.get(ct.Mailingcountry);
+        if(fullCountryName != null){
+            ct.Mailingcountry=fullCountryName;
+        }
+        }  
+    } 
+           
+           
+
 public static void CSLIdentification(List<Contact> lstContactnew)
      {  
            

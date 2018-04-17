@@ -10,6 +10,10 @@ Description     :    SFDC-44-To replace hard coded URLs with generic URLs for CM
 Modified By     :    Nisha Agrawal
 Modified Date   :    20 Nov 2017
 Description     :    SFDC-1080-To update urls for outdated hyperlinks and remove GoToTraining Section and other updates
+--------------------------------------------------------------------------------------------------------
+Modified By     :    Harish Gowda N
+Modified Date   : 30 Mar2018
+Description     :    SFDC-1171-Brainshark New User Registration form-- Click here to register for Brainshark URL Change
 **********************************************************************************************************************-->
 <apex:page id="thePage" sidebar="false" showHeader="false"  standardStylesheets="false" cache="false" controller="CaseControllerAttachment">
 
@@ -240,7 +244,7 @@ Description     :    SFDC-1080-To update urls for outdated hyperlinks and remove
                    <div class="sub-container">
                         <ul class="bullet-green-list">
                             <li>
-                               <p><a href="/newuser/NewUserRegisteration?userRequestparam=Brainshark" title="Brainshark" target="blank">Click here to register</a></p>                      
+                               <p><a href="/welcome/BrainsharkNewUserRegisteration" title="Brainshark" target="blank">Click here to register</a></p>                      
                             </li>
                         </ul>
                     </div>                    

@@ -172,7 +172,7 @@ public class Contact_AfterTriggerTest {
 
         insert objContact1;
         //added by shridevi to increase the code coverage of the trigger Contact_AfterTrigger
-         objContact=[select id,Email,FirstName,LastName,Phone,Job_Title__c,Linkedin__c,Twitter__c,State_Province__c,Web_Region__c,Company__c,Community_web_country__c from contact where id=:objContact.id];
+         objContact=[select id,Email,FirstName,LastName,Phone,Job_Title__c,Linkedin__c,Twitter__c,State_Province__c,Web_Region__c,Company__c,Community_web_country__c,Mailingcountry from contact where id=:objContact.id];
          //objContact.Email='shridevi.badiger@nxp.com';
          //objContact.FirstName='venky';
         // objContact.LastName='guna';
@@ -182,6 +182,7 @@ public class Contact_AfterTriggerTest {
         // objContact.Twitter__c='Twitter';
         // objContact.State_Province__c='Goa';
          objContact.Web_Region__c='Japan';
+         objContact.Mailingcountry='IND';
         // objContact.Company__c='TCS';
          //objContact.Community_web_country__c='India';
          update objContact;

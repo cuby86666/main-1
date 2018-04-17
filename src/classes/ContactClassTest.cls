@@ -98,7 +98,7 @@ public class ContactClassTest{
     {   
        
        objContact1=new Contact(FirstName='test1',LastName='strLastName', Title = 'strTitle',
-                                          Phone = '8123978919', email = 'test1@CN.BOSCH.COM', AccountID = AccountId,CanAllowPortalSelfReg=false,contact_service_level__c=''); 
+                                          Phone = '8123978919', email = 'test1@CN.BOSCH.COM', AccountID = AccountId,CanAllowPortalSelfReg=false,contact_service_level__c='',Mailingcountry='DEU'); 
         
     
          return objContact1 ;

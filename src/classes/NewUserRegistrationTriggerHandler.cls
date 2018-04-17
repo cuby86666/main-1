@@ -3,6 +3,10 @@
 * Created Date : 16 May 2016
 * Description  : Trigger handler for New User Registration object, which contains the method 
                  to send an eMail notification when the request gets Rejected.
+--------------------------------------------------------------------------------------------                 
+Modified By     :    Harish Gowda N
+Modified Date   : 30 Mar2018
+Description     : SFDC-1171-Brainshark New User Registration form- adding Rejection Mail for Brainshark New user Registration form.
 ********************************************************************************************/
 public class NewUserRegistrationTriggerHandler implements Itrigger 
 {
@@ -10,8 +14,11 @@ public class NewUserRegistrationTriggerHandler implements Itrigger
     public static Boolean TriggerDisabled = false;
     private static Final string TYPE_New_User_Reg='New_User_Registeration';
     private static Final String TYPE_Apttus_New_User_Reg='Apttus_New_User_Registeration';
+    private static Final string TYPE_Brainshark_New_User_Reg='Brainshark_New_User_Registration';
     public static Id newUserReg_Id;
     public static Id apptusNewUserReg_Id;
+    public static Id BrainsharkNewUserReg_Id;
+ 
     /*
         Checks to see if the trigger has been disabled either by custom setting or by running code
     */
@@ -60,7 +67,7 @@ public class NewUserRegistrationTriggerHandler implements Itrigger
      
         for(recordType rt:[Select Id, Name,DeveloperName From RecordType 
                         Where IsActive=true AND (SobjectType = 'New_User_Registeration__c' and 
-                        (DeveloperName =:TYPE_New_User_Reg OR DeveloperName =:TYPE_Apttus_New_User_Reg))])
+                        (DeveloperName =:TYPE_New_User_Reg OR DeveloperName =:TYPE_Apttus_New_User_Reg OR DeveloperName =:TYPE_Brainshark_New_User_Reg ))])
         {
          if(rt.DeveloperName == TYPE_New_User_Reg ) 
             {
@@ -69,6 +76,10 @@ public class NewUserRegistrationTriggerHandler implements Itrigger
          else if(rt.DeveloperName == TYPE_Apttus_New_User_Reg)
             {
                apptusNewUserReg_Id= rt.id;  
+            }
+            else if(rt.DeveloperName == TYPE_Brainshark_New_User_Reg)
+            {
+               BrainsharkNewUserReg_Id= rt.id;  
             }
         } 
     
@@ -83,6 +94,12 @@ public class NewUserRegistrationTriggerHandler implements Itrigger
          listuserId.add(request.ownerId);
       // listuserId.add(request.createdbyId);
        }
+       if(request.RecordTypeId == BrainsharkNewUserReg_Id)
+       {
+         listuserId.add(request.ownerId);
+      // listuserId.add(request.createdbyId);
+       }
+       
        listRequestId.add(request.Id);
        }
        
@@ -153,6 +170,23 @@ public class NewUserRegistrationTriggerHandler implements Itrigger
                                 +'<a href="https://nxpsemiconductors.secure.force.com/welcome/Landing_Page?success=1"> Data Admin </a></body></html>';
              mail.setHtmlBody(url);     
             }
+            //Rejection Email For Brainshark New User Form
+            if(request.RecordTypeId == BrainsharkNewUserReg_Id && mapUser.size()!=0)
+            {
+            strSendTo.add(mapUser.get(request.ownerId).Email);
+            // strSendTo.add(mapUser.get(request.createdbyId).Email);
+            mail.setToAddresses(strSendTo);         
+            mail.setSubject( 'Brainshark New user registration request has been rejected.' );
+            Url='<html lang="ja"><body>'
+                                +'Dear '+mapUser.get(request.ownerId).name+' ,<br><br>'
+                                +'Your Brainshark new user registration request has been rejected, due to the following reason.<br>'
+                                +'<br>Comments:'+mapStep.get(request.id).comments+'<br><br>'
+                                +'In case of any issue please contact Support&Help : https://nxpsemiconductors.secure.force.com/welcome/Landing_Page?success=1  -> HELP -> fill the required info.  and SUBMIT <br><br>'
+                                + 'Best regards,<br>'
+                                +'<a href="https://nxpsemiconductors.secure.force.com/welcome/Landing_Page?success=1"> Data Admin </a></body></html>';
+             mail.setHtmlBody(url);     
+            }
+            
             mails.add(mail);
            }
          }
