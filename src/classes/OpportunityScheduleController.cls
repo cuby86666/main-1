@@ -138,7 +138,7 @@ public with sharing class OpportunityScheduleController {
          for(OpportunitySchedulingWrapper.OpportunityScheduleView dispTab: lstWrapperOpptySchedule){	
             OpportunitySchedulingWrapper.OpportunityScheduleView positionRecord = new OpportunitySchedulingWrapper.OpportunityScheduleView();	
             positionRecord.quantities = dispTab.quantities;	
-            positionRecord.comment ='';	
+            positionRecord.comment = dispTab.comment; //J Copy comment too	
             positionRecord.oppValues =  oppty;   	
             if(qttr >4){	
              year++;	
