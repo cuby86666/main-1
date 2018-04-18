@@ -8,6 +8,7 @@ public with sharing class OpportunityCloneController {
         @AuraEnabled public String newOpptyName {get; set;}
         @AuraEnabled public String message {get; set;}
         @AuraEnabled public List<OpportunitySpinOffWrapper> lstWrappers {get; set;}
+        public List<OpportunitySchedule__c> lstOpptyScheds {get; set;}
     }
     
     public class OpportunitySpinOffWrapper {
@@ -19,11 +20,14 @@ public with sharing class OpportunityCloneController {
 
     @AuraEnabled
     public static OpportunityCloneController.OpportunityWrapper getOpptyProdsByOpptyId(String opptyId, String func) {
-        Opportunity oppty = [Select Id, Name, StageName, Design_Win_Approval_Process__c, OwnerId from Opportunity Where Id =: opptyId];
+        Opportunity oppty = [Select Id, Name, StageName, Design_Win_Approval_Process__c, OwnerId, CloseDate, Production_Date__c from Opportunity Where Id =: opptyId];
         List<OpportunityLineItem> lstOpptyProds = 
             [Select Id, Product2.Name, MAG__c, Product_Active_Flags__c, UnitPrice, Component_Multiplier__c, Claim_Value_USD__c, Product2.IsActive, Prod_Lost_Cancelled__c 
              from OpportunityLineItem Where OpportunityId =: opptyId];
         List<OpportunitySpinOffWrapper> lstWrappers = new List<OpportunitySpinOffWrapper>();
+        List<OpportunitySchedule__c> lstOpptyScheds = 
+            [Select Id, Sched_Date__c, Oppty_Sched_Qty__c, Frozen_Oppty_Sched_Qty__c 
+             from OpportunitySchedule__c Where Opportunity__c =: opptyId];
         
         String message = null;
         for (OpportunityLineItem item : lstOpptyProds) {
@@ -54,7 +58,10 @@ public with sharing class OpportunityCloneController {
             if (!CommonUtils.isAdmin() && oppty.OwnerId != UserInfo.getUserId()) {
                 throw new AuraHandledException('Only opportunity owner can do spin off.');
             }            
-        } 
+        } else if (func == OpportunityCloneController.FUNC_REOPEN) {
+            if (oppty.StageName != 'Lost' && oppty.StageName != 'Cancelled')
+                throw new AuraHandledException('Only Cancelled or Lost opportunity can do reopen.');
+        }
         return opptyWrapper;
     }
     
@@ -112,6 +119,35 @@ public with sharing class OpportunityCloneController {
         
         return newOpptyId;
     }
+
+    public static String doReOpen(OpportunityCloneController.OpportunityWrapper wrapper, String func, 
+                                           OpportunityCloneController.OpportunityCloneWrapper myclone) {
+        //keep savepoint
+        Savepoint sp = Database.setSavepoint();
+        Opportunity myOppty = (Opportunity)myclone.clonedSObjectOppty.get(0);
+
+        try {
+            myclone.checkOpptyCloseDateAndSched();
+            //update close date/production date
+            wrapper.oppty.StageName = 'Initial Engagement';
+            wrapper.oppty.CloseDate = myOppty.CloseDate;
+            wrapper.oppty.Production_Date__c = myOppty.Production_Date__c;                
+            update wrapper.oppty;
+
+            if (myclone.isOpptySchedReset) {
+                //insert new oppty sched
+                myclone.clonedSObjectOpptyScheds.get(0).put('Opportunity__c', wrapper.oppty.Id);
+                insert myclone.clonedSObjectOpptyScheds;
+            }
+
+        } catch (Exception err) {
+            system.debug('@@@@@ ' + err.getMessage());
+            Database.rollback(sp);
+            throw err;
+        }
+        
+        return wrapper.oppty.Id;
+    }
     
     @AuraEnabled
     public static String doCloneAndSpinOff(String opptyWrapper, String func) {
@@ -121,7 +157,10 @@ public with sharing class OpportunityCloneController {
         OpportunityCloneController.OpportunityCloneWrapper myclone = 
             new OpportunityCloneController.OpportunityCloneWrapper(wrapper.oppty.Id, (func == OpportunityCloneController.FUNC_CLONE ? false : true));
         
-        return OpportunityCloneController.doCloneAndSpinOff(wrapper, func, myclone);
+        if (func == OpportunityCloneController.FUNC_REOPEN)
+            return OpportunityCloneController.doReOpen(wrapper, func, myclone);
+        else
+            return OpportunityCloneController.doCloneAndSpinOff(wrapper, func, myclone);
     }
 
     public class OpportunityCloneWrapper {
@@ -129,8 +168,10 @@ public with sharing class OpportunityCloneController {
         public List<sObject> clonedSObjectOppty {get; set;}
         public List<sObject> clonedSObjectOpptyProds {get; set;}
         public List<sObject> clonedSObjectOpptyScheds {get; set;}
+        public Boolean isOpptySchedReset {get; set;}
         
         public OpportunityCloneWrapper(String opptyId, boolean keepSystemFields) {
+            isOpptySchedReset = false;
             List<Opportunity> lstOppty = [Select Id, Name,Legacy_Id__c, Spin_Off_Opportunity__c, Design_Win_Approval_Process__c, RecordType.Name,
                                           (Select Id, Product2.Name, MAG__c, Product_Active_Flags__c, UnitPrice, Component_Multiplier__c, Claim_Value_USD__c, Spin_Off__c from OpportunityLineItems), 
                                           (Select Id, Opportunity__c, Oppty_Sched_Qty__c, Sched_Date__c, Frozen_Oppty_Sched_Qty__c from Opportunity_Schedules__r) 
@@ -174,14 +215,10 @@ public with sharing class OpportunityCloneController {
             myOppty.put('OwnerId', UserInfo.getUserId());
             //update opportunity name
             myOppty.put('Name', (String)myOppty.get('Name') + '(cloned)');
-            
-            //check close date & production date
-            Date today = Date.today();
-            Date closeDate = (Date)myOppty.get('CloseDate');
-            if (today > closeDate) {
-                myOppty.put('CloseDate', today.addDays(1));
-            }
-   
+               
+            checkOpptyCloseDateAndSched();
+
+            /*
             Date productionDate = (Date)myOppty.get('Production_Date__c');
             if (today > productionDate) {
                 myOppty.put('Production_Date__c', today.addDays(1));
@@ -193,6 +230,33 @@ public with sharing class OpportunityCloneController {
                     opptySched.Frozen_Oppty_Sched_Qty__c = 1000;
                     opptySched.Sched_Date__c = (Date)myOppty.get('Production_Date__c');
                     clonedSObjectOpptyScheds = new List<sObject>{(sObject)opptySched};                    
+                }
+            }*/
+            return (Opportunity)myOppty;
+        }
+
+        public Opportunity checkOpptyCloseDateAndSched() {
+            sObject myOppty = clonedSObjectOppty.get(0);
+
+            //check close date & production date
+            Date today = Date.today();
+            Date closeDate = (Date)myOppty.get('CloseDate');
+            if (today > closeDate) {
+                myOppty.put('CloseDate', today.addDays(1));
+            }
+
+            Date productionDate = (Date)myOppty.get('Production_Date__c');
+            if (today > productionDate) {
+                myOppty.put('Production_Date__c', today.addDays(1));
+                //process oppty sched data
+                if (clonedSObjectOpptyScheds != null) {
+                    //reset opportunity schedule
+                    OpportunitySchedule__c opptySched = new OpportunitySchedule__c();
+                    opptySched.Oppty_Sched_Qty__c = 1000;
+                    opptySched.Frozen_Oppty_Sched_Qty__c = 1000;
+                    opptySched.Sched_Date__c = (Date)myOppty.get('Production_Date__c');
+                    clonedSObjectOpptyScheds = new List<sObject>{(sObject)opptySched};
+                    isOpptySchedReset = true;
                 }
             }
             return (Opportunity)myOppty;

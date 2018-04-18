@@ -186,9 +186,16 @@
   	    <ui:button aura:id="back"
           class="slds-button slds-button--neutral"
           labelClass="label" press="{!c.gotoURL}">Back</ui:button>
-        <ui:button aura:id="next"
-          class="slds-button slds-button--neutral"
-          labelClass="label" press="{!c.doPreview}" disabled="{!v.isError}">Next</ui:button>
+        <aura:if isTrue="{!(v.func == 'reopen')}">
+            <ui:button aura:id="finish"
+              class="slds-button slds-button--neutral"
+              labelClass="label" press="{!c.doFinish}" disabled="{!v.isError}">Finish</ui:button>
+        </aura:if>
+        <aura:if isTrue="{!(v.func != 'reopen')}">
+            <ui:button aura:id="next"
+              class="slds-button slds-button--neutral"
+              labelClass="label" press="{!c.doPreview}" disabled="{!v.isError}">Next</ui:button>
+        </aura:if>
     </aura:if>
     
     <aura:if isTrue="{!v.isPreview}">
@@ -197,6 +204,6 @@
           labelClass="label" press="{!c.doBack}">Back</ui:button>
         <ui:button aura:id="finish"
           class="slds-button slds-button--neutral"
-          labelClass="label" press="{!c.doFinish}">Finish</ui:button>    
+          labelClass="label" press="{!c.doFinish}" disabled="{!v.isError}">Finish</ui:button>
     </aura:if>        
 </aura:component>
