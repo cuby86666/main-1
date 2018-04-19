@@ -129,6 +129,9 @@ public class OpportunityCloneControllerTest {
         System.assert(lstOppty.size() == 1);
         OpportunityCloneController.OpportunityWrapper wrapper = 
             OpportunityCloneController.getOpptyProdsByOpptyId(lstOppty.get(0).Id, OpportunityCloneController.FUNC_CLONE);
+        if (wrapper.lstOpptyScheds != null && wrapper.lstOpptyScheds.size() > 0) {
+            OpportunitySchedule__c opptySched = wrapper.lstOpptyScheds.get(0);
+        }
         wrapper.lstWrappers.get(0).isSelected = true;
         wrapper.newOpptyName = 'CloneTest';
         String strWrapper = System.JSON.serialize(wrapper);
@@ -192,6 +195,50 @@ public class OpportunityCloneControllerTest {
         String strWrapper = System.JSON.serialize(wrapper);
         Test.startTest();
         OpportunityCloneController.doCloneAndSpinOff(strWrapper, OpportunityCloneController.FUNC_CLONE);
+        lstOppty = [Select Id from Opportunity];
+        System.assert(lstOppty.size() == 2);
+        Test.stopTest();
+    }
+
+    @isTest
+    static void testReOpenCancelledOpportunity() {
+        List<Opportunity> lstOppty = [Select Id, StageName, CloseDate, Production_Date__c from Opportunity order by CreatedDate];
+        System.assert(lstOppty.size() == 1);
+        Opportunity oppty = lstOppty.get(0);
+        oppty.CloseDate = Date.today().addDays(-5);
+        oppty.Production_Date__c = Date.today().addDays(-4);
+        oppty.StageName = 'Cancelled';
+        update oppty;
+        OpportunityCloneController.OpportunityWrapper wrapper = OpportunityCloneController.getOpptyProdsByOpptyId(lstOppty.get(0).Id, OpportunityCloneController.FUNC_REOPEN);
+        wrapper.lstWrappers.get(0).isSelected = true;
+        wrapper.newOpptyName = 'ReOpenTest';
+        String strWrapper = System.JSON.serialize(wrapper);
+        Test.startTest();
+        OpportunityCloneController.doCloneAndSpinOff(strWrapper, OpportunityCloneController.FUNC_REOPEN);
+        lstOppty = [Select Id from Opportunity];
+        System.assert(lstOppty.size() == 1);
+        Test.stopTest();
+    }
+
+    @isTest
+    static void testOpportunityCloneQtyPerSys() {
+        List<Opportunity> lstOppty = [Select Id from Opportunity];
+        System.assert(lstOppty.size() == 1);
+        //find lineitem
+        List<OpportunityLineItem> lstOpptyProd = [Select Id, Component_Multiplier__c from OpportunityLineItem];
+        for (OpportunityLineItem prod : lstOpptyProd) {
+            prod.Component_Multiplier__c = 1.5;
+        }
+        
+        update lstOpptyProd;
+
+        OpportunityCloneController.OpportunityWrapper wrapper = 
+            OpportunityCloneController.getOpptyProdsByOpptyId(lstOppty.get(0).Id, OpportunityCloneController.FUNC_CLONE);
+        wrapper.lstWrappers.get(0).isSelected = true;
+        wrapper.newOpptyName = 'CloneTest';
+        String strWrapper = System.JSON.serialize(wrapper);
+        Test.startTest();
+        String strOpptyId = OpportunityCloneController.doCloneAndSpinOff(strWrapper, OpportunityCloneController.FUNC_CLONE);
         lstOppty = [Select Id from Opportunity];
         System.assert(lstOppty.size() == 2);
         Test.stopTest();

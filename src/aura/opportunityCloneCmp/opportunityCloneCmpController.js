@@ -25,10 +25,8 @@
     doFinish : function(component, event, helper) {
         var func = component.get("v.func");
         component.set("v.isProcessing", true);
-        if (func == "clone" || func == "spin off") {
+        if (func == "clone" || func == "spin off" || func == "reopen") {
         	helper.doCloneAndSpinOff(component);
-        } else if (func == "reopen") {
-            //
         }
     },
     
@@ -43,7 +41,7 @@
             component.set("v.isError", !checkResult);
             tag = "(spinoff)";
         } else if ("reopen") {
-            
+            tag = ""
         } else {
             return;
         }
