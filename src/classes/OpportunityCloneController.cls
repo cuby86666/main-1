@@ -8,7 +8,7 @@ public with sharing class OpportunityCloneController {
         @AuraEnabled public String newOpptyName {get; set;}
         @AuraEnabled public String message {get; set;}
         @AuraEnabled public List<OpportunitySpinOffWrapper> lstWrappers {get; set;}
-        public List<OpportunitySchedule__c> lstOpptyScheds {get; set;}
+        @AuraEnabled public List<OpportunitySchedule__c> lstOpptyScheds {get; set;}
     }
     
     public class OpportunitySpinOffWrapper {
@@ -50,6 +50,7 @@ public with sharing class OpportunityCloneController {
         opptyWrapper.oppty = oppty;
         opptyWrapper.message = message;
         opptyWrapper.lstWrappers = lstWrappers;
+        opptyWrapper.lstOpptyScheds = lstOpptyScheds;
         //check current user is oppty owner or not
         if (func == OpportunityCloneController.FUNC_SPINOFF) {
             if (oppty.Design_Win_Approval_Process__c != 'Open') {
@@ -135,10 +136,23 @@ public with sharing class OpportunityCloneController {
             update wrapper.oppty;
 
             if (myclone.isOpptySchedReset) {
+                //delete existed oppty sched
+                if (wrapper.lstOpptyScheds != null && wrapper.lstOpptyScheds.size() > 0)
+                    delete wrapper.lstOpptyScheds;
                 //insert new oppty sched
                 myclone.clonedSObjectOpptyScheds.get(0).put('Opportunity__c', wrapper.oppty.Id);
                 insert myclone.clonedSObjectOpptyScheds;
             }
+
+            //process reopen lineitems
+            List<OpportunityLineItem> reopenProds = new List<OpportunityLineItem>();
+            for(OpportunitySpinOffWrapper w : wrapper.lstWrappers) {
+                if (w.isSelected) {
+                    w.opptyLineItem.Prod_Lost_Cancelled__c = null;
+                    reopenProds.add(w.opptyLineItem);
+                }
+            }
+            update reopenProds;
 
         } catch (Exception err) {
             system.debug('@@@@@ ' + err.getMessage());
