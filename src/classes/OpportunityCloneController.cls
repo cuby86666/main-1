@@ -260,7 +260,8 @@ public with sharing class OpportunityCloneController {
             }
 
             Date productionDate = (Date)myOppty.get('Production_Date__c');
-            if (today > productionDate) {
+            Date newCloseDate = (Date)myOppty.get('CloseDate'); //
+            if (today > productionDate || newCloseDate > productionDate) { //
                 myOppty.put('Production_Date__c', today.addDays(1));
                 //process oppty sched data
                 if (clonedSObjectOpptyScheds != null) {
