@@ -1205,6 +1205,7 @@ private class OpportunityLineItemTriggerTest {
 /*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Opportunity Spin Off Test @@@@@@@@@@@@@@@@@@@@@@@@*/   
 
 /** Stan Hsu For SIR#470 ****** BEGIN ******/
+/*
     static testMethod void testOpportunityProductLost() 
     {
         testProduct = createProduct( 'R33' );
@@ -1259,9 +1260,9 @@ private class OpportunityLineItemTriggerTest {
         testOpportunity2010.Lost_Description__c = 'testtesttesttesttesttesttesttesttesttesttesttesttest';
         testOpportunity2010.Competitors__c = 'CAVIUM';       //2016.9 SIR# 958 added competitor for lost opportunity to comply with validation rule 
         update testOpportunity2010;
-/** Stan Hsu For SIR#470 ****** END ******/
     }
-    
+*/  
+/** Stan Hsu For SIR#470 ****** END ******/    
     
     /************** 2016.08 Test Medhods for the the AttachmentTrigger and NoteTrigger *** Code Block BEGIN ***************************/
 

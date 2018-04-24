@@ -158,7 +158,8 @@ private class OpportunityTest {
             StageName = opptyStageName,
             CurrencyIsoCode = CCY_CODE_DEFAULT,
             Production_Date__c = PRODUCTION_DATE,
-            CloseDate = PRODUCTION_DATE - 30
+            CloseDate = PRODUCTION_DATE - 30,
+            Bypass_Validation_Sched_Start_Date__c = true
         );
 
         insert oppty;
@@ -250,7 +251,8 @@ private class OpportunityTest {
             CurrencyIsoCode = CCY_CODE_DEFAULT,
             Production_Date__c = PRODUCTION_DATE,
             CloseDate = PRODUCTION_DATE - 30,
-            One_Year_Pieces__c = 1000
+            One_Year_Pieces__c = 1000,
+            Bypass_Validation_Sched_Start_Date__c = true
         );
         
         insert oppty;

@@ -121,7 +121,8 @@ public class TrackingSheetControllerTest
                             RecordTypeID=sfdcOptty.Id,
                             Locked_Exchange_Rate__c = 1.00,
                             Currency__c = fxRates.get(CCY_CODE_DEFAULT).Id,
-                            CurrencyIsoCode = CCY_CODE_DEFAULT
+                            CurrencyIsoCode = CCY_CODE_DEFAULT,
+                            Bypass_Validation_Sched_Start_Date__c = true
                         );
                         
                         Opportunity o1 = new Opportunity(
@@ -135,7 +136,8 @@ public class TrackingSheetControllerTest
                             RecordTypeID=sfdcOptty.Id,
                             Locked_Exchange_Rate__c = 1.00,
                             Currency__c = fxRates.get(CCY_CODE_DEFAULT).Id,
-                            CurrencyIsoCode = CCY_CODE_DEFAULT
+                            CurrencyIsoCode = CCY_CODE_DEFAULT,
+                            Bypass_Validation_Sched_Start_Date__c = true
                         );
                         
                         Opportunity o2 = new Opportunity(
@@ -149,7 +151,8 @@ public class TrackingSheetControllerTest
                             RecordTypeID=sfdcOptty.Id,
                             Locked_Exchange_Rate__c = 1.00,
                             Currency__c = fxRates.get(CCY_CODE_DEFAULT).Id,
-                            CurrencyIsoCode = CCY_CODE_DEFAULT
+                            CurrencyIsoCode = CCY_CODE_DEFAULT,
+                            Bypass_Validation_Sched_Start_Date__c = true
                         );
                         
                         Opportunity o3 = new Opportunity(
@@ -163,7 +166,8 @@ public class TrackingSheetControllerTest
                             RecordTypeID=sfdcOptty.Id,
                             Locked_Exchange_Rate__c = 1.00,
                             Currency__c = fxRates.get(CCY_CODE_DEFAULT).Id,
-                            CurrencyIsoCode = CCY_CODE_DEFAULT
+                            CurrencyIsoCode = CCY_CODE_DEFAULT,
+                            Bypass_Validation_Sched_Start_Date__c = true
                         );
                         
                         Opportunity o4 = new Opportunity(
@@ -177,7 +181,8 @@ public class TrackingSheetControllerTest
                             RecordTypeID=sfdcOptty.Id,
                             Locked_Exchange_Rate__c = 1.00,
                             Currency__c = fxRates.get(CCY_CODE_DEFAULT).Id,
-                            CurrencyIsoCode = CCY_CODE_DEFAULT
+                            CurrencyIsoCode = CCY_CODE_DEFAULT,
+                            Bypass_Validation_Sched_Start_Date__c = true
                         );
                         
                         listDWs.add(o);

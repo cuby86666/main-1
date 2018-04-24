@@ -135,7 +135,8 @@ private class OpportunityScheduleTest {
             StageName = opptyStageName,
             CurrencyIsoCode = CCY_CODE_EUR,
             Production_Date__c = PRODUCTION_DATE,
-            CloseDate = PRODUCTION_DATE - 30
+            CloseDate = PRODUCTION_DATE - 30,
+            Bypass_Validation_Sched_Start_Date__c = true
         );
 
         insert oppty;

@@ -104,6 +104,7 @@ private class OpportunityLineItemsTest {
         o.Currency__c = fxRates.get(CCY_CODE_DEFAULT).Id; // Locked_Exchange_Rate__c will be set to this by workflow.
         o.CurrencyIsoCode = CCY_CODE_DEFAULT; // CurrencyIsoCode and Currency__c are correlated.
         o.Program__c = op.Id;
+        o.Bypass_Validation_Sched_Start_Date__c = true;
         insert o;
         
         System.debug('//J ========== after insert oppty');  

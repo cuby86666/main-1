@@ -232,25 +232,26 @@ public with sharing class OpportunityScheduleController {
                      lstDelOpptySchedId.add(opptySchedExistRec.Id);	
                  }	
             }	
-            if(sumOpptySchedQtyCheck(opptyschldWrapRec)!= true)	
-            {  
-              // DML operations executed in try catch block    
-              try{                	
-                  updateOpptyValue(opportunityId,oppPassed.CloseDate,oppPassed.Production_Date__c); //call for updating the Opportunity record with newly modified Expected Closed Dtae and Production date.	
-                  upsert lstOpptySchld;
-                  delete lstdelOpptySchld;
-              }	
-              // If Exception found throw the Error to Front End user
-              catch(Exception e)	
-              {	
-               throw e;	
-              }	          		
-            oppsave= [SELECT Id, Name,CloseDate, Production_Date__c,LT_Value_USD__c, Claim_Value_USD__c ,StageName,AccountId, Account.Customer_Category__c,TMMA_Override__c,RecordType.DeveloperName,Design_Win_Approval_Process__c,CreatedDate FROM Opportunity WHERE Id =:opportunityId]; 	
-            oppsave.CloseDate = oppPassed.CloseDate;	
-            oppsave.Production_Date__c = oppPassed.Production_Date__c;	
-            opptyDisplay.oppValues =oppsave;	
-            opptyDisplay.isOpptySchedule = true;	
-           }	
+            
+            if (sumOpptySchedQtyCheck(opptyschldWrapRec)!= true) {  
+            	// DML operations executed in try catch block    
+            	try {                	
+            		updateOpptyValue(opportunityId, oppPassed.CloseDate, oppPassed.Production_Date__c); //call for updating the Opportunity record with newly modified Expected Closed Dtae and Production date.	
+            		upsert lstOpptySchld;
+            		delete lstdelOpptySchld;
+            	} catch (Exception e) {	
+            		throw e;	
+            	} finally {
+            		oppPassed.Bypass_Validation_Sched_Start_Date__c = false;
+            		update oppPassed;  	
+            	}	          		
+            
+            	oppsave= [SELECT Id, Name,CloseDate, Production_Date__c,LT_Value_USD__c, Claim_Value_USD__c ,StageName,AccountId, Account.Customer_Category__c,TMMA_Override__c,RecordType.DeveloperName,Design_Win_Approval_Process__c,CreatedDate FROM Opportunity WHERE Id =:opportunityId]; 	
+            	oppsave.CloseDate = oppPassed.CloseDate;	
+            	oppsave.Production_Date__c = oppPassed.Production_Date__c;	
+            	opptyDisplay.oppValues =oppsave;	
+            	opptyDisplay.isOpptySchedule = true;	
+            }	
         }           	
         return opptyDisplay;	
     }  	
@@ -568,6 +569,7 @@ public with sharing class OpportunityScheduleController {
          (oppsave.Production_Date__c !=NewProdDate && NewProdDate !=null)) && oppsave.StageName !='Commitment'){	
           oppsave.CloseDate =ExpClsDate;	
           oppsave.Production_Date__c=NewProdDate;
+          oppsave.Bypass_Validation_Sched_Start_Date__c = true;
           flagIsChanged = true;   
       }	
       if(oppsave.RecordType.DeveloperName =='Model_N_Oppty' && oppsave.Account.Customer_Category__c =='Tier 4 - TMMA'){	
@@ -575,7 +577,7 @@ public with sharing class OpportunityScheduleController {
          flagIsChanged = true;
       }  
       if(flagIsChanged){
-         Update oppsave;	
+         update oppsave;	
       }	
     }	
     	

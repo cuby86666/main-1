@@ -161,30 +161,6 @@ private class OpportunityApprovalTest {
         u.MT_2__c = userMT2.Id;
         update u;
         
-        /*
-        // insert approvers
-        List<Approvers_Matrix__c> ams = new List<Approvers_Matrix__c>();
-        ams.add(newApproverMatrix('MAG Approver', MAG_SHORT_LIVED, null, THRESHOLD_MAG, userMAG.Id, null));
-        ams.add(newApproverMatrix('MAG Approver', MAG_LIFETIME, null, THRESHOLD_MAG, userMAG.Id, null));
-        ams.add(newApproverMatrix('BL Approver', BL1, null, THRESHOLD_BL, userBL.Id, null));
-        ams.add(newApproverMatrix('BL Approver', BL2, null, THRESHOLD_BL, userBL.Id, null));
-        ams.add(newApproverMatrix('MAG Approver', MAG_SHORT_LIVED, 'STAR', THRESHOLD_MAG, userMagSTAR.Id, null));
-        ams.add(newApproverMatrix('MAG Approver', MAG_LIFETIME, 'STAR', THRESHOLD_MAG, userMagSTAR.Id, null));
-        ams.add(newApproverMatrix('BL Approver', BL1, 'STAR', THRESHOLD_BL, userBlSTAR.Id, null));
-        ams.add(newApproverMatrix('BL Approver', BL2, 'STAR', THRESHOLD_BL, userBlSTAR.Id, null));
-        ams.add(newApproverMatrix('GAM', 'STAR', null, 0, userGamSTAR.Id, null));
-        ams.add(newApproverMatrix('GAM', 'Samsung', null, 0, userGamSamsung.Id, null));
-        ams.add(newApproverMatrix('EVP', 'STAR', null, THRESHOLD_VP, userEvpSTAR.Id, null));
-        ams.add(newApproverMatrix('EVP', 'Samsung', null, THRESHOLD_VP, userEvpSamsung.Id, null));
-        ams.add(newApproverMatrix('Segment VP', 'Automotive', null, THRESHOLD_VP, userAuto.Id, null));
-        ams.add(newApproverMatrix('GSM Sales Director', null, null, 0, u.Id, null));
-        ams.add(newApproverMatrix('GSM VP 1', null, null, THRESHOLD_VP, u.Id, null));
-        ams.add(newApproverMatrix('GSM VP 2', 'Automotive', 'Greater China', THRESHOLD_VP, u.Id, null));
-        ams.add(newApproverMatrix('GSM VP 2', 'Automotive', 'South Asia Pacific', THRESHOLD_VP, u.Id, null));
-        ams.add(newApproverMatrix('GAM', 'General Account', null, 0, userGamGeneral.Id, parentAccountIdGeneral));
-        insert ams;
-        */
-        
         // insert FX Rates
         // There is a workflow which sets Opportunity.Locked_Exchange_Rate__c to 
         // Opportunity.Currency__r.Exchange_Rate__c, which refers to FX_Rates__c.Exchange_Rate__c
@@ -247,6 +223,7 @@ private class OpportunityApprovalTest {
         o.CloseDate = PRODUCTION_DATE - 60;
         o.Currency__c = fxRates.get(CCY_CODE_DEFAULT).Id; // Locked_Exchange_Rate__c will be set to this by workflow.
         o.CurrencyIsoCode = CCY_CODE_DEFAULT; // CurrencyIsoCode and Currency__c are correlated.
+        o.Bypass_Validation_Sched_Start_Date__c = true;
         insert o;
         
         System.debug('//J ========== after insert oppty');  

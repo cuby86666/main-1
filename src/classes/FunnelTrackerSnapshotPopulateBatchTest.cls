@@ -66,6 +66,7 @@ public class FunnelTrackerSnapshotPopulateBatchTest
                 date d2=Date.newInstance(2010, 1, 1);
                 date d4=Date.newInstance(2010, 1, 1);
                         Opportunity o = new Opportunity(Name='TestOppty',AccountId=ChildStarTest.Id,CloseDate=d2,StageName='Initial Engagement',Production_Date__c=d4,RecordTypeID=sfdcOptty.Id,X2010_Pieces__c=10,X2011_Pieces__c=11,X2012_Pieces__c=12,X2013_Pieces__c=13,X2014_Pieces__c=14,X2015_Pieces__c=15,X2016_Pieces__c=16,X2017_Pieces__c=17,X2018_Pieces__c=18,X2019_Pieces__c=19,X2020_Pieces__c=20,X2021_Pieces__c=21,X2022_Pieces__c=22,X2023_Pieces__c=23,X2024_Pieces__c=24,X2025_Pieces__c=25,X2026_Pieces__c=26,X2027_Pieces__c=27,X2028_Pieces__c=28,X2029_Pieces__c=29,X2030_Pieces__c=30,Locked_Exchange_Rate__c = 1.00,Currency__c = fxRates.get(CCY_CODE_DEFAULT).Id,CurrencyIsoCode = CCY_CODE_DEFAULT);
+                        o.Bypass_Validation_Sched_Start_Date__c = true;
                         listDWs.add(o);
                 Test.StartTest();
                 insert listDWs;
