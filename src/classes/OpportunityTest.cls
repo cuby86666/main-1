@@ -697,38 +697,7 @@ private class OpportunityTest {
         
         system.assertNOTEquals(fxRates.get(opptySfdc.CurrencyIsoCode).Exchange_Rate__c, opptyFxRates.get(opptySfdc.Id).Locked_Exchange_Rate__c);
     }
-    /* Removed for One Funnel 2.0 project
-    @isTest
-    static void testMNOpptyDesignWinApprovalStatus(){
-        Map<ID, Opportunity> opptyDWApprovalStatus = new Map<ID, Opportunity>();
-        List<Opportunity> opptys;
-        
-        opptyMn = [
-            SELECT  Id, StageName, Design_Win_Approval_Process__c 
-            FROM    Opportunity 
-            WHERE   RecordTypeId = :OpportunitiesSelector.getMnRecordTypeId() AND StageName = :STAGE_NAME
-            LIMIT 1
-        ];
-        
-        system.assertEquals(DW_APPROVAL_STATUS_OPEN, opptyMn.Design_Win_Approval_Process__c);
-        
-        opptyMn.StageName = STAGE_COMMITMENT;
-        update opptyMn;
-        
-        opptys = new List<Opportunity>{opptyMn};
-        opptyDWApprovalStatus = getOpptyDesignWinApprovalStatus(opptys);
-        
-        system.assertEquals(DW_APPROVAL_STATUS_APPROVED, opptyDWApprovalStatus.get(opptyMn.Id).Design_Win_Approval_Process__c);
-        
-        opptyMn.StageName = STAGE_LOST;
-        update opptyMn;
-
-        opptys = new List<Opportunity>{opptyMn};
-        opptyDWApprovalStatus = getOpptyDesignWinApprovalStatus(opptys);
-        
-        system.assertEquals(DW_APPROVAL_STATUS_LOST, opptyDWApprovalStatus.get(opptyMn.Id).Design_Win_Approval_Process__c);     
-    }
-    */
+    
     @isTest
     static void testOpptyProdLostCancelledInfo(){
         Map<Id, OpportunityLineItem> opptyProdLostCancelledInfo = new Map<Id, OpportunityLineItem>();
@@ -768,12 +737,12 @@ private class OpportunityTest {
         opptysUpdate = new List<Opportunity>();
         
         opptyMn.StageName = STAGE_LOST;
-        opptyMn.Lost_Reason__c = 'Lost';
+        opptyMn.Lost_Reason__c = 'Expired';
         opptyMn.Lost_Description__c = 'Lost Description';
         opptysUpdate.add(opptyMn);
         
         opptySfdc.StageName = STAGE_LOST;
-        opptySfdc.Lost_Reason__c = 'Lost';
+        opptySfdc.Lost_Reason__c = 'Expired';
         opptySfdc.Lost_Description__c = 'Lost Description';
         opptySfdc.Competitors__c = 'Test Competitor';
         opptysUpdate.add(opptySfdc);
@@ -783,10 +752,10 @@ private class OpportunityTest {
         opptyProdLostCancelledInfo = getOpptyProdLostCancelledInfo(opptysUpdate);
         
         system.assertEquals(true, opptyProdLostCancelledInfo.get(opptyProdMn.Id).Prod_Lost__c);
-        system.assertEquals('Lost', opptyProdLostCancelledInfo.get(opptyProdMn.Id).Prod_Lost_Cancelled_Reason__c);
+        system.assertEquals('Expired', opptyProdLostCancelledInfo.get(opptyProdMn.Id).Prod_Lost_Cancelled_Reason__c);
                 
         system.assertEquals(true, opptyProdLostCancelledInfo.get(opptyProdSfdc.Id).Prod_Lost__c);
-        system.assertEquals('Lost', opptyProdLostCancelledInfo.get(opptyProdSfdc.Id).Prod_Lost_Cancelled_Reason__c);
+        system.assertEquals('Expired', opptyProdLostCancelledInfo.get(opptyProdSfdc.Id).Prod_Lost_Cancelled_Reason__c);
         system.assertEquals('Lost Description', opptyProdLostCancelledInfo.get(opptyProdSfdc.Id).Prod_Lost_Reason__c);
         system.assertEquals('Test Competitor', opptyProdLostCancelledInfo.get(opptyProdSfdc.Id).Competitor__c);
         
@@ -810,7 +779,7 @@ private class OpportunityTest {
         system.assertEquals(null, opptyProdLostCancelledInfo.get(opptyProdMn.Id).Prod_Lost_Reason__c); 
         
         system.assertEquals(true, opptyProdLostCancelledInfo.get(opptyProdSfdc.Id).Prod_Lost__c);
-        system.assertEquals('Lost', opptyProdLostCancelledInfo.get(opptyProdSfdc.Id).Prod_Lost_Cancelled_Reason__c);
+        system.assertEquals('Expired', opptyProdLostCancelledInfo.get(opptyProdSfdc.Id).Prod_Lost_Cancelled_Reason__c);
         system.assertEquals('Lost Description', opptyProdLostCancelledInfo.get(opptyProdSfdc.Id).Prod_Lost_Reason__c);
         system.assertEquals('Test Competitor', opptyProdLostCancelledInfo.get(opptyProdSfdc.Id).Competitor__c);             
     }
