@@ -231,19 +231,23 @@ public with sharing class OpportunityScheduleController {
                      lstdelOpptySchld.add(opptySchedExistRec);	
                      lstDelOpptySchedId.add(opptySchedExistRec.Id);	
                  }	
-            }	
+            }
+            
+            Boolean opptyUpdated = false;	
             
             if (sumOpptySchedQtyCheck(opptyschldWrapRec)!= true) {  
             	// DML operations executed in try catch block    
             	try {                	
-            		updateOpptyValue(opportunityId, oppPassed.CloseDate, oppPassed.Production_Date__c); //call for updating the Opportunity record with newly modified Expected Closed Dtae and Production date.	
+            		opptyUpdated = updateOpptyValue(opportunityId, oppPassed.CloseDate, oppPassed.Production_Date__c); //call for updating the Opportunity record with newly modified Expected Closed Dtae and Production date.	
             		upsert lstOpptySchld;
             		delete lstdelOpptySchld;
             	} catch (Exception e) {	
             		throw e;	
             	} finally {
-            		oppPassed.Bypass_Validation_Sched_Start_Date__c = false;
-            		update oppPassed;  	
+            		if (opptyUpdated) {
+            			oppPassed.Bypass_Validation_Sched_Start_Date__c = false;
+            			update oppPassed;	
+            		}
             	}	          		
             
             	oppsave= [SELECT Id, Name,CloseDate, Production_Date__c,LT_Value_USD__c, Claim_Value_USD__c ,StageName,AccountId, Account.Customer_Category__c,TMMA_Override__c,RecordType.DeveloperName,Design_Win_Approval_Process__c,CreatedDate FROM Opportunity WHERE Id =:opportunityId]; 	
@@ -559,7 +563,7 @@ public with sharing class OpportunityScheduleController {
     	
 	
     /******Method Called for Updating the Opportunity Records with the new Expected Closed Date and Production Date*******/	
-    public static void updateOpptyValue(Id opportunityId, Date ExpClsDate, Date NewProdDate){ 
+    public static Boolean updateOpptyValue(Id opportunityId, Date ExpClsDate, Date NewProdDate){ 
       system.debug('opportunityId called'+opportunityId);
       Opportunity oppsave = new Opportunity();
       Boolean flagIsChanged = false;
@@ -578,7 +582,9 @@ public with sharing class OpportunityScheduleController {
       }  
       if(flagIsChanged){
          update oppsave;	
-      }	
+      }
+      
+      return flagIsChanged; 
     }	
     	
     /******Method for displaying the Updated ForecastValue in Production Management view for the particular Product*******/	

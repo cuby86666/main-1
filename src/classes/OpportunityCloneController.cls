@@ -132,7 +132,8 @@ public with sharing class OpportunityCloneController {
             //update close date/production date
             wrapper.oppty.StageName = 'Initial Engagement';
             wrapper.oppty.CloseDate = myOppty.CloseDate;
-            wrapper.oppty.Production_Date__c = myOppty.Production_Date__c;                
+            wrapper.oppty.Production_Date__c = myOppty.Production_Date__c;
+            wrapper.oppty.Sched_Start_Date__c = null;                
             update wrapper.oppty;
 
             if (myclone.isOpptySchedReset) {
