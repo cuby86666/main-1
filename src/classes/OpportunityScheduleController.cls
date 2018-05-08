@@ -164,78 +164,83 @@ public with sharing class OpportunityScheduleController {
         List<OpportunitySchedule__c> lstdelOpptySchld = new  List<OpportunitySchedule__c>(); // Delete Existing Oppty Sched List	
         	
         List<OpportunitySchedule__c> lstExistingOpptySchld = new  List<OpportunitySchedule__c>();	
-        lstExistingOpptySchld= [Select Id, Name, Comment__c, Frozen_Oppty_Sched_Qty__c, Opportunity__c, Oppty_Sched_Qty__c, 	
-                                       Sched_Date__c From OpportunitySchedule__c where Opportunity__c=:opportunityId Order By Sched_Date__c];	
+        lstExistingOpptySchld= [Select Id, Name, Comment__c, Frozen_Oppty_Sched_Qty__c, Opportunity__c, Oppty_Sched_Qty__c, Sched_Date__c From OpportunitySchedule__c where Opportunity__c = :opportunityId Order By Sched_Date__c];	
 	
         Map<Date,OpportunitySchedule__c> mapExistSchld = new Map<Date,OpportunitySchedule__c>();	
         Map<Date,OpportunitySchedulingWrapper.OpportunityScheduleView> mapWrapSchld = new Map<Date,OpportunitySchedulingWrapper.OpportunityScheduleView>();	
-        for(OpportunitySchedule__c oppSch: lstExistingOpptySchld){	
+        
+        for (OpportunitySchedule__c oppSch: lstExistingOpptySchld){	
             mapExistSchld.put(oppSch.Sched_Date__c, oppSch);    	
         }	
            	
         Date OpptySchldDateCheckMap;  	
         String schldDate;	
 	
-        if(lstWrapperOpptySchedule != null && lstWrapperOpptySchedule.size()>0){	
-            for(Integer i=0; i<lstWrapperOpptySchedule.size();i++){
-                if(Integer.valueOf(lstWrapperOpptySchedule[i].quantities) !=null){
-                sumQty+= Integer.valueOf(lstWrapperOpptySchedule[i].quantities);
+        if (lstWrapperOpptySchedule != null && lstWrapperOpptySchedule.size() > 0) {	
+            for (Integer i = 0; i < lstWrapperOpptySchedule.size(); i++) {
+                if (Integer.valueOf(lstWrapperOpptySchedule[i].quantities) != null) {
+                	sumQty += Integer.valueOf(lstWrapperOpptySchedule[i].quantities);
                 }
+                
                 String quarterdate = lstWrapperOpptySchedule[i].quarterdate;                	
                 schldDate = getScheduledate(quarterdate);	
                 OpptySchldDateCheckMap = Date.valueOf(schldDate);	
-                if(i==0){	
-                 OpptySchldDateCheckMap = oppPassed.Production_Date__c;	
-                }                	
-                mapWrapSchld.put(OpptySchldDateCheckMap,lstWrapperOpptySchedule[i]);	
+                
+                if (i == 0) {	
+                	OpptySchldDateCheckMap = oppPassed.Production_Date__c;	
+                }
+                                	
+                mapWrapSchld.put(OpptySchldDateCheckMap, lstWrapperOpptySchedule[i]);	
                 	
                 //Logic to Update Existing Oppty Sched 	
-                if(mapExistSchld.containsKey(OpptySchldDateCheckMap))	
-                {	
-                   OpportunitySchedule__c oppSchldFrmMap =  mapExistSchld.get(OpptySchldDateCheckMap) ;                    	
-                   if(oppSchldFrmMap.Comment__c == lstWrapperOpptySchedule[i].comment && oppSchldFrmMap.Oppty_Sched_Qty__c == lstWrapperOpptySchedule[i].quantities){	
-                      System.debug('Skip to Next iteration if no Change is there in the display'); 	
-                      continue;                          	
-                   }	
+                if (mapExistSchld.containsKey(OpptySchldDateCheckMap)) {	
+                	OpportunitySchedule__c oppSchldFrmMap = mapExistSchld.get(OpptySchldDateCheckMap);                    	
+                   
+                	if (oppSchldFrmMap.Comment__c == lstWrapperOpptySchedule[i].comment && oppSchldFrmMap.Oppty_Sched_Qty__c == lstWrapperOpptySchedule[i].quantities) {	
+                    	System.debug('Skip to Next iteration if no Change is there in the display'); 	
+                    	continue;                          	
+                	}	
                     	
-                   if(oppSchldFrmMap.Comment__c != lstWrapperOpptySchedule[i].comment || oppSchldFrmMap.Oppty_Sched_Qty__c != lstWrapperOpptySchedule[i].quantities){                       	
-                      oppSchldFrmMap.Comment__c = lstWrapperOpptySchedule[i].comment;	
-                      oppSchldFrmMap.Oppty_Sched_Qty__c = lstWrapperOpptySchedule[i].quantities;	
-                      lstUpdateOpptySchld.add(oppSchldFrmMap);	
-                      System.debug('Skip to Next iteration if Change is there in the display after upadting it'); 	
-                      continue;                          	
-                   }	
-                   	
+                	if (oppSchldFrmMap.Comment__c != lstWrapperOpptySchedule[i].comment || oppSchldFrmMap.Oppty_Sched_Qty__c != lstWrapperOpptySchedule[i].quantities) {                       	
+                    	oppSchldFrmMap.Comment__c = lstWrapperOpptySchedule[i].comment;	
+                    	oppSchldFrmMap.Oppty_Sched_Qty__c = lstWrapperOpptySchedule[i].quantities;	
+                    	lstUpdateOpptySchld.add(oppSchldFrmMap);	
+                    	System.debug('Skip to Next iteration if Change is there in the display after upadting it'); 	
+                    	continue;                          	
+                	}	
                 }  	
                     	
                 //Logic if Schedules not contain in Existing then its is New Oppty Sched Insert	
-                if(!mapExistSchld.containsKey(OpptySchldDateCheckMap))	
-                {               	
-                 OpportunitySchedule__c oppSchld = new OpportunitySchedule__c();	
-                 oppSchld.Opportunity__c = opportunityId;	
-                 oppSchld.Comment__c = lstWrapperOpptySchedule[i].comment;	
-                 oppSchld.Oppty_Sched_Qty__c = lstWrapperOpptySchedule[i].quantities;                	
-                 oppSchld.Sched_Date__c = Date.valueOf(schldDate); 	
-                 if(i==0){	
-                   oppSchld.Sched_Date__c = oppPassed.Production_Date__c;	
-                 }                	
-                 lstOpptySchld.add(oppSchld);                   	
+                if (!mapExistSchld.containsKey(OpptySchldDateCheckMap)) {               	
+                	OpportunitySchedule__c oppSchld = new OpportunitySchedule__c();	
+                	oppSchld.Opportunity__c = opportunityId;	
+                	oppSchld.Comment__c = lstWrapperOpptySchedule[i].comment;	
+                	oppSchld.Oppty_Sched_Qty__c = lstWrapperOpptySchedule[i].quantities;                	
+                	oppSchld.Sched_Date__c = Date.valueOf(schldDate); 	
+                 
+                	if (i == 0) {	
+                		oppSchld.Sched_Date__c = oppPassed.Production_Date__c;	
+                	}                	
+                 
+                	lstOpptySchld.add(oppSchld);                   	
                 }                                	
             }	
+            
             lstOpptySchld.addAll(lstUpdateOpptySchld);	
             	
             //Logic to Delete Existing Oppty Sched if not in the dispaly	
             List<Id> lstDelOpptySchedId = new List<Id>();	
-            for(OpportunitySchedule__c opptySchedExistRec : lstExistingOpptySchld){	
-                 if(!mapWrapSchld.containsKey(opptySchedExistRec.Sched_Date__c)){	
-                     lstdelOpptySchld.add(opptySchedExistRec);	
-                     lstDelOpptySchedId.add(opptySchedExistRec.Id);	
-                 }	
+            
+            for (OpportunitySchedule__c opptySchedExistRec : lstExistingOpptySchld) {	
+            	if (!mapWrapSchld.containsKey(opptySchedExistRec.Sched_Date__c)) {	
+                	lstdelOpptySchld.add(opptySchedExistRec);	
+                	lstDelOpptySchedId.add(opptySchedExistRec.Id);	
+            	}	
             }
             
             Boolean opptyUpdated = false;	
             
-            if (sumOpptySchedQtyCheck(opptyschldWrapRec)!= true) {  
+            if (sumOpptySchedQtyCheck(opptyschldWrapRec) != true) {  
             	// DML operations executed in try catch block    
             	try {                	
             		opptyUpdated = updateOpptyValue(opportunityId, oppPassed.CloseDate, oppPassed.Production_Date__c); //call for updating the Opportunity record with newly modified Expected Closed Dtae and Production date.	
@@ -253,10 +258,11 @@ public with sharing class OpportunityScheduleController {
             	oppsave= [SELECT Id, Name,CloseDate, Production_Date__c,LT_Value_USD__c, Claim_Value_USD__c ,StageName,AccountId, Account.Customer_Category__c,TMMA_Override__c,RecordType.DeveloperName,Design_Win_Approval_Process__c,CreatedDate FROM Opportunity WHERE Id =:opportunityId]; 	
             	oppsave.CloseDate = oppPassed.CloseDate;	
             	oppsave.Production_Date__c = oppPassed.Production_Date__c;	
-            	opptyDisplay.oppValues =oppsave;	
+            	opptyDisplay.oppValues = oppsave;	
             	opptyDisplay.isOpptySchedule = true;	
             }	
         }           	
+        
         return opptyDisplay;	
     }  	
         	
@@ -563,28 +569,29 @@ public with sharing class OpportunityScheduleController {
     	
 	
     /******Method Called for Updating the Opportunity Records with the new Expected Closed Date and Production Date*******/	
-    public static Boolean updateOpptyValue(Id opportunityId, Date ExpClsDate, Date NewProdDate){ 
-      system.debug('opportunityId called'+opportunityId);
-      Opportunity oppsave = new Opportunity();
-      Boolean flagIsChanged = false;
-      oppsave= [SELECT Id, Name,CloseDate, Production_Date__c,LT_Value_USD__c, Claim_Value_USD__c ,StageName, AccountId, Account.Customer_Category__c,TMMA_Override__c,RecordType.DeveloperName,Design_Win_Approval_Process__c,CreatedDate FROM Opportunity WHERE Id =:opportunityId]; 	
+    public static Boolean updateOpptyValue(Id opportunityId, Date ExpClsDate, Date NewProdDate) { 
+    	system.debug('opportunityId called' + opportunityId);
+    	Opportunity oppsave = new Opportunity();
+    	Boolean flagIsChanged = false;
+    	oppsave= [SELECT Id, Name, CloseDate, Production_Date__c, LT_Value_USD__c, Claim_Value_USD__c ,StageName, AccountId, Account.Customer_Category__c, TMMA_Override__c, RecordType.DeveloperName, Design_Win_Approval_Process__c, CreatedDate FROM Opportunity WHERE Id = :opportunityId]; 	
         	
-      if(((oppsave.CloseDate != ExpClsDate && ExpClsDate != null) || 	
-         (oppsave.Production_Date__c !=NewProdDate && NewProdDate !=null)) && oppsave.StageName !='Commitment'){	
-          oppsave.CloseDate =ExpClsDate;	
-          oppsave.Production_Date__c=NewProdDate;
-          oppsave.Bypass_Validation_Sched_Start_Date__c = true;
-          flagIsChanged = true;   
-      }	
-      if(oppsave.RecordType.DeveloperName =='Model_N_Oppty' && oppsave.Account.Customer_Category__c =='Tier 4 - TMMA'){	
-         oppsave.TMMA_Override__c = true;
-         flagIsChanged = true;
-      }  
-      if(flagIsChanged){
-         update oppsave;	
-      }
+    	if (((oppsave.CloseDate != ExpClsDate && ExpClsDate != null) || (oppsave.Production_Date__c != NewProdDate && NewProdDate != null)) && oppsave.StageName != 'Commitment') {	
+        	oppsave.CloseDate = ExpClsDate;	
+        	oppsave.Production_Date__c = NewProdDate;
+        	oppsave.Bypass_Validation_Sched_Start_Date__c = true;
+        	flagIsChanged = true;   
+    	}
+      	
+    	if (oppsave.RecordType.DeveloperName == 'Model_N_Oppty' && oppsave.Account.Customer_Category__c == 'Tier 4 - TMMA') {	
+			oppsave.TMMA_Override__c = true;
+        	flagIsChanged = true;
+      	}  
       
-      return flagIsChanged; 
+    	if (flagIsChanged) {
+        	update oppsave;	
+    	}
+      
+    	return flagIsChanged; 
     }	
     	
     /******Method for displaying the Updated ForecastValue in Production Management view for the particular Product*******/	
