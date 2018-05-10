@@ -248,18 +248,18 @@ public with sharing class OpportunityScheduleController {
             		delete lstdelOpptySchld;
             	} catch (Exception e) {	
             		throw e;	
-            	} finally {
-            		if (opptyUpdated) {
-            			oppPassed.Bypass_Validation_Sched_Start_Date__c = false;
-            			update oppPassed;	
-            		}
-            	}	          		
+            	}           		
             
-            	oppsave= [SELECT Id, Name,CloseDate, Production_Date__c,LT_Value_USD__c, Claim_Value_USD__c ,StageName,AccountId, Account.Customer_Category__c,TMMA_Override__c,RecordType.DeveloperName,Design_Win_Approval_Process__c,CreatedDate FROM Opportunity WHERE Id =:opportunityId]; 	
+            	oppsave= [SELECT Id, Name, CloseDate, Production_Date__c, LT_Value_USD__c, Claim_Value_USD__c ,StageName,AccountId, Account.Customer_Category__c, TMMA_Override__c, RecordType.DeveloperName, Design_Win_Approval_Process__c, CreatedDate FROM Opportunity WHERE Id = :opportunityId]; 	
             	oppsave.CloseDate = oppPassed.CloseDate;	
             	oppsave.Production_Date__c = oppPassed.Production_Date__c;	
             	opptyDisplay.oppValues = oppsave;	
-            	opptyDisplay.isOpptySchedule = true;	
+            	opptyDisplay.isOpptySchedule = true;
+            	
+            	if (opptyUpdated) {
+            		oppsave.Bypass_Validation_Sched_Start_Date__c = false;
+            		update oppsave;	
+            	}	
             }	
         }           	
         

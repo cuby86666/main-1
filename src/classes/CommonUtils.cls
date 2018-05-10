@@ -1,7 +1,7 @@
 public class CommonUtils {
 	private static final String INTEGRATION_USER_PROFILE = 'TS Standard User - API Enabled';
 	private static final String SYSTEM_ADMIN_PROFILE = 'System Administrator';
-	private static final String DATA_ADMIN_USER = 'Data Admin';
+	private static final String DATA_ADMIN_USER_ID = '00520000001EuBkAAK';
 	
 	private static Id integrationUserProfileId;
 	private static Id systemAdminProfileId;
@@ -72,7 +72,7 @@ public class CommonUtils {
     
     public static Id getDataAdminUserId() {
     	if (dataAdminUserId == null) {
-    		User u = new UsersSelector().selectByName(new Set<String>{DATA_ADMIN_USER}).get(0);
+    		User u = ((List<User>)new UsersSelector().selectSObjectsById(new Set<Id>{DATA_ADMIN_USER_ID})).get(0);
 		
 			dataAdminUserId = u.Id;	
     	}
