@@ -135,6 +135,18 @@ public with sharing class OpportunityCloneController {
             wrapper.oppty.Production_Date__c = myOppty.Production_Date__c;
             wrapper.oppty.Sched_Start_Date__c = null;                
             update wrapper.oppty;
+            
+            //process reopen lineitems
+            List<OpportunityLineItem> reopenProds = new List<OpportunityLineItem>();
+            
+            for (OpportunitySpinOffWrapper w : wrapper.lstWrappers) {
+                if (w.isSelected) {
+                    w.opptyLineItem.Prod_Lost_Cancelled__c = null;
+                    reopenProds.add(w.opptyLineItem);
+                }
+            }
+            
+            update reopenProds;
 
             if (myclone.isOpptySchedReset) {
                 //delete existed oppty sched
@@ -144,17 +156,6 @@ public with sharing class OpportunityCloneController {
                 myclone.clonedSObjectOpptyScheds.get(0).put('Opportunity__c', wrapper.oppty.Id);
                 insert myclone.clonedSObjectOpptyScheds;
             }
-
-            //process reopen lineitems
-            List<OpportunityLineItem> reopenProds = new List<OpportunityLineItem>();
-            for(OpportunitySpinOffWrapper w : wrapper.lstWrappers) {
-                if (w.isSelected) {
-                    w.opptyLineItem.Prod_Lost_Cancelled__c = null;
-                    reopenProds.add(w.opptyLineItem);
-                }
-            }
-            update reopenProds;
-
         } catch (Exception err) {
             system.debug('@@@@@ ' + err.getMessage());
             Database.rollback(sp);
