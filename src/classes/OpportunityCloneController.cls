@@ -133,8 +133,17 @@ public with sharing class OpportunityCloneController {
             wrapper.oppty.StageName = 'Initial Engagement';
             wrapper.oppty.CloseDate = myOppty.CloseDate;
             wrapper.oppty.Production_Date__c = myOppty.Production_Date__c;
-            wrapper.oppty.Sched_Start_Date__c = null;                
+            //wrapper.oppty.Sched_Start_Date__c = null;                
             update wrapper.oppty;
+            
+            if (myclone.isOpptySchedReset) {
+                //delete existed oppty sched
+                if (wrapper.lstOpptyScheds != null && wrapper.lstOpptyScheds.size() > 0)
+                    delete wrapper.lstOpptyScheds;
+                //insert new oppty sched
+                myclone.clonedSObjectOpptyScheds.get(0).put('Opportunity__c', wrapper.oppty.Id);
+                insert myclone.clonedSObjectOpptyScheds;
+            }
             
             //process reopen lineitems
             List<OpportunityLineItem> reopenProds = new List<OpportunityLineItem>();
@@ -147,15 +156,6 @@ public with sharing class OpportunityCloneController {
             }
             
             update reopenProds;
-
-            if (myclone.isOpptySchedReset) {
-                //delete existed oppty sched
-                if (wrapper.lstOpptyScheds != null && wrapper.lstOpptyScheds.size() > 0)
-                    delete wrapper.lstOpptyScheds;
-                //insert new oppty sched
-                myclone.clonedSObjectOpptyScheds.get(0).put('Opportunity__c', wrapper.oppty.Id);
-                insert myclone.clonedSObjectOpptyScheds;
-            }
         } catch (Exception err) {
             system.debug('@@@@@ ' + err.getMessage());
             Database.rollback(sp);

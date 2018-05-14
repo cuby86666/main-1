@@ -86,8 +86,9 @@ public class OpportunityCloneControllerTest {
                                   RecordTypeId = OpportunityTrigger.sfdcrecordtype_Id, Production_Date__c = PRODUCTION_DATE,
                                     CloseDate = PRODUCTION_DATE - 60,Locked_Exchange_Rate__c = LOCKED_EXCHANGE_RATE,
                                    Currency__c = fxRates.get(CCY_CODE_DEFAULT).Id,CurrencyIsoCode = CCY_CODE_DEFAULT,
-                                   One_Year_Pieces__c= ONE_YEAR_PIECES,
-                                   Bypass_Validation_Sched_Start_Date__c = true));        
+                                   One_Year_Pieces__c= ONE_YEAR_PIECES
+                                   //Bypass_Validation_Sched_Start_Date__c = true
+                                   ));        
         insert listOpp;
         
         //product
