@@ -132,6 +132,7 @@ public class MnStages extends ApplicationDomain {
 			oppty.CloseDate = (oppty.StageName == STAGE_COMMITMENT) ? ms.Reg_Part_Win_Date__c : ms.Reg_Production_Date__c;
 			oppty.Assembly__c = ms.Assembly_Name__c;
 			oppty.Business_Created_Date__c = ms.Reg_Created_Date__c;
+			oppty.Bypass_Validation_Sched_Start_Date__c = true;
 			oppty.Design_Customer_City__c = ms.Addr_Design_Cust_City__c;
 			oppty.Design_Customer_Country__c = ms.Addr_Design_Cust_Country__c;
 			oppty.Design_Customer_GID__c = ms.Design_Cust_GID__c;
@@ -169,7 +170,6 @@ public class MnStages extends ApplicationDomain {
 			oppty.Production_Date__c = ms.Reg_Production_Date__c;
 			oppty.Project__c = ms.Prog_Name__c;
 			oppty.Rejected_by__c = (ms.User_First_Name__c != null ? ms.User_First_Name__c : '') + ' ' + (ms.User_Last_Name__c != null ? ms.User_Last_Name__c : '');
-			oppty.Sched_Start_Date__c = null;
 			oppty.Sub_Segment__c = (ms.Func_Name__c != null) ? ms.Func_Name__c.substringAfter('-') : null;
 			
 			OpportunityService.setMnOpportunityLostCancelledInfo(oppty, ms.Reg_Action_Date__c); 
