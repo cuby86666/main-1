@@ -92,27 +92,34 @@ public class Opportunities extends ApplicationDomain {
 	private void bypassValidation(Map<Id, Opportunity> existingRecords) {
 		p('bypassValidation');
 		Map<String, Schema.SObjectField> opptyFields = fflib_SObjectDescribe.getDescribe(getSObjectType()).getFieldsMap();
-		List<Schema.SObjectField> bypassValidationFields = BypassValidationFieldsSelector.getFields(getSObjectType());
+		List<Schema.SObjectField> bypassFields = BypassValidationFieldsSelector.selectBySObject(getSObjectType());
 		
 		for (Opportunity oppty : (List<Opportunity>)this.records) {
 			oppty.Bypass_Validation__c = false;
+			Boolean bypassFieldsChanged = false;
 			Boolean otherFieldsChanged = false;
 			
 			Opportunity oldOppty = existingRecords.get(oppty.Id);
 			
-			for (Schema.SObjectField field : opptyFields.values()) {
-				if (!bypassValidationFields.contains(field) && field.getDescribe().isUpdateable()) {
-					String fieldName = field.getDescribe().getName();
-					
-					if (oppty.get(fieldName) != oldOppty.get(fieldName)) {
-						otherFieldsChanged = true;
-						break;
-					}	
-				}
+			for (Schema.SObjectField f : bypassFields) {
+				bypassFieldsChanged |= (oppty.get(f) != oldOppty.get(f));	
 			}
 			
-			if (!otherFieldsChanged) {
-				oppty.Bypass_Validation__c = true;	
+			if (bypassFieldsChanged) {
+				for (Schema.SObjectField field : opptyFields.values()) {
+					if (!bypassFields.contains(field) && field != Opportunity.Bypass_Validation__c && field.getDescribe().isUpdateable()) {
+						String fieldName = field.getDescribe().getName();
+						
+						if (oppty.get(fieldName) != oldOppty.get(fieldName)) {
+							otherFieldsChanged = true;
+							break;
+						}	
+					}
+				}
+				
+				if (!otherFieldsChanged) {
+					oppty.Bypass_Validation__c = true;	
+				}		
 			}
 		}
 	}

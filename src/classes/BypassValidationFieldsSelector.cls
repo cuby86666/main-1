@@ -13,7 +13,7 @@ public class BypassValidationFieldsSelector extends ApplicationSelector {
 		};
 	}
 	
-	public static List<Schema.SObjectField> getFields(Schema.SObjectType sObjectType) {
+	public static List<Schema.SObjectField> selectBySObject(Schema.SObjectType sObjectType) {
 		List<Schema.SObjectField> result = new List<Schema.SObjectField>();
 		
 		if (bypassValidationFields == null) {
