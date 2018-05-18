@@ -39,6 +39,9 @@ public class Opportunities extends ApplicationDomain {
 	
 	public static final String MN_LOST_REASON = 'Expired';
 	
+	private static Boolean isFirstRunBeforeUpdate = true;
+	private static Boolean isFirstRunAfterUpdate = true;
+	
     public Opportunities(List<Opportunity> oppties) {
 		super(oppties);
 	}
@@ -58,6 +61,10 @@ public class Opportunities extends ApplicationDomain {
 	
 	public override void onBeforeUpdate(Map<Id, SObject> existingRecords) {
 		p('onBeforeUpdate');
+		if (!isFirstRunBeforeUpdate) return;
+		
+		isFirstRunBeforeUpdate = false;
+		
 		// Must be the first method call to skip any field updates by the following method calls.
 		bypassValidation((Map<Id, Opportunity>)existingRecords); 
 		
@@ -77,6 +84,10 @@ public class Opportunities extends ApplicationDomain {
 	
 	public override void onAfterUpdate(Map<Id, SObject> existingRecords) {
 		p('onAfterUpdate');
+		if (!isFirstRunAfterUpdate) return;
+		
+		isFirstRunAfterUpdate = false;
+		
 		updateOpptyScheds((List<Opportunity>)existingRecords.values());
 		
 		updateOpptyProdLostCancelledInfo((List<Opportunity>)existingRecords.values());
@@ -151,10 +162,10 @@ public class Opportunities extends ApplicationDomain {
 	
 	private void createMnOpptyScheds() {
 		p('createMnOpptyScheds');
-		List<SObject> opptiesMn = new List<SObject>();
+		List<Opportunity> opptiesMn = new List<SObject>();
 		
-		for (SObject o : (List<Opportunity>)this.records) {
-			if (((Opportunity)o).RecordTypeId == OpportunitiesSelector.getMnRecordTypeId()) {
+		for (Opportunity o : (List<Opportunity>)this.records) {
+			if (o.RecordTypeId == OpportunitiesSelector.getMnRecordTypeId()) {
 				opptiesMn.add(o);	
 			}
 		}
@@ -163,6 +174,8 @@ public class Opportunities extends ApplicationDomain {
 			List<OpportunitySchedule__c> opptySchedsCreated = createMnOpptyScheds(opptiesMn);
 		    
 			insert opptySchedsCreated;
+			
+			resetOppties(new Map<Id, Opportunity>(opptiesMn).keySet());
 		}	
 	}
 	
@@ -239,19 +252,37 @@ public class Opportunities extends ApplicationDomain {
 		if (opptiesOldMn.size() > 0 && opptiesNewMn.size() > 0) {
 			List<OpportunitySchedule__c> opptySchedsUpdated = updateMnOpptyScheds(opptiesOldMn, opptiesNewMn);
 			
-			update opptySchedsUpdated;	
+			if (opptySchedsUpdated.size() > 0) {
+				update opptySchedsUpdated;
+				
+				resetOppties(opptiesNewMn.keySet());
+			}
 		}
 		
 		if (opptiesOldSfdc.size() > 0 && opptiesNewSfdc.size() > 0) {
 			List<OpportunitySchedule__c> opptySchedsUpdated = updateSfdcOpptyScheds(opptiesOldSfdc, opptiesNewSfdc);
 			
-			update opptySchedsUpdated;	
+			if (opptySchedsUpdated.size() > 0) {
+				update opptySchedsUpdated;	
+			}
 		}
 	}
 	
 	private Boolean isMnOpptySchedsUpdatable(Opportunity oppty) {
 		p('isMnOpptySchedsUpdatable');
 		return isMnRecordType(oppty) && !isTmmaOverride(oppty) && CommonUtils.isDataAdminUser();
+	}
+	
+	private void resetOppties(Set<Id> opptyIds) {
+		p('resetOppties');
+		List<Opportunity> opptiesUpdated = new List<Opportunity>(); 
+				
+		for (Opportunity o : new OpportunitiesSelector().selectById(opptyIds)) {
+			o.Bypass_Validation_Sched_Start_Date__c = false;
+			opptiesUpdated.add(o);
+		}
+		
+		update opptiesUpdated;	
 	}
 	
 	private List<OpportunitySchedule__c> updateMnOpptyScheds(Map<Id, Opportunity> opptiesOld, Map<Id, Opportunity> opptiesNew) {

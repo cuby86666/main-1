@@ -238,7 +238,7 @@ public with sharing class OpportunityScheduleController {
             	}	
             }
             
-            Boolean opptyUpdated = false;	
+            Boolean opptyUpdated = false;
             
             if (sumOpptySchedQtyCheck(opptyschldWrapRec) != true) {  
             	// DML operations executed in try catch block    
@@ -259,7 +259,7 @@ public with sharing class OpportunityScheduleController {
             	if (opptyUpdated) {
             		oppsave.Bypass_Validation_Sched_Start_Date__c = false;
             		update oppsave;	
-            	}	
+            	}
             }	
         }           	
         
@@ -571,9 +571,10 @@ public with sharing class OpportunityScheduleController {
     /******Method Called for Updating the Opportunity Records with the new Expected Closed Date and Production Date*******/	
     public static Boolean updateOpptyValue(Id opportunityId, Date ExpClsDate, Date NewProdDate) { 
     	system.debug('opportunityId called' + opportunityId);
-    	Opportunity oppsave = new Opportunity();
     	Boolean flagIsChanged = false;
-    	oppsave= [SELECT Id, Name, CloseDate, Production_Date__c, LT_Value_USD__c, Claim_Value_USD__c ,StageName, AccountId, Account.Customer_Category__c, TMMA_Override__c, RecordType.DeveloperName, Design_Win_Approval_Process__c, CreatedDate FROM Opportunity WHERE Id = :opportunityId]; 	
+    	
+    	Opportunity oppsave= [SELECT Id, Name, CloseDate, Production_Date__c, LT_Value_USD__c, Claim_Value_USD__c ,StageName, AccountId, Account.Customer_Category__c, TMMA_Override__c, RecordType.DeveloperName, Design_Win_Approval_Process__c, CreatedDate FROM Opportunity WHERE Id = :opportunityId]; 	
+        oppsave.Bypass_Validation_Sched_Start_Date__c = false;
         	
     	if (((oppsave.CloseDate != ExpClsDate && ExpClsDate != null) || (oppsave.Production_Date__c != NewProdDate && NewProdDate != null)) && oppsave.StageName != 'Commitment') {	
         	oppsave.CloseDate = ExpClsDate;	
@@ -590,8 +591,8 @@ public with sharing class OpportunityScheduleController {
     	if (flagIsChanged) {
         	update oppsave;	
     	}
-      
-    	return flagIsChanged; 
+    	
+    	return flagIsChanged;
     }	
     	
     /******Method for displaying the Updated ForecastValue in Production Management view for the particular Product*******/	

@@ -156,6 +156,10 @@ public with sharing class OpportunityCloneController {
             }
             
             update reopenProds;
+            
+            Opportunity oppty = new OpportunitiesSelector().selectById(new Set<Id>{wrapper.oppty.Id}).get(0); 
+            oppty.Bypass_Validation_Sched_Start_Date__c = false;                
+            update oppty;
         } catch (Exception err) {
             system.debug('@@@@@ ' + err.getMessage());
             Database.rollback(sp);
