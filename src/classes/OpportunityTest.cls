@@ -305,6 +305,7 @@ private class OpportunityTest {
         
         // Update Opportunity from Lost to Open
         opptySfdc.StageName = STAGE_NAME;
+        resetOpptyFirstRun();
         update opptySfdc;
     
         opptys = new List<Opportunity>{opptySfdc};
@@ -317,6 +318,7 @@ private class OpportunityTest {
         opptySfdc.StageName = STAGE_CANCELLED;
         opptySfdc.Lost_Description__c = '[Cancelled]Test Cancelled Description';
         opptySfdc.Lost_Reason__c = '[Cancelled]Test Cancelled Reason';
+        resetOpptyFirstRun();
         update opptySfdc;        
     
         opptys = new List<Opportunity>{opptySfdc};
@@ -386,10 +388,11 @@ private class OpportunityTest {
         system.assertEquals(NULL, opptySfdc.Help_Needed_History__c);
         system.assertEquals(NULL, opptyMn.Help_Needed_History__c);
     
-        opptySfdc.Help_Needed__c = '[SFDC Oppty]Test Help Needed v1';
+    	opptySfdc.Help_Needed__c = '[SFDC Oppty]Test Help Needed v1';
         opptyUpdateList.add(opptySfdc);        
         opptyMn.Help_Needed__c = '[MN Oppty]Test Help Needed v1';
         opptyUpdateList.add(opptyMn);
+        resetOpptyFirstRun();
         update opptyUpdateList;
         
         opptyUpdateList = new List<Opportunity>();
@@ -397,6 +400,7 @@ private class OpportunityTest {
         opptyUpdateList.add(opptySfdc);        
         opptyMn.Help_Needed__c = '[MN Oppty]Test Help Needed v2';
         opptyUpdateList.add(opptyMn);   
+        resetOpptyFirstRun();
         update opptyUpdateList;
 
         opptys = new List<Opportunity>{opptySfdc, opptyMn};
@@ -615,7 +619,8 @@ private class OpportunityTest {
         }
 
         system.runAs(testUser) {
-            update opptyNew2;
+        	resetOpptyFirstRun();
+        	update opptyNew2;
         }
         
         opptysNew = new List<Opportunity>{opptyNew2};
@@ -770,6 +775,7 @@ private class OpportunityTest {
         opptyMn.Lost_Reason__c = null;
         opptysUpdate.add(opptyMn);
         
+        resetOpptyFirstRun();
         update opptysUpdate;
         
         opptyProdLostCancelledInfo = getOpptyProdLostCancelledInfo(opptysUpdate); 
@@ -992,5 +998,10 @@ private class OpportunityTest {
         );
         
         return result;
+    }
+    
+    static void resetOpptyFirstRun() {
+    	Opportunities.isFirstRunBeforeUpdate = true;
+	    Opportunities.isFirstRunAfterUpdate = true;
     }
 }

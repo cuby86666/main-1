@@ -168,8 +168,9 @@ private class OpportunitiesTest {
 	    System.runAs(user) {
 	    	OpportunityProgram__c opptyProg = new OpportunityProgram__c(Name = 'Test Program 1');
 	    	insert opptyProg;
-	            	
+	        
 	        oppty.Program__c = opptyProg.Id;
+	        resetOpptyFirstRun();
 	        update oppty;
 	        
 	        opptyProd = [select Program__c from OpportunityLineItem where Id = :opptyProd.Id];
@@ -183,6 +184,7 @@ private class OpportunitiesTest {
 	        	// Only Program can be edited all the time.
 	        	oppty.Program__c = opptyProg.Id;
 	        	oppty.Name = 'Name 1';
+	        	resetOpptyFirstRun();
 	        	update oppty;	
 	        	
 	        	System.assert(false);
@@ -193,7 +195,8 @@ private class OpportunitiesTest {
 	        try {
 	        	// Only War Room Completed can be edited all the time.
 	        	oppty.War_Room_Completed__c = 'Yes';
-	        	//oppty.Name = 'Name 1';
+	        	oppty.Name = 'Name 2';
+	        	resetOpptyFirstRun();
 	        	update oppty;	
 	        	
 	        	System.assert(false);
@@ -211,6 +214,7 @@ private class OpportunitiesTest {
 	        insert opptyProg;
 	        
 	        oppty.Program__c = opptyProg.Id;
+	        resetOpptyFirstRun();
 	        update oppty;
 	        
 	        opptyProd = [select Program__c from OpportunityLineItem where Id = :opptyProd.Id];
@@ -223,7 +227,8 @@ private class OpportunitiesTest {
 	        	
 	        	// Only Program can be edited all the time.
 	        	oppty.Program__c = opptyProg.Id;
-	        	oppty.Name = 'Name 2';
+	        	oppty.Name = 'Name 3';
+	        	resetOpptyFirstRun();
 	        	update oppty;
 	        	
 	        	System.assert(false);
@@ -234,7 +239,8 @@ private class OpportunitiesTest {
 	        try {
 	        	// Only War Room Completed can be edited all the time.
 	        	oppty.War_Room_Completed__c = 'No';
-	        	//oppty.Name = 'Name 1';
+	        	oppty.Name = 'Name 4';
+	        	resetOpptyFirstRun();
 	        	update oppty;	
 	        	
 	        	System.assert(false);
@@ -250,14 +256,6 @@ private class OpportunitiesTest {
 		Test.startTest();
 		// Case 1: update oppty to discovery stage
     	Opportunity oppty = getOpportunity(opptyProd.OpportunityId);
-    	
-    	system.assertEquals(null, oppty.Discovery_Date__c);
-    	
-    	oppty.StageName = Opportunities.STAGES.get(Opportunities.Stage.CANCELLED);
-	    update oppty;
-    	
-    	oppty = getOpportunity(opptyProd.OpportunityId);
-	    system.assertEquals(null, oppty.Discovery_Date__c);
     	
 	    oppty.StageName = Opportunities.STAGES.get(Opportunities.Stage.DISCOVERY);
 	    update oppty;
@@ -358,6 +356,11 @@ private class OpportunitiesTest {
         			   Claim_Value_USD_SYS__c, CurrencyIsoCode
         		  from Opportunity 
         		 where Id = :opptyID];    
+    }
+    
+    static void resetOpptyFirstRun() {
+    	Opportunities.isFirstRunBeforeUpdate = true;
+	    Opportunities.isFirstRunAfterUpdate = true;
     }
 
 }
