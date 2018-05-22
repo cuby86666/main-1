@@ -73,10 +73,10 @@
                       
         }
         if (nonSpinOffCount == 0) {
-            component.set("v.errorMessage", "No existed products. Spun off opportunity requires at least one product.");
+            component.set("v.errorMessage", "Current opportunity requires at least one product.");
             return false;
         } else if (spinOffCount == 0) {
-            component.set("v.errorMessage", "No selected products. Please select spin off products.")
+            component.set("v.errorMessage", "Please select spin-off product(s).")
             return false;
         } else if (inActiveProds > 0) {
             component.set("v.errorMessage", "Cannot spin off inactive product. Please select other active products.")

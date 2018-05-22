@@ -21,19 +21,27 @@ public with sharing class OpportunityCloneController {
     @AuraEnabled
     public static OpportunityCloneController.OpportunityWrapper getOpptyProdsByOpptyId(String opptyId, String func) {
         Opportunity oppty = [Select Id, Name, StageName, Design_Win_Approval_Process__c, OwnerId, CloseDate, Production_Date__c from Opportunity Where Id =: opptyId];
+        
         List<OpportunityLineItem> lstOpptyProds = 
             [Select Id, Product2.Name, MAG__c, Product_Active_Flags__c, UnitPrice, Component_Multiplier__c, Claim_Value_USD__c, Product2.IsActive, Prod_Lost_Cancelled__c 
              from OpportunityLineItem Where OpportunityId =: opptyId];
+        
         List<OpportunitySpinOffWrapper> lstWrappers = new List<OpportunitySpinOffWrapper>();
+        
         List<OpportunitySchedule__c> lstOpptyScheds = 
             [Select Id, Sched_Date__c, Oppty_Sched_Qty__c, Frozen_Oppty_Sched_Qty__c 
              from OpportunitySchedule__c Where Opportunity__c =: opptyId];
         
         String message = null;
+        Integer activeProdCount = 0;
+        
         for (OpportunityLineItem item : lstOpptyProds) {
+        	if (item.Product2.IsActive) activeProdCount++;
+        	
             OpportunitySpinOffWrapper wrapper = new OpportunitySpinOffWrapper();
             //check Qty Per Sys
             Double qtyPerSys = item.Component_Multiplier__c * 100;
+            
             if (Math.mod(qtyPerSys.intValue(), 100) > 0) {
                 wrapper.qtyPerSys = 1;
                 wrapper.qtyPerSysChanged = true;
@@ -42,27 +50,46 @@ public with sharing class OpportunityCloneController {
                 wrapper.qtyPerSys = item.Component_Multiplier__c;
                 wrapper.qtyPerSysChanged = false;
             }
+            
             wrapper.opptyLineItem = item;
             wrapper.isSelected = (func == OpportunityCloneController.FUNC_SPINOFF || !item.Product2.IsActive) ? false : true;
             lstWrappers.add(wrapper);
         }
+        
         OpportunityWrapper opptyWrapper = new OpportunityWrapper();
         opptyWrapper.oppty = oppty;
         opptyWrapper.message = message;
         opptyWrapper.lstWrappers = lstWrappers;
         opptyWrapper.lstOpptyScheds = lstOpptyScheds;
+        
         //check current user is oppty owner or not
         if (func == OpportunityCloneController.FUNC_SPINOFF) {
+        	String errMsg = '';
+        	
+        	if (lstOpptyProds.size() < 2 || activeProdCount < 1) {
+        		//throw new AuraHandledException('Opportunities require at least two products of which one is active to be spun off.');
+        		errMsg = 'Opportunities require at least two products of which one is active to be spun off.\n'; 
+        	}
+        	
             if (oppty.Design_Win_Approval_Process__c != 'Open') {
-                throw new AuraHandledException('Only open opportunity can be spun off.');
+                //throw new AuraHandledException('Only open opportunity can be spun off.');
+                errMsg += 'Only open opportunity can be spun off.\n'; 
             }
+            
             if (!CommonUtils.isAdmin() && oppty.OwnerId != UserInfo.getUserId()) {
-                throw new AuraHandledException('Only opportunity owner can do spin off.');
+                //throw new AuraHandledException('Only opportunity owner can do spin off.');
+                errMsg += 'Only opportunity owner can do spin off.\n'; 
+            }
+            
+            if (errMsg != '') {
+            	throw new AuraHandledException(errMsg);	
             }            
         } else if (func == OpportunityCloneController.FUNC_REOPEN) {
-            if (oppty.StageName != 'Lost' && oppty.StageName != 'Cancelled')
+            if (oppty.StageName != 'Lost' && oppty.StageName != 'Cancelled') {
                 throw new AuraHandledException('Only Cancelled or Lost opportunity can do reopen.');
+            }
         }
+        
         return opptyWrapper;
     }
     
