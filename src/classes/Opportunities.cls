@@ -39,10 +39,13 @@ public class Opportunities extends ApplicationDomain {
 	
 	public static final String MN_LOST_REASON = 'Expired';
 	
-	@TestVisible
 	private static Boolean isFirstRunBeforeUpdate = true;
-	@TestVisible
 	private static Boolean isFirstRunAfterUpdate = true;
+	
+	public static void resetUpdateEventEntry() {
+    	isFirstRunBeforeUpdate = true;
+	    isFirstRunAfterUpdate = true;
+    }
 	
     public Opportunities(List<Opportunity> oppties) {
 		super(oppties);

@@ -170,7 +170,7 @@ private class OpportunitiesTest {
 	    	insert opptyProg;
 	        
 	        oppty.Program__c = opptyProg.Id;
-	        resetOpptyFirstRun();
+	        Opportunities.resetUpdateEventEntry();
 	        update oppty;
 	        
 	        opptyProd = [select Program__c from OpportunityLineItem where Id = :opptyProd.Id];
@@ -184,7 +184,7 @@ private class OpportunitiesTest {
 	        	// Only Program can be edited all the time.
 	        	oppty.Program__c = opptyProg.Id;
 	        	oppty.Name = 'Name 1';
-	        	resetOpptyFirstRun();
+	        	Opportunities.resetUpdateEventEntry();
 	        	update oppty;	
 	        	
 	        	System.assert(false);
@@ -196,7 +196,7 @@ private class OpportunitiesTest {
 	        	// Only War Room Completed can be edited all the time.
 	        	oppty.War_Room_Completed__c = 'Yes';
 	        	oppty.Name = 'Name 2';
-	        	resetOpptyFirstRun();
+	        	Opportunities.resetUpdateEventEntry();
 	        	update oppty;	
 	        	
 	        	System.assert(false);
@@ -214,7 +214,7 @@ private class OpportunitiesTest {
 	        insert opptyProg;
 	        
 	        oppty.Program__c = opptyProg.Id;
-	        resetOpptyFirstRun();
+	        Opportunities.resetUpdateEventEntry();
 	        update oppty;
 	        
 	        opptyProd = [select Program__c from OpportunityLineItem where Id = :opptyProd.Id];
@@ -228,7 +228,7 @@ private class OpportunitiesTest {
 	        	// Only Program can be edited all the time.
 	        	oppty.Program__c = opptyProg.Id;
 	        	oppty.Name = 'Name 3';
-	        	resetOpptyFirstRun();
+	        	Opportunities.resetUpdateEventEntry();
 	        	update oppty;
 	        	
 	        	System.assert(false);
@@ -240,7 +240,7 @@ private class OpportunitiesTest {
 	        	// Only War Room Completed can be edited all the time.
 	        	oppty.War_Room_Completed__c = 'No';
 	        	oppty.Name = 'Name 4';
-	        	resetOpptyFirstRun();
+	        	Opportunities.resetUpdateEventEntry();
 	        	update oppty;	
 	        	
 	        	System.assert(false);
@@ -356,11 +356,6 @@ private class OpportunitiesTest {
         			   Claim_Value_USD_SYS__c, CurrencyIsoCode
         		  from Opportunity 
         		 where Id = :opptyID];    
-    }
-    
-    static void resetOpptyFirstRun() {
-    	Opportunities.isFirstRunBeforeUpdate = true;
-	    Opportunities.isFirstRunAfterUpdate = true;
     }
 
 }

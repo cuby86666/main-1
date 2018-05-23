@@ -896,7 +896,7 @@ private class OpportunityProductClaimValueTest {
 			Double frozenSchedQty1 = opptySched.Frozen_Oppty_Sched_Qty__c;	
 			
 			oppty.One_Year_Pieces__c = 1;
-			resetOpptyFirstRun();
+			Opportunities.resetUpdateEventEntry();
 	    	update oppty;
         
 	    	OpportunitySchedule__c opptySched2 = 
@@ -1150,7 +1150,7 @@ private class OpportunityProductClaimValueTest {
         	opptyProdMN.Opportunity.Bypass_Validation_Sched_Start_Date__c = true;
         	opptyProdMN.Opportunity.CloseDate = EXPECTED_CLOSE_DATE.addDays(2);
         	opptyProdMN.Opportunity.Production_Date__c = PRODUCTION_DATE.addDays(2);
-        	resetOpptyFirstRun();
+        	Opportunities.resetUpdateEventEntry();
         	update opptyProdMN.Opportunity;
         }
         Test.stopTest();
@@ -1466,11 +1466,6 @@ private class OpportunityProductClaimValueTest {
     
     static User getSystemAdminUser() {
     	return [select Id from User where ProfileId = :CommonUtils.getSystemAdminProfileId() and Id != :CommonUtils.getDataAdminUserId() and IsActive = true limit 1];	
-    }
-    
-    static void resetOpptyFirstRun() {
-    	Opportunities.isFirstRunBeforeUpdate = true;
-	    Opportunities.isFirstRunAfterUpdate = true;
     }
     
 }
