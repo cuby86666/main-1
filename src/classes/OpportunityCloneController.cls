@@ -67,17 +67,14 @@ public with sharing class OpportunityCloneController {
         	String errMsg = '';
         	
         	if (lstOpptyProds.size() < 2 || activeProdCount < 1) {
-        		//throw new AuraHandledException('Opportunities require at least two products of which one is active to be spun off.');
         		errMsg = 'Opportunities require at least two products of which one is active to be spun off.\n'; 
         	}
         	
             if (oppty.Design_Win_Approval_Process__c != 'Open') {
-                //throw new AuraHandledException('Only open opportunity can be spun off.');
                 errMsg += 'Only open opportunity can be spun off.\n'; 
             }
             
             if (!CommonUtils.isAdmin() && oppty.OwnerId != UserInfo.getUserId()) {
-                //throw new AuraHandledException('Only opportunity owner can do spin off.');
                 errMsg += 'Only opportunity owner can do spin off.\n'; 
             }
             
