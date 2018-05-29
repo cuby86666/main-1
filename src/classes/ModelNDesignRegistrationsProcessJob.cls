@@ -5,7 +5,7 @@ global class ModelNDesignRegistrationsProcessJob implements Schedulable, Databas
 	private static final String STATUS_PROCESSING = MnStages.STATUS_PROCESSING;
 	private static final String STATUS_FAILED = MnStages.STATUS_FAILED;
 	
-	private static final Integer RECORD_COUNT_LIMIT = 10000; // Process 10000 records at a time to avoid hitting governors and limits 
+	private static final Integer RECORD_COUNT_LIMIT = Integer.valueOf(((List<Model_N_Stage_Setting__mdt>)new ModelNStageSettingsSelector().selectWhere('Name__c = \'Record_Count_Limit\'')).get(0).Value__c);  
 		
 	private Id schedJobId;
 	

@@ -233,12 +233,17 @@ public class Opportunities extends ApplicationDomain {
 	
 	private void updateOpptyScheds(List<Opportunity> existingRecords) {
 		p('updateOpptyScheds');
+		List<Opportunity> opptiesMn = new List<Opportunity>();
 		Map<Id, Opportunity> opptiesOldMn = new Map<Id, Opportunity>();
 		Map<Id, Opportunity> opptiesNewMn = new Map<Id, Opportunity>();
 		Map<Id, Opportunity> opptiesOldSfdc = new Map<Id, Opportunity>();
 		Map<Id, Opportunity> opptiesNewSfdc = new Map<Id, Opportunity>();
 		
 		for (SObject o : existingRecords) {
+			if (isMnRecordType((Opportunity)o) && CommonUtils.isDataAdminUser()) {
+				opptiesMn.add((Opportunity)o);
+			}
+			
 			if (isMnOpptySchedsUpdatable((Opportunity)o)) {
 				opptiesOldMn.put(o.Id, (Opportunity)o);	
 			} else {
@@ -259,9 +264,11 @@ public class Opportunities extends ApplicationDomain {
 			
 			if (opptySchedsUpdated.size() > 0) {
 				update opptySchedsUpdated;
-				
-				resetOppties(opptiesNewMn.keySet());
 			}
+		}
+		
+		if (opptiesMn.size() > 0) {
+			resetOppties(new Map<Id, Opportunity>(opptiesMn).keySet());	
 		}
 		
 		if (opptiesOldSfdc.size() > 0 && opptiesNewSfdc.size() > 0) {
