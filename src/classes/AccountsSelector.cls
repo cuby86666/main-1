@@ -17,6 +17,7 @@ public class AccountsSelector extends ApplicationSelector {
 	public List<Schema.SObjectField> getSObjectFieldList() {
 		return new List<Schema.SObjectField> {
 			Account.Id,
+			Account.OwnerId,
 			Account.ParentId,
 			Account.CMD_Industry_Segment__c,
 			Account.Customer_Category__c,

@@ -265,4 +265,85 @@ private class OpportunityServiceTest {
     	System.assertEquals(Opportunities.STAGE_LOST, opptyMn.StageName);
     }
     
+    @isTest
+    static void testMnOpptyOwnerId() {
+    	final String END_CUST_GID = '12345';
+    	final String DISTI_NAME = 'CHINA ELEC';
+    	final String END_CUST_REGION = 'AMERICAS';
+    	final String LEGACY_ID = DISTI_NAME + '-' + END_CUST_REGION;   
+    	final String APPROVER_EMAIL = 'approver@test.com';  
+    	
+    	Profile p = [select Id from Profile where Name = :TEST_USER_PROFILE];
+    	
+    	// Use account owner as oppty owner
+    	User acctOwner = createUser('tuser123', 'tuser123', p.Id, false);
+    	acctOwner.IsActive = true;
+    	update acctOwner;
+    	
+    	Account a1 = new Account();
+    	a1.Name = 'Test Account 1';
+    	a1.OwnerId = acctOwner.Id;
+    	a1.NXP_GID__c = END_CUST_GID;
+    	insert a1;
+    	
+    	Opportunity oppty = new OpportunitiesSelector().selectById(new Set<Id> {opptyProdMn.OpportunityId}).get(0);
+    	oppty.OwnerId = CommonUtils.getDataAdminUserId();
+    	oppty.End_Customer_GID__c = END_CUST_GID;
+    	update oppty;    	
+    	
+    	oppty = new OpportunitiesSelector().selectByIdWithAccountAndOwner(new Set<Id> {oppty.Id}).get(0);
+    	
+    	OpportunityService.updateMnOpportunityAccountsAndOwners(new List<Opportunity> {oppty}, null);
+    	
+    	update oppty;
+    	
+    	oppty = new OpportunitiesSelector().selectById(new Set<Id> {oppty.Id}).get(0);
+    	
+    	System.assertEquals(acctOwner.Id, oppty.OwnerId);
+    	
+    	// Use approver as oppty owner
+    	User drApprover = createUser('tuser456', 'tuser456', p.Id, false);
+    	drApprover.Email = APPROVER_EMAIL;
+    	update drApprover;
+    	
+    	Account a2 = new Account();
+    	a2.name = 'Test Account 2';
+    	a2.Legacy_Id__c = LEGACY_ID;
+    	insert a2;
+    	
+    	oppty.OwnerId = CommonUtils.getDataAdminUserId();
+    	oppty.Legacy_Opportunity_Owner__c = APPROVER_EMAIL; 
+    	oppty.End_Customer_GID__c = null;
+    	oppty.Distributor_Name__c = DISTI_NAME;
+    	oppty.End_Customer_Region__c = END_CUST_REGION;
+    	update oppty;
+    	
+    	oppty = new OpportunitiesSelector().selectByIdWithAccountAndOwner(new Set<Id> {oppty.Id}).get(0);
+    	
+    	OpportunityService.updateMnOpportunityAccountsAndOwners(new List<Opportunity> {oppty}, null);
+    	
+    	update oppty;
+    	
+    	oppty = new OpportunitiesSelector().selectById(new Set<Id> {oppty.Id}).get(0);
+        
+    	System.assertEquals(drApprover.Id, oppty.OwnerId);
+    	
+    	// If oppty owner is not Data Admin, no change.
+    	oppty.OwnerId = drApprover.Id;
+    	oppty.End_Customer_GID__c = END_CUST_GID;
+    	oppty.Distributor_Name__c = null;
+    	oppty.End_Customer_Region__c = null;
+    	update oppty;    	
+    	
+    	oppty = new OpportunitiesSelector().selectByIdWithAccountAndOwner(new Set<Id> {oppty.Id}).get(0);
+    	
+    	OpportunityService.updateMnOpportunityAccountsAndOwners(new List<Opportunity> {oppty}, null);
+    	
+    	update oppty;
+    	
+    	oppty = new OpportunitiesSelector().selectById(new Set<Id> {oppty.Id}).get(0);
+    	
+    	System.assertEquals(drApprover.Id, oppty.OwnerId);
+    }
+    
 }

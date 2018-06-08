@@ -82,7 +82,7 @@ public class OpportunityCloneControllerTest {
         //opportunity
         list<Opportunity> listOpp=new list<opportunity>();
         listOpp.add(new Opportunity(Name = 'Test Oppty1', OwnerId = u.Id,
-                                      StageName = 'Initial Engagement', Legacy_End_Customer_Name_and_Location__c='Test Account-EMEA',
+                                      StageName = 'Initial Engagement',
                                   RecordTypeId = OpportunityTrigger.sfdcrecordtype_Id, Production_Date__c = PRODUCTION_DATE,
                                     CloseDate = PRODUCTION_DATE - 60,Locked_Exchange_Rate__c = LOCKED_EXCHANGE_RATE,
                                    Currency__c = fxRates.get(CCY_CODE_DEFAULT).Id,CurrencyIsoCode = CCY_CODE_DEFAULT,

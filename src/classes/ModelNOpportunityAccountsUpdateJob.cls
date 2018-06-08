@@ -29,7 +29,7 @@ global class ModelNOpportunityAccountsUpdateJob implements Database.Batchable<sO
    	global void execute(Database.BatchableContext BC, List<sObject> scope) {
         list<Opportunity> oppties = (list<Opportunity>)scope;
         fflib_ISObjectUnitOfWork uow = Application.UnitOfWork.newInstance();
-		OpportunityService.updateMnOpportunityAccounts(oppties, uow);
+		OpportunityService.updateMnOpportunityAccountsAndOwners(oppties, uow);
         OpportunityService.updateMnOpportunityStages(oppties, uow);
 		uow.commitWork();
 	}
