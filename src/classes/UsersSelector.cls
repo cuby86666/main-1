@@ -22,7 +22,7 @@ public class UsersSelector extends ApplicationSelector {
 
     public List<User> selectSalesforceUsersByEmail(Set<String> emails) {
 		p('selectSalesforceUsersByEmail');
-		return (List<User>)Database.query(newQueryFactory().setCondition('Email in :emails and Profile.UserLicense.Name =\'Salesforce\'').toSOQL());
+		return (List<User>)Database.query(newQueryFactory().setCondition('Email in :emails').toSOQL());
     }
     
 }
