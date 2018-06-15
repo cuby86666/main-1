@@ -187,13 +187,20 @@ private class OpportunityServiceTest {
     }
     
     static User createUser(String alias, String lastName, ID profileID, Boolean signedARIA) {
-    	User user = newUser(alias, lastName, profileID, signedARIA); 
+    	User user = newUser(alias, lastName, null, profileID, signedARIA); 
     	insert user;
         
         return user;	
     }
     
-    static User newUser(String alias, String lastName, ID profileID, Boolean signedARIA) {
+    static User createUser(String alias, String lastName, String username, ID profileID, Boolean signedARIA) {
+    	User user = newUser(alias, lastName, username, profileID, signedARIA); 
+    	insert user;
+        
+        return user;	
+    }
+    
+    static User newUser(String alias, String lastName, String username, ID profileID, Boolean signedARIA) {
     	String email = CommonUtils.generateGUID() + '@nxp.com.test123';
     	
     	User user = new User(EmailEncodingKey = 'UTF-8', LanguageLocaleKey = 'en_US', LocaleSidKey = 'en_US', TimeZoneSidKey = 'America/Los_Angeles');
@@ -201,7 +208,7 @@ private class OpportunityServiceTest {
 		user.LastName = lastName;
 		user.ProfileId = profileID;
 		user.Email = email;
-		user.UserName = email;
+		user.UserName = (username != null) ? username : email;
 		user.Signed_ARIA__c = signedARIA;
 		        
         return user;	
@@ -300,11 +307,9 @@ private class OpportunityServiceTest {
     	oppty = new OpportunitiesSelector().selectById(new Set<Id> {oppty.Id}).get(0);
     	
     	System.assertEquals(acctOwner.Id, oppty.OwnerId);
-    	
+  	
     	// Use approver as oppty owner
-    	User drApprover = createUser('tuser456', 'tuser456', p.Id, false);
-    	drApprover.Email = APPROVER_EMAIL;
-    	update drApprover;
+    	User drApprover = createUser('tuser456', 'tuser456', APPROVER_EMAIL, p.Id, false);
     	
     	Account a2 = new Account();
     	a2.name = 'Test Account 2';

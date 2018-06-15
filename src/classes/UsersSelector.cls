@@ -10,6 +10,7 @@ public class UsersSelector extends ApplicationSelector {
 			User.Email,
 			User.Name,
 			User.IsActive,
+			User.Username,
 			User.MT_1__c,
 			User.MT_2__c
 		};
@@ -20,9 +21,9 @@ public class UsersSelector extends ApplicationSelector {
 		return (List<User>)Database.query(newQueryFactory().setCondition('Name in :names').toSOQL());
 	}
 
-    public List<User> selectSalesforceUsersByEmail(Set<String> emails) {
-		p('selectSalesforceUsersByEmail');
-		return (List<User>)Database.query(newQueryFactory().setCondition('Email in :emails').toSOQL());
+    public List<User> selectSalesforceUsersByUsername(Set<String> usernames) {
+		p('selectSalesforceUsersByUsername');
+		return (List<User>)Database.query(newQueryFactory().setCondition('Username in :usernames and User_License__c in (\'Salesforce\', \'Salesforce Platform\', \'Chatter Only\')').toSOQL());
     }
     
 }

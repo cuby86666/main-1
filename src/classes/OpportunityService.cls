@@ -137,7 +137,7 @@ public with sharing class OpportunityService {
 		}
 		
 		List<Account> accounts = new AccountsSelector().selectChildAccountsWithOwnerByGidOrLegacyId(gids, legacyIds);
-		List<User> drApporvers = new UsersSelector().selectSalesforceUsersByEmail(legacyOpptyOwners);
+		List<User> drApporvers = new UsersSelector().selectSalesforceUsersByUsername(legacyOpptyOwners);
 		Map<String, Account> accountsByGidOrLegacyId = new Map<String, Account>();
 		
 		for (Account account : accounts) {
@@ -150,10 +150,10 @@ public with sharing class OpportunityService {
 			}
 		}
 
-		Map<String, User> drApporversByEmail = new Map<String, User>();
+		Map<String, User> drApporversByUsername = new Map<String, User>();
 		
 		for (User user : drApporvers) {
-			drApporversByEmail.put(user.Email, user);
+			drApporversByUsername.put(user.Username, user);
 		}
 
 		List<Opportunity> opptyUpdates = new List<Opportunity>();
@@ -163,7 +163,7 @@ public with sharing class OpportunityService {
 		for (Opportunity oppty : oppties) {
 			if (oppty.RecordTypeId != modelNRecordTypeId) continue;
 			
-			Id drApproverId = drApporversByEmail.get(oppty.Legacy_Opportunity_Owner__c) != null ? drApporversByEmail.get(oppty.Legacy_Opportunity_Owner__c).Id : null;
+			Id drApproverId = drApporversByUsername.get(oppty.Legacy_Opportunity_Owner__c) != null ? drApporversByUsername.get(oppty.Legacy_Opportunity_Owner__c).Id : null;
 			Id newAccountId = oppty.AccountId;
 			Id newAccountOwnerId = null;
 			Id newOwnerId = oppty.OwnerId;
