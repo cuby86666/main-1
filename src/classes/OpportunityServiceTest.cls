@@ -278,7 +278,7 @@ private class OpportunityServiceTest {
     	final String DISTI_NAME = 'CHINA ELEC';
     	final String END_CUST_REGION = 'AMERICAS';
     	final String LEGACY_ID = DISTI_NAME + '-' + END_CUST_REGION;   
-    	final String APPROVER_EMAIL = 'approver@test.com';  
+    	final String APPROVER_EMAIL = CommonUtils.generateGUID() + '@nxp.com.test123';  
     	
     	Profile p = [select Id from Profile where Name = :TEST_USER_PROFILE];
     	
