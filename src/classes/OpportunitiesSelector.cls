@@ -48,6 +48,8 @@ public class OpportunitiesSelector extends ApplicationSelector {
 			Opportunity.MAG_Approver_1__c, 
 			Opportunity.MAG_Approver_2__c,
 			Opportunity.MN_Account_Id_Old__c,
+			Opportunity.NPI__c,
+			Opportunity.NPI_Shadow__c,
 			Opportunity.Production_Date__c,
 			Opportunity.Program__c,
 			Opportunity.Regional_VP_Approver__c,

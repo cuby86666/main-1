@@ -22,15 +22,17 @@ public class OpportunityLineItems extends ApplicationDomain {
 		p('onBeforeInsert');
 		checkOpptyScheds();
 		
-		updateOpptyProdLastBusinessModifiedInfo();
+		updateLastBusinessModifiedInfo();
 		
-		updateOpptyProdQty();
+		updateQty();
 		
-		updateOpptyProdLostCancelledInfo();
+		updateNpi();
+		
+		updateLostCancelledInfo();
 		
 		OpportunityProductClaimValue.setOpportunityProductClaimValues((List<OpportunityLineItem>)this.records);
 		
-		updatePrograms();
+		updateProgram();
 	}
 	
 	public override void onBeforeUpdate(Map<Id, SObject> existingRecords) {
@@ -39,11 +41,13 @@ public class OpportunityLineItems extends ApplicationDomain {
 		
 		OpportunityProductClaimValue.setOpportunityProductClaimValues((List<OpportunityLineItem>)this.records);	
 		
-		updateOpptyProdLastBusinessModifiedInfo();
-
-		updateOpptyProdLostCancelledInfo((List<OpportunityLineItem>)existingRecords.values());
+		updateLastBusinessModifiedInfo();
 		
-		updateOpptyProdHelpNeededHistory((List<OpportunityLineItem>)existingRecords.values());
+		updateNpi();
+
+		updateLostCancelledInfo((List<OpportunityLineItem>)existingRecords.values());
+		
+		updateHelpNeededHistory((List<OpportunityLineItem>)existingRecords.values());
 	}
 	
 	public override void onAfterInsert() {
@@ -98,8 +102,8 @@ public class OpportunityLineItems extends ApplicationDomain {
         uow.registerDirty(opptyProdsUpdated);
     }
 
-	private void updatePrograms() {
-		p('updatePrograms');
+	private void updateProgram() {
+		p('updateProgram');
 		Set<Id> opptyIds = new Set<Id>();
 		
 		for (OpportunityLineItem opptyProd : (List<OpportunityLineItem>)this.records) {
@@ -487,8 +491,8 @@ public class OpportunityLineItems extends ApplicationDomain {
         }
     }
     
-    private void updateOpptyProdLastBusinessModifiedInfo() {
-    	p('updateOpptyProdLastBusinessModifiedInfo');
+    private void updateLastBusinessModifiedInfo() {
+    	p('updateLastBusinessModifiedInfo');
 		for (OpportunityLineItem opptyProdNew : (List<OpportunityLineItem>)this.records) { 
 			if (Trigger.isInsert) {
 	            opptyProdNew.LastUpdatedById__c = UserInfo.getUserId();
@@ -503,8 +507,8 @@ public class OpportunityLineItems extends ApplicationDomain {
 		}
     }
     
-    private void updateOpptyProdQty() {  
-    	p('updateOpptyProdQty'); 
+    private void updateQty() {  
+    	p('updateQty'); 
         Set<Id> opptyIds = getOpptyIds((List<OpportunityLineItem>)this.records);
         
         List<OpportunitySchedulesSelector.OpportunityScheduleValueSummary> schedValues = new OpportunitySchedulesSelector().selectSchedValueByOpptyIdGroupByOpptyId(opptyIds);
@@ -520,8 +524,8 @@ public class OpportunityLineItems extends ApplicationDomain {
         }               
     }
     
-    private void updateOpptyProdLostCancelledInfo() {
-    	p('updateOpptyProdLostCancelledInfo');
+    private void updateLostCancelledInfo() {
+    	p('updateLostCancelledInfo');
     	Map<Id, Opportunity> opptyLostCancelledInfo;
     	
     	opptyLostCancelledInfo = getOpptyLostCancelledInfo();
@@ -550,8 +554,8 @@ public class OpportunityLineItems extends ApplicationDomain {
         return result;
     }
     
-    private void updateOpptyProdLostCancelledInfo(List<OpportunityLineItem> existingRecords) {
-    	p('updateOpptyProdLostCancelledInfo(existingRecords)');
+    private void updateLostCancelledInfo(List<OpportunityLineItem> existingRecords) {
+    	p('updateLostCancelledInfo(existingRecords)');
     	for (OpportunityLineItem opptyProdOld : existingRecords) {
     		for (OpportunityLineItem opptyProdNew : (List<OpportunityLineItem>)this.records) {
     			if (opptyProdOld.Id == opptyProdNew.Id && opptyProdNew.Opportunity_Record_Type_Id__c == OpportunitiesSelector.getSfdcRecordTypeId()) {
@@ -591,8 +595,8 @@ public class OpportunityLineItems extends ApplicationDomain {
     }
     
     // SFDC-588
-    private void updateOpptyProdHelpNeededHistory(List<OpportunityLineItem> existingRecords) {
-    	p('updateOpptyProdHelpNeededHistory');
+    private void updateHelpNeededHistory(List<OpportunityLineItem> existingRecords) {
+    	p('updateHelpNeededHistory');
     	for (OpportunityLineItem opptyProdOld : existingRecords) {
     		for (OpportunityLineItem opptyProdNew : (List<OpportunityLineItem>)this.records) {
     			if (opptyProdOld.Id == opptyProdNew.Id) {
@@ -605,4 +609,12 @@ public class OpportunityLineItems extends ApplicationDomain {
     		}
     	}
     }
+    
+    private void updateNpi() {
+    	p('updateNpi');
+    	for (OpportunityLineItem oli : (List<OpportunityLineItem>)this.records) {
+    		oli.NPI_Shadow__c = new Set<String> {'DEV', 'CQS', 'ASM'}.contains(oli.Prod_State__c) ? 1 : 0;
+    	}
+    }
+    
 }

@@ -1,11 +1,14 @@
 public class CommonUtils {
+	
 	private static final String INTEGRATION_USER_PROFILE = 'TS Standard User - API Enabled';
 	private static final String SYSTEM_ADMIN_PROFILE = 'System Administrator';
 	private static final String DATA_ADMIN_USER_ID = '00520000001EuBkAAK';
+	private static final String INTEGRATION_USER_ID = '005D0000002rbSfIAI';
 	
 	private static Id integrationUserProfileId;
 	private static Id systemAdminProfileId;
 	private static Id dataAdminUserId;
+	private static Id integrationUserId;
 	private static Map<String, FX_Rates__c> fxRatesByCurIsoCode;
 	@TestVisible
 	private static Boolean isLoggingActive = null;
@@ -78,6 +81,16 @@ public class CommonUtils {
     	}
     	
     	return dataAdminUserId;
+    }
+    
+    public static Id getIntegrationUserId() {
+    	if (integrationUserId == null) {
+    		User u = ((List<User>)new UsersSelector().selectSObjectsById(new Set<Id>{INTEGRATION_USER_ID})).get(0);
+		
+			integrationUserId = u.Id;	
+    	}
+    	
+    	return integrationUserId;
     } 
     
     private static void setProfileIds() {
@@ -128,5 +141,6 @@ public class CommonUtils {
     	if (isLoggingActive != null ? isLoggingActive : false) {
     		System.debug(prefix + ' ' + klass.getName() + ' - ' + msg);
     	}
-    }  
+    }
+      
 }

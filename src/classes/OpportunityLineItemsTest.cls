@@ -161,10 +161,47 @@ private class OpportunityLineItemsTest {
     	opptyProd.Help_Needed__c = 'Test Help Needed v2';
     	update opptyProd;
         
-        opptyProdUpdated = getOpportunityLineItem(opptyProd.Id);
+        opptyProdUpdated = getOpptyProd(opptyProd.Id);
         
         System.assertEquals('Test Help Needed v2', opptyProdUpdated.Help_Needed__c);
     	System.assertEquals('Test Help Needed v1', opptyProdUpdated.Help_Needed_History__c);
+    }
+    
+    @isTest
+    static void testNpi() {
+    	Opportunity oppty = getOppty(opptyProd.OpportunityId); 
+    	
+    	System.assert(!oppty.NPI__c);
+    	
+    	// Insert an oppty prod with prod state in ('DEV', 'CQS', 'ASM')
+    	// Opportunity.Prototype_Required_Date__c and Opportunity.System_Qualification_Date__c become mandatory 
+    	oppty.Prototype_Required_Date__c = System.today();
+    	oppty.System_Qualification_Date__c = System.today();
+    	update oppty;
+    	 
+    	Product2 prod = new Product2(Name = 'test');
+    	prod.SalesItem_ProductState__c = 'ASM';
+    	insert prod;
+    	
+    	PricebookEntry pbe = new PricebookEntriesSelector().selectByProdId(new Set<Id>{prod.Id}).get(0);
+    	
+    	OpportunityLineItem oli = new OpportunityLineItem(OpportunityId = opptyProd.OpportunityId, PricebookEntryId = pbe.Id);
+        oli.UnitPrice = UNIT_PRICE;
+        oli.Component_Multiplier__c = COMP_MULT;
+        insert oli;
+        
+        System.assert(getOpptyProd(oli.Id).NPI__c);
+        System.assert(getOppty(opptyProd.OpportunityId).NPI__c);
+        
+        // Delete the oppty prod with prod state in ('DEV', 'CQS', 'ASM')
+        delete oli;
+        
+        System.assert(!getOppty(opptyProd.OpportunityId).NPI__c);
+        
+        // Run as integration user to test the following two scenarios:
+        // 1. Update opptyProd product state to one of ('DEV', 'CQS', 'ASM') and check if oppty NPI is true
+        // 2. Update opptyProd product state to 'RFS' and check if oppty NPI is false	
+        
     }
     
     static User createUser(String alias, String lastName, ID profileID, Boolean signedARIA) {
@@ -199,18 +236,11 @@ private class OpportunityLineItemsTest {
     	return account;
     }
     
-    static Opportunity getOpportunity(ID opptyID) {
-        return [select LT_Value_USD__c, Sales_Director_Approver__c, Regional_VP_Approver__c, VP_Approver_2__c, 
-        			   MAG_Approver_1__c, MAG_Approver_2__c, BL_Approver_1__c, BL_Approver_2__c, Program__c,    
-        			   Account.ParentId, Owner.MT_2__c
-        		  from Opportunity 
-        		 where Id = :opptyID];    
+    static Opportunity getOppty(Id opptyId) {
+    	return new OpportunitiesSelector().selectByIdWithAccountAndOwner(new Set<Id>{opptyId}).get(0);
     } 
     
-    static OpportunityLineItem getOpportunityLineItem(ID opptyProdID){
-		return [select Id, Help_Needed__c, Help_Needed_History__c 
-                  from OpportunityLineItem
-                 where Id = :opptyProdID
-               ];
-    }
+    static OpportunityLineItem getOpptyProd(Id opptyProdId){
+    	return ((List<OpportunityLineItem>)new OpportunityLineItemsSelector().selectSObjectsById(new Set<Id>{opptyProdId})).get(0);
+	}
 }

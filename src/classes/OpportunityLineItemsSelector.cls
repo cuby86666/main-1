@@ -16,6 +16,8 @@ public class OpportunityLineItemsSelector extends ApplicationSelector {
 			OpportunityLineItem.Help_Needed_History__c,
 			OpportunityLineItem.Legacy_Id__c,
 			OpportunityLineItem.MAG__c,
+			OpportunityLineItem.NPI__c,
+			OpportunityLineItem.NPI_Shadow__c,
 			OpportunityLineItem.POS_Resale_Value_USD__c,
 			OpportunityLineItem.Price_Erosion_Rate__c,
 			OpportunityLineItem.PricebookEntryId,
@@ -25,6 +27,7 @@ public class OpportunityLineItemsSelector extends ApplicationSelector {
 			OpportunityLineItem.Prod_Lost_Cancelled_Date__c, 
 			OpportunityLineItem.Prod_Lost_Cancelled_Reason__c,
 			OpportunityLineItem.Prod_Lost_Reason__c, 
+			OpportunityLineItem.Prod_State__c,
 			OpportunityLineItem.Program__c,
 			OpportunityLineItem.Registration_Effort_Description__c,
       		OpportunityLineItem.Registration_Status__c,
@@ -66,7 +69,7 @@ public class OpportunityLineItemsSelector extends ApplicationSelector {
 		p('selectByLegacyId');
 		return (List<OpportunityLineItem>)Database.query(newQueryFactory().setCondition('Legacy_Id__c in :legacyIds').toSOQL());
 	}
-	
+
 	public List<OpportunityLineItem> selectByOpptyIdWithProduct(Set<Id> opptyIds, Set<String> lostCancelled)  {
 		p('selectByOpptyIdWithProduct(opptyIds)');
 		fflib_QueryFactory opptyLineItemsQueryFactory = newQueryFactory();

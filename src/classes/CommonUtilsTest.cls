@@ -28,6 +28,7 @@ private class CommonUtilsTest {
     	System.assertNotEquals(null, CommonUtils.getIntegrationUserProfileId());
     	System.assertNotEquals(null, CommonUtils.getSystemAdminProfileId());
     	System.assertNotEquals(null, CommonUtils.getDataAdminUserId());
+    	System.assertNotEquals(null, CommonUtils.getIntegrationUserId());
     	System.assertNotEquals(null, CommonUtils.isAdminOrIntegrationUser());
     	System.assertNotEquals(null, CommonUtils.isIntegrationUser());
     	System.assertNotEquals(null, CommonUtils.isAdmin());

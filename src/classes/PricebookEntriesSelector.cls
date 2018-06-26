@@ -15,6 +15,11 @@ public class PricebookEntriesSelector extends ApplicationSelector {
 		};
 	}
 	
+	public List<PricebookEntry> selectByProdId(Set<Id> prodIds) {
+		p('selectByProdId');
+		return (List<PricebookEntry>)Database.query(newQueryFactory().setCondition('Product2Id in :prodIds').toSOQL());	
+	}
+	
 	public List<PricebookEntry> selectByProdSalesItemWithProduct(Set<String> prodSalesItems) {
 		p('selectByProdSalesItemWithProduct');
 		prodSalesItems = (prodSalesItems != null) ? prodSalesItems : new Set<String>();

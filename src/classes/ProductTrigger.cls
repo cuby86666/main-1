@@ -26,45 +26,15 @@ public with sharing class ProductTrigger {
     final static Set<String> fieldsSet = new Set<String> {
         'MAG__c',
         'BU__c', 
-        'BL__c'     
+        'BL__c',
+        'SalesItem_ProductState__c'     
     };
         
     public static Boolean IsFirstRun_AfterUpdate = true;
     public static Boolean IsFirstRun_AfterInsert = true;
-    /*
-    public static void updateOpptyLineItemProductStatus(Map<Id,Product2> productMap) {
-        //J Added by Jason Tsai on April 26, 2016. 
-        // To prevent claim value calculation if triggered from Product object change.
-        OpportunityProductClaimValue.isUpdatable = false;
-                                 
-        List<OpportunityLineItem> oliList = [select id,Product_Status__c, Thrust_Indicator__c , PricebookEntryId,PricebookEntry.Product2Id , Opportunity.Design_Win_Approval_Process__c
-                                               from OpportunityLineItem
-                                              where PricebookEntry.Product2Id in: productMap.keySet() 
-                                                and ((Opportunity.RecordTypeId = :OpportunitiesSelector.getSfdcRecordTypeId())
-                                                and (Opportunity.Design_Win_Approval_Process__c =: 'Pending' or Opportunity.Design_Win_Approval_Process__c =: 'Rejected' or Opportunity.Design_Win_Approval_Process__c =: 'Open'))
-                                            ];        
-        if (oliList.size() > 0) {
-            Product2 objProduct;
-            
-            for (OpportunityLineItem oli: oliList) {
-                objProduct = productMap.get(oli.PricebookEntry.Product2Id);
-                
-                //Set Product Status
-                if (oli.Opportunity.Design_Win_Approval_Process__c == 'Open' || oli.Opportunity.Design_Win_Approval_Process__c == 'Pending') {
-                    oli.Product_Status__c = (objProduct.IsActive ? 0 : 1);
-                }               
-            }                       
-            
-            update oliList;
-            
-            //J Added by Jason Tsai on April 26, 2016. 
-            // To prevent claim value calculation if triggered from Product object change. 
-            OpportunityProductClaimValue.isUpdatable = true;
-        }       
-    }
-    */
+    
     public static void updateOpportunityFields(List<Product2> lstNewProducts, List<Product2> lstOldProducts) {
-        Set<Id> productIdSet = new Set<Id>();
+        Set<Id> prodIds = new Set<Id>();
         
         for (Integer i=0; Trigger.new != null && i < Trigger.new.size(); i++) {       
             if (Trigger.old != null && Trigger.old[i] != null) {
@@ -84,22 +54,27 @@ public with sharing class ProductTrigger {
                 }
                 
                 if (bisFieldChange) {
-                    productIdSet.add(Trigger.new[i].Id);    
+                    prodIds.add(Trigger.new[i].Id);    
                 }               
             }
         }
         
-        if (!productIdSet.isEmpty()) {
-            //OpportuniLineItemTrigger.executeProductUpdate(productIdSet); 
-            
-        	updateOppties(productIdSet);    
+        if (!prodIds.isEmpty()) {
+            updateOpptiesAndOpptyProds(prodIds);    
         }
     }
-    
+  
     @future
-    private static void updateOppties(Set<Id> prodIds) {
+    private static void updateOpptiesAndOpptyProds(Set<Id> prodIds) {
     	for (List<OpportunityLineItem> olis : [select OpportunityId from OpportunityLineItem where PricebookEntry.Product2.Id in :prodIds]) {
-            if (olis.size() > 0) {
+    	    if (olis.size() > 0) {
+    	    	// To prevent claim value calculation if triggered from Product object change.
+    	    	OpportunityProductClaimValue.isUpdatable = false;
+    	    	
+            	update olis;
+            	
+            	OpportunityProductClaimValue.isUpdatable = true;
+            	
             	List<SObject> oppties = (List<SObject>)dlrs.RollupService.rollup(olis);
 				
 				if (oppties != null && oppties.size() > 0) {
@@ -126,8 +101,6 @@ public with sharing class ProductTrigger {
          
         if (pricebookId != null) {
         	for (Product2 theProduct : lstProducts) {
-/* 2015.10 Hotfix SIR#520 ***** BEGIN ***/
-            //if (theProduct.isActive == true) {
                 listPricebookEntries.add
                     (
                         new PricebookEntry
@@ -153,36 +126,9 @@ public with sharing class ProductTrigger {
                             UseStandardPrice=FALSE
                         )
                     ); 
-            //}
-            /* SFDC-1094: set all pricebookentry items to active, remove the logic of setting pricebookentry to inactive
-            if (theProduct.isActive == false) {
-                listPricebookEntries.add
-                    (
-                        new PricebookEntry
-                        (
-                            Pricebook2Id=pricebookId, 
-                            Product2Id=theProduct.ID, 
-                            UnitPrice=0.00, 
-                            CurrencyIsoCode='USD',
-                            IsActive=FALSE, 
-                            UseStandardPrice=FALSE)); 
- 
-                listPricebookEntries.add
-                    (
-                        new PricebookEntry
-                        (
-                            Pricebook2Id=pricebookId, 
-                            Product2Id=theProduct.ID, 
-                            UnitPrice=0.00, 
-                            CurrencyIsoCode='EUR',
-                            IsActive=FALSE, 
-                            UseStandardPrice=FALSE
-                        )
-                    ); 
-            }*/
-/* 2015.10 Hotfix SIR#520 ***** END ***/
-        }
-    }
+        	}
+    	}
+        
         insert listPricebookEntries;
     }
     
