@@ -42,7 +42,7 @@ private class OpportunityLineItemsTest {
         
         MAG_LIFETIME = claimValueMagSetting.MAG__c;
         
-        List<OpportunityLineItem> opptyLineItems = [select Id, OpportunityId, Program__c, Opportunity.Program__c, PricebookEntry.Product2.MAG__c, Help_Needed__c, Help_Needed_History__c from OpportunityLineItem]; 
+        List<OpportunityLineItem> opptyLineItems = [select Id, OpportunityId, Program__c, Opportunity.Program__c, Product2.MAG__c, Help_Needed__c, Help_Needed_History__c from OpportunityLineItem]; 
         
         for (OpportunityLineItem oli : opptyLineItems) {
         	opptyProds.add(oli);    
@@ -198,10 +198,46 @@ private class OpportunityLineItemsTest {
         
         System.assert(!getOppty(opptyProd.OpportunityId).NPI__c);
         
-        // Run as integration user to test the following two scenarios:
-        // 1. Update opptyProd product state to one of ('DEV', 'CQS', 'ASM') and check if oppty NPI is true
-        // 2. Update opptyProd product state to 'RFS' and check if oppty NPI is false	
-        
+    }
+    
+    @isTest
+    static void testNpiProdStateChange1() {  	
+ 		// Run as integration user to test the following scenario:
+        // Update opptyProd product state to one of ('DEV', 'CQS', 'ASM') and check if oppty NPI is true                      
+    	User u = ((List<User>)new UsersSelector().selectSObjectsById(new Set<Id>{CommonUtils.getIntegrationUserId()})).get(0);
+        			    
+        System.runAs(u) {        	        		        
+	        Test.startTest();	   	        
+			opptyProd.Product2.SalesItem_ProductState__c = 'DEV';
+			update opptyProd.Product2;
+			Test.stopTest();
+			
+			Product2 prod = ((List<Product2>)new ProductsSelector().selectSObjectsById(new Set<Id>{opptyProd.Product2.Id})).get(0);
+	
+			System.assertEquals('DEV', prod.SalesItem_ProductState__c); 					
+	        System.assertEquals(true, getOpptyProd(opptyProd.Id).NPI__c);
+	        System.assertEquals(true, getOppty(opptyProd.Opportunity.Id).NPI__c);                       
+        }	
+    }
+    
+    @isTest
+    static void testNpiProdStateChange2() { 	
+		// Run as integration user to test the following scenario:
+    	// Update opptyProd product state to 'RFS' and check if oppty NPI is false     
+		User u = ((List<User>)new UsersSelector().selectSObjectsById(new Set<Id>{CommonUtils.getIntegrationUserId()})).get(0);
+        			    
+		System.runAs(u) {       	    
+			Test.startTest();   
+			opptyProd.Product2.SalesItem_ProductState__c = 'RFS';
+			update opptyProd.Product2;
+			Test.stopTest();
+			
+			Product2 prod = ((List<Product2>)new ProductsSelector().selectSObjectsById(new Set<Id>{opptyProd.Product2.Id})).get(0);
+				
+			System.assertEquals('RFS', opptyProd.Product2.SalesItem_ProductState__c);             			
+			System.assertEquals(false, getOpptyProd(opptyProd.Id).NPI__c);
+			System.assertEquals(false, getOppty(opptyProd.Opportunity.Id).NPI__c);	
+		}  
     }
     
     static User createUser(String alias, String lastName, ID profileID, Boolean signedARIA) {
