@@ -55,100 +55,116 @@ public with sharing class OpportunityScheduleController {
    	
     @AuraEnabled	
     public static List<OpportunitySchedulingWrapper.OpportunityScheduleView> getOpportunityScheduleDisplayValues(Id opportunityId, Integer qtr, Integer qty, String ProdDate,String ExpClsDate, string opptyschldWrapRec, Boolean flagDirect) {        	
-        List<OpportunitySchedulingWrapper.OpportunityScheduleView> lstWrapperOpptySchedule = new  List<OpportunitySchedulingWrapper.OpportunityScheduleView>();	
-        if(opptyschldWrapRec != null){	
-         List<OpportunitySchedulingWrapper.OpportunityScheduleView> lstWrapperOpptyScheduleDeserailise = (List<OpportunitySchedulingWrapper.OpportunityScheduleView>)System.JSON.deserialize(opptyschldWrapRec,List<OpportunitySchedulingWrapper.OpportunityScheduleView>.class);	
-         lstWrapperOpptySchedule = lstWrapperOpptyScheduleDeserailise;	
-        }	
+        List<OpportunitySchedulingWrapper.OpportunityScheduleView> lstWrapperOpptySchedule = new List<OpportunitySchedulingWrapper.OpportunityScheduleView>();	
+        
+        if (opptyschldWrapRec != null) {	
+        	List<OpportunitySchedulingWrapper.OpportunityScheduleView> lstWrapperOpptyScheduleDeserailise = (List<OpportunitySchedulingWrapper.OpportunityScheduleView>)System.JSON.deserialize(opptyschldWrapRec,List<OpportunitySchedulingWrapper.OpportunityScheduleView>.class);	
+         	lstWrapperOpptySchedule = lstWrapperOpptyScheduleDeserailise;	
+        }
+        	
         Date tempProdDate;	
         Date tempcloseDate;	
         List<OpportunitySchedulingWrapper.OpportunityScheduleView> lstOpptySchedDisplayValues = new List<OpportunitySchedulingWrapper.OpportunityScheduleView>();        	
-        List<OpportunitySchedule__c> lstExistingOpptySchld = new  List<OpportunitySchedule__c>();	
-        lstExistingOpptySchld= [Select Id, Name, Comment__c, Frozen_Oppty_Sched_Qty__c, Opportunity__c, Oppty_Sched_Qty__c, 	
-                                       Sched_Date__c From OpportunitySchedule__c where Opportunity__c=:opportunityId Order By Sched_Date__c];	
-        Opportunity oppty= [SELECT Id, Name,CloseDate, Production_Date__c, LT_Value_USD__c, Claim_Value_USD__c, StageName,Design_Win_Approval_Process__c,AccountId,Account.Customer_Category__c, TMMA_Override__c,RecordType.DeveloperName, CreatedDate FROM Opportunity WHERE Id =:opportunityId];        	
+        List<OpportunitySchedule__c> lstExistingOpptySchld = new List<OpportunitySchedule__c>();	
+        
+        lstExistingOpptySchld= [select Id, Name, Comment__c, Frozen_Oppty_Sched_Qty__c, Opportunity__c, Oppty_Sched_Qty__c, Sched_Date__c 
+                                  from OpportunitySchedule__c 
+                                 where Opportunity__c = :opportunityId 
+                                order by Sched_Date__c];	
+        
+        Opportunity oppty= [select Id, Name,CloseDate, Production_Date__c, LT_Value_USD__c, Claim_Value_USD__c, StageName,Design_Win_Approval_Process__c, AccountId, Account.Customer_Category__c, TMMA_Override__c, RecordType.DeveloperName, CreatedDate 
+        					  from Opportunity 
+        					 where Id = :opportunityId];
+        					 
+		// Execute if No Oppty Schedules already exist: Directing from step1:Create to step2:Edit	
+        if ((lstWrapperOpptySchedule == null || lstWrapperOpptySchedule.isEmpty()) && flagDirect == true) {	
+        	tempProdDate= Date.valueOf(ProdDate);	
+        	tempcloseDate= Date.valueOf(ExpClsDate);	
+        	oppty.CloseDate =tempcloseDate;	
+        	oppty.Production_Date__c = tempProdDate;	
+        	Integer year= tempProdDate.year();	
+        	Integer month= tempProdDate.month();	
+        	Integer qttr = quarterReturn(month); // Call to return Quarter for the month	
+        	Integer quatr = integer.valueof(qtr);	
 	
-        // Execute if No Oppty Schedules already exist: Directing from step1:Create to step2:Edit	
-        if((lstWrapperOpptySchedule == null || lstWrapperOpptySchedule.isEmpty()) && flagDirect==true){	
-        tempProdDate= Date.valueOf(ProdDate);	
-        tempcloseDate= Date.valueOf(ExpClsDate);	
-        oppty.CloseDate =tempcloseDate;	
-        oppty.Production_Date__c = tempProdDate;	
-        Integer year= tempProdDate.year();	
-        Integer month= tempProdDate.month();	
-        Integer qttr = quarterReturn(month); // Call to return Quarter for the month	
-        Integer quatr = integer.valueof(qtr);	
-	
-        if(integer.valueof(qtr) != 0){	
-           for(Integer i=1; i<=integer.valueof(qtr);i++){                	
-            OpportunitySchedulingWrapper.OpportunityScheduleView positionRecord = new OpportunitySchedulingWrapper.OpportunityScheduleView();	
-            positionRecord.quantities = qty;	
-            positionRecord.comment ='';	
-            positionRecord.oppValues =  oppty;   	
-            IF(qttr >4){	
-             year++;	
-             qttr =1;	
-            }	
-            positionRecord.quarterdate = string.valueOf(year)+'Q'+ string.valueOf(qttr) ;	
-            qttr++;	
-            lstOpptySchedDisplayValues.add(positionRecord);	
-          }            	
-       }	
+        	if (integer.valueof(qtr) != 0) {	
+           		for (Integer i = 1; i <= integer.valueof(qtr); i++) {                	
+            		OpportunitySchedulingWrapper.OpportunityScheduleView positionRecord = new OpportunitySchedulingWrapper.OpportunityScheduleView();	
+            		positionRecord.quantities = qty;	
+            		positionRecord.comment ='';	
+            		positionRecord.oppValues = oppty;   	
+            		
+            		if (qttr > 4) {	
+             			year++;	
+             			qttr = 1;	
+            		}	
+            
+            		positionRecord.quarterdate = string.valueOf(year) + 'Q'+ string.valueOf(qttr);	
+            		qttr++;	
+            		lstOpptySchedDisplayValues.add(positionRecord);	
+          		}            	
+       		}	
             	
-      /***Default Save Oppty Schedule Records while Navigating from step1:Create to Step2: Edit***/	
-       String opptySchedWrapper = JSON.serialize(lstOpptySchedDisplayValues);	
-       OpportunitySchedulingWrapper.OpportunityScheduleExists opptyExitsSaved = new OpportunitySchedulingWrapper.OpportunityScheduleExists();	
-       opptyExitsSaved = saveOpptySchedule(opportunityId,opptySchedWrapper,oppty);	
-       for(OpportunitySchedulingWrapper.OpportunityScheduleView opptyScheviewRec: lstOpptySchedDisplayValues){	
-           opptyScheviewRec.oppValues = opptyExitsSaved.oppValues;	
-       }	
-      }	
+      		/***Default Save Oppty Schedule Records while Navigating from step1:Create to Step2: Edit***/	
+       		String opptySchedWrapper = JSON.serialize(lstOpptySchedDisplayValues);	
+       		OpportunitySchedulingWrapper.OpportunityScheduleExists opptyExitsSaved = new OpportunitySchedulingWrapper.OpportunityScheduleExists();	
+       		opptyExitsSaved = saveOpptySchedule(opportunityId,opptySchedWrapper,oppty);	
+       
+       		for (OpportunitySchedulingWrapper.OpportunityScheduleView opptyScheviewRec : lstOpptySchedDisplayValues) {	
+           		opptyScheviewRec.oppValues = opptyExitsSaved.oppValues;	
+       		}	
+      	}	
         	
         // Execute if Already Oppty Schedules Exist: Directing to Oppty Sched Edit	
-        if(flagDirect==false && (lstWrapperOpptySchedule == null || lstWrapperOpptySchedule.isEmpty())){	
-            for (OpportunitySchedule__c oppSch :lstExistingOpptySchld){	
-                 OpportunitySchedulingWrapper.OpportunityScheduleView existingOpptySchld = new OpportunitySchedulingWrapper.OpportunityScheduleView();	
-                 existingOpptySchld.oppValues =  oppty;	
-                 existingOpptySchld.comment = oppSch.Comment__c;	
-                 if(oppSch.Comment__c == null){	
-                    existingOpptySchld.comment='';   	
-                 }	
-                 existingOpptySchld.quantities = Integer.valueOf(oppSch.Oppty_Sched_Qty__c);        	
-                 Date tempQtrSchldDate= oppSch.Sched_Date__c;	
-                 Integer year= tempQtrSchldDate.year();	
-                 Integer month= tempQtrSchldDate.month();	
-                 Integer quartr=quarterReturn(month);// Call to return Quarter for the month	
-                 existingOpptySchld.quarterdate = string.valueOf(year)+'Q'+ string.valueOf(quartr) ;	
-                 lstOpptySchedDisplayValues.add(existingOpptySchld);	
+        if (flagDirect == false && (lstWrapperOpptySchedule == null || lstWrapperOpptySchedule.isEmpty())) {	
+            for (OpportunitySchedule__c oppSch : lstExistingOpptySchld) {	
+            	OpportunitySchedulingWrapper.OpportunityScheduleView existingOpptySchld = new OpportunitySchedulingWrapper.OpportunityScheduleView();	
+                existingOpptySchld.oppValues =  oppty;	
+                existingOpptySchld.comment = oppSch.Comment__c;	
+                
+                if (oppSch.Comment__c == null) {	
+                	existingOpptySchld.comment='';   	
+                }	
+                
+                existingOpptySchld.quantities = Integer.valueOf(oppSch.Oppty_Sched_Qty__c);        	
+                Date tempQtrSchldDate= oppSch.Sched_Date__c;	
+                Integer year= tempQtrSchldDate.year();	
+                Integer month= tempQtrSchldDate.month();	
+                Integer quartr=quarterReturn(month);// Call to return Quarter for the month	
+                existingOpptySchld.quarterdate = string.valueOf(year)+'Q'+ string.valueOf(quartr) ;	
+                lstOpptySchedDisplayValues.add(existingOpptySchld);	
             }    	
         }	
         	
         // Execute if there is a Production Date change then display the shifted Quater in Oppty Sched Display	
-        if(lstWrapperOpptySchedule != null && lstWrapperOpptySchedule.size() != 0){	
-           if(ProdDate ==null){	
-             tempProdDate = oppty.Production_Date__c;	
-           }	
-           else{	
-            tempProdDate= Date.valueOf(ProdDate);  	
-           }	
+        if (lstWrapperOpptySchedule != null && lstWrapperOpptySchedule.size() != 0) {	
+        	if (ProdDate == null) {	
+           		tempProdDate = oppty.Production_Date__c;	
+           	} else {	
+            	tempProdDate= Date.valueOf(ProdDate);  	
+           	}
+           		
             Integer year= tempProdDate.year();	
             Integer month= tempProdDate.month();	
             Integer qttr= quarterReturn(month); // Call to return Quarter for the month;	
        	
-         for(OpportunitySchedulingWrapper.OpportunityScheduleView dispTab: lstWrapperOpptySchedule){	
-            OpportunitySchedulingWrapper.OpportunityScheduleView positionRecord = new OpportunitySchedulingWrapper.OpportunityScheduleView();	
-            positionRecord.quantities = dispTab.quantities;	
-            positionRecord.comment = dispTab.comment; //J Copy comment too	
-            positionRecord.oppValues =  oppty;   	
-            if(qttr >4){	
-             year++;	
-             qttr =1;	
-            }	
-            positionRecord.quarterdate = string.valueOf(year)+'Q'+ string.valueOf(qttr) ;	
-            qttr++;	
-            lstOpptySchedDisplayValues.add(positionRecord);                       	
-           }	
+        	for (OpportunitySchedulingWrapper.OpportunityScheduleView dispTab: lstWrapperOpptySchedule) {	
+            	OpportunitySchedulingWrapper.OpportunityScheduleView positionRecord = new OpportunitySchedulingWrapper.OpportunityScheduleView();	
+            	positionRecord.quantities = dispTab.quantities;	
+            	positionRecord.comment = dispTab.comment; //J Copy comment too	
+            	positionRecord.oppValues =  oppty;   	
+            
+            	if (qttr > 4) {	
+             		year++;	
+             		qttr =1;	
+            	}	
+            
+            	positionRecord.quarterdate = string.valueOf(year)+'Q'+ string.valueOf(qttr) ;	
+            	qttr++;	
+            	lstOpptySchedDisplayValues.add(positionRecord);                       	
+           	}	
         }	
+        
         return lstOpptySchedDisplayValues;	
     }    	
 	
@@ -576,7 +592,7 @@ public with sharing class OpportunityScheduleController {
     	Opportunity oppsave= [SELECT Id, Name, CloseDate, Production_Date__c, LT_Value_USD__c, Claim_Value_USD__c ,StageName, AccountId, Account.Customer_Category__c, TMMA_Override__c, RecordType.DeveloperName, Design_Win_Approval_Process__c, CreatedDate FROM Opportunity WHERE Id = :opportunityId]; 	
         oppsave.Bypass_Validation_Sched_Start_Date__c = false;
         	
-    	if (((oppsave.CloseDate != ExpClsDate && ExpClsDate != null) || (oppsave.Production_Date__c != NewProdDate && NewProdDate != null)) && oppsave.StageName != 'Commitment') {	
+    	if ((oppsave.CloseDate != ExpClsDate && ExpClsDate != null) || (oppsave.Production_Date__c != NewProdDate && NewProdDate != null)) {
         	oppsave.CloseDate = ExpClsDate;	
         	oppsave.Production_Date__c = NewProdDate;
         	oppsave.Bypass_Validation_Sched_Start_Date__c = true;

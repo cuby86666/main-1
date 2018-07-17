@@ -31,16 +31,19 @@ public class OpportunitySchedulingWrapper {
             messageException='';
         }
     }
+    
     public class OpportunityScheduleView {
-        
         @AuraEnabled public Integer quantities;
         @AuraEnabled public string comment;
         @AuraEnabled public string quarterdate;
         @AuraEnabled public Opportunity oppValues;
+        @AuraEnabled public Boolean isAdmin;
+        
         public OpportunityScheduleView(){
             quantities = 0;
             comment = '';
             quarterdate = '';
+            isAdmin = CommonUtils.isAdmin();
         }
     }
  

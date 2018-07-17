@@ -123,103 +123,114 @@ getOpptyScheduleValues: function(component) {
     this.disableButton(component);
    					
     var opptyStage= component.get("v.opp1");					
-    if(opptyStage.Account !=null){					
-    if(opptyStage.StageName == 'Commitment' || opptyStage.Design_Win_Approval_Process__c =='Lost'||(opptyStage.Design_Win_Approval_Process__c =='Pending' && opptyStage.StageName == 'Decision')||(opptyStage.RecordType.DeveloperName =='Model_N_Oppty' && (opptyStage.Account.Customer_Category__c !='Tier 4 - TMMA'|| opptyStage.StageName == 'Cancelled'))){					
-    var reEstblishBtn = component.find("reEstablish");					
-    reEstblishBtn.set("v.disabled",true);					
-    }					
-    if(opptyStage.Design_Win_Approval_Process__c =='Lost'||(opptyStage.Design_Win_Approval_Process__c =='Pending' && opptyStage.StageName == 'Decision')||(opptyStage.RecordType.DeveloperName =='Model_N_Oppty' && (opptyStage.Account.Customer_Category__c !='Tier 4 - TMMA' || opptyStage.StageName == 'Cancelled'))){					
-    var addQtrBtn = component.find("addQtr");					
-    addQtrBtn.set("v.disabled",true);					
-    component.set("v.flagNonTmmaDisabling", true);     					
-    }					
-    if(opptyStage.Design_Win_Approval_Process__c !='Pending'&& opptyStage.Design_Win_Approval_Process__c !='Lost'&&((opptyStage.RecordType.DeveloperName =='Model_N_Oppty' && opptyStage.Account.Customer_Category__c =='Tier 4 - TMMA'&& opptyStage.StageName != 'Cancelled')||opptyStage.RecordType.DeveloperName !='Model_N_Oppty')){					
-    component.set("v.flagNonTmmaDisabling", false);					
-        if(opptyStage.StageName != 'Commitment'){					
-        component.set("v.flagNonTmmaDelDisabling", true);    					
-        }					
-    }					
-    var flg = component.get("v.flagDirect");					
-    if(flg == true){					
-    var productionDate = component.find("proddate1").get("v.value");					
-    var expCloseDate = component.find("expclosedate1").get("v.value");					
-    }					
-    else{					
-    var productionDate = component.find("proddate").get("v.value");					
-    var expCloseDate = component.find("expclosedate").get("v.value");					
-    component.set("v.flagSaveSuccess", false);					
-					
-    }					
+    
+    if (opptyStage.Account != null) {					
+    	if (opptyStage.StageName == 'Commitment' || opptyStage.Design_Win_Approval_Process__c == 'Lost' || (opptyStage.Design_Win_Approval_Process__c == 'Pending' && opptyStage.StageName == 'Decision') || (opptyStage.RecordType.DeveloperName == 'Model_N_Oppty' && (opptyStage.Account.Customer_Category__c !='Tier 4 - TMMA' || opptyStage.StageName == 'Cancelled'))) {					
+    		var reEstblishBtn = component.find("reEstablish");					
+    		reEstblishBtn.set("v.disabled",true);					
+    	}					
+    
+    	if (opptyStage.Design_Win_Approval_Process__c == 'Lost' || (opptyStage.Design_Win_Approval_Process__c == 'Pending' && opptyStage.StageName == 'Decision') || (opptyStage.RecordType.DeveloperName == 'Model_N_Oppty' && (opptyStage.Account.Customer_Category__c != 'Tier 4 - TMMA' || opptyStage.StageName == 'Cancelled'))) {					
+    		var addQtrBtn = component.find("addQtr");					
+    		addQtrBtn.set("v.disabled",true);					
+    		component.set("v.flagNonTmmaDisabling", true);     					
+    	}					
+    
+    	if (opptyStage.Design_Win_Approval_Process__c != 'Pending' && opptyStage.Design_Win_Approval_Process__c != 'Lost' && ((opptyStage.RecordType.DeveloperName == 'Model_N_Oppty' && opptyStage.Account.Customer_Category__c == 'Tier 4 - TMMA' && opptyStage.StageName != 'Cancelled') || opptyStage.RecordType.DeveloperName != 'Model_N_Oppty')) {					
+    		component.set("v.flagNonTmmaDisabling", false);					
+        
+    		if (opptyStage.StageName != 'Commitment') {					
+    			component.set("v.flagNonTmmaDelDisabling", true);    					
+    		}					
+    	}					
+    
+    	var flg = component.get("v.flagDirect");					
+    
+    	if (flg == true) {					
+    		var productionDate = component.find("proddate1").get("v.value");					
+    		var expCloseDate = component.find("expclosedate1").get("v.value");					
+    	} else {					
+    		var productionDate = component.find("proddate").get("v.value");					
+    		var expCloseDate = component.find("expclosedate").get("v.value");					
+    		component.set("v.flagSaveSuccess", false);					
+		}					
     					
-    var toggle = component.get("v.toggleCompDisplay");					
-    if(toggle == true){					
-       var lstPositions = null; 					
-    }					
-    else{					
-    var lstPositions = component.get("v.lstPositions");					
-    }					
-    var opptyschldWrapRec = JSON.stringify(lstPositions);					
-    var action = component.get("c.getOpportunityScheduleDisplayValues");					
-    action.setParams({					
-    opportunityId: component.get("v.recordId"),					
-    qtr:  component.get("v.qtr"),					
-    qty:  component.get("v.qty"),					
-    ProdDate: productionDate,					
-    ExpClsDate: expCloseDate,					
-    opptyschldWrapRec : opptyschldWrapRec,					
-    flagDirect: component.get("v.flagDirect")					
+    	var toggle = component.get("v.toggleCompDisplay");					
+    
+    	if (toggle == true) {					
+    		var lstPositions = null; 					
+    	} else {					
+    		var lstPositions = component.get("v.lstPositions");					
+    	}					
+    
+    	var opptyschldWrapRec = JSON.stringify(lstPositions);					
+    	var action = component.get("c.getOpportunityScheduleDisplayValues");					
+    
+    	action.setParams({					
+    		opportunityId: component.get("v.recordId"),					
+    		qtr:  component.get("v.qtr"),					
+    		qty:  component.get("v.qty"),					
+    		ProdDate: productionDate,					
+    		ExpClsDate: expCloseDate,					
+    		opptyschldWrapRec: opptyschldWrapRec,					
+    		flagDirect: component.get("v.flagDirect")					
         });					
     					
-    action.setCallback(this, function(response) {					
-     if (response.getState() === "SUCCESS") {					
-           var result = response.getReturnValue();					
-    if(result != null){					
-            component.set("v.lstPositions", response.getReturnValue());					
-            component.set("v.opp1",result[0].oppValues);	
-            component.set("v.OldCloseDate", result[0].oppValues.CloseDate);
-            component.set("v.opp1.LT_Value_USD__c",result[0].oppValues.LT_Value_USD__c);					
-            component.set("v.opp1.Claim_Value_USD__c",result[0].oppValues.Claim_Value_USD__c);					
-            component.set("v.OldProdDate",result[0].oppValues.Production_Date__c); // added   					
-    }       					
-               component.set("v.flagSaveSuccess", false);					
-               if(flg == true){					
-               component.set("v.flagSaveSuccess", true);					
-               }					
-               var count = response.getReturnValue().length;					
-               component.set("v.OpptySchldCount",count);					
-               component.set("v.OpptySchldCountInit",count);					
-               if(result[0].oppValues.StageName == 'Commitment'||(result[0].oppValues.StageName == 'Decision' && result[0].oppValues.Design_Win_Approval_Process__c =='Pending') || result[0].oppValues.Design_Win_Approval_Process__c =='Lost' || (opptyStage.RecordType.DeveloperName =='Model_N_Oppty' && (opptyStage.Account.Customer_Category__c !='Tier 4 - TMMA' || opptyStage.StageName == 'Cancelled')))					
-               {					
-                var expClsDt = component.find("expclosedate");					
-                expClsDt.set("v.disabled",true);					
-                expClsDt.set("v.displayDatePicker",false); //added to fix issue #297					
-                var prodDt = component.find("proddate");					
-                prodDt.set("v.disabled",true); 					
-                prodDt.set("v.displayDatePicker",false);// added to fix issue #297					
-                component.set("v.flagDelCmitmntButton",false);					
-             }					
-                   component.set("v.isSpinner", false);					
-        } else if (response.getState() === "ERROR") {					
-                    console.log(response.getError());					
-                    var errors = response.getError();					
-                    if(errors[0] && errors[0].pageErrors) // To show DML exceptions					
-                    {					
+    	action.setCallback(this, function(response) {					
+    		if (response.getState() === "SUCCESS") {					
+    			var result = response.getReturnValue();					
+    
+    			if (result != null) {					
+    				component.set("v.lstPositions", response.getReturnValue());					
+    				component.set("v.opp1",result[0].oppValues);	
+    				component.set("v.OldCloseDate", result[0].oppValues.CloseDate);
+    				component.set("v.opp1.LT_Value_USD__c",result[0].oppValues.LT_Value_USD__c);					
+    				component.set("v.opp1.Claim_Value_USD__c",result[0].oppValues.Claim_Value_USD__c);					
+    				component.set("v.OldProdDate",result[0].oppValues.Production_Date__c); // added   					
+    			}       					
+               
+    			component.set("v.flagSaveSuccess", false);					
+               
+    			if (flg == true) {					
+    				component.set("v.flagSaveSuccess", true);					
+    			}					
+               
+    			var count = response.getReturnValue().length;					
+                component.set("v.OpptySchldCount",count);					
+                component.set("v.OpptySchldCountInit",count);
+               
+                if ((result[0].oppValues.StageName == 'Commitment' && !(opptyStage.RecordType.DeveloperName == 'Model_N_Oppty' && result[0].oppValues.TMMA_Override__c && result[0].isAdmin)) || (result[0].oppValues.StageName == 'Decision' && result[0].oppValues.Design_Win_Approval_Process__c == 'Pending') || result[0].oppValues.Design_Win_Approval_Process__c == 'Lost' || (opptyStage.RecordType.DeveloperName =='Model_N_Oppty' && (opptyStage.Account.Customer_Category__c != 'Tier 4 - TMMA' || opptyStage.StageName == 'Cancelled'))) {					
+                	var expClsDt = component.find("expclosedate");					
+                	expClsDt.set("v.disabled",true);					
+                	expClsDt.set("v.displayDatePicker",false); // added to fix issue #297					
+                	var prodDt = component.find("proddate");					
+                	prodDt.set("v.disabled",true); 					
+                	prodDt.set("v.displayDatePicker",false); // added to fix issue #297					
+                	component.set("v.flagDelCmitmntButton",false);					
+                }					
+                   
+                component.set("v.isSpinner", false);					
+    		} else if (response.getState() === "ERROR") {					
+                console.log(response.getError());					
+                var errors = response.getError();					
+                    
+                if (errors[0] && errors[0].pageErrors) { // To show DML exceptions					
                     component.set("v.toggleCompDisplayCreate", true);					
                     component.set("v.toggleCompDisplay", false);					
                     component.set("v.ErrorMessage", errors[0].pageErrors[0].message); 					
                     component.set("v.isExceptionFlag", true);					
-                    }					
-                    component.set("v.isSpinner", false);					            					
-          }					
-      });					
-      $A.enqueueAction(action);					
-  }					
-    else{					
+                }					
+                    
+                component.set("v.isSpinner", false);					            					
+    		}					
+    	});					
+      
+    	$A.enqueueAction(action);					
+    } else{					
         component.set("v.isExceptionFlag", true);					
         component.set("v.ErrorMessage", 'Please add Account to the Opportunity');					
         component.set("v.isSpinner", false);					
     }					
-					
 },					
     					
 // add rows to the Oppty schedule list     					

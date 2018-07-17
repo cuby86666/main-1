@@ -35,8 +35,6 @@ public class OpportunityCloneControllerTest {
     @testSetup
     static void setup()
     {
-        OpportunityTrigger.fetchOppRecordTypes();
-
         Profile p = [SELECT Id FROM Profile WHERE Name = :TEST_USER_PROFILE];
         
         // insert a test user
@@ -83,7 +81,7 @@ public class OpportunityCloneControllerTest {
         list<Opportunity> listOpp=new list<opportunity>();
         listOpp.add(new Opportunity(Name = 'Test Oppty1', OwnerId = u.Id,
                                       StageName = 'Initial Engagement',
-                                  RecordTypeId = OpportunityTrigger.sfdcrecordtype_Id, Production_Date__c = PRODUCTION_DATE,
+                                  RecordTypeId = OpportunitiesSelector.getSfdcRecordTypeId(), Production_Date__c = PRODUCTION_DATE,
                                     CloseDate = PRODUCTION_DATE - 60,Locked_Exchange_Rate__c = LOCKED_EXCHANGE_RATE,
                                    Currency__c = fxRates.get(CCY_CODE_DEFAULT).Id,CurrencyIsoCode = CCY_CODE_DEFAULT,
                                    One_Year_Pieces__c= ONE_YEAR_PIECES,

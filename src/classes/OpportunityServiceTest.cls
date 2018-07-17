@@ -280,6 +280,7 @@ private class OpportunityServiceTest {
     	final String LEGACY_ID = DISTI_NAME + '-' + END_CUST_REGION;   
     	final String APPROVER_EMAIL = CommonUtils.generateGUID() + '@nxp.com.test123';  
     	
+    	Test.startTest();
     	Profile p = [select Id from Profile where Name = :TEST_USER_PROFILE];
     	
     	// Use account owner as oppty owner
@@ -332,6 +333,7 @@ private class OpportunityServiceTest {
     	oppty = new OpportunitiesSelector().selectById(new Set<Id> {oppty.Id}).get(0);
         
     	System.assertEquals(drApprover.Id, oppty.OwnerId);
+    	Test.stopTest();
     	
     	// If oppty owner is not Data Admin, no change.
     	oppty.OwnerId = drApprover.Id;
