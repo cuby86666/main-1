@@ -39,12 +39,10 @@ public class Opportunities extends ApplicationDomain {
 	
 	public static final String MN_LOST_REASON = 'Expired';
 	
-	private static Boolean isFirstRunBeforeUpdate = true;
-	private static Boolean isFirstRunAfterUpdate = true;
+	private static Set<Id> processedIds = new Set<Id>();
 	
 	public static void resetUpdateEventEntry() {
-    	isFirstRunBeforeUpdate = true;
-	    isFirstRunAfterUpdate = true;
+    	processedIds = new Set<Id>();
     }
 	
     public Opportunities(List<Opportunity> oppties) {
@@ -66,10 +64,6 @@ public class Opportunities extends ApplicationDomain {
 	
 	public override void onBeforeUpdate(Map<Id, SObject> existingRecords) {
 		p('onBeforeUpdate');
-		if (!isFirstRunBeforeUpdate) return;
-		
-		isFirstRunBeforeUpdate = false;
-		
 		// Must be the first method call to skip any field updates by the following method calls.
 		bypassValidation((Map<Id, Opportunity>)existingRecords); 
 		
@@ -89,9 +83,16 @@ public class Opportunities extends ApplicationDomain {
 	
 	public override void onAfterUpdate(Map<Id, SObject> existingRecords) {
 		p('onAfterUpdate');
-		if (!isFirstRunAfterUpdate) return;
+		Boolean continued = false;
 		
-		isFirstRunAfterUpdate = false;
+		for (Opportunity oppty : (List<Opportunity>)this.records) {
+			if (!processedIds.contains(oppty.Id)) {
+				processedIds.add(oppty.Id);
+				continued = true;	
+			}	
+		}
+		
+		if (!continued) return;
 		
 		updateOpptyScheds((List<Opportunity>)existingRecords.values());
 		

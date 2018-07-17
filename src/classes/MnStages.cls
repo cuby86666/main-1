@@ -219,7 +219,7 @@ public class MnStages extends ApplicationDomain {
 		List<Database.UpsertResult> opptiesUpsertResults = Database.upsert(oppties, Opportunity.Fields.Legacy_Id__c, false);
 		List<Database.UpsertResult> opptyProdsUpsertResults = Database.upsert(opptyProds, OpportunityLineItem.Fields.Legacy_Id__c, false);
 		
-		List<Id> opptyIdsDeleted = new List<Id>();
+		Set<Id> opptyIdsDeleted = new Set<Id>();
 		
 		for (Integer i = 0; i < this.mnStages.size(); i++) {
 			MnStage__c mnStage = this.mnStages.get(i);
@@ -252,7 +252,7 @@ public class MnStages extends ApplicationDomain {
 		}
 		
 		if (opptyIdsDeleted.size() > 0) {
-			List<Database.DeleteResult> opptiesDeleteResults = Database.delete(opptyIdsDeleted, false);
+			List<Database.DeleteResult> opptiesDeleteResults = Database.delete(new List<Id>(opptyIdsDeleted), false);
 		}
 		
 		update this.mnStages; 
