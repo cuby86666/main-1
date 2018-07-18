@@ -83,16 +83,8 @@ public class Opportunities extends ApplicationDomain {
 	
 	public override void onAfterUpdate(Map<Id, SObject> existingRecords) {
 		p('onAfterUpdate');
-		Boolean continued = false;
-		
-		for (Opportunity oppty : (List<Opportunity>)this.records) {
-			if (!processedIds.contains(oppty.Id)) {
-				processedIds.add(oppty.Id);
-				continued = true;	
-			}	
-		}
-		
-		if (!continued) return;
+		// Each oppty should be processed only once in after update event.
+		if (processed()) return;
 		
 		updateOpptyScheds((List<Opportunity>)existingRecords.values());
 		
@@ -718,11 +710,27 @@ public class Opportunities extends ApplicationDomain {
     }
     
     private Boolean isTmmaOverride(Opportunity oppty) {
+    	p('isTmmaOverride');
     	return oppty.TMMA_Override__c;
     }
     
     private Boolean isMnRecordType(Opportunity oppty) {
+    	p('isMnRecordType');
 		return oppty.RecordTypeId == OpportunitiesSelector.getMnRecordTypeId();
+    }
+    
+    private Boolean processed() {
+    	p('processed');
+    	Boolean result = true;
+		
+		for (Opportunity oppty : (List<Opportunity>)this.records) {
+			if (!processedIds.contains(oppty.Id)) {
+				processedIds.add(oppty.Id);
+				result = false;	
+			}	
+		}
+		
+		return result;	
     }
     
 }
