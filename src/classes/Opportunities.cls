@@ -39,10 +39,12 @@ public class Opportunities extends ApplicationDomain {
 	
 	public static final String MN_LOST_REASON = 'Expired';
 	
-	private static Set<Id> processedIds = new Set<Id>();
+	private static Set<Id> beforeUpdateProcessedIds = new Set<Id>();
+	private static Set<Id> afterUpdateProcessedIds = new Set<Id>();
 	
 	public static void resetUpdateEventEntry() {
-    	processedIds = new Set<Id>();
+		beforeUpdateProcessedIds = new Set<Id>();
+    	afterUpdateProcessedIds = new Set<Id>();
     }
 	
     public Opportunities(List<Opportunity> oppties) {
@@ -64,6 +66,9 @@ public class Opportunities extends ApplicationDomain {
 	
 	public override void onBeforeUpdate(Map<Id, SObject> existingRecords) {
 		p('onBeforeUpdate');
+		// Each oppty should be processed only once in before update event.
+		if (processed()) return;
+		
 		// Must be the first method call to skip any field updates by the following method calls.
 		bypassValidation((Map<Id, Opportunity>)existingRecords); 
 		
@@ -723,12 +728,21 @@ public class Opportunities extends ApplicationDomain {
     	p('processed');
     	Boolean result = true;
 		
-		for (Opportunity oppty : (List<Opportunity>)this.records) {
-			if (!processedIds.contains(oppty.Id)) {
-				processedIds.add(oppty.Id);
-				result = false;	
+		if (Trigger.isBefore && Trigger.isUpdate) {
+			for (Opportunity oppty : (List<Opportunity>)this.records) {
+				if (!beforeUpdateProcessedIds.contains(oppty.Id)) {
+					beforeUpdateProcessedIds.add(oppty.Id);
+					result = false;	
+				}	
 			}	
-		}
+		} else if (Trigger.isAfter && Trigger.isUpdate) {
+			for (Opportunity oppty : (List<Opportunity>)this.records) {
+				if (!afterUpdateProcessedIds.contains(oppty.Id)) {
+					afterUpdateProcessedIds.add(oppty.Id);
+					result = false;	
+				}	
+			}	
+		} 
 		
 		return result;	
     }
