@@ -592,7 +592,7 @@ public with sharing class OpportunityScheduleController {
     	Opportunity oppsave= [SELECT Id, Name, CloseDate, Production_Date__c, LT_Value_USD__c, Claim_Value_USD__c ,StageName, AccountId, Account.Customer_Category__c, TMMA_Override__c, RecordType.DeveloperName, Design_Win_Approval_Process__c, CreatedDate FROM Opportunity WHERE Id = :opportunityId]; 	
         oppsave.Bypass_Validation_Sched_Start_Date__c = false;
         	
-    	if ((oppsave.CloseDate != ExpClsDate && ExpClsDate != null) || (oppsave.Production_Date__c != NewProdDate && NewProdDate != null)) {
+    	if (((oppsave.CloseDate != ExpClsDate && ExpClsDate != null) || (oppsave.Production_Date__c != NewProdDate && NewProdDate != null)) && oppsave.StageName != 'Commitment') {
         	oppsave.CloseDate = ExpClsDate;	
         	oppsave.Production_Date__c = NewProdDate;
         	oppsave.Bypass_Validation_Sched_Start_Date__c = true;

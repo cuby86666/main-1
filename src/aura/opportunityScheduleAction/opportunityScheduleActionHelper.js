@@ -199,7 +199,7 @@ getOpptyScheduleValues: function(component) {
                 component.set("v.OpptySchldCount",count);					
                 component.set("v.OpptySchldCountInit",count);
                
-                if ((result[0].oppValues.StageName == 'Commitment' && !(opptyStage.RecordType.DeveloperName == 'Model_N_Oppty' && result[0].oppValues.TMMA_Override__c && result[0].isAdmin)) || (result[0].oppValues.StageName == 'Decision' && result[0].oppValues.Design_Win_Approval_Process__c == 'Pending') || result[0].oppValues.Design_Win_Approval_Process__c == 'Lost' || (opptyStage.RecordType.DeveloperName =='Model_N_Oppty' && (opptyStage.Account.Customer_Category__c != 'Tier 4 - TMMA' || opptyStage.StageName == 'Cancelled'))) {					
+                if (result[0].oppValues.StageName == 'Commitment' || (result[0].oppValues.StageName == 'Decision' && result[0].oppValues.Design_Win_Approval_Process__c == 'Pending') || result[0].oppValues.Design_Win_Approval_Process__c == 'Lost' || (opptyStage.RecordType.DeveloperName =='Model_N_Oppty' && (opptyStage.Account.Customer_Category__c != 'Tier 4 - TMMA' || opptyStage.StageName == 'Cancelled'))) {					
                 	var expClsDt = component.find("expclosedate");					
                 	expClsDt.set("v.disabled",true);					
                 	expClsDt.set("v.displayDatePicker",false); // added to fix issue #297					
