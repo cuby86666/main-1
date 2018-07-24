@@ -7,16 +7,16 @@
 public class AptsAgreementBeforeTriggerTest {
     private static final String TYPE_Assembly_Testing_Agreement = 'Assembly_Testing_Agreement';//purchase agreement
     private static final String TYPE_NDA_Evaluation_Other = 'NDA_Evaluation_Other';//Corporate agreement
-    private static final String TYPE_Design_in_Development = 'Design_in_Development';//sales agreement
-    private static final String TYPE_NXP_Software_NDA = 'NXP_Software_NDA';//Software Agreement
-    private static final String TYPE_Framework_Distributor_Agreement = 'Framework_Distributor_Agreement';
+    private static final String TYPE_Design_in_Development_Agreement = 'Design_in_Development_Agreement';//sales agreement
+    private static final String TYPE_Other_Agreement = 'Other_Agreement';//Software Agreement
+    private static final String TYPE_Master_Sales_Agreement = 'Master_Sales_Agreement';
     private static final String TYPE_Global_Local_Price_Agreement = 'Global_Local_Price_Agreement';
     
     private static RecordType Assembly_Testing_Agreement;
     private static RecordType NDA_Evaluation_Other;
-    private static RecordType Design_in_Development;
-    private static RecordType NXP_Software_NDA;
-    private static RecordType Framework_Distributor_Agreement;
+    private static RecordType Design_in_Development_Agreement;
+    private static RecordType Other_Agreement;
+    private static RecordType Master_Sales_Agreement;
     private static RecordType Global_Local_Price_Agreement;
     
     @isTest(seeAllData = TRUE)
@@ -25,9 +25,9 @@ public class AptsAgreementBeforeTriggerTest {
                              WHERE IsActive = TRUE AND SobjectType = 'Apttus__APTS_Agreement__c' AND 
                              (DeveloperName =: TYPE_Assembly_Testing_Agreement OR
                               DeveloperName =: TYPE_NDA_Evaluation_Other OR
-                              DeveloperName =: TYPE_Design_in_Development OR
-                              DeveloperName =: TYPE_NXP_Software_NDA OR
-                              DeveloperName =: TYPE_Framework_Distributor_Agreement OR
+                              DeveloperName =: TYPE_Design_in_Development_Agreement OR
+                              DeveloperName =: TYPE_Other_Agreement OR
+                              DeveloperName =: TYPE_Master_Sales_Agreement OR
                               DeveloperName =: TYPE_Global_Local_Price_Agreement
                              )])
         {
@@ -35,12 +35,12 @@ public class AptsAgreementBeforeTriggerTest {
                 Assembly_Testing_Agreement = rt;
             if(rt.DeveloperName == TYPE_NDA_Evaluation_Other)
                 NDA_Evaluation_Other = rt;
-            if(rt.DeveloperName == TYPE_Design_in_Development)
-                Design_in_Development = rt;
-            if(rt.DeveloperName == TYPE_NXP_Software_NDA)
-                NXP_Software_NDA = rt;
-            if(rt.DeveloperName == TYPE_Framework_Distributor_Agreement)
-                Framework_Distributor_Agreement = rt;
+            if(rt.DeveloperName == TYPE_Design_in_Development_Agreement)
+                Design_in_Development_Agreement = rt;
+            if(rt.DeveloperName == TYPE_Other_Agreement)
+                Other_Agreement = rt;
+            if(rt.DeveloperName == TYPE_Master_Sales_Agreement)
+                Master_Sales_Agreement = rt;
             if(rt.DeveloperName == TYPE_Global_Local_Price_Agreement)
                 Global_Local_Price_Agreement = rt;
         }
@@ -298,8 +298,8 @@ public class AptsAgreementBeforeTriggerTest {
             
             //Sales agreement
             lstCustomSettingApprover.add( new Apttus_Approver_Role__c(
-                Name = Design_in_Development.Name,
-                Agreement_Type_Name__c = Design_in_Development.Name,
+                Name = Design_in_Development_Agreement.Name,
+                Agreement_Type_Name__c = Design_in_Development_Agreement.Name,
                 Approver_1_Role__c = 'GSM ControllerCoporate Control',  
                 Approver_2_Role__c = 'Regional Controller', 
                 Approver_3_Role__c = 'Tax Depatment',   
@@ -311,10 +311,10 @@ public class AptsAgreementBeforeTriggerTest {
                 Approver_9_Role__c = 'BU GM'
             ));
             
-            //Sales Agreement: Framework_Distributor_Agreement
+            //Sales Agreement: Master_Sales_Agreement
             lstCustomSettingApprover.add( new Apttus_Approver_Role__c(
-                Name = Framework_Distributor_Agreement.Name,
-                Agreement_Type_Name__c = Framework_Distributor_Agreement.Name,
+                Name = Master_Sales_Agreement.Name,
+                Agreement_Type_Name__c = Master_Sales_Agreement.Name,
                 Approver_1_Role__c = 'GSM ControllerCoporate Control',  
                 Approver_2_Role__c = 'Regional Controller', 
                 Approver_3_Role__c = 'Tax Depatment',   
@@ -328,8 +328,8 @@ public class AptsAgreementBeforeTriggerTest {
             
             //Software Agreement
             lstCustomSettingApprover.add( new Apttus_Approver_Role__c(
-                Name = NXP_Software_NDA.Name,
-                Agreement_Type_Name__c = NXP_Software_NDA.Name,
+                Name = Other_Agreement.Name,
+                Agreement_Type_Name__c = Other_Agreement.Name,
                 Approver_1_Role__c = 'GSM ControllerCoporate Control',  
                 Approver_2_Role__c = 'Regional Controller', 
                 Approver_3_Role__c = 'Tax Depatment',   
@@ -343,6 +343,7 @@ public class AptsAgreementBeforeTriggerTest {
             insert lstCustomSettingApprover;
             System.assert(lstCustomSettingApprover.Size() > 0);
             
+           List<Account> accounts = new List<Account> ();
             //Create Account
             Account testA = new Account( 
                 Name = 'Test' ,
@@ -359,7 +360,9 @@ public class AptsAgreementBeforeTriggerTest {
                 D_B_ZIP_Postal_Code__c = 'Test ZIP',
                 Customer_Category__c = 'Longtail'
             );
-            insert testA;   
+           accounts.add(testA);
+         
+            //insert testA;   
             Account testB = new Account( 
                 Name = 'Test' ,
                 Status_of_D_B_Cleansing__c = null ,
@@ -375,7 +378,26 @@ public class AptsAgreementBeforeTriggerTest {
                 D_B_ZIP_Postal_Code__c = 'Test ZIP',
                 Customer_Category__c = 'Global'
             );
-            insert testB;   
+            //insert testB;   
+         accounts.add(testB);
+         
+         Account globalAcc = new Account( 
+             Name = 'Test' ,
+             Status_of_D_B_Cleansing__c = null ,
+             D_B_Number__c = 'Test DUNS' ,
+             D_B_SIC_Code__c = 'Test SIC' ,
+             D_B_SIC_Code_Description__c = 'Test SIC Desc' ,
+             D_B_NAICS_Code__c = 'Test NAICS' ,
+             D_B_NAICS_Code_Description__c = 'Test NAICS Desc' ,
+             D_B_Country__c = 'Test Country' ,
+             D_B_State_Province__c = 'Test Province' ,
+             D_B_City__c = 'Test City' ,
+             D_B_Street__c = 'Test Street' ,
+             D_B_ZIP_Postal_Code__c = 'Test ZIP',
+             Customer_Category__c = 'Global'
+         );
+            accounts.add(globalAcc);
+           insert accounts;
          
             List<Apttus__APTS_Agreement__c> lstAgreement = new List<Apttus__APTS_Agreement__c>();
         
@@ -461,7 +483,7 @@ public class AptsAgreementBeforeTriggerTest {
             
             //Create Sales Agreement
             Apttus__APTS_Agreement__c salesAgmt = new Apttus__APTS_Agreement__c(
-                RecordTypeId = Design_in_Development.Id,
+                RecordTypeId = Design_in_Development_Agreement.Id,
                 Apttus__Account__c = testA.Id,
                 nxp_account_Legal_Entity__c = 'Test',
                 NXP_Legal_Entity__c = 'Test',
@@ -987,7 +1009,7 @@ public class AptsAgreementBeforeTriggerTest {
             LstAgreement.add(Global_Local_General_Purchase_Agmt);       
 
             Apttus__APTS_Agreement__c FrameworkDistributorAgmt = new Apttus__APTS_Agreement__c(
-                RecordTypeId = Framework_Distributor_Agreement.Id,
+                RecordTypeId = Master_Sales_Agreement.Id,
                 Apttus__Account__c = testA.Id,
                 nxp_account_Legal_Entity__c = 'Test',
                 NXP_Legal_Entity__c = 'Test',
@@ -1029,7 +1051,7 @@ public class AptsAgreementBeforeTriggerTest {
             LstAgreement.add(FrameworkDistributorAgmt); 
             
             Apttus__APTS_Agreement__c FrameworkDistributorAgmt2 = new Apttus__APTS_Agreement__c(
-                RecordTypeId = Framework_Distributor_Agreement.Id,
+                RecordTypeId = Master_Sales_Agreement.Id,
                 Apttus__Account__c = testA.Id,
                 nxp_account_Legal_Entity__c = 'Test',
                 NXP_Legal_Entity__c = 'Test',
@@ -1049,7 +1071,7 @@ public class AptsAgreementBeforeTriggerTest {
             LstAgreement.add(FrameworkDistributorAgmt2);        
             
             Apttus__APTS_Agreement__c FrameworkDistributorAgmt3 = new Apttus__APTS_Agreement__c(
-                RecordTypeId = Framework_Distributor_Agreement.Id,
+                RecordTypeId = Master_Sales_Agreement.Id,
                 Apttus__Account__c = testA.Id,
                 nxp_account_Legal_Entity__c = 'Test',
                 NXP_Legal_Entity__c = 'Test',
@@ -1069,7 +1091,7 @@ public class AptsAgreementBeforeTriggerTest {
             LstAgreement.add(FrameworkDistributorAgmt3);    
             
             Apttus__APTS_Agreement__c FrameworkDistributorAgmt4 = new Apttus__APTS_Agreement__c(
-                RecordTypeId = Framework_Distributor_Agreement.Id,
+                RecordTypeId = Master_Sales_Agreement.Id,
                 Apttus__Account__c = testA.Id,
                 nxp_account_Legal_Entity__c = 'Test',
                 NXP_Legal_Entity__c = 'Test',
@@ -1089,7 +1111,7 @@ public class AptsAgreementBeforeTriggerTest {
             LstAgreement.add(FrameworkDistributorAgmt4);    
             
             Apttus__APTS_Agreement__c FrameworkDistributorAgmt6 = new Apttus__APTS_Agreement__c(
-                RecordTypeId = Framework_Distributor_Agreement.Id,
+                RecordTypeId = Master_Sales_Agreement.Id,
                 Apttus__Account__c = testA.Id,
                 nxp_account_Legal_Entity__c = 'Test',
                 NXP_Legal_Entity__c = 'Test',
@@ -1106,28 +1128,11 @@ public class AptsAgreementBeforeTriggerTest {
                 nxp_Restricted__c = True,
                 Total_Agreement_Value_in_millions__c = 0
             );
-            LstAgreement.add(FrameworkDistributorAgmt6);    
+            LstAgreement.add(FrameworkDistributorAgmt6);     
             
-            Account globalAcc = new Account( 
-                Name = 'Test' ,
-                Status_of_D_B_Cleansing__c = null ,
-                D_B_Number__c = 'Test DUNS' ,
-                D_B_SIC_Code__c = 'Test SIC' ,
-                D_B_SIC_Code_Description__c = 'Test SIC Desc' ,
-                D_B_NAICS_Code__c = 'Test NAICS' ,
-                D_B_NAICS_Code_Description__c = 'Test NAICS Desc' ,
-                D_B_Country__c = 'Test Country' ,
-                D_B_State_Province__c = 'Test Province' ,
-                D_B_City__c = 'Test City' ,
-                D_B_Street__c = 'Test Street' ,
-                D_B_ZIP_Postal_Code__c = 'Test ZIP',
-                Customer_Category__c = 'Global'
-            );
-            insert globalAcc;     
-            
-            //sales agreement: Framework_Distributor_Agreement with global account
-            Apttus__APTS_Agreement__c Framework_Distributor_Agreement2 = new Apttus__APTS_Agreement__c(
-                RecordTypeId = Framework_Distributor_Agreement.Id,
+            //sales agreement: Master_Sales_Agreement with global account
+            Apttus__APTS_Agreement__c Master_Sales_Agreement2 = new Apttus__APTS_Agreement__c(
+                RecordTypeId = Master_Sales_Agreement.Id,
                 nxp_account_Legal_Entity__c = 'Test',
                 NXP_Legal_Entity__c = 'Test',
                 nxp_Contract_Id__c = '123456',
@@ -1144,7 +1149,7 @@ public class AptsAgreementBeforeTriggerTest {
                 Total_Agreement_Value_in_millions__c = 0,
                 Apttus__Account__c = globalAcc.Id
             );
-            LstAgreement.add(Framework_Distributor_Agreement2);    
+            LstAgreement.add(Master_Sales_Agreement2);    
             
             //Purchase Agreement Global_Local_Price_Agreement with Red flag
             Apttus__APTS_Agreement__c Global_Local_Price_Agreement2 = new Apttus__APTS_Agreement__c(
@@ -1167,31 +1172,42 @@ public class AptsAgreementBeforeTriggerTest {
                 Management_Team__c = True
             );
             LstAgreement.add(Global_Local_Price_Agreement2);   
-
+         
             insert LstAgreement;
             System.assert(lstAgreement.size() > 0);
             
+         List<Apttus__APTS_Agreement__c> updatedGlobalPriceAgreements = new List<Apttus__APTS_Agreement__c> ();
             //Chnage Record Type
             purchaseAgmt2.RecordTypeId = NDA_Evaluation_Other.Id;
             purchaseAgmt2.Apttus__Status_Category__c = 'Request';
             purchaseAgmt2.Total_Agreement_Value_in_millions__c = 5.0;
             purchaseAgmt2.nxp_complete_checked__c = false;
-            Update purchaseAgmt2;
+         
+         updatedGlobalPriceAgreements.add(purchaseAgmt2);
+            //Update purchaseAgmt2;
             
             //Update Status
             purchaseAgmt.Apttus__Status_Category__c = 'Request';
             purchaseAgmt.Apttus__Status__c = 'Request Approval';
-            update purchaseAgmt;
-            
-            //Change Approver to Corporate Control Approver
-            purchaseAgmt.Approver_1_Role__c = lstApttusApprover[7].Role__c;
+           purchaseAgmt.Approver_1_Role__c = lstApttusApprover[7].Role__c;
             purchaseAgmt.Approver1__c = lstApttusApprover[7].User__c;
             purchaseAgmt.Management_Team__c = True;
-            update purchaseAgmt;
+         //updatedGlobalPriceAgreements.add(purchaseAgmt);
+            //update purchaseAgmt;
+            
+            //Change Approver to Corporate Control Approver
+            /*purchaseAgmt.Approver_1_Role__c = lstApttusApprover[7].Role__c;
+            purchaseAgmt.Approver1__c = lstApttusApprover[7].User__c;
+            purchaseAgmt.Management_Team__c = True;*/
+      updatedGlobalPriceAgreements.add(purchaseAgmt);         
+            //update purchaseAgmt;
 
             //Remove Head of Sourcing Approver from approval flow
             Global_Local_Price_Agreement2.Approver_3_Role__c = 'BU GM';
-            update Global_Local_Price_Agreement2;
+         updatedGlobalPriceAgreements.add(Global_Local_Price_Agreement2);  
+            //update Global_Local_Price_Agreement2;
+            //
+            update updatedGlobalPriceAgreements;
          
             //Update Purchasing Agmt for adding SBMT approver
             //purchaseAgmtSBMT1.Approver_2_Role__c = 'SBMT';
@@ -1588,11 +1604,11 @@ public class AptsAgreementBeforeTriggerTest {
         insert purchaseAgmtHeadofSourcing11;
     }
     
-    static testmethod void apttusTest(){
+    /*static testmethod void apttusTest(){
         test.startTest();
         prepareData();
         test.stopTest();   
-    }
+    }*/
     
     static testmethod void purchasingAgmtSBMTApproverTest(){
         test.startTest();
@@ -1610,5 +1626,39 @@ public class AptsAgreementBeforeTriggerTest {
         test.startTest();
         preparePurchasingAgmtHeadofourcing();
         test.stopTest();   
+    }
+    
+    @IsTest
+    static void test_catchApproverRoleForChangeRecordType_validAptsAgreement() {
+        // Given
+        RecordType atart = [SELECT Id, DeveloperName, Name FROM RecordType WHERE IsActive = TRUE AND SobjectType = 'Apttus__APTS_Agreement__c' AND DeveloperName = 'Assembly_Testing_Agreement' LIMIT 1];
+        Apttus__APTS_Agreement__c purchaseAgmtHeadofSourcing5 = new Apttus__APTS_Agreement__c(
+            RecordTypeId = atart.Id,
+            Name = 'Test Purchasing Agreement',
+            Apttus__Agreement_Category__c = 'Purchase',
+            Total_Agreement_Value_in_millions__c = 0.1,            
+            Approver_1_Role__c = 'SBMT'
+        );
+        insert purchaseAgmtHeadofSourcing5;
+        
+        // When
+        AptsAgreementBeforeTrigger.catchApproverRoleForChangeRecordType(purchaseAgmtHeadofSourcing5);
+        
+        // Then
+        Id purchaseAgmtHeadofSourcing5Id = purchaseAgmtHeadofSourcing5.Id;
+        Map<String, Apttus_Approver_Role__c> agreementRecordType = Apttus_Approver_Role__c.getAll();
+        
+        purchaseAgmtHeadofSourcing5 = 
+            [
+                SELECT Approver_1_Role__c
+                FROM Apttus__APTS_Agreement__c
+        WHERE Id = :purchaseAgmtHeadofSourcing5.Id
+            ];
+        
+        for(Apttus_Approver_Role__c rt : agreementRecordType.values()) {
+            if(rt.Agreement_Type_Name__c == atart.Name){
+            System.assertEquals(rt.Approver_1_Role__c, purchaseAgmtHeadofSourcing5.Approver_1_Role__c);
+            }
+        }
     }
 }

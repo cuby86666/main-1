@@ -9,6 +9,11 @@
 @Description:    Modified class to include Updating the contact to Disti account 
 if a contact is identified based on Lead's Email and associated to a different Account
 **************************************************************************/
+/*************************************************************************
+@Modified By:    Harish Gowda
+@Modified Date:   16 JUN 2017
+@Description:    Modified class to allow conversion of Leads for Currency ISO diferrence(SFDC-1620)
+**************************************************************************/
 public class LeadConvertROMHandler {    
     public static set<string> strLeadEmail;
     public static set<string> strLeadDistiNum;
@@ -42,7 +47,7 @@ public class LeadConvertROMHandler {
             }
         }        
         list<contact> listContact=[select id, email,AccountId from contact where email In:strLeadEmail];
-        list<Opportunity> listOpp=[Select id, Distributor_Tracking_Number__c,Lead_Id__c,AccountId,CreatedDate from Opportunity where 
+        list<Opportunity> listOpp=[Select id, Distributor_Tracking_Number__c,Lead_Id__c,AccountId,CreatedDate,CurrencyIsoCode from Opportunity where 
                                    (Distributor_Tracking_Number__c IN:strLeadDistiNum OR Lead_Id__c IN:strLeadIds)
                                    AND RecordType.Name='Model N Oppty' AND 
                                    (CreatedDate = LAST_N_DAYS:365 OR CreatedDate = TODAY)];
@@ -63,6 +68,7 @@ public class LeadConvertROMHandler {
                 mapEmailToContact.put(con.email,con);                
             }
         }
+        List<Lead> leadsWithUpdatedCurr= new List<Lead>();
         for(lead ld:listLeadToConvert){
             if(mapEmailToContact.containskey(ld.email) && ld.email!=null){ 
                If(mapDistiNumToOppty.containskey(ld.Distributor_Tracking_Number__c)){
@@ -72,14 +78,30 @@ public class LeadConvertROMHandler {
                               (ld.Distributor_Tracking_Number__c).accountId; 
                             listContactIdsToUpdate.add(mapEmailToContact.get(ld.email));
                       }
-                   }
+                      // added to allow conversion of Leads for Currency ISO diferrence(SFDC-1620)
+                      if(ld.CurrencyIsoCode !=  mapDistiNumToOppty.get(ld.Distributor_Tracking_Number__c).CurrencyIsoCode){
+                         ld.CurrencyIsoCode =  mapDistiNumToOppty.get(ld.Distributor_Tracking_Number__c).CurrencyIsoCode;
+                         leadsWithUpdatedCurr.add(ld);       
+                      }   
+               }
+                   
                    if(mapLeadIdToOppty.containsKey(ld.Id)){
                        if(mapEmailToContact.get(ld.email).accountId != mapLeadIdToOppty.get(ld.Id).accountId){
                         mapEmailToContact.get(ld.email).accountId=mapLeadIdToOppty.get(ld.Id).accountId;
                             listContactIdsToUpdate.add(mapEmailToContact.get(ld.email));
                         }
+            // added to allow conversion of Leads for Currency ISO diferrence(SFDC-1620)            
+      if(ld.CurrencyIsoCode !=  mapLeadIdToOppty.get(ld.Id).CurrencyIsoCode){
+                         ld.CurrencyIsoCode =  mapLeadIdToOppty.get(ld.Id).CurrencyIsoCode;
+                         leadsWithUpdatedCurr.add(ld);  
+          
+                      }
                    }                                  
             }
+        }
+        // added to allow conversion of Leads for Currency ISO diferrence(SFDC-1620)
+        if(!leadsWithUpdatedCurr.isEmpty()){
+            update leadsWithUpdatedCurr ;
         }
         update listContactIdsToUpdate;
         for(lead ld:listLeadToConvert){            
@@ -128,7 +150,7 @@ public class LeadConvertROMHandler {
                         lc.setAccountId(mapDistiNumToOppty.get(ld.Distributor_Tracking_Number__c).accountId);
                           lc.setContactId(mapEmailToContact.get(ld.email).Id);
                           system.debug('oppId'+mapDistiNumToOppty.get(ld.Distributor_Tracking_Number__c).Id);
-                    	lc.setOpportunityId(mapDistiNumToOppty.get(ld.Distributor_Tracking_Number__c).Id);                    
+                        lc.setOpportunityId(mapDistiNumToOppty.get(ld.Distributor_Tracking_Number__c).Id);                    
                       lc.setConvertedStatus(convertedStatus);
                       leadConverts.add(lc);
                 }                
@@ -136,11 +158,11 @@ public class LeadConvertROMHandler {
             if(mapLeadIdToOppty.containsKey(ld.Id) && (!strLeadIdsToSeperate.contains(ld.Id))){
                 if(mapLeadIdToOppty.get(ld.Id).AccountId !=null){
                     lc.setAccountId(mapLeadIdToOppty.get(ld.Id).accountId);
-                	lc.setContactId(mapEmailToContact.get(ld.email).Id);
-                	system.debug('ConId1::'+mapEmailToContact.get(ld.email).Id);
-                	lc.setOpportunityId(mapLeadIdToOppty.get(ld.Id).Id);
-                	lc.setConvertedStatus(convertedStatus);
-                	leadConverts.add(lc);
+                    lc.setContactId(mapEmailToContact.get(ld.email).Id);
+                    system.debug('ConId1::'+mapEmailToContact.get(ld.email).Id);
+                    lc.setOpportunityId(mapLeadIdToOppty.get(ld.Id).Id);
+                    lc.setConvertedStatus(convertedStatus);
+                    leadConverts.add(lc);
                 }                
             }                               
         }        

@@ -10,17 +10,33 @@ Created date: 20-Mar-2017
 Description : SIR SFDC374-calculate the contact service level for the account's having role as Distributors and 
                customer category as Tier 4-ROM. Also removed coustomer category value from code and introduced custom setting.
 **********************************************************************/
-
 /*****************************************************************************************
 @Modified By :   Ranganath C N
 @Modified Date:  22 Mar 2018
 @Description:    To Convert ISO-3 country values to full country names as part of SFDC-1387. 
 *******************************************************************************************/
+/*****************************************************************************************
+@Modified By :   Anil Somani
+@Modified Date:  21 May 2018
+@Description:    To overcome NullPointerException error as part of SFDC-1398. 
+*******************************************************************************************/
+/*************************************************************************************************************
+@Modified By :   Harish Gowda N.
+@Modified Date:  22 May 2018
+@Description:    To Update User region of a contact based on the Community web country as part of SFDC-1611. 
+**************************************************************************************************************/
 public class ContactClass
 {
       //  private static String CASE_TSCOMMUNITY = 'TS_Community';
       //  private static String CASE_TECH_SUPPORT = 'Tech_Support'; 
-           
+       private static final String DEFAULT_REGION =  'Not Found';
+       private static String SAP_REGION = 'South Asia Pacific';
+       private static String GC_REGION  = 'Greater China';
+       private static String JAPAN_REGION = 'Japan';
+       private static String KOREA_REGION = 'Korea';
+       private static String AMEC_REGION = 'Americas';
+       private static String EMEA_REGION= 'EMEA'; 
+       
   public static void convertISONameToFullName(List<Contact> contacts)
     {
         map<String,String> mapOdCodes= new map<String,String>(); 
@@ -108,31 +124,36 @@ public static void CSLIdentification(List<Contact> lstContactnew)
                        }
                      }
              }
-                     if(ContactRec.AccountId!=null && matchFound==false)
-                        {
-                          //--------Added by Shridevi as par of SIR 374----------------------------------------------------------
-                          if(mapAccount.get(ContactRec.AccountId).Customer_Category__c!=null && mapAccount.get(ContactRec.AccountId).Customer_Category__c!='--None--' && mapAccount.get(ContactRec.AccountId).Customer_Category__c!='')
-                              {
-                                 if(mapAccount.get(ContactRec.AccountId).Role__c=='Distributor' && mapAccount.get(ContactRec.AccountId).Customer_Category__c=='Tier 4 - ROM')
-                                 {
-                                  contactRec.Contact_Service_Level__c='A3_Distributor';
-                                  matchFound=true;
-                                 }
-                                 else if(mapCustCatagory!=null)
-                                 {
-                                     if( mapCustCatagory.get(mapAccount.get(ContactRec.AccountId).Customer_Category__c)!=null                                      
-                                        && mapCustCatagory.get(mapAccount.get(ContactRec.AccountId).Customer_Category__c).Contact_Service_Level__c!=null 
-                                        && mapCustCatagory.get(mapAccount.get(ContactRec.AccountId).Customer_Category__c).Contact_Service_Level__c!='')
+           //---------------Added by Shridevi as par of SIR 374 and Modified as part of SFDC-1398----------------------------------------------------------
+            if(matchFound==false && ContactRec.AccountId!=null)
+            {
+                if(mapAccount.containsKey(ContactRec.AccountId))
+                {
+                    Account objAccount = mapAccount.get(ContactRec.AccountId);
+                    if(objAccount.Customer_Category__c!=null && objAccount.Customer_Category__c!='--None--' && objAccount.Customer_Category__c!='')
+                    {
+                         if(objAccount.Role__c=='Distributor' && objAccount.Customer_Category__c=='Tier 4 - ROM')
+                         {
+                            contactRec.Contact_Service_Level__c='A3_Distributor';
+                            matchFound=true;
+                         }
+                         else if(mapCustCatagory!=null)
+                         {
+                            if( mapCustCatagory.get(objAccount.Customer_Category__c)!=null                                      
+                            && mapCustCatagory.get(objAccount.Customer_Category__c).Contact_Service_Level__c!=null 
+                            && mapCustCatagory.get(objAccount.Customer_Category__c).Contact_Service_Level__c!='')
                                  
-                                     {
-                                         System.debug(mapCustCatagory.get(mapAccount.get(ContactRec.AccountId).Customer_Category__c).Contact_Service_Level__c);
-                                         contactRec.Contact_Service_Level__c=(string)(mapCustCatagory.get(mapAccount.get(ContactRec.AccountId).Customer_Category__c).Contact_Service_Level__c);
-                                         matchFound=true;
-                                     }
-                                 }
-                               }
-                              //----------------------------------------------------------------------------------------  
-                         }  
+                            {
+                                 System.debug(mapCustCatagory.get(objAccount.Customer_Category__c).Contact_Service_Level__c);
+                                 contactRec.Contact_Service_Level__c=(string)(mapCustCatagory.get(objAccount.Customer_Category__c).Contact_Service_Level__c);
+                                 matchFound=true;
+                            }
+                         }
+                     }
+                }
+             }    
+           //----------------------------------------------------------------------------------------------------------------------    
+        
                    if(matchFound==false && lstCSL.size()!=0 && lstCSL!=null)
             
                          {
@@ -178,6 +199,67 @@ public static void CSLIdentification(List<Contact> lstContactnew)
         
      } 
     }
-  
- 
+  //added as a part of SFDC-1611, Method to update region based on the country from Hub foundation
+   public static void AssignRegionByCountryForContact(List<Contact> lstContacts, Map<Id, Contact> oldContactsMap, Boolean IsInsert, Boolean IsUpdate)
+    {
+        Set<String> countries = new Set<String>(); 
+        Map<String, String> mapCountryToRegions = new Map<String, String>();
+          
+        for(Contact objContact : lstContacts)
+        {
+            if((objContact.Community_web_country__c != null) &&( IsInsert || (IsUpdate && oldContactsMap.get(objContact .Id).Community_web_country__c != objContact.Community_web_country__c)))
+            {
+                countries.add(objContact.Community_web_country__c);
+            }
+        }
+          
+        if(countries.size() > 0)
+        {
+            //Fetch the Record Type for Country and Region Mapping
+            List<RecordType> lstRecordTypes = [Select Id, DeveloperName From RecordType Where DeveloperName = 'Country_and_Region' and SobjectType = 'Hub_Foundation__c'];
+            
+            if(lstRecordTypes.size() > 0)
+            {
+                for (Hub_Foundation__c objRegion : [select Alpha_2_Code__c,Alpha_3_Code__c,Country__c,Region__c from Hub_Foundation__c Where Alpha_3_Code__c in :countries and RecordTypeId =: lstRecordTypes[0].Id ])
+                {
+                    mapCountryToRegions.put(objRegion.Alpha_3_Code__c , objRegion.Region__c);
+                } 
+            }      
+        }
+          
+        String strRegion;
+        for(Contact objContactUpdate : lstContacts)
+        {
+            if((IsInsert) || (IsUpdate && oldContactsMap.get(objContactUpdate.Id).Community_web_country__c!= objContactUpdate.Community_web_country__c))
+            {
+                if(objContactUpdate.Community_web_country__c!= null)
+                { 
+                   if(mapCountryToRegions.get(objContactUpdate.Community_web_country__c) == 'AP - SAP'){
+                     strRegion = SAP_REGION ;
+                   }
+                   else if(mapCountryToRegions.get(objContactUpdate.Community_web_country__c) == 'AP - GC'){
+                     strRegion = GC_REGION ;
+                   }
+                   else if(mapCountryToRegions.get(objContactUpdate.Community_web_country__c) == 'AP - JAPAN'){
+                     strRegion = JAPAN_REGION ;
+                   }
+                   else if(mapCountryToRegions.get(objContactUpdate.Community_web_country__c) == 'AP - KOREA'){
+                     strRegion = KOREA_REGION ;
+                   }
+                   else if(mapCountryToRegions.get(objContactUpdate.Community_web_country__c) == 'AM - AMEC'){
+                     strRegion = AMEC_REGION ;
+                   }
+                   else if(mapCountryToRegions.get(objContactUpdate.Community_web_country__c) == 'EU - EMEA'){
+                     strRegion = EMEA_REGION ;
+                   }
+                }
+                //objContactUpdate.User_Region__c =(strRegion != null ? strRegion : DEFAULT_REGION);  
+                
+                if(strRegion != null){
+                objContactUpdate.User_Region__c = strRegion;
+                }
+                else{objContactUpdate.User_Region__c = DEFAULT_REGION;}
+                }            
+        }  
+    }
 }

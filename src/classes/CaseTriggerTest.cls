@@ -624,7 +624,7 @@ private class CaseTriggerTest
         For(Integer i =1; i<5; i++)
         {
             lstContacts.add(new Contact(AccountID=objTechServiceAccount.Id, FirstName = 'test'+i, LastName = 'test', 
-                                        Title = 'title', Phone = '8123978919', email = 'test'+i+'@test.com'));
+                                        Title = 'title', Phone = '8123978919', email = 'testemail'+i+'@test.com'));
         }
         
         if(lstContacts.size() > 0)

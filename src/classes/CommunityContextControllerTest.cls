@@ -11,6 +11,9 @@ Public class CommunityContextControllerTest{
     static Contact participantconRecord ;
     static Contact observerconRecord ;
     static User usr1;
+    
+      
+    
     /*
     * @name         : saveRecord
     * @description  : saves the Case record with updated owner
@@ -27,6 +30,7 @@ Public class CommunityContextControllerTest{
             contextController.developmentEntitlement.accountId = accRecord.id;
             contextController.developmentEntitlement.name= 'development';
             contextController.saveDevelopmentEntitlement();
+            
             
             participantconRecord = new Contact();
             participantconRecord.LastName = 'T';
@@ -63,13 +67,8 @@ Public class CommunityContextControllerTest{
             controller.caseRecord.subject='test';
             controller.saveCaseRecord();
         
-            
-         
             controller.addAttachment();            
 
-            
-            
-            
             ApexPages.currentPage().getParameters().put('econtactId', [SELECT id from Entitlement_Contact__c limit 1].id);
      
             controller.acceptEntitlement();
@@ -92,26 +91,141 @@ Public class CommunityContextControllerTest{
             CommunityContextController controller1 = new CommunityContextController( ); 
             controller1.getPageReference1();
             controller1.createCaseRecord();
-            }
-        
-        
+            }  
     } 
     
-    public static testmethod void caseDetailRecordTest(){
-        
-        
+    
+            public static testmethod void caseDetailRecordTestnotNXPCommunityaccount(){
             PageReference pg = Page.CommunityNXPCaseDetail;
             Test.setCurrentPage(pg);
+            
+            User usr = new User(Id = UserInfo.getUserID());
+            usr.UserRoleID = [SELECT id from USerRole Where Name = 'Super User' Limit 1].id;
+            update usr;
+        
+            System.runAs(usr){
+            accRecord = new Account();
+            accRecord.Name = 'others';
+            insert accRecord;
+                
+            Contact conRecord = new Contact();
+            conRecord.accountId = accRecord.id;
+            conRecord.LastName = 'T';
+            conRecord.Email = 'test@nxp.com';
+            insert conRecord;    
+            
+            Contact conRecord1 = new Contact();
+            conRecord1.accountId = accRecord.id;
+            conRecord1.LastName = 'T';
+            conRecord1.Email =userinfo.getUserEmail();
+            insert conRecord1;
+                
             Case cse = new Case();
             cse.subject ='test';
+            cse.contactid=conRecord.id;
             cse.FeedItemId = NULL;
-            insert cse;
+            insert cse;    
+                
+            CommunityNXPCaseDetailController caseDetail = new CommunityNXPCaseDetailController();
+            pg.getParameters().put('caseId',cse.id );
+            caseDetail.assignCaseRecord();
+            System.assert(caseDetail.caseVisibleToUser=true); 
+            }            
+    }
+    
+            public static testmethod void caseDetailRecordTest(){
+            PageReference pg = Page.CommunityNXPCaseDetail;
+            Test.setCurrentPage(pg);
             
+            User usr = new User(Id = UserInfo.getUserID());
+            usr.UserRoleID = [SELECT id from USerRole Where Name = 'Super User' Limit 1].id;
+            update usr;
+        
+            System.runAs(usr){
+            accRecord = new Account();
+            accRecord.Name = 'NXP Community';
+            insert accRecord;
+            
+            Contact conRecord = new Contact();
+            conRecord.accountId = accRecord.id;
+            conRecord.LastName = 'T';
+            conRecord.Email = 'test@nxp.com';
+            insert conRecord;
+                
+            Contact conRecord1 = new Contact();
+            conRecord1.accountId = accRecord.id;
+            conRecord1.LastName = 'T';
+            conRecord1.Email =userinfo.getUserEmail();
+            insert conRecord1;
+                
+            Case cse = new Case();
+            cse.subject ='test';
+            cse.contactid=conRecord1.id;
+            cse.FeedItemId = NULL;
+            insert cse;    
+                
+            CommunityNXPCaseDetailController caseDetail = new CommunityNXPCaseDetailController();
+            pg.getParameters().put('caseId',cse.id );
+            caseDetail.assignCaseRecord();
+            System.assert(caseDetail.caseVisibleToUser=true);     
+            }            
+    }
+    
+    
+    
+    public static testmethod void caseDetailRecordTestContactnotasCaseContact(){
+            PageReference pg = Page.CommunityNXPCaseDetail;
+            Test.setCurrentPage(pg);
+            
+            User usr = new User(Id = UserInfo.getUserID());
+            usr.UserRoleID = [SELECT id from USerRole Where Name = 'Super User' Limit 1].id;
+            update usr;
+        
+            System.runAs(usr){
+            accRecord = new Account();
+            accRecord.Name = 'NXP Community';
+            insert accRecord;
+              
+            Contact conRecord = new Contact();
+            conRecord.accountId = accRecord.id;
+            conRecord.LastName = 'T';
+            conRecord.Email ='test@nxp.com';
+            insert conRecord;
+                
+            Contact conRecord1 = new Contact();
+            conRecord1.accountId = accRecord.id;
+            conRecord1.LastName = 'T';
+            conRecord1.Email =userinfo.getUserEmail();
+            insert conRecord1;
+            
+            
+            Entitlement entRecord = new Entitlement();
+            entRecord.Name = 'development';
+            entRecord.accountId = accRecord.id;
+            insert entRecord;
+              
+            Entitlement_Contact__c entconRecord = new Entitlement_Contact__c();
+            entconRecord.Entitlement__c= entRecord.id;
+            entconRecord.Contact__c=conRecord1.id;
+            insert entconRecord;
+            
+            Case cse = new Case();
+            cse.subject ='test';
+            cse.contactid=conRecord.id;
+            cse.EntitlementId=entRecord.id;
+            cse.FeedItemId = NULL;
+            insert cse;  
+            
+           
             CommunityNXPCaseDetailController caseDetail = new CommunityNXPCaseDetailController();
             pg.getParameters().put('caseId',cse.id );
             caseDetail.assignCaseRecord();
             
+            System.assert(caseDetail.caseVisibleToUser=true); 
+            }            
     }
+    
+    
       /*
     * @name         : saveRecord
     * @description  : saves the Case record with updated owner
@@ -201,9 +315,6 @@ Public class CommunityContextControllerTest{
     } 
     
     static void loadData(){
-        
-        
-     
         
         User usr = new User(Id = UserInfo.getUserID());
         usr.UserRoleID = [SELECT id from USerRole Where Name = 'Super User' Limit 1].id;

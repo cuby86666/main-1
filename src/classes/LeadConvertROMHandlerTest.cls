@@ -9,6 +9,11 @@
 @Description:    Modified class to include Updating the contact to Disti account 
 if a contact is identified based on Lead's Email and associated to a different Account
 **************************************************************************/
+/*************************************************************************
+@Modified By:    Harish Gowda
+@Modified Date:   16 JUN 2017
+@Description:    Modified class to allow conversion of Leads for Currency ISO diferrence(SFDC-1620)
+**************************************************************************/
 
 @isTest
 public class LeadConvertROMHandlerTest {
@@ -97,22 +102,22 @@ public class LeadConvertROMHandlerTest {
         //Insert Lead to Convert
         List<Lead> listLeadToConvert=new list<lead>();
         listLeadToConvert.add(new Lead(FirstName='Test',LastName='Lead3', Company='Test compan3',
-                                  RecordTypeId=LeadOwnerAssignmentHandler.ROM_LEAD_RECORD_TYPE, 
+                                  RecordTypeId=LeadOwnerAssignmentHandler.ROM_LEAD_RECORD_TYPE,CurrencyIsoCode ='USD' ,
                               status='Accepted by Disti',country='Test Country', city='Test City',email=TEST_USER_EMAIL_3,
                                  Distributor_Tracking_Number__c=DISTRIBUTOR_TRACKING_NUMBER,Manual_Update_Check__c=True
                                  ));
         listLeadToConvert.add(new Lead(FirstName='Test',LastName='Lead4', Company='Test compan3',
-                                  RecordTypeId=LeadOwnerAssignmentHandler.ROM_LEAD_RECORD_TYPE, 
+                                  RecordTypeId=LeadOwnerAssignmentHandler.ROM_LEAD_RECORD_TYPE, CurrencyIsoCode ='USD' ,
                               status='Accepted by Disti',country='Test Country', city='Test City',email=TEST_USER_EMAIL_2,
                                        Distributor_Tracking_Number__c=DISTRIBUTOR_TRACKING_NUMBER
                                  
                                  )); 
         listLeadToConvert.add(new Lead(FirstName='Test',LastName='Lead3', Company='Test compan3',
-                                  RecordTypeId=LeadOwnerAssignmentHandler.ROM_LEAD_RECORD_TYPE, 
+                                  RecordTypeId=LeadOwnerAssignmentHandler.ROM_LEAD_RECORD_TYPE, CurrencyIsoCode ='USD' ,
                                 status='Accepted by Disti',email=TEST_USER_EMAIL_0,Manual_Update_Check__c=True
                                  ));
         listLeadToConvert.add(new Lead(FirstName='Test',LastName='Lead3', Company='Test compan3',
-                                  RecordTypeId=LeadOwnerAssignmentHandler.ROM_LEAD_RECORD_TYPE, 
+                                  RecordTypeId=LeadOwnerAssignmentHandler.ROM_LEAD_RECORD_TYPE, CurrencyIsoCode ='USD' ,
                                 status='Accepted by Disti',email=TEST_USER_EMAIL_1,Manual_Update_Check__c=True
                                  ));
         
@@ -123,16 +128,16 @@ public class LeadConvertROMHandlerTest {
         list<opportunity> listOpp=new list<Opportunity>();
         for(lead ld:listLeadToConvert){
             listOpp.add(new Opportunity(Name = 'Test Oppty', AccountId = a.Id, Industry_Segment__c ='Industrial',StageName = 'Initial Engagement',
-        	RecordTypeId = OpportunityTrigger.mnRecordType_Id,
-        	Distributor_Tracking_Number__c=DISTRIBUTOR_TRACKING_NUMBER,
-        	Lead_Id__c=ld.Id,
-        	Production_Date__c = PRODUCTION_DATE,
-        	CloseDate = EXPECTED_CLOSE_DATE,
+            RecordTypeId = OpportunityTrigger.mnRecordType_Id,
+            Distributor_Tracking_Number__c=DISTRIBUTOR_TRACKING_NUMBER,
+            Lead_Id__c=ld.Id,
+            Production_Date__c = PRODUCTION_DATE,
+            CloseDate = EXPECTED_CLOSE_DATE,
             createdDate=system.today()-10,
-        	Locked_Exchange_Rate__c = LOCKED_EXCHANGE_RATE, // Enabled for MN type, hidden for SFDC type. Admin can edit it no matter what type it is.
-        	Currency__c = fxRates.get(CCY_CODE_DEFAULT).Id, // Locked_Exchange_Rate__c will be set to this by workflow.
-        	CurrencyIsoCode = CCY_CODE_DEFAULT, // CurrencyIsoCode and Currency__c are correlated.
-        	One_Year_Pieces__c= ONE_YEAR_PIECES));           
+            Locked_Exchange_Rate__c = LOCKED_EXCHANGE_RATE, // Enabled for MN type, hidden for SFDC type. Admin can edit it no matter what type it is.
+            Currency__c = fxRates.get(CCY_CODE_EUR).Id, // Locked_Exchange_Rate__c will be set to this by workflow.
+            CurrencyIsoCode = CCY_CODE_EUR, // CurrencyIsoCode and Currency__c are correlated.
+            One_Year_Pieces__c= ONE_YEAR_PIECES));           
         }
         insert listOpp;
         /*Opportunity o = new Opportunity(Name = 'Test Oppty', AccountId = a.Id, Industry_Segment__c ='Industrial',StageName = 'Initial Engagement');

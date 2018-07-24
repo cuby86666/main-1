@@ -1,21 +1,21 @@
 public with sharing class LeadConvertController {
    
     @AuraEnabled
-    Public static LeadConvertWrapper.LeadInitialReturns getLeadActivities(Id LeadId) { 	
-     	LeadConvertWrapper.LeadInitialReturns ldCurrentReturns= new  LeadConvertWrapper.LeadInitialReturns();
-     	 lead ldCurrent;
+    Public static LeadConvertWrapper.LeadInitialReturns getLeadActivities(Id LeadId) {  
+        LeadConvertWrapper.LeadInitialReturns ldCurrentReturns= new  LeadConvertWrapper.LeadInitialReturns();
+         lead ldCurrent;
          list<Lead_Activity__c> ldActCurrent;
          Account ldAccountCurrent;
         list<Opportunity> listldOppty;
         ldCurrent=[Select Id,Name,Company,Email,Owner.Id,Account_Id__c,Title,Job_Description__c,Normalized_Title__c,
                    Project_Description__c,Manual_Update_Check__c from Lead where Id=:LeadId];         
-     	ldActCurrent=[Select id,Response_Date_Created__c,Action__c,Object__c,Specific_Interest__c,
+        ldActCurrent=[Select id,Response_Date_Created__c,Action__c,Object__c,Specific_Interest__c,
               Specific_Interest_Description__c,Order_Status__c from Lead_Activity__c 
                       where Related_to_Lead__c =:LeadId];
               
         if(ldCurrent.Account_Id__c!=null){
             ldAccountCurrent=[Select Id, Name from Account where id=:ldCurrent.Account_Id__c];
-        	listldOppty=[select Id,Name,AccountId from Opportunity where accountId=:ldCurrent.Account_Id__c];
+            listldOppty=[select Id,Name,AccountId from Opportunity where accountId=:ldCurrent.Account_Id__c];
         }        
         ldCurrentReturns.leadCurrent=ldCurrent;
         ldCurrentReturns.leadAccountCurrent=ldAccountCurrent;
@@ -38,7 +38,7 @@ public with sharing class LeadConvertController {
         if(listOpp.size() !=0){
             for (Opportunity opp: listOpp) {
             returnList.add(opp);
-        	}
+            }
         }        
         return returnList;
     }
@@ -57,7 +57,7 @@ public with sharing class LeadConvertController {
         if(listOpp.size() !=0){
             for (Opportunity opp: listOpp) {
             returnList.add(opp);
-        	}
+            }
         }        
         return returnList;
     }
@@ -107,7 +107,7 @@ public with sharing class LeadConvertController {
             System.debug('FIELD NOT FOUND --.> ' + controllingField + ' OR ' + dependentField);
             return objResults;     
         }
-       	
+        
         List<Schema.PicklistEntry> contrEntries = objFieldMap.get(controllingField).getDescribe().getPicklistValues();        
         List<Schema.PicklistEntry> depEntries = objFieldMap.get(dependentField).getDescribe().getPicklistValues();
          objFieldMap = null;
@@ -173,13 +173,13 @@ public with sharing class LeadConvertController {
         list<lead> listLead=new list<lead>();
         Lead ldToConvert;
         map<string,contact> mapEmailToContact=new map<string,contact>();
-   		map<string,contact> mapLeadIdToContact=new map<string,contact>();
+        map<string,contact> mapLeadIdToContact=new map<string,contact>();
         map<string,Opportunity> mapLeadIdToOppty=new map<string,opportunity>();
         opportunity newOpp=new Opportunity();
         opportunity existingOppty;
         
         
-        ldToConvert=[select id,ownerid, email,Manual_Update_Check__c,Account_Id__c,status,firstName,LastName from Lead where Id=:LeadId];        
+        ldToConvert=[select id,ownerid, email,Manual_Update_Check__c,Account_Id__c,status,firstName,LastName,CurrencyIsoCode from Lead where Id=:LeadId];        
             
             system.debug('manualcheck::'+ldToConvert.Manual_Update_Check__c);
             if(ldToConvert.Email != null){
@@ -187,31 +187,32 @@ public with sharing class LeadConvertController {
             }
         
         existingContact=[select id, email,AccountId from contact where email =:strLeadEmail];
-      	if(existingContact.size() !=null){
+        if(existingContact.size() !=null){
             for(contact con:existingContact){
                 if(!mapEmailToContact.containskey(con.email)){
-                	mapEmailToContact.put(con.email,con);                
-            	}  
+                    mapEmailToContact.put(con.email,con);                
+                }  
             }                                       
         }                                                                                     
         if(IsCreateOpp==True &&(oppttyName !=null || oppttyDesc !=null)){
-			date closeDate=date.valueOf(oppCloseDate);            
+            date closeDate=date.valueOf(oppCloseDate);            
             newOpp.Name=oppttyName;newOpp.AccountId=leadAccountId;newOpp.CloseDate=closeDate;
             newOpp.Production_Date__c=closeDate+30;newOpp.StageName='Initial Engagement';newOpp.Description=oppttyDesc;
             newOpp.Channel__c='Direct';newOpp.Industry_Segment__c=oppttySeg;newOpp.Sub_Segment__c=oppttySubseg;
             newOpp.Executive_Summary__c=oppttyDesc;
-            
+            newOpp.CurrencyIsoCode =ldToConvert.CurrencyIsoCode ;
+           
             insert newOpp;
             Opportunity newOppToConvert=[select id,AccountId from Opportunity where Id=:newOpp.Id];
             if(!mapLeadIdToOppty.containskey(ldToConvert.Id) && IsCreateOpp==True){                                
-            	mapLeadIdToOppty.put(ldToConvert.Id,newOppToConvert);                               
-        	} 
+                mapLeadIdToOppty.put(ldToConvert.Id,newOppToConvert);                               
+            } 
        }                                      
         else if(IsTagOpp == True ){
-           existingOppty=[Select Id,AccountId, name from opportunity where Id=:existingOppId];
+           existingOppty=[Select Id,AccountId, name,CurrencyIsoCode  from opportunity where Id=:existingOppId];
            if(!mapLeadIdToOppty.containskey(ldToConvert.Id) && IsTagOpp==True){                                
-           		 mapLeadIdToOppty.put(ldToConvert.Id,existingOppty);                               
-        	} 
+                 mapLeadIdToOppty.put(ldToConvert.Id,existingOppty);                               
+            } 
         }
         if(mapEmailToContact.containskey(ldToConvert.email) && 
           mapLeadIdToOppty.containskey(ldToConvert.Id)){
@@ -233,32 +234,35 @@ public with sharing class LeadConvertController {
                 mapEmailToContact.put(newConToConvert.email,newConToConvert);                
             } 
         }
-             	
+                
         try{
-            Database.LeadConvert lc = new Database.LeadConvert();			            
-        	String convertedStatus = [SELECT MasterLabel FROM LeadStatus WHERE IsConverted = TRUE LIMIT 1].MasterLabel;            
-        	lc.setLeadId(ldToConvert.Id);
-        	lc.setContactId(mapEmailToContact.get(ldToConvert.email).Id);
-        	lc.setAccountId(mapLeadIdToOppty.get(ldToConvert.Id).accountId);
-        	lc.setOpportunityId(mapLeadIdToOppty.get(ldToConvert.Id).Id);
-			FeedItem post = new FeedItem();
-			post.ParentId = mapLeadIdToOppty.get(ldToConvert.Id).Id; //eg. Opportunity id, custom object id..
-			post.Body = 'converted a lead to this opportunity.';
-			insert post;
+            Database.LeadConvert lc = new Database.LeadConvert();                       
+            String convertedStatus = [SELECT MasterLabel FROM LeadStatus WHERE IsConverted = TRUE LIMIT 1].MasterLabel;            
+            lc.setLeadId(ldToConvert.Id);
             
-        	lc.setConvertedStatus(convertedStatus);            
+            lc.setContactId(mapEmailToContact.get(ldToConvert.email).Id);
+            lc.setAccountId(mapLeadIdToOppty.get(ldToConvert.Id).accountId);
+            lc.setOpportunityId(mapLeadIdToOppty.get(ldToConvert.Id).Id);
+            FeedItem post = new FeedItem();
+            post.ParentId = mapLeadIdToOppty.get(ldToConvert.Id).Id; //eg. Opportunity id, custom object id..
+            post.Body = 'converted a lead to this opportunity.';
+            ldToConvert.currencyIsoCode = mapLeadIdToOppty.get(ldToConvert.Id).currencyIsoCode ;
+            update ldToConvert;
+            insert post;
+            
+            lc.setConvertedStatus(convertedStatus);            
             Database.LeadConvertResult lcr = Database.convertLead(lc);
             
-         	System.assert(lcr.isSuccess());
-			system.debug('error::'+lcr.getErrors()); 
+            System.assert(lcr.isSuccess());
+            system.debug('error::'+lcr.getErrors()); 
         }                             
         catch (Exception ex){
-    		throw new AuraHandledException(ex.getMessage());
+            throw new AuraHandledException(ex.getMessage());
             System.debug('error --'+ ex.getStackTraceString());
                system.debug('message::'+ex.getTypeName() + ': ' + ex.getMessage()
                     + ' -- ' + ex.getCause());
-   		}
+        }
                                        
-   		        	        
+                            
     }
 }

@@ -1,20 +1,20 @@
 /*************************************************************************
 @Created By:     Jewelslyn
 @Description:    class for Lead Trigger to update the country ,state, region based on Lead country Settings.
-**************************************************************************/
-
-/*************************************************************************
+------------------------------------------------------------------------------------
 @Modified By:     Jewelslyn
 @Modified Date:   22 Sep 2017
 @Description:    Modified class to include random Token generation and to update the Disti contact
 if disti contact is not same as Disti feedback email provided Disti feedback email exists in sfdc.
-**************************************************************************/
-
-/*************************************************************************
+----------------------------------------------------------------------------------
 @Modified By:     Jewelslyn
 @Modified Date:   4 Dec 2017
 @Description:    Modified trigger to include Sending emails to multiple distis
-**************************************************************************/
+-------------------------------------------------------------------------------
+@Modified By:    Nisha Agrawal
+@Modified Date:  Jun 20, 2017
+@Description:    Modified to include method to share lead records with Disti User (Lead Portal)
+***************************************************************************************************/
 
 public class LeadTriggerHandler {
     Private Static Final string TMMA_LEAD='TMMA Leads';
@@ -222,4 +222,258 @@ public class LeadTriggerHandler {
             
         }                                    
     }
+    
+   //Method added by Nisha Agrawal on Jun 20, 2018 to share Lead access to Disti Users
+    public static void shareLeadRecordsToLPUsers(List<Lead> newLeadList, Map<Id, Lead> oldLeadMap)
+    {
+        if(newLeadList != null && newLeadList.size() > 0 && oldLeadMap != null && oldLeadMap.size() > 0)
+        {
+            Lead oldLead;            
+            Map<Id, Id> mapLeadToAssignedContacts = new Map<Id, Id>(); //Map of lead to assigned contacts
+            Map<Id, Id> mapLeadToOldContacts = new Map<Id, Id>(); //Map of lead to previously assigned contacts
+            Map<Id, String> mapLeadToRegions = new Map<Id, String>();            
+            
+            for(Lead objLead : newLeadList)
+            {
+                oldLead = oldLeadMap.get(objLead.Id); 
+                //check if Distributor Contact field changed
+                if(objLead.Distributor_Contact__c != null && objLead.Distributor_Contact__c != oldLead.Distributor_Contact__c)
+                {
+                    //Add the region to the set
+                    mapLeadToRegions.put(objLead.Id, objLead.Region__c);
+                                        
+                    mapLeadToAssignedContacts.put(objLead.Id, objLead.Distributor_Contact__c);                    
+                     
+                    if(oldLead.Distributor_Contact__c != null)
+                    {
+                        mapLeadToOldContacts.put(objLead.Id, oldLead.Distributor_Contact__c);
+                    }
+                }
+            }
+            
+            //To share with other contacts in that region for that disti               
+            Map<Id, Id> mapContactToAccountId = new Map<Id, Id>();                
+            for(Contact objContact : [Select Id, AccountId From Contact Where Id in :mapLeadToAssignedContacts.values() or Id in : mapLeadToOldContacts.values()])
+            {
+                mapContactToAccountId.put(objContact.Id, objContact.AccountId);
+            }
+            
+            //Get the list of all contacts in lead region for assigned distributor account
+            List<Contact> lstOtherContactsForAssignedDisti = [Select Id, AccountId, User_Region__c From Contact 
+                                                              Where AccountId in :mapContactToAccountId.values() ];
+            
+            Map<Id, List<Contact>> mapAccountToContacts = new Map<Id, List<Contact>>();
+                
+            for(Contact objContact : lstOtherContactsForAssignedDisti)
+            {
+                if(mapAccountToContacts.containsKey(objContact.AccountId))
+                {
+                    mapAccountToContacts.get(objContact.AccountId).add(objContact);
+                }
+                else
+                {
+                    mapAccountToContacts.put(objContact.AccountId, new List<Contact>{objContact});
+                }
+            }            
+            
+            String leadRegion;           
+            Map<Id , Set<Id>> mapLeadToOtherContacts = new Map<Id, Set<Id>>();  //map of Lead to set of ContactIds for other contacts 
+            Map<Id, Set<Id>> mapLeadToContactsToRevokeAccess = new Map<Id, Set<Id>>(); //map of lead to set of contactIds to revoke access 
+            Set<Id> contactIdsToFetchUsers = new Set<Id>();
+            
+            //Loop to create linking between leads to other contacts from assigned disti for same region
+            for(Id leadId : mapLeadToAssignedContacts.keySet())
+            {  
+                leadRegion = (mapLeadToRegions.containsKey(leadId) ? mapLeadToRegions.get(leadId) : '');
+                Id accountAssignedToLead = mapContactToAccountId.get(mapLeadToAssignedContacts.get(leadId));
+                Id oldContactId;
+                Id oldAccountId;
+                
+                //revoke the access for previously assigned contact, if its reassigned to different disti                                                
+                if(mapLeadToOldContacts.containsKey(leadId)) //check if reassignment scenario
+                {
+                    oldContactId = mapLeadToOldContacts.get(leadId);
+                    oldAccountId = mapContactToAccountId.get(oldContactId);
+                    
+                    if(oldAccountId == accountAssignedToLead)  //assigned to different contact in same disti
+                    {                        
+                       //TODO : for feed comment 
+                    }
+                    else
+                    {
+                        //different disti so revoke the access for previous assignee
+                        Set<Id> otherContactsToRevoke = new Set<Id>();
+                        //check for all other contacts from same disti
+                        for(Contact objContact : mapAccountToContacts.get(oldAccountId))
+                        {
+                            otherContactsToRevoke.add(objContact.Id);
+                        }
+                        
+                        mapLeadToContactsToRevokeAccess.put(leadId, new Set<Id>{oldContactId});
+                    	mapLeadToContactsToRevokeAccess.get(leadId).addAll(otherContactsToRevoke);
+                        
+                        contactIdsToFetchUsers.add(oldContactId);
+                        contactIdsToFetchUsers.addAll(otherContactsToRevoke);
+                    }
+                }
+                
+                //for finding new contacts from new assignee
+                if(mapAccountToContacts.containsKey(accountAssignedToLead))
+                {
+                    Set<Id> otherContactsToAssign = new Set<Id>();
+                    
+                    for(Contact objContact : mapAccountToContacts.get(accountAssignedToLead))
+                    {
+                        if(objContact.AccountId == accountAssignedToLead && (leadRegion != null && objContact.User_Region__c != null && objContact.User_Region__c.toLowerCase() == leadRegion.toLowerCase()))
+                        {
+                            otherContactsToAssign.add(objContact.Id);
+                        }
+                    }
+                    
+					
+                    contactIdsToFetchUsers.addAll(otherContactsToAssign);
+                    
+                    //remove previous assignee from other Contact's for this lead for reassignment scenario
+                    if(oldContactId != null && otherContactsToAssign.contains(oldContactId))
+                    {
+						otherContactsToAssign.remove(oldContactId);
+                    }
+                    
+                    mapLeadToOtherContacts.put(leadId, otherContactsToAssign);
+                } 
+            }                
+            
+            //create a combined set of contact Ids for which we have to fecth community users
+            //It already have all the contacts to revoke and other contacts for asignment
+            contactIdsToFetchUsers.addAll(mapLeadToAssignedContacts.values());
+            
+            //ensure that we have profile id value
+            if(LeadPortalLib.LP_EXTERNAL_PROFILE_Id == null)
+            {
+                LeadPortalLib.getExternalUserProfile();
+            }
+            //check if active community users associated for the contacts and create a map of contact to user
+            Map<Id, User> mapContactToUsers = new Map<Id, User>();
+                
+            for(User objUser : [Select Id, Disti_Lead_Portal_User_Role__c, ContactId From User 
+                                Where IsActive = true and IsPortalEnabled = true and 
+                                ProfileId =: LeadPortalLib.LP_EXTERNAL_PROFILE_Id and
+                                ContactId in: contactIdsToFetchUsers])
+            {
+                mapContactToUsers.put(objUser.ContactId, objUser);
+            }
+            
+            //Lets revoke the access for old assignees (if any)
+            Map<Id, Set<Id>> mapLeadToUsersToRevokeAccess = new Map<Id, Set<Id>>();
+            for(Id leadId : mapLeadToContactsToRevokeAccess.keySet())
+            {
+                for(Id contactId : mapLeadToContactsToRevokeAccess.get(leadId))
+                {
+                    if(mapContactToUsers.containsKey(contactId))
+                    {
+                        Id userId = mapContactToUsers.get(contactId).Id;
+                        if(mapLeadToUsersToRevokeAccess.containsKey(leadId))        
+                        {
+                            mapLeadToUsersToRevokeAccess.get(leadId).add(userId);
+                        }
+                        else
+                        {
+                            mapLeadToUsersToRevokeAccess.put(leadId, new Set<Id>{userId});
+                        }
+                    }
+                }
+            }
+            
+            //TODO: Error Handling part
+            LeadPortalLib.revokeLeadAccessFromUsers(mapLeadToUsersToRevokeAccess, null);
+            
+            //Lead Sharing record creation code begins here
+            List<LeadPortalLib.CustomLeadShare> lstShares = new List<LeadPortalLib.CustomLeadShare>();
+                
+            //scenario 1-  User is assigned as Disti Contact
+            for(Id leadId : mapLeadToAssignedContacts.keySet())
+            { 
+                Id assignedContactId = mapLeadToAssignedContacts.get(leadId);
+                
+                //check if partner user exists
+                if(mapContactToUsers.containsKey(assignedContactId))
+                {
+                    lstShares.add(new LeadPortalLib.CustomLeadShare(leadId, mapContactToUsers.get(assignedContactId).Id, LeadPortalLib.ACCESS_TYPE.Edit));
+                    
+                    //remove this contact for this lead from other contacts list
+                    if(mapLeadToOtherContacts.containsKey(leadId))
+                    {
+                        mapLeadToOtherContacts.get(leadId).remove(assignedContactId);
+                    }
+                }
+            }
+            //scenario 2-  Other Users from same region for that Disti          
+            for(Id leadId : mapLeadToOtherContacts.keySet())
+            {
+                for(Id contactId : mapLeadToOtherContacts.get(leadId))
+                {
+                    //check if partner user exists
+                    if(mapContactToUsers.containsKey(contactId))  
+                    {
+                        User objUser = mapContactToUsers.get(contactId);
+                        LeadPortalLib.ACCESS_TYPE leadAccess = (objUser.Disti_Lead_Portal_User_Role__c == LeadPortalLib.PORTAL_ROLE_REGIONAL 
+                                                                ? LeadPortalLib.ACCESS_TYPE.Edit :  LeadPortalLib.ACCESS_TYPE.Read);
+                    
+                        lstShares.add(new LeadPortalLib.CustomLeadShare(leadId, objUser.Id, leadAccess));
+                    }
+                }
+            }
+            
+            //TODO : Error Handling part
+            //create sharing records
+            LeadPortalLib.shareLeadAccessToUsers(lstShares);
+            
+            //Lead Sharing record creation code ends here
+        }
+    }
+    
+       /* public static void assignNewDistiFromQueue(List<Lead> distiExpiredLeads){
+        List<Id> modifiedLeadIds=new List<Id>();
+        for(Lead ld:distiExpiredLeads){
+            modifiedLeadIds.add(ld.Id);
+        }
+        List<Distributor_Lead_Tracker__c> modifiedDLT = new List<Distributor_Lead_Tracker__c>();
+        //find assigned disti contacts and expire them
+        List<Distributor_Lead_Tracker__c> assignedDistis = [SELECT Id,Status__c from Distributor_Lead_Tracker__c where (Status__c='Assigned' OR Status__c='Queued') and Lead_Id__c in:modifiedLeadIds];
+        for(Distributor_Lead_Tracker__c dlt: assignedDistis){
+            if(dlt.Status__c == 'Assigned'){
+                dlt.Status__c= 'Expired';    
+            }else{
+                dlt.Status__c= 'Assigned';    
+            } 
+            modifiedDLT.add(dlt);
+        }
+        update modifiedDLT;
+        
+        
+    }*/
+    
+       /*public static void rejectedleadswithreason(List<Lead> rejectedLeads){
+         Map<Id,String > mapOfleadrejreason = new Map<Id,String>();
+         Map<Id,String > mapOfleadstatus = new Map<Id,String>();
+        List<Id> modifiedLeadIds=new List<Id>();
+        for(Lead ld:rejectedLeads){
+            mapOfleadrejreason.put(ld.Id,ld.Rejection_Reason__c );
+            mapOfleadstatus.put(ld.Id,ld.Status);
+            modifiedLeadIds.add(ld.Id);
+        }
+        List<Distributor_Lead_Tracker__c> modifiedDLT = new List<Distributor_Lead_Tracker__c>();
+        List<Distributor_Lead_Tracker__c> assignedDistis = [SELECT Id,Status__c,Rejection_Reason__c,Lead_Id__c from Distributor_Lead_Tracker__c where (Status__c='Assigned' OR Status__c='Queued')and Lead_Id__c in:modifiedLeadIds];
+        for(Distributor_Lead_Tracker__c dlt: assignedDistis){
+            String mapleadrejreason = mapOfleadrejreason.get(dlt.Lead_Id__c);
+            String mapleadstatus = mapOfleadstatus.get(dlt.Lead_Id__c);
+            dlt.Rejection_Reason__c = mapleadrejreason ;
+            dlt.Status__c = 'Rejected' ;
+            modifiedDLT.add(dlt);
+        }
+           
+        update modifiedDLT;
+       
+        
+    }*/
 }

@@ -9,6 +9,11 @@ Description :      Community notify case owner if customer replies by email(Amru
 @Modified  Date :   9 Aug 2016
 Description :      Restrict the received reply Email to Assigned To/ Case Owner when the reply is recived for the case closed for more than 30 days.
 ****************************************************************************************************/
+/*********************************************************************************************
+@Modified By :     Anil Somani
+@Modified Date :   22 Mar 2018
+Description :      Updating the cases which depends on Latest Outbound Email as part of SFDC-1327
+****************************************************************************************************/
 
 public class CommunityEmailNotificationController{
 
@@ -141,5 +146,25 @@ public static void sendNotificationToOwner(List<String> lstCaseIds, List<String>
                 }
             }
     }   
+    
+    /***********************Updating the case which depends on Latest Outbound Email as part of SFDC-1327********************/
+    public static void updateCaseLatestOutboundEmail(List<String> lstrelatedCaseIds)
+    {
+        //query for cases with id in relatedCaseIds List
+        lstCase= [Select id,createddate,Last_Contact_to_Customer__c from case where id IN: lstrelatedCaseIds  and recordType.developername='TS_Community'];
+        DateTime currentTime = System.now();          
+        //set the new field value to now();
+        if (lstCase!=null && lstCase.size()>0) 
+        {
+              for(Case objcase: lstCase)
+              {
+                  Long inSeconds = (currentTime.getTime()-objcase.createddate.getTime())/(1000);
+                  if(inSeconds>30){
+                    objcase.Last_Contact_to_Customer__c = DateTime.now();                      
+                  }
+              }
+              update lstCase;  
+        }                
 
+    }
 }

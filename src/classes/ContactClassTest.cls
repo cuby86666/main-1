@@ -14,17 +14,30 @@
  @Description : SIR 828-Increased the code coverage of ContactClass
 
 **********************************************************************/
+/*************************************************************************************************************
+@Modified By :   Harish Gowda N.
+@Modified Date:  23 May 2018
+@Description:    To Update User region of a contact based on the Community web country as part of SFDC-1611. 
+**************************************************************************************************************/
 @isTest
 public class ContactClassTest{
     private static final String ACCOUNT_CHILDACCOUNT = 'Child_Account';
     private static final String ACCOUNT_ParentACCOUNT = 'Parent_Account';
-    
+   // private static final String Hub_countryAndRegion = 'Country_and_Region';
+     private static Hub_Foundation__c testHubFoundation;
+     private static Hub_Foundation__c testHubFoundation2;
+     private static Hub_Foundation__c testHubFoundation3;
+     private static Hub_Foundation__c testHubFoundation4;
+     private static Hub_Foundation__c testHubFoundation5;
+     private static Hub_Foundation__c testHubFoundation6; 
     public static RecordType childAccount;
     public static RecordType parentAccount;
+     //public static RecordType countryAndRegion;
     public static User objUser{get;set;}
     public static List<Account> lstChildAccount=new list<Account>();
     public static Contact objContact1{get;set;}
     public static Account objChildAccount{get;set;}
+   // public static String recordTypeId ;
 
     private static void CreateContactServiceLevelCriteria()
     {
@@ -44,7 +57,7 @@ public class ContactClassTest{
         for(RecordType rt : [Select Id, DeveloperName
                               From RecordType
                               Where IsActive=true and
-                               (SobjectType = 'Account' and (DeveloperName =: ACCOUNT_CHILDACCOUNT or DeveloperName =: ACCOUNT_ParentACCOUNT) 
+                               ((SobjectType = 'Account' or SobjectType = 'Hub_Foundation__c') and (DeveloperName =: ACCOUNT_CHILDACCOUNT or DeveloperName =: ACCOUNT_ParentACCOUNT) 
                               )
                               Limit 2])
         {
@@ -55,9 +68,79 @@ public class ContactClassTest{
             else if(rt.DeveloperName == ACCOUNT_ParentACCOUNT)
             {
                 parentAccount = rt; 
-            }            
+            } 
+          /*  else if(rt.DeveloperName == Hub_countryAndRegion)
+            {
+                countryAndRegion = rt; 
+            } */
         }
-    } 
+    }
+     //Added By Harish Gowda as part of SFDC-1161 -to Create a hub foundation
+     
+    private static void makeTestHubFoundations()
+    {
+        RecordType recId = [Select Id, DeveloperName From RecordType Where DeveloperName = 'Country_and_Region' and SobjectType = 'Hub_Foundation__c'];
+         Id recTypeId = recId.id; 
+ testHubFoundation = new Hub_Foundation__c 
+        (
+            Country__c = 'India' ,
+            Region__c = 'AP - GC' ,
+            Alpha_2_Code__c = 'TT' ,
+            Alpha_3_Code__c = 'AAA' ,
+            RecordTypeid = recTypeId
+        );
+        insert testHubFoundation ;
+        
+        testHubFoundation2 = new Hub_Foundation__c 
+        (
+            Country__c = 'Test Country 2' ,
+            Region__c = 'AP - JAPAN' ,
+            Alpha_2_Code__c = 'TA' ,
+            Alpha_3_Code__c = 'BBB' ,
+            RecordTypeid = recTypeId
+            );
+        insert testHubFoundation2 ;
+        
+        testHubFoundation3 = new Hub_Foundation__c 
+        (
+            Country__c = 'India' ,
+            Region__c = 'AP - SAP' ,
+            Alpha_2_Code__c = 'TB' ,
+            Alpha_3_Code__c = 'CCC' ,
+            RecordTypeid = recTypeId
+        );
+        insert testHubFoundation3 ;
+        
+        testHubFoundation4 = new Hub_Foundation__c 
+        (
+            Country__c = 'India' ,
+            Region__c = 'AP - KOREA' ,
+            Alpha_2_Code__c = 'TC' ,
+            Alpha_3_Code__c = 'DDD' ,
+            RecordTypeid = recTypeId
+        );
+        insert testHubFoundation4 ;
+        
+        testHubFoundation5 = new Hub_Foundation__c 
+        (
+            Country__c = 'India' ,
+            Region__c = 'AM - AMEC' ,
+            Alpha_2_Code__c = 'TD' ,
+            Alpha_3_Code__c = 'EEE' ,
+            RecordTypeid = recTypeId
+        );
+        insert testHubFoundation5 ;
+        
+        testHubFoundation6 = new Hub_Foundation__c 
+        (
+            Country__c = 'India' ,
+            Region__c = 'EU - EMEA' ,
+            Alpha_2_Code__c = 'TE' ,
+            Alpha_3_Code__c = 'FFF' ,
+            RecordTypeid = recTypeId
+        );
+        insert testHubFoundation6 ;
+    }
     //Added By Shridevi as part of SIR 1329-to create parent account
     private static Account createParentAccount()
     {
@@ -81,8 +164,9 @@ public class ContactClassTest{
             
         insert objUser;
     }
+ 
     
-    //Added By Shridevi as part of SIR 1329-to create child account
+//Added By Shridevi as part of SIR 1329-to create child account
      private static Account createChildAccount(ID parentAccountId,string customerCategory)
     {
        
@@ -98,11 +182,35 @@ public class ContactClassTest{
     {   
        
        objContact1=new Contact(FirstName='test1',LastName='strLastName', Title = 'strTitle',
-                                          Phone = '8123978919', email = 'test1@CN.BOSCH.COM', AccountID = AccountId,CanAllowPortalSelfReg=false,contact_service_level__c='',Mailingcountry='DEU'); 
+                                          Phone = '8123978919', email = 'test1@CN.BOSCH.COM', AccountID = AccountId,CanAllowPortalSelfReg=false,contact_service_level__c='',Mailingcountry='DEU',Community_web_country__c='AAA',User_region__c='SAP'); 
         
     
          return objContact1 ;
      }
+
+//Added By Harish Gowda as part of SFDC-1161 -to Create list of contacts with the data from hub foundation
+          
+     private static void createTestContactList(id AccountId)    
+    {   
+       
+       List<Contact> lstContact = new List<Contact>();
+       
+       lstContact.add(new Contact(FirstName='test1',LastName='strLastName', Title = 'strTitle',
+                                          Phone = '8123978919', email = 'test11@CN.BOSCH.COM', AccountID = AccountId,CanAllowPortalSelfReg=false,contact_service_level__c='',Mailingcountry='AAA',Community_web_country__c='AAA'));
+       lstContact.add(new Contact(FirstName='test1',LastName='strLastName', Title = 'strTitle',
+                                          Phone = '8123978919', email = 'test12@CN.BOSCH.COM', AccountID = AccountId,CanAllowPortalSelfReg=false,contact_service_level__c='',Mailingcountry='BBB',Community_web_country__c='BBB'));                                  
+      lstContact.add(new Contact(FirstName='test1',LastName='strLastName', Title = 'strTitle',
+                                          Phone = '8123978919', email = 'test13@CN.BOSCH.COM', AccountID = AccountId,CanAllowPortalSelfReg=false,contact_service_level__c='',Mailingcountry='CCC',Community_web_country__c='CCC'));
+      lstContact.add(new Contact(FirstName='test1',LastName='strLastName', Title = 'strTitle',
+                                          Phone = '8123978919', email = 'test14@CN.BOSCH.COM', AccountID = AccountId,CanAllowPortalSelfReg=false,contact_service_level__c='',Mailingcountry='DDD',Community_web_country__c='DDD')); 
+      lstContact.add(new Contact(FirstName='test1',LastName='strLastName', Title = 'strTitle',
+                                          Phone = '8123978919', email = 'test15@CN.BOSCH.COM', AccountID = AccountId,CanAllowPortalSelfReg=false,contact_service_level__c='',Mailingcountry='EEE',Community_web_country__c='EEE'));                                                                       
+      lstContact.add(new Contact(FirstName='test1',LastName='strLastName', Title = 'strTitle',
+                                          Phone = '8123978919', email = 'test16@CN.BOSCH.COM', AccountID = AccountId,CanAllowPortalSelfReg=false,contact_service_level__c='',Mailingcountry='FFF',Community_web_country__c='FFF')); 
+        
+        insert lstContact;                               
+     }
+     
      //Added by Shridevi as part of SIR 324.
    public static void createCustomSetting()
     {
@@ -129,6 +237,7 @@ public class ContactClassTest{
         createTestUser();
         createCustomSetting();
         CreateContactServiceLevelCriteria();
+         makeTestHubFoundations();
         Account objParentAccount = createParentAccount();
         insert objParentAccount;
         system.assert(objParentAccount.id!=null);
@@ -150,7 +259,8 @@ public class ContactClassTest{
         lstContact.add(createTestContact( lstChildAccount[0].id));
         lstContact.add(createTestContact( lstChildAccount[2].id));
         lstContact.add(createTestContact( lstChildAccount[2].id));
-       
+      //  lstContact.add(createTestContactList);       
+        
         test.starttest();
         //system.debug('acc 2:'+lstChildAccount[1]);
         lstContact[0].Email='test@zollikofer.eu';
@@ -182,6 +292,10 @@ public class ContactClassTest{
         update lstContact;
         lstContact=[select id,name,Email,AccountID,contact_service_level__c from contact where id in:lstContact];
         system.assert(lstContact[0].contact_service_level__c=='B2-OtherCompany'); 
+        createTestContactList(objParentAccount.id);
         test.stoptest();
-    }  
-}
+        
+    }
+   
+   
+    }

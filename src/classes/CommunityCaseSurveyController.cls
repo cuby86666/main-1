@@ -73,12 +73,17 @@ public class CommunityCaseSurveyController
         lstQuesValues = new List<SelectOption>();
         List<Survey_question__c> objSurveyQues= [Select id, name, question__c,type__c,value__c from survey_question__c 
                                            where name='Resolved ?' LIMIT 1];
+                                           
+        Pattern nonAlphanumeric = Pattern.compile('[0-9]');
+                                           
         if(objSurveyQues.size()!=0 || objSurveyQues!=null)
         {
             List<String> lstStrQuesValue= objSurveyQues[0].value__c.split(',');
+            
             for(string strValue: lstStrQuesValue)
             {
-                lstQuesValues.add(new SelectOption(strValue,strValue));
+                Matcher matcher = nonAlphanumeric.matcher(strValue);
+                lstQuesValues.add(new SelectOption(strValue,matcher.replaceAll('')));
             }            
         }
          
@@ -106,6 +111,32 @@ public class CommunityCaseSurveyController
     //method to submit survey answers for five question records
     public PageReference submitSurvey()
     {
+    
+       if(ApexPages.currentPage().getParameters().get('options')==null || ApexPages.currentPage().getParameters().get('options')=='')
+        {
+            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR,'You have not completed all questions'));
+            return null;
+        }
+        
+        if(ApexPages.currentPage().getParameters().get('options1')==null || ApexPages.currentPage().getParameters().get('options1')=='')
+        {
+            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR,'You have not completed all questions'));
+            return null;
+        }
+        
+        if(ApexPages.currentPage().getParameters().get('options2')==null || ApexPages.currentPage().getParameters().get('options2')=='')
+        {
+            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR,'You have not completed all questions'));
+            return null;
+        }
+        
+        if(ApexPages.currentPage().getParameters().get('options3')==null || ApexPages.currentPage().getParameters().get('options3')=='')
+        {
+            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR,'You have not completed all questions'));
+            return null;
+        }
+    
+        
         if(ApexPages.currentPage().getParameters().get('caseId')==null || ApexPages.currentPage().getParameters().get('caseId')=='')
         {
             ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR,'Error in submitting survey,case not found'));

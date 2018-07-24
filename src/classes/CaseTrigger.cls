@@ -44,6 +44,11 @@
 @Modified Date:     28 Jun 2017
 @Description:       SIR-518-Remove the usage of tech support record type to disable it
 **********************************************************************************************************/
+/***************************************************************************************************
+@Modified By :      Harish Gowda N.
+@Modified Date:     06 Jul 2018
+@Description:       SFDC-1761 mapping between "Title"(Contact field) to "Contact Title "(Case Field).
+**********************************************************************************************************/
 public class CaseTrigger 
 { 
     private static final string DOMAIN_SEPARATOR = '@';
@@ -149,7 +154,7 @@ public class CaseTrigger
             {        
                 for (Case objCase: CaseList) 
                 {
-                    if(objCase.Origin != null && objCase.EntitlementId == null && objCase.RecordTypeId==tscommunityRT)
+                    if(objCase.Origin != null && objCase.Origin != 'Forum' && objCase.EntitlementId == null && objCase.RecordTypeId==tscommunityRT)
                     {
                         objCase.AccountId = lstContacts[0].accountId;
                         objcase.ownerid = lstGroups[0].id;
@@ -661,7 +666,7 @@ public static void fetchContactInfo(List<Case> CaseList)
             }
 
 Map<id,Contact> mapContact = new map<id,Contact>([SELECT Id, Name, Email,Company__c,Community_web_country__c,Linkedin__c,Twitter__c,
-                        FirstName,State_Province__c,Web_Region__c,LastName,Phone,Job_Title__c,Facebook__c FROM Contact WHERE Id in: setContactID]);
+                        FirstName,State_Province__c,Web_Region__c,LastName,Phone,Job_Title__c,Facebook__c,Title FROM Contact WHERE Id in: setContactID]);
 for(Case objCase : lstCases)        
         { 
         
@@ -680,7 +685,8 @@ for(Case objCase : lstCases)
           objCase.Twitter__c=mapContact.get(objCase.contactID).Twitter__c;
           objCase.State_Province__c=mapContact.get(objCase.contactID).State_Province__c;
           objCase.Web_Region__c=mapContact.get(objCase.contactID).Web_Region__c;
-        
+          objCase.Contact_Title__c=mapContact.get(objCase.contactID).Title;
+               
 }
 }  
     /****************************************************************
@@ -1444,7 +1450,7 @@ for(Case objCase : lstCases)
         }        
         for(Case objCase : CaseList)
         {
-            if(caseRecordTypeSet.contains(objCase.RecordTypeId))
+            if(caseRecordTypeSet.contains(objCase.RecordTypeId) && objCase.Origin !='Forum')
             {
                 Case objCse = new Case(Id = objCase.Id);
                 lstCases.add(objCse);
@@ -1659,12 +1665,12 @@ for(Case objCase : lstCases)
            }
               System.debug('<<<<<<<<<<<<<<<<<<<<<<<<<<<<'+CaseOldMap.get(c.ID).Contact_Title__c);
           
-          if( c.JobTitle__c!=(CaseOldMap.get(c.ID)).Contact_Title__c  )
+          /*if( c.JobTitle__c!=(CaseOldMap.get(c.ID)).Contact_Title__c  )
           {
         
               c.Contact_Title__c= c.JobTitle__c;
         
-          }
+          }*/
         
           if( c.My_Question_is_Related__c !=(CaseOldMap.get(c.ID)).My_Question_is_Related__c )
           

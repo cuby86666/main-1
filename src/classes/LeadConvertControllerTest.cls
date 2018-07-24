@@ -100,10 +100,15 @@ public class LeadConvertControllerTest {
                                   RecordTypeId=LeadOwnerAssignmentHandler.ROM_LEAD_RECORD_TYPE,Account_Id__c= accountId,
                               status='Open',country='Test Country', city='Test City',email=TEST_USER_EMAIL_3,ownerId=u.Id                                 
                                  ));
-        listLeadToConvert.add(new Lead(FirstName='Test',LastName='Lead4', Company='Test compan3',
+        /*listLeadToConvert.add(new Lead(FirstName='Test',LastName='Lead4', Company='Test compan3',
                                   RecordTypeId=LeadOwnerAssignmentHandler.ROM_LEAD_RECORD_TYPE, 
                               status='Sent to Distributor',country='Test Country', city='Test City',email=TEST_USER_EMAIL_2,
                                  Distributor_Tracking_Number__c=DISTRIBUTOR_TRACKING_NUMBER,Manual_Update_Check__c=True
+                                 )); */
+        listLeadToConvert.add(new Lead(FirstName='Test',LastName='Lead4', Company='Test compan3',
+                                  RecordTypeId=LeadOwnerAssignmentHandler.ROM_LEAD_RECORD_TYPE, 
+                              		status='Sent to Distributor',country='Test Country', city='Test City',email=TEST_USER_EMAIL_2,
+                                  Manual_Update_Check__c=True
                                  )); 
         listLeadToConvert.add(new Lead(FirstName='Test',LastName='Lead3', Company='Test compan3',
                                   RecordTypeId=LeadOwnerAssignmentHandler.ROM_LEAD_RECORD_TYPE, 

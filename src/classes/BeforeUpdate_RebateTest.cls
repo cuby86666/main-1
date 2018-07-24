@@ -1,24 +1,25 @@
-/*
+/******************************************************************
 @Created By :       Nisha Agrawal
 @Created Date:      03 Jan 2012
 @Description:       Test Class for Trigger BeforeUpdate_Rebate
-*/
-/*
+--------------------------------------------------------------------
 @Created By :       Scarlett Kang
 @Created Date:      03 Dec 2014
 @Description:       Add new case for Apex Class RebateTrigger
-*/
-/*
+---------------------------------------------------------------------
 @Modified By :       Balaji Gunasekaran
 @Modified Date:      21 May 2015
 @Description:       As Part of CACC code impact analysis LineItem#24 
                     - Replaced CACC code object with Consolidated Account Code object and replaced field Consolidate_Code_Description__c with Consolidated_Account_Code_Description__c
-*/
-/*
+--------------------------------------------------------------------------------
 @Modified By :       Scarlett Kang
 @Modified Date:      19 Aug 2015
 @Description:       Test data revision for validation rule
-*/
+---------------------------------------------------------------------------------------------------------------------
+@Modified By :      Nisha Agrawal
+@Modified Date :    May 10, 2018
+@Description :      Test methods revised as per change in approval flow for Regional Channel Controller
+*********************************************************************************************************/
 
 @isTest(SeeAllData=true)
 private class BeforeUpdate_RebateTest 
@@ -51,7 +52,6 @@ private class BeforeUpdate_RebateTest
             User objRegionalSalesManager  = lstApprovers[8];
             User objGSMController = lstApprovers[9];            
 
-            /*
             system.assert(objApttusChecker.Id != null);                        
             system.assert(objLegal.Id != null);
             system.assert(objCorpCotrol.Id != null);
@@ -62,7 +62,7 @@ private class BeforeUpdate_RebateTest
             system.assert(objRegionalDistiManager.Id != null);
             system.assert(objRegionalSalesManager.Id != null);
             system.assert(objGSMController.Id != null);
-            */
+            
             integer numOfProducts = 8;
             integer i;
             
@@ -90,7 +90,8 @@ private class BeforeUpdate_RebateTest
             lstRebateApprovers.add(new Rebate_Approver_Matrix__c(Region__c = 'EMEA' , Role__c = 'Corporate Control' , Approver__c = objCorpCotrol.Id));
             lstRebateApprovers.add(new Rebate_Approver_Matrix__c(Region__c = 'EMEA' , Role__c = 'Global Sales & OPS Manager' , Approver__c = objGlobalSalesOPS.Id));
             lstRebateApprovers.add(new Rebate_Approver_Matrix__c(Region__c = 'EMEA' , Role__c = 'Regional Controller' , Approver__c = objRegionalController.Id));           
-            lstRebateApprovers.add(new Rebate_Approver_Matrix__c(Region__c = 'EMEA' , Role__c = 'Regional Channel Controller' , Approver__c = objRegionalChannelController.Id));
+            //Modified by Nisha Agrawal on May 10, 2018 for approval flow change
+            lstRebateApprovers.add(new Rebate_Approver_Matrix__c(Region__c = 'EMEA', Program_Type__c = 'OEM / EMS' , Role__c = 'Regional Channel Controller' , Approver__c = objRegionalChannelController.Id));
             lstRebateApprovers.add(new Rebate_Approver_Matrix__c(Region__c = 'EMEA' , Role__c = 'Global Channel Controller' , Approver__c = objGlobalChannelController.Id));
             lstRebateApprovers.add(new Rebate_Approver_Matrix__c(Region__c = 'EMEA' , Role__c = 'Regional Disti Manager' , Approver__c = objRegionalDistiManager.Id));
             lstRebateApprovers.add(new Rebate_Approver_Matrix__c(Region__c = 'EMEA' , Role__c = 'Regional Sales Manager' , Approver__c = objRegionalSalesManager.Id));
@@ -126,30 +127,16 @@ private class BeforeUpdate_RebateTest
             }
            
             //insert Consolidated Account code
-            Consolidated_Account_Code__c objCACC = new Consolidated_Account_Code__c();
-            objCACC.Code_Description__c='123';
+            Consolidated_Account_Code__c objCACC = new Consolidated_Account_Code__c(Code_Description__c='123');
             insert objCACC;
             system.assert(objCACC.Id != null);
             
             //insert eRebate
-            eRebate__c objRebate = new eRebate__c(
-                Rebate_Program_Name__c = 'ut_program' , 
-                Sales_Channel__c = 'OEM',  
-                End_Customer__c ='ut_endcustomer', 
-                Rebate_End_Date__c = date.today().addDays(30) , 
-                Rebate_Effective_Date__c = date.today() , 
-                Sales_Region__c = 'EMEA' , 
-                Rebate_Currency__c = rebateCurrency.Id,  
-                CurrencyIsoCode = 'USD', 
-                Red_Flag__c = 'YES', 
-                Material_Limitations_to_do_Business__c = true, 
-                Consolidated_Account_Code_Description__c = objCACC.Id, 
-                Capped_Payout_USD__c = 50000000, 
-                Apttus_Agreement__c = true, 
-                Apttus_Agreement_Number__c ='1234', 
-                Industry_Segment__c = 'Test',
-                Programe_Type__c = 'OEM / EMS'
-            );
+            eRebate__c objRebate = new eRebate__c(Rebate_Program_Name__c = 'ut_program' , Sales_Channel__c = 'OEM', End_Customer__c ='ut_endcustomer', 
+                Rebate_End_Date__c = date.today().addDays(30) , Rebate_Effective_Date__c = date.today() , Sales_Region__c = 'EMEA' , 
+                Rebate_Currency__c = rebateCurrency.Id,  CurrencyIsoCode = 'USD', Red_Flag__c = 'YES', Material_Limitations_to_do_Business__c = true, 
+                Consolidated_Account_Code_Description__c = objCACC.Id, Capped_Payout_USD__c = 50000000, Apttus_Agreement__c = true, 
+                Apttus_Agreement_Number__c ='1234', Industry_Segment__c = 'Test', Programe_Type__c = 'OEM / EMS');
             insert objRebate;
             system.assert(objRebate.Id != null);
             
@@ -167,8 +154,7 @@ private class BeforeUpdate_RebateTest
                         Where Id =: objRebate.Id limit 1];
                         
             //apttus agreement checker - not null
-            system.assert(objRebate.Apttus_Rebate_Checker__c != null);
-            
+            system.assert(objRebate.Apttus_Rebate_Checker__c != null);            
             //system.assert(objRebate.Apttus_Rebate_Checker__c == objApttusChecker.Id); - need this assertion
             
             //other approver should be null
@@ -224,7 +210,7 @@ private class BeforeUpdate_RebateTest
             User objRegionalDistiManager = lstApprovers[7];
             User objRegionalSalesManager  = lstApprovers[8];
             User objGSMController = lstApprovers[9];            
-            /*
+            
             system.assert(objApttusChecker.Id != null);                        
             system.assert(objLegal.Id != null);
             system.assert(objCorpCotrol.Id != null);
@@ -235,8 +221,7 @@ private class BeforeUpdate_RebateTest
             system.assert(objRegionalDistiManager.Id != null);
             system.assert(objRegionalSalesManager.Id != null);
             system.assert(objGSMController.Id != null);  
-            */
-            
+                       
             integer numOfProducts = 8;
             integer i;
             
@@ -264,7 +249,8 @@ private class BeforeUpdate_RebateTest
             lstRebateApprovers.add(new Rebate_Approver_Matrix__c(Region__c = 'EMEA' , Role__c = 'Corporate Control' , Approver__c = objCorpCotrol.Id));
             lstRebateApprovers.add(new Rebate_Approver_Matrix__c(Region__c = 'EMEA' , Role__c = 'Global Sales & OPS Manager' , Approver__c = objGlobalSalesOPS.Id));
             lstRebateApprovers.add(new Rebate_Approver_Matrix__c(Region__c = 'EMEA' , Role__c = 'Regional Controller' , Approver__c = objRegionalController.Id));           
-            lstRebateApprovers.add(new Rebate_Approver_Matrix__c(Region__c = 'EMEA' , Role__c = 'Regional Channel Controller' , Approver__c = objRegionalChannelController.Id));
+            //Modified by Nisha Agrawal on May 10, 2018 for approval flow change
+            lstRebateApprovers.add(new Rebate_Approver_Matrix__c(Region__c = 'EMEA', Program_Type__c = 'OEM / EMS' , Role__c = 'Regional Channel Controller' , Approver__c = objRegionalChannelController.Id));
             lstRebateApprovers.add(new Rebate_Approver_Matrix__c(Region__c = 'EMEA' , Role__c = 'Global Channel Controller' , Approver__c = objGlobalChannelController.Id));
             lstRebateApprovers.add(new Rebate_Approver_Matrix__c(Region__c = 'EMEA' , Role__c = 'Regional Disti Manager' , Approver__c = objRegionalDistiManager.Id));
             lstRebateApprovers.add(new Rebate_Approver_Matrix__c(Region__c = 'EMEA' , Role__c = 'Regional Sales Manager' , Approver__c = objRegionalSalesManager.Id));
@@ -294,34 +280,20 @@ private class BeforeUpdate_RebateTest
             else
             {
                 rebateCurrency = new FX_Rates__c(Name = 'USD' , Currency_Code__c = 'USD');
-                insert rebateCurrency;
-                
+                insert rebateCurrency;                
                 system.assert(rebateCurrency.Id != null);
             }
            
             //insert Consolidated Account code
-            Consolidated_Account_Code__c objCACC = new Consolidated_Account_Code__c();
-            objCACC.Code_Description__c='123';
+            Consolidated_Account_Code__c objCACC = new Consolidated_Account_Code__c(Code_Description__c='123');
             insert objCACC;
             system.assert(objCACC.Id != null);
             
             //insert eRebate
-            eRebate__c objRebate = new eRebate__c(
-                Rebate_Program_Name__c = 'ut_program' , 
-                Sales_Channel__c = 'OEM',  
-                End_Customer__c ='ut_endcustomer', 
-                Rebate_End_Date__c = date.today().addDays(30) , 
-                Rebate_Effective_Date__c = date.today() , 
-                Sales_Region__c = 'EMEA' , 
-                Rebate_Currency__c = rebateCurrency.Id,  
-                CurrencyIsoCode = 'USD', 
-                Red_Flag__c = 'YES', 
-                Material_Limitations_to_do_Business__c = true, 
-                Consolidated_Account_Code_Description__c = objCACC.Id, 
-                Capped_Payout_USD__c = 50000000, 
-                Industry_Segment__c = 'Test',
-                Programe_Type__c = 'OEM / EMS'
-            );
+            eRebate__c objRebate = new eRebate__c(Rebate_Program_Name__c = 'ut_program' , Sales_Channel__c = 'OEM', End_Customer__c ='ut_endcustomer', 
+                Rebate_End_Date__c = date.today().addDays(30) , Rebate_Effective_Date__c = date.today() , Sales_Region__c = 'EMEA' , 
+                Rebate_Currency__c = rebateCurrency.Id,  CurrencyIsoCode = 'USD', Red_Flag__c = 'YES', Material_Limitations_to_do_Business__c = true, 
+                Consolidated_Account_Code_Description__c = objCACC.Id, Capped_Payout_USD__c = 50000000, Industry_Segment__c = 'Test', Programe_Type__c = 'OEM / EMS');
             insert objRebate;
             system.assert(objRebate.Id != null);
                         
@@ -377,19 +349,19 @@ private class BeforeUpdate_RebateTest
   ***************************************************/
     static testMethod void BeforeUpdate_RebateTest3() 
     {
-      //prepare test data
-      //insert approver users
-      List<Profile> lstProfiles =[Select Id, Name From Profile Where Name = 'Standard User' Limit 1 ];
-      if(lstProfiles.size() > 0)
+      	//prepare test data
+      	//insert approver users
+      	List<Profile> lstProfiles =[Select Id, Name From Profile Where Name = 'Standard User' Limit 1 ];
+      	if(lstProfiles.size() > 0)
         {
-          Profile objProfile = lstProfiles[0];
+          	Profile objProfile = lstProfiles[0];
             List<User> lstApprovers = TestUtil.createTestUsers(objProfile.Id, 18);
             insert lstApprovers;
             
             for(User objUser : lstApprovers)
-      {
-        system.assert(objUser.Id != null);
-      }
+      		{	
+        		system.assert(objUser.Id != null);
+      		}
       
             User objApttusChecker = lstApprovers[0];            
             User objLegal = lstApprovers[1];
@@ -402,7 +374,6 @@ private class BeforeUpdate_RebateTest
             User objRegionalSalesManager  = lstApprovers[8];
             User objGSMController = lstApprovers[9];
             
-            /*
             system.assert(objApttusChecker.Id != null);                        
             system.assert(objLegal.Id != null);
             system.assert(objCorpCotrol.Id != null);
@@ -413,21 +384,20 @@ private class BeforeUpdate_RebateTest
             system.assert(objRegionalDistiManager.Id != null);
             system.assert(objRegionalSalesManager.Id != null);
             system.assert(objGSMController.Id != null);
-            */
-            
+                        
             integer numOfProducts = 8;
-          integer i;
+          	integer i;
           
-          //insert products
-          List<Product2> lstProducts = new List<Product2>();
-          Product2 objProduct;
-          
-          for(i =0; i < numOfProducts ;  i++)
-          {
-              objProduct = new Product2(Name = 'ut_product' + i , ProductCode = 'ut_code' + i, MAG__c = 'ut' + i, isActive = true);
-              lstProducts.add(objProduct);
-          }
-          insert lstProducts;
+              //insert products
+              List<Product2> lstProducts = new List<Product2>();
+              Product2 objProduct;
+              
+              for(i =0; i < numOfProducts ;  i++)
+              {
+                  objProduct = new Product2(Name = 'ut_product' + i , ProductCode = 'ut_code' + i, MAG__c = 'ut' + i, isActive = true);
+                  lstProducts.add(objProduct);
+              }
+              insert lstProducts;
           
           //assert products       
           for(Product2 p : lstProducts)
@@ -442,8 +412,9 @@ private class BeforeUpdate_RebateTest
         lstRebateApprovers.add(new Rebate_Approver_Matrix__c(Region__c = 'EMEA' , Role__c = 'Corporate Control' , Approver__c = objCorpCotrol.Id));
         lstRebateApprovers.add(new Rebate_Approver_Matrix__c(Region__c = 'EMEA' , Role__c = 'Global Sales & OPS Manager' , Approver__c = objGlobalSalesOPS.Id));
         lstRebateApprovers.add(new Rebate_Approver_Matrix__c(Region__c = 'EMEA' , Role__c = 'Regional Controller' , Approver__c = objRegionalController.Id));        
-        lstRebateApprovers.add(new Rebate_Approver_Matrix__c(Region__c = 'EMEA' , Role__c = 'Regional Channel Controller' , Approver__c = objRegionalChannelController.Id));
-        lstRebateApprovers.add(new Rebate_Approver_Matrix__c(Region__c = 'EMEA' , Role__c = 'Global Channel Controller' , Approver__c = objGlobalChannelController.Id));
+        //Modified by Nisha Agrawal on May 10, 2018 for approval flow change
+            lstRebateApprovers.add(new Rebate_Approver_Matrix__c(Region__c = 'EMEA', Program_Type__c = 'OEM / EMS' , Role__c = 'Regional Channel Controller' , Approver__c = objRegionalChannelController.Id));
+            lstRebateApprovers.add(new Rebate_Approver_Matrix__c(Region__c = 'EMEA' , Role__c = 'Global Channel Controller' , Approver__c = objGlobalChannelController.Id));
         lstRebateApprovers.add(new Rebate_Approver_Matrix__c(Region__c = 'EMEA' , Role__c = 'Regional Disti Manager' , Approver__c = objRegionalDistiManager.Id));
         lstRebateApprovers.add(new Rebate_Approver_Matrix__c(Region__c = 'EMEA' , Role__c = 'Regional Sales Manager' , Approver__c = objRegionalSalesManager.Id));
         lstRebateApprovers.add(new Rebate_Approver_Matrix__c(Region__c = 'EMEA' , Role__c = 'GSM Controller' , Approver__c = objGSMController.Id));
@@ -478,35 +449,21 @@ private class BeforeUpdate_RebateTest
           }
          
            //insert Consolidated Account code
-           Consolidated_Account_Code__c objCACC = new Consolidated_Account_Code__c();
-           objCACC.Code_Description__c='123';
+           Consolidated_Account_Code__c objCACC = new Consolidated_Account_Code__c(Code_Description__c='123');
            insert objCACC;
            system.assert(objCACC.Id != null);
         
         //insert eRebate
-          eRebate__c objRebate = new eRebate__c(
-              Rebate_Program_Name__c = 'ut_program' , 
-              Sales_Channel__c = 'OEM',  
-              End_Customer__c ='ut_endcustomer', 
-              Rebate_End_Date__c = date.today().addDays(30) , 
-              Rebate_Effective_Date__c = date.today() , 
-              Sales_Region__c = 'EMEA' , 
-              Rebate_Currency__c = rebateCurrency.Id,  
-              CurrencyIsoCode = 'USD', 
-              Red_Flag__c = 'YES', 
-              Material_Limitations_to_do_Business__c = true, 
-              Consolidated_Account_Code_Description__c = objCACC.Id, 
-              Capped_Payout_USD__c = 50000000, 
-              Apttus_Agreement__c = true, 
-              Apttus_Agreement_Number__c ='1234', 
-              Industry_Segment__c = 'Test',
-              Programe_Type__c = 'OEM / EMS'
-          );
+          eRebate__c objRebate = new eRebate__c(Rebate_Program_Name__c = 'ut_program' , Sales_Channel__c = 'OEM',  End_Customer__c ='ut_endcustomer', 
+              Rebate_End_Date__c = date.today().addDays(30) , Rebate_Effective_Date__c = date.today() , Sales_Region__c = 'EMEA' , 
+              Rebate_Currency__c = rebateCurrency.Id, CurrencyIsoCode = 'USD', Red_Flag__c = 'YES', Material_Limitations_to_do_Business__c = true, 
+              Consolidated_Account_Code_Description__c = objCACC.Id, Capped_Payout_USD__c = 50000000, Apttus_Agreement__c = true, 
+              Apttus_Agreement_Number__c ='1234', Industry_Segment__c = 'Test', Programe_Type__c = 'OEM / EMS');
           insert objRebate;
-           system.assert(objRebate.Id != null);
+          system.assert(objRebate.Id != null);
            
            //insert Rebate Products
-        List<eRebate_Product__c> lstRebateLines = new List<eRebate_Product__c>();
+        	List<eRebate_Product__c> lstRebateLines = new List<eRebate_Product__c>();
         
         for(i=0; i < numOfProducts ;  i++)
         {
@@ -639,7 +596,6 @@ private class BeforeUpdate_RebateTest
             User objRegionalSalesManager  = lstApprovers[8];
             User objGSMController = lstApprovers[9];
             
-            /*
             system.assert(objApttusChecker.Id != null);                        
             system.assert(objLegal.Id != null);
             system.assert(objCorpCotrol.Id != null);
@@ -650,7 +606,6 @@ private class BeforeUpdate_RebateTest
             system.assert(objRegionalDistiManager.Id != null);
             system.assert(objRegionalSalesManager.Id != null);
             system.assert(objGSMController.Id != null);
-            */
             
             integer numOfProducts = 8;
           integer i;
@@ -679,7 +634,8 @@ private class BeforeUpdate_RebateTest
         lstRebateApprovers.add(new Rebate_Approver_Matrix__c(Region__c = 'EMEA' , Role__c = 'Corporate Control' , Approver__c = objCorpCotrol.Id));
         lstRebateApprovers.add(new Rebate_Approver_Matrix__c(Region__c = 'EMEA' , Role__c = 'Global Sales & OPS Manager' , Approver__c = objGlobalSalesOPS.Id));
         lstRebateApprovers.add(new Rebate_Approver_Matrix__c(Region__c = 'EMEA' , Role__c = 'Regional Controller' , Approver__c = objRegionalController.Id));        
-        lstRebateApprovers.add(new Rebate_Approver_Matrix__c(Region__c = 'EMEA' , Role__c = 'Regional Channel Controller' , Approver__c = objRegionalChannelController.Id));
+        //Modified by Nisha Agrawal on May 10, 2018 for approval flow change
+         lstRebateApprovers.add(new Rebate_Approver_Matrix__c(Region__c = 'EMEA', Program_Type__c = 'OEM / EMS' , Role__c = 'Regional Channel Controller' , Approver__c = objRegionalChannelController.Id));
         lstRebateApprovers.add(new Rebate_Approver_Matrix__c(Region__c = 'EMEA' , Role__c = 'Global Channel Controller' , Approver__c = objGlobalChannelController.Id));
         lstRebateApprovers.add(new Rebate_Approver_Matrix__c(Region__c = 'EMEA' , Role__c = 'Regional Disti Manager' , Approver__c = objRegionalDistiManager.Id));
         lstRebateApprovers.add(new Rebate_Approver_Matrix__c(Region__c = 'EMEA' , Role__c = 'Regional Sales Manager' , Approver__c = objRegionalSalesManager.Id));
@@ -715,30 +671,16 @@ private class BeforeUpdate_RebateTest
           }
          
            //insert Consolidated Account code
-           Consolidated_Account_Code__c objCACC = new Consolidated_Account_Code__c();
-           objCACC.Code_Description__c='123';
+           Consolidated_Account_Code__c objCACC = new Consolidated_Account_Code__c(Code_Description__c='123');
            insert objCACC;
            system.assert(objCACC.Id != null);
         
         //insert eRebate
-          eRebate__c objRebate = new eRebate__c(
-              Rebate_Program_Name__c = 'ut_program' , 
-              Sales_Channel__c = 'OEM',  
-              End_Customer__c ='ut_endcustomer', 
-              Rebate_End_Date__c = date.today().addDays(30) , 
-              Rebate_Effective_Date__c = date.today() , 
-              Sales_Region__c = 'EMEA' , 
-              Rebate_Currency__c = rebateCurrency.Id,  
-              CurrencyIsoCode = 'USD', 
-              Red_Flag__c = 'YES', 
-              Material_Limitations_to_do_Business__c = true, 
-              Consolidated_Account_Code_Description__c = objCACC.Id, 
-              Capped_Payout_USD__c = 50000000, 
-              Apttus_Agreement__c = true, 
-              Apttus_Agreement_Number__c ='1234', 
-              Industry_Segment__c = 'Test',
-              Programe_Type__c = 'OEM / EMS'
-          );
+          eRebate__c objRebate = new eRebate__c(Rebate_Program_Name__c = 'ut_program' , Sales_Channel__c = 'OEM', End_Customer__c ='ut_endcustomer', 
+              Rebate_End_Date__c = date.today().addDays(30) , Rebate_Effective_Date__c = date.today() , Sales_Region__c = 'EMEA' , 
+              Rebate_Currency__c = rebateCurrency.Id, CurrencyIsoCode = 'USD', Red_Flag__c = 'YES', Material_Limitations_to_do_Business__c = true, 
+              Consolidated_Account_Code_Description__c = objCACC.Id, Capped_Payout_USD__c = 50000000, Apttus_Agreement__c = true, 
+              Apttus_Agreement_Number__c ='1234', Industry_Segment__c = 'Test',Programe_Type__c = 'OEM / EMS');
           insert objRebate;
            system.assert(objRebate.Id != null);
            

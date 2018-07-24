@@ -32,6 +32,10 @@
 @Modified Date:      19 Jan 2018
 @Description:        (SFDC 1231) - New Attributes(CN and PH) added on Tax Classification session for sales org NL61. 
                      (SFDC 1235) - US63 - NXP San Jose Changed to US63 - NXP Austin for sales org US63.
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+@Modified By :       Baji
+@Modified Date:      17 May 2018 
+@Description:        1806 Release (SFDC 1713) - Generate Tax Classifications for new MANU sales orgs.
                      
 *********************************************************************************************************/
 
@@ -62,6 +66,18 @@ public with sharing class TaxClassificationCMDRequestController
     private static final String SALES_ORG_NL61 = 'NL61 - Nijmegen';
     private static final String SALES_ORG_NL68 = 'NL68 - NXP Software';
     private static final String SALES_ORG_RO61 = 'RO61 - SOrg. Romania';
+    // Added as part of SFDC-1713
+    private static final String SALES_ORG_CA61 = 'CA61 - SOrg Canada';
+    private static final String SALES_ORG_CN6A = 'CN6A - SOrg. Chongqing';
+    private static final String SALES_ORG_CN69 = 'CN69 - SOrg. China';
+    private static final String SALES_ORG_CZ61 = 'CZ61 - SOrg.Czech Republic';
+    private static final String SALES_ORG_GB63 = 'GB63 - NXP Laboratories UK';
+    private static final String SALES_ORG_HK63 = 'HK63 - NXP Semi Hong Kong';
+    private static final String SALES_ORG_IN62 = 'IN62 - SOrg. Noida';
+    private static final String SALES_ORG_IN63 = 'IN63 - SOrg. Hyderabad';
+    private static final String SALES_ORG_JP61 = 'JP61 - SOrg. Japan';
+    private static final String SALES_ORG_SG60 = 'SG60 - MSO Singapore';
+
               
             
     public List<Tax_Classification__c> lstTaxClassifications{get; set;}
@@ -326,6 +342,51 @@ public with sharing class TaxClassificationCMDRequestController
                     lstTaxClassifications.add(new Tax_Classification__c(CMD_Request__c = objCMDRequest.Id, Country__c = 'IN - India', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
                     lstTaxClassifications.add(new Tax_Classification__c(CMD_Request__c = objCMDRequest.Id, Country__c = 'MX - Mexico', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
                     lstTaxClassifications.add(new Tax_Classification__c(CMD_Request__c = objCMDRequest.Id, Country__c = 'RO - Romania', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
+                }
+                 else if((objCMDRequest.Sales_Organisation__c != null || objCMDRequest.Sales_Organisation__c == '') && objCMDRequest.Sales_Organisation__c.trim() == SALES_ORG_CA61)
+                {     
+                    lstTaxClassifications.add(new Tax_Classification__c(CMD_Request__c = objCMDRequest.Id, Country__c = 'CA - Canada', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
+                }
+                 else if((objCMDRequest.Sales_Organisation__c != null || objCMDRequest.Sales_Organisation__c == '') && objCMDRequest.Sales_Organisation__c.trim() == SALES_ORG_CN6A)
+                {     
+                    lstTaxClassifications.add(new Tax_Classification__c(CMD_Request__c = objCMDRequest.Id, Country__c = 'CN - China', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
+                }
+                 else if((objCMDRequest.Sales_Organisation__c != null || objCMDRequest.Sales_Organisation__c == '') && objCMDRequest.Sales_Organisation__c.trim() == SALES_ORG_CN69)
+                {     
+                    lstTaxClassifications.add(new Tax_Classification__c(CMD_Request__c = objCMDRequest.Id, Country__c = 'CN - China', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
+                }
+                 else if((objCMDRequest.Sales_Organisation__c != null || objCMDRequest.Sales_Organisation__c == '') && objCMDRequest.Sales_Organisation__c.trim() == SALES_ORG_CZ61)
+                {     
+                    lstTaxClassifications.add(new Tax_Classification__c(CMD_Request__c = objCMDRequest.Id, Country__c = 'CZ - Czech Republic', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
+                }
+                 else if((objCMDRequest.Sales_Organisation__c != null || objCMDRequest.Sales_Organisation__c == '') && objCMDRequest.Sales_Organisation__c.trim() == SALES_ORG_GB63)
+                {     
+                    lstTaxClassifications.add(new Tax_Classification__c(CMD_Request__c = objCMDRequest.Id, Country__c = 'GB - United Kingdom', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
+                }
+                 else if((objCMDRequest.Sales_Organisation__c != null || objCMDRequest.Sales_Organisation__c == '') && objCMDRequest.Sales_Organisation__c.trim() == SALES_ORG_HK63)
+                {     
+                    lstTaxClassifications.add(new Tax_Classification__c(CMD_Request__c = objCMDRequest.Id, Country__c = 'HK - Hong Kong', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
+                }
+                 else if((objCMDRequest.Sales_Organisation__c != null || objCMDRequest.Sales_Organisation__c == '') && objCMDRequest.Sales_Organisation__c.trim() == SALES_ORG_IN62)
+                {     
+                    lstTaxClassifications.add(new Tax_Classification__c(CMD_Request__c = objCMDRequest.Id, Country__c = 'IN - India', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
+                }
+                else if((objCMDRequest.Sales_Organisation__c != null || objCMDRequest.Sales_Organisation__c == '') && objCMDRequest.Sales_Organisation__c.trim() == SALES_ORG_IN63)
+                {     
+                    lstTaxClassifications.add(new Tax_Classification__c(CMD_Request__c = objCMDRequest.Id, Country__c = 'IN - India', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
+                }
+                else if((objCMDRequest.Sales_Organisation__c != null || objCMDRequest.Sales_Organisation__c == '') && objCMDRequest.Sales_Organisation__c.trim() == SALES_ORG_JP61)
+                {     
+                    lstTaxClassifications.add(new Tax_Classification__c(CMD_Request__c = objCMDRequest.Id, Country__c = 'JP - Japan', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
+                }
+                else if((objCMDRequest.Sales_Organisation__c != null || objCMDRequest.Sales_Organisation__c == '') && objCMDRequest.Sales_Organisation__c.trim() == SALES_ORG_SG60)
+                {     
+                    lstTaxClassifications.add(new Tax_Classification__c(CMD_Request__c = objCMDRequest.Id, Country__c = 'AU - Australia', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
+                    lstTaxClassifications.add(new Tax_Classification__c(CMD_Request__c = objCMDRequest.Id, Country__c = 'HK - Hong Kong', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
+                    lstTaxClassifications.add(new Tax_Classification__c(CMD_Request__c = objCMDRequest.Id, Country__c = 'NL - Netherlands', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
+                    lstTaxClassifications.add(new Tax_Classification__c(CMD_Request__c = objCMDRequest.Id, Country__c = 'NL - Netherlands', Tax_Category__c = 'ZWRC', Tax_Classification__c = '1'));
+                    lstTaxClassifications.add(new Tax_Classification__c(CMD_Request__c = objCMDRequest.Id, Country__c = 'SG - Singapore', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
+                    lstTaxClassifications.add(new Tax_Classification__c(CMD_Request__c = objCMDRequest.Id, Country__c = 'US - USA', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
                 }
             }
         }

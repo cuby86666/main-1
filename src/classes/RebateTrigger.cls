@@ -21,10 +21,17 @@
 @Modified By : 		Scarlett Kang
 @Modified Date : 	11 Dec 2014
 @Description : 		Add MAG Details (BL Marketing Mgr MAG) for BL Marketing Managers
+--------------------------------------------------------------------------------------------------
+@Modified By : 		Nisha Agrawal
+@Modified Date : 	May 10, 2018
+@Description : 		Change in Approval Flow, Populate Regional Channel Controller as per program type and region
 *******************************************************************************************************************/
 
 public with sharing class RebateTrigger 
 {
+    //Added by Nisha Agrawal on May 10,2018 for approval flow change
+    public static string ROLE_REGIONAL_CHANNEL_CONTROLLER = 'Regional Channel Controller';
+    
 	public static void updateRebateCurrency(List<eRebate__c> lstRebates)
 	{
 		Set<String> currencyCodes = new Set<String>();
@@ -65,7 +72,7 @@ public with sharing class RebateTrigger
 		}
 		
 		//get all the approvers from the approval matrix for the region
-		List<Rebate_Approver_Matrix__c> lstApprovers = [Select Id , Approver__c , Role__c, Region__c , MAG__c
+		List<Rebate_Approver_Matrix__c> lstApprovers = [Select Id , Approver__c , Role__c, Region__c , MAG__c, Program_Type__c
 														From Rebate_Approver_Matrix__c
 														Where Region__c in : salesRegions and Role__c != 'BL Marketing Manager'
 														Order By Role__c];
@@ -73,6 +80,8 @@ public with sharing class RebateTrigger
 		//prepare maps from list of approvers
 		//Role -> (Region -> Approver)
 		Map<String, Map<String , Id>> mapRoleToRegionalApprovers = new Map<String , Map<String , Id>>();
+        //Added by Nisha Agrawal on May 10,2018 for approval flow change
+        Map<String, Map<String, Id>> mapProgramTypeToReginalChannelControllers = new Map<String , Map<String , Id>>();
         
         //Get Segment VP
         List<Rebate_Approver_Matrix__c> lstSegmentVP = [
@@ -85,14 +94,29 @@ public with sharing class RebateTrigger
 		
 		for(Rebate_Approver_Matrix__c objApprover : lstApprovers)
 		{
-			if(mapRoleToRegionalApprovers.containsKey(objApprover.Role__c))	
-			{
-				mapRoleToRegionalApprovers.get(objApprover.Role__c).put(objApprover.Region__c , objApprover.Approver__c);
-			}
-			else
-			{					
-				mapRoleToRegionalApprovers.put(objApprover.Role__c , new Map<String , Id> {objApprover.Region__c => objApprover.Approver__c});
-			}
+            //if block- Added by Nisha Agrawal on May 10,2018 for approval flow change
+            if(objApprover.Role__c == ROLE_REGIONAL_CHANNEL_CONTROLLER)
+            {
+                if(mapProgramTypeToReginalChannelControllers.containsKey(objApprover.Program_Type__c))	
+                {
+                    mapProgramTypeToReginalChannelControllers.get(objApprover.Program_Type__c).put(objApprover.Region__c , objApprover.Approver__c);
+                }
+                else
+                {					
+                    mapProgramTypeToReginalChannelControllers.put(objApprover.Program_Type__c , new Map<String , Id> {objApprover.Region__c => objApprover.Approver__c});
+                }
+            }
+            else
+            {
+            	if(mapRoleToRegionalApprovers.containsKey(objApprover.Role__c))	
+                {
+                    mapRoleToRegionalApprovers.get(objApprover.Role__c).put(objApprover.Region__c , objApprover.Approver__c);
+                }
+                else
+                {					
+                    mapRoleToRegionalApprovers.put(objApprover.Role__c , new Map<String , Id> {objApprover.Region__c => objApprover.Approver__c});
+                }    
+            }
 		}
         
         for(Rebate_Approver_Matrix__c objApprover : lstSegmentVP)
@@ -171,9 +195,10 @@ public with sharing class RebateTrigger
 					}
 					
 					//Level 5 - Regional Channel Controller
-					if(mapRoleToRegionalApprovers.containsKey('Regional Channel Controller') && mapRoleToRegionalApprovers.get('Regional Channel Controller').containsKey(objRebate.Sales_Region__c))
+					//code block modified by Nisha Agrawal on May 10, 2018 for approval flow change
+					if(mapProgramTypeToReginalChannelControllers.containsKey(objRebate.Programe_Type__c) && mapProgramTypeToReginalChannelControllers.get(objRebate.Programe_Type__c).containsKey(objRebate.Sales_Region__c))
 					{
-						objRebate.Regional_Channel_Controller__c = mapRoleToRegionalApprovers.get('Regional Channel Controller').get(objRebate.Sales_Region__c);
+						objRebate.Regional_Channel_Controller__c = mapProgramTypeToReginalChannelControllers.get(objRebate.Programe_Type__c).get(objRebate.Sales_Region__c);
 					}
 					
 					//Level 6 - Global Channel Controller

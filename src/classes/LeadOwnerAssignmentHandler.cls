@@ -438,7 +438,8 @@ public class LeadOwnerAssignmentHandler {
                                        leadIds.add(ld.Id);
                                    }
                             } 
-                            if(ldOwner.city__c.toUpperCase()== 'Other' && (!leadIds.contains(ld.Id))){                                   
+                            if(ldOwner.CBG__c.toUpperCase() ==  ld.Industry.toUpperCase() 
+                               && ldOwner.city__c.toUpperCase()== 'OTHER' && (!leadIds.contains(ld.Id))){                                   
                                    if(ldOwner.Lead_Owner__c !=null){
                                        ld.ownerId=ldOwner.Lead_Owner__c;
                                        leadIds.add(ld.Id);
