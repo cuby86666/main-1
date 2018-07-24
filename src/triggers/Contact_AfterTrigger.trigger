@@ -18,6 +18,11 @@ Modified By: Shridevi
 Created Date :25 Aug 2017
 Description: As per SIR 828- Removed the functionality on AfterInsert event since it is not required.
 */
+/***************************************************************************************************
+@Modified By :      Harish Gowda N.
+@Modified Date:     06 Jul 2018
+@Description:       SFDC-1761 mapping between "Title"(Contact field) to "Contact Title "(Case Field).
+**********************************************************************************************************/
 trigger Contact_AfterTrigger on Contact (after insert,after update) 
 {
     Private Final String CASE_TSCOMMUNITY = 'TS_Community';
@@ -41,6 +46,7 @@ trigger Contact_AfterTrigger on Contact (after insert,after update)
  ||(trigger.oldmap.get(objContact.id).Twitter__c!=objContact.Twitter__c)
  ||(trigger.oldmap.get(objContact.id).State_Province__c!=objContact.State_Province__c)
  ||(trigger.oldmap.get(objContact.id).Web_Region__c!=objContact.Web_Region__c)
+ ||(trigger.oldmap.get(objContact.id).Title!=objContact.Title)
  )
  {
     mapContact.put(objContact.id,objContact);
@@ -49,7 +55,7 @@ trigger Contact_AfterTrigger on Contact (after insert,after update)
  System.debug(mapContact);
 if(!(mapContact.isEmpty() || mapContact == null))
 {
-     List<Case> lstCases=[select id,contactID,Community_Web_Country__c,company__c,First_Name__c,Email__c,Web_Region__c,Last_Name__c,State_Province__c,Phone_Number__c,Linkedin__c,Twitter__c FROM case where contact.id in: trigger.new ];
+     List<Case> lstCases=[select id,contactID,Community_Web_Country__c,company__c,First_Name__c,Email__c,Web_Region__c,Last_Name__c,State_Province__c,Phone_Number__c,Linkedin__c,Twitter__c,Contact_Title__c FROM case where contact.id in: trigger.new ];
      for(Case objCase : lstCases)
      {
           if(mapContact.containskey(objCase.contactId))
@@ -68,6 +74,8 @@ if(!(mapContact.isEmpty() || mapContact == null))
               objCase.Twitter__c=mapContact.get(objCase.contactID).Twitter__c;
               objCase.State_Province__c=mapContact.get(objCase.contactID).State_Province__c;
               objCase.Web_Region__c=mapContact.get(objCase.contactID).Web_Region__c;
+              objCase.Contact_Title__c=mapContact.get(objCase.contactID).Title;
+         
           }
      }
      try

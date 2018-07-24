@@ -9,11 +9,20 @@ Description :      Community notify case owner if customer replies by email.
 Description :      Community notify case owner if customer replies by email.
                    Moving the logic in the "CommunityEmailNotificationController" class.
 ****************************************************************************************************/
+/*********************************************************************************************
+@Modified By :     Anil Somani
+@Modified Date :   22 Mar 2018
+Description :      Processing case related outbound emails as part of SFDC-1327
+***********************************************************************************************/
 
 trigger CommunityEmailMessage_AfterTrigger on EmailMessage (After insert) 
 {
     Public List<String> lstCaseIds= new List<String>();
     Public List<String> lstEmailMsgIds= new List<String>();
+    
+    //  new list for outgoing mails and their cases
+    Public List<String> lstoutgoingCaseIds= new List<String>();
+    
     for(EmailMessage objEmailMsg: trigger.new)
     {   
    
@@ -22,6 +31,12 @@ trigger CommunityEmailMessage_AfterTrigger on EmailMessage (After insert)
             lstCaseIds.add(objEmailMsg.parentid);
             lstEmailMsgIds.add(objEmailMsg.Id);
         }
+        //collect all outgoing(incoming==false) email details
+        else
+        {
+          lstoutgoingCaseIds.add(objEmailMsg.parentid);
+        }
+        
         
     }
     if(lstCaseIds.size()>0 && lstCaseIds!= null)
@@ -31,6 +46,10 @@ trigger CommunityEmailMessage_AfterTrigger on EmailMessage (After insert)
        
     }
     
-    
+    /*****************************Processing case related outbound emails***************************/
+    if(lstoutgoingCaseIds.size()>0 && lstoutgoingCaseIds!= null)
+    {   
+        CommunityEmailNotificationController.updateCaseLatestOutboundEmail(lstoutgoingCaseIds);  
+    }
     
 }

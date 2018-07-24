@@ -1,18 +1,19 @@
 /*************************************************************************
 @Created By:     Jewelslyn
 @Description:    Trigger for updates in Lead
-**************************************************************************/
-
-/*************************************************************************
+-----------------------------------------------------------------
 @Modified By:     Jewelslyn
 @Modified Date:   22 Sep 2017
 @Description:    Modified trigger to include random Token generation and to update the Disti contact
 if disti contact is not same as Disti feedback email provided Disti feedback email exists in sfdc.
-**************************************************************************/
-/*************************************************************************
+--------------------------------------------------------------------
 @Modified By:     Jewelslyn
 @Modified Date:   4 Dec 2017
 @Description:    Modified trigger to include Sending emails to multiple distis
+----------------------------------------------------------------------------
+@Modified By:     Nisha Agrawal
+@Modified Date:   Jun 20, 2018
+@Description:     Modified trigger to include Lead record sharing with Disti Users
 **************************************************************************/
 
 trigger LeadTrigger on Lead (before insert,before update,after insert,after update) {
@@ -61,14 +62,30 @@ trigger LeadTrigger on Lead (before insert,before update,after insert,after upda
     if(trigger.isAfter && trigger.isUpdate){
         list<Lead> listConvertedLeads=new list<lead>();
         List<Lead> listEmailToDistiLds = new List<Lead>();
+        
+                
+         //Added by Ranganath --(SFDC-1708) 
+        //rejected lead
+        List<Lead> distiExpiredLeads = new List<Lead>();
+        List<Lead> rejectedLeads = new List<Lead>();
+        
         for(lead newld:trigger.new){
             Lead oldLd = Trigger.oldMap.get(newld.Id);
             if(newld.IsConverted && !oldLd.IsConverted){
                 listConvertedLeads.add(newld);
             }
-            if((oldLd.status !=SENT_TO_DISTI && newLd.Status==SENT_TO_DISTI)|| oldLd.Note_To_Disti__c != newLd.Note_To_Disti__c){
+            if((oldLd.status !=SENT_TO_DISTI && newLd.Status==SENT_TO_DISTI)){
                 listEmailToDistiLds.add(newLd);
+           }
+             //Added by Ranganath --(SFDC-1708) 
+            //check if new value is rejected
+            /*if(oldLd.status !='Disti Expired' && newLd.Status=='Disti Expired'){
+                distiExpiredLeads.add(newLd);
             }
+
+            if(oldLd.status !='Rejected' && newLd.Status=='Rejected'){
+                rejectedLeads.add(newLd);
+            } */           
             
         }
         if(listConvertedLeads!=null && (!listConvertedLeads.isEmpty())){
@@ -78,7 +95,16 @@ trigger LeadTrigger on Lead (before insert,before update,after insert,after upda
                LeadTriggerHandler.emailToMultipleDistis(listEmailToDistiLds);                         
         }
         
+      /*  if(distiExpiredLeads!=null && (!distiExpiredLeads.isEmpty())){
+            LeadTriggerHandler.assignNewDistiFromQueue(distiExpiredLeads);    
+        } 
         
+        if(rejectedLeads!=null &&(!rejectedLeads.isEmpty()) ){            
+               LeadTriggerHandler.rejectedleadswithreason(rejectedLeads);                         
+        }*/
+        
+        //code added by Nisha Agrawal on Jun 20, 2018
+        LeadTriggerHandler.shareLeadRecordsToLPUsers(trigger.new, trigger.oldmap);
     }
     
 }
