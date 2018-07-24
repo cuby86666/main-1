@@ -16,10 +16,13 @@
             </p>
         </div>
         <![endif]-->
-         <apex:stylesheet value="{!URLFOR($Resource.communityContextSearchStyles)}"/>
+        <apex:stylesheet value="{!URLFOR($Resource.communityContextSearchStyles)}"/>
+             
         <apex:composition template="CommunityNXPContextTemplate" >
             <apex:define name="body" >
+       
                 <body style= "background-color:#ffffff;">
+                 <apex:outputPanel rendered="{!caseVisibleToUser}">
                     <div id="nxp-wrapper">
                         <div class="container">
                             <!-- ===== ===== =====  Start Main ===== ===== ===== -->
@@ -274,9 +277,11 @@
                             })
                         });
                     </script>
+                     </apex:outputPanel>
                     <!-- Added by Rudy END -->
                 </body>
             </apex:define>
         </apex:composition>
+        
     </html>
 </apex:page>

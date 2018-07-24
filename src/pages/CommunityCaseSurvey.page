@@ -13,118 +13,59 @@ Last Modified By : Shridevi
 Last Modified Date:01-Feb-2018
 Description:Satisfaction Survey Changes
 *******************************************************************************************************-->
+<!--***************************************************************************************************
+Last Modified By : Anil Somani
+Last Modified Date:13-Jun-2018
+Description:UI changes done as part of SFDC-1542
+*******************************************************************************************************-->
+<!--***************************************************************************************************
+Last Modified By : Ranganath C N
+Last Modified Date:10-Jul-2018
+Description:UI changes done as part of SFDC-1542
+*******************************************************************************************************-->
+
 
 
 <apex:page sidebar="false" showHeader="false" standardStylesheets="false" controller="CommunityCaseSurveyController">
   <head>
-    <meta charset="utf-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <meta name="description" content=""/>
-    <meta name="author" content=""/>
-    <title>Survey - NXP TechSupport Community</title>
-    <apex:stylesheet value="{!URLFOR($Resource.Forum_Community_3, 'NXP-community/css/jasny-bootstrap.css')}" ></apex:stylesheet>  
-    <apex:stylesheet value="{!URLFOR($Resource.Forum_Community_3, 'NXP-community/css/font-awesome.css')}" ></apex:stylesheet>      
-    <apex:stylesheet value="{!URLFOR($Resource.Forum_Community_3, 'NXP-community/css/hover.css')}" ></apex:stylesheet>
-    <apex:stylesheet value="{!URLFOR($Resource.Forum_Community_3, 'NXP-community/css/main.css')}" ></apex:stylesheet>
-    <apex:stylesheet value="{!URLFOR($Resource.communityContextSearchStyles)}"/>
+  <apex:stylesheet value="{!URLFOR($Resource.communityContextSearchStyles)}"/>  
   </head>
   
   <body class="new-case">
-    <c:CommunityHeaderComponent ></c:CommunityHeaderComponent>
-   <!-- Breadcrumbs 
-    <div class="breadcrumb-bar">
-        <div class="container">
-            <ul class="breadcrumb">
-                <li><a href="/community/CommunityOverview">{!$label.Community_breadcrumb_Home}</a></li>
-                <li><a href="/community/CommunityOverview">{!$label.Community_breadcrumb_Community}</a></li>
-                <li class="active"><a href="/community/CommunityCaseList">Contact Support</a></li>
-            </ul>
-        </div>
-    </div>
--->
-    <!-- Community Navigtion -->
-    <div class="container h-spacer navigation">
-        <nav class="navbar navbar-default">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-12 col-sm-12">
-                        <div class="navbar-header">
-                            <a class="navbar-brand" href="#">NXP Community</a>
-                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                                <span class="sr-only">Toggle navigation</span>
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar"></span>
-                            </button>
-                        </div>
-                        <div id="navbar" class="navbar-collapse collapse">
-                            <ul class="nav navbar-nav">
-                               <!-- <li ><a href="/community/CommunityOverview">{!$label.Community_tab_Overview}</a></li>
-                               <!-- <li ><a href="/community/CommunityForum">{!$label.Community_breadcrumb_Forum}</a></li>-->
-                               <!-- <li><a href="/community/CommunityFAQ">{!$label.Community_tab_FAQ}</a></li>-->
-                               <!-- <li class="active"><apex:outputLink rendered="{!If(($Profile.Name='NXP Community Profile'),false,true)}" value="/community/CommunityCaseList">{!$Label.Community_tab_Contactsupport}</apex:outputLink></li>
-                                <li><a href="/community/CommunityStories">{!$Label.Community_tab_Stories}</a></li>
-                                <li ><apex:outputLink rendered="{!InternalExternalUser}" value="/community/CommunityProjectIssueList">{!$Label.Community_tab_Project}</apex:outputLink></li> 
-                                -->
-                            </ul>
-                        </div>
-                    </div>
-
-                   <!-- login container -->
-                    <apex:outputPanel rendered="{!If(($Profile.Name='NXP Community Profile'),true,false)}">
-                    <div class="nav navbar-nav navbar-right">
-                         <div class="login-holder" style="width:331px;">
-                            <img class="hvr-grow" id="logo" src="/community/resource/1441788430000/Forum_Community_3/NXP-community/img/community-logo_small.png" />
-                           <!-- <a href="/community/communityLogin?pagename=CommunityForum">Login / </a>-->
-                            <!--below line is commented by shridevi as part of SIR-750. Since the community registration is not used.-->
-                            <!-- <a href="/community/communityRegistration">Register</a>-->
-                            <a href="http://www.nxp.com/support/communities:COMMUNITIES">| Communities </a>
-
-                        </div>
-                    </div>
-                    </apex:outputPanel>
-       
-                    <apex:outputPanel rendered="{!If(($Profile.Name='NXP Community Profile'),false,true)}">
-                    <div class="nav navbar-nav navbar-right">
-                        <span>
-                            <!--  <img src="{!URLFOR($Resource.Forum_Community_3,'NXP-community/img/avatar_round.png')}" class="avatar" alt="" />  -->
-                          <img src="{!largePhotoUrl}" height="42" width="42" />
-                     &nbsp;<a title="" data-toggle="popover" href="#" data-original-title="Profile properties">
-                    {!$User.firstName}&nbsp;{!$User.Lastname} <i class="fa fa-gear"></i>
-                    </a>
-                  </span>|
-                         <a href="http://www.nxp.com/support/communities:COMMUNITIES"> Communities </a>
-                    </div>
-                    </apex:outputPanel>
-                </div>
-            </div>
-        </nav>
-    </div>
+  <apex:composition template="CommunityNXPSurveyTemplate"> 
+  <apex:define name="body"> 
+  <!--  <c:CommunityHeaderComponent ></c:CommunityHeaderComponent> -->
+   
+    
+    
     <apex:form styleclass="form-horizontal" id="surveyForm">
        
     <div class="container">
         
-        <h4>Submit Survey</h4>
-        <apex:pageMessages ></apex:pageMessages>
+        <h1>Submit Survey</h1>
+        
+        <div style="color:red; font-size:14px">
+        <b><apex:pageMessages ></apex:pageMessages></b>
+        </div>
+        
         <div class="h-spacer">&nbsp;</div>
         <div class="row">
-            <div class="col-md-12 col-xs-12 bg-color-bar padding-left-10">
-                <h5>Case Information</h5></div>
+            <div class="col-md-12 col-xs-12 bg-color-bar padding-left-10" style="background-color:#eeeeee;padding-bottom: 15px">
+            <h3>Case Information</h3></div>
         </div>
          <br/>
         
         <div class="row">
             <div class="col-md-8 col-xs-8">                                                           
                 <div class="form-group">
-                    <apex:outputLabel value="Case Number" styleclass="control-label col-md-4" id="caseNumber"/>
-                    <div class="control-label col-md-8">
+                    <apex:outputLabel value="Case Number" styleclass="col-md-4" id="caseNumber"/>
+                    <div class="col-md-8">
                         <apex:outputText value="{!strCaseNumber}" id="caseNumberValue"/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <apex:outputLabel value="Case Subject" styleclass="control-label col-md-4" id="caseSubject"/>
-                    <div class="control-label col-md-8" >
+                    <apex:outputLabel value="Case Subject" styleclass="col-md-4" id="caseSubject"/>
+                    <div class=" col-md-8" >
                         <apex:outputText value="{!strCaseSubject}" id="caseSubjectValue"/>
                     </div>
                 </div>
@@ -132,9 +73,9 @@ Description:Satisfaction Survey Changes
         </div>
         <br/>
         <div class="row">
-            <div class="col-md-12 col-xs-12 bg-color-bar padding-left-10">
-                <h5>Satisfaction Survey</h5></div>
-        </div>
+            <div class="col-md-12 col-xs-12 bg-color-bar padding-left-10" style="background-color:#eeeeee;padding-bottom: 15px">
+                <h3>Satisfaction Survey</h3></div>
+            </div>
         <br/>
        
   
@@ -144,86 +85,240 @@ Description:Satisfaction Survey Changes
                  <!-- Modified by SHRIDEVI----------------------------------------------------------------------->
                    <div class="form-group">
                     
-                        <label class="control-label col-md-4">Resolved ?</label>
-                        <div  class="col-md-12">
+                         
+                  <!--     <label class="col-md-4"><h5>Resolved ?</h5></label> -->
+                 
+                   <!--     <div class="container">
+                            <div class="h4 col-md-4">Resolved ?</div>    
+                        </div> 
+                        <br/>  -->
+                        
+                         <div style="margin-top: 5px; padding: 10px" class="col-md-12">
+                          <h3><apex:outputtext value="How satisfied are you with the answer you received?" id="resolvedQuestion"/></h3>
+                         </div>
+                          
+                         
+                <!--         <div class="col-md-12 h5" style="margin-top: 0px;"><span id="resolvedQuestion">How satisfied are you with the answer you received?</span>
+                        </div>
+                        <br/>  -->
+
+                         <div class="container">
+                         <div class="btn-group survey media-object" data-toggle="buttons">
+                         
+                                <apex:inputHidden value="{!strResolved}" id="resolved"/> 
+                                
+                                <label class="btn btn-default  form-check-label option-button">
+                                  <br></br>  <input name="options" class="form-check-input" type="radio" value="1 Very Dissatisfied" onchange="document.getElementById('{!$Component.resolved}').value='Very Dissatisfied';" autocomplete="off"/> Very Dissatisfied<br/><i class="material-icons">sentiment_very_dissatisfied</i>
+                                </label>
+
+                                <label class="btn btn-default form-check-label option-button">
+                                  <br></br>  <input name="options" class="form-check-input" type="radio" value="2 Dissatisfied" onchange="document.getElementById('{!$Component.resolved}').value='Dissatisfied';"  autocomplete="off"/> Dissatisfied<br/><i class="material-icons">sentiment_dissatisfied</i>
+                                </label>
+
+                                <label class="btn btn-default form-check-label option-button">
+                                  <br></br>  <input name="options" class="form-check-input" type="radio" value="3 Satisfied" onchange="document.getElementById('{!$Component.resolved}').value='Satisfied';" autocomplete="off"/> Satisfied<br/><i class="material-icons">sentiment_satisfied</i>
+                                </label>
+                                <label class="btn btn-default form-check-label option-button">
+                                  <br></br>  <input name="options" class="form-check-input" type="radio"  value="4 Very Satisfied" onchange="document.getElementById('{!$Component.resolved}').value='Very Satisfied';" autocomplete="off"/> Very Satisfied<br/><i class="material-icons">sentiment_very_satisfied</i>
+                                </label>
+                                
+                           </div>      
+                          </div>  
+                          
+                          </div>  
+                        
+                         
+                         
+               <!--         <div  class="col-md-12">
                           <apex:outputPanel styleClass="requiredInput"  layout="none" id="inputPanelResolved">                 
                                 <apex:outputPanel styleClass="requiredBlock"  id="inputBlockResolved"/>
                                
                             <apex:inputHidden value="{!strResolved}" id="resolved"/> 
+                            
                             <label class="radio-inline ">
-                              <input type="radio" class="label-content-4 radio-button-y" id="radio1" onchange="document.getElementById('{!$Component.resolved}').value=' 1 Very Dissatisfied';" value="{!quesValues[0].value}" name="optradio"/><b>{!quesValues[0].label}</b>
+                              <input type="radio" class="label-content-4 radio-button-y" id="radio1" onchange="document.getElementById('{!$Component.resolved}').value='Very Dissatisfied';" value="{!quesValues[0].value}" name="optradio"/><b>{!quesValues[0].label}</b>
                             </label>
                             <label class="radio-inline label-content-4">
-                              <input type="radio"  id="radio2" class="radio-button-y" onchange="document.getElementById('{!$Component.resolved}').value=' 2 Dissatisfied';" value="{!quesValues[1].value}" name="optradio"/><b>{!quesValues[1].label}</b>
+                              <input type="radio"  id="radio2" class="radio-button-y" onchange="document.getElementById('{!$Component.resolved}').value='Dissatisfied';" value="{!quesValues[1].value}" name="optradio"/><b>{!quesValues[1].label}</b>
                             </label>
                             <label class="radio-inline label-content-4">
-                              <input type="radio" id="radio3" class="radio-button-y" onchange="document.getElementById('{!$Component.resolved}').value=' 3 Satisfied';" value="{!quesValues[2].value}" name="optradio"/><b>{!quesValues[2].label}</b>
+                              <input type="radio" id="radio3" class="radio-button-y" onchange="document.getElementById('{!$Component.resolved}').value='Satisfied';" value="{!quesValues[2].value}" name="optradio"/><b>{!quesValues[2].label}</b>
                             </label>
                             <label class="radio-inline label-content-4">
-                              <input type="radio" id="radio4" class="radio-button-y" onchange="document.getElementById('{!$Component.resolved}').value=' 4 Very Satisfied';" value="{!quesValues[3].value}" name="optradio" checked="checked"/><b>{!quesValues[3].label}</b>
+                              <input type="radio" id="radio4" class="radio-button-y" onchange="document.getElementById('{!$Component.resolved}').value='Very Satisfied';" value="{!quesValues[3].value}" name="optradio"/><b>{!quesValues[3].label}</b>
                             </label>
                                          
                          </apex:outputPanel>
-                         </div>
-                         <div style="margin-top: 0px;" class="col-md-12">
-                          <apex:outputtext value="How satisfied are you with the answer you received?" id="resolvedQuestion"/>
-                         </div>
-                       </div>
+                        </div>
+                     -->   
+                   
+                       
                        
                        <div class="form-group">
-                        <label class="control-label col-md-4">Resolution Time?</label>
-                       <div  class="col-md-12">
+                        
+                        
+                        <div style="margin-top: 5px; padding: 10px" class="col-md-12">
+                     <!--    <label class="col-md-4"><h5>Resolution Time?</h5></label> -->
+                        <h3> <apex:outputtext value="How satisfied are you with the request resolution time?" id="ResolutionTimeQuestion"/></h3>
+                       </div>
+                      <div class="container">
+                       <div class="btn-group survey media-object" data-toggle="buttons">
+                         
+                         <apex:inputHidden value="{!strResolutionTime}" id="resolutionTime"/> 
+                         
+                                <label class="btn btn-default  form-check-label option-button">
+                                   <br></br> <input name="options1" class="form-check-input" type="radio" value="1 Very Dissatisfied" onchange="document.getElementById('{!$Component.resolutionTime}').value='Very Dissatisfied';" autocomplete="off"/> Very Dissatisfied<br/><i class="material-icons">sentiment_very_dissatisfied</i>
+                                </label>
+
+                                <label class="btn btn-default form-check-label option-button">
+                                  <br></br>  <input name="options1" class="form-check-input" type="radio" value="2 Dissatisfied" onchange="document.getElementById('{!$Component.resolutionTime}').value='Dissatisfied';" autocomplete="off"/> Dissatisfied<br/><i class="material-icons">sentiment_dissatisfied</i>
+                                </label>
+
+                                <label class="btn btn-default form-check-label option-button">
+                                  <br></br>  <input name="options1" class="form-check-input" type="radio" value="3 Satisfied" onchange="document.getElementById('{!$Component.resolutionTime}').value='Satisfied';" autocomplete="off"/> Satisfied<br/><i class="material-icons">sentiment_satisfied</i>
+                                </label>
+                                <label class="btn btn-default form-check-label option-button">
+                                  <br></br>  <input name="options1" class="form-check-input" type="radio"  value="4 Very Satisfied" onchange="document.getElementById('{!$Component.resolutionTime}').value='Very Satisfied';" autocomplete="off"/> Very Satisfied<br/><i class="material-icons">sentiment_very_satisfied</i>
+                                </label>
+                                
+                                
+                          </div>  
+                          
+                          </div> 
+                       
+                       <!--  <div  class="col-md-12">
                             <apex:outputPanel styleClass="requiredInput"  layout="none" id="inputPanelResolution">                 
                               <apex:outputPanel styleClass="requiredBlock" layout="block" id="inputBlockResolution"/>
                                
                                    <apex:inputHidden value="{!strResolutionTime}" id="resolutionTime"/> 
                                     <label class="radio-inline">
-                                         <input type="radio" class="label-content-4 radio-button-y" id="radio5" onchange="document.getElementById('{!$Component.resolutionTime}').value=' 1 Very Dissatisfied';" value="{!quesValues[0].value}" name="optradio1"/><b>{!quesValues[0].label}</b>
+                                         <input type="radio" class="label-content-4 radio-button-y" id="radio5" onchange="document.getElementById('{!$Component.resolutionTime}').value='Very Dissatisfied';" value="{!quesValues[0].value}" name="optradio1"/><b>{!quesValues[0].label}</b>
                                     </label>
                                     <label class="radio-inline label-content-4">
-                                      <input type="radio"  id="radio6" class="radio-button-y" onchange="document.getElementById('{!$Component.resolutionTime}').value=' 2 Dissatisfied';" value="{!quesValues[1].value}" name="optradio1"/><b>{!quesValues[1].label}</b>
+                                      <input type="radio"  id="radio6" class="radio-button-y" onchange="document.getElementById('{!$Component.resolutionTime}').value='Dissatisfied';" value="{!quesValues[1].value}" name="optradio1"/><b>{!quesValues[1].label}</b>
                                     </label>
                                     <label class="radio-inline label-content-4">
-                                      <input type="radio" id="radio7" onchange="document.getElementById('{!$Component.resolutionTime}').value=' 3 Satisfied';" value="{!quesValues[2].value}" name="optradio1"/><b>{!quesValues[2].label}</b>
+                                      <input type="radio" id="radio7" onchange="document.getElementById('{!$Component.resolutionTime}').value='Satisfied';" value="{!quesValues[2].value}" name="optradio1"/><b>{!quesValues[2].label}</b>
                                     </label>
                                     <label class="radio-inline label-content-4">
-                                      <input type="radio" id="radio8" class="radio-button-y" onchange="document.getElementById('{!$Component.resolutionTime}').value=' 4 Very Satisfied';" value="{!quesValues[3].value}" name="optradio1" checked="checked"/><b>{!quesValues[3].label}</b>
+                                      <input type="radio" id="radio8" class="radio-button-y" onchange="document.getElementById('{!$Component.resolutionTime}').value='Very Satisfied';" value="{!quesValues[3].value}" name="optradio1"/><b>{!quesValues[3].label}</b>
                                     </label>
                                </apex:outputPanel>
                         </div>
-                        <div style="margin-top: 0px;" class="col-md-12">
-                         <apex:outputtext value="How satisfied are you with the request resolution time?" id="ResolutionTimeQuestion"/>
-                       </div>
+             -->       
                        </div>
                        
                         <div class="form-group">
-                        <label class="control-label col-md-4">Support Person?</label>
-                        <div  class="col-md-12">
+                     <!--  <label class="col-md-4"><h5>Support Person?</h5></label> -->
+                        
+                        <div style="margin-top: 5px; padding: 10px" class="col-md-12">
+                      <h3><apex:outputtext id="supportQuestion" value="How satisfied are you with the support person’s ability to answer your question?"/></h3>
+                        </div>
+                        <div class="container">
+                        <div class="btn-group survey media-object" data-toggle="buttons">
+                         
+                          <apex:inputHidden value="{!strSupportPerson}" id="supportPerson"/>
+                          
+                                <label class="btn btn-default  form-check-label option-button">
+                                  <br></br>  <input name="options2" class="form-check-input" type="radio" value="1 Very Dissatisfied" onchange="document.getElementById('{!$Component.supportPerson}').value='Very Dissatisfied';" autocomplete="off"/> Very Dissatisfied<br/><i class="material-icons">sentiment_very_dissatisfied</i>
+                                </label>
+
+                                <label class="btn btn-default form-check-label option-button">
+                                  <br></br>  <input name="options2" class="form-check-input" type="radio" value="2 Dissatisfied" onchange="document.getElementById('{!$Component.supportPerson}').value='Dissatisfied';" autocomplete="off"/> Dissatisfied<br/><i class="material-icons">sentiment_dissatisfied</i>
+                                </label>
+
+                                <label class="btn btn-default form-check-label option-button">
+                                  <br></br>  <input name="options2" class="form-check-input" type="radio" value="3 Satisfied" onchange="document.getElementById('{!$Component.supportPerson}').value='Satisfied';" autocomplete="off"/> Satisfied<br/><i class="material-icons">sentiment_satisfied</i>
+                                </label>
+                                <label class="btn btn-default form-check-label option-button">
+                                  <br></br>  <input name="options2" class="form-check-input" type="radio"  value="4 Very Satisfied" onchange="document.getElementById('{!$Component.supportPerson}').value='Very Satisfied';" autocomplete="off"/> Very Satisfied<br/><i class="material-icons">sentiment_very_satisfied</i>
+                                </label>
+                                
+                             </div>    
+                          </div>  
+                          
+                  <!--        <div  class="col-md-12">
                             <apex:outputPanel styleClass="requiredInput"  layout="none" id="inputPanelSupport">                 
                                 <apex:outputPanel styleClass="requiredBlock" layout="block" id="inputBlockSupport"/>
                                <apex:inputHidden value="{!strSupportPerson}" id="supportPerson"/> 
                                 <label class="radio-inline">
-                                     <input type="radio" class="label-content-4 radio-button-y" id="radio9" onchange="document.getElementById('{!$Component.supportPerson}').value=' 1 Very Dissatisfied';" value="{!quesValues[0].value}" name="optradio2"/><b>{!quesValues[0].label}</b>
+                                     <input type="radio" class="label-content-4 radio-button-y" id="radio9" onchange="document.getElementById('{!$Component.supportPerson}').value='Very Dissatisfied';" value="{!quesValues[0].value}" name="optradio2"/><b>{!quesValues[0].label}</b>
                                 </label>
                                 <label class="radio-inline label-content-4">
-                                  <input type="radio"  id="radio10" class="radio-button-y" onchange="document.getElementById('{!$Component.supportPerson}').value=' 2 Dissatisfied';" value="{!quesValues[1].value}" name="optradio2"/><b>{!quesValues[1].label}</b>
+                                  <input type="radio"  id="radio10" class="radio-button-y" onchange="document.getElementById('{!$Component.supportPerson}').value='Dissatisfied';" value="{!quesValues[1].value}" name="optradio2"/><b>{!quesValues[1].label}</b>
                                 </label>
                                 <label class="radio-inline label-content-4">
-                                  <input type="radio" id="radio11" class="radio-button-y" onchange="document.getElementById('{!$Component.supportPerson}').value=' 3 Satisfied';" value="{!quesValues[2].value}" name="optradio2"/><b>{!quesValues[2].label}</b>
+                                  <input type="radio" id="radio11" class="radio-button-y" onchange="document.getElementById('{!$Component.supportPerson}').value='Satisfied';" value="{!quesValues[2].value}" name="optradio2"/><b>{!quesValues[2].label}</b>
                                 </label>
                                 <label class="radio-inline label-content-4 ">
-                                  <input type="radio" id="radio12" class="radio-button-y" onchange="document.getElementById('{!$Component.supportPerson}').value=' 4 Very Satisfied';" value="{!quesValues[3].value}" name="optradio2" checked="checked"/><b>{!quesValues[3].label}</b>
+                                  <input type="radio" id="radio12" class="radio-button-y" onchange="document.getElementById('{!$Component.supportPerson}').value='Very Satisfied';" value="{!quesValues[3].value}" name="optradio2"/><b>{!quesValues[3].label}</b>
                                 </label>
                                </apex:outputPanel>
                         </div>
-                        <div style="margin-top: 0px;" class="col-md-12">
-                      <apex:outputtext id="supportQuestion" value="How satisfied are you with the support person’s ability to answer your question?"/>
-                        </div>
+                 -->
                        </div>
                        
                         <div class="form-group">
-                        <label class="control-label col-md-4">Share with others?</label>
-                        <div  class="col-md-12">
+                      <!--   <label class="col-md-4"><h5>Share with others?</h5></label> -->
+                        
+                        <div style="margin-top: 5px; padding: 10px" class="col-md-12">
+                         <h3><apex:outputtext id="likeQuestion" value="Based on your experience with our support, would you tell others  “You should use it” ?"/></h3>
+                       </div> 
+                        <div class="container">
+                        <div class="btn-group survey media-object" data-toggle="buttons">
+                         
+                          <apex:inputHidden value="{!strLikeOurSupport}" id="LikeOurSupport"/> 
+                          
+                                <label class="btn btn-default form-check-label option-button">
+                                    <input name="options3" class="form-check-input" type="radio" value="0" onchange="document.getElementById('{!$Component.LikeOurSupport}').value='0';" autocomplete="off"/> 0<br/><i class="material-icons">sentiment_very_dissatisfied</i><br/> - -Not likely at all
+                                </label>
+
+                                <label class="btn btn-default form-check-label option-button">
+                                    <input name="options3" class="form-check-input" type="radio" value="1" onchange="document.getElementById('{!$Component.LikeOurSupport}').value='1';" autocomplete="off"/>1
+                                </label>
+
+                                <label class="btn btn-default form-check-label option-button">
+                                    <input name="options3" class="form-check-input" type="radio" value="2 " onchange="document.getElementById('{!$Component.LikeOurSupport}').value='2';" autocomplete="off"/> 2
+                                </label>
+                                
+                                <label class="btn btn-default form-check-label option-button">
+                                    <input name="options3" class="form-check-input" type="radio" value="3 " onchange="document.getElementById('{!$Component.LikeOurSupport}').value='3';" autocomplete="off"/> 3
+                                </label>
+                                
+                                <label class="btn btn-default form-check-label option-button">
+                                    <input name="options3" class="form-check-input" type="radio" value="4 " onchange="document.getElementById('{!$Component.LikeOurSupport}').value='4';" autocomplete="off"/> 4
+                                </label>
+                                
+                                <label class="btn btn-default form-check-label option-button">
+                                    <input name="options3" class="form-check-input" type="radio" value="5 " onchange="document.getElementById('{!$Component.LikeOurSupport}').value='5';" autocomplete="off"/> 5
+                                </label>
+                                
+                                <label class="btn btn-default form-check-label option-button">
+                                    <input name="options3" class="form-check-input" type="radio" value="6 " onchange="document.getElementById('{!$Component.LikeOurSupport}').value='6';" autocomplete="off"/> 6
+                                </label>
+                                
+                                <label class="btn btn-default form-check-label option-button">
+                                    <input name="options3" class="form-check-input" type="radio" value="7 " onchange="document.getElementById('{!$Component.LikeOurSupport}').value='7';" autocomplete="off"/> 7
+                                </label>
+                                
+                                <label class="btn btn-default form-check-label option-button">
+                                    <input name="options3" class="form-check-input" type="radio" value="8 " onchange="document.getElementById('{!$Component.LikeOurSupport}').value='8';" autocomplete="off"/> 8
+                                </label>
+                                
+                                <label class="btn btn-default form-check-label option-button">
+                                    <input name="options3" class="form-check-input" type="radio" value="9" onchange="document.getElementById('{!$Component.LikeOurSupport}').value='9';" autocomplete="off"/> 9
+                                </label>
+                                
+                                <label class="btn btn-default form-check-label option-button">
+                                    <input name="options3" class="form-check-input" type="radio" value="10" onchange="document.getElementById('{!$Component.LikeOurSupport}').value='10';" autocomplete="off"/>10<br/><i class="material-icons">sentiment_very_satisfied</i><br/>+ +Extremely Likely
+                                </label>
+                                
+                           </div>      
+                          </div>  
+                          
+                          
+                       
+            <!--           <div  class="col-md-12">
                             <apex:outputPanel styleClass="requiredInput"  layout="none" id="inputPanelLike">                 
                                 <apex:outputPanel styleClass="requiredBlock" layout="block" id="inputBlockLike"/>
                                 <apex:selectRadio id="inputLike" styleClass="col-xs-12 col-sm-7 col-md-5"    value="{!strLikeOurSupport}" required="true"  layout="lineDirection">
@@ -234,85 +329,72 @@ Description:Satisfaction Survey Changes
                                </apex:outputPanel>
                         </div>
                         <table class="col-xs-12  col-md-12" >
-                        <td  class="col-xs-8 col-sm-4 col-md-3">Not likely at all</td>
+                        <td  class="col-xs-8 col-sm-4 col-md-3"> - -Not likely at all</td>
                         <td  ></td>
                          <td ></td>
-                          <td Class="col-xs-12 col-sm-10 col-md-9 "><span class="label-content-2 ">Extremely Likely</span></td>
+                         
+                          <td Class="col-xs-2 col-sm-10 col-md-8"><span class="label-content-10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + +Extremely Likely</span></td>
                           </table>
-                         <div style="margin-top: 5px;" class="col-md-12">
-                         <apex:outputtext id="likeQuestion" value="Based on your experience with our support, would you tell others  “You should use it” ?"/>
+                          
+                 -->         
+                   
                        </div>
-                       </div>
-                        
+                       
+                       
+                       
+                       
                     <!---------------------------------------------------------------------------------------------------------------->          
               
-                </div>
+                
+                
+                
+                </div> 
+                        
                 </div>
         <br/>
                 <div class="row">
-            <div class="col-md-12 col-xs-12 bg-color-bar padding-left-10">
-                <h5>Any additional comments would you like to share with us?</h5></div>
-        </div>
+            <div class="col-md-12 col-xs-12 bg-color-bar padding-left-10" style="background-color:#eeeeee;padding-bottom: 15px">
+                <h3>Any additional comments you would like to share with us?</h3></div>
+            </div>
+            
+                    
+            
+        
          <br/>
         <div class="row">
                 <div class="col-md-8 col-xs-8">
                    
                     <div class="form-group">
-                        <label class="control-label col-md-4">Comments</label>
+                <!--   <label class="control-label col-md-4">Comments</label>     -->
                         <div class="col-md-5">
                             <apex:outputPanel styleClass="requiredInput"  layout="block" id="inputPanelComment">                 
                                 <apex:outputPanel styleClass="requiredBlock" layout="block" id="inputBlockComment"/>
                                 <apex:inputTextarea value="{!strComment}" rows="5" cols="45" id="inputComment"/>
                             </apex:outputPanel>
                         </div>
-                        <div class="col-md-3">
-                        <apex:outputtext value="Please add any additional comments" id="commentQuestion"/>
-                        </div>
+                  
                     </div>
                     
+          
                 </div>
         </div>
         <br/>
-        <apex:commandButton value="Submit This Survey" styleclass="btn btn-default submit" action="{!submitSurvey}" id="submitQuestion"/>
         
+       
+        <!--<apex:commandButton value="Submit This Survey" styleclass="btn btn-default submit" action="{!submitSurvey}" id="submitQuestion"/>
+         -->
+        <apex:commandButton value="Submit This Survey"  action="{!submitSurvey}" id="submitQuestion"/> 
+     
         </div>
       </apex:form><br/>
-     <c:CommunityFooterComponent ></c:CommunityFooterComponent>
       
-      <div class="h-spacer"></div>
-<!-- Menu for user configuration -->
-    <div id="user-config-popover" style="display:none">
-        <ul class='nav nav-pills nav-stacked'>
-           <!-- <li><apex:outputlink style="width:179px; margin-left: 0px;" value="/community/CommunitiesEditUserProfile" rendered="{!If(($Profile.Name='NXP Customer Community Login User'),true,false)}" > Edit profile</apex:outputlink></li>
-                <li ><apex:outputlink style="width:179px; margin-left: 0px;" value="/secur/logout.jsp?retUrl=https%3A%2F%2Fnxpcommunity.force.com%2Fcommunity%2FCommunityOverview">Logout</apex:outputlink></li>-->
-            <li ><apex:outputlink style="width:179px; margin-left: 0px;" value="{!RedirectionToLoginPage}">Logout</apex:outputlink></li>
       
-       
-        </ul>
-    </div>
-      <!-- Bootstrap core JavaScript
-         ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <script src="{!URLFOR($Resource.Forum_Community_3,'NXP-community/js/bootstrap.js')}"></script>
-    <script src="{!URLFOR($Resource.Forum_Community_3,'NXP-community/js/collapse.js')}"></script>
-    <script src="{!URLFOR($Resource.Forum_Community_3,'NXP-community/js/nxp-community.js')}"></script>
-    <script src="{!URLFOR($Resource.Forum_Community_3,'NXP-community/js/jasny-bootstrap.min.js')}"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <!-- <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script> -->
+  <!--   <c:CommunityFooterComponent ></c:CommunityFooterComponent> -->
+ </apex:define>
+   </apex:composition>  
+     
     
 
-
-
-window.onload=function(){
-    
-    document.getElementsByid("inputResolved")[0].setAttribute("layout", "pageDirection"); 
-       
-    
-};
-
-
-    
     </body>                
            
         </apex:page>

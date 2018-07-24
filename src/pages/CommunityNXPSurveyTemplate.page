@@ -1,0 +1,14 @@
+<apex:page showHeader="false" standardStyleSheets="false" id="template" sidebar="false" showChat="false" docType="html-5.0" applyHtmlTag="false">
+    <div >
+        <!-- HEADER STARTS-->
+        <apex:include pageName="CommunityNXPSurveyHeader" id="header" rendered="true"/>
+        <!-- HEADER ENDS-->
+        <!-- Main content starts--> 
+        <apex:insert name="body"/>
+        <!-- Main content ends-->
+        <!-- WRAPPER ENDS-->
+        <!-- FOOTER STARTS-->
+    </div>
+    <apex:include pageName="CommunityNXPContextFooter"/>
+    <!-- FOOTER ENDS-->
+</apex:page>
