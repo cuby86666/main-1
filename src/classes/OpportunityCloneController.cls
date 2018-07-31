@@ -343,6 +343,8 @@ public with sharing class OpportunityCloneController {
             } else if (displayType == Schema.DisplayType.BOOLEAN) {
                 //System.debug('@@@@@ 3type=' + displayType + ', ' + obj.Field_Name__c);
                 resetValue = Boolean.valueOf(obj.Value__c);
+            } else if (displayType == Schema.DisplayType.Date) {
+                resetValue = Date.valueOf(obj.Value__c);
             } else {
                 //System.debug('@@@@@ 4type=' + displayType + ', ' + obj.Field_Name__c);
                 resetValue = obj.Value__c;
