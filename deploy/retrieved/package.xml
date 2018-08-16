@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>0918</fullName>
+    <types>
+        <members>OpportunityScheduleController</members>
+        <members>OpportunitySchedulingWrapper</members>
+        <name>ApexClass</name>
+    </types>
+    <types>
+        <members>opportunityScheduleAction</members>
+        <name>AuraDefinitionBundle</name>
+    </types>
+    <version>43.0</version>
+</Package>
