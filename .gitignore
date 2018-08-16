@@ -1,18 +1,5 @@
-
+.settings
 .settings/com.salesforce.ide.core.prefs
 .project
 salesforce.schema
-.settings
-Referenced Packages
-.sfdx/tools/apex.db
-.sfdx/tools/apex.log
-config/.debug
-config/.describe
-config/.lightning
-config/.local_store
-*.sublime-project
-*.sublime-workspace
 src/package.xml
-src/classes/UsersSelector.cls-meta.xml
-src/classes/UsersSelector.cls-meta.xml
-src/classes/OpportunityLineItemsSelector.cls-meta.xml
