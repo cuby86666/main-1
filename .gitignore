@@ -3,5 +3,7 @@
 .project
 salesforce.schema
 src/package.xml
+deploy/dist
 deploy/dist/*
+deploy/retrievedSource
 deploy/retrievedSource/*
