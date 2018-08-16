@@ -4,6 +4,4 @@
 salesforce.schema
 src/package.xml
 deploy/dist/*
-!deploy/dist/.gitignore
 deploy/retrievedSource/*
-!deploy/retrievedSource/.gitignore
