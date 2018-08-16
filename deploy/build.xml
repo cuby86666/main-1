@@ -1,0 +1,293 @@
+<project name="NXP" default="" basedir="." xmlns:sf="antlib:com.salesforce">
+
+    <property file="build.properties"/>
+    
+	<property environment="env"/>
+	
+	<property name="antform.home" value="${env.ANTFORM_HOME}" />
+
+    <taskdef resource="com/salesforce/antlib.xml" uri="antlib:com.salesforce" classpath="lib/ant-salesforce.jar"/>
+    
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+	
+	<taskdef resource="com/sardak/antform/taskdefs.properties" classpath="${antform.home}/lib/antform.jar"/>
+	
+	<scriptdef language="javascript" name="capitalize">
+		<attribute name="string"/>
+		<attribute name="to"/>
+
+		var s = new String(attributes.get("string"));
+		project.setProperty(attributes.get("to"), s.toLowerCase().replace(/^.|\s\S/g, function(a) {return a.toUpperCase();}));
+	</scriptdef>
+	
+	<scriptdef language="javascript" name="toLowerCase">
+		<attribute name="string"/>
+		<attribute name="to"/>
+
+		var s = new String(attributes.get("string"));
+		project.setProperty(attributes.get("to"), s.toLowerCase());
+	</scriptdef>
+	
+    <!--////////////////////  Targets  ////////////////////-->	
+	
+	<target name="proxy">
+	  	<property name="proxy.host" value="apac.nics.nxp.com"/>
+	  	<property name="proxy.port" value="8080"/>
+	  	<property name="proxy.user" value=""/>
+	  	<property name="proxy.pass" value=""/>
+	  	<setproxy proxyhost="${proxy.host}" proxyport="${proxy.port}" proxyuser="${proxy.user}" proxypassword="${proxy.pass}"/>
+	</target>
+	
+	<target name="show-form">
+		<if><equals arg1="${show.form}" arg2="dual"/>
+			<then>
+		   		<antcallback target="show-form-dual" return="sf.source.username,sf.source.password,sf.source.serverurl,sf.target.username,sf.target.password,sf.target.serverurl"/>
+		 	</then>
+		<elseif><equals arg1="${show.form}" arg2="source"/>
+			<then>
+				<antcallback target="show-form-source" return="sf.source.username,sf.source.password,sf.source.serverurl"/>
+		  	</then>
+		</elseif>
+		<elseif><equals arg1="${show.form}" arg2="target"/>
+			<then>
+				<antcallback target="show-form-target" return="sf.target.username,sf.target.password,sf.target.serverurl"/>
+			</then>
+		</elseif>
+		<else>
+		   	<echo message="Invalid value for property show.form: ${show.form}" />
+		</else>
+		</if>	
+	</target>
+	
+	<target name="show-form-dual">
+		<antform>
+			<selectionProperty label="Source: " property="sf.source" values="${sf.servers}"/>
+			<selectionProperty label="Target: " property="sf.target" values="${sf.servers}"/>
+		</antform>
+		
+		<echo message="Source: ${sf.source}"/>
+		<echo message="Target: ${sf.target}"/>
+		
+		<toLowerCase string="${sf.source}" to="sf.source"/>
+		<toLowerCase string="${sf.target}" to="sf.target"/>
+		
+		<propertycopy name="sf.source.username" from="${sf.source}.username"/>
+		<propertycopy name="sf.source.password" from="${sf.source}.password"/>
+		<propertycopy name="sf.target.username" from="${sf.target}.username"/>
+		<propertycopy name="sf.target.password" from="${sf.target}.password"/>
+		
+		<antcallback target="set-sf-property" return="sf.source.serverurl,sf.target.serverurl"/>
+	</target>
+	
+	<target name="show-form-source">
+		<antform>
+			<selectionProperty label="Source: " property="sf.source" values="${sf.servers}"/>
+		</antform>
+		
+		<echo message="Source: ${sf.source}"/>
+				
+		<toLowerCase string="${sf.source}" to="sf.source"/>
+				
+		<propertycopy name="sf.source.username" from="${sf.source}.username"/>
+		<propertycopy name="sf.source.password" from="${sf.source}.password"/>
+		
+		<antcallback target="set-sf-property" return="sf.source.serverurl"/>
+	</target>
+	
+	<target name="show-form-target">
+		<antform>
+			<selectionProperty label="Target: " property="sf.target" values="${sf.servers}"/>
+		</antform>
+		
+		<echo message="Target: ${sf.target}"/>
+		
+		<toLowerCase string="${sf.target}" to="sf.target"/>
+		
+		<propertycopy name="sf.target.username" from="${sf.target}.username"/>
+		<propertycopy name="sf.target.password" from="${sf.target}.password"/>
+		
+		<antcallback target="set-sf-property" return="sf.target.serverurl"/>
+	</target>
+	
+	<target name="set-form-dual">
+		<property name="show.form" value="dual"/>
+	</target>
+	
+	<target name="set-form-source">
+		<property name="show.form" value="source"/>
+	</target>
+	
+	<target name="set-form-target">
+		<property name="show.form" value="target"/>
+	</target>
+	
+	<target name="set-sf-property">
+		<!-- Setting default value for username, password and session id properties to empty string so unset values are treated as empty. 
+		     Without this, ant expressions such as ${sf.source.username} will be treated literally.
+		-->
+		<condition property="sf.source.username" value=""> <not> <isset property="sf.source.username"/> </not> </condition>
+	    <condition property="sf.source.password" value=""> <not> <isset property="sf.source.password"/> </not> </condition>
+		<condition property="sf.target.username" value=""> <not> <isset property="sf.target.username"/> </not> </condition>
+		<condition property="sf.target.password" value=""> <not> <isset property="sf.target.password"/> </not> </condition>
+	    <condition property="sf.sessionId" value=""> <not> <isset property="sf.sessionId"/> </not> </condition>
+		<!--
+		<echo message="sf.source.username: ${sf.source.username}"/>
+		<echo message="sf.source.password: ${sf.source.password}"/>
+		<echo message="sf.target.username: ${sf.target.username}"/>
+		<echo message="sf.target.password: ${sf.target.password}"/>
+		<echo message="sf.sessionId: ${sf.sessionId}"/>
+		-->
+		<propertyregex property="target.server.name"
+				       input="${sf.target.username}"
+				       regexp="\b(\w+)$"
+				       select="\1"
+				       casesensitive="false"/>
+		
+		<script language="javascript">
+			if (project.getProperty('target.server.name') != null) {
+		  		project.setProperty('target.server.name', project.getProperty('target.server.name').replace('com', 'prod'));
+			}
+		</script>
+			
+		<capitalize string="${target.server.name}" to="target.server.name"/>
+		
+		<condition property="not.jason"> <not> <equals arg1="${target.server.name}" arg2="jason" casesensitive="false"/> </not> </condition>
+		
+		<propertyregex property="source.domain"
+		 	       	   input="${sf.source.username}"
+					   regexp="@(.+)"
+					   select="\1"
+					   casesensitive="false"/>
+			
+		<propertyregex property="target.domain"
+					   input="${sf.target.username}"
+					   regexp="@(.+)"
+					   select="\1"
+					   casesensitive="false"/>
+		
+		<condition property="sf.source.serverurl" value="${sf.prod.serverurl}" else="${sf.test.serverurl}">
+			<equals arg1="${source.domain}" arg2="${prod.domain}" casesensitive="false" trim="true"/>
+		</condition>
+		
+		<condition property="sf.target.serverurl" value="${sf.prod.serverurl}" else="${sf.test.serverurl}">
+			<equals arg1="${target.domain}" arg2="${prod.domain}" casesensitive="false" trim="true"/>
+		</condition>
+	</target>
+	
+	<target name="init" depends="proxy"/>
+	
+	<target name="clean">
+		<delete dir="${project.folder}"/>
+		<mkdir dir="${project.folder}"/>	
+	</target>
+	
+	<target name="copy-files" depends="clean">
+		<copy todir="${project.folder}" preservelastmodified="true">
+			<fileset dir="retrievedSource"/>
+		</copy>	
+	</target>	
+	
+	<target name="copy-retrieved" depends="init,retrieve,copy-files"/>
+		
+	<!-- deploy -->
+	<target name="deploy" depends="deploy-no-tests,mail" description="Deploy"/>
+	
+	<!-- deploy with no tests -->
+	<target name="deploy-no-tests" depends="init,set-form-dual,show-form,copy-retrieved" description="Deploy without tests">
+		<echo message="Target username: ${sf.target.username}"/>
+		<sf:deploy username="${sf.target.username}" password="${sf.target.password}" sessionId="${sf.sessionId}" serverurl="${sf.target.serverurl}" maxPoll="${sf.maxPoll}" deployRoot="${project.folder}" rollbackOnError="true" autoUpdatePackage="true"/>
+	</target>
+	
+	<!-- deploy with local tests -->
+	<target name="deploy-local-tests" depends="init,set-form-dual,show-form,copy-retrieved" description="Deploy with local tests">
+		<echo message="Target username: ${sf.target.username}"/>
+		<sf:deploy username="${sf.target.username}" password="${sf.target.password}" sessionId="${sf.sessionId}" serverurl="${sf.target.serverurl}" maxPoll="${sf.maxPoll}" deployRoot="${project.folder}" rollbackOnError="true" autoUpdatePackage="true" testLevel="RunLocalTests" pollWaitMillis="40000" logType="None"/>
+	</target>
+	
+	<!-- deploy with specified tests -->
+	<target name="deploy-specified-tests" depends="init,set-form-dual,show-form,copy-retrieved" description="Deploy with specified tests">
+		<echo message="Target username: ${sf.target.username}"/>
+	    <sf:deploy username="${sf.target.username}" password="${sf.target.password}" sessionId="${sf.sessionId}" serverurl="${sf.target.serverurl}" maxPoll="${sf.maxPoll}" deployRoot="${project.folder}" rollbackOnError="true" autoUpdatePackage="true" testLevel="RunSpecifiedTests" pollWaitMillis="40000" logType="None">
+	    	<runTest>OpportunitiesTest</runTest>
+	    </sf:deploy>
+	</target>
+	
+	<!-- deploy check only; never actually saves to the server -->
+	<target name="deploy-check-only" depends="init,set-form-dual,show-form,copy-retrieved" description="Deploy check only from deploy folder">
+		<echo message="Target username: ${sf.target.username}"/>
+		<sf:deploy username="${sf.target.username}" password="${sf.target.password}" sessionId="${sf.sessionId}" serverurl="${sf.target.serverurl}" maxPoll="${sf.maxPoll}" deployRoot="${project.folder}" checkOnly="true" rollbackOnError="true" autoUpdatePackage="true" testLevel="RunLocalTests" pollWaitMillis="40000" logType="None"/>
+	</target>
+	
+	<!-- run local tests only -->
+	<target name="run-local-tests" depends="init,set-form-target,show-form" description="Run local tests only">
+		<echo message="Target username: ${sf.target.username}"/>
+		<sf:deploy username="${sf.target.username}" password="${sf.target.password}" sessionId="${sf.sessionId}" serverurl="${sf.target.serverurl}" maxPoll="${sf.maxPoll}" deployRoot="test" checkOnly="true" rollbackOnError="true" autoUpdatePackage="true" testLevel="RunLocalTests" pollWaitMillis="40000" logType="None"/>
+	</target>
+	
+	<!-- deploy from retrievedSource folder -->
+	<target name="deploy-retrieved" depends="init,set-form-target,show-form" description="Deploy from retrievedSource folder">
+		<echo message="Target username: ${sf.target.username}"/>
+		<sf:deploy username="${sf.target.username}" password="${sf.target.password}" sessionId="${sf.sessionId}" serverurl="${sf.target.serverurl}" maxPoll="${sf.maxPoll}" deployRoot="retrievedSource" rollbackOnError="true"/>
+	</target>
+	
+	<!-- retrieve -->
+	<target name="retrieve" depends="init,set-form-source,show-form" description="Retrieve based on package.xml from retrieved folder">
+		<delete dir="retrievedSource"/>
+		<mkdir dir="retrievedSource"/>
+			
+		<!-- Retrieve the contents into another directory -->
+		<echo message="Source username: ${sf.source.username}"/>
+		<sf:retrieve username="${sf.source.username}" password="${sf.source.password}" sessionId="${sf.sessionId}" serverurl="${sf.source.serverurl}" maxPoll="${sf.maxPoll}" retrieveTarget="retrievedSource" unpackaged="retrieved/package.xml"/>
+	</target>
+	
+	<!-- remove -->
+	<target name="remove" depends="init,set-form-target,show-form" description="Remove based on destructiveChanges.xml from removed folder">
+		<echo message="Target username: ${sf.target.username}"/>
+		<sf:deploy username="${sf.target.username}" password="${sf.target.password}" sessionId="${sf.sessionId}" serverurl="${sf.target.serverurl}" maxPoll="${sf.maxPoll}" deployRoot="removed"/>
+	</target>
+	
+	<!-- mail -->
+	<target name="mail" if="not.jason">
+		<exec executable="blat"
+	          vmlauncher="false"
+	          failonerror="true">
+			<arg value="-server"/>
+			<arg value="${deploy.mail.server}"/>
+			<arg value="-f"/>
+			<arg value="${deploy.mail.sender}"/>
+			<arg value="-to"/>
+			<arg value="${deploy.to.recipient}"/>
+			<arg value="-cc"/>
+			<arg value="${deploy.cc.recipient}"/>
+			<arg value="-s"/>
+			<arg value="'${target.server.name}' has been updated"/>
+			<arg value="-body"/>
+			<arg value="'${target.server.name}' has been updated. Please check. Thanks!"/>
+		</exec>
+	</target>
+	
+	<!-- test -->
+	<target name="test" description="test">
+		<antform>
+			<selectionProperty label="Source: " property="source" values="Jason,GSAS,Data,Full,Production"/>
+			<selectionProperty label="Target: " property="target" values="Jason,GSAS,Data,Full,Production"/>
+		</antform>
+		
+		<toLowerCase string="${source}" to="source"/>
+		<toLowerCase string="${target}" to="target"/>
+		
+		<echo message="source: ${source}"/>
+		<echo message="target: ${target}"/>
+		
+		<propertycopy name="source.username" from="${source}.username"/>
+		<propertycopy name="source.password" from="${source}.password"/>
+		<propertycopy name="target.username" from="${target}.username"/>
+		<propertycopy name="target.password" from="${target}.password"/>
+		
+		<echo message="source username: ${source.username}"/>
+		<echo message="source password: ${source.password}"/>
+		<echo message="target username: ${target.username}"/>
+		<echo message="target password: ${target.password}"/>
+	</target>	
+	
+</project>
