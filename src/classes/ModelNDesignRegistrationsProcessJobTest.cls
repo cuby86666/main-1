@@ -515,34 +515,89 @@ private class ModelNDesignRegistrationsProcessJobTest {
      * Reg_Status__c: Pending, Requested, Approved, Rejected
      */
     @isTest
-    static void testOpptyCloseDate() {
+    static void testOpptyCloseDateAndProdDate1() {
+    	// TMMA Override = false
+    	// Commitment 
+    	// Reg Production Date < Reg Part Win Date 
+    	oppty.TMMA_Override__c = false;
+    	
+    	update oppty;
+    	
+    	Date prodDate = Date.today() + 30;
+    	Date partWinDate = Date.today() + 60;
+    	 
     	mnStage.Status__c = STATUS_QUEUED;
     	mnStage.Reg_Part_Status__c = 'Pending'; 
     	mnStage.Reg_Part_Win_Status__c = 'DesignWin';
-    	mnStage.Reg_Status__c = 'Rejected';
+    	mnStage.Reg_Status__c = 'Pending';
+    	mnStage.Reg_Production_Date__c = prodDate;
+    	mnStage.Reg_Part_Win_Date__c = partWinDate;
     	
     	update mnStage;
     	
     	processData();
     	
     	Opportunity oppty = new OpportunitiesSelector().selectByLegacyId(new Set<String> {opptyExtId}).get(0); 
-    	System.assertEquals(PRODUCTION_DATE, oppty.CloseDate);
     	
+    	System.assertEquals(partWinDate, oppty.CloseDate);
+    	System.assertEquals(partWinDate.addMonths(6), oppty.Production_Date__c);
+    }
+    
+    @isTest
+    static void testOpptyCloseDateAndProdDate2() {
+    	// TMMA Override = false 
+    	// Commitment 
+    	// Reg Production Date >= Reg Part Win Date
+    	oppty.TMMA_Override__c = false;
+    	
+    	update oppty;
+    	
+    	Date prodDate = Date.today() + 60;
+    	Date partWinDate = Date.today() + 30;
+    	 
     	mnStage.Status__c = STATUS_QUEUED;
-    	mnStage.Reg_Part_Status__c = 'Rejected'; 
+    	mnStage.Reg_Part_Status__c = 'Approved'; 
     	mnStage.Reg_Part_Win_Status__c = 'ProdWin';
-    	mnStage.Reg_Status__c = 'Approved';
+    	mnStage.Reg_Status__c = 'Rejected';
+    	mnStage.Reg_Production_Date__c = prodDate;
+    	mnStage.Reg_Part_Win_Date__c = partWinDate;
     	
     	update mnStage;
     	
-    	Test.startTest();
     	processData();
-    	Test.stopTest();
     	
-    	oppty = new OpportunitiesSelector().selectByLegacyId(new Set<String> {opptyExtId}).get(0); 
-    	System.assertEquals(WIN_DATE, oppty.CloseDate);		
+    	Opportunity oppty = new OpportunitiesSelector().selectByLegacyId(new Set<String> {opptyExtId}).get(0); 
+    	
+    	System.assertEquals(partWinDate, oppty.CloseDate);
+    	System.assertEquals(prodDate, oppty.Production_Date__c);
     }
     
+    @isTest
+    static void testOpptyCloseDateAndProdDate3() {
+    	// TMMA Override = false 
+    	// Not Commitment 
+    	oppty.TMMA_Override__c = false;
+    	
+    	update oppty;
+    	
+    	Date prodDate = Date.today() + 30;
+    	    	 
+    	mnStage.Status__c = STATUS_QUEUED;
+    	mnStage.Reg_Part_Status__c = 'Rejected'; 
+    	mnStage.Reg_Part_Win_Status__c = 'Pending';
+    	mnStage.Reg_Status__c = 'Approved';
+    	mnStage.Reg_Production_Date__c = prodDate;
+    	    	
+    	update mnStage;
+    	
+    	processData();
+    	
+    	Opportunity oppty = new OpportunitiesSelector().selectByLegacyId(new Set<String> {opptyExtId}).get(0); 
+    	
+    	System.assertEquals(prodDate, oppty.CloseDate);
+    	System.assertEquals(prodDate, oppty.Production_Date__c);
+    }
+   
     @isTest
     static void testOpptyStageInitialEngagement() {
     	// Initial Engagement

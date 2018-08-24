@@ -4,6 +4,9 @@
     <types>
         <members>OpportunityScheduleController</members>
         <members>OpportunitySchedulingWrapper</members>
+        <members>MnStages</members>
+        <members>ModelNDesignRegistrationsProcessJobTest</members>
+        <members>OpportunityService</members>
         <name>ApexClass</name>
     </types>
     <types>
