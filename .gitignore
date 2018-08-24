@@ -3,7 +3,6 @@
 .project
 salesforce.schema
 src/package.xml
-deploy/build.properties
 deploy/dist
 deploy/dist/*
 deploy/retrievedSource
