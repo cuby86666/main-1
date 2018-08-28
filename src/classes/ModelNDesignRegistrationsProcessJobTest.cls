@@ -523,15 +523,15 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	
     	update oppty;
     	
-    	Date prodDate = Date.today() + 30;
-    	Date partWinDate = Date.today() + 60;
-    	 
+    	final Date REG_PROD_DATE = Date.today() + 30;
+    	final Date REG_PART_WIN_DATE = Date.today() + 60;
+    	
     	mnStage.Status__c = STATUS_QUEUED;
     	mnStage.Reg_Part_Status__c = 'Pending'; 
     	mnStage.Reg_Part_Win_Status__c = 'DesignWin';
     	mnStage.Reg_Status__c = 'Pending';
-    	mnStage.Reg_Production_Date__c = prodDate;
-    	mnStage.Reg_Part_Win_Date__c = partWinDate;
+    	mnStage.Reg_Production_Date__c = REG_PROD_DATE;
+    	mnStage.Reg_Part_Win_Date__c = REG_PART_WIN_DATE;
     	
     	update mnStage;
     	
@@ -539,8 +539,8 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	
     	Opportunity oppty = new OpportunitiesSelector().selectByLegacyId(new Set<String> {opptyExtId}).get(0); 
     	
-    	System.assertEquals(partWinDate, oppty.CloseDate);
-    	System.assertEquals(partWinDate.addMonths(6), oppty.Production_Date__c);
+    	System.assertEquals(REG_PART_WIN_DATE, oppty.CloseDate);
+    	System.assertEquals(REG_PART_WIN_DATE.addMonths(6), oppty.Production_Date__c);
     }
     
     @isTest
@@ -552,15 +552,15 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	
     	update oppty;
     	
-    	Date prodDate = Date.today() + 60;
-    	Date partWinDate = Date.today() + 30;
-    	 
+    	final Date REG_PROD_DATE = Date.today() + 60;
+    	final Date REG_PART_WIN_DATE = Date.today() + 30;
+    	
     	mnStage.Status__c = STATUS_QUEUED;
     	mnStage.Reg_Part_Status__c = 'Approved'; 
     	mnStage.Reg_Part_Win_Status__c = 'ProdWin';
     	mnStage.Reg_Status__c = 'Rejected';
-    	mnStage.Reg_Production_Date__c = prodDate;
-    	mnStage.Reg_Part_Win_Date__c = partWinDate;
+    	mnStage.Reg_Production_Date__c = REG_PROD_DATE;
+    	mnStage.Reg_Part_Win_Date__c = REG_PART_WIN_DATE;
     	
     	update mnStage;
     	
@@ -568,8 +568,8 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	
     	Opportunity oppty = new OpportunitiesSelector().selectByLegacyId(new Set<String> {opptyExtId}).get(0); 
     	
-    	System.assertEquals(partWinDate, oppty.CloseDate);
-    	System.assertEquals(prodDate, oppty.Production_Date__c);
+    	System.assertEquals(REG_PART_WIN_DATE, oppty.CloseDate);
+    	System.assertEquals(REG_PROD_DATE, oppty.Production_Date__c);
     }
     
     @isTest
@@ -580,13 +580,13 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	
     	update oppty;
     	
-    	Date prodDate = Date.today() + 30;
-    	    	 
+    	final Date REG_PROD_DATE = Date.today() + 30;
+    	
     	mnStage.Status__c = STATUS_QUEUED;
     	mnStage.Reg_Part_Status__c = 'Rejected'; 
     	mnStage.Reg_Part_Win_Status__c = 'Pending';
     	mnStage.Reg_Status__c = 'Approved';
-    	mnStage.Reg_Production_Date__c = prodDate;
+    	mnStage.Reg_Production_Date__c = REG_PROD_DATE;
     	    	
     	update mnStage;
     	
@@ -594,10 +594,109 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	
     	Opportunity oppty = new OpportunitiesSelector().selectByLegacyId(new Set<String> {opptyExtId}).get(0); 
     	
-    	System.assertEquals(prodDate, oppty.CloseDate);
-    	System.assertEquals(prodDate, oppty.Production_Date__c);
+    	System.assertEquals(REG_PROD_DATE, oppty.CloseDate);
+    	System.assertEquals(REG_PROD_DATE, oppty.Production_Date__c);
     }
-   
+    
+    @isTest
+    static void testOpptyCloseDateAndProdDate4() {
+    	// TMMA Override = true
+    	// Commitment 
+    	// User Production Date < Reg Part Win Date 
+    	final Date USER_CLOSE_DATE = Date.today() + 10;
+    	final Date USER_PROD_DATE = Date.today() + 30;
+    	
+    	oppty.TMMA_Override__c = true;
+    	oppty.CloseDate = USER_CLOSE_DATE; 
+    	oppty.Production_Date__c = USER_PROD_DATE;
+    	
+    	update oppty;
+    	
+    	final Date REG_PROD_DATE = Date.today() + 90;
+    	final Date REG_PART_WIN_DATE = Date.today() + 60;
+    	
+    	mnStage.Status__c = STATUS_QUEUED;
+    	mnStage.Reg_Part_Status__c = 'Pending'; 
+    	mnStage.Reg_Part_Win_Status__c = 'DesignWin';
+    	mnStage.Reg_Status__c = 'Pending';
+    	mnStage.Reg_Production_Date__c = REG_PROD_DATE;
+    	mnStage.Reg_Part_Win_Date__c = REG_PART_WIN_DATE;
+    	
+    	update mnStage;
+    	
+    	processData();
+    	
+    	Opportunity oppty = new OpportunitiesSelector().selectByLegacyId(new Set<String> {opptyExtId}).get(0); 
+    	
+    	System.assertEquals(REG_PART_WIN_DATE, oppty.CloseDate);
+    	System.assertEquals(REG_PART_WIN_DATE.addMonths(6), oppty.Production_Date__c);
+    }
+  
+ 	@isTest
+    static void testOpptyCloseDateAndProdDate5() {
+    	// TMMA Override = true  
+    	// Commitment 
+    	// User Production Date >= Reg Part Win Date
+    	final Date USER_CLOSE_DATE = Date.today() + 10;
+    	final Date USER_PROD_DATE = Date.today() + 60;
+    	
+    	oppty.TMMA_Override__c = true;
+    	oppty.CloseDate = USER_CLOSE_DATE;
+    	oppty.Production_Date__c = USER_PROD_DATE;
+    	
+    	update oppty;
+    	
+    	final Date REG_PROD_DATE = Date.today() + 90;
+    	final Date REG_PART_WIN_DATE = Date.today() + 30;
+    	
+    	mnStage.Status__c = STATUS_QUEUED;
+    	mnStage.Reg_Part_Status__c = 'Approved'; 
+    	mnStage.Reg_Part_Win_Status__c = 'ProdWin';
+    	mnStage.Reg_Status__c = 'Rejected';
+    	mnStage.Reg_Production_Date__c = REG_PROD_DATE;
+    	mnStage.Reg_Part_Win_Date__c = REG_PART_WIN_DATE;
+    	
+    	update mnStage;
+    	
+    	processData();
+    	
+    	Opportunity oppty = new OpportunitiesSelector().selectByLegacyId(new Set<String> {opptyExtId}).get(0); 
+    	
+    	System.assertEquals(REG_PART_WIN_DATE, oppty.CloseDate);
+    	System.assertEquals(USER_PROD_DATE, oppty.Production_Date__c);
+    }
+    
+    @isTest
+    static void testOpptyCloseDateAndProdDate6() {
+    	// TMMA Override = true 
+    	// Not Commitment 
+    	final Date USER_CLOSE_DATE = Date.today() + 30;
+    	final Date USER_PROD_DATE = Date.today() + 60;
+    	
+    	oppty.TMMA_Override__c = true;
+    	oppty.CloseDate = USER_CLOSE_DATE;
+    	oppty.Production_Date__c = USER_PROD_DATE;  
+    	
+    	update oppty;
+    	
+    	final Date REG_PROD_DATE = Date.today() + 90;
+    	
+    	mnStage.Status__c = STATUS_QUEUED;
+    	mnStage.Reg_Part_Status__c = 'Rejected'; 
+    	mnStage.Reg_Part_Win_Status__c = 'Pending';
+    	mnStage.Reg_Status__c = 'Approved';
+    	mnStage.Reg_Production_Date__c = REG_PROD_DATE;
+    	    	
+    	update mnStage;
+  
+    	processData();
+    	
+    	Opportunity oppty = new OpportunitiesSelector().selectByLegacyId(new Set<String> {opptyExtId}).get(0); 
+    	
+    	System.assertEquals(USER_CLOSE_DATE, oppty.CloseDate);
+    	System.assertEquals(USER_PROD_DATE, oppty.Production_Date__c);
+    }
+
     @isTest
     static void testOpptyStageInitialEngagement() {
     	// Initial Engagement
@@ -745,7 +844,12 @@ private class ModelNDesignRegistrationsProcessJobTest {
     }
     
     private static void processData() {
-    	MnStages.newInstance(new MnStagesSelector().selectByStatus(new Set<String> {STATUS_QUEUED})).processData();
+    	User u = [select Id from User where Id = :CommonUtils.getDataAdminUserId()];
+        
+        System.runAs(u) {
+			Opportunities.resetUpdateEventEntry();       	
+        	MnStages.newInstance(new MnStagesSelector().selectByStatus(new Set<String> {STATUS_QUEUED})).processData();	
+        }
     }
     
     private static Id runBatch() {

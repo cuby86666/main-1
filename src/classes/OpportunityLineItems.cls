@@ -3,10 +3,20 @@ public class OpportunityLineItems extends ApplicationDomain {
 	public static final Set<String> LOST_CANCELLED = new Set<String> {'Lost', 'Cancelled'};
 	
 	private static final Integer PRICE_EROSION_QUARTERS = 4;
-    
     private static final String PROBABILITY_TO_WIN_80_100 = '80% - 100%';
+    private static final Set<String> TMMA_OVERRIDE_FIELDS_OPPTY_PROD = new Set<String>();
 	
 	private static Set<Id> opptyProdSchedIds;
+	
+	static {
+		List<Opportunity_TMMA_Override_Setting__mdt> tmmaOverrideSettings = (List<Opportunity_TMMA_Override_Setting__mdt>)new OpportunityTmmaOverrideSettingsSelector().selectAll();
+        
+        for (Opportunity_TMMA_Override_Setting__mdt otos : tmmaOverrideSettings) {
+        	if (otos.Object_Name__c == 'OpportunityLineItem') {
+        		TMMA_OVERRIDE_FIELDS_OPPTY_PROD.add(otos.Field_Name__c);	
+        	}
+        }
+	}
 	
 	public OpportunityLineItems(List<OpportunityLineItem> opptyProds) {
 		super(opptyProds);
@@ -37,7 +47,7 @@ public class OpportunityLineItems extends ApplicationDomain {
 	
 	public override void onBeforeUpdate(Map<Id, SObject> existingRecords) {
 		p('onBeforeUpdate');
-		OpportunityProductClaimValue.bypassOpportunityProductMnUpdateForTmmaOverride((Map<Id, OpportunityLineItem>)existingRecords, new Map<Id, OpportunityLineItem>((List<OpportunityLineItem>)this.records));
+		resetTmmaOverriddenFields((Map<Id, OpportunityLineItem>)existingRecords, new Map<Id, OpportunityLineItem>((List<OpportunityLineItem>)this.records));
 		
 		OpportunityProductClaimValue.setOpportunityProductClaimValues((List<OpportunityLineItem>)this.records);	
 		
@@ -57,7 +67,7 @@ public class OpportunityLineItems extends ApplicationDomain {
 	
 	public override void onAfterUpdate(Map<Id, SObject> existingRecords) {
 		p('onAfterUpdate');
-		OpportunityProductClaimValue.updateTmmaOverrideIfOpportunityProductMnUpdatedByTmma((Map<Id, OpportunityLineItem>)existingRecords, new Map<Id, OpportunityLineItem>((List<OpportunityLineItem>)this.records));
+		updateMnOppties((Map<Id, OpportunityLineItem>)existingRecords, new Map<Id, OpportunityLineItem>((List<OpportunityLineItem>)this.records));
 		
 		createReOpenOpptyProdScheds((List<OpportunityLineItem>)existingRecords.values());
 		
@@ -615,6 +625,94 @@ public class OpportunityLineItems extends ApplicationDomain {
     	for (OpportunityLineItem oli : (List<OpportunityLineItem>)this.records) {
     		oli.NPI_Shadow__c = new Set<String> {'DEV', 'CQS', 'ASM'}.contains(oli.Prod_State__c) ? 1 : 0;
     	}
+    }
+    
+    private void resetTmmaOverriddenFields(Map<Id, OpportunityLineItem> opptyLineItemsOld, Map<Id, OpportunityLineItem> opptyLineItemsNew) {
+    	p('resetTmmaOverriddenFields');
+    	for (OpportunityLineItem oliNew : opptyLineItemsNew.values()) {
+        	OpportunityLineItem oliOld = opptyLineItemsOld.get(oliNew.Id);    
+            
+            if (isMnRecordType(oliNew) && isTmmaOverride(oliNew) && CommonUtils.isDataAdminUser()) {
+            	CommonUtils.resetFields(oliOld, oliNew, TMMA_OVERRIDE_FIELDS_OPPTY_PROD);
+            }
+        }	
+    }
+    
+    private void updateMnOppties(Map<Id, OpportunityLineItem> opptyLineItemsOld, Map<Id, OpportunityLineItem> opptyLineItemsNew) {
+    	p('updateMnOppties');
+    	Set<Id> opptyIds = new Set<Id>();
+    	    	
+    	for (OpportunityLineItem oli : opptyLineItemsNew.values()) {
+    		if (isMnRecordType(oli)) {
+    			opptyIds.add(oli.OpportunityId);
+    		}
+    	}
+    	
+    	if (opptyIds.size() == 0) return;
+    	
+    	Map<Id, Opportunity> oppties = new Map<Id, Opportunity>(new OpportunitiesSelector().selectById(opptyIds));
+    	
+    	List<Opportunity> opptiesUpdated = new List<Opportunity>(); 
+    	
+    	for (OpportunityLineItem oliNew : opptyLineItemsNew.values()) {
+    		OpportunityLineItem oliOld = opptyLineItemsOld.get(oliNew.Id);    
+            Opportunity oppty = oppties.get(oliNew.OpportunityId);
+            Boolean fieldChanged = false;
+            
+            if (oppty != null && isMnRecordType(oliNew)) {
+            	if (!CommonUtils.isDataAdminUser() && CommonUtils.fieldsChanged(oliOld, oliNew, TMMA_OVERRIDE_FIELDS_OPPTY_PROD)) {
+	            	oppty.TMMA_Override__c = true;
+	            	fieldChanged = true;
+	            }
+	            
+	            if (CommonUtils.isDataAdminUser()) {
+	            	OpportunityService.setMnOpportunityCloseDateAndProdDate(oppty, oppty.CloseDate, oppty.Production_Date__c, oliNew.Win_Date__c);
+	            	fieldChanged = true;	
+	            }
+	            
+	            if (fieldChanged) {
+	            	opptiesUpdated.add(oppty);	
+	            }	
+            }
+        }
+    	
+    	if (opptiesUpdated.size() > 0) {
+    		update opptiesUpdated;
+    	}
+    }
+   
+    private void updateMnOpptyScheds() {
+    	p('updateMnOpptyScheds');
+    	for (OpportunityLineItem oli : (List<OpportunityLineItem>)this.records) {
+    		if (isMnOpptySchedsUpdatable(oli)) {
+    			// shift scheds	
+    		}	
+    	}
+    }
+    
+    private Boolean isMnOpptySchedsUpdatable(OpportunityLineItem opptyProd) {
+		p('isMnOpptySchedsUpdatable');
+		return isMnRecordType(opptyProd) && isCommitment(opptyProd) && isTmmaOverride(opptyProd) && isProdDateBeforeWinDate(opptyProd) && CommonUtils.isDataAdminUser();
+	}
+    
+    private Boolean isMnRecordType(OpportunityLineItem opptyProd) {
+    	p('isMnRecordType');
+		return opptyProd.Opportunity_Record_Type_Id__c == OpportunitiesSelector.getMnRecordTypeId();
+    }
+    
+    private Boolean isCommitment(OpportunityLineItem opptyProd) {
+    	p('isCommitment');
+    	return opptyProd.Opportunity_Stage__c == Opportunities.STAGE_COMMITMENT;
+    }
+    
+    private Boolean isTmmaOverride(OpportunityLineItem opptyProd) {
+    	p('isTmmaOverride');
+    	return opptyProd.Opportunity_TMMA_Override__c;
+    }
+    
+    private Boolean isProdDateBeforeWinDate(OpportunityLineItem opptyProd) {
+    	p('isProdDateBeforeWinDate');
+    	return opptyProd.Opportunity_Production_Date__c < opptyProd.Win_Date__c;
     }
     
 }

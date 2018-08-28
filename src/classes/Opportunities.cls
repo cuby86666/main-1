@@ -38,9 +38,20 @@ public class Opportunities extends ApplicationDomain {
 	};
 	
 	public static final String MN_LOST_REASON = 'Expired';
+	private static final Set<String> TMMA_OVERRIDE_FIELDS_OPPTY = new Set<String>();
 	
 	private static Set<Id> beforeUpdateProcessedIds = new Set<Id>();
 	private static Set<Id> afterUpdateProcessedIds = new Set<Id>();
+	
+	static {
+		List<Opportunity_TMMA_Override_Setting__mdt> tmmaOverrideSettings = (List<Opportunity_TMMA_Override_Setting__mdt>)new OpportunityTmmaOverrideSettingsSelector().selectAll();
+        
+        for (Opportunity_TMMA_Override_Setting__mdt otos : tmmaOverrideSettings) {
+        	if (otos.Object_Name__c == 'Opportunity') {
+        		TMMA_OVERRIDE_FIELDS_OPPTY.add(otos.Field_Name__c);	
+        	}
+        }
+	}
 	
 	public static void resetUpdateEventEntry() {
 		beforeUpdateProcessedIds = new Set<Id>();
@@ -76,9 +87,9 @@ public class Opportunities extends ApplicationDomain {
 		
 		updateOpptyStarInfo();
 		
-		OpportunityProductClaimValue.updateTmmaOverrideIfOpportunityMnUpdatedByTmma((Map<Id, Opportunity>)existingRecords, new Map<Id, Opportunity>((List<Opportunity>)this.records));
+		updateTmmaOverride((Map<Id, Opportunity>)existingRecords, new Map<Id, Opportunity>((List<Opportunity>)this.records));
 		
-		OpportunityProductClaimValue.bypassOpportunityMnUpdateForTmmaOverride((Map<Id, Opportunity>)existingRecords, new Map<Id, Opportunity>((List<Opportunity>)this.records));
+		resetTmmaOverriddenFields((Map<Id, Opportunity>)existingRecords, new Map<Id, Opportunity>((List<Opportunity>)this.records));
 	}
 	
 	public override void onAfterInsert() {
@@ -714,16 +725,38 @@ public class Opportunities extends ApplicationDomain {
 		return result;
     }
     
+    private void updateTmmaOverride(Map<Id, Opportunity> opptiesOld, Map<Id, Opportunity> opptiesNew) {
+    	p('updateTmmaOverride');
+    	for (Opportunity oNew : opptiesNew.values()) {
+        	Opportunity oOld = opptiesOld.get(oNew.Id);
+        	
+        	if (isMnRecordType(oNew) && !CommonUtils.isDataAdminUser() && CommonUtils.fieldsChanged(oOld, oNew, TMMA_OVERRIDE_FIELDS_OPPTY)) {
+            	oNew.TMMA_Override__c = true;	
+            }
+    	}	
+    }
+    
+    private void resetTmmaOverriddenFields(Map<Id, Opportunity> opptiesOld, Map<Id, Opportunity> opptiesNew) {
+    	p('resetTmmaOverriddenFields');
+    	for (Opportunity oNew : opptiesNew.values()) {
+        	Opportunity oOld = opptiesOld.get(oNew.Id);    
+                        
+            if (isMnRecordType(oNew) && isTmmaOverride(oNew) && CommonUtils.isDataAdminUser()) {
+            	CommonUtils.resetFields(oOld, oNew, TMMA_OVERRIDE_FIELDS_OPPTY);
+            }
+        }
+    }
+    
+    private Boolean isMnRecordType(Opportunity oppty) {
+		p('isMnRecordType');
+		return oppty.RecordTypeId == OpportunitiesSelector.getMnRecordTypeId();
+    }
+    
     private Boolean isTmmaOverride(Opportunity oppty) {
     	p('isTmmaOverride');
     	return oppty.TMMA_Override__c;
     }
-    
-    private Boolean isMnRecordType(Opportunity oppty) {
-    	p('isMnRecordType');
-		return oppty.RecordTypeId == OpportunitiesSelector.getMnRecordTypeId();
-    }
-    
+  
     private Boolean processed() {
     	p('processed');
     	Boolean result = true;

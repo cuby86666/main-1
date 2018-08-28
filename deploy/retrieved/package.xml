@@ -2,16 +2,26 @@
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>0918</fullName>
     <types>
+    	<members>CommonUtils</members>
         <members>OpportunityScheduleController</members>
         <members>OpportunitySchedulingWrapper</members>
         <members>MnStages</members>
         <members>ModelNDesignRegistrationsProcessJobTest</members>
+        <members>Opportunities</members>
+        <members>OpportunityLineItems</members>
+        <members>OpportunityLineItemsSelector</members>
+        <members>OpportunityProductClaimValue</members>
         <members>OpportunityService</members>
         <name>ApexClass</name>
     </types>
     <types>
         <members>opportunityScheduleAction</members>
         <name>AuraDefinitionBundle</name>
+    </types>
+    <types>
+    	<members>OpportunityLineItem.Opportunity_Stage__c</members>
+        <members>OpportunityLineItem.Opportunity_TMMA_Override__c</members>
+        <name>CustomField</name>
     </types>
     <version>43.0</version>
 </Package>

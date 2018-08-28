@@ -204,7 +204,12 @@ public with sharing class OpportunityService {
 	}
 	
 	public static void setMnOpportunityCloseDateAndProdDate(Opportunity oppty, Date prodDate, Date partWinDate) {
-		p('setMnOpportunityCloseDateAndProdDate');
+		p('setMnOpportunityCloseDateAndProdDate(oppty, prodDate, partWinDate)');
+		setMnOpportunityCloseDateAndProdDate(oppty, null, prodDate, partWinDate);
+	}
+	
+	public static void setMnOpportunityCloseDateAndProdDate(Opportunity oppty, Date closeDate, Date prodDate, Date partWinDate) {
+		p('setMnOpportunityCloseDateAndProdDate(oppty, closeDate, prodDate, partWinDate)');
 		
 		if (oppty.StageName == STAGE_COMMITMENT) {
 			oppty.CloseDate = partWinDate;
@@ -215,7 +220,7 @@ public with sharing class OpportunityService {
 				oppty.Production_Date__c = prodDate;
 			} 
 		} else {
-			oppty.CloseDate = prodDate;	
+			oppty.CloseDate = (closeDate != null ? closeDate : prodDate);	
 			oppty.Production_Date__c = prodDate;
 		}	
 	}

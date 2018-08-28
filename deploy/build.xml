@@ -130,13 +130,7 @@
 		<condition property="sf.target.username" value=""> <not> <isset property="sf.target.username"/> </not> </condition>
 		<condition property="sf.target.password" value=""> <not> <isset property="sf.target.password"/> </not> </condition>
 	    <condition property="sf.sessionId" value=""> <not> <isset property="sf.sessionId"/> </not> </condition>
-		<!--
-		<echo message="sf.source.username: ${sf.source.username}"/>
-		<echo message="sf.source.password: ${sf.source.password}"/>
-		<echo message="sf.target.username: ${sf.target.username}"/>
-		<echo message="sf.target.password: ${sf.target.password}"/>
-		<echo message="sf.sessionId: ${sf.sessionId}"/>
-		-->
+		
 		<propertyregex property="target.server.name"
 				       input="${sf.target.username}"
 				       regexp="\b(\w+)$"
@@ -220,6 +214,15 @@
 	
 	<!-- run local tests only -->
 	<target name="run-local-tests" depends="init,set-form-target,show-form" description="Run local tests only">
+		<delete dir="test"/>
+		<mkdir dir="test"/>
+		
+		<echoxml file="test/package.xml">
+			<Package>
+				<version>43.0</version>
+			</Package>
+		</echoxml>
+		
 		<echo message="Target username: ${sf.target.username}"/>
 		<sf:deploy username="${sf.target.username}" password="${sf.target.password}" sessionId="${sf.sessionId}" serverurl="${sf.target.serverurl}" maxPoll="${sf.maxPoll}" deployRoot="test" checkOnly="true" rollbackOnError="true" autoUpdatePackage="true" testLevel="RunLocalTests" pollWaitMillis="40000" logType="None"/>
 	</target>

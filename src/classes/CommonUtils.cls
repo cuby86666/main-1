@@ -131,6 +131,22 @@ public class CommonUtils {
 		return guid; 
     }
     
+    public static Boolean fieldsChanged(SObject soOld, SObject soNew, Set<String> fieldNames) {
+    	Boolean result = false;
+    	
+    	for (String fn : fieldNames) {
+    		result |= (soOld.get(fn) != soNew.get(fn));
+    	}
+    	
+    	return result;
+    }
+    
+    public static void resetFields(SObject soOld, SObject soNew, Set<String> fieldNames) {
+    	for (String fn : fieldNames) {
+        	soNew.put(fn, soOld.get(fn));	
+        }	
+    }
+    
     public static void p(Object obj, String prefix, String msg) {
     	if (isLoggingActive != null ? isLoggingActive : false) {
     		System.debug(prefix + ' ' + String.valueOf(obj).substring(0, String.valueOf(obj).indexOf(':')) + ' - ' + msg);

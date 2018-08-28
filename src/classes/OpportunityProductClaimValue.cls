@@ -17,10 +17,6 @@ public class OpportunityProductClaimValue {
     private static final Boolean CROSS_UPDATE_ALLOWED;
     private static final String ACCOUNT_CBG;
     
-    // TMMA
-    private static final List<String> TMMA_OVERRIDE_FIELDS_OPPTY = new List<String>();
-    private static final List<String> TMMA_OVERRIDE_FIELDS_OPPTY_PROD = new List<String>();
-        
     // Used to prevent claim value calculation if triggered from other object changes, such as Product2 and Account.
     public static Boolean isUpdatable = true;
     
@@ -34,17 +30,6 @@ public class OpportunityProductClaimValue {
         
         for (Opportunity_Claim_Value_MAG_Setting__mdt ocvms : claimValueMagSettings) {
         	MAG_CLAIM_VALUE_QUARTERS.put(ocvms.MAG__c, ocvms.Claim_Value_Quarters__c);
-        }
-        
-        // TMMA
-        List<Opportunity_TMMA_Override_Setting__mdt> tmmaOverrideSettings = (List<Opportunity_TMMA_Override_Setting__mdt>)new OpportunityTmmaOverrideSettingsSelector().selectAll();
-        
-        for (Opportunity_TMMA_Override_Setting__mdt otos : tmmaOverrideSettings) {
-        	if (otos.Object_Name__c == 'Opportunity') {
-        		TMMA_OVERRIDE_FIELDS_OPPTY.add(otos.Field_Name__c);	
-        	} else if (otos.Object_Name__c == 'OpportunityLineItem') {
-        		TMMA_OVERRIDE_FIELDS_OPPTY_PROD.add(otos.Field_Name__c);	
-        	}
         }
     }
    
@@ -223,19 +208,6 @@ public class OpportunityProductClaimValue {
         return (isUpdatable || CROSS_UPDATE_ALLOWED) ? true : false;    
     }
     
-    private static Map<Id, Opportunity> getOpptyRecordTypeIds(List<OpportunityLineItem> opptyLineItems) {
-    	p2('getOpptyRecordTypeIds');
-        Set<Id> opptyIds = new Set<Id>();
-        
-        for (OpportunityLineItem oli : opptyLineItems) {
-            opptyIds.add(oli.OpportunityId);
-        }
-        
-        Map<Id, Opportunity> result = new Map<Id, Opportunity>(new OpportunitiesSelector().selectById(opptyIds));
-        
-        return result;
-    }
-    
     private static Set<Id> getOpptyIds(List<OpportunityLineItem> opptyLineItems) {
     	p2('getOpptyIds');
         Set<Id> result = new Set<Id>();
@@ -247,101 +219,7 @@ public class OpportunityProductClaimValue {
         return result;
     }
     
-    // TMMA
-    public static void bypassOpportunityProductMnUpdateForTmmaOverride(Map<Id, OpportunityLineItem> opptyLineItemsOld, Map<Id, OpportunityLineItem> opptyLineItemsNew) {
-    	p2('bypassOpportunityProductMnUpdateForTmmaOverride');
-    	Map<Id, Opportunity> opptys = getOpptyRecordTypeIds(opptyLineItemsNew.values());
-        
-        for (OpportunityLineItem oliNew : opptyLineItemsNew.values()) {
-        	OpportunityLineItem oliOld = opptyLineItemsOld.get(oliNew.Id);    
-            Opportunity oppty = opptys.get(oliNew.OpportunityId);
-            
-            if (isMnRecordType(oppty) && isTmmaOverride(oppty) && CommonUtils.isDataAdminUser()) {
-            	setTmmaOverrideFields(oliOld, oliNew, TMMA_OVERRIDE_FIELDS_OPPTY_PROD);
-            }
-        }	
-    }
-    
-    public static void updateTmmaOverrideIfOpportunityProductMnUpdatedByTmma(Map<Id, OpportunityLineItem> opptyLineItemsOld, Map<Id, OpportunityLineItem> opptyLineItemsNew) {
-    	p2('updateTmmaOverrideIfOpportunityProductMnUpdatedByTmma');
-    	Map<Id, Opportunity> opptys = getOpptyRecordTypeIds(opptyLineItemsNew.values());
-    	
-    	Map<Id, Opportunity> opptyMNs = new Map<Id, Opportunity>();
-    	
-    	for (Opportunity o : opptys.values()) {
-    		if (isMnRecordType(o)) {
-    			opptyMNs.put(o.Id, o);
-    		}
-    	}
-    	
-    	if (opptyMNs.size() == 0) return;
-    	
-    	List<Opportunity> opptiesUpdated = new List<Opportunity>(); 
-    	
-    	for (OpportunityLineItem oliNew : opptyLineItemsNew.values()) {
-    		OpportunityLineItem oliOld = opptyLineItemsOld.get(oliNew.Id);    
-            Opportunity oppty = opptyMNs.get(oliNew.OpportunityId);
-            
-            if (oppty != null && isMnRecordType(oppty) && !CommonUtils.isDataAdminUser() && isTmmaOverrideFieldsChanged(oliOld, oliNew, TMMA_OVERRIDE_FIELDS_OPPTY_PROD)) {
-            	oppty.TMMA_Override__c = true;
-            	opptiesUpdated.add(oppty);
-            }		
-    	}
-    	
-    	if (opptiesUpdated.size() > 0) {
-    		update opptiesUpdated;
-    	}
-    }
-    
-    public static void bypassOpportunityMnUpdateForTmmaOverride(Map<Id, Opportunity> opptiesOld, Map<Id, Opportunity> opptiesNew) {
-    	p2('bypassOpportunityMnUpdateForTmmaOverride');
-    	for (Opportunity oNew : opptiesNew.values()) {
-        	Opportunity oOld = opptiesOld.get(oNew.Id);    
-                        
-            if (isMnRecordType(oNew) && isTmmaOverride(oNew) && CommonUtils.isDataAdminUser()) {
-            	setTmmaOverrideFields(oOld, oNew, TMMA_OVERRIDE_FIELDS_OPPTY);
-            }
-        }
-    }
-    
-    public static void updateTmmaOverrideIfOpportunityMnUpdatedByTmma(Map<Id, Opportunity> opptiesOld, Map<Id, Opportunity> opptiesNew) {
-    	p2('updateTmmaOverrideIfOpportunityMnUpdatedByTmma');
-    	for (Opportunity oNew : opptiesNew.values()) {
-        	Opportunity oOld = opptiesOld.get(oNew.Id);
-        	
-        	if (isMnRecordType(oNew) && !CommonUtils.isDataAdminUser() && isTmmaOverrideFieldsChanged(oOld, oNew, TMMA_OVERRIDE_FIELDS_OPPTY)) {
-            	oNew.TMMA_Override__c = true;	
-            }
-    	}	
-    }
-    
-    private static void setTmmaOverrideFields(SObject soOld, SObject soNew, List<String> fieldNames) {
-    	p2('setTmmaOverrideFields');
-    	for (String fn : fieldNames) {
-        	soNew.put(fn, soOld.get(fn));	
-        }	
-    }
-    
-    private static Boolean isTmmaOverrideFieldsChanged(SObject soOld, SObject soNew, List<String> fieldNames) {
-    	p2('isTmmaOverrideFieldsChanged');
-    	Boolean result = false;
-    	
-    	for (String fn : fieldNames) {
-    		result |= (soOld.get(fn) != soNew.get(fn));
-    	}
-    	
-    	return result;
-    }
-    
-    private static Boolean isTmmaOverride(Opportunity oppty) {
-    	return oppty.TMMA_Override__c;
-    }
-    
-    private static Boolean isMnRecordType(Opportunity oppty) {
-		return oppty.RecordTypeId == OpportunitiesSelector.getMnRecordTypeId();
-    }
-    
-    private static void p2(String msg) {
+ 	private static void p2(String msg) {
 		CommonUtils.p(OpportunityProductClaimValue.class, '//-c', msg);
 	}
 	
