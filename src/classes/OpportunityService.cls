@@ -205,13 +205,13 @@ public with sharing class OpportunityService {
 	
 	public static void setMnOpportunityCloseDateAndProdDate(Opportunity oppty, Date prodDate, Date partWinDate) {
 		p('setMnOpportunityCloseDateAndProdDate(oppty, prodDate, partWinDate)');
-		setMnOpportunityCloseDateAndProdDate(oppty, null, prodDate, partWinDate);
+		setMnOpportunityCloseDateAndProdDate(oppty, null, null, prodDate, partWinDate);
 	}
 	
-	public static void setMnOpportunityCloseDateAndProdDate(Opportunity oppty, Date closeDate, Date prodDate, Date partWinDate) {
-		p('setMnOpportunityCloseDateAndProdDate(oppty, closeDate, prodDate, partWinDate)');
+	public static void setMnOpportunityCloseDateAndProdDate(Opportunity oppty, Opportunity opptyOld, Date closeDate, Date prodDate, Date partWinDate) {
+		p('setMnOpportunityCloseDateAndProdDate(oppty, opptyOld, closeDate, prodDate, partWinDate)');
 		
-		if (oppty.StageName == STAGE_COMMITMENT) {
+		if (isCommitment(oppty) && !isCommitment(opptyOld)) {
 			oppty.CloseDate = partWinDate;
 			
 			if (prodDate < partWinDate) {
@@ -224,6 +224,11 @@ public with sharing class OpportunityService {
 			oppty.Production_Date__c = prodDate;
 		}	
 	}
+	
+	private static Boolean isCommitment(Opportunity oppty) {
+    	p('isCommitment');
+    	return (oppty != null && oppty.StageName == STAGE_COMMITMENT) ? true : false;
+    }
 	
 	public static void setMnOpportunityLostCancelledInfo(Opportunity oppty, Date actionDate) {
 		p('setMnOpportunityLostCancelledInfo');	

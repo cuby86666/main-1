@@ -627,7 +627,7 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	processData();
     	
     	Opportunity oppty = new OpportunitiesSelector().selectByLegacyId(new Set<String> {opptyExtId}).get(0); 
-    	
+
     	System.assertEquals(REG_PART_WIN_DATE, oppty.CloseDate);
     	System.assertEquals(REG_PART_WIN_DATE.addMonths(6), oppty.Production_Date__c);
     }

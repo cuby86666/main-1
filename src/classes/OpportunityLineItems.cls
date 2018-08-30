@@ -652,32 +652,20 @@ public class OpportunityLineItems extends ApplicationDomain {
     	
     	Map<Id, Opportunity> oppties = new Map<Id, Opportunity>(new OpportunitiesSelector().selectById(opptyIds));
     	
-    	List<Opportunity> opptiesUpdated = new List<Opportunity>(); 
+    	Set<Opportunity> opptiesUpdated = new Set<Opportunity>(); 
     	
     	for (OpportunityLineItem oliNew : opptyLineItemsNew.values()) {
     		OpportunityLineItem oliOld = opptyLineItemsOld.get(oliNew.Id);    
             Opportunity oppty = oppties.get(oliNew.OpportunityId);
-            Boolean fieldChanged = false;
-            
-            if (oppty != null && isMnRecordType(oliNew)) {
-            	if (!CommonUtils.isDataAdminUser() && CommonUtils.fieldsChanged(oliOld, oliNew, TMMA_OVERRIDE_FIELDS_OPPTY_PROD)) {
-	            	oppty.TMMA_Override__c = true;
-	            	fieldChanged = true;
-	            }
-	            
-	            if (CommonUtils.isDataAdminUser()) {
-	            	OpportunityService.setMnOpportunityCloseDateAndProdDate(oppty, oppty.CloseDate, oppty.Production_Date__c, oliNew.Win_Date__c);
-	            	fieldChanged = true;	
-	            }
-	            
-	            if (fieldChanged) {
-	            	opptiesUpdated.add(oppty);	
-	            }	
-            }
+                        
+            if (oppty != null && isMnRecordType(oliNew) && !CommonUtils.isDataAdminUser() && CommonUtils.fieldsChanged(oliOld, oliNew, TMMA_OVERRIDE_FIELDS_OPPTY_PROD)) {
+            	oppty.TMMA_Override__c = true;
+	            opptiesUpdated.add(oppty);
+	        }
         }
     	
     	if (opptiesUpdated.size() > 0) {
-    		update opptiesUpdated;
+    		update new List<Opportunity>(opptiesUpdated);
     	}
     }
    

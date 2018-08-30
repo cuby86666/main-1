@@ -740,13 +740,17 @@ public class Opportunities extends ApplicationDomain {
     	p('resetTmmaOverriddenFields');
     	for (Opportunity oNew : opptiesNew.values()) {
         	Opportunity oOld = opptiesOld.get(oNew.Id);    
-                        
+
             if (isMnRecordType(oNew) && isTmmaOverride(oNew) && CommonUtils.isDataAdminUser()) {
-            	CommonUtils.resetFields(oOld, oNew, TMMA_OVERRIDE_FIELDS_OPPTY);
+            	Date userCloseDate = oOld.CloseDate;
+            	Date userProdDate = oOld.Production_Date__c;
+        		Date regPartWinDate = oNew.CloseDate;
+            	
+            	OpportunityService.setMnOpportunityCloseDateAndProdDate(oNew, oOld, userCloseDate, userProdDate, regPartWinDate); 
             }
         }
     }
-    
+   
     private Boolean isMnRecordType(Opportunity oppty) {
 		p('isMnRecordType');
 		return oppty.RecordTypeId == OpportunitiesSelector.getMnRecordTypeId();
