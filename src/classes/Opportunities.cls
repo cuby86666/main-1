@@ -38,20 +38,9 @@ public class Opportunities extends ApplicationDomain {
 	};
 	
 	public static final String MN_LOST_REASON = 'Expired';
-	private static final Set<String> TMMA_OVERRIDE_FIELDS_OPPTY = new Set<String>();
-	
+		
 	private static Set<Id> beforeUpdateProcessedIds = new Set<Id>();
 	private static Set<Id> afterUpdateProcessedIds = new Set<Id>();
-	
-	static {
-		List<Opportunity_TMMA_Override_Setting__mdt> tmmaOverrideSettings = (List<Opportunity_TMMA_Override_Setting__mdt>)new OpportunityTmmaOverrideSettingsSelector().selectAll();
-        
-        for (Opportunity_TMMA_Override_Setting__mdt otos : tmmaOverrideSettings) {
-        	if (otos.Object_Name__c == 'Opportunity') {
-        		TMMA_OVERRIDE_FIELDS_OPPTY.add(otos.Field_Name__c);	
-        	}
-        }
-	}
 	
 	public static void resetUpdateEventEntry() {
 		beforeUpdateProcessedIds = new Set<Id>();
@@ -727,10 +716,12 @@ public class Opportunities extends ApplicationDomain {
     
     private void updateTmmaOverride(Map<Id, Opportunity> opptiesOld, Map<Id, Opportunity> opptiesNew) {
     	p('updateTmmaOverride');
+    	Set<String> tmmaOverrideFields = getTmmaOverrideFields();
+    	
     	for (Opportunity oNew : opptiesNew.values()) {
         	Opportunity oOld = opptiesOld.get(oNew.Id);
         	
-        	if (isMnRecordType(oNew) && !CommonUtils.isDataAdminUser() && CommonUtils.fieldsChanged(oOld, oNew, TMMA_OVERRIDE_FIELDS_OPPTY)) {
+        	if (isMnRecordType(oNew) && !CommonUtils.isDataAdminUser() && CommonUtils.fieldsChanged(oOld, oNew, tmmaOverrideFields)) {
             	oNew.TMMA_Override__c = true;	
             }
     	}	
@@ -760,7 +751,12 @@ public class Opportunities extends ApplicationDomain {
     	p('isTmmaOverride');
     	return oppty.TMMA_Override__c;
     }
-  
+    
+    private Set<String> getTmmaOverrideFields() {
+    	p('getTmmaOverrideFields');
+    	return new OpportunityTmmaOverrideSettingsSelector().selectFieldNamesByObjectName(getSObjectName());
+    }
+
     private Boolean processed() {
     	p('processed');
     	Boolean result = true;

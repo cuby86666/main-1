@@ -16,6 +16,10 @@ public abstract class ApplicationDomain extends fflib_SObjectDomain {
         Configuration.disableTriggerCRUDSecurity();
     }
     
+    public String getSObjectName() {
+    	return getSObjectType().getDescribe().getName();
+    }
+    
     protected void p(String msg) {
     	CommonUtils.p(this, '//-d', msg);
     }
