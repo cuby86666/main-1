@@ -716,12 +716,14 @@ public class Opportunities extends ApplicationDomain {
     
     private void updateTmmaOverride(Map<Id, Opportunity> opptiesOld, Map<Id, Opportunity> opptiesNew) {
     	p('updateTmmaOverride');
+    	if (CommonUtils.isDataAdminUser()) return;
+    	
     	Set<String> tmmaOverrideFields = getTmmaOverrideFields();
     	
     	for (Opportunity oNew : opptiesNew.values()) {
         	Opportunity oOld = opptiesOld.get(oNew.Id);
         	
-        	if (isMnRecordType(oNew) && !CommonUtils.isDataAdminUser() && CommonUtils.fieldsChanged(oOld, oNew, tmmaOverrideFields)) {
+        	if (isMnRecordType(oNew) && CommonUtils.fieldsChanged(oOld, oNew, tmmaOverrideFields)) {
             	oNew.TMMA_Override__c = true;	
             }
     	}	
@@ -729,10 +731,12 @@ public class Opportunities extends ApplicationDomain {
     
     private void resetTmmaOverriddenFields(Map<Id, Opportunity> opptiesOld, Map<Id, Opportunity> opptiesNew) {
     	p('resetTmmaOverriddenFields');
+    	if (!CommonUtils.isDataAdminUser()) return;
+    	
     	for (Opportunity oNew : opptiesNew.values()) {
         	Opportunity oOld = opptiesOld.get(oNew.Id);    
 
-            if (isMnRecordType(oNew) && isTmmaOverride(oNew) && CommonUtils.isDataAdminUser()) {
+            if (isMnRecordType(oNew) && isTmmaOverride(oNew)) {
             	Date userCloseDate = oOld.CloseDate;
             	Date userProdDate = oOld.Production_Date__c;
         		Date regPartWinDate = oNew.CloseDate;

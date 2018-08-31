@@ -618,12 +618,14 @@ public class OpportunityLineItems extends ApplicationDomain {
     
     private void resetTmmaOverriddenFields(Map<Id, OpportunityLineItem> opptyLineItemsOld, Map<Id, OpportunityLineItem> opptyLineItemsNew) {
     	p('resetTmmaOverriddenFields');
+    	if (!CommonUtils.isDataAdminUser()) return;
+    	
     	Set<String> tmmaOverrideFields = getTmmaOverrideFields(); 
     	
     	for (OpportunityLineItem oliNew : opptyLineItemsNew.values()) {
         	OpportunityLineItem oliOld = opptyLineItemsOld.get(oliNew.Id);    
             
-            if (isMnRecordType(oliNew) && isTmmaOverride(oliNew) && CommonUtils.isDataAdminUser()) {
+            if (isMnRecordType(oliNew) && isTmmaOverride(oliNew)) {
             	CommonUtils.resetFields(oliOld, oliNew, tmmaOverrideFields);
             }
         }	
