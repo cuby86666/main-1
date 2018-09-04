@@ -12,7 +12,9 @@
         <members>OpportunityLineItems</members>
         <members>OpportunityLineItemsSelector</members>
         <members>OpportunityProductClaimValue</members>
+        <members>OpportunitySchedulesSelector</members>
         <members>OpportunityService</members>
+        <members>OpportunityServiceTest</members>
         <members>OpportunityTmmaOverrideSettingsSelector</members>
         <name>ApexClass</name>
     </types>
