@@ -606,11 +606,19 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	final Date USER_CLOSE_DATE = Date.today() + 10;
     	final Date USER_PROD_DATE = Date.today() + 30;
     	
+    	oppty.Bypass_Validation_Sched_Start_Date__c = true;
     	oppty.TMMA_Override__c = true;
     	oppty.CloseDate = USER_CLOSE_DATE; 
     	oppty.Production_Date__c = USER_PROD_DATE;
     	
     	update oppty;
+    	
+    	oppty = new OpportunitiesSelector().selectById(new Set<Id> {oppty.Id}).get(0);
+    	
+    	List<OpportunitySchedule__c> opptyScheds = new OpportunitySchedulesSelector().selectByOpptyId(new Set<Id> {oppty.Id});
+    	OpportunityService.shiftOpportunitySchedules(opptyScheds, oppty.Production_Date__c);
+    	
+    	update opptyScheds; 
     	
     	final Date REG_PROD_DATE = Date.today() + 90;
     	final Date REG_PART_WIN_DATE = Date.today() + 60;
@@ -626,12 +634,12 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	
     	processData();
     	
-    	Opportunity oppty = new OpportunitiesSelector().selectByLegacyId(new Set<String> {opptyExtId}).get(0); 
+    	oppty = new OpportunitiesSelector().selectByLegacyId(new Set<String> {opptyExtId}).get(0); 
 
     	System.assertEquals(REG_PART_WIN_DATE, oppty.CloseDate);
     	System.assertEquals(REG_PART_WIN_DATE.addMonths(6), oppty.Production_Date__c);
     }
-  
+
  	@isTest
     static void testOpptyCloseDateAndProdDate5() {
     	// TMMA Override = true  
@@ -640,11 +648,19 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	final Date USER_CLOSE_DATE = Date.today() + 10;
     	final Date USER_PROD_DATE = Date.today() + 60;
     	
+    	oppty.Bypass_Validation_Sched_Start_Date__c = true;
     	oppty.TMMA_Override__c = true;
     	oppty.CloseDate = USER_CLOSE_DATE;
     	oppty.Production_Date__c = USER_PROD_DATE;
     	
     	update oppty;
+    	
+    	oppty = new OpportunitiesSelector().selectById(new Set<Id> {oppty.Id}).get(0);
+    	
+    	List<OpportunitySchedule__c> opptyScheds = new OpportunitySchedulesSelector().selectByOpptyId(new Set<Id> {oppty.Id});
+    	OpportunityService.shiftOpportunitySchedules(opptyScheds, oppty.Production_Date__c);
+    	
+    	update opptyScheds;
     	
     	final Date REG_PROD_DATE = Date.today() + 90;
     	final Date REG_PART_WIN_DATE = Date.today() + 30;
@@ -660,7 +676,7 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	
     	processData();
     	
-    	Opportunity oppty = new OpportunitiesSelector().selectByLegacyId(new Set<String> {opptyExtId}).get(0); 
+    	oppty = new OpportunitiesSelector().selectByLegacyId(new Set<String> {opptyExtId}).get(0); 
     	
     	System.assertEquals(REG_PART_WIN_DATE, oppty.CloseDate);
     	System.assertEquals(USER_PROD_DATE, oppty.Production_Date__c);
@@ -673,11 +689,19 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	final Date USER_CLOSE_DATE = Date.today() + 30;
     	final Date USER_PROD_DATE = Date.today() + 60;
     	
+    	oppty.Bypass_Validation_Sched_Start_Date__c = true;
     	oppty.TMMA_Override__c = true;
     	oppty.CloseDate = USER_CLOSE_DATE;
     	oppty.Production_Date__c = USER_PROD_DATE;  
     	
     	update oppty;
+    	
+    	oppty = new OpportunitiesSelector().selectById(new Set<Id> {oppty.Id}).get(0);
+    	
+    	List<OpportunitySchedule__c> opptyScheds = new OpportunitySchedulesSelector().selectByOpptyId(new Set<Id> {oppty.Id});
+    	OpportunityService.shiftOpportunitySchedules(opptyScheds, oppty.Production_Date__c);
+    	
+    	update opptyScheds;
     	
     	final Date REG_PROD_DATE = Date.today() + 90;
     	
@@ -691,7 +715,7 @@ private class ModelNDesignRegistrationsProcessJobTest {
   
     	processData();
     	
-    	Opportunity oppty = new OpportunitiesSelector().selectByLegacyId(new Set<String> {opptyExtId}).get(0); 
+    	oppty = new OpportunitiesSelector().selectByLegacyId(new Set<String> {opptyExtId}).get(0); 
     	
     	System.assertEquals(USER_CLOSE_DATE, oppty.CloseDate);
     	System.assertEquals(USER_PROD_DATE, oppty.Production_Date__c);

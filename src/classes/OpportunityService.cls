@@ -312,6 +312,36 @@ public with sharing class OpportunityService {
 	private static Boolean isMnRecordType(Opportunity oppty) {
 		return oppty.RecordTypeId == OpportunitiesSelector.getMnRecordTypeId();
     }
+    
+    public static void shiftOpportunitySchedules(List<OpportunitySchedule__c> opptyScheds, Date prodDate) {
+    	p('shiftOpportunitySchedules');
+    	if (opptyScheds != null && opptyScheds.size() > 0) {
+    		List<Date> schedDates = generateOpportunityScheduleDates(prodDate, opptyScheds.size());
+    		
+    		for (Integer i = 0; i < opptyScheds.size(); i++) {
+    			opptyScheds.get(i).Sched_Date__c = schedDates.get(i);	
+    		}	
+    	}
+    }
+   
+    public static List<Date> generateOpportunityScheduleDates(Date prodDate, Integer qtrs) {
+    	p('generateOpportunityScheduleDates');
+    	List<Date> result = new List<Date>();
+    	
+    	Integer prodQtr = ((prodDate.month() - 1) / 3) + 1;
+		Integer prodQtrStartMonth = 3 * prodQtr - 2;	// qtr + 2 * (qtr - 1)
+		Date prodQtrStartDate = Date.newInstance(prodDate.year(), prodQtrStartMonth, 1);
+    	
+    	for (Integer i = 0; i < qtrs; i++) {
+    		if (i == 0) {
+    			result.add(prodDate);		
+    		} else {
+    			result.add(prodQtrStartDate.addMonths(3 * i));
+    		}
+    	}
+    	
+    	return result; 
+    } 
 	
 	private static void p(String msg) {
 		CommonUtils.p(OpportunityService.class, '//-v', msg);
