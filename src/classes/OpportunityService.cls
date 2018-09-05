@@ -210,7 +210,6 @@ public with sharing class OpportunityService {
 	
 	public static void setMnOpportunityCloseDateAndProdDate(Opportunity oppty, Opportunity opptyOld, Date closeDate, Date prodDate, Date partWinDate) {
 		p('setMnOpportunityCloseDateAndProdDate(oppty, opptyOld, closeDate, prodDate, partWinDate)');
-		
 		if (isCommitment(oppty) && !isCommitment(opptyOld)) {
 			oppty.CloseDate = partWinDate;
 			

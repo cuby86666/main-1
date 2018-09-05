@@ -192,25 +192,16 @@ public class Opportunities extends ApplicationDomain {
 			Date prodDate = o.Production_Date__c;
 			Integer yrQty = (Integer)o.One_Year_Pieces__c;
             Integer qtrQty = yrQty / QUARTERS;
-            List<Integer> qtrQties = new List<Integer>();
             List<Date> schedDates = OpportunityService.generateOpportunityScheduleDates(prodDate, QUARTERS);
             
-            for (Integer i = 0; i < QUARTERS; i++) {
-            	if (i == (QUARTERS - 1)) {
-                	qtrQty = yrQty - (qtrQty * (QUARTERS - 1));   
-                }
-                
-                qtrQties.add(qtrQty);	
-            }
-			
 			for (Integer i = 0; i < QUARTERS; i++) {
-                qtrQty = qtrQties.get(QUARTERS - i - 1);
+                Integer qty = (i == 0) ? yrQty - (qtrQty * (QUARTERS - 1)) : qtrQty;
                 
                 OpportunitySchedule__c opptySched = new OpportunitySchedule__c();
     			opptySched.Opportunity__c = o.Id;
     			opptySched.Sched_Date__c = schedDates.get(i);
-    			opptySched.Oppty_Sched_Qty__c = qtrQty;
-    			opptySched.Frozen_Oppty_Sched_Qty__c = qtrQty;
+    			opptySched.Oppty_Sched_Qty__c = qty;
+    			opptySched.Frozen_Oppty_Sched_Qty__c = qty;
     			opptySched.CurrencyIsoCode = o.CurrencyIsoCode;
     			result.add(opptySched);	
             }		
@@ -285,20 +276,24 @@ public class Opportunities extends ApplicationDomain {
 		Map<Id, List<OpportunitySchedule__c>> opptySchedsByOpptyId = new OpportunitySchedulesSelector().selectByOpptyIdGroupByOpptyId(opptiesNew.keySet());
 		
 		for (Opportunity opptyNew : opptiesNew.values()) {
+			Opportunity opptyOld = opptiesOld.get(opptyNew.Id); 
+			
 			List<OpportunitySchedule__c> opptySchedsOld = opptySchedsByOpptyId.get(opptyNew.Id);
 			
 			if (opptySchedsOld == null) continue;
 			
 			if (isTmmaOverride(opptyNew)) {
-				if (opptiesOld.get(opptyNew.Id).Production_Date__c != opptyNew.Production_Date__c) {
+				if (opptyOld.Production_Date__c != opptyNew.Production_Date__c) {
 					OpportunityService.shiftOpportunitySchedules(opptySchedsOld, opptyNew.Production_Date__c);
 					result.addAll(opptySchedsOld);	
 				}	
 			} else {
-				if (opptiesOld.get(opptyNew.Id).Production_Date__c != opptyNew.Production_Date__c ||
-					opptiesOld.get(opptyNew.Id).One_Year_Pieces__c != opptyNew.One_Year_Pieces__c ||
-					opptiesOld.get(opptyNew.Id).CurrencyIsoCode != opptyNew.CurrencyIsoCode) {
+				if (opptyOld.Production_Date__c != opptyNew.Production_Date__c ||
+					opptyOld.One_Year_Pieces__c != opptyNew.One_Year_Pieces__c ||
+					opptyOld.CurrencyIsoCode != opptyNew.CurrencyIsoCode) {
 					List<OpportunitySchedule__c> opptySchedsNew = getMnOpptySchedsCreated(new List<Opportunity>{opptyNew});
+					
+					if (opptySchedsOld.size() != opptySchedsNew.size()) continue;
 					
 					for (Integer i = 0; i < opptySchedsOld.size(); i++) {
 						OpportunitySchedule__c opptySchedOld = opptySchedsOld.get(i);
@@ -324,15 +319,17 @@ public class Opportunities extends ApplicationDomain {
 		Map<Id, List<OpportunitySchedule__c>> opptySchedsByOpptyId = new OpportunitySchedulesSelector().selectByOpptyIdGroupByOpptyId(opptiesNew.keySet());
 		
 		for (Opportunity opptyNew : opptiesNew.values()) {
-			if (opptiesOld.get(opptyNew.Id).CurrencyIsoCode != opptyNew.CurrencyIsoCode) {
+			Opportunity opptyOld = opptiesOld.get(opptyNew.Id);
+			
+			if (opptyOld.CurrencyIsoCode != opptyNew.CurrencyIsoCode) {
 				List<OpportunitySchedule__c> opptySchedsOld = opptySchedsByOpptyId.get(opptyNew.Id);
 				
-				if (opptySchedsOld != null) {
-					for (OpportunitySchedule__c opptySchedOld : opptySchedsOld) {
-						opptySchedOld.CurrencyIsoCode = opptyNew.CurrencyIsoCode;
-						result.add(opptySchedOld);
-					}	
-				}
+				if (opptySchedsOld == null) continue;
+				
+				for (OpportunitySchedule__c opptySchedOld : opptySchedsOld) {
+					opptySchedOld.CurrencyIsoCode = opptyNew.CurrencyIsoCode;
+					result.add(opptySchedOld);
+				}	
 			}	
 		}
 		
