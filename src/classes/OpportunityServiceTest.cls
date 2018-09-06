@@ -23,6 +23,8 @@ private class OpportunityServiceTest {
         
     private static List<OpportunityLineItem> opptyProds = new List<OpportunityLineItem>();
     private static List<OpportunityLineItem> opptyProdsMn = new List<OpportunityLineItem>();
+    private static Opportunity oppty;
+    private static Opportunity opptyMn;
     private static OpportunityLineItem opptyProd;
     private static OpportunityLineItem opptyProdMn;
     
@@ -68,6 +70,14 @@ private class OpportunityServiceTest {
                 opptyProdMn = oli;
                 break;
             }
+        }
+		
+		if (opptyProd != null) {
+			oppty = new OpportunitiesSelector().selectById(new Set<Id> {opptyProd.OpportunityId}).get(0);	
+		}        
+        
+        if (opptyProdMn != null) {
+        	opptyMn = new OpportunitiesSelector().selectById(new Set<Id> {opptyProdMn.OpportunityId}).get(0);	
         }
     }
 	
@@ -133,12 +143,11 @@ private class OpportunityServiceTest {
         o.Currency__c = fxRates.get(CCY_CODE_DEFAULT).Id; // Locked_Exchange_Rate__c will be set to this by workflow.
         o.CurrencyIsoCode = CCY_CODE_DEFAULT; // CurrencyIsoCode and Currency__c are correlated.
         o.One_Year_Pieces__c= ONE_YEAR_PIECES;
-        o.Bypass_Validation_Sched_Start_Date__c = true;
         insert o;
         
         if (recordTypeID == OpportunitiesSelector.getSfdcRecordTypeId()) {
         	// For direct oppty, oppty scheds are manually created.
-        	createOpportunitySchedules(o.Id, 1000);	
+        	createOpportunitySchedules(o.Id, o.Production_Date__c, 1000);	
         } 
         
         System.debug('//J ========== after insert oppty');
@@ -169,19 +178,15 @@ private class OpportunityServiceTest {
         System.debug('//J ========== after insert oppty prods');    
     }
     
-    static void createOpportunitySchedules(ID opptyID, Double totalQty) {
+    static void createOpportunitySchedules(Id opptyId, Date prodDate, Double totalQty) {
     	List<OpportunitySchedule__c> opptyScheds = new List<OpportunitySchedule__c>();
+    	List<Date> schedDates = OpportunityService.generateOpportunityScheduleDates(prodDate, 4);
     	Double qty = totalQty / 4;
     	
-    	OpportunitySchedule__c opptySched;
-		opptySched = new OpportunitySchedule__c(Opportunity__c = opptyID, Sched_Date__c = Date.newInstance(2016, 01, 01), Oppty_Sched_Qty__c = qty, Frozen_Oppty_Sched_Qty__c = qty);
-		opptyScheds.add(opptySched);
-		opptySched = new OpportunitySchedule__c(Opportunity__c = opptyID, Sched_Date__c = Date.newInstance(2016, 04, 01), Oppty_Sched_Qty__c = qty, Frozen_Oppty_Sched_Qty__c = qty);
-		opptyScheds.add(opptySched);
-		opptySched = new OpportunitySchedule__c(Opportunity__c = opptyID, Sched_Date__c = Date.newInstance(2016, 07, 01), Oppty_Sched_Qty__c = qty, Frozen_Oppty_Sched_Qty__c = qty);
-		opptyScheds.add(opptySched);
-		opptySched = new OpportunitySchedule__c(Opportunity__c = opptyID, Sched_Date__c = Date.newInstance(2016, 10, 01), Oppty_Sched_Qty__c = qty, Frozen_Oppty_Sched_Qty__c = qty);
-		opptyScheds.add(opptySched);	
+    	for (Date schedDate : schedDates) {
+    		OpportunitySchedule__c opptySched = new OpportunitySchedule__c(Opportunity__c = opptyId, Sched_Date__c = schedDate, Oppty_Sched_Qty__c = qty, Frozen_Oppty_Sched_Qty__c = qty);
+    		opptyScheds.add(opptySched); 	
+    	}
     	
     	insert opptyScheds;
     }
@@ -351,6 +356,28 @@ private class OpportunityServiceTest {
     	oppty = new OpportunitiesSelector().selectById(new Set<Id> {oppty.Id}).get(0);
     	
     	System.assertEquals(drApprover.Id, oppty.OwnerId);
+    }
+    
+    @isTest
+    static void testShiftOpportunitySchedules() {
+    	List<OpportunitySchedule__c> opptyScheds = new OpportunitySchedulesSelector().selectByOpptyId(new Set<Id> {oppty.Id});
+    	Date prodDate = Date.today(); 
+    	
+    	OpportunityService.shiftOpportunitySchedules(opptyScheds, prodDate);
+    	
+    	System.assertEquals(prodDate, opptyScheds.get(0).Sched_Date__c);
+    }
+  
+    @isTest
+    static void testGenerateOpportunityScheduleDates() {
+    	Date prodDate = Date.newInstance(2018, 05, 18);
+    	List<Date> schedDates = OpportunityService.generateOpportunityScheduleDates(prodDate, 5);
+    	
+    	System.assertEquals(prodDate, schedDates.get(0)); 	
+    	System.assertEquals(Date.newInstance(2018, 07, 01), schedDates.get(1));
+    	System.assertEquals(Date.newInstance(2018, 10, 01), schedDates.get(2));
+    	System.assertEquals(Date.newInstance(2019, 01, 01), schedDates.get(3));
+    	System.assertEquals(Date.newInstance(2019, 04, 01), schedDates.get(4));
     }
     
 }

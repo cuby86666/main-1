@@ -4,7 +4,7 @@
     
 	<property environment="env"/>
 	
-	<property name="antform.home" value="${env.ANTFORM_HOME}" />
+	<property name="antform.home" value="${env.ANTFORM_HOME}"/>
 
     <taskdef resource="com/salesforce/antlib.xml" uri="antlib:com.salesforce" classpath="lib/ant-salesforce.jar"/>
     
@@ -41,7 +41,8 @@
 	<target name="show-form">
 		<if><equals arg1="${show.form}" arg2="dual"/>
 			<then>
-		   		<antcallback target="show-form-dual" return="sf.source.username,sf.source.password,sf.source.serverurl,sf.target.username,sf.target.password,sf.target.serverurl"/>
+		   		<antcallback target="show-form-dual" return="mail.target,sf.source.username,sf.source.password,sf.source.serverurl,sf.target.username,sf.target.password,sf.target.serverurl"/>
+				<antcall target="prod-confirm"/>
 		 	</then>
 		<elseif><equals arg1="${show.form}" arg2="source"/>
 			<then>
@@ -50,7 +51,8 @@
 		</elseif>
 		<elseif><equals arg1="${show.form}" arg2="target"/>
 			<then>
-				<antcallback target="show-form-target" return="sf.target.username,sf.target.password,sf.target.serverurl"/>
+				<antcallback target="show-form-target" return="mail.target,sf.target.username,sf.target.password,sf.target.serverurl"/>
+				<antcall target="prod-confirm"/>
 			</then>
 		</elseif>
 		<else>
@@ -67,6 +69,8 @@
 		
 		<echo message="Source: ${sf.source}"/>
 		<echo message="Target: ${sf.target}"/>
+		
+		<propertycopy name="mail.target" from="sf.target"/>
 		
 		<toLowerCase string="${sf.source}" to="sf.source"/>
 		<toLowerCase string="${sf.target}" to="sf.target"/>
@@ -101,6 +105,8 @@
 		
 		<echo message="Target: ${sf.target}"/>
 		
+		<propertycopy name="mail.target" from="sf.target"/>
+		
 		<toLowerCase string="${sf.target}" to="sf.target"/>
 		
 		<propertycopy name="sf.target.username" from="${sf.target}.username"/>
@@ -122,21 +128,16 @@
 	</target>
 	
 	<target name="set-sf-property">
-		<!-- Setting default value for username, password and session id properties to empty string so unset values are treated as empty. 
-		     Without this, ant expressions such as ${sf.source.username} will be treated literally.
+		<!-- 
+			Setting default value for username, password and session id properties to empty string so unset values are treated as empty. 
+			Without this, ant expressions such as ${sf.source.username} will be treated literally.
 		-->
 		<condition property="sf.source.username" value=""> <not> <isset property="sf.source.username"/> </not> </condition>
 	    <condition property="sf.source.password" value=""> <not> <isset property="sf.source.password"/> </not> </condition>
 		<condition property="sf.target.username" value=""> <not> <isset property="sf.target.username"/> </not> </condition>
 		<condition property="sf.target.password" value=""> <not> <isset property="sf.target.password"/> </not> </condition>
 	    <condition property="sf.sessionId" value=""> <not> <isset property="sf.sessionId"/> </not> </condition>
-		<!--
-		<echo message="sf.source.username: ${sf.source.username}"/>
-		<echo message="sf.source.password: ${sf.source.password}"/>
-		<echo message="sf.target.username: ${sf.target.username}"/>
-		<echo message="sf.target.password: ${sf.target.password}"/>
-		<echo message="sf.sessionId: ${sf.sessionId}"/>
-		-->
+		
 		<propertyregex property="target.server.name"
 				       input="${sf.target.username}"
 				       regexp="\b(\w+)$"
@@ -150,8 +151,6 @@
 		</script>
 			
 		<capitalize string="${target.server.name}" to="target.server.name"/>
-		
-		<condition property="not.jason"> <not> <equals arg1="${target.server.name}" arg2="jason" casesensitive="false"/> </not> </condition>
 		
 		<propertyregex property="source.domain"
 		 	       	   input="${sf.source.username}"
@@ -171,6 +170,29 @@
 		
 		<condition property="sf.target.serverurl" value="${sf.prod.serverurl}" else="${sf.test.serverurl}">
 			<equals arg1="${target.domain}" arg2="${prod.domain}" casesensitive="false" trim="true"/>
+		</condition>
+	</target>
+	
+	<target name="prod-confirm" if="is.prod" depends="is-prod">
+		<loadfile property="passcode" srcFile="passcode.txt"/>
+		
+		<antform>
+			<label>Please enter the passcode (found in deploy/passcode.txt) to confirm deployment to production.</label>
+			<textProperty label="Passcode: " property="passcode.input" password="true"/>
+		</antform>
+		
+		<fail message="Passcode is not matched.">
+			<condition>
+				<not>
+					<equals arg1="${passcode}" arg2="${passcode.input}"/>
+				</not>
+		    </condition>
+		</fail>
+	</target>
+	
+	<target name="is-prod">
+		<condition property="is.prod">
+			<equals arg1="${mail.target}" arg2="Production"/>
 		</condition>
 	</target>
 	
@@ -220,6 +242,15 @@
 	
 	<!-- run local tests only -->
 	<target name="run-local-tests" depends="init,set-form-target,show-form" description="Run local tests only">
+		<delete dir="test"/>
+		<mkdir dir="test"/>
+		
+		<echoxml file="test/package.xml">
+			<Package>
+				<version>43.0</version>
+			</Package>
+		</echoxml>
+		
 		<echo message="Target username: ${sf.target.username}"/>
 		<sf:deploy username="${sf.target.username}" password="${sf.target.password}" sessionId="${sf.sessionId}" serverurl="${sf.target.serverurl}" maxPoll="${sf.maxPoll}" deployRoot="test" checkOnly="true" rollbackOnError="true" autoUpdatePackage="true" testLevel="RunLocalTests" pollWaitMillis="40000" logType="None"/>
 	</target>
@@ -247,7 +278,7 @@
 	</target>
 	
 	<!-- mail -->
-	<target name="mail" if="not.jason">
+	<target name="mail">
 		<exec executable="blat"
 	          vmlauncher="false"
 	          failonerror="true">
@@ -260,34 +291,16 @@
 			<arg value="-cc"/>
 			<arg value="${deploy.cc.recipient}"/>
 			<arg value="-s"/>
-			<arg value="'${target.server.name}' has been updated"/>
+			<arg value="'${mail.target}' has been updated"/>
 			<arg value="-body"/>
-			<arg value="'${target.server.name}' has been updated. Please check. Thanks!"/>
+			<arg value="'${mail.target}' has been updated. Please check. Thanks!"/>
 		</exec>
 	</target>
 	
 	<!-- test -->
 	<target name="test" description="test">
-		<antform>
-			<selectionProperty label="Source: " property="source" values="Jason,GSAS,Data,Full,Production"/>
-			<selectionProperty label="Target: " property="target" values="Jason,GSAS,Data,Full,Production"/>
-		</antform>
-		
-		<toLowerCase string="${source}" to="source"/>
-		<toLowerCase string="${target}" to="target"/>
-		
-		<echo message="source: ${source}"/>
-		<echo message="target: ${target}"/>
-		
-		<propertycopy name="source.username" from="${source}.username"/>
-		<propertycopy name="source.password" from="${source}.password"/>
-		<propertycopy name="target.username" from="${target}.username"/>
-		<propertycopy name="target.password" from="${target}.password"/>
-		
-		<echo message="source username: ${source.username}"/>
-		<echo message="source password: ${source.password}"/>
-		<echo message="target username: ${target.username}"/>
-		<echo message="target password: ${target.password}"/>
+		<property name="mail.target" value="Jason"/>
+		<antcall target="prod-confirm"/>
 	</target>	
 	
 </project>

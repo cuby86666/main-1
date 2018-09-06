@@ -66,12 +66,6 @@ public class MnStages extends ApplicationDomain {
 	public static final String REG_STATUS_APPROVED = REG_STATUSES.get(RegStatus.APPROVED);
 	public static final String REG_STATUS_REJECTED = REG_STATUSES.get(RegStatus.REJECTED);
 	
-	private static final String STAGE_INITIAL_ENGAGEMENT = Opportunities.STAGE_INITIAL_ENGAGEMENT;
-	private static final String STAGE_DISCOVERY = Opportunities.STAGE_DISCOVERY;
-	private static final String STAGE_COMMITMENT = Opportunities.STAGE_COMMITMENT;
-	private static final String STAGE_LOST = Opportunities.STAGE_LOST;
-	private static final String STAGE_CANCELLED = Opportunities.STAGE_CANCELLED;
-	
 	private List<MnStage__c> mnStages;
 	
 	private MnStages() {}   
@@ -129,7 +123,6 @@ public class MnStages extends ApplicationDomain {
 			oppty.Name = (ms.Reg_Oppty_Num__c + ' - ' + ms.Part_Name__c + ' - ' + ms.Prog_Name__c).left(120);
 			oppty.RecordTypeId = OpportunitiesSelector.getMnRecordTypeId();
 			oppty.StageName = OpportunityService.deriveMnOpportunityStage(ms.Reg_Part_Status__c, ms.Reg_Part_Win_Status__c, ms.Reg_Status__c, ms.Reg_Expiration_Date__c);
-			oppty.CloseDate = (oppty.StageName == STAGE_COMMITMENT) ? ms.Reg_Part_Win_Date__c : ms.Reg_Production_Date__c;
 			oppty.Assembly__c = ms.Assembly_Name__c;
 			oppty.Business_Created_Date__c = ms.Reg_Created_Date__c;
 			oppty.Bypass_Validation_Sched_Start_Date__c = true;
@@ -167,11 +160,11 @@ public class MnStages extends ApplicationDomain {
 			oppty.Lead_Id__c = ms.Reg_Lead_Id__c;
 			oppty.Locked_Exchange_Rate__c = ms.Reg_Exchange_Rate__c;
 			oppty.One_Year_Pieces__c = ms.Reg_Project_Units__c;
-			oppty.Production_Date__c = ms.Reg_Production_Date__c;
 			oppty.Project__c = ms.Prog_Name__c;
 			oppty.Rejected_by__c = (ms.User_First_Name__c != null ? ms.User_First_Name__c : '') + ' ' + (ms.User_Last_Name__c != null ? ms.User_Last_Name__c : '');
 			oppty.Sub_Segment__c = (ms.Func_Name__c != null) ? ms.Func_Name__c.substringAfter('-') : null;
 			
+			OpportunityService.setMnOpportunityCloseDateAndProdDate(oppty, ms.Reg_Production_Date__c, ms.Reg_Part_Win_Date__c);
 			OpportunityService.setMnOpportunityLostCancelledInfo(oppty, ms.Reg_Action_Date__c); 
 			
 			oppties.add(oppty);

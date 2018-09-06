@@ -38,7 +38,7 @@ public class Opportunities extends ApplicationDomain {
 	};
 	
 	public static final String MN_LOST_REASON = 'Expired';
-	
+		
 	private static Set<Id> beforeUpdateProcessedIds = new Set<Id>();
 	private static Set<Id> afterUpdateProcessedIds = new Set<Id>();
 	
@@ -76,9 +76,9 @@ public class Opportunities extends ApplicationDomain {
 		
 		updateOpptyStarInfo();
 		
-		OpportunityProductClaimValue.updateTmmaOverrideIfOpportunityMnUpdatedByTmma((Map<Id, Opportunity>)existingRecords, new Map<Id, Opportunity>((List<Opportunity>)this.records));
+		updateTmmaOverride((Map<Id, Opportunity>)existingRecords, new Map<Id, Opportunity>((List<Opportunity>)this.records));
 		
-		OpportunityProductClaimValue.bypassOpportunityMnUpdateForTmmaOverride((Map<Id, Opportunity>)existingRecords, new Map<Id, Opportunity>((List<Opportunity>)this.records));
+		resetTmmaOverriddenFields((Map<Id, Opportunity>)existingRecords, new Map<Id, Opportunity>((List<Opportunity>)this.records));
 	}
 	
 	public override void onAfterInsert() {
@@ -165,62 +165,43 @@ public class Opportunities extends ApplicationDomain {
 	
 	private void createMnOpptyScheds() {
 		p('createMnOpptyScheds');
-		List<Opportunity> opptiesMn = new List<SObject>();
+		List<Opportunity> opptiesMn = new List<Opportunity>();
 		
-		for (Opportunity o : (List<Opportunity>)this.records) {
-			if (o.RecordTypeId == OpportunitiesSelector.getMnRecordTypeId()) {
-				opptiesMn.add(o);	
+		for (Opportunity oppty : (List<Opportunity>)this.records) {
+			if (isMnRecordType(oppty)) {
+				opptiesMn.add(oppty);	
 			}
 		}
 		
 		if (opptiesMn.size() > 0) {
-			List<OpportunitySchedule__c> opptySchedsCreated = createMnOpptyScheds(opptiesMn);
+			List<OpportunitySchedule__c> opptySchedsCreated = getMnOpptySchedsCreated(opptiesMn);
 		    
 			insert opptySchedsCreated;
 			
-			resetOppties(new Map<Id, Opportunity>(opptiesMn).keySet());
+			updateOppties(new Map<Id, Opportunity>(opptiesMn).keySet());
 		}	
 	}
 	
-	private List<OpportunitySchedule__c> createMnOpptyScheds(List<Opportunity> oppties) {
-		p('createMnOpptyScheds(oppties)');
+	private List<OpportunitySchedule__c> getMnOpptySchedsCreated(List<Opportunity> oppties) {
+		p('getMnOpptySchedsCreated');
 		List<OpportunitySchedule__c> result = new List<OpportunitySchedule__c>();
         
         final Integer QUARTERS = 4;
-        final Map<Integer, Integer> QTR_MONTHS = new Map<Integer, Integer> {1 => 1, 2 => 4, 3 => 7, 4 => 10};
-				 
+        				 
 		for (Opportunity o : oppties) {
 			Date prodDate = o.Production_Date__c;
-			Integer yearQty = (Integer)o.One_Year_Pieces__c;
-            Integer quarterQty = yearQty / 4;
-            List<Integer> quarterQtys = new List<Integer>();
-            Date schedDate = prodDate;
-            Integer prodYear = prodDate.year();
-            Integer prodMonth = prodDate.month();
+			Integer yrQty = (Integer)o.One_Year_Pieces__c;
+            Integer qtrQty = yrQty / QUARTERS;
+            List<Date> schedDates = OpportunityService.generateOpportunityScheduleDates(prodDate, QUARTERS);
             
-            for (Integer i = 0; i < QUARTERS; i++) {
-            	if (i == 3) {
-                	quarterQty = yearQty - (quarterQty * 3);   
-                }
-                
-                quarterQtys.add(quarterQty);	
-            }
-			
 			for (Integer i = 0; i < QUARTERS; i++) {
-                if (i != 0) {
-                    Integer x = (prodMonth + (3 * i) - 1) / 3;
-                    Integer year = prodYear + (x / 4);
-                    Integer month = QTR_MONTHS.get(Math.mod(x, 4) + 1);
-                    schedDate = Date.newInstance(year, month, 1);
-                }
-                
-                quarterQty = quarterQtys.get(QUARTERS - i - 1);
+                Integer qty = (i == 0) ? yrQty - (qtrQty * (QUARTERS - 1)) : qtrQty;
                 
                 OpportunitySchedule__c opptySched = new OpportunitySchedule__c();
     			opptySched.Opportunity__c = o.Id;
-    			opptySched.Sched_Date__c = schedDate;
-    			opptySched.Oppty_Sched_Qty__c = quarterQty;
-    			opptySched.Frozen_Oppty_Sched_Qty__c = quarterQty;
+    			opptySched.Sched_Date__c = schedDates.get(i);
+    			opptySched.Oppty_Sched_Qty__c = qty;
+    			opptySched.Frozen_Oppty_Sched_Qty__c = qty;
     			opptySched.CurrencyIsoCode = o.CurrencyIsoCode;
     			result.add(opptySched);	
             }		
@@ -231,132 +212,130 @@ public class Opportunities extends ApplicationDomain {
 	
 	private void updateOpptyScheds(List<Opportunity> existingRecords) {
 		p('updateOpptyScheds');
-		List<Opportunity> opptiesMn = new List<Opportunity>();
-		Map<Id, Opportunity> opptiesOldMn = new Map<Id, Opportunity>();
-		Map<Id, Opportunity> opptiesNewMn = new Map<Id, Opportunity>();
-		Map<Id, Opportunity> opptiesOldSfdc = new Map<Id, Opportunity>();
-		Map<Id, Opportunity> opptiesNewSfdc = new Map<Id, Opportunity>();
+		List<OpportunitySchedule__c> opptySchedsUpdated = new List<OpportunitySchedule__c>(); 
+		Map<Id, Opportunity> opptiesMnOld = new Map<Id, Opportunity>();
+		Map<Id, Opportunity> opptiesMnNew = new Map<Id, Opportunity>();
+		Map<Id, Opportunity> opptiesSfdcOld = new Map<Id, Opportunity>();
+		Map<Id, Opportunity> opptiesSfdcNew = new Map<Id, Opportunity>();
 		
-		for (SObject o : existingRecords) {
-			if (isMnRecordType((Opportunity)o) && CommonUtils.isDataAdminUser()) {
-				opptiesMn.add((Opportunity)o);
+		for (Opportunity oppty : existingRecords) {
+			if (isMnRecordType(oppty) && CommonUtils.isDataAdminUser()) {
+				opptiesMnOld.put(oppty.Id, oppty);
 			}
 			
-			if (isMnOpptySchedsUpdatable((Opportunity)o)) {
-				opptiesOldMn.put(o.Id, (Opportunity)o);	
-			} else {
-				opptiesOldSfdc.put(o.Id, (Opportunity)o);
+			if (isSfdcRecordType(oppty)) {
+				opptiesSfdcOld.put(oppty.Id, oppty);	
 			}
 		}
 		
-		for (SObject o : (List<Opportunity>)this.records) {
-			if (isMnOpptySchedsUpdatable((Opportunity)o)) {
-				opptiesNewMn.put(o.Id, (Opportunity)o);	
-			} else {
-				opptiesNewSfdc.put(o.Id, (Opportunity)o);
+		for (Opportunity oppty : (List<Opportunity>)this.records) {
+			if (isMnRecordType(oppty) && CommonUtils.isDataAdminUser()) {
+				opptiesMnNew.put(oppty.Id, oppty);	
 			}
-		}
-		
-		if (opptiesOldMn.size() > 0 && opptiesNewMn.size() > 0) {
-			List<OpportunitySchedule__c> opptySchedsUpdated = updateMnOpptyScheds(opptiesOldMn, opptiesNewMn);
 			
-			if (opptySchedsUpdated.size() > 0) {
-				update opptySchedsUpdated;
+			if (isSfdcRecordType(oppty)) {
+				opptiesSfdcNew.put(oppty.Id, oppty);	
 			}
 		}
 		
-		if (opptiesMn.size() > 0) {
-			resetOppties(new Map<Id, Opportunity>(opptiesMn).keySet());	
+		if (opptiesMnOld.size() > 0 && opptiesMnNew.size() > 0) {
+			opptySchedsUpdated.addAll(getMnOpptySchedsUpdated(opptiesMnOld, opptiesMnNew));
 		}
 		
-		if (opptiesOldSfdc.size() > 0 && opptiesNewSfdc.size() > 0) {
-			List<OpportunitySchedule__c> opptySchedsUpdated = updateSfdcOpptyScheds(opptiesOldSfdc, opptiesNewSfdc);
-			
-			if (opptySchedsUpdated.size() > 0) {
-				update opptySchedsUpdated;	
-			}
+		if (opptiesSfdcOld.size() > 0 && opptiesSfdcNew.size() > 0) {
+			opptySchedsUpdated.addAll(getSfdcOpptySchedsUpdated(opptiesSfdcOld, opptiesSfdcNew));
+		}
+		
+		if (opptySchedsUpdated.size() > 0) {
+			update opptySchedsUpdated;	
+		}
+		
+		if (opptiesMnNew.size() > 0) {
+			updateOppties(opptiesMnNew.keySet());	
 		}
 	}
 	
-	private Boolean isMnOpptySchedsUpdatable(Opportunity oppty) {
-		p('isMnOpptySchedsUpdatable');
-		return isMnRecordType(oppty) && !isTmmaOverride(oppty) && CommonUtils.isDataAdminUser();
-	}
-	
-	private void resetOppties(Set<Id> opptyIds) {
-		p('resetOppties');
+	private void updateOppties(Set<Id> opptyIds) {
+		p('updateOppties');
 		List<Opportunity> opptiesUpdated = new List<Opportunity>(); 
 				
-		for (Opportunity o : new OpportunitiesSelector().selectById(opptyIds)) {
-			o.Bypass_Validation_Sched_Start_Date__c = false;
-			opptiesUpdated.add(o);
+		for (Opportunity oppty : new OpportunitiesSelector().selectById(opptyIds)) {
+			oppty.Bypass_Validation_Sched_Start_Date__c = false;
+			opptiesUpdated.add(oppty);
 		}
 		
-		update opptiesUpdated;	
+		if (opptiesUpdated.size() > 0) {
+			update opptiesUpdated;	
+		}
 	}
 	
-	private List<OpportunitySchedule__c> updateMnOpptyScheds(Map<Id, Opportunity> opptiesOld, Map<Id, Opportunity> opptiesNew) {
-    	p('updateMnOpptyScheds');
+	private List<OpportunitySchedule__c> getMnOpptySchedsUpdated(Map<Id, Opportunity> opptiesOld, Map<Id, Opportunity> opptiesNew) {
+    	p('getMnOpptySchedsUpdated');
 		List<OpportunitySchedule__c> result = new List<OpportunitySchedule__c>();
 		
-		List<OpportunitySchedule__c> opptyScheds = new OpportunitySchedulesSelector().selectByOpptyId(opptiesNew.keySet()); 
+		Map<Id, List<OpportunitySchedule__c>> opptySchedsByOpptyId = new OpportunitySchedulesSelector().selectByOpptyIdGroupByOpptyId(opptiesNew.keySet());
 		
 		for (Opportunity opptyNew : opptiesNew.values()) {
-			if (opptiesOld.get(opptyNew.Id).Production_Date__c != opptyNew.Production_Date__c ||
-				opptiesOld.get(opptyNew.Id).One_Year_Pieces__c != opptyNew.One_Year_Pieces__c ||
-				opptiesOld.get(opptyNew.Id).CurrencyIsoCode != opptyNew.CurrencyIsoCode) {
-				List<OpportunitySchedule__c> oldOpptyScheds = getOpptySchedsForUpdate(opptyScheds, opptyNew.Id);
-				List<OpportunitySchedule__c> newOpptyScheds = createMnOpptyScheds(new List<Opportunity>{opptyNew});
-				
-				for (Integer i = 0; i < oldOpptyScheds.size(); i++) {
-					OpportunitySchedule__c osOld = oldOpptyScheds.get(i);
-					OpportunitySchedule__c osNew = newOpptyScheds.get(i);
+			Opportunity opptyOld = opptiesOld.get(opptyNew.Id); 
+			
+			List<OpportunitySchedule__c> opptySchedsOld = opptySchedsByOpptyId.get(opptyNew.Id);
+			
+			if (opptySchedsOld == null) continue;
+			
+			if (isTmmaOverride(opptyNew)) {
+				if (opptyOld.Production_Date__c != opptyNew.Production_Date__c) {
+					OpportunityService.shiftOpportunitySchedules(opptySchedsOld, opptyNew.Production_Date__c);
+					result.addAll(opptySchedsOld);	
+				}	
+			} else {
+				if (opptyOld.Production_Date__c != opptyNew.Production_Date__c ||
+					opptyOld.One_Year_Pieces__c != opptyNew.One_Year_Pieces__c ||
+					opptyOld.CurrencyIsoCode != opptyNew.CurrencyIsoCode) {
+					List<OpportunitySchedule__c> opptySchedsNew = getMnOpptySchedsCreated(new List<Opportunity>{opptyNew});
 					
-					osOld.Sched_Date__c = osNew.Sched_Date__c;
-    				osOld.Oppty_Sched_Qty__c = osNew.Oppty_Sched_Qty__c;
-    				osOld.Frozen_Oppty_Sched_Qty__c = osNew.Frozen_Oppty_Sched_Qty__c;	
-    				osOld.CurrencyIsoCode = opptyNew.CurrencyIsoCode;
-    				result.add(osOld);		
-				}
-			}	
+					if (opptySchedsOld.size() != opptySchedsNew.size()) continue;
+					
+					for (Integer i = 0; i < opptySchedsOld.size(); i++) {
+						OpportunitySchedule__c opptySchedOld = opptySchedsOld.get(i);
+						OpportunitySchedule__c opptySchedNew = opptySchedsNew.get(i);
+						
+						opptySchedOld.Sched_Date__c = opptySchedNew.Sched_Date__c;
+	    				opptySchedOld.Oppty_Sched_Qty__c = opptySchedNew.Oppty_Sched_Qty__c;
+	    				opptySchedOld.Frozen_Oppty_Sched_Qty__c = opptySchedNew.Frozen_Oppty_Sched_Qty__c;	
+	    				opptySchedOld.CurrencyIsoCode = opptyNew.CurrencyIsoCode;
+	    				result.add(opptySchedOld);		
+					}		
+				}	
+			}
 		}	
 		
 		return result;
 	}
 	
-	private List<OpportunitySchedule__c> updateSfdcOpptyScheds(Map<Id, Opportunity> opptiesOld, Map<Id, Opportunity> opptiesNew) {
-		p('updateSfdcOpptyScheds');
+	private List<OpportunitySchedule__c> getSfdcOpptySchedsUpdated(Map<Id, Opportunity> opptiesOld, Map<Id, Opportunity> opptiesNew) {
+		p('getSfdcOpptySchedsUpdated');
 		List<OpportunitySchedule__c> result = new List<OpportunitySchedule__c>();
 		
-		List<OpportunitySchedule__c> opptyScheds = new OpportunitySchedulesSelector().selectByOpptyId(opptiesNew.keySet()); 
+		Map<Id, List<OpportunitySchedule__c>> opptySchedsByOpptyId = new OpportunitySchedulesSelector().selectByOpptyIdGroupByOpptyId(opptiesNew.keySet());
 		
 		for (Opportunity opptyNew : opptiesNew.values()) {
-			if (opptiesOld.get(opptyNew.Id).CurrencyIsoCode != opptyNew.CurrencyIsoCode) {
-				List<OpportunitySchedule__c> opptySchedsUpdated = getOpptySchedsForUpdate(opptyScheds, opptyNew.Id);
+			Opportunity opptyOld = opptiesOld.get(opptyNew.Id);
+			
+			if (opptyOld.CurrencyIsoCode != opptyNew.CurrencyIsoCode) {
+				List<OpportunitySchedule__c> opptySchedsOld = opptySchedsByOpptyId.get(opptyNew.Id);
 				
-				for (OpportunitySchedule__c os : opptySchedsUpdated) {
-					os.CurrencyIsoCode = opptyNew.CurrencyIsoCode;
-					result.add(os);
-				}			
+				if (opptySchedsOld == null) continue;
+				
+				for (OpportunitySchedule__c opptySchedOld : opptySchedsOld) {
+					opptySchedOld.CurrencyIsoCode = opptyNew.CurrencyIsoCode;
+					result.add(opptySchedOld);
+				}	
 			}	
 		}
 		
 		return result;	
 	}
-	
-	private List<OpportunitySchedule__c> getOpptySchedsForUpdate(List<OpportunitySchedule__c> opptyScheds, Id opptyId) {
-		p('getOpptySchedsForUpdate');
-		List<OpportunitySchedule__c> result = new List<OpportunitySchedule__c>();
-		
-		for (OpportunitySchedule__c os : opptyScheds) {
-			if (os.Opportunity__c == opptyId) {
-				result.add(os);
-			}			
-		} 
-		
-		return result;	
-	}
-	
+
 	private void updateOpptyProdLostCancelledInfo(List<Opportunity> existingRecords){
 		p('updateOpptyProdLostCancelledInfo');
 		List<OpportunityLineItem> opptyProds;
@@ -390,7 +369,7 @@ public class Opportunities extends ApplicationDomain {
 								}
 							}
 							
-							if (opptyNew.RecordTypeId == OpportunitiesSelector.getMnRecordTypeId()) {
+							if (isMnRecordType(opptyNew)) {
 								if ((opptyOld.StageName != STAGE_LOST && opptyNew.StageName == STAGE_LOST) ||
 								    (opptyOld.StageName != STAGE_CANCELLED && opptyNew.StageName == STAGE_CANCELLED) ||
 								    (LOST_STAGES.contains(opptyNew.StageName) && (opptyOld.Lost_Date__c != opptyNew.Lost_Date__c || opptyOld.Lost_Reason__c != opptyNew.Lost_Reason__c))) {
@@ -485,7 +464,7 @@ public class Opportunities extends ApplicationDomain {
 	        		}
 	        	}
 	        	
-	        	if (opptyNew.RecordTypeId == OpportunitiesSelector.getMnRecordTypeId()) {
+	        	if (isMnRecordType(opptyNew)) {
 	        		// Set Curreny for MN Oppty
 	        		if (CommonUtils.getFxRatesByCurIsoCode().containsKey(opptyNew.CurrencyIsoCode)) {
 	        			opptyNew.Currency__c = CommonUtils.getFxRatesByCurIsoCode().get(opptyNew.CurrencyIsoCode).Id;
@@ -531,7 +510,7 @@ public class Opportunities extends ApplicationDomain {
 					}
 				}
 				
-				if (opptyNew.RecordTypeId == OpportunitiesSelector.getMnRecordTypeId()) {
+				if (isMnRecordType(opptyNew)) {
 	        		// Set Curreny for MN Oppty
 	        		if (CommonUtils.getFxRatesByCurIsoCode().containsKey(opptyNew.CurrencyIsoCode)) {
 	        			opptyNew.Currency__c = CommonUtils.getFxRatesByCurIsoCode().get(opptyNew.CurrencyIsoCode).Id;
@@ -714,16 +693,58 @@ public class Opportunities extends ApplicationDomain {
 		return result;
     }
     
+    private void updateTmmaOverride(Map<Id, Opportunity> opptiesOld, Map<Id, Opportunity> opptiesNew) {
+    	p('updateTmmaOverride');
+    	if (CommonUtils.isDataAdminUser()) return;
+    	
+    	Set<String> tmmaOverrideFields = getTmmaOverrideFields();
+    	
+    	for (Opportunity oNew : opptiesNew.values()) {
+        	Opportunity oOld = opptiesOld.get(oNew.Id);
+        	
+        	if (isMnRecordType(oNew) && CommonUtils.fieldsChanged(oOld, oNew, tmmaOverrideFields)) {
+            	oNew.TMMA_Override__c = true;	
+            }
+    	}	
+    }
+    
+    private void resetTmmaOverriddenFields(Map<Id, Opportunity> opptiesOld, Map<Id, Opportunity> opptiesNew) {
+    	p('resetTmmaOverriddenFields');
+    	if (!CommonUtils.isDataAdminUser()) return;
+    	
+    	for (Opportunity oNew : opptiesNew.values()) {
+        	Opportunity oOld = opptiesOld.get(oNew.Id);    
+
+            if (isMnRecordType(oNew) && isTmmaOverride(oNew)) {
+            	Date userCloseDate = oOld.CloseDate;
+            	Date userProdDate = oOld.Production_Date__c;
+        		Date regPartWinDate = oNew.CloseDate;
+            	
+            	OpportunityService.setMnOpportunityCloseDateAndProdDate(oNew, oOld, userCloseDate, userProdDate, regPartWinDate); 
+            }
+        }
+    }
+    
+    private Boolean isSfdcRecordType(Opportunity oppty) {
+		p('isSfdcRecordType');
+		return oppty.RecordTypeId == OpportunitiesSelector.getSfdcRecordTypeId();
+    }
+   
+    private Boolean isMnRecordType(Opportunity oppty) {
+		p('isMnRecordType');
+		return oppty.RecordTypeId == OpportunitiesSelector.getMnRecordTypeId();
+    }
+    
     private Boolean isTmmaOverride(Opportunity oppty) {
     	p('isTmmaOverride');
     	return oppty.TMMA_Override__c;
     }
     
-    private Boolean isMnRecordType(Opportunity oppty) {
-    	p('isMnRecordType');
-		return oppty.RecordTypeId == OpportunitiesSelector.getMnRecordTypeId();
+    private Set<String> getTmmaOverrideFields() {
+    	p('getTmmaOverrideFields');
+    	return new OpportunityTmmaOverrideSettingsSelector().selectFieldNamesByObjectName(getSObjectName());
     }
-    
+
     private Boolean processed() {
     	p('processed');
     	Boolean result = true;

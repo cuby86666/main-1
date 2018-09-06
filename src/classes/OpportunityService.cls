@@ -1,6 +1,7 @@
 public with sharing class OpportunityService {
 	
 	private static final Date NIL_DATE = Date.newInstance(0, 0, 0);
+	private static final String STAGE_COMMITMENT = Opportunities.STAGE_COMMITMENT;
 	
 	public static Map<Id, List<DesignWinApprover>> getDesignWinApprovers(Set<Id> opptyIds) {
 		p('getDesignWinApprovers');
@@ -202,18 +203,44 @@ public with sharing class OpportunityService {
 		}
 	}
 	
+	public static void setMnOpportunityCloseDateAndProdDate(Opportunity oppty, Date prodDate, Date partWinDate) {
+		p('setMnOpportunityCloseDateAndProdDate(oppty, prodDate, partWinDate)');
+		setMnOpportunityCloseDateAndProdDate(oppty, null, null, prodDate, partWinDate);
+	}
+	
+	public static void setMnOpportunityCloseDateAndProdDate(Opportunity oppty, Opportunity opptyOld, Date closeDate, Date prodDate, Date partWinDate) {
+		p('setMnOpportunityCloseDateAndProdDate(oppty, opptyOld, closeDate, prodDate, partWinDate)');
+		if (isCommitment(oppty) && !isCommitment(opptyOld)) {
+			oppty.CloseDate = partWinDate;
+			
+			if (prodDate < partWinDate) {
+				oppty.Production_Date__c = partWinDate.addMonths(6);
+			} else {
+				oppty.Production_Date__c = prodDate;
+			} 
+		} else {
+			oppty.CloseDate = (closeDate != null ? closeDate : prodDate);	
+			oppty.Production_Date__c = prodDate;
+		}	
+	}
+	
+	private static Boolean isCommitment(Opportunity oppty) {
+    	p('isCommitment');
+    	return (oppty != null && oppty.StageName == STAGE_COMMITMENT) ? true : false;
+    }
+	
 	public static void setMnOpportunityLostCancelledInfo(Opportunity oppty, Date actionDate) {
-		p('setMnOpportunityLostCancelledInfo(oppty, actionDate)');	
+		p('setMnOpportunityLostCancelledInfo');	
 		setMnOpptyLostCancelledInfo(oppty, actionDate);
 	}
 	
-	private static void setMnOpportunityLostCancelledInfo(Opportunity oppty) {
-		p('setMnOpportunityLostCancelledInfo(oppty)');	
+	private static void setMnOpptyLostCancelledInfo(Opportunity oppty) {
+		p('setMnOpptyLostCancelledInfo(oppty)');	
 		setMnOpptyLostCancelledInfo(oppty, NIL_DATE);
 	}
 	
 	private static void setMnOpptyLostCancelledInfo(Opportunity oppty, Date actionDate) {
-		p('setMnOpptyLostCancelledInfo');	
+		p('setMnOpptyLostCancelledInfo(oppty, actionDate)');	
 		
 		if (oppty.StageName == Opportunities.STAGE_LOST) {
 			oppty.Lost_Date__c = oppty.Expiration_Date__c;
@@ -226,7 +253,7 @@ public with sharing class OpportunityService {
 			oppty.Lost_Reason__c = null;	
 		}
 	}
-
+	
 	public static Set<Id> updateMnOpportunityStages(List<Opportunity> oppties, fflib_ISObjectUnitOfWork uow) {
 		List<Opportunity> opptyUpdates = new List<Opportunity>();
 		Set<Id> opptyUpdateIds = new Set<Id>();
@@ -246,7 +273,7 @@ public with sharing class OpportunityService {
             if (mnOpptyStages.containsKey(oppty.Id) && oppty.StageName != mnOpptyStages.get(oppty.Id)) {
                 oppty.StageName = mnOpptyStages.get(oppty.Id);
 
-				setMnOpportunityLostCancelledInfo(oppty); // SFDC-1407 
+				setMnOpptyLostCancelledInfo(oppty); // SFDC-1407 
 				
                 if (!opptyUpdateIds.contains(oppty.Id)) {
                     opptyUpdateIds.add(oppty.Id);
@@ -284,6 +311,36 @@ public with sharing class OpportunityService {
 	private static Boolean isMnRecordType(Opportunity oppty) {
 		return oppty.RecordTypeId == OpportunitiesSelector.getMnRecordTypeId();
     }
+    
+    public static void shiftOpportunitySchedules(List<OpportunitySchedule__c> opptyScheds, Date prodDate) {
+    	p('shiftOpportunitySchedules');
+    	if (opptyScheds != null && opptyScheds.size() > 0) {
+    		List<Date> schedDates = generateOpportunityScheduleDates(prodDate, opptyScheds.size());
+    		
+    		for (Integer i = 0; i < opptyScheds.size(); i++) {
+    			opptyScheds.get(i).Sched_Date__c = schedDates.get(i);	
+    		}	
+    	}
+    }
+   
+    public static List<Date> generateOpportunityScheduleDates(Date prodDate, Integer qtrs) {
+    	p('generateOpportunityScheduleDates');
+    	List<Date> result = new List<Date>();
+    	
+    	Integer prodQtr = ((prodDate.month() - 1) / 3) + 1;
+		Integer prodQtrStartMonth = 3 * prodQtr - 2;	// qtr + 2 * (qtr - 1)
+		Date prodQtrStartDate = Date.newInstance(prodDate.year(), prodQtrStartMonth, 1);
+    	
+    	for (Integer i = 0; i < qtrs; i++) {
+    		if (i == 0) {
+    			result.add(prodDate);		
+    		} else {
+    			result.add(prodQtrStartDate.addMonths(3 * i));
+    		}
+    	}
+    	
+    	return result; 
+    } 
 	
 	private static void p(String msg) {
 		CommonUtils.p(OpportunityService.class, '//-v', msg);

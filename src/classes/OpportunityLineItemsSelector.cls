@@ -18,6 +18,7 @@ public class OpportunityLineItemsSelector extends ApplicationSelector {
 			OpportunityLineItem.MAG__c,
 			OpportunityLineItem.NPI__c,
 			OpportunityLineItem.NPI_Shadow__c,
+			OpportunityLineItem.Opportunity_Record_Type_Id__c,
 			OpportunityLineItem.POS_Resale_Value_USD__c,
 			OpportunityLineItem.Price_Erosion_Rate__c,
 			OpportunityLineItem.PricebookEntryId,

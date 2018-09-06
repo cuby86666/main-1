@@ -3,7 +3,10 @@
 .project
 salesforce.schema
 src/package.xml
+deploy/build.properties
 deploy/dist
 deploy/dist/*
 deploy/retrievedSource
 deploy/retrievedSource/*
+deploy/test
+deploy/test/*

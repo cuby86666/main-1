@@ -3,9 +3,8 @@ public class OpportunityLineItems extends ApplicationDomain {
 	public static final Set<String> LOST_CANCELLED = new Set<String> {'Lost', 'Cancelled'};
 	
 	private static final Integer PRICE_EROSION_QUARTERS = 4;
-    
     private static final String PROBABILITY_TO_WIN_80_100 = '80% - 100%';
-	
+    	
 	private static Set<Id> opptyProdSchedIds;
 	
 	public OpportunityLineItems(List<OpportunityLineItem> opptyProds) {
@@ -37,7 +36,7 @@ public class OpportunityLineItems extends ApplicationDomain {
 	
 	public override void onBeforeUpdate(Map<Id, SObject> existingRecords) {
 		p('onBeforeUpdate');
-		OpportunityProductClaimValue.bypassOpportunityProductMnUpdateForTmmaOverride((Map<Id, OpportunityLineItem>)existingRecords, new Map<Id, OpportunityLineItem>((List<OpportunityLineItem>)this.records));
+		resetTmmaOverriddenFields((Map<Id, OpportunityLineItem>)existingRecords, new Map<Id, OpportunityLineItem>((List<OpportunityLineItem>)this.records));
 		
 		OpportunityProductClaimValue.setOpportunityProductClaimValues((List<OpportunityLineItem>)this.records);	
 		
@@ -57,7 +56,7 @@ public class OpportunityLineItems extends ApplicationDomain {
 	
 	public override void onAfterUpdate(Map<Id, SObject> existingRecords) {
 		p('onAfterUpdate');
-		OpportunityProductClaimValue.updateTmmaOverrideIfOpportunityProductMnUpdatedByTmma((Map<Id, OpportunityLineItem>)existingRecords, new Map<Id, OpportunityLineItem>((List<OpportunityLineItem>)this.records));
+		updateTmmaOverride((Map<Id, OpportunityLineItem>)existingRecords, new Map<Id, OpportunityLineItem>((List<OpportunityLineItem>)this.records));
 		
 		createReOpenOpptyProdScheds((List<OpportunityLineItem>)existingRecords.values());
 		
@@ -617,4 +616,68 @@ public class OpportunityLineItems extends ApplicationDomain {
     	}
     }
     
+    private void resetTmmaOverriddenFields(Map<Id, OpportunityLineItem> opptyLineItemsOld, Map<Id, OpportunityLineItem> opptyLineItemsNew) {
+    	p('resetTmmaOverriddenFields');
+    	if (!CommonUtils.isDataAdminUser()) return;
+    	
+    	Set<String> tmmaOverrideFields = getTmmaOverrideFields(); 
+    	
+    	for (OpportunityLineItem oliNew : opptyLineItemsNew.values()) {
+        	OpportunityLineItem oliOld = opptyLineItemsOld.get(oliNew.Id);    
+            
+            if (isMnRecordType(oliNew) && isTmmaOverride(oliNew)) {
+            	CommonUtils.resetFields(oliOld, oliNew, tmmaOverrideFields);
+            }
+        }	
+    }
+    
+    private void updateTmmaOverride(Map<Id, OpportunityLineItem> opptyLineItemsOld, Map<Id, OpportunityLineItem> opptyLineItemsNew) {
+    	p('updateTmmaOverride');
+    	if (CommonUtils.isDataAdminUser()) return;
+    	
+    	Set<Id> opptyIds = new Set<Id>();
+    	    	
+    	for (OpportunityLineItem oli : opptyLineItemsNew.values()) {
+    		if (isMnRecordType(oli)) {
+    			opptyIds.add(oli.OpportunityId);
+    		}
+    	}
+    	
+    	if (opptyIds.size() == 0) return;
+    	
+    	Map<Id, Opportunity> oppties = new Map<Id, Opportunity>(new OpportunitiesSelector().selectById(opptyIds));
+    	
+    	Set<String> tmmaOverrideFields = getTmmaOverrideFields();
+    	Set<Opportunity> opptiesUpdated = new Set<Opportunity>(); 
+    	
+    	for (OpportunityLineItem oliNew : opptyLineItemsNew.values()) {
+    		OpportunityLineItem oliOld = opptyLineItemsOld.get(oliNew.Id);    
+                        
+            if (isMnRecordType(oliNew) && CommonUtils.fieldsChanged(oliOld, oliNew, tmmaOverrideFields)) {
+            	Opportunity oppty = oppties.get(oliNew.OpportunityId);
+            	oppty.TMMA_Override__c = true;
+	            opptiesUpdated.add(oppty);
+	        }
+        }
+    	
+    	if (opptiesUpdated.size() > 0) {
+    		update new List<Opportunity>(opptiesUpdated);
+    	}
+    }
+   
+    private Boolean isMnRecordType(OpportunityLineItem opptyProd) {
+    	p('isMnRecordType');
+		return opptyProd.Opportunity_Record_Type_Id__c == OpportunitiesSelector.getMnRecordTypeId();
+    }
+    
+    private Boolean isTmmaOverride(OpportunityLineItem opptyProd) {
+    	p('isTmmaOverride');
+    	return opptyProd.Opportunity_TMMA_Override__c;
+    }
+    
+    private Set<String> getTmmaOverrideFields() {
+    	p('getTmmaOverrideFields');
+    	return new OpportunityTmmaOverrideSettingsSelector().selectFieldNamesByObjectName(getSObjectName());
+    }
+
 }

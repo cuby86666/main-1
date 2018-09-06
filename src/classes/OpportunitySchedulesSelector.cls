@@ -21,6 +21,21 @@ public class OpportunitySchedulesSelector extends ApplicationSelector {
 	public List<OpportunitySchedule__c> selectByOpptyId(Set<Id> opptyIds) {
 		p('selectByOpptyId');
 		return (List<OpportunitySchedule__c>)Database.query(newQueryFactory().setCondition('Opportunity__c in :opptyIds').toSOQL());	
+	}
+	
+	public Map<Id, List<OpportunitySchedule__c>> selectByOpptyIdGroupByOpptyId(Set<Id> opptyIds) {
+		p('selectByOpptyIdGroupByOpptyId');
+		Map<Id, List<OpportunitySchedule__c>> result = new Map<Id, List<OpportunitySchedule__c>>();
+        
+        for (OpportunitySchedule__c opptySched : selectByOpptyId(opptyIds)) {
+            if (result.containsKey(opptySched.Opportunity__c)) {
+            	result.get(opptySched.Opportunity__c).add(opptySched);
+            } else {
+            	result.put(opptySched.Opportunity__c, new List<OpportunitySchedule__c> {opptySched});
+            }
+        }
+        
+        return result;	
 	} 
 	
 	public List<OpportunityScheduleValueSummary> selectSchedValueByOpptyIdGroupByOpptyId(Set<Id> opptyIds) {
