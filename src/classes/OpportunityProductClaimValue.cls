@@ -5,10 +5,6 @@
  *     Claim_Value__c
  *	   Lost_Cancelled_LT_Value__c
  *     Lost_Cancelled_Claim_Value__c
- *   
- *   Opportunity
- *     AccountId
- *     TMMA_Override__c
  */
 public class OpportunityProductClaimValue {
 	@TestVisible 
