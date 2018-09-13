@@ -123,9 +123,8 @@ public class LeadConvertControllerTest {
                                         Order_Status__c='PENDING',Related_to_Lead__c=listLeadToConvert[0].Id);
         
          //Insert Opportunity
-        OpportunityTrigger.fetchOppRecordTypes();
         Opportunity o = new Opportunity(Name = 'Test Oppty', AccountId = a.Id, Industry_Segment__c = 'Industrial', StageName = 'Initial Engagement');
-        o.RecordTypeId = OpportunityTrigger.sfdcrecordtype_Id;
+        o.RecordTypeId = OpportunitiesSelector.getSfdcRecordTypeId();
         o.Distributor_Tracking_Number__c=DISTRIBUTOR_TRACKING_NUMBER;
         o.Lead_Id__c=listLeadToConvert[2].Id;
         o.Production_Date__c = PRODUCTION_DATE;

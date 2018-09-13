@@ -261,7 +261,7 @@ private class OpportunitiesTest {
 	    update oppty;
 	    
 	    oppty = getOpportunity(opptyProd.OpportunityId);
-	    system.assertEquals(date.today(), oppty.Discovery_Date__c);
+	    System.assertEquals(date.today(), oppty.Discovery_Date__c);
 	    
 	    //Case 2: insert oppty with Discovery stage
 	    Opportunity opptyDiscovery = new Opportunity(
@@ -273,7 +273,7 @@ private class OpportunitiesTest {
 	    insert opptyDiscovery; 
         
         oppty = getOpportunity(opptyDiscovery.Id);
-	    system.assertEquals(date.today(), oppty.Discovery_Date__c);
+	    System.assertEquals(date.today(), oppty.Discovery_Date__c);
 	    
 	    Test.stopTest();
     }
@@ -285,9 +285,9 @@ private class OpportunitiesTest {
         //Case 1: Locked Exchange Rate != null && Claim Value != null
     	Opportunity oppty = getOpportunity(opptyProd.OpportunityId);
     	
-    	system.assertNotEquals(null, oppty.Claim_Value__c);
-    	system.assertNotEquals(null, oppty.Locked_Exchange_Rate__c);
-    	system.assertEquals(oppty.Claim_Value__c/oppty.Locked_Exchange_Rate__c, oppty.Claim_Value_USD_SYS__c);
+    	System.assertNotEquals(null, oppty.Claim_Value__c);
+    	System.assertNotEquals(null, oppty.Locked_Exchange_Rate__c);
+    	System.assertEquals(oppty.Claim_Value__c/oppty.Locked_Exchange_Rate__c, oppty.Claim_Value_USD_SYS__c);
     	
     	//Case 2: Locked Exchange Rate == null && Claim Value == null
     	Fx_Rates__c fxRate= [SELECT Id, Exchange_Rate__c, CurrencyIsoCode FROM Fx_Rates__c WHERE CurrencyIsoCode = :CCY_CODE_USD];
@@ -305,16 +305,76 @@ private class OpportunitiesTest {
 	    	    
 	    oppty = getOpportunity(opptyWoProduct.Id);
 	    
-	    system.assertEquals(0, oppty.Locked_Exchange_Rate__c);
-	 	system.assertEquals(null, oppty.Claim_Value_USD_SYS__c);
+	    System.assertEquals(0, oppty.Locked_Exchange_Rate__c);
+	 	System.assertEquals(null, oppty.Claim_Value_USD_SYS__c);
         
         delete fxRate;
         update oppty;
         oppty = getOpportunity(opptyWoProduct.Id);
 	    
-	    system.assertEquals(0, oppty.Locked_Exchange_Rate__c);
+	    System.assertEquals(0, oppty.Locked_Exchange_Rate__c);
     	
     	Test.stopTest();
+    }
+    
+    // Test medhods for AttachmentTrigger and NoteTrigger
+    @isTest
+    static void testAttachmentAndNote() {
+    	Opportunity oppty = getOpportunity(opptyProd.OpportunityId);
+    	
+        List<Attachment> attachments = new  List<Attachment>();
+        
+        Attachment attach1 = new Attachment();
+        attach1.ParentId = oppty.Id;
+        attach1.Name = 'Attachment 1';
+        attach1.body = Blob.valueOf('Test'); 
+        attachments.add(attach1);
+            
+        Attachment attach2 = new Attachment();
+        attach2.ParentId = oppty.Id;
+        attach2.Name = 'Attachment 2';
+        attach2.body = Blob.valueOf('Test'); 
+        attachments.add(attach2);             
+        
+        insert attachments;
+                
+        oppty = [select Id, numAtts__c from Opportunity where Id = :oppty.Id];
+        
+        System.assertEquals(2, oppty.numAtts__c);
+              
+        List<Attachment> attachmentsDeleted= [select Id from Attachment where ParentId = :oppty.Id];
+        
+        delete attachmentsDeleted;
+        
+        oppty = [select Id, numAtts__c from Opportunity where Id = :oppty.Id];
+        
+        System.assertEquals(0, oppty.numAtts__c);
+        
+        List<Note> notes = new  List<Note>();
+        
+        Note note1 = new Note();
+        note1.ParentId = oppty.Id;
+        note1.Title = 'Note 1';
+        note1.Body = 'Test';
+        notes.add(note1);
+            
+        Note note2 = new Note();
+        note2.ParentId = oppty.Id;
+        note2.Title = 'Note 2';
+        note2.Body = 'Test';
+        notes.add(note2);
+        
+        insert notes ; 
+        
+        notes= [select Id from Note where ParentId = :oppty.Id];
+               
+        System.assertEquals(2, notes.size());
+        
+        delete notes;
+        
+        notes= [select Id from Note where ParentId = :oppty.Id];
+               
+        System.assertEquals(0, notes.size());
     }
   
     static User createUser(String alias, String lastName, ID profileID, Boolean signedARIA) {
@@ -349,13 +409,8 @@ private class OpportunitiesTest {
     	return account;
     }
     
-    static Opportunity getOpportunity(ID opptyID) {
-        return [select LT_Value_USD__c, Sales_Director_Approver__c, Regional_VP_Approver__c, VP_Approver_2__c, 
-        			   MAG_Approver_1__c, MAG_Approver_2__c, BL_Approver_1__c, BL_Approver_2__c, Program__c,    
-        			   Account.ParentId, Owner.MT_2__c, StageName, Discovery_Date__c, Claim_Value__c, Locked_Exchange_Rate__c,
-        			   Claim_Value_USD_SYS__c, CurrencyIsoCode
-        		  from Opportunity 
-        		 where Id = :opptyID];    
+    static Opportunity getOpportunity(Id opptyId) {
+        return new OpportunitiesSelector().selectById(new Set<Id> {opptyId}).get(0);    
     }
 
 }

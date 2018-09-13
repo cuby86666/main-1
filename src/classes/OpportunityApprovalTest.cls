@@ -247,6 +247,51 @@ private class OpportunityApprovalTest {
         System.debug('//J ========== after insert oppty prods');
     } 
     
+    static User createUser(String alias, String lastName, ID profileID, Boolean signedARIA) {
+    	User user = newUser(alias, lastName, profileID, signedARIA); 
+    	insert user;
+        
+        return user;	
+    }
+    
+    static User newUser(String alias, String lastName, ID profileID, Boolean signedARIA) {
+    	String email = CommonUtils.generateGUID() + '@nxp.com.test123';
+    	
+    	User user = new User(EmailEncodingKey = 'UTF-8', LanguageLocaleKey = 'en_US', LocaleSidKey = 'en_US', TimeZoneSidKey = 'America/Los_Angeles');
+		user.Alias = alias;
+		user.LastName = lastName;
+		user.ProfileId = profileID;
+		user.Email = email;
+		user.UserName = email;
+		user.Signed_ARIA__c = signedARIA;
+		        
+        return user;	
+    }
+    
+    static Account createAccount(String name, ID recordTypeID, ID parentID, String cbg) {
+    	Account account = new Account(Region__c = 'EMEA');
+    	account.Name = name;
+    	account.RecordTypeId = recordTypeID;
+    	account.ParentId = parentID;
+    	account.CMD_Industry_Segment__c = cbg;
+    	insert account;
+    	
+    	return account;
+    }
+    
+    static Approvers_Matrix__c newApproverMatrix(String type, String criteria1, String criteria2, Double threshold1, ID approverID, ID accountID) {//SFDC-954, Add Account ID
+    	Approvers_Matrix__c approverMatrix = new Approvers_Matrix__c();
+    	approverMatrix.RecordTypeId = new ApproverMatrixesSelector().getRecordTypeId(ApproverMatrixesSelector.RecordType.DIRECT_OPPTY);
+    	approverMatrix.Type__c = type;
+    	approverMatrix.Criteria_1__c = criteria1;
+    	approverMatrix.Criteria_2__c = criteria2;
+    	approverMatrix.Threshold_1__c = threshold1;
+    	approverMatrix.Approver__c = approverID;
+    	approverMatrix.Account__c = accountID;
+    	    	
+    	return approverMatrix;
+    }
+    
     static void createOpportunitySchedules(ID opptyID, Double totalQty) {
     	List<OpportunitySchedule__c> opptyScheds = new List<OpportunitySchedule__c>();
     	Double qty = totalQty / 4;
@@ -2094,53 +2139,8 @@ private class OpportunityApprovalTest {
     	system.assertEquals(null, oppty.Global_Key_Account_Manager__c);
     }
     
-    static User createUser(String alias, String lastName, ID profileID, Boolean signedARIA) {
-    	User user = newUser(alias, lastName, profileID, signedARIA); 
-    	insert user;
-        
-        return user;	
-    }
-    
-    static User newUser(String alias, String lastName, ID profileID, Boolean signedARIA) {
-    	String email = CommonUtils.generateGUID() + '@nxp.com.test123';
-    	
-    	User user = new User(EmailEncodingKey = 'UTF-8', LanguageLocaleKey = 'en_US', LocaleSidKey = 'en_US', TimeZoneSidKey = 'America/Los_Angeles');
-		user.Alias = alias;
-		user.LastName = lastName;
-		user.ProfileId = profileID;
-		user.Email = email;
-		user.UserName = email;
-		user.Signed_ARIA__c = signedARIA;
-		        
-        return user;	
-    }
-    
-    static Account createAccount(String name, ID recordTypeID, ID parentID, String cbg) {
-    	Account account = new Account(Region__c = 'EMEA');
-    	account.Name = name;
-    	account.RecordTypeId = recordTypeID;
-    	account.ParentId = parentID;
-    	account.CMD_Industry_Segment__c = cbg;
-    	insert account;
-    	
-    	return account;
-    }
-    
-    static Approvers_Matrix__c newApproverMatrix(String type, String criteria1, String criteria2, Double threshold1, ID approverID, ID accountID) {//SFDC-954, Add Account ID
-    	Approvers_Matrix__c approverMatrix = new Approvers_Matrix__c();
-    	approverMatrix.RecordTypeId = new ApproverMatrixesSelector().getRecordTypeId(ApproverMatrixesSelector.RecordType.DIRECT_OPPTY);
-    	approverMatrix.Type__c = type;
-    	approverMatrix.Criteria_1__c = criteria1;
-    	approverMatrix.Criteria_2__c = criteria2;
-    	approverMatrix.Threshold_1__c = threshold1;
-    	approverMatrix.Approver__c = approverID;
-    	approverMatrix.Account__c = accountID;
-    	    	
-    	return approverMatrix;
-    }
-    
     static Opportunity getOpportunity(Id opptyId) {
-    	return new OpportunitiesSelector().selectByIdWithAccountAndOwner(new Set<Id>{opptyId}).get(0);    
+    	return new OpportunitiesSelector().selectByIdWithAccountAndOwner(new Set<Id> {opptyId}).get(0);    
     } 
     
     static void testOpptyShare(List<ID> userIDs) {
