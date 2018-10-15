@@ -135,6 +135,7 @@ public class MnStages extends ApplicationDomain {
 			oppty.Design_Customer_Zip__c = ms.Addr_Design_Cust_Zip__c;
 			oppty.Design_Reg_Is_Created_By_B2B__c = ms.Reg_Is_Created_By_B2B__c;
 			oppty.Design_Reg_Is_Duplicated__c = ms.Reg_Is_Duplicated__c;
+			oppty.Design_Reg_Production_Date__c = ms.Reg_Production_Date__c;
 			oppty.Design_Reg_Reject_Reason__c = ms.Reg_Reject_Reason__c;
 			oppty.Design_Reg_Status__c = ms.Reg_Status__c;
 			oppty.Design_Reg_Win_Date__c = ms.Reg_Win_Date__c;

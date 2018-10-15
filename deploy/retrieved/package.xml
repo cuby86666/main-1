@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
-	<fullName>1018 - SFDC-1771, SFDC-1995</fullName>
-    <types>
+	<fullName>1018 - SFDC-1771</fullName>
+	<types>
     	<members>ApplicationDomain</members>
     	<members>CommonUtils</members>
     	<members>LeadConvertControllerTest</members>
@@ -28,6 +28,9 @@
         <name>AuraDefinitionBundle</name>
     </types>
     <types>
+    	<members>Opportunity.Design_Reg_Production_Date__c</members>
+    	<members>OpportunityLineItem.Close_Date_EQ_Win_Date__c</members>
+    	<members>OpportunityLineItem.DR_Prod_Date_LT_Win_Date__c</members>
     	<members>OpportunityLineItem.Opportunity_TMMA_Override__c</members>
     	<members>OpportunityLineItem.Prod_Date_LT_Win_Date__c</members>
     	<members>OpportunitySchedule__c.Sched_Qty_NE_Frozen_Qty__c</members>

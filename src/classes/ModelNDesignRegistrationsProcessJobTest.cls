@@ -1,6 +1,7 @@
 @isTest
 private class ModelNDesignRegistrationsProcessJobTest {
 	
+	private static final String TEST_USER = 't_user_1';
 	private static final String STATUS_QUEUED = MnStages.STATUS_QUEUED;
 	private static final String STATUS_PROCESSING = MnStages.STATUS_PROCESSING;
 	private static final String STATUS_COMPLETED = MnStages.STATUS_COMPLETED;
@@ -36,11 +37,11 @@ private class ModelNDesignRegistrationsProcessJobTest {
 			opptyProdExtId = mnStage.Reg_Part_OID__c;
 			
 			for (PricebookEntry pe : new PricebookEntriesSelector().selectByProdSalesItemWithProduct(new Set<String> {mnStage.Part_12NC__c})) {
-					if (pricebookEntry12NC == null &&
-						pe.Product2.Sales_Item__c == mnStage.Part_12NC__c &&
-						pe.CurrencyIsoCode == mnStage.Currency_Code__c) {
-						pricebookEntry12NC = pe;
-					}	
+				if (pricebookEntry12NC == null &&
+					pe.Product2.Sales_Item__c == mnStage.Part_12NC__c &&
+					pe.CurrencyIsoCode == mnStage.Currency_Code__c) {
+					pricebookEntry12NC = pe;
+				}	
 			}
 			
 			oppty = ((List<Opportunity>)new OpportunitiesSelector().selectAll()).get(0);
@@ -161,6 +162,27 @@ private class ModelNDesignRegistrationsProcessJobTest {
 	
 		processData();
 	}
+	
+	static User createUser(String alias, String lastName, ID profileID, Boolean signedARIA) {
+    	User user = newUser(alias, lastName, profileID, signedARIA); 
+    	insert user;
+        
+        return user;	
+    }
+    
+    static User newUser(String alias, String lastName, ID profileID, Boolean signedARIA) {
+    	String email = CommonUtils.generateGUID() + '@nxp.com.test123';
+    	
+    	User user = new User(EmailEncodingKey = 'UTF-8', LanguageLocaleKey = 'en_US', LocaleSidKey = 'en_US', TimeZoneSidKey = 'America/Los_Angeles');
+		user.Alias = alias;
+		user.LastName = lastName;
+		user.ProfileId = profileID;
+		user.Email = email;
+		user.UserName = email;
+		user.Signed_ARIA__c = signedARIA;
+		        
+        return user;	
+    }
     
     @isTest
     static void testSetup() {
@@ -521,7 +543,11 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	// Reg Production Date < Reg Part Win Date 
     	oppty.TMMA_Override__c = false;
     	
-    	update oppty;
+    	User u = createUser(TEST_USER, TEST_USER, CommonUtils.getSystemAdminProfileId(), false);
+        
+        System.runAs(u) {
+        	update oppty;	
+        }
     	
     	final Date REG_PROD_DATE = Date.today() + 30;
     	final Date REG_PART_WIN_DATE = Date.today() + 60;
@@ -550,7 +576,11 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	// Reg Production Date >= Reg Part Win Date
     	oppty.TMMA_Override__c = false;
     	
-    	update oppty;
+    	User u = createUser(TEST_USER, TEST_USER, CommonUtils.getSystemAdminProfileId(), false);
+        
+        System.runAs(u) {
+        	update oppty;	
+        }
     	
     	final Date REG_PROD_DATE = Date.today() + 60;
     	final Date REG_PART_WIN_DATE = Date.today() + 30;
@@ -578,7 +608,11 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	// Not Commitment 
     	oppty.TMMA_Override__c = false;
     	
-    	update oppty;
+    	User u = createUser(TEST_USER, TEST_USER, CommonUtils.getSystemAdminProfileId(), false);
+        
+        System.runAs(u) {
+        	update oppty;	
+        }
     	
     	final Date REG_PROD_DATE = Date.today() + 30;
     	
@@ -611,7 +645,11 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	oppty.CloseDate = USER_CLOSE_DATE; 
     	oppty.Production_Date__c = USER_PROD_DATE;
     	
-    	update oppty;
+    	User u = createUser(TEST_USER, TEST_USER, CommonUtils.getSystemAdminProfileId(), false);
+        
+        System.runAs(u) {
+        	update oppty;	
+        }
     	
     	oppty = new OpportunitiesSelector().selectById(new Set<Id> {oppty.Id}).get(0);
     	
@@ -653,7 +691,11 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	oppty.CloseDate = USER_CLOSE_DATE;
     	oppty.Production_Date__c = USER_PROD_DATE;
     	
-    	update oppty;
+    	User u = createUser(TEST_USER, TEST_USER, CommonUtils.getSystemAdminProfileId(), false);
+        
+        System.runAs(u) {
+        	update oppty;	
+        }
     	
     	oppty = new OpportunitiesSelector().selectById(new Set<Id> {oppty.Id}).get(0);
     	
@@ -694,7 +736,11 @@ private class ModelNDesignRegistrationsProcessJobTest {
     	oppty.CloseDate = USER_CLOSE_DATE;
     	oppty.Production_Date__c = USER_PROD_DATE;  
     	
-    	update oppty;
+    	User u = createUser(TEST_USER, TEST_USER, CommonUtils.getSystemAdminProfileId(), false);
+        
+        System.runAs(u) {
+        	update oppty;	
+        }
     	
     	oppty = new OpportunitiesSelector().selectById(new Set<Id> {oppty.Id}).get(0);
     	

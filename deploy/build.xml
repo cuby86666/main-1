@@ -5,6 +5,7 @@
 	<property environment="env"/>
 	
 	<property name="antform.home" value="${env.ANTFORM_HOME}"/>
+	<property name="package.filepath" location="retrieved/package.xml"/>
 
     <taskdef resource="com/salesforce/antlib.xml" uri="antlib:com.salesforce" classpath="lib/ant-salesforce.jar"/>
     
@@ -294,13 +295,18 @@
 			<arg value="'${mail.target}' has been updated"/>
 			<arg value="-body"/>
 			<arg value="'${mail.target}' has been updated. Please check. Thanks!"/>
+			<arg value="-attach"/>
+			<arg value="${package.filepath}"/>
 		</exec>
 	</target>
 	
 	<!-- test -->
 	<target name="test" description="test">
+		<!--
 		<property name="mail.target" value="Jason"/>
 		<antcall target="prod-confirm"/>
+		-->
+		<antcall target="mail"/>
 	</target>	
 	
 </project>

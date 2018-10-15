@@ -89,7 +89,7 @@ private class OpportunitiesTest {
         
         System.debug('//J ========== after insert oppty');  
         
-        createOpportunitySchedules(o.Id, 1000);
+        createOpportunitySchedules(o.Id, o.Production_Date__c, 1000);
         
         // Insert products
         List<Product2> prods = new List<Product2>();
@@ -123,19 +123,15 @@ private class OpportunitiesTest {
         System.debug('//J ========== after insert oppty prods');
     } 
     
-    static void createOpportunitySchedules(ID opptyID, Double totalQty) {
+    static void createOpportunitySchedules(Id opptyId, Date prodDate, Double totalQty) {
     	List<OpportunitySchedule__c> opptyScheds = new List<OpportunitySchedule__c>();
+    	List<Date> schedDates = OpportunityService.generateOpportunityScheduleDates(prodDate, 4);
     	Double qty = totalQty / 4;
     	
-    	OpportunitySchedule__c opptySched;
-		opptySched = new OpportunitySchedule__c(Opportunity__c = opptyID, Sched_Date__c = Date.newInstance(2016, 01, 01), Oppty_Sched_Qty__c = qty, Frozen_Oppty_Sched_Qty__c = qty);
-		opptyScheds.add(opptySched);
-		opptySched = new OpportunitySchedule__c(Opportunity__c = opptyID, Sched_Date__c = Date.newInstance(2016, 04, 01), Oppty_Sched_Qty__c = qty, Frozen_Oppty_Sched_Qty__c = qty);
-		opptyScheds.add(opptySched);
-		opptySched = new OpportunitySchedule__c(Opportunity__c = opptyID, Sched_Date__c = Date.newInstance(2016, 07, 01), Oppty_Sched_Qty__c = qty, Frozen_Oppty_Sched_Qty__c = qty);
-		opptyScheds.add(opptySched);
-		opptySched = new OpportunitySchedule__c(Opportunity__c = opptyID, Sched_Date__c = Date.newInstance(2016, 10, 01), Oppty_Sched_Qty__c = qty, Frozen_Oppty_Sched_Qty__c = qty);
-		opptyScheds.add(opptySched);	
+    	for (Date schedDate : schedDates) {
+    		OpportunitySchedule__c opptySched = new OpportunitySchedule__c(Opportunity__c = opptyId, Sched_Date__c = schedDate, Oppty_Sched_Qty__c = qty, Frozen_Oppty_Sched_Qty__c = qty);
+    		opptyScheds.add(opptySched); 	
+    	}
     	
     	insert opptyScheds;
     }

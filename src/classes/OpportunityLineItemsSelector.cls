@@ -33,6 +33,7 @@ public class OpportunityLineItemsSelector extends ApplicationSelector {
 			OpportunityLineItem.Registration_Effort_Description__c,
       		OpportunityLineItem.Registration_Status__c,
 			OpportunityLineItem.Share__c,
+			OpportunityLineItem.Win_Date__c,
 			OpportunityLineItem.Win_Status__c
 		};
 	}
