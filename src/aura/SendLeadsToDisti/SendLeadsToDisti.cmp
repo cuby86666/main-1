@@ -1,0 +1,187 @@
+<aura:component controller="SendLeadDetailsToDistiController" implements="force:lightningQuickActionWithoutHeader,force:hasRecordId,flexipage:availableForAllPageTypes">
+    <aura:attribute name="primaryDistiContact" type="Object"/>
+    <aura:attribute name="primaryAdditionalContact" type="String"/>
+    <aura:attribute name="secondaryDistiContact" type="Object"/>
+    <aura:attribute name="secondaryAdditionalContact" type="String"/>
+    <aura:attribute name="primaryDetailsPresent" type="boolean" />
+    <aura:attribute name="secondaryDetailsPresent" type="boolean" />
+    <aura:attribute name="distiContactDetails" type="Object" />
+    <aura:attribute access="private" name="error" type="String[]" default=""/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="recordId" type="Id" />
+    <aura:registerEvent name="cancelEvent" type="c:CancelAndClose" />
+    <aura:attribute name="toggleSpinner" type="boolean" default="false"/> 
+    
+    <aura:if isTrue="{!v.toggleSpinner}">
+        <div class="slds-spinner_container">
+          <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+            <span class="slds-assistive-text">Loading</span>
+            <div class="slds-spinner__dot-a"></div>
+            <div class="slds-spinner__dot-b"></div>
+          </div>
+        </div>
+    </aura:if>  
+    
+    <aura:if isTrue="{! !empty(v.error)}">
+        <div class="slds-notify_container slds-is-relative">
+            <div class="slds-notify slds-notify_toast slds-theme_error" role="alert">
+                <span class="slds-assistive-text">error</span>
+                <span class="slds-icon_container slds-icon-utility-error slds-m-right_small slds-no-flex slds-align-top" title="Errors encountered">
+						<lightning:icon iconName="utility:error" size="small" alternativeText="Errors found"/>
+                </span>
+                <div class="slds-notify__content">
+                    <h2 class="slds-text-heading_small">Please correct the following errors</h2>
+                    <aura:iteration items="{!v.error}" var="item">
+                        <p>{!item}</p>
+                    </aura:iteration>	
+                </div>
+            </div>
+        </div>
+    </aura:if>
+    <aura:if isTrue="{! !empty(v.distiContactDetails.messages)}">
+          <!--div class="slds-notify_container slds-is-relative">
+            <div class="slds-notify slds-notify_toast slds-theme_success" role="alert">
+              <span class="slds-assistive-text">success</span>
+              <span class="slds-icon_container slds-icon-utility-success slds-m-right_small slds-no-flex slds-align-top" title="Description of icon when needed">
+                <lightning:icon iconName="utility:success" size="small" alternativeText="Errors found"/>
+              </span>
+              <div class="slds-notify__content">
+                  <aura:iteration items="{!v.distiContactDetails.messages}" var="item">
+                    <h2 class="slds-text-heading_small ">{!item}</h2>
+                  </aura:iteration>
+                
+              </div>
+        
+            </div>
+          </div -->
+        <div class="demo-only" style="height: 640px;">
+        	<section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+        		<div class="slds-modal__container">
+                    <div class="slds-modal__content slds-p-around_small" id="modal-content-id-1">
+                        <aura:iteration items="{!v.distiContactDetails.messages}" var="item">
+                            <h2 class="slds-text-heading_small ">{!item}</h2>
+                        </aura:iteration>            
+                    </div>
+                    <footer class="slds-modal__footer">
+                       <lightning:button label="Close" onclick="{!c.handleCancel}" class="slds-m-top_medium" />
+                    </footer>
+        		</div>
+        	</section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>        
+    </aura:if>
+    <div class="slds-p-vertical_small">
+    <div class="slds-box"> 
+        <article class="slds-tile slds-media">
+            <div class="slds-media__figure">
+                <span class="slds-icon_container" title="Primary Distributor Contact Details">
+                    <lightning:icon iconName="standard:channel_program_members" size="large" alternativeText="Primary Distributor Contact Details"/>                            
+                </span>
+            </div>
+            <div class="slds-media__body">
+                <h3 class="slds-tile__title slds-truncate" title="Primary Distributor Contact Details"><a href="javascript:void(0);">Primary Distributor Contact Details</a></h3>
+                <aura:if isTrue="{! !empty(v.distiContactDetails.primaryDistiContact)}">                            
+                    <div class="slds-tile__detail">
+                        <dl class="slds-list_horizontal slds-wrap">
+                            <dt class="slds-item_label slds-text-color_weak slds-truncate" title="Primary Distributor Contact :">Distributor Contact : </dt> 
+                            <dd class="slds-item_detail slds-truncate" title="{!v.distiContactDetails.primaryDistiContact.distiContact}">{!v.distiContactDetails.primaryDistiContact.distiContact}</dd>
+                            <dt class="slds-item_label slds-text-color_weak slds-truncate" title="Primary Additional Email :">Additional Email :</dt>
+                            <dd class="slds-item_detail slds-truncate" title="{!v.distiContactDetails.primaryDistiContact.distiAdditionalEmail}" >{!v.distiContactDetails.primaryDistiContact.distiAdditionalEmail}</dd>
+                        </dl>
+                    </div>
+                    <aura:set attribute="else">
+                        <div class="slds-form slds-form_stacked">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" ><abbr class="slds-required" title="required">*</abbr>Primary Distributor Contact:</label>
+                                <c:SearchAndSelectContacts selContact="{!v.primaryDistiContact}" limit="10"/>
+                            </div>
+                        </div>
+                        <div class="slds-form slds-form_stacked">
+                            <div class="slds-form-element">
+                                <div class="slds-form-element__control">
+                                    <lightning:textarea name="primaryAdditionalEmail" value="{!v.primaryAdditionalContact}" label="Primary Distributor Additional Email(Optional)" class="additionalEmail" maxlength="300" />
+                                </div>
+                            </div>
+                        </div>                                    
+                    </aura:set>
+                </aura:if>                 
+            </div>
+        </article> 
+    </div>
+        
+    </div>    
+    <div class="slds-box">
+        <article class="slds-tile slds-media">
+            <div class="slds-media__figure">
+                <span class="slds-icon_container" title="Secondary Distributor Contact Details">
+                    <lightning:icon iconName="standard:channel_program_members" size="large" alternativeText="Secondary Distributor Contact Details"/>                            
+                </span>
+            </div>
+            <div class="slds-media__body">
+                <h3 class="slds-tile__title slds-truncate" title="Secondary Contact Details"><a href="javascript:void(0);">Secondary Distributor Contact Details</a></h3>
+                <aura:if isTrue="{! !empty(v.distiContactDetails.secondaryDistiContact)}">                            
+                    <div class="slds-tile__detail">
+                        <dl class="slds-list_horizontal slds-wrap">
+                            <dt class="slds-item_label slds-text-color_weak slds-truncate" title="Secondary Distributor Contact :">Distributor Contact : </dt> 
+                            <dd class="slds-item_detail slds-truncate" title="{!v.distiContactDetails.secondaryDistiContact.distiContact}">{!v.distiContactDetails.secondaryDistiContact.distiContact}</dd>
+                            <dt class="slds-item_label slds-text-color_weak slds-truncate" title="Secondary Additional Email :">Additional Email :</dt>
+                            <dd class="slds-item_detail slds-truncate" title="{!v.distiContactDetails.secondaryDistiContact.distiAdditionalEmail}" >{!v.distiContactDetails.secondaryDistiContact.distiAdditionalEmail}</dd>
+                        </dl>
+                        <lightning:button variant="brand" label="Delete" iconName="utility:delete" iconPosition="left" onclick="{!c.deleteSecondaryContact}" />
+                    </div>
+                    <aura:set attribute="else">
+                        <div class="slds-form slds-form_stacked">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" >Secondary Distributor(Optional):</label>
+                                <c:SearchAndSelectContacts selContact="{!v.secondaryDistiContact}" limit="10"/>
+                            </div>
+                        </div>
+                        <div class="slds-form slds-form_stacked">
+                            <div class="slds-form-element">
+                                <div class="slds-form-element__control">
+                                    <lightning:textarea name="secondaryAdditionalEmail" value="{!v.secondaryAdditionalContact}" label="Secondary Distributor Additional Email(Optional):" maxlength="300" class="additionalEmail" />
+                                </div>
+                            </div>
+                        </div>                                    
+                    </aura:set>
+                </aura:if>
+                <div class="slds-inline_icon_text slds-grid slds-m-bottom--large slds-p-top_small">
+                    <lightning:icon iconName="utility:info" size="small" />
+                    <div class="slds-col slds-align-middle">
+                        <p>Please note that the lead will be automatically assigned to Secondary Distributor if no response is received from Primary Distributor</p>
+                    </div>
+                </div>
+                <!-- span class="slds-checkbox slds-p-top_medium">
+                    <h2 class="slds-tile__title slds-truncate" title="Secondary Contact Details">
+                        Reassign Leads to secondary distributor if:
+                    </h2 -->                    
+                    <!-- lightning:input type="checkbox" name="ExpiresWithPrimary" checked="{!v.distiContactDetails.expiresWithPrimary}"  
+                                        label="Expires with Primary Disti without  any response" / -->
+                    <!-- lightning:input type="checkbox" name="RejectedByPrimary"  checked="{!v.distiContactDetails.rejectedByPrimary}"
+                                        label="Gets rejected by Primary Distributor"  / --> 
+                <!-- /span -->
+            </div>
+        </article>             
+    </div>
+    <div class="slds slds-p-top_medium">
+        <div class="slds-size_1-of-1
+                    slds-small-size_1-of-1
+                    slds-medium-size_1-of-1
+                    slds-large-size_1-of-1">
+            <lightning:textarea name="NotesToDisti" value="{!v.distiContactDetails.notesToDisti}" 
+                                label="Notes To Disti" maxlength="300" />
+            
+        </div>
+        <div class="slds-inline_icon_text slds-grid slds-m-bottom--large slds-p-top_small">
+            <lightning:icon iconName="utility:info" size="small" />
+            <div class="slds-col slds-align-middle">
+                <p>Beware. These notes will be the same for primary and secondary distributors. Take care of not placing too personal information.</p>
+            </div>
+        </div>
+		
+    </div>
+    <lightning:button label="Cancel" onclick="{!c.handleCancel}" class="slds-m-top_medium" />
+    <lightning:button label="Send To Disti" onclick="{!c.handleSendToDisti}"
+                      variant="brand" class="slds-m-top_medium"/>        
+	      
+</aura:component>

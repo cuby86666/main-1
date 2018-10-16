@@ -1,0 +1,47 @@
+<aura:component controller="ForwardLeadToDistiController" implements ="force:lightningQuickActionWithoutHeader,force:hasRecordId" >
+	<aura:attribute name="Contact" type="Contact" />
+    <aura:attribute name="recordId" type="Id" />
+   <!-- <aura:attribute access="private" name="error" type="String[]" default="[]"/>    -->
+    <aura:attribute name="IsProcessing" type="boolean" default="false"/> 
+    
+    <aura:attribute name="message" description="Message content, can be HTML" type="String[]" 
+                    default="[]"/>
+	<aura:attribute name="messagetype" description="Message type, can be error/warning/info/success" type="String" default=""/>
+    
+    <!--loading spinner start... style=Brand Medium (blue dots)-->
+ 	<aura:if isTrue="{!v.IsProcessing}">
+    	<div aura:id="spinnerId" class="slds-spinner_container slds-is-relative">
+           <div class="slds-spinner--brand  slds-spinner slds-spinner--medium slds-is-relative" role="alert">
+             <span class="slds-assistive-text">Loading</span>
+             <div class="slds-spinner__dot-a"></div>
+             <div class="slds-spinner__dot-b"></div>
+           </div>
+        </div>
+ 	</aura:if>
+  	<!-- Loading spinner end-->
+    <aura:if isTrue="{! !empty(v.message)}">
+        <div class="{!'slds-box slds-theme–alert-texture slds-theme_' + v.messagetype}">
+            <lightning:icon iconName="{! 'utility:'+ v.messagetype }" size="small" alternativeText="{!v.messagetype}" Class="iconContainer" />            
+            <span class="slds-text-body–regular">
+                <aura:iteration items="{!v.message}" var="item">
+                    <p>{!item}</p>
+                </aura:iteration>
+            </span>
+        </div>
+    </aura:if>
+        
+    <div class="slds-form slds-form_stacked">
+        <div class="slds-col slds-align-middle">
+            <p>To forward a lead to a colleague and transfer ownership of the lead, please search for the contact using their Name or Email Address.</p>
+            <br />
+        </div>
+        <div class="slds-form-element">
+            <label class="slds-form-element__label" ><abbr class="slds-required" title="required">*</abbr>Search Contact:</label>
+            <c:SearchAndSelectContacts selContact="{!v.Contact}" limit="10"/>
+        </div>
+    </div>
+    
+    <lightning:button label="Cancel" onclick="{!c.handleCancel}" class="slds-m-top_medium" />
+    <lightning:button label="Forward" onclick="{!c.handleForwardToDisti}"
+                      variant="brand" class="slds-m-top_medium"/>        
+</aura:component>

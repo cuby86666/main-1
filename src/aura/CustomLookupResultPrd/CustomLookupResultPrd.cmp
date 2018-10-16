@@ -1,0 +1,20 @@
+<aura:component >
+	<aura:attribute name="oProduct" type="Product2" />
+            
+  <!--Register the component level event-->
+    <aura:registerEvent name="oPrdsObjectRecordEvent" type="c:prdSObjectRecordEvent"/>
+       
+    <li role="presentation">        
+        <span class="slds-lookup__item-action slds-media slds-media--center" id="lookup-option-351" role="option">
+        <div class="slds-media__body">            
+            <div class="slds-lookup__result-text">                                                                                  
+                <a onclick="{!c.selectDistiPrd}">
+                    {!v.oProduct.Name}
+                </a>                                                                       
+          </div> 
+            </div>
+        </span>
+    </li>
+    
+    
+</aura:component>

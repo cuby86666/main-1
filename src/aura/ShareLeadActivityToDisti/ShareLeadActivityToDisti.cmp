@@ -1,0 +1,248 @@
+<aura:component controller="ShareLeadActivity" implements="force:lightningQuickActionWithoutHeader,force:hasRecordId,flexipage:availableForAllPageTypes">
+   <!--declare attributes--> 
+	<aura:attribute name="primaryDistiContact" type="Object"/>
+    <aura:attribute name="primaryDetailsPresent" type="boolean" />
+    <aura:attribute name="primaryAdditionalContact" type="String"/>
+    <aura:attribute type="string" name="Name"/>
+    <aura:attribute type="string" name="Company"/>
+    <aura:attribute type="string" name="JobDescription"/>
+    <aura:attribute type="string" name="NormalizedTitle"/>
+    <aura:attribute type="string" name="city"/>
+    <aura:attribute type="string" name="Street"/>
+    <aura:attribute type="string" name="State"/>
+    <aura:attribute type="string" name="Zip"/>
+    <aura:attribute type="string" name="Country"/>
+    <aura:attribute type="string" name="Industry"/>
+    <aura:attribute type="string" name="Email"/>
+    <aura:attribute type="string" name="Phone"/>
+    <aura:attribute type="string" name="status"/>
+    <aura:attribute type="string" name="HasOptedOutOfEmail"/>
+    <aura:attribute type="string" name="DoNotCall"/>
+    <aura:attribute type="string" name="actn"/>
+    <aura:attribute type="string" name="rating"/>
+    <aura:attribute type="string" name="owneremail"/>
+    <aura:attribute name="ListOfLeads" type="contact[]" />
+    <aura:attribute name="selectedCount" type="integer" default="0"/>
+    <aura:attribute name="select1" type="integer" default="0"/>
+    <aura:attribute name="toggleSpinner" type="boolean" default="false"/> 
+    <aura:attribute type="Boolean" name="isCreated"/>
+    <aura:attribute access="private" name="error" type="String[]" default=""/>
+    <aura:attribute type="string" name="notestodisti"/>
+    <aura:registerEvent name="cancelEvent" type="c:CancelAndClose" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+     <!--###### ToggleSpinner Code Start Here ######-->
+    
+        <aura:if isTrue="{!v.toggleSpinner}">
+        <div class="slds-spinner_container">
+          <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+            <span class="slds-assistive-text">Loading</span>
+            <div class="slds-spinner__dot-a"></div>
+            <div class="slds-spinner__dot-b"></div>
+          </div>
+        </div>
+    </aura:if> 
+    
+     <!--###### ToggleSpinner Code End Here ######-->
+    
+     <!--###### Error Message showing Code Start Here ######-->
+    
+        <aura:if isTrue="{! !empty(v.error)}">
+        <div class="slds-notify_container slds-is-relative">
+            <div class="slds-notify slds-notify_toast slds-theme_error" role="alert">
+                <span class="slds-assistive-text">error</span>
+                <span class="slds-icon_container slds-icon-utility-error slds-m-right_small slds-no-flex slds-align-top" title="Errors encountered">
+						<lightning:icon iconName="utility:error" size="small" alternativeText="Errors found"/>
+                </span>
+                <div class="slds-notify__content">
+                    <h2 class="slds-text-heading_small">Please correct the following errors</h2>
+                    <aura:iteration items="{!v.error}" var="item">
+                        <p>{!item}</p>
+                    </aura:iteration>	
+                </div>
+            </div>
+        </div>
+    </aura:if>
+    
+    <!--###### Error Message showing Code End Here ######-->
+  
+  
+	<!--###### MODAL BOX Start From Here ######--> 
+    
+			<aura:if isTrue="{!v.isCreated}">
+                                 
+                 <div role="dialog" tabindex="-1" aria-labelledby="header99" class="slds-modal slds-fade-in-open ">
+        <div class="slds-modal__container">
+          <!-- ###### MODAL BOX HEADER Part Start From Here ######-->
+          <div class="slds-modal__header">
+            <button class="slds-button slds-modal__close slds-button--icon-inverse" title="Close" onclick="{!c.handleCancel}">
+            X
+            <span class="slds-assistive-text">Close</span>
+            </button>
+            <h2 id="header99" class="slds-text-heading--medium">Success Message</h2>
+          </div>
+          <!--###### MODAL BOX BODY Part Start From Here ######-->
+          <div class="slds-modal__content slds-p-around--medium">
+            <p><b>Activity has been shared with distributor.
+              </b>
+            </p>
+          </div>
+          <!--###### MODAL BOX FOOTER Part Start From Here ######-->
+          <div class="slds-modal__footer">
+            <button class="slds-button slds-button--neutral" onclick="{!c.handleCancel}" >OK</button>      
+          </div>
+        </div>
+      </div>
+      <div class="slds-backdrop slds-backdrop--open"></div>
+      
+            </aura:if>
+    <!--###### MODAL BOX Part END Here ######-->
+
+      <!--###### For Showing Distributor Contact and Notes to Disti Start Here ######-->
+    
+        <div class="slds-p-vertical_small">
+    <div class="slds-box"> 
+        <article class="slds-tile slds-media">
+            <div class="slds-media__figure">
+                <span class="slds-icon_container" title="Distributor Contact Details">
+                    <lightning:icon iconName="standard:channel_program_members" size="large" alternativeText="Distributor Contact Details"/>                            
+                </span>
+            </div>
+            <div class="slds-media__body">
+                <h3 class="slds-tile__title slds-truncate" title="Distributor Contact Details"><a href="javascript:void(0);">Distributor Contact Details</a></h3>
+                <aura:if isTrue="{! !empty(v.distiContactDetails.primaryDistiContact)}">                            
+                    <div class="slds-tile__detail">
+                        <dl class="slds-list_horizontal slds-wrap">
+                            <dt class="slds-item_label slds-text-color_weak slds-truncate" title="Distributor Contact :">Distributor Contact : </dt> 
+                            <dd class="slds-item_detail slds-truncate" title="{!v.distiContactDetails.primaryDistiContact.distiContact}">{!v.distiContactDetails.primaryDistiContact.distiContact}</dd>
+                            <dt class="slds-item_label slds-text-color_weak slds-truncate" title="Primary Additional Email :">Additional Email :</dt>
+                            <dd class="slds-item_detail slds-truncate" title="{!v.distiContactDetails.primaryDistiContact.distiAdditionalEmail}" >{!v.distiContactDetails.primaryDistiContact.distiAdditionalEmail}</dd>
+                        </dl>
+                    </div>
+                    <aura:set attribute="else">
+                        <div class="slds-form slds-form_stacked">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" ><abbr class="slds-required" title="required">*</abbr>Distributor Contact:</label>
+                                <c:SearchAndSelectContacts selContact="{!v.primaryDistiContact}" limit="10"/>
+                            </div>
+                        </div>
+                        <br/>
+                        <div class="slds-form slds-form_stacked">
+                            <div class="slds-form-element">
+                                <div class="slds-form-element__control">
+                                    <lightning:textarea name="primaryAdditionalEmail" value="{!v.primaryAdditionalContact}" label="Distributor Additional Email(Optional)" class="additionalEmail" maxlength="300" />
+                                </div>
+                            </div>
+                        </div>  
+                                                        
+                    </aura:set>
+                </aura:if>                 
+            </div>
+        </article> 
+    </div>
+        
+    </div> 
+    
+     <div class="slds slds-p-top_medium">
+        <div class="slds-size_1-of-1
+                    slds-small-size_1-of-1
+                    slds-medium-size_1-of-1
+                    slds-large-size_1-of-1">
+       <!--     <lightning:textarea  name="NotesToDisti" value="" 
+                                label="Notes To Disti"  maxlength="300" /> -->
+             <ui:inputTextArea aura:Id="Notes-to-Disti" label="Notes To Disti" class="slds-input"
+                                       change="{!c.SetNotestoDisti}" 
+                                                    maxlength="300"/>
+            
+        </div>
+		
+    </div><br/>
+  
+   <!--###### For Showing Distributor Contact and Notes to Disti End Here ######-->
+    
+   
+    
+    <h1 style="font-size:16px;"><u><b>Activities List</b></u></h1>
+    <span class="slds-badge">Selected Activities:{!v.selectedCount}</span>
+    <br/>
+    
+   <!--###### For Buttons Send to Disti and cancel Start Here ######-->
+    
+  <lightning:button label="Cancel" onclick="{!c.handleCancel}" class="slds-m-top_medium" />
+        <lightning:button label="Share To Disti" onclick="{!c.sendMail}"
+                      variant="brand" class="slds-m-top_medium"/> 
+    <br/><br/>
+    <!--###### For Buttons Send to Disti and cancel End Here ######-->
+    
+    <!--###### For Showing List Of Activities in a Table Start Here ######-->
+    
+    <!--###### For Showing List Of Activities in a Table Start Here ######-->
+
+  <table class="slds-table slds-table--bordered slds-table--cell-buffer">
+      <thead>
+         <tr class="slds-text-title--caps">
+            <th style="width:3.25rem;" class="slds-text-align--right">
+               <div class="slds-form-element">
+                  <div class="slds-form-element__control">
+                     <label class="slds-checkbox">
+                        <!--header checkbox for select all-->
+                        <ui:inputCheckbox aura:id="box3" change="{!c.selectAll}"/>
+                        <span class="slds-checkbox--faux"></span>
+                        <span class="slds-form-element__label text"></span>
+                     </label>
+                  </div>
+               </div>
+            </th>
+            <th>
+               <span class="slds-truncate" title="Action">Action</span>      
+            </th>
+            <th>
+               <span class="slds-truncate" title="Object">Object</span>
+            </th>
+            <th>       
+               <span class="slds-truncate" title="Specific Interest">Specific Interest</span>
+            </th>
+            
+         </tr>
+      </thead>
+      <!--table body start, 
+         Iterate Activity list as a <tr>
+         -->
+     
+      <tbody>
+         <aura:iteration items="{!v.ListOfLeads}" var="con">
+            <tr>
+               <td scope="row" class="slds-text-align--right" style="width:3.25rem;">
+                  <div class="slds-form-element">
+                     <div class="slds-form-element__control">
+                        <label class="slds-checkbox">
+                           <ui:inputCheckbox text="{!con.Id}" aura:id="boxPack" value="" change="{!c.checkboxSelect}"/>
+                           <span class="slds-checkbox--faux"></span>
+                           <span class="slds-form-element__label text"></span>
+                        </label>
+                     </div>
+                  </div>
+               </td>
+               <td scope="row">
+                  <div class="slds-truncate" title="{!con.Action__c}"><a>{!con.Action__c}</a></div>
+               </td>
+               <td scope="row">
+                  <div class="slds-truncate" title="{!con.Object__c}">{!con.Object__c}</div>
+               </td>
+               <td scope="row">
+                  <div class="slds-truncate" title="{!con.Specific_Interest__c}">{!con.Specific_Interest__c}</div>
+               </td>
+               
+            </tr>
+         </aura:iteration>
+      </tbody>
+          
+   </table>
+    
+        <!--###### For Showing List Of Activities in a Table End Here ######-->
+ 
+     
+
+    
+</aura:component>

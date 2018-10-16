@@ -1,0 +1,506 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId,force:appHostable,force:lightningQuickActionWithoutHeader"
+                controller="CreatePotentialLead">
+	    <!--declare attributes--> 
+	<aura:attribute name="contact" type="Contact" default="{sobjectType : 'Contact' }"/>
+    <aura:attribute name="objInfo" type="Lead" default="{sobjectType : 'Lead'}" />
+    <aura:attribute name="LiveChatTranscript" type="LiveChatTranscript" default="{sobjectType : 'LiveChatTranscript'}" />
+	<aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="coontactId" type="Id" />
+    <aura:attribute type="string" name="conid"/>
+	<aura:attribute type="string" name="zipCodeValue"/>
+    <aura:attribute type="string" name="Transcriptname"/>
+    <aura:attribute type="string" name="mobPhoneValue"/>
+    <aura:attribute type="string" name="phoneValue"/>
+    <aura:attribute type="string" name="firstNameVal"/>
+    <aura:attribute type="string" name="firstNameValC"/>
+    <aura:attribute type="string" name="ProjDesc"/>
+    <aura:attribute type="string" name="Industry"/>
+    <aura:attribute type="string" name="lastNameVal"/>
+     <aura:attribute type="string" name="lastNameValC"/>
+    <aura:attribute type="string" name="NXPRep"/>
+    <aura:attribute type="string" name="perToDisti"/>
+    <aura:attribute type="string" name="perToMark"/>
+    <aura:attribute name="Message" type="String" default="Search Result.."/>
+ 	<aura:attribute name="accObjInfo" type="string" default="Account" />
+	<aura:attribute name="depnedentFieldMap" type="map" description="store controller(key)--> dependent(values) picklist value as a map." />
+    <aura:attribute name="isDependentDisable" type="boolean" default="true" description="use for, make disbale depandent field." />
+	<aura:attribute type="string" name="countryVal"/>
+    <aura:attribute type="string" name="stateVal"/>
+	<aura:attribute type="string" name="regVal"/>
+    <aura:attribute name="isSpinner" type="Boolean"/>
+	<aura:attribute type="Boolean" name="preDistiMandatory"/>
+    <aura:attribute type="Boolean" name="preMarkMandatory"/>
+	<aura:attribute name="countryList" type="List" />
+    <aura:attribute type="Boolean" name="isCreated"/>
+	<aura:attribute type="Boolean" name="stateMandatory"/>
+	<aura:attribute type="Boolean" name="IndMandatory"/>
+	<aura:attribute type="Boolean" name="ZipValmandatory"/>
+    <aura:attribute name="caseObjInfo" type="string" default="Case" />
+    <aura:attribute name="selectedRecord" type="Product2"  default="{}" description="Use,for store SELECTED sObject Record"/>
+	<aura:attribute name="prddepnedentFieldMap" type="map" description="store controller(key)--> product dependent(values) picklist value as a map." />
+	<aura:attribute type="string" name="ProductVal"/>
+	<aura:attribute name="prdList" type="List" />
+    <aura:attribute type="string" name="Prd1val"/>
+    <aura:attribute name="listOfSearchRecords" type="List" description="Use,for store the list of search records which returns from apex class"/>
+    <aura:attribute name="SearchKeyWord" type="string"/>
+    <aura:attribute name="isprdDependentDisable" type="boolean" default="true" description="use for, make disbale depandent field." />
+	<aura:attribute name="prdddepnedentFieldMap" type="map" description="store controller(key)--> product dependent(values) picklist value as a map." />
+    <aura:attribute type="string" name="ProductVal1"/>
+    <aura:attribute type="string" name="Prdd1val"/>
+    <aura:attribute name="isprddDependentDisable" type="boolean" default="true" description="use for, make disbale depandent field." />
+    <aura:attribute type="string" name="ProductVal2"/>
+      <aura:attribute type="string" name="CompVal"/>  
+    <aura:attribute type="string" name="ProdId"/>
+    <aura:attribute type="Boolean" name="Contactexixts"/>
+	<aura:handler name="init" value="{!this}" action="{!c.doInits}" />
+    
+    <aura:handler name="oPrdsObjectRecordEvent" event="c:prdSObjectRecordEvent" action="{!c.handleComponentEvent}"/> 
+	
+				
+    
+    <div class="Container" >
+        <fieldset class="slds-box slds-theme--default slds-container">
+            <h2 class="slds-section-title--divider"><b>Create Lead</b></h2> <br/>
+      	<!-- start -->
+            
+<aura:if isTrue="{!v.isCreated}">
+                 <!--###### MODAL BOX Start From Here ######-->                 
+                 <div role="dialog" tabindex="-1" aria-labelledby="header99" class="slds-modal slds-fade-in-open ">
+        <div class="slds-modal__container">
+          <!-- ###### MODAL BOX HEADER Part Start From Here ######-->
+          <div class="slds-modal__header">
+            <button class="slds-button slds-modal__close slds-button--icon-inverse" title="Close" onclick="{!c.closeModel}">
+            X
+            <span class="slds-assistive-text">Close</span>
+            </button>
+            <h2 id="header99" class="slds-text-heading--medium">Success Message</h2>
+          </div>
+          <!--###### MODAL BOX BODY Part Start From Here ######-->
+          <div class="slds-modal__content slds-p-around--medium">
+            <p><b>Lead details sent.
+              </b>
+            </p>
+          </div>
+          <!--###### MODAL BOX FOOTER Part Start From Here ######-->
+          <div class="slds-modal__footer">
+            <button class="slds-button slds-button--neutral" onclick="{!c.closeModel}" >OK</button>      
+          </div>
+        </div>
+      </div>
+      <div class="slds-backdrop slds-backdrop--open"></div>
+      <!--###### MODAL BOX Part END Here ######-->
+            </aura:if>
+            
+            <aura:if isTrue="{!v.isSpinner}">	
+           <div class="slds-spinner_container">
+            <div role="status" class="slds-spinner slds-spinner--medium slds-spinner--brand">
+             <span class="slds-assistive-text">Loading</span>
+              <div class="slds-spinner__dot-a"></div>
+              <div class="slds-spinner__dot-b"></div>
+            </div>
+           </div>
+          </aura:if>
+            <!-- End -->
+            
+            
+	                     <label class="slds-form-element__label">In Bold * - Mandatory Fields</label>
+            <br/> <br/>
+               <aura:if isTrue="{!v.Contactexixts}"> 
+                   <h2 class="slds-section-title--divider"><b>Contact Details</b></h2>  
+                   <aura:set attribute="else">
+                     <h2 class="slds-section-title--divider"><b>LiveChatTranscript Details</b></h2> 
+                          </aura:set>
+                         </aura:if>
+			<div class="slds-page-header" role="banner">
+                <div class="slds-grid">
+                 <div class="slds-p-horizontal--small slds-size--1-of-2">
+                     <div class="slds-form-element">
+                         <!--start-->
+                      <aura:if isTrue="{!v.Contactexixts}">             
+
+								              <div class="slds-form-element__control">
+                         <b><label class="uiLabel-left form-element__label uiLabel" >
+                                First Name* </label></b>
+                                  <ui:inputtext aura:Id="first-Name-Inp-c" class="slds-input"
+                                       value="{!v.contact.FirstName}"  change="{!c.SetconFirstNameChange}" required="True"  />
+                                     
+                                 </div><br/>
+                              <div class="slds-form-element__control">
+                             <b><label class="uiLabel-left form-element__label uiLabel" >
+                                Last Name*</label></b>
+                         <ui:inputtext aura:Id="last-Name-Inp-c" class="slds-input"
+                                       value="{!v.contact.LastName}" change="{!c.SetconLastNameChange}" required="True"
+                                      />
+                                 </div><br/>
+                         <div class="slds-form-element__control">
+                             <b><label class="uiLabel-left form-element__label uiLabel" >
+                                Contact Email* </label></b>
+                                  <ui:inputEmail aura:Id="con-Name-Inp-c" class="slds-input width=25%"
+                                       value="{!v.contact.Email}" required="True"
+                                       errors="Please enter valid Email address"/>
+                                </div><br/> 
+								
+								<aura:set attribute="else">
+								
+											 <div class="slds-form-element__control">
+                         <b><label class="uiLabel-left form-element__label uiLabel" >
+                                First Name* </label></b>
+                                  <ui:inputtext aura:Id="first-Name-Inp" class="slds-input"
+                                       value="{!v.LiveChatTranscript.First_Name__c}"  change="{!c.SetFirstNameChange}" required="True"  />
+                                     
+                                 </div><br/>
+                              <div class="slds-form-element__control">
+                             <b><label class="uiLabel-left form-element__label uiLabel" >
+                                Last Name*</label></b>
+                         <ui:inputtext aura:Id="last-Name-Inp" class="slds-input"
+                                       value="{!v.LiveChatTranscript.Last_Name__c}" change="{!c.SetLastNameChange}" required="True"
+                                      />
+                                 </div><br/>
+                         <div class="slds-form-element__control">
+                             <b><label class="uiLabel-left form-element__label uiLabel" >
+                                Contact Email* </label></b>
+                                  <ui:inputEmail aura:Id="con-Name-Inp" class="slds-input width=25%"
+                                       value="{!v.LiveChatTranscript.Email__c}" required="True"
+                                       errors="Please enter valid Email address"/>
+                                </div><br/> 
+							   </aura:set>
+                         </aura:if>
+                         <!--end-->
+                     </div>
+                    </div>
+                    <div class="slds-p-horizontal--small slds-size--1-of-2">
+                     <div class="slds-form-element">                                                          
+                                 <div class="slds-form-element__control">
+						<label class="uiLabel-left form-element__label uiLabel" >
+                                Phone # </label>                                     
+                                  <ui:inputtext aura:Id="Ph-Inp" class="slds-input" 
+                                                 change="{!c.SetPhone}"
+                                                value="{!v.contact.Phone}"/>
+
+                                 </div><br/>
+                         
+                         <div class="slds-form-element__control">
+                             <b><label class="uiLabel-left form-element__label uiLabel" >
+                                NXP Representative Notes*
+                                 <lightning:icon iconName="utility:info"  
+                                 
+                                                 title="Message being shared to NXP Sales. 
+i.e. Summary of the Contact, some particular customer request, 
+any fact worth sharing, etc."
+
+                                                 size="xx-small" />
+                                 </label></b>    
+                              <ui:inputTextArea change="{!c.SetRepNotes}" required="True"
+                         		class="slds-input"  
+                                                   maxlength="300" aura:id="rep-Inp"/> 
+                                
+                             <!--<ui:inputRichText aura:id="rep-Inp" change="{!c.SetReppNotes}"  value="{!v.LiveChatTranscript.Body}" />-->
+                             
+                                                   
+                                 </div><br/>   
+                         <!--start-->
+                         <div class="slds-form-element__control">
+                             <b><label class="uiLabel-left form-element__label uiLabel" >
+                                Chat Details
+                                 <lightning:icon iconName="utility:info"  
+                                 
+                                                 title="Chat Information"
+
+                                                 size="xx-small" />
+                                 </label></b> 
+                             <lightning:inputRichText aura:id="rep-Inpp"  value="{!v.LiveChatTranscript.Body}" /></div><br/> 
+                         <!--end-->
+                         
+                         
+                        </div>
+                    </div>
+                </div>
+            </div>  
+       
+					 
+<h2 class="slds-section-title--divider"><b>Company Information</b></h2>		 		
+				<div class="slds-page-header" role="banner">
+                <div class="slds-grid">	 
+				 <div class="slds-p-horizontal--small slds-size--1-of-2">
+                     <div class="slds-form-element">
+                           <div class="slds-form-element__control">
+                         <b><label class="uiLabel-left form-element__label uiLabel" >
+                                Company* </label></b>
+                                  <ui:inputtext aura:Id="comp-id" class="slds-input"
+                                       value="{!v.LiveChatTranscript.Company__c}" change="{!c.SetCompanyChange}" required="True"  />
+                                                                      </div><br/>
+                         <div class="slds-form-element__control"> 
+                             <b><label class="uiLabel-left form-element__label uiLabel" >
+                                Country*</label></b>
+                                  <ui:inputSelect aura:Id="country-Inp" class="slds-select" required="True"
+                                       change="{!c.onControllerFieldChange}">
+									  
+                                                <aura:iteration items="{!v.countryList}" var="countryVal" >
+                                    <ui:inputSelectOption text="{!countryVal.value}" label="{!countryVal.label}" />
+                                 </aura:iteration>
+  									
+                                      </ui:inputSelect>
+                                 </div><br/>
+                         <aura:if isTrue="{!v.stateMandatory}">
+                         
+                             <b><label class="uiLabel-left form-element__label uiLabel" >
+                             State/Province*
+                              <lightning:icon iconName="utility:info"                                   
+                                                 title="Mandatory for USA, Canada and China"
+                                                 size="xx-small" /></label></b>
+                             <aura:set attribute="else">
+                                 <label class="uiLabel-left form-element__label uiLabel" >
+                                State/Province
+                              <lightning:icon iconName="utility:info"                                   
+                                                 title="Mandatory for USA, Canada and China"
+                                                 size="xx-small" /></label>
+                                 </aura:set>
+                         </aura:if>
+                             <div class="slds-form-element__control"> 
+                                  <ui:inputSelect aura:Id="state-Inp" class="slds-select" disabled="{!v.isDependentDisable}"
+                                                   change="{!c.onDepFieldChange}" >
+                              
+                             </ui:inputSelect>
+                         </div></div></div><br/>
+                <div class="slds-p-horizontal--small slds-size--1-of-2">
+                     <div class="slds-form-element">                                                          
+                                 <div class="slds-form-element__control">
+                         
+              <aura:if isTrue="{!v.ZipValmandatory}">
+                        
+							<b><label class="uiLabel-left form-element__label uiLabel" >
+                                Zip/PostalCode*
+                              <lightning:icon iconName="utility:info"                                   
+                                                 title="Mandatory for USA and Germany"
+                                                 size="xx-small" /></label></b> 
+                         <aura:set attribute="else">
+                             <label class="uiLabel-left form-element__label uiLabel" >
+                                Zip/PostalCode
+                              <lightning:icon iconName="utility:info"                                   
+                                                 title="Mandatory for USA and Germany"
+                                                 size="xx-small" /></label>
+                  </aura:set>
+                         </aura:if>
+                         
+                         
+                  <div class="slds-form-element__control">
+                                  <ui:inputtext aura:Id="Zip-Inp" class="slds-input"
+                                                change="{!c.SetZipCode}"/>
+                                                                              
+                                                                                
+                                 </div><br/>
+                         
+                                                  <aura:if isTrue="{!v.IndMandatory}">
+                             <b><label class="uiLabel-left form-element__label uiLabel" >
+                                Industry*
+                              <lightning:icon iconName="utility:info"                                   
+                                                 title="Mandatory for China"
+                                                 size="xx-small" /></label></b>
+                              
+                         <aura:set attribute="else">
+                             <label class="uiLabel-left form-element__label uiLabel" >
+                                Industry
+                              <lightning:icon iconName="utility:info"                                   
+                                                 title="Mandatory for China"
+                                              size="xx-small" /></label>
+                             </aura:set>
+                             </aura:if>
+                                <div class="slds-form-element__control"> 
+                                  <ui:inputSelect aura:Id="Ind-Inp" class="slds-select"
+                                       change="{!c.IndFieldChange}"> 
+                                      
+                                      <aura:iteration items="{!v.IndustryList}" var="IndVal" >
+                                    <ui:inputSelectOption text="{!IndVal.value}" label="{!IndVal.label}" />
+                                 </aura:iteration>
+                                     </ui:inputSelect>
+                                     </div></div></div></div><br/>
+                        
+                     </div></div>
+    
+    <h2 class="slds-section-title--divider"><b>Project Information</b></h2>
+                     <div class="slds-page-header" role="banner">
+                <div class="slds-grid">
+                    <div class="slds-p-horizontal--small slds-size--1-of-2">
+                     <div class="slds-form-element">
+                         <div class="slds-form-element__control">
+                             <b><label class="uiLabel-left form-element__label uiLabel" >
+                                Project Description*</label></b>
+                             <ui:inputTextArea aura:Id="Pro-Desc-Inp" class="slds-input"
+                                       change="{!c.SetProjDesc}" required="True"
+                                                    maxlength="200"/>
+                         </div></div></div></div></div>
+        
+            <h2 class="slds-section-title--divider"><b>Product Information</b></h2>		 		
+				<div class="slds-page-header" role="banner">
+                <div class="slds-grid">	 
+				 <div class="slds-p-horizontal--small slds-size--1-of-2">
+                     <div class="slds-form-element">
+                         <div class="slds-form-element__control"> 
+                            <b><label class="uiLabel-left form-element__label uiLabel" >
+                                 Product Lv1*</label></b>
+                             
+                             <ui:inputSelect aura:Id="Prod-lv1" class="slds-select" required="True" 
+                                             change="{!c.onControllerprdFieldChange}" >
+                                       
+	     						 <aura:iteration items="{!v.prdList}" var="prdVal" >
+                                    <ui:inputSelectOption text="{!prdVal.value}" label="{!prdVal.label}" />
+                                 </aura:iteration>
+  									
+                                      </ui:inputSelect>
+                                 </div><br/>
+                       
+                         
+                             <b><label class="uiLabel-left form-element__label uiLabel" >
+                             Product Lv2*
+                             </label></b>
+                                 <div class="slds-form-element__control"> 
+                                  <ui:inputSelect aura:Id="Prod-lv2" class="slds-select" disabled="{!v.isprdDependentDisable}"  change="{!c.onControllerprddFieldChange}"  >
+                                     </ui:inputSelect> <br/><br/>
+                                     
+                                      <label class="uiLabel-left form-element__label uiLabel" >
+                             Product Lv3
+                             </label>
+                                     <div class="slds-form-element__control"> 
+                                  <ui:inputSelect aura:Id="Prod-lv3" class="slds-select" disabled="{!v.isprddDependentDisable}"  change="{!c.onControllerprdddFieldChange}" >
+                                  </ui:inputSelect>
+                                     
+                                     </div></div></div></div><br/>
+                                     
+                                   
+                                     <!--Startrefedf  -->
+                                      <div class="slds-p-horizontal--small slds-size--1-of-2">
+                       <div aura:id="searchRes" class="slds-form-element slds-lookup slds-is-close" data-select="single">
+                                                  
+							<label class="uiLabel-left form-element__label uiLabel" for="lookup-349">
+                                Product Name
+                               </label>
+                           
+                            <div class="slds-form-element">
+                               
+                                 <!--This part is for display search bar for lookup--> 
+                                 <div class="slds-form-element__control"> 
+                                     
+                                     <div class="slds-input-has-icon slds-input-has-icon--right">
+                              <div aura:id="lookupField" class="slds-show">                                      
+                                   <ui:inputText aura:id="pre-disti-Inp" updateOn="keyup" keyup="{!c.keyPressController}"
+                                         class="slds-lookup__search-input slds-input" 
+                                         value="{!v.SearchKeyWord}" click="{!c.hidelist}"  />
+                                        <lightning:buttonIcon class="slds-button slds-input__icon slds-text-color--default"
+                                 		iconName="utility:search" variant="bare" onclick="{!c.displaylist}" alternativeText="Search Products" />
+                                                                                                                                            		
+                                	</div>
+                                      <!-- This markup is for when an record is selected -->
+                                          <div aura:id="lookup-pill" class="slds-pill-container slds-hide" >
+                               <span class="slds-pill"  style="width:100%">
+                                    <span class="slds-pill__label" >{!v.selectedRecord.Name}
+                                                            				
+                                   </span>
+
+									<button class="slds-button slds-button--icon slds-pill__remove" onclick="{!c.clear}">
+                                       <lightning:buttonIcon class="slds-button slds-input__icon slds-text-color--default"
+                                                             iconName="utility:close" variant="bare" alternativeText="Remove" />
+                                  		<span class="slds-assistive-text">Remove</span>	
+                                       </button> 
+                                       </span>                                 
+                           </div>
+                              <!--This part is for Display typehead lookup result List-->                          
+                                             <div class="slds-lookup__menu slds " id="lookup-348"  >                               
+                               <div class="form-element__label slds-text-body--small ">{!v.Message}                                     
+                                      <ul role="listbox" >   
+             							<aura:iteration items="{!v.listOfSearchRecords}" var="singleRec">             
+            							<c:CustomLookupResultPrd oProduct="{!singleRec}" />                                                    	                    
+                						</aura:iteration>                           
+                                          </ul>
+                                      
+                                  </div> 
+                               </div>  
+                           </div>
+                                 </div>
+                                 </div><br/>
+                           
+                            <div class="slds-form-element__control">
+                             <label class="uiLabel-left form-element__label uiLabel" >
+                                Product Type Number </label>
+                         <ui:inputtext aura:Id="Prod-Id" class="slds-input" click="{!c.getProdId}" value="{!v.ProdId}"/>
+                                                  
+                                 </div><br/>
+                                          </div></div></div><br/>
+                                 
+                                     <!-- End 32534 -->
+      </div><br/>
+        
+        <!-- Start -->
+        <h2 class="slds-section-title--divider"><b>Distributor</b></h2>
+                     <div class="slds-page-header" role="banner">
+                <div class="slds-grid">
+                    <div class="slds-p-horizontal--small slds-size--1-of-2">
+                         <div class="slds-form-element">
+                              <aura:if isTrue="{!v.preDistiMandatory}">                         
+							<b><label class="uiLabel-left form-element__label uiLabel" >
+                                Permission to Share with Distributor*
+                               <lightning:icon iconName="utility:info"                                   
+                                                 title="Mandatory for EMEA Countries"
+                                                 size="xx-small" /></label></b> 
+                         <aura:set attribute="else">
+                             <label class="uiLabel-left form-element__label uiLabel" >
+                                Permission to Share with Distributor
+                               <lightning:icon iconName="utility:info"                                   
+                                                 title="Mandatory for EMEA Countries"
+                                                 size="xx-small" /></label>
+                  </aura:set>
+                         </aura:if>
+                         <div class="slds-form-element__control">                             
+                                 <ui:inputSelect required="True"
+                                  class="slds-select" aura:id="per-Inp" value="{!v.LiveChatTranscript.Distributor_Permission__c}"  change="{!c.PerFieldChange}" />
+                             </div></div><br/>
+                    </div>
+
+                    <div class="slds-p-horizontal--small slds-size--1-of-2">
+                         <div class="slds-form-element">
+                              <aura:if isTrue="{!v.preMarkMandatory}">                         
+							<b><label class="uiLabel-left form-element__label uiLabel" >
+                                Permission for use with marketing purposes (EU)*
+                               <lightning:icon iconName="utility:info"                                   
+                                                 title="Mandatory for EMEA Countries"
+                                                 size="xx-small" /></label></b> 
+                         <aura:set attribute="else">
+                             <label class="uiLabel-left form-element__label uiLabel" >
+                                Permission for use with marketing purposes 
+                               <lightning:icon iconName="utility:info"                                   
+                                                 title="Mandatory for EMEA Countries"
+                                                 size="xx-small" /></label>
+                  </aura:set>
+                         </aura:if>
+                         <div class="slds-form-element__control">                             
+                                 <ui:inputSelect required="True" 
+                                  class="slds-select" aura:id="per-Mark" value="{!v.LiveChatTranscript.Marketing_Permission__c}" change="{!c.PerMarkFieldChange}"  /> 
+                             </div></div><br/>
+                    </div>
+                    
+                    
+                         
+                         </div></div></fieldset>
+        
+        
+        <div class="slds-grid slds-grid--align-center">
+      					<div class="slds-form-element">									
+        				<div class="slds-form-element__control">									    									
+         				<ui:button aura:id="create"									
+          				class="slds-button slds-button--neutral"									
+          				labelClass="label"									
+                    	press="{!c.createLeadButton}">Create Lead</ui:button>	
+                         &nbsp; &nbsp;  &nbsp; &nbsp;  &nbsp; &nbsp;
+                            
+                            <ui:button aura:id="cancel"									
+          class="slds-button slds-button--neutral"									
+          labelClass="label"								
+                    press="{!c.cancelLead}">Cancel</ui:button>
+                                         
+        </div>
+       </div>
+     </div>
+
+        </div> <br/><br/>
+				
+	
+</aura:component>

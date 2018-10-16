@@ -1,0 +1,3 @@
+<design:component label="Content Document Preview">
+	<design:attribute name="helpFileId" label="File Id" />
+</design:component>

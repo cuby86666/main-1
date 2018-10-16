@@ -1,0 +1,30 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,force:hasRecordId" access="global" controller="LeadHistoryChangesController">
+	<aura:attribute name="leadHistoryChanges" type="LeadHistory[]"/>
+    <aura:attribute name="page" type="integer" description="using for store page Number"/>
+    <aura:attribute name="pages" type="integer" description="using for store All Pages page Number"/>
+    <aura:attribute name="total" type="integer" description="total records count store "/>
+    <aura:attribute name="columnsToDisplay" type="List"/>
+    <aura:attribute name="recordToDisplay" type="Integer" default="5"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <div class="slds-m-around_small">
+        <div class="slds-page-header" role="banner">
+            <p class="slds-page-header__title slds-truncate">Lead History Changes • page {!v.page}</p>
+            <ui:inputSelect aura:id="recordSize" label="Records Per Page: " change="{!c.onSelectChange}">
+                <ui:inputSelectOption text="5" label="5" value="true"/>
+                <ui:inputSelectOption text="10" label="10"/>
+                <ui:inputSelectOption text="15" label="15"/>
+                <ui:inputSelectOption text="20" label="20"/>
+            </ui:inputSelect>
+        </div>
+        
+        <p class="slds-p-horizontal_small">
+            <lightning:datatable data="{!v.leadHistoryChanges}" columns="{! v.columnsToDisplay }" keyField="id"  />
+        </p>
+        <div class="slds-align_absolute-center slds-m-top_small">            
+            <lightning:button disabled="{!v.page == 1}" variant="brand" label="Previous Page" onclick="{! c.navigate }" />            
+            <lightning:button disabled="{!v.page == v.pages}" aura:id="previousPage" variant="brand" label="Next Page" onclick="{! c.navigate }" />
+        </div>
+    </div>
+</aura:component>
