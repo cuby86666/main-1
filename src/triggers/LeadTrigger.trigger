@@ -61,7 +61,7 @@ trigger LeadTrigger on Lead (before insert,before update,after insert,after upda
     }
     if(trigger.isAfter && trigger.isUpdate){
         list<Lead> listConvertedLeads=new list<lead>();
-        List<Lead> listEmailToDistiLds = new List<Lead>();
+        List<Id> listEmailToDistiLds = new List<Id>();
         
                 
          //Added by Ranganath --(SFDC-1708) 
@@ -75,33 +75,36 @@ trigger LeadTrigger on Lead (before insert,before update,after insert,after upda
                 listConvertedLeads.add(newld);
             }
             if((oldLd.status !=SENT_TO_DISTI && newLd.Status==SENT_TO_DISTI)){
-                listEmailToDistiLds.add(newLd);
+                listEmailToDistiLds.add(newLd.id);
            }
              //Added by Ranganath --(SFDC-1708) 
             //check if new value is rejected
-            /*if(oldLd.status !='Disti Expired' && newLd.Status=='Disti Expired'){
+            if(oldLd.status !='Disti Expired' && newLd.Status=='Disti Expired'&& 
+               (newLd.Disti_Feedback_Email_Address__c==null || 
+                newLd.Disti_Feedback_Email_Address__c.trim().length()==0)){
                 distiExpiredLeads.add(newLd);
             }
 
             if(oldLd.status !='Rejected' && newLd.Status=='Rejected'){
                 rejectedLeads.add(newLd);
-            } */           
+            }           
             
         }
         if(listConvertedLeads!=null && (!listConvertedLeads.isEmpty())){
             LeadTriggerHandler.insertContactRoles(listConvertedLeads);
         }
         if(listEmailToDistiLds!=null &&(!listEmailToDistiLds.isEmpty()) && LeadTriggerHandler.recursionCheck ==True){            
-               LeadTriggerHandler.emailToMultipleDistis(listEmailToDistiLds);                         
+               LeadTriggerHandler.emailToMultipleDistis(listEmailToDistiLds); 
+                LeadTriggerHandler.recursionCheck=false;                        
         }
         
-      /*  if(distiExpiredLeads!=null && (!distiExpiredLeads.isEmpty())){
+       if(distiExpiredLeads!=null && (!distiExpiredLeads.isEmpty())){
             LeadTriggerHandler.assignNewDistiFromQueue(distiExpiredLeads);    
         } 
         
         if(rejectedLeads!=null &&(!rejectedLeads.isEmpty()) ){            
                LeadTriggerHandler.rejectedleadswithreason(rejectedLeads);                         
-        }*/
+        } 
         
         //code added by Nisha Agrawal on Jun 20, 2018
         LeadTriggerHandler.shareLeadRecordsToLPUsers(trigger.new, trigger.oldmap);

@@ -1,3 +1,10 @@
+/***************************************************************************************************
+@Modified By :      Gunjan Singh
+@Modified Date:     11 Sep 2018
+@Description:       SFDC-2078 Web-to-Case form without Login - Enhancement (Creating contact along with case)
+                    Created method createContact to create Contact, along with Case if contact doesnot exist 
+**********************************************************************************************************/
+
 trigger CaseMasterTrigger on Case (before insert,before update,after insert,after update) 
 {
 
@@ -44,6 +51,10 @@ trigger CaseMasterTrigger on Case (before insert,before update,after insert,afte
                  /**Calling a routine related to 7summits code **/
                  MappingCaseRouting objMCR = new MappingCaseRouting();
                  objMCR.onBeforeInsert(Trigger.new); 
+                 
+                 //Created as part of SFDC-2078
+                 /**Calling method createContact to create Contact, along with Case if contact doesnot exist  **/
+                 caseTrigger.createContact(Trigger.New);
             }
             
             else if(Trigger.isAfter)

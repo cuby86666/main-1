@@ -44,7 +44,9 @@ trigger SAP_CMD_AfterTrigger on SAP_CMD__c (after update, after insert) {
        oldObjSapCmd.Additional_VAT_Number_5_Plants_Abroad__c != ObjSapCmd.Additional_VAT_Number_5_Plants_Abroad__c ||oldObjSapCmd.Additional_VAT_Number_6_Plants_Abroad__c != ObjSapCmd.Additional_VAT_Number_6_Plants_Abroad__c ||oldObjSapCmd.Additional_VAT_Number_7_Plants_Abroad__c != ObjSapCmd.Additional_VAT_Number_7_Plants_Abroad__c ||
        oldObjSapCmd.Additional_VAT_Number_8_Plants_Abroad__c != ObjSapCmd.Additional_VAT_Number_8_Plants_Abroad__c ||oldObjSapCmd.Global_Account__c != ObjSapCmd.Global_Account__c ||oldObjSapCmd.Customer_Factory_Calendar__c != ObjSapCmd.Customer_Factory_Calendar__c ||oldObjSapCmd.Unloading_Point__c != ObjSapCmd.Unloading_Point__c ||
        oldObjSapCmd.Military_Usage__c != ObjSapCmd.Military_Usage__c ||oldObjSapCmd.Controlled_Party__c != ObjSapCmd.Controlled_Party__c ||oldObjSapCmd.SDI_Screened__c != ObjSapCmd.SDI_Screened__c ||oldObjSapCmd.Consolidated_Account_Code__c != ObjSapCmd.Consolidated_Account_Code__c ||oldObjSapCmd.Fix_Price_Ind_SP__c != ObjSapCmd.Fix_Price_Ind_SP__c ||
-       oldObjSapCmd.Delivery_Group_Ind_SH__c != ObjSapCmd.Delivery_Group_Ind_SH__c ||oldObjSapCmd.Rounding_Rule_SH__c != ObjSapCmd.Rounding_Rule_SH__c ||oldObjSapCmd.Pull_Up_OK_SH__c != ObjSapCmd.Pull_Up_OK_SH__c)
+       oldObjSapCmd.Delivery_Group_Ind_SH__c != ObjSapCmd.Delivery_Group_Ind_SH__c ||oldObjSapCmd.Rounding_Rule_SH__c != ObjSapCmd.Rounding_Rule_SH__c ||oldObjSapCmd.Pull_Up_OK_SH__c != ObjSapCmd.Pull_Up_OK_SH__c ||
+       oldObjSapCmd.Central_order_block__c != ObjSapCmd.Central_order_block__c || oldObjSapCmd.Central_delivery_block__c != ObjSapCmd.Central_delivery_block__c || oldObjSapCmd.Central_billing_block_for_customer__c != ObjSapCmd.Central_billing_block_for_customer__c ||
+       oldObjSapCmd.Central_posting_block__c != ObjSapCmd.Central_posting_block__c || oldObjSapCmd.Central_Deletion_Flag__c != ObjSapCmd.Central_Deletion_Flag__c || oldObjSapCmd.Central_deletion_block__c != ObjSapCmd.Central_deletion_block__c)
        {
        system.debug('test2T' + lstSapCmd.size());
        lstSapCmd.add(objSapCmd);
