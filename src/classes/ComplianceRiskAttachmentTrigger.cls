@@ -2,6 +2,10 @@
  * Created By   : Baji
  * Created Date : 22 Jan,2017
  * Description   : To update file details on risk assessment based on the files uploaded, edited or deleted.
+ ------------------------------------------------------------------------------------------------------------------
+ * Modified By   : Baji
+ * Modified Date : 24 Aug,2018
+ * Description   : not to allow users to upload/edit/delete files when Oppty is pending for approval
  ------------------------------------------------------------------------------------------------------------------*/
 
 public class ComplianceRiskAttachmentTrigger {
@@ -27,7 +31,7 @@ public class ComplianceRiskAttachmentTrigger {
           mapAttachDetails.put(objAttmt.parentid,objAttmt);
         }
  
-      List<Compliance_Risk__c> lstRiskAsmt = [SELECT Id,opportunity__r.stagename,opportunity__r.Number_of_Compliance_Asse_Evidences__c,Compliance_Risk_Assessment_File_Name__c ,Compliance_Risk_Assessment_Uploaded__c,Compliance_Risk_Last_Modfied_Date__c,
+      List<Compliance_Risk__c> lstRiskAsmt = [SELECT Id,opportunity__r.stagename,opportunity__r.Design_Win_Approval_Process__c,opportunity__r.Number_of_Compliance_Asse_Evidences__c,Compliance_Risk_Assessment_File_Name__c ,Compliance_Risk_Assessment_Uploaded__c,Compliance_Risk_Last_Modfied_Date__c,
                                             Project_Report_File_Name__c,Project_Report_Uploaded__c,Project_Report_Last_Modified_Date__c,
                                             Tender_Spec_File_Name__c,Tender_Spec_Uploaded__c,Tender_Specification_Last_Modified_Date__c,
                                             Background_Check_File_Name__c,Background_Check_Uploaded__c,Background_Check_Last_Modified_Date__c,
@@ -121,9 +125,9 @@ public class ComplianceRiskAttachmentTrigger {
       catch(exception e){
        for(Compliance_Risk__c  objRiskAsmt :  lstRiskAsmt){
        for(attachment  objAtt : lstAttachmts ){
-       if(objRiskAsmt.opportunity__r.stagename == 'Commitment')
+       if(objRiskAsmt.opportunity__r.stagename == 'Commitment' || objRiskAsmt.opportunity__r.design_win_approval_process__c == 'Pending')
         {
-                objAtt.addError('Cannot Upload/Edit/Delete evidences if opportunity is at Commitment stage.');
+                objAtt.addError('Cannot Upload/Edit/Delete evidences if Opportunity is pending for approval or at Commitment stage.');
         }
        }
      }
@@ -150,7 +154,7 @@ public class ComplianceRiskAttachmentTrigger {
                   
               }
  
-    List<Compliance_Risk__c> lstRiskAsmt = [SELECT Id,opportunity__r.stagename,Compliance_Risk_Assessment_File_Name__c ,Compliance_Risk_Assessment_Uploaded__c,Compliance_Risk_Last_Modfied_Date__c,
+    List<Compliance_Risk__c> lstRiskAsmt = [SELECT Id,opportunity__r.stagename,opportunity__r.Design_Win_Approval_Process__c,Compliance_Risk_Assessment_File_Name__c ,Compliance_Risk_Assessment_Uploaded__c,Compliance_Risk_Last_Modfied_Date__c,
                                             Project_Report_File_Name__c,Project_Report_Uploaded__c,Project_Report_Last_Modified_Date__c,
                                             Tender_Spec_File_Name__c,Tender_Spec_Uploaded__c,Tender_Specification_Last_Modified_Date__c,
                                             Background_Check_File_Name__c,Background_Check_Uploaded__c,Background_Check_Last_Modified_Date__c,
@@ -212,11 +216,11 @@ public class ComplianceRiskAttachmentTrigger {
    }
    catch(exception e){
    for(Compliance_Risk__c  objRiskAsmt :  lstRiskAsmt){
-   if(objRiskAsmt.opportunity__r.stagename == 'Commitment')
+   if(objRiskAsmt.opportunity__r.stagename == 'Commitment' || objRiskAsmt.opportunity__r.design_win_approval_process__c == 'Pending')
     {
       for(attachment  objAtt :  lstDelAttachmts)
            {
-               objAtt.addError('Cannot Upload/Edit/Delete evidences if opportunity is at Commitment stage.');
+               objAtt.addError('Cannot Upload/Edit/Delete evidences if Opportunity is pending for approval or at Commitment stage.');
            }
       }
     }

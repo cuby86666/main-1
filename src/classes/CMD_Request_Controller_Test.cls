@@ -15,12 +15,14 @@ private class CMD_Request_Controller_Test
     private static final String TYPE_Parent_Account = 'Parent_Account';//obj: Account
     private static final String TYPE_Child_Account = 'Child_Account';//obj: Account
     private static final String TYPE_New_SFDC_Parent_Account = 'New_SFDC_Parent_Account';//obj: CMD Request
+    private static final String TYPE_New_SFDC_Child_Account = 'New_SFDC_Parent_Account';//obj: CMD Request
         
     private static RecordType Global_Enterprise;
     private static RecordType Country_and_Region;
     private static RecordType Parent_Account;
     private static RecordType Child_Account;
     private static RecordType New_SFDC_Parent_Account;
+    private static RecordType New_SFDC_Child_Account;
     
     private static List<Customer__c> lstCustomer;
     private static Customer__c objCustomer;
@@ -46,6 +48,7 @@ private class CMD_Request_Controller_Test
                                  OR (SobjectType = 'Account' and DeveloperName =: TYPE_Parent_Account)
                                  OR (SobjectType = 'Account' and DeveloperName =: TYPE_Child_Account)
                                  OR (SobjectType = 'CMD_Request__c' and DeveloperName =: TYPE_New_SFDC_Parent_Account)
+                                 OR (SobjectType = 'CMD_Request__c' and DeveloperName =: TYPE_New_SFDC_Child_Account)
                                  /*
                                  OR (SobjectType = 'CMD_Request__c' and DeveloperName =: TYPE_SAP_New_Funloc_Request)
                                  OR (SobjectType = 'CMD_Request__c' and DeveloperName =: TYPE_SAP_Funloc_Edit_Request)
@@ -73,6 +76,8 @@ private class CMD_Request_Controller_Test
                 Child_Account = rt;
             if(rt.DeveloperName == TYPE_New_SFDC_Parent_Account)
                 New_SFDC_Parent_Account = rt;
+            if(rt.DeveloperName == TYPE_New_SFDC_Child_Account)
+                New_SFDC_Child_Account = rt;
             /*
             if(rt.DeveloperName == TYPE_SAP_New_Funloc_Request)
                 SAP_New_Funloc_Request = rt;    
@@ -213,13 +218,13 @@ private class CMD_Request_Controller_Test
        
     private static void createCMDRequest(){
         objCMDRequest = new CMD_Request__c(
-            RecordTypeId = New_SFDC_Parent_Account.Id,
+            RecordTypeId = New_SFDC_Child_Account.Id,
             Requester_SFDC__c = objUser.Id,
             Request_Status__c = 'Submitted',
             Requester_Email__c = objUser.Email,
             country__c='Taiwan',
             State_Province__c='kerala',
-            Request_Type__c = 'SFDC New Parent Account'
+            Request_Type__c = 'SFDC New Child Account'
         );
         insert objCMDRequest;
     }    
@@ -286,7 +291,7 @@ private class CMD_Request_Controller_Test
         ApexPages.StandardController stdCtrl = new ApexPages.StandardController(objCMDRequest);                                   
 
         CMD_Request_Controller testRequest = new CMD_Request_Controller(stdCtrl);
-        testRequest.RequestType = 'New SFDC Parent Account';
+        testRequest.RequestType = 'New SFDC Child Account';
         testRequest.Requester_Name = 'Test User';
         testRequest.Requester_Email = 'test.user@test.com';
         testRequest.Account_Name = 'Test Parent Account';
@@ -1056,7 +1061,7 @@ private class CMD_Request_Controller_Test
         */
         ApexPages.StandardController stdCtrl = new ApexPages.StandardController(objCMDRequest);       
         CMD_Request_Controller testRequest = new CMD_Request_Controller(stdCtrl);
-        testRequest.RequestType = 'New SFDC Parent Account';
+        testRequest.RequestType = 'New SFDC Child Account';
         testRequest.Requester_Name = 'Test User';
         testRequest.Requester_Email = 'test.user@test.com';
         testRequest.Account_Name = objChildAccount.Name;

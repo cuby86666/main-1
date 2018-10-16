@@ -19,7 +19,7 @@ public without sharing class CommunityContextInviteController{
     public integer existingObservers {Set;get;}
     
     List<Contact> participantContacts   = new List<Contact>();                                                
-    List<Contact> observerContacts                            = new List<Contact>();                             
+    List<Contact> observerContacts = new List<Contact>();                             
 
     public List<String> headers {set;get;}
     CommunitySettings__c cs=  CommunitySettings__c.getValues('CommunityUrl');
@@ -41,8 +41,10 @@ public without sharing class CommunityContextInviteController{
         
         for(integer i=1; i<=3; i++){
             
-            Wrapper wrap = new Wrapper(i, new Contact(), 'p'+i,'');
+            Wrapper wrap = new Wrapper(i, new Contact(), '0'+i,'');
             participantsList.add(wrap);
+          //Wrapper wrap = new Wrapper(i, new Contact(), 'p','');
+         //  participantsList.add(wrap);
             
         }
         

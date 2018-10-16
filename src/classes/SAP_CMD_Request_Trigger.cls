@@ -102,7 +102,7 @@ public class SAP_CMD_Request_Trigger {
                                          Additional_VAT_Number_2_Plants_Abroad__c,Additional_VAT_Number_3_Plants_Abroad__c,Additional_VAT_Number_4_Plants_Abroad__c,Additional_VAT_Number_5_Plants_Abroad__c,
                                          Additional_VAT_Number_6_Plants_Abroad__c,Additional_VAT_Number_7_Plants_Abroad__c,Additional_VAT_Number_8_Plants_Abroad__c,Global_Account__c,
                                          Customer_Factory_Calendar__c,Unloading_Point__c,Military_Usage__c,Controlled_Party__c,SDI_Screened__c,Consolidated_Account_Code__c,
-                                         Fix_Price_Ind_SP__c,Delivery_Group_Ind_SH__c,Rounding_Rule_SH__c,Pull_Up_OK_SH__c
+                                         Fix_Price_Ind_SP__c,Delivery_Group_Ind_SH__c,Rounding_Rule_SH__c,Pull_Up_OK_SH__c,Central_order_block__c,Central_delivery_block__c,Central_billing_block_for_customer__c,Central_posting_block__c,Central_Deletion_Flag__c,Central_deletion_block__c
                                          FROM SAP_CMD__c
                                          WHERE FunLoc__c =:setSapCmdFunloc and id not in:lstSapCmd ];
        
@@ -166,7 +166,12 @@ public class SAP_CMD_Request_Trigger {
             if(objSAPCMD.Delivery_Group_Ind_SH__c != objSAPCMDAll.Delivery_Group_Ind_SH__c) objSAPCMDAll.Delivery_Group_Ind_SH__c = objSAPCMD.Delivery_Group_Ind_SH__c;
             if(objSAPCMD.Rounding_Rule_SH__c != objSAPCMDAll.Rounding_Rule_SH__c) objSAPCMDAll.Rounding_Rule_SH__c = objSAPCMD.Rounding_Rule_SH__c;
             if(objSAPCMD.Pull_Up_OK_SH__c != objSAPCMDAll.Pull_Up_OK_SH__c) objSAPCMDAll.Pull_Up_OK_SH__c = objSAPCMD.Pull_Up_OK_SH__c;
-
+            if(objSAPCMD.Central_order_block__c != objSAPCMDAll.Central_order_block__c) objSAPCMDAll.Central_order_block__c = objSAPCMD.Central_order_block__c;
+            if(objSAPCMD.Central_delivery_block__c != objSAPCMDAll.Central_delivery_block__c) objSAPCMDAll.Central_delivery_block__c = objSAPCMD.Central_delivery_block__c;
+            if(objSAPCMD.Central_billing_block_for_customer__c != objSAPCMDAll.Central_billing_block_for_customer__c) objSAPCMDAll.Central_billing_block_for_customer__c = objSAPCMD.Central_billing_block_for_customer__c;
+            if(objSAPCMD.Central_posting_block__c != objSAPCMDAll.Central_posting_block__c) objSAPCMDAll.Central_posting_block__c = objSAPCMD.Central_posting_block__c;
+            if(objSAPCMD.Central_Deletion_Flag__c != objSAPCMDAll.Central_Deletion_Flag__c) objSAPCMDAll.Central_Deletion_Flag__c = objSAPCMD.Central_Deletion_Flag__c;
+            if(objSAPCMD.Central_deletion_block__c != objSAPCMDAll.Central_deletion_block__c) objSAPCMDAll.Central_deletion_block__c = objSAPCMD.Central_deletion_block__c;
             allSapCmdToBeUpdated.add(objSAPCMDAll);
        }
    }

@@ -146,7 +146,10 @@ public class LeadTriggerHandler {
           Database.insert(mapOppConRole.values());       
         }               
     }
-    public static void emailToMultipleDistis(list<lead> listLeads){
+    
+    @future
+    public static void emailToMultipleDistis(list<ID> listLeadIds){ 
+        List<Lead> listLeads =  [SELECT Id,Distributor_Contact__c,OwnerId,CC_Address__c from Lead where Id in :listLeadIds];
         List<Messaging.SingleEmailMessage> emails = new List<Messaging.SingleEmailMessage>();        
         set<string> distiEmail=new set<string>();
         set<string> ownerEmail=new set<string>();        
@@ -197,11 +200,11 @@ public class LeadTriggerHandler {
                        mapUserIdToEmail.get(ld.OwnerId)};
                }                                    
                 sendEmail.setToAddresses(toaddress);
-            	system.debug('ccadd::'+CcEmails);
+                system.debug('ccadd::'+CcEmails);
                 sendEmail.setCCAddresses(CCEmails);
-            	system.debug('bccadd::'+novaSilvaEmail);
+                system.debug('bccadd::'+novaSilvaEmail);
                 sendEmail.setBccAddresses(novaSilvaEmail);              
-                sendEmail.setTemplateID(emailTemp.Id);           	 	
+                sendEmail.setTemplateID(emailTemp.Id);                  
                 sendEmail.setTargetObjectId(ld.Distributor_Contact__c);
                 sendEmail.setWhatId(ld.Id);
                 sendEmail.setSaveAsActivity(false);
@@ -210,12 +213,15 @@ public class LeadTriggerHandler {
         if (emails != NULL && emails.size() > 0)
         {
             try{
+   System.debug('>>>>> emails = ' + emails);
                Messaging.sendEmail(emails);
                 recursionCheck=false;
             }
             catch(exception e){
+   System.debug('>>>>> e = ' + e.getMessage());
+   System.debug('>>>>> listLeads = ' + listLeads);
                 for(lead ld:listLeads){
-                    ld.addError('Please enter Valid email Address seperated by ;');
+                    ld.addError('Please enter Valid email Address separated by ;');
                 }
                 
             }
@@ -253,9 +259,12 @@ public class LeadTriggerHandler {
             
             //To share with other contacts in that region for that disti               
             Map<Id, Id> mapContactToAccountId = new Map<Id, Id>();                
-            for(Contact objContact : [Select Id, AccountId From Contact Where Id in :mapLeadToAssignedContacts.values() or Id in : mapLeadToOldContacts.values()])
+            for(Contact objContact : [Select Id, AccountId, Account.IsPartner From Contact Where Id in :mapLeadToAssignedContacts.values() or Id in : mapLeadToOldContacts.values()])
             {
-                mapContactToAccountId.put(objContact.Id, objContact.AccountId);
+                if(objContact.Account.IsPartner)
+                {
+                	mapContactToAccountId.put(objContact.Id, objContact.AccountId);    
+                }
             }
             
             //Get the list of all contacts in lead region for assigned distributor account
@@ -304,21 +313,24 @@ public class LeadTriggerHandler {
                         //different disti so revoke the access for previous assignee
                         Set<Id> otherContactsToRevoke = new Set<Id>();
                         //check for all other contacts from same disti
-                        for(Contact objContact : mapAccountToContacts.get(oldAccountId))
+                        if(oldAccountId != null)
                         {
-                            otherContactsToRevoke.add(objContact.Id);
+                        	for(Contact objContact : mapAccountToContacts.get(oldAccountId))
+                            {
+                                otherContactsToRevoke.add(objContact.Id);
+                            }
+                            
+                            mapLeadToContactsToRevokeAccess.put(leadId, new Set<Id>{oldContactId});
+                            mapLeadToContactsToRevokeAccess.get(leadId).addAll(otherContactsToRevoke);
+                            
+                            contactIdsToFetchUsers.add(oldContactId);
+                            contactIdsToFetchUsers.addAll(otherContactsToRevoke);
                         }
-                        
-                        mapLeadToContactsToRevokeAccess.put(leadId, new Set<Id>{oldContactId});
-                    	mapLeadToContactsToRevokeAccess.get(leadId).addAll(otherContactsToRevoke);
-                        
-                        contactIdsToFetchUsers.add(oldContactId);
-                        contactIdsToFetchUsers.addAll(otherContactsToRevoke);
                     }
                 }
                 
                 //for finding new contacts from new assignee
-                if(mapAccountToContacts.containsKey(accountAssignedToLead))
+                if(accountAssignedToLead != null && mapAccountToContacts.containsKey(accountAssignedToLead))
                 {
                     Set<Id> otherContactsToAssign = new Set<Id>();
                     
@@ -432,7 +444,7 @@ public class LeadTriggerHandler {
         }
     }
     
-       /* public static void assignNewDistiFromQueue(List<Lead> distiExpiredLeads){
+       public static void assignNewDistiFromQueue(List<Lead> distiExpiredLeads){
         List<Id> modifiedLeadIds=new List<Id>();
         for(Lead ld:distiExpiredLeads){
             modifiedLeadIds.add(ld.Id);
@@ -444,16 +456,17 @@ public class LeadTriggerHandler {
             if(dlt.Status__c == 'Assigned'){
                 dlt.Status__c= 'Expired';    
             }else{
-                dlt.Status__c= 'Assigned';    
+                dlt.Status__c= 'Assigned';
+                dlt.Assigned_Date__c = System.now();
             } 
             modifiedDLT.add(dlt);
         }
         update modifiedDLT;
         
         
-    }*/
+    }
     
-       /*public static void rejectedleadswithreason(List<Lead> rejectedLeads){
+       public static void rejectedleadswithreason(List<Lead> rejectedLeads){
          Map<Id,String > mapOfleadrejreason = new Map<Id,String>();
          Map<Id,String > mapOfleadstatus = new Map<Id,String>();
         List<Id> modifiedLeadIds=new List<Id>();
@@ -463,7 +476,7 @@ public class LeadTriggerHandler {
             modifiedLeadIds.add(ld.Id);
         }
         List<Distributor_Lead_Tracker__c> modifiedDLT = new List<Distributor_Lead_Tracker__c>();
-        List<Distributor_Lead_Tracker__c> assignedDistis = [SELECT Id,Status__c,Rejection_Reason__c,Lead_Id__c from Distributor_Lead_Tracker__c where (Status__c='Assigned' OR Status__c='Queued')and Lead_Id__c in:modifiedLeadIds];
+        List<Distributor_Lead_Tracker__c> assignedDistis = [SELECT Id,Status__c,Rejection_Reason__c,Lead_Id__c from Distributor_Lead_Tracker__c where Status__c='Assigned' and Lead_Id__c in:modifiedLeadIds];
         for(Distributor_Lead_Tracker__c dlt: assignedDistis){
             String mapleadrejreason = mapOfleadrejreason.get(dlt.Lead_Id__c);
             String mapleadstatus = mapOfleadstatus.get(dlt.Lead_Id__c);
@@ -475,5 +488,5 @@ public class LeadTriggerHandler {
         update modifiedDLT;
        
         
-    }*/
+    }
 }

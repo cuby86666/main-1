@@ -1325,6 +1325,10 @@ public class CMD_Request_Controller_SAP_Extension {
                 ( theRequest.Accept_Dupl_PO_SP__c == 'Yes' ? true : 
                      ( theRequest.Accept_Dupl_PO_SP__c == 'No' ? false : theCMD.Accept_Dupl_PO_SP__c )
                 );
+            theCMD.Non_I2_related_SP__c = 
+                ( theRequest.Non_I2_related_SP__c == 'Yes' ? true :
+                    ( theRequest.Non_I2_related_SP__c == 'No' ? false : theCMD.Non_I2_related_SP__c )
+                );
             theCMD.Ch_dupl_PO_item_SP__c = 
                 ( theRequest.Ch_dupl_PO_item_SP__c == 'Yes' ? true :
                     ( theRequest.Ch_dupl_PO_item_SP__c == 'No' ? false : theCMD.Ch_dupl_PO_item_SP__c )
@@ -2348,10 +2352,15 @@ public class CMD_Request_Controller_SAP_Extension {
                         lstZORGTaxClassification.add(new Tax_Classification__c(SAP_CMD_Tax_Classification__c = lstNewZORGSAPCMD[i].Id, Country__c = 'TH - Thailand', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
                     }
                     if(lstNewZORGSAPCMD[i].Sales_Organisation__c == 'TW61 - NXP Kaohsiung'){
+                        lstZORGTaxClassification.add(new Tax_Classification__c(SAP_CMD_Tax_Classification__c = lstNewZORGSAPCMD[i].Id, Country__c = 'CA - Canada', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
+                        lstZORGTaxClassification.add(new Tax_Classification__c(SAP_CMD_Tax_Classification__c = lstNewZORGSAPCMD[i].Id, Country__c = 'CN - China', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
+                        lstZORGTaxClassification.add(new Tax_Classification__c(SAP_CMD_Tax_Classification__c = lstNewZORGSAPCMD[i].Id, Country__c = 'PH - Philippines', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
+                        lstZORGTaxClassification.add(new Tax_Classification__c(SAP_CMD_Tax_Classification__c = lstNewZORGSAPCMD[i].Id, Country__c = 'SG - Singapore', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
                         lstZORGTaxClassification.add(new Tax_Classification__c(SAP_CMD_Tax_Classification__c = lstNewZORGSAPCMD[i].Id, Country__c = 'TW - Taiwan', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
                     }
                     if(lstNewZORGSAPCMD[i].Sales_Organisation__c == 'US63 - NXP Austin'){
-                    lstZORGTaxClassification.add(new Tax_Classification__c(SAP_CMD_Tax_Classification__c = lstNewZORGSAPCMD[i].Id, Country__c = 'IN - India', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
+                       lstZORGTaxClassification.add(new Tax_Classification__c(SAP_CMD_Tax_Classification__c = lstNewZORGSAPCMD[i].Id, Country__c = 'IN - India', Tax_Category__c = 'JOSG', Tax_Classification__c = '1'));
+                       lstZORGTaxClassification.add(new Tax_Classification__c(SAP_CMD_Tax_Classification__c = lstNewZORGSAPCMD[i].Id, Country__c = 'IN - India', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
                         lstZORGTaxClassification.add(new Tax_Classification__c(SAP_CMD_Tax_Classification__c = lstNewZORGSAPCMD[i].Id, Country__c = 'US - USA', Tax_Category__c = 'UTXJ', Tax_Classification__c = '1'));
                     }
                 }

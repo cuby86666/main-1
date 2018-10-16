@@ -1,8 +1,12 @@
-/********************************************************
+/************************************************************************
 @Created By :    Nisha Agrawal
 @Created Date:   Jun 20, 2018
 @Description:    Library class for Lead Portal related functionality
-*********************************************************/
+----------------------------------------------------------------------
+@Modified By :    	Nisha Agrawal
+@Modified Date:   	Jul 31, 2018
+@Description:    	Modified to solve MixedDML issue from User trigger
+****************************************************************************/
 
 public class LeadPortalLib 
 {
@@ -17,7 +21,7 @@ public class LeadPortalLib
         
     public static void getExternalUserProfile()
     {
-        if(LP_EXTERNAL_PROFILE_Id == null)
+    	if(LP_EXTERNAL_PROFILE_Id == null)
         {
             List<Profile> lstProfiles = [Select Id, Name from Profile Where Name =: LP_EXTERNAL_PROFILE limit 1];
             if(lstProfiles.size() > 0)
@@ -27,11 +31,19 @@ public class LeadPortalLib
         }
     }
     
+    @future
+    public static void shareLeadAccessToUsers(String leadSharesAsJSON)
+    {
+        //deserilize JSON to object list        
+        List<CustomLeadShare> lstShares = (List<CustomLeadShare>)JSON.deserialize(leadSharesAsJSON, List<CustomLeadShare>.Class);
+        shareLeadAccessToUsers(lstShares);
+    }
+    
     public static void shareLeadAccessToUsers(List<CustomLeadShare> lst)
     {
         if(lst != null)
         {
-            List<LeadShare> lstLeadSharings = new List<LeadShare>();
+			List<LeadShare> lstLeadSharings = new List<LeadShare>();
            
             for(CustomLeadShare objShare : lst) 
             {
@@ -40,7 +52,8 @@ public class LeadPortalLib
             
             if(lstLeadSharings.size() > 0)
             {
-                List<Database.SaveResult> lstResults = Database.insert(lstLeadSharings,false);
+				//calling method from MixedDMLOps class to avoid mixed DML issue in test class context
+				List<Database.SaveResult> lstResults = MixedDMLOps.ins(lstLeadSharings);
                 
                 for(Database.SaveResult objResult : lstResults)
                 {
@@ -59,11 +72,11 @@ public class LeadPortalLib
                         else
                         {
                             //TODO : exception handling
-                            //system.debug('==error, failed to create share record : ' + err.getMessage());                            
+							//system.debug('==error, failed to create share record : ' + err.getMessage());                            
                         }
                     }
                 }   
-            }
+			}
         }
     }
     
@@ -109,7 +122,7 @@ public class LeadPortalLib
         if(mapLeadToUsers != null)
         {
             List<LeadShare> lstLeadSharings = new List<LeadShare>();
-            
+        	
             //TODO : uncomment below code
             /*
             for(Id leadId : mapLeadToUsers.keySet())
@@ -121,8 +134,8 @@ public class LeadPortalLib
             }            
             if(lstLeadSharings.size() > 0)
             {
-                List<Database.SaveResult> lstResults = Database.insert(lstLeadSharings,false);
-                
+				List<Database.SaveResult> lstResults = Database.insert(lstLeadSharings,false);
+				
                 for(Database.SaveResult objResult : lstResults)
                 {
                     if(!objResult.isSuccess())
@@ -142,7 +155,7 @@ public class LeadPortalLib
                         }
                     }
                 }   
-            } */    
+			} */	
         } 
     }
     

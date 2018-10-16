@@ -43,8 +43,8 @@ public class NewUserRegistrationV2Controller {
     
     public List<RegionSettings> lstRegionSettings { get; set; }
     public List<BUSettings> lstBUSettings { get; set; }
-    public New_User_Registeration__c user { get;set; }
-    New_User_Registeration__c current;
+    public New_User_Registration__c user { get;set; }
+    New_User_Registration__c current; 
     public boolean newUserMode { get; set; }
     public boolean checkBoxDisabled { get; set; }
     public boolean success { get; set; }
@@ -53,25 +53,31 @@ public class NewUserRegistrationV2Controller {
 
     //Standard page layout constructor
     public NewUserRegistrationV2Controller(ApexPages.StandardController controller) {
-        New_User_Registeration__c current = (New_User_Registeration__c)controller.getRecord();
+       
+        New_User_Registration__c current = (New_User_Registration__c)controller.getRecord();
         if (current.Id == null) {//newuser site
             newUserMode = true;
             success = false;
-            user = new New_User_Registeration__c();
+            user = new New_User_Registration__c();
         } else {
             newUserMode = false;
-            success = false;
+            success = false; 
             /*
             if (UserInfo.getProfileId().equals('00e20000001Nc7gAAC')) 
                 checkBoxDisabled = false;
             else*/
+            
             checkBoxDisabled = true; //disable checkbox matrix
-            user = [Select Id, User_Groups__c from New_User_Registeration__c where Id =: current.Id];
+            user = [Select Id, User_Groups__c from New_User_Registration__c where Id =: current.Id];
         }
         system.debug('##### current=' + current + ', mode=' + newUserMode);
+        
+     
     }
     
     //initialization
+    
+    
     public void init() {
         List<New_User_Reg_Settings__c> lstUserRegSettings = 
             New_User_Reg_Settings__c.getAll().values();
@@ -127,7 +133,8 @@ public class NewUserRegistrationV2Controller {
             }
             lstBUSettings.add(tmpBU);
         }
-        if (!newUserMode) LoadUserGroup(user.User_Groups__c);
+   
+        if (!newUserMode) LoadUserGroup(user.User_Groups__c); 
     }
     
     //convert group settings to string
@@ -151,12 +158,14 @@ public class NewUserRegistrationV2Controller {
                 tmpUserGroup += ';';
                 BUCount++;
             }
-        }
+        }   
         /*if(lstRegionSettings.size() !=0 || lstBUSettings.size() !=0)        
         {
             return tmpUserGroup;
         } */
+        
         //collect bu - region info
+        
         String tmpSingleGroup = '';
         String tmpBuGroup = '';
         for(GroupSettings grp : lstAllGroupSettings) {
@@ -187,7 +196,12 @@ public class NewUserRegistrationV2Controller {
     String test3 = 'EU;JP;525 AUT - KR;510 SnC - KR;525 AUT - GC;';
     String test4 = '525 AUT;510 SnC;511 SP - EU;513 LOG - EU;';
     */
+    
+    
     //parse string to group settings
+    
+   
+    
     public void LoadUserGroup(String strUserGroup) {
         if (strUserGroup == null || strUserGroup.length() == 0) return;
         List<String> lstUserGroup = strUserGroup.split(';');
@@ -226,21 +240,25 @@ public class NewUserRegistrationV2Controller {
     }*/
     
     //save record
+    
     public void Save() {
         String tmpUserGroup = SaveUserGroup();
-        List<RecordType> lstRecTypeId = [Select Id from RecordType Where Name = 'New User Registeration'];
+        List<RecordType> lstRecTypeId = [Select Id from RecordType Where Name = 'New User Registration'];
         /* check group settings
         if (tmpUserGroup == null || tmpUserGroup.length() == 0) {
             ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, 'Please Select Data Accessibility Session. It is Required !!'));
             return;
         }*/
+      
         user.User_Groups__c = tmpUserGroup;
         user.RequestforAccountin__c = 'Salesforce';
         User.Role__c = 'User';
         user.Status__c= 'Submitted';
         if (lstRecTypeId.size() > 0) user.RecordTypeId = lstRecTypeId.get(0).Id;
         upsert user;
+        
+       
         ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.INFO, 'Your application has been successfully submitted and a response to your request will arrive shortly. You will not be able to logon to the system until the registration has been approved. If you do not receive a response, Pls raise the issue via  Case tool http://nxpsemiconductors.force.com/welcome -> HELP give info. required and submit'));
         success = true;
-    }
+    }  
 }

@@ -8,6 +8,7 @@ Description       : SIR 1371-Not able to save funlocs in CMDRequests.
 @isTest
 private class SAPCMDMassUpdateControllerTest
 {
+/*    
     //TO Do:Update Stan for the line commented
     //private static final String CMD_REQUEST_SAP_MASS_UPDATE_RECORD_TYPE_ID = '012D0000000QmBTIA0';
     //private static final String CMD_REQUEST_SAP_MASS_UPDATE_RECORD_TYPE_ID = '012M00000004gGJIAY';     
@@ -201,6 +202,7 @@ private class SAPCMDMassUpdateControllerTest
   /***************************************************************************
       Test Method for CSV Parsing Method  
     ****************************************************************************/ 
+/*    
     static testmethod void csvUploadTest() 
     {
         //Prepare the test data
@@ -231,6 +233,7 @@ private class SAPCMDMassUpdateControllerTest
             Positive case:When delimitor is colon and no of headers 
             is either two or five->Parse the data and upload the data
             ********************************************************/
+/*            
             
             //Data with Delimiter - colon   and number of columns -2
             string csvContent = 'Customer FunLoc Number,Person Name\n427863,HU165 - ESZTER LESKO';
@@ -274,7 +277,8 @@ private class SAPCMDMassUpdateControllerTest
             ->Do not Parse the data and capture error in apex message
             ********************************************************/
             
-            //Data with Delimiter - semi colon  and number of columns -6            
+            //Data with Delimiter - semi colon  and number of columns -6     
+/*            
             csvContent = 'Customer FunLoc Number;SAP CMD;Legal Name;Person Name old;Person Name;Person Name\n449471;SAP#00016519;Flextronics International KFT;HU225 - LASZLO BARANYAI;TW006 - OPEN;TW006 - OPEN';
             SAPCMDMassUpdateController.contentFile =  blob.valueOf(csvContent);
             currentPage=theController.uploadCSV();
@@ -371,6 +375,7 @@ private class SAPCMDMassUpdateControllerTest
             Positive case:When delimitor is colon or semi colon and 
             no of headers is 12->Parse the data and upload the data
             ********************************************************/
+/*            
             system.debug('strMassUpdateType2.equalsIgnoreCase+++++++++++++++++++++++++++++++++++++++'+strMassUpdateType2);
             //Data with Delimiter is colon and number of columns is 12
             string csvContent = 'Customer FunLoc Number,SAP CMD,Legal Name,Name 2,Name 3,Name 4,Street,Street 4,City,State,Country,Zip\n427863,test,"test,test",test,test,test,test,test,test,test,test,test';
@@ -398,6 +403,7 @@ private class SAPCMDMassUpdateControllerTest
             ********************************************************/
             
             //Data with Delimiter is semi colon and number of columns is >12 and carriage return is \r
+/*            
             csvContent = 'Customer FunLoc Number;SAP CMD;Legal Name;Name 2;Name 3;Name 4;Street;Street 4;City;State;Country;Zip;Zip\r427863;test1;test1;test;test;test;test;test;test;test;test;test;test';
             SAPCMDMassUpdateController.contentFile =  blob.valueOf(csvContent);
             currentPage=theController2.uploadCSV();
@@ -464,6 +470,7 @@ private class SAPCMDMassUpdateControllerTest
             ********************************************************/
             
             //Data with Delimiter - colon   and number of columns -2
+/*            
             string csvContent = 'Customer FunLoc Number,Person Name\n427863,HU165 - ESZTER LESKO';
             SAPCMDMassUpdateController.contentFile =  blob.valueOf(csvContent);
             
@@ -503,7 +510,8 @@ private class SAPCMDMassUpdateControllerTest
             ->Do not Parse the data and capture error in apex message
             ********************************************************/
             
-            //Data with Delimiter - semi colon  and number of columns -6            
+            //Data with Delimiter - semi colon  and number of columns -6     
+/*            
             csvContent = 'Customer FunLoc Number;SAP CMD;Legal Name;Person Name old;Person Name;Person Name\n449471;SAP#00016519;Flextronics International KFT;HU225 - LASZLO BARANYAI;TW006 - OPEN;TW006 - OPEN';
             SAPCMDMassUpdateController.contentFile =  blob.valueOf(csvContent);
             currentPage=theController1.uploadCSV();
@@ -585,6 +593,7 @@ private class SAPCMDMassUpdateControllerTest
                                           Fax__c = '+1234567890', Telephone__c = '+1234567890');
         
       insert testCustomer; */
+/*      
       
       ZA_ZS_RECORD_TYPE_ID = [Select Id, Name,DeveloperName From RecordType Where IsActive=true AND 
                                 (SobjectType = 'Partner_Function__c' AND DeveloperName =:ZA_ZS_RECORD_TYPE) limit 1].id;
@@ -596,5 +605,5 @@ private class SAPCMDMassUpdateControllerTest
       
       }
       
-      
+*/      
 }

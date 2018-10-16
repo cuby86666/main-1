@@ -68,6 +68,10 @@ public class CMD_Request_Trigger {
      Private Static Final string TYPE_Edit_SBE_CmdReq='SAP_SBE_Funloc_Edit_request';
      Private Static Final string TYPE_New_MANU_CmdReq='SAP_New_MANU_Funloc_request';
      Private Static Final string TYPE_Edit_MANU_CmdReq='SAP_MANU_Funloc_Edit_request';
+     Private Static Final string TYPE_New_Parent_Account='New_SFDC_Parent_Account';
+     Private Static Final string TYPE_Edit_Parent_Account='Edit_SFDC_Parent_Account';
+     Private Static Final string TYPE_New_Child_Account='New_SFDC_Child_Account';
+     Private Static Final string TYPE_Edit_Child_Account='Edit_SFDC_Child_Account';
      Private static final String SALES_ORG_NL60 = 'NL60 - RSO Europe';
      Private static final String SALES_ORG_US60 = 'US60 - RSO U.S.A.';
      Public Static Id sapNewSBEFun_Id;
@@ -78,6 +82,10 @@ public class CMD_Request_Trigger {
      Public Static Id sapEditFun_Id;
      Public Static Id emailNewFun_Id;
      Public Static Id emailEditFun_Id;
+     Public Static Id newParentAccount_Id;
+     Public Static Id editParentAccount_Id;
+     Public Static Id newChildAccount_Id;
+     Public Static Id editChildAccount_Id;
      
      
      public CMD_Request_Trigger()
@@ -168,7 +176,9 @@ public static void fetchCMDReqRecordTypes()
          For(recordType rt:[Select Id, Name,DeveloperName From RecordType 
                         Where IsActive=true AND (SobjectType = 'CMD_Request__c' and 
                         (DeveloperName =:TYPE_New_CmdReq OR DeveloperName =:TYPE_Edit_CmdReq OR DeveloperName =:TYPE_New_SBE_CmdReq
-                         OR DeveloperName =:TYPE_Edit_SBE_CmdReq OR DeveloperName =:TYPE_New_MANU_CmdReq OR DeveloperName =:TYPE_Edit_MANU_CmdReq))])
+                         OR DeveloperName =:TYPE_Edit_SBE_CmdReq OR DeveloperName =:TYPE_New_MANU_CmdReq OR DeveloperName =:TYPE_Edit_MANU_CmdReq
+                         OR DeveloperName =:TYPE_New_Parent_Account OR DeveloperName =:TYPE_Edit_Parent_Account 
+                         OR DeveloperName =:TYPE_New_Child_Account OR DeveloperName =:TYPE_Edit_Child_Account))])
         {         
             if(rt.DeveloperName ==TYPE_New_CmdReq) 
             {
@@ -194,6 +204,22 @@ public static void fetchCMDReqRecordTypes()
             {
                sapEditMANUFun_Id = rt.id;
             }
+            else if(rt.DeveloperName == TYPE_New_Parent_Account)
+            {
+               newParentAccount_Id = rt.id;
+            }
+            else if(rt.DeveloperName == TYPE_Edit_Parent_Account)
+            {
+               editParentAccount_Id = rt.id;
+            }
+            else if(rt.DeveloperName == TYPE_New_Child_Account)
+            {
+               newChildAccount_Id = rt.id;
+            }
+            else if(rt.DeveloperName == TYPE_Edit_Child_Account)
+            {
+               editChildAccount_Id = rt.id;
+            }
            
           }
         }
@@ -214,7 +240,8 @@ public static void fetchCMDReqRecordTypes()
     }
   
     public static void fetchApprovers( List<CMD_Request__c> listCMDRequests ) {
-
+        
+        fetchCMDReqRecordTypes();
         Map<Id, Account> mapAllParents = new Map<Id, Account>();
         for( Account theAccount : allAccountApprovers ){
             mapAllParents.put( theAccount.Id , theAccount );
@@ -236,7 +263,10 @@ public static void fetchCMDReqRecordTypes()
                     theCMDRequest.Approver_SAP__c = theParent.Account_Manager_SAP__c;
                     theCMDRequest.Approver_SAP_2__c = theParent.Account_Manager_SAP_2__c;
                     theCMDRequest.Approver_SAP_3__c = theParent.Account_Manager_SAP_3__c;
+                    if(theCMDRequest.RecordTypeId != newParentAccount_Id && theCMDRequest.RecordTypeId != editParentAccount_Id 
+                       && theCMDRequest.RecordTypeId != newChildAccount_Id && theCMDRequest.RecordTypeId != editChildAccount_Id){
                     theCMDRequest.Customer_Category__c=theParent.Customer_Category__c;
+                    }
                 } else if( theParent == null ) {
                     theCMDRequest.Approver_AMEC__c = null;
                     theCMDRequest.Approver_EMEA__c = null;
@@ -247,7 +277,10 @@ public static void fetchCMDReqRecordTypes()
                     theCMDRequest.Approver_SAP__c = null;
                     theCMDRequest.Approver_SAP_2__c = null;
                     theCMDRequest.Approver_SAP_3__c = null;
-                    theCMDRequest.Customer_Category__c=null;            
+                   if(theCMDRequest.RecordTypeId != newParentAccount_Id && theCMDRequest.RecordTypeId != editParentAccount_Id 
+                       && theCMDRequest.RecordTypeId != newChildAccount_Id && theCMDRequest.RecordTypeId != editChildAccount_Id){
+                    theCMDRequest.Customer_Category__c=null;  
+                    }          
                 }
             } else if( theCMDRequest.Parent_Account_in_CRM__c == null ) {
                 theCMDRequest.Approver_AMEC__c = null;
@@ -259,7 +292,10 @@ public static void fetchCMDReqRecordTypes()
                 theCMDRequest.Approver_SAP__c = null;
                 theCMDRequest.Approver_SAP_2__c = null;
                 theCMDRequest.Approver_SAP_3__c = null;
-                theCMDRequest.Customer_Category__c=null;            
+                if(theCMDRequest.RecordTypeId != newParentAccount_Id && theCMDRequest.RecordTypeId != editParentAccount_Id 
+                   && theCMDRequest.RecordTypeId != newChildAccount_Id && theCMDRequest.RecordTypeId != editChildAccount_Id){
+                theCMDRequest.Customer_Category__c=null;  
+                }          
             }  
         }
     }  
@@ -275,7 +311,7 @@ public static void fetchCMDReqRecordTypes()
         ]);
 *****/
         Map<Id, String> allParentCustomerCategory = new Map<Id, String>();
-        
+        fetchCMDReqRecordTypes();
         for( Account theParent : allParents ){
             if( theParent.Customer_Category__c != null ){
                 allParentCustomerCategory.put(theParent.Id, theParent.Customer_Category__c );
@@ -286,7 +322,8 @@ public static void fetchCMDReqRecordTypes()
             if(theCMDRequest.Parent_Account_in_CRM__c != null 
                && allParentCustomerCategory.containsKey(theCMDRequest.Parent_Account_in_CRM__c)    
                && ( theCMDRequest.Customer_Category__c == null
-               || theCMDRequest.Customer_Category__c == '' )) {
+               || theCMDRequest.Customer_Category__c == '' ) && theCMDRequest.RecordTypeId != newParentAccount_Id && theCMDRequest.RecordTypeId != editParentAccount_Id 
+                   && theCMDRequest.RecordTypeId != newChildAccount_Id && theCMDRequest.RecordTypeId != editChildAccount_Id) {
              theCMDRequest.Customer_Category__c = allParentCustomerCategory.get(theCMDRequest.Parent_Account_in_CRM__c);
 //                    = allParentsForThisMethod.get(theCMDRequest.Parent_Account_in_CRM__c).Customer_Category__c;
             }

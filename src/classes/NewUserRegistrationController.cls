@@ -1,5 +1,5 @@
 /*********************************************************************************************************
-Name            :    NewUserRegisterationController
+Name            :    NewUserRegistrationController
 Author          :    
 Date            :    1 Jun, 2011
 Description     :    This controller is used to Register New user. All fields are required in this controller.                        
@@ -20,15 +20,19 @@ Modified By     :    Shridevi Badiger
 Modified Date   :    6-Oct-2016
 Description     :    SIR-1172-changing BL field from free text to picklist.
 
+Modified By     :    Naveen Nayak
+Modified Date   :    12 July 2018
+Description     :    Story#-1553-change the spelling error " New User Registeration " TO " New User Registration"
+
 *********************************************************************************************************/
 
-public class NewUserRegisterationController
-{
 
- 
+public class NewUserRegistrationController
+
+{
    public String userRequest { get; set; }
     public static final string NO_APP_SELECTED_ERROR = 'Please Select atleast one application to register.'; 
-    public New_User_Registeration__c user { get; set; }
+    public New_User_Registration__c user { get; set; }
     
     public boolean Step1 { get;set; }
     public boolean Step2{ get;set; }
@@ -39,25 +43,24 @@ public class NewUserRegisterationController
     public List<SelectOption> BLOptions{get;set;}
     //public list<String> selectedApps { get; set; }
     //public Schema.DescribeFieldResult fieldResult{get;set;}
-  //   public Schema.DescribeFieldResult fieldResult=New_User_Registeration__c.BL__c.getDescribe();
+  //   public Schema.DescribeFieldResult fieldResult=New_User_Registration__c.BL__c.getDescribe();
    // public List<Schema.PicklistEntry> ple{get;set;}
     public boolean validBL{get;set;}
     //Constructor
-    public NewUserRegisterationController()
+    public NewUserRegistrationController()
     {    
     
-        
          validBL=false;
          helpTextBL='Please enter BL code (number) or BL description.';
          BLVisibility=false;
-         user = new New_User_Registeration__c();
+         user = new New_User_Registration__c();
          user.First_Name__c=ApexPages.CurrentPage().getParameters().get('firstName');
          user.Last_Name__c=ApexPages.CurrentPage().getParameters().get('lastName');
          user.Email_Address__c=ApexPages.CurrentPage().getParameters().get('email'); 
          user.RequestforAccountin__c=  ApexPages.CurrentPage().getParameters().get('userRequestparam');
          //selectedApps = new String[]{};
          //initialize application list
-         //Schema.DescribeFieldResult fieldResult =  New_User_Registeration__c.RequestforAccountin__c.getDescribe();
+         //Schema.DescribeFieldResult fieldResult =  New_User_Registration__c.RequestforAccountin__c.getDescribe();
          //List<Schema.PicklistEntry> ple = fieldResult.getPicklistValues();
          //lstApplications = new List<SelectOption>();
          //selectedApps = new list<String>();
@@ -240,6 +243,6 @@ public class NewUserRegisterationController
         
         System.debug('page reference::'+pg);
         return pg;
-     }
+     } 
    
 }

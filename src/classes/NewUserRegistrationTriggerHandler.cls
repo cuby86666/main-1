@@ -7,13 +7,17 @@
 Modified By     :    Harish Gowda N
 Modified Date   : 30 Mar2018
 Description     : SFDC-1171-Brainshark New User Registration form- adding Rejection Mail for Brainshark New user Registration form.
+********************************************************************************************
+Last Modified By     : Naveen Nayak 
+Last Modified Date   : 13 July, 2018
+Description : Changing Custom Object name New_User_Registration__C
 ********************************************************************************************/
 public class NewUserRegistrationTriggerHandler implements Itrigger 
 {
     // Allows unit tests (or other code) to disable this trigger for the transaction
     public static Boolean TriggerDisabled = false;
-    private static Final string TYPE_New_User_Reg='New_User_Registeration';
-    private static Final String TYPE_Apttus_New_User_Reg='Apttus_New_User_Registeration';
+    private static Final string TYPE_New_User_Reg='New_User_Registration';
+    private static Final String TYPE_Apttus_New_User_Reg='Apttus_New_User_Registration';
     private static Final string TYPE_Brainshark_New_User_Reg='Brainshark_New_User_Registration';
     public static Id newUserReg_Id;
     public static Id apptusNewUserReg_Id;
@@ -22,14 +26,16 @@ public class NewUserRegistrationTriggerHandler implements Itrigger
     /*
         Checks to see if the trigger has been disabled either by custom setting or by running code
     */
+    
     public Boolean IsDisabled()
     {
         /*if (TriggerSettings__c.AccountTriggerDisabled__c = true)
             return true;
-        else*/
+        else*/ 
+        
             return TriggerDisabled;
-    }
- 
+    } 
+    
     public void BeforeInsert(List<SObject> newItems) 
     {
         
@@ -45,19 +51,20 @@ public class NewUserRegistrationTriggerHandler implements Itrigger
     {
         SendRejectionEmail(newItems,oldItems);
     }
-    
+
     public void SendRejectionEmail(map<Id, SObject> newItems, map<Id, SObject> oldItems) 
     {
-        map<Id, New_User_Registeration__c> newRegUsermap = new map<Id, New_User_Registeration__c>();
-        map<Id, New_User_Registeration__c> oldRegUserMap= new map<Id, New_User_Registeration__c>();
-        newRegUserMap = (map<Id, New_User_Registeration__c>)newItems;
-        oldRegUserMap = (map<Id, New_User_Registeration__c>)oldItems;
+        
+        map<Id, New_User_Registration__c> newRegUsermap = new map<Id, New_User_Registration__c>();
+        map<Id, New_User_Registration__c> oldRegUserMap= new map<Id, New_User_Registration__c>();
+        newRegUserMap = (map<Id, New_User_Registration__c>)newItems;
+        oldRegUserMap = (map<Id, New_User_Registration__c>)oldItems;
         list<id> listRequestId=new list<id>();
         set<String> setUserEmail= new set<String>();
         list<Messaging.SingleEmailMessage> mails = new list<Messaging.SingleEmailMessage>();
         list<id> listuserId=new list<id>();
          map<id,User> mapUser= new map<id,User>();
-        list<New_User_Registeration__c> newUserRegList= new list<New_User_Registeration__c>();
+        list<New_User_Registration__c> newUserRegList= new list<New_User_Registration__c>();
         map<id,ProcessInstancestep>  mapStep=new  map<id,ProcessInstancestep>();
      
         for(Id id: newRegUserMap.keySet())
@@ -66,7 +73,7 @@ public class NewUserRegistrationTriggerHandler implements Itrigger
         }
      
         for(recordType rt:[Select Id, Name,DeveloperName From RecordType 
-                        Where IsActive=true AND (SobjectType = 'New_User_Registeration__c' and 
+                        Where IsActive=true AND (SobjectType = 'New_User_Registration__c' and 
                         (DeveloperName =:TYPE_New_User_Reg OR DeveloperName =:TYPE_Apttus_New_User_Reg OR DeveloperName =:TYPE_Brainshark_New_User_Reg ))])
         {
          if(rt.DeveloperName == TYPE_New_User_Reg ) 
@@ -84,11 +91,16 @@ public class NewUserRegistrationTriggerHandler implements Itrigger
         } 
     
      
-        for (New_User_Registeration__c request : newUserRegList)
+        for (New_User_Registration__c request : newUserRegList)
         {
-        New_User_Registeration__c oldNewUserRegRec = oldRegUserMap.get(request.Id);
+        New_User_Registration__c oldNewUserRegRec = oldRegUserMap.get(request.Id);
        if(request.status__c=='Rejected' && oldNewUserRegRec.status__c!='Rejected')
        {
+     /*  if(request.RecordTypeId == newUserReg_Id)
+       {
+         listuserId.add(request.ownerId);
+      // listuserId.add(request.createdbyId);
+       }*/
        if(request.RecordTypeId == apptusNewUserReg_Id)
        {
          listuserId.add(request.ownerId);
@@ -130,7 +142,7 @@ public class NewUserRegistrationTriggerHandler implements Itrigger
       if(listuserId!=null && listuserId.size()!=0)
       mapUser=new map<id,user>([Select id, email,name from user where id in:listuserId]);
       string Url;
-      for(New_User_Registeration__c request : newUserRegList) 
+      for(New_User_Registration__c request : newUserRegList) 
         {
             list<String> strSendTo =new list<String>();
             if(mapStep.size()!=0)
@@ -194,9 +206,12 @@ public class NewUserRegistrationTriggerHandler implements Itrigger
          {
            Messaging.sendEmail(mails);
          }
+         
+        
     }
  
     public void AfterDelete(map<Id, SObject> oldItems) {}
  
-    public void AfterUndelete(map<Id, SObject> oldItems) {}
+    public void AfterUndelete(map<Id, SObject> oldItems) {} 
+
 }

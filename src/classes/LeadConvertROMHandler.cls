@@ -14,15 +14,22 @@ if a contact is identified based on Lead's Email and associated to a different A
 @Modified Date:   16 JUN 2017
 @Description:    Modified class to allow conversion of Leads for Currency ISO diferrence(SFDC-1620)
 **************************************************************************/
+/*************************************************************************
+@Modified By:    Harish Gowda
+@Modified Date:   23 JUL 2017
+@Description:    Modified class to allow conversion of Leads only if the Opportunity business created date is >= to Lead created date(SFDC-1916)
+**************************************************************************/
 public class LeadConvertROMHandler {    
     public static set<string> strLeadEmail;
     public static set<string> strLeadDistiNum;
     public static set<string> strLeadIds;
     public static set<string> strLeadIdsToSeperate;
+    public static set<datetime>  LeadCreateddate; 
     
     public static map<string,contact> mapEmailToContact;    
     public static map<string,Opportunity> mapDistiNumToOppty;
     public static map<string,Opportunity> mapLeadIdToOppty;
+    public static map<string,lead> mapLeadDetails;
     public static List<OpportunityContactRole> listNewContactRole;    
         
     public static void insertContactRole(list<Lead> listLeadToConvert){        
@@ -33,10 +40,13 @@ public class LeadConvertROMHandler {
         mapEmailToContact=new map<string,contact>();
         mapDistiNumToOppty=new map<string,Opportunity>();
         mapLeadIdToOppty=new map<string,Opportunity>();
+        mapLeadDetails=new map<string,Lead>();
         listNewContactRole = new List<OpportunityContactRole>();
         list<contact> listNewContact=new list<contact>();
         list<contact> listContactIdsToUpdate=new list<contact>();
-        list<lead> listNewLead=new list<lead>();                
+        list<lead> listNewLead=new list<lead>();
+        LeadCreateddate = new set<datetime>();  
+         System.debug('LCD ::'+LeadCreateddate);            
         for(lead ld:listLeadToConvert){
             strLeadIds.add(ld.Id);
             if(ld.email!=null){
@@ -45,16 +55,29 @@ public class LeadConvertROMHandler {
             if(ld.Distributor_Tracking_Number__c != null){
                 strLeadDistiNum.add(ld.Distributor_Tracking_Number__c);
             }
+             if(ld.createddate != null ){
+                LeadCreateddate.add(ld.createddate);
+            }
+            mapLeadDetails.put(ld.Id, ld);
         }        
         list<contact> listContact=[select id, email,AccountId from contact where email In:strLeadEmail];
-        list<Opportunity> listOpp=[Select id, Distributor_Tracking_Number__c,Lead_Id__c,AccountId,CreatedDate,CurrencyIsoCode from Opportunity where 
+        list<Opportunity> listOpp=[Select id, Distributor_Tracking_Number__c,Lead_Id__c,AccountId,CreatedDate,CurrencyIsoCode,Business_Created_Date__c from Opportunity where 
                                    (Distributor_Tracking_Number__c IN:strLeadDistiNum OR Lead_Id__c IN:strLeadIds)
                                    AND RecordType.Name='Model N Oppty' AND 
-                                   (CreatedDate = LAST_N_DAYS:365 OR CreatedDate = TODAY)];
+                                   (CreatedDate = LAST_N_DAYS:365 OR CreatedDate = TODAY)
+                               ];
+                                System.debug('LCD ::'+LeadCreateddate);
+                                System.debug('BCD ::'+listOpp);
+                          String LeadId ;
         for(opportunity opp:listOpp){
-            if(opp.Distributor_Tracking_Number__c!=null){
+         for(lead objLead:listLeadToConvert){
+         LeadId = objLead.id;
+            if(opp.Distributor_Tracking_Number__c!=null &&  (opp.Distributor_Tracking_Number__c == objLead.Distributor_Tracking_Number__c || opp.Lead_Id__c == LeadId ) && (opp.Business_Created_Date__c >= objLead.CreatedDate)){
                 if(!mapDistiNumToOppty.containskey(opp.Distributor_Tracking_Number__c)){
                 mapDistiNumToOppty.put(opp.Distributor_Tracking_Number__c,opp);
+               System.debug('BCD ::'+listOpp);
+               System.debug('BCD ::'+listOpp.size());
+               System.debug('LCD ::'+LeadCreateddate);
                 }
             }
             if(opp.Lead_Id__c != null){
@@ -62,7 +85,8 @@ public class LeadConvertROMHandler {
                    mapLeadIdToOppty.put(opp.Lead_Id__c,opp); 
                 }
             }
-        }                                           
+        } 
+      }                                          
         for(contact con:listContact){
             if(!mapEmailToContact.containskey(con.email) && con.email!=null){
                 mapEmailToContact.put(con.email,con);                

@@ -151,7 +151,7 @@ public static void sendNotificationToOwner(List<String> lstCaseIds, List<String>
     public static void updateCaseLatestOutboundEmail(List<String> lstrelatedCaseIds)
     {
         //query for cases with id in relatedCaseIds List
-        lstCase= [Select id,createddate,Last_Contact_to_Customer__c from case where id IN: lstrelatedCaseIds  and recordType.developername='TS_Community'];
+        lstCase= [Select id,createddate,Last_Contact_to_Customer__c from case where id IN: lstrelatedCaseIds  and recordType.developername='TS_MICR_Group'];
         DateTime currentTime = System.now();          
         //set the new field value to now();
         if (lstCase!=null && lstCase.size()>0) 

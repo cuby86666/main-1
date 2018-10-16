@@ -49,6 +49,12 @@
 @Modified Date:     06 Jul 2018
 @Description:       SFDC-1761 mapping between "Title"(Contact field) to "Contact Title "(Case Field).
 **********************************************************************************************************/
+/***************************************************************************************************
+@Modified By :      Gunjan Singh
+@Modified Date:     11 Sep 2018
+@Description:       SFDC-2078 Web-to-Case form without Login - Enhancement (Creating contact along with case)
+                    Created method createContact() to create Contact, along with Case if contact doesnot exist
+**********************************************************************************************************/
 public class CaseTrigger 
 { 
     private static final string DOMAIN_SEPARATOR = '@';
@@ -2031,7 +2037,63 @@ public static void EntitlementUpdate(List<Case> CaseNewList,List<Case> CaseOldLi
     
     
     }
-
-
+    
+    // Created this method as part of SFDC-2078 , To create the contact along with case if contact doesnt exist.
+    public static void createContact(List<Case> caseList){
+        List<String> emailAddresses = new List<String>();
+        List<Account> objAcc = new List<Account>();
+        for (Case caseObj:caseList) {
+            if (caseObj.SuppliedEmail!='' || caseObj.SuppliedEmail!=Null)
+            {
+                system.debug('Value of caseObj.SuppliedEmail'+ caseObj.SuppliedEmail);
+                emailAddresses.add(caseObj.SuppliedEmail);
+                 
+            }
+        }
+        List<Contact> listContacts = [Select Id, Email From Contact Where Email in :emailAddresses];
+        Set<String> takenEmails = new Set<String>();
+        if(listContacts != Null){
+            for (Contact c:listContacts) {
+                takenEmails.add(c.Email);
+            }
+        }
+        system.debug('Value of takenEmails'+takenEmails);
+        List<Contact> lstContact = new List<Contact>(); 
+        Map<String,Contact> emailToContactMap = new Map<String,Contact>();
+        
+        List<Case> lstCasesToUpdate = new List<Case>();
+        objAcc = [Select Id,Name from Account where Name = 'NXP Community' limit 1];
+        system.debug('Value of AccountId is'+objAcc);
+        for(Case objCase:caseList){
+            if (!takenEmails.contains(objCase.SuppliedEmail)&& objCase.ContactId==null && objCase.Web_First_Name__c!=null &&
+                objCase.Web_First_Name__c!='' && objCase.Web_Last_Name__c!='' && objCase.Web_Last_Name__c!=null &&
+                objCase.SuppliedEmail!=null && objCase.SuppliedEmail!='' && objAcc!=Null ){
+                system.debug('Inside If');
+                Contact objCont = new Contact(FirstName=objCase.Web_First_Name__c,
+                                            LastName=objCase.Web_Last_Name__c,
+                                            Email=objCase.SuppliedEmail,
+                                            AccountId = objAcc[0].Id
+                                            );
+                emailToContactMap.put(objCase.SuppliedEmail,objCont);
+                lstCasesToUpdate.add(objCase);
+                                            
+                
+            }          
+        }
+        if(emailToContactMap != Null){
+            lstContact = emailToContactMap.values();
+        }
+        if(lstContact !=Null){
+            insert lstContact;
+        }
+        for (Case caseObj:lstCasesToUpdate) {
+            system.debug('Inside for');
+            if(emailToContactMap !=Null && emailToContactMap.containsKey(caseObj.SuppliedEmail)==True && emailToContactMap.get(caseObj.SuppliedEmail)!=Null){
+                Contact newContact = emailToContactMap.get(caseObj.SuppliedEmail);
+                caseObj.ContactId = newContact.Id;
+            } 
+             
+        }
+    }
 
 }

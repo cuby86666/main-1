@@ -1,5 +1,7 @@
 @isTest
 private class SAPCMDMassUpdateTest{
+
+/*    
     
     private static final String CMD_REQUEST_SAP_MASS_UPDATE_RECORD_TYPE_ID = '012D0000000QmBTIA0';
 //    private static final String CMD_REQUEST_SAP_MASS_UPDATE_RECORD_TYPE_ID = '012M00000004gGJIAY';
@@ -27,4 +29,5 @@ private class SAPCMDMassUpdateTest{
 //		Test.setCurrentPage(pageRef);
 //		SAPCMDMassUpdateController theController = new SAPCMDMassUpdateController();
     }
+*/
 }

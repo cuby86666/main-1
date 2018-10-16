@@ -213,7 +213,7 @@ public without sharing class CommunityContextController{
         errorMessage ='';
         currentEntitlementId= ApexPages.currentPage().getParameters().get('entitlementId');
         caseRecord.entitlementId = currentEntitlementId;
-
+        caseRecord.origin = 'Self Service Portal';
         System.debug('%%%Entitlement'+currentEntitlementId);
         
         caseRecord.contactId = contactId;

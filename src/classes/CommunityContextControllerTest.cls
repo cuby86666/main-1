@@ -3,6 +3,12 @@
 @CreatedDate :     12 June 2016
 Description :      Test Class for CommunityContextController
 ****************************************************************************************************/
+/*****************************************************************************
+@Modified By :  Gunjan Singh
+@Modified Date: 25 July 2018
+Description :   Showing attachment section along with Delete option as part SFDC-1765
+******************************************************************************/
+
 @isTest(seeAllData = false)
 Public class CommunityContextControllerTest{
     
@@ -11,8 +17,6 @@ Public class CommunityContextControllerTest{
     static Contact participantconRecord ;
     static Contact observerconRecord ;
     static User usr1;
-    
-      
     
     /*
     * @name         : saveRecord
@@ -31,15 +35,16 @@ Public class CommunityContextControllerTest{
             contextController.developmentEntitlement.name= 'development';
             contextController.saveDevelopmentEntitlement();
             
-            
             participantconRecord = new Contact();
             participantconRecord.LastName = 'T';
             participantconRecord.Email = 'r@t.com';
+            participantconRecord.Community_web_Country__c = 'Hagon';
             insert participantconRecord ;
             
             observerconRecord = new Contact();
             observerconRecord.LastName = 'T';
             observerconRecord.Email = 's@t.com';
+            observerconRecord.Community_web_Country__c = 'Hagon';
             insert observerconRecord ;
             
             Entitlement_Contact__c pcont = new Entitlement_Contact__c();
@@ -54,23 +59,18 @@ Public class CommunityContextControllerTest{
             ocont.Contact__c = observerconRecord.id;
             insert ocont ;
             
+            Test.startTest();
            
             ApexPages.currentPage().getParameters().put('entitlementId', ocont.Entitlement__c);
            
             CommunityContextController controller = new CommunityContextController( ); 
             
-        
-            Test.startTest();
             controller.getPageReference1();
-            
             controller.caseRecord = new Case();
             controller.caseRecord.subject='test';
-            controller.saveCaseRecord();
-        
-            controller.addAttachment();            
-
+                        
             ApexPages.currentPage().getParameters().put('econtactId', [SELECT id from Entitlement_Contact__c limit 1].id);
-     
+            controller.addAttachment();            
             controller.acceptEntitlement();
             controller.rejectEntitlement();
             controller.removeEntitlementContact();
@@ -82,17 +82,69 @@ Public class CommunityContextControllerTest{
             controller.SortCases();
             controller.SearchText=''; 
             controller.SearchCases();
+            controller.saveCaseRecord();
+            Test.stopTest();   
+               
+        }
+           /* usr1=createManagerUsers();
+            insert usr1;
+            System.runAs(usr1){
+            Test.startTest();
+            CommunityContextController controller1 = new CommunityContextController( ); 
+            controller1.getPageReference1();
+            controller1.createCaseRecord();
             Test.stopTest();
+            }  */
+    } 
+    
+    
+    public static testmethod void caseTestDupl(){
+        
+        loadData();
+         
+        System.runAs(userRecord){
+            CommunityCreateContextController contextController = new CommunityCreateContextController( );
             
+            contextController.developmentEntitlement.accountId = accRecord.id;
+            contextController.developmentEntitlement.name= 'development';
+            contextController.saveDevelopmentEntitlement();
+            
+            participantconRecord = new Contact();
+            participantconRecord.LastName = 'T';
+            participantconRecord.Email = 'r@t.com';
+            participantconRecord.Community_web_Country__c = 'Hagon';
+            insert participantconRecord ;
+            
+            observerconRecord = new Contact();
+            observerconRecord.LastName = 'T';
+            observerconRecord.Email = 's@t.com';
+            observerconRecord.Community_web_Country__c = 'Hagon';
+            insert observerconRecord ;
+            
+            Entitlement_Contact__c pcont = new Entitlement_Contact__c();
+            pcont.Type__c = 'Participant';
+            pCont.Entitlement__c = [SELECT id from Entitlement limit 1].id;
+            pcont.Contact__c = participantconRecord.id;
+            insert pcont;
+            
+            Entitlement_Contact__c ocont = new Entitlement_Contact__c();
+            ocont.Type__c = 'Observer';
+            ocont.Entitlement__c = [SELECT id from Entitlement limit 1].id;
+            ocont.Contact__c = observerconRecord.id;
+            insert ocont ;
+          
         }
             usr1=createManagerUsers();
             insert usr1;
             System.runAs(usr1){
+            Test.startTest();
             CommunityContextController controller1 = new CommunityContextController( ); 
             controller1.getPageReference1();
             controller1.createCaseRecord();
+            Test.stopTest();
             }  
     } 
+    
     
     
             public static testmethod void caseDetailRecordTestnotNXPCommunityaccount(){
@@ -112,24 +164,62 @@ Public class CommunityContextControllerTest{
             conRecord.accountId = accRecord.id;
             conRecord.LastName = 'T';
             conRecord.Email = 'test@nxp.com';
+            conRecord.Community_Web_Country__c = 'Hagon' ;
             insert conRecord;    
             
             Contact conRecord1 = new Contact();
             conRecord1.accountId = accRecord.id;
             conRecord1.LastName = 'T';
             conRecord1.Email =userinfo.getUserEmail();
+            conRecord1.Community_Web_Country__c = 'Hagon' ;
             insert conRecord1;
+            
+            Entitlement entRecord = new Entitlement();
+            entRecord.Name = 'development';
+            entRecord.accountId = accRecord.id;
+            insert entRecord;
+              
+            Entitlement_Contact__c entconRecord = new Entitlement_Contact__c();
+            entconRecord.Entitlement__c= entRecord.id;
+            entconRecord.Contact__c=conRecord1.id;
+            insert entconRecord;
                 
             Case cse = new Case();
             cse.subject ='test';
             cse.contactid=conRecord.id;
+            cse.EntitlementId=entRecord.id;
             cse.FeedItemId = NULL;
             insert cse;    
-                
+            
+            Attachment attach=new Attachment();     
+            attach.Name='Unit Test Attachment';
+            Blob bodyBlob=Blob.valueOf('Unit Test Attachment Body');
+            attach.body=bodyBlob;
+            attach.parentId=cse.id;
+            insert attach;
+             
+            //List<Attachment> caseAttachments = new List<Attachment>();
+            //caseAttachments.add(attach);
+            
+            ApexPages.currentPage().getParameters().put('caseId',cse.id); 
             CommunityNXPCaseDetailController caseDetail = new CommunityNXPCaseDetailController();
-            pg.getParameters().put('caseId',cse.id );
+            //pg.getParameters().put('caseId',cse.id );
+            //ApexPages.currentPage().getParameters().put('caseId',cse.id);
+            
             caseDetail.assignCaseRecord();
+             
+            caseDetail.caseAttachments.add(attach);
+            caseDetail.uploadAttachment();
+            
+            caseDetail.deleteAttachId = attach.Id;
+            caseDetail.deleteAttachment();
+            
             System.assert(caseDetail.caseVisibleToUser=true); 
+             
+            caseDetail.showPopup();
+            caseDetail.closePopup();
+            
+           
             }            
     }
     
@@ -150,22 +240,37 @@ Public class CommunityContextControllerTest{
             conRecord.accountId = accRecord.id;
             conRecord.LastName = 'T';
             conRecord.Email = 'test@nxp.com';
+            conRecord.Community_Web_Country__c = 'Hagon' ;
             insert conRecord;
                 
             Contact conRecord1 = new Contact();
             conRecord1.accountId = accRecord.id;
             conRecord1.LastName = 'T';
             conRecord1.Email =userinfo.getUserEmail();
+            conRecord1.Community_Web_Country__c = 'Hagon' ;
             insert conRecord1;
+            
+            Entitlement entRecord = new Entitlement();
+            entRecord.Name = 'development';
+            entRecord.accountId = accRecord.id;
+            insert entRecord;
+              
+            Entitlement_Contact__c entconRecord = new Entitlement_Contact__c();
+            entconRecord.Entitlement__c= entRecord.id;
+            entconRecord.Contact__c=conRecord1.id;
+            insert entconRecord;
                 
             Case cse = new Case();
             cse.subject ='test';
             cse.contactid=conRecord1.id;
+            cse.EntitlementId=entRecord.id;
             cse.FeedItemId = NULL;
             insert cse;    
-                
+            
+            ApexPages.currentPage().getParameters().put('caseId',cse.id);    
             CommunityNXPCaseDetailController caseDetail = new CommunityNXPCaseDetailController();
-            pg.getParameters().put('caseId',cse.id );
+            //pg.getParameters().put('caseId',cse.id );
+            //ApexPages.currentPage().getParameters().put('caseId',cse.id); 
             caseDetail.assignCaseRecord();
             System.assert(caseDetail.caseVisibleToUser=true);     
             }            
@@ -190,12 +295,14 @@ Public class CommunityContextControllerTest{
             conRecord.accountId = accRecord.id;
             conRecord.LastName = 'T';
             conRecord.Email ='test@nxp.com';
+            conRecord.Community_Web_Country__c = 'Hagon' ;
             insert conRecord;
                 
             Contact conRecord1 = new Contact();
             conRecord1.accountId = accRecord.id;
             conRecord1.LastName = 'T';
             conRecord1.Email =userinfo.getUserEmail();
+            conRecord1.Community_Web_Country__c = 'Hagon' ;
             insert conRecord1;
             
             
@@ -216,9 +323,10 @@ Public class CommunityContextControllerTest{
             cse.FeedItemId = NULL;
             insert cse;  
             
-           
+            ApexPages.currentPage().getParameters().put('caseId',cse.id); 
             CommunityNXPCaseDetailController caseDetail = new CommunityNXPCaseDetailController();
-            pg.getParameters().put('caseId',cse.id );
+            //pg.getParameters().put('caseId',cse.id );
+            //ApexPages.currentPage().getParameters().put('caseId',cse.id);
             caseDetail.assignCaseRecord();
             
             System.assert(caseDetail.caseVisibleToUser=true); 
@@ -296,7 +404,7 @@ Public class CommunityContextControllerTest{
             controller.rejectEntitlement();
             controller.removeEntitlementContact();
             
-             ApexPages.currentPage().getParameters().put('entitlementId', contextController.developmentEntitlement.id);
+            ApexPages.currentPage().getParameters().put('entitlementId', contextController.developmentEntitlement.id);
            
             controller = new CommunityContextController( ); 
             
@@ -330,11 +438,13 @@ Public class CommunityContextControllerTest{
             conRecord.accountId = accRecord.id;
             conRecord.LastName = 'T';
             conRecord.Email = 'test@'+system.currentTimeMillis()+'.com';
+            conRecord.Community_Web_Country__c = 'Hagon' ;
             insert conRecord;
              Contact conRecord1 = new Contact();
             conRecord1.accountId = accRecord.id;
             conRecord1.LastName = 'T';
             conRecord1.Email = 'test@'+system.currentTimeMillis()+'.com';
+            conRecord1.Community_Web_Country__c ='Hagon' ;
             insert conRecord1;
             
             Profile p = [SELECT Id FROM Profile WHERE Name LIKE '%NXPCommunity Login User%' limit 1]; 

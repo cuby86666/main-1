@@ -22,38 +22,54 @@ Description : SIR SFDC374-calculate the contact service level for the account's 
 *******************************************************************************************/
 /*************************************************************************************************************
 @Modified By :   Harish Gowda N.
-@Modified Date:  22 May 2018
+@Modified Date:  22 May 2018 and on 20th aug 2018.
 @Description:    To Update User region of a contact based on the Community web country as part of SFDC-1611. 
+@Description:  on 20 aug Logic To update community web country based on the mailing country (3 letter code) and to update User Region based on the community web country full country name .  
 **************************************************************************************************************/
 public class ContactClass
 {
       //  private static String CASE_TSCOMMUNITY = 'TS_Community';
       //  private static String CASE_TECH_SUPPORT = 'Tech_Support'; 
        private static final String DEFAULT_REGION =  'Not Found';
+       private static final String Blank_REGION =  '';
        private static String SAP_REGION = 'South Asia Pacific';
        private static String GC_REGION  = 'Greater China';
        private static String JAPAN_REGION = 'Japan';
        private static String KOREA_REGION = 'Korea';
        private static String AMEC_REGION = 'Americas';
-       private static String EMEA_REGION= 'EMEA'; 
-       
-  public static void convertISONameToFullName(List<Contact> contacts)
+       private static String EMEA_REGION= 'EMEA';
+       private static List<Contact> contacts ;
+        
+              
+ public static void convertISONameToFullName(List<Contact> contacts )
     {
-        map<String,String> mapOdCodes= new map<String,String>(); 
+         system.debug ('1entered' + contacts.size());  
+         map<String,String> mapOdCodes= new map<String,String>(); 
         List<Hub_Foundation__c> allCodes =[select Alpha_2_Code__c,Alpha_3_Code__c,Country__c,Region__c from Hub_Foundation__c]; 
-    
+        system.debug ('2hubf' + allCodes.size());
         for(Hub_Foundation__c hc: allCodes)
         {
             mapOdCodes.put( hc.Alpha_3_Code__c ,hc.Country__c);
-        }   
+        }  
+        system.debug ('3alpha' + mapOdCodes); 
         for(contact ct : contacts)
         {
-        String fullCountryName = mapOdCodes.get(ct.Mailingcountry);
-        if(fullCountryName != null){
-            ct.Mailingcountry=fullCountryName;
+        if(ct.Mailingcountry != null){
+        String UpperCaseMailingCountry = ct.Mailingcountry.touppercase() ;
+         if( mapOdCodes.get(UpperCaseMailingCountry)!= null)
+         {
+            system.debug ('4mc' + ct.Mailingcountry) ;
+          //  String UpperCaseMailingCountry = ct.Mailingcountry.touppercase() ;
+            String fullCountryName = mapOdCodes.get(UpperCaseMailingCountry);
+            system.debug ('5upper' + UpperCaseMailingCountry) ;
+         if(fullCountryName != null ){
+            ct.Community_web_country__c=fullCountryName;
+            system.debug ('6cwc' + ct.Community_web_country__c) ;
         }
-        }  
-    } 
+      }
+     }
+   }
+  }   
            
            
 
@@ -220,9 +236,9 @@ public static void CSLIdentification(List<Contact> lstContactnew)
             
             if(lstRecordTypes.size() > 0)
             {
-                for (Hub_Foundation__c objRegion : [select Alpha_2_Code__c,Alpha_3_Code__c,Country__c,Region__c from Hub_Foundation__c Where Alpha_3_Code__c in :countries and RecordTypeId =: lstRecordTypes[0].Id ])
+                for (Hub_Foundation__c objRegion : [select Alpha_2_Code__c,Alpha_3_Code__c,Country__c,Region__c from Hub_Foundation__c Where Country__c in :countries and RecordTypeId =: lstRecordTypes[0].Id ])
                 {
-                    mapCountryToRegions.put(objRegion.Alpha_3_Code__c , objRegion.Region__c);
+                    mapCountryToRegions.put(objRegion.Country__c , objRegion.Region__c);
                 } 
             }      
         }
@@ -258,8 +274,9 @@ public static void CSLIdentification(List<Contact> lstContactnew)
                 if(strRegion != null){
                 objContactUpdate.User_Region__c = strRegion;
                 }
-                else{objContactUpdate.User_Region__c = DEFAULT_REGION;}
+                else{objContactUpdate.User_Region__c = Blank_REGION ;}
                 }            
         }  
-    }
+    } 
+    
 }

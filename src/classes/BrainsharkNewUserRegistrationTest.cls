@@ -5,6 +5,7 @@
 ********************************************************************************************/
 @isTest
 public class BrainsharkNewUserRegistrationTest{
+    
     @isTest
     public static void testBrainsharkNewUserRegistrationNoRequiredFields(){
         BrainsharkNewUserRegisterationController bnsk = new BrainsharkNewUserRegisterationController();
@@ -20,8 +21,10 @@ public class BrainsharkNewUserRegistrationTest{
         BrainsharkNewUserRegisterationController bnsk = new BrainsharkNewUserRegisterationController();
         System.assert(bnsk.Step1==true);
         System.assert(bnsk.Step2==false);
+        
+       
         //add values for new user registration
-        bnsk.user =  new New_User_Registeration__c();
+        bnsk.user =  new New_User_Registration__c();
         
         bnsk.user.First_Name__c='Test';
         bnsk.user.Last_Name__c='Brainshark';
@@ -39,6 +42,8 @@ public class BrainsharkNewUserRegistrationTest{
         bnsk.user.Anticipate_Creating_Content__c='No';
         bnsk.user.Are_You_On_Sales_Incentive_Plan__c='No';
         bnsk.user.Reason_for_Request__c='test@brainshark.com';
+        bnsk.user.Are_You_A_New_Hire__c='Yes';
+        
         bnsk.save();
         System.assert(bnsk.Step2==true);
         System.assert(bnsk.Step1==false);
@@ -50,7 +55,7 @@ public class BrainsharkNewUserRegistrationTest{
         System.assert(bnsk.Step1==true);
         System.assert(bnsk.Step2==false);
         //add values for new user registration
-        bnsk.user =  new New_User_Registeration__c();
+        bnsk.user =  new New_User_Registration__c();
         
         bnsk.user.First_Name__c='Test';
         bnsk.user.Last_Name__c='Brainshark';
@@ -68,6 +73,8 @@ public class BrainsharkNewUserRegistrationTest{
         bnsk.user.Anticipate_Creating_Content__c='No';
         bnsk.user.Are_You_On_Sales_Incentive_Plan__c='No';
         bnsk.user.Reason_for_Request__c='test@brainshark.com';
+        bnsk.user.Are_You_A_New_Hire__c='Yes';
+        
         bnsk.save();
         bnsk.backToStep1();
         System.assert(bnsk.Step1==true);
@@ -78,8 +85,10 @@ public class BrainsharkNewUserRegistrationTest{
         BrainsharkNewUserRegisterationController bnsk = new BrainsharkNewUserRegisterationController();
         System.assert(bnsk.Step1==true);
         System.assert(bnsk.Step2==false);
+
+       
         //add values for new user registration
-        bnsk.user =  new New_User_Registeration__c();
+        bnsk.user =  new New_User_Registration__c();
         
         bnsk.user.First_Name__c='Test';
         bnsk.user.Last_Name__c='Brainshark';
@@ -97,6 +106,8 @@ public class BrainsharkNewUserRegistrationTest{
         bnsk.user.Anticipate_Creating_Content__c='No';
         bnsk.user.Are_You_On_Sales_Incentive_Plan__c='No';
         bnsk.user.Reason_for_Request__c='test@brainshark.com';
+        bnsk.user.Are_You_A_New_Hire__c='Yes';
+
         bnsk.save();
         System.assert(bnsk.Step2==true);
         System.assert(bnsk.Step1==false);

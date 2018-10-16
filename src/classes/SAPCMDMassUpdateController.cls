@@ -24,7 +24,8 @@
 **********************************************************************************************/
 
 public class SAPCMDMassUpdateController {
-    
+
+/*    
     //private static final String CMD_REQUEST_SAP_MASS_UPDATE_RECORD_TYPE_ID = '012D0000000QmBTIA0';
         
     private final CMD_Request__c theRequest;
@@ -189,6 +190,7 @@ public SAPCMDMassUpdateController(ApexPages.StandardController stdController)
             WHERE CMD_Request__c = :theRequest.Id
         ];
         */
+/*        
         for( CMD_Request_SAP_Mass_Update_Detail__c theDetail : [SELECT  Id,Funloc__c,Legal_Name_New__c,Name_2_New__c,Name_3_New__c,Name_4_New__c,Street_New__c,Street_4_New__c,City_New__c,State_Province_New__c,Country_New__c,Zip_New__c,ZA_New__c,ZS_New__c  FROM CMD_Request_SAP_Mass_Update_Detail__c WHERE CMD_Request__c = :theRequest.Id]) 
         {
             FunlocWrapper theFunlocWrapper = new FunlocWrapper();
@@ -286,6 +288,7 @@ public void visibility(CMD_Request__c theCMDRequest)
             WHERE IsDeleted = FALSE
         ];*/
  /*************************************************************************************************************/
+/* 
         for( SAP_CMD__c theSAPCMD : [SELECT  Id,Name_1_Service_Provider__c,Name,RecordType.Name,HUB_Customer__c,FunLoc__c,Customer_FunLoc_Number__c,Account_Name__c,Legal_Name__c,Name_2__c,Name_3__c,Name_4__c,Street_1__c,Street_2__c,City__c,State_Province__c,Country__c,Zip__c FROM SAP_CMD__c WHERE IsDeleted = FALSE]) //modified as part of SIR 1114- Replaced the list allSAPCMDs by query
          {
             mapFunlocSAPCMD.put( theSAPCMD.Customer_FunLoc_Number__c , theSAPCMD );
@@ -314,6 +317,7 @@ public void visibility(CMD_Request__c theCMDRequest)
             WHERE IsDeleted = FALSE 
         ];*/
      /*****************************************************************************************************/   
+/*     
         Map<Id,Partner_Function__c> mapZAs = new Map<Id,Partner_Function__c>();
         Map<Id,Partner_Function__c> mapZIs = new Map<Id,Partner_Function__c>();
         Map<Id,Partner_Function__c> mapZSs = new Map<Id,Partner_Function__c>();
@@ -351,6 +355,7 @@ public void visibility(CMD_Request__c theCMDRequest)
         }            
     }
  */   
+/* 
     public List<SelectOption> getCountryOptions() {
         Schema.DescribeFieldResult fieldResult = SAP_CMD__c.Country__c.getDescribe();
         List<Schema.PicklistEntry> ple = fieldResult.getPicklistValues();
@@ -391,7 +396,7 @@ public void visibility(CMD_Request__c theCMDRequest)
         return theZSOptions;
     }
 *****/
-
+/*
     public List<SelectOption> getZAOptions() {
         Schema.DescribeFieldResult fieldResult = Partner_Function__c.Person_Name__c.getDescribe();
         List<Schema.PicklistEntry> ple = fieldResult.getPicklistValues();
@@ -423,6 +428,7 @@ public void visibility(CMD_Request__c theCMDRequest)
                 }
             }
         } */
+/*      
         return theZAOptions;
     }
 
@@ -459,6 +465,7 @@ public void visibility(CMD_Request__c theCMDRequest)
                 }
             }
         } */
+/*        
         return theZSOptions;
     }
 
@@ -1142,6 +1149,7 @@ public void visibility(CMD_Request__c theCMDRequest)
                          ApexPages.addmessage(new ApexPages.message(ApexPages.severity.INFO,'Funloc-'+SapCmdRecord.Customer_FunLoc_Number__c+': Name1(Service Provider) field can be filled only if the Customer is of type Service Provider.'));
                           
                       }*/
+/*                      
                 }
             
         if( detailsToBeUpdatedToSAPCMD.size()!=0)
@@ -1168,4 +1176,5 @@ public void visibility(CMD_Request__c theCMDRequest)
         // pageRef.setRedirect(true);
         //return pageRef;
     }
+    */
 }

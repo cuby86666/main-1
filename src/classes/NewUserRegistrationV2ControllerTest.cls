@@ -11,6 +11,11 @@
   Last Modified Date   : 16 Feb, 2017
   Description : Obsoleted BU 511 related test data
   
+  Last Modified By     : Naveen Nayak 
+  Last Modified Date   : 13 July, 2018
+  Description : Changing Custom Object name New_User_Registration__C
+        
+  
 */
 
 @isTest
@@ -35,10 +40,13 @@ private class NewUserRegistrationV2ControllerTest
     
     static testMethod void initTest() {
         setupCustomSettings();
-        New_User_Registeration__c user = new New_User_Registeration__c();
+         New_User_Registration__c user = new New_User_Registration__c();
+       
         ApexPages.StandardController stdController = new ApexPages.StandardController(user);
+        
         NewUserRegistrationV2Controller controller = new NewUserRegistrationV2Controller(stdController);
         controller.init();
+        
     }
     
     /*
@@ -49,73 +57,94 @@ private class NewUserRegistrationV2ControllerTest
     */
     static testMethod void regionTest() {
         setupCustomSettings();
-        New_User_Registeration__c user = new New_User_Registeration__c();
+         
+        New_User_Registration__c user = new New_User_Registration__c();
+        
         ApexPages.StandardController stdController = new ApexPages.StandardController(user);
+        
+        
         NewUserRegistrationV2Controller controller = new NewUserRegistrationV2Controller(stdController);
         controller.init();
         String test1 = 'EU;JP;';
         controller.LoadUserGroup(test1);
         controller.Save();
+        
     }
 
     static testMethod void BUTest() {
         setupCustomSettings();
-        New_User_Registeration__c user = new New_User_Registeration__c();
+         
+        New_User_Registration__c user = new New_User_Registration__c();
+        
         ApexPages.StandardController stdController = new ApexPages.StandardController(user);
+        
+       
         NewUserRegistrationV2Controller controller = new NewUserRegistrationV2Controller(stdController);
         controller.init();
         String test2 = '525 AUT;510 SnC;';
         controller.LoadUserGroup(test2);
         controller.Save();
+         
     }
 
     static testMethod void groupTest() {
         setupCustomSettings();
-        New_User_Registeration__c user = new New_User_Registeration__c();
+        New_User_Registration__c user = new New_User_Registration__c();
         ApexPages.StandardController stdController = new ApexPages.StandardController(user);
         NewUserRegistrationV2Controller controller = new NewUserRegistrationV2Controller(stdController);
         controller.init();
         String test3 = '525 AUT - KR;510 SnC - KR;525 AUT - GC;';
         controller.LoadUserGroup(test3);
         controller.Save();
+         
     }
 
     static testMethod void globalTest() {
         setupCustomSettings();
-        New_User_Registeration__c user = new New_User_Registeration__c();
+        New_User_Registration__c user = new New_User_Registration__c();
         ApexPages.StandardController stdController = new ApexPages.StandardController(user);
         NewUserRegistrationV2Controller controller = new NewUserRegistrationV2Controller(stdController);
         controller.init();
         String test1 = 'Global;';
         controller.LoadUserGroup(test1);
         controller.Save();
+        
     }
 
     static testMethod void saveErrorTest() {
         setupCustomSettings();
-        New_User_Registeration__c user = new New_User_Registeration__c();
+        New_User_Registration__c user = new New_User_Registration__c();
         ApexPages.StandardController stdController = new ApexPages.StandardController(user);
         NewUserRegistrationV2Controller controller = new NewUserRegistrationV2Controller(stdController);
         controller.init();
         controller.Save();
+         
     }
     
     static testMethod void getKeyTest() {
         setupCustomSettings();
-        New_User_Registeration__c user = new New_User_Registeration__c();
+        
+        New_User_Registration__c user = new New_User_Registration__c();
+        
         ApexPages.StandardController stdController = new ApexPages.StandardController(user);
+        
+       
         NewUserRegistrationV2Controller controller = new NewUserRegistrationV2Controller(stdController);
         controller.init();
+        
+
         List<NewUserRegistrationV2Controller.RegionSettings> lstRegionSettings = controller.lstRegionSettings;
         lstRegionSettings.get(0).getKey();
         List<NewUserRegistrationV2Controller.BUSettings> lstBUSettings = controller.lstBUSettings;
         lstBUSettings.get(0).getKey();
         lstBUSettings.get(0).lstGroups.get(0).getIdKey();
+                 
     }
     
     static testMethod void checkBoxDisabledTest() {
         setupCustomSettings();
-        New_User_Registeration__c user = new New_User_Registeration__c();
+        
+        New_User_Registration__c user = new New_User_Registration__c();
         user.First_Name__c = 'Test999';
         user.Last_Name__c = 'Test999';
         user.Email_Address__c = 'test999999999@nxp.com';
@@ -124,8 +153,13 @@ private class NewUserRegistrationV2ControllerTest
         user.Manager_Name__c = 'Test888 Test888';
         user.Manager_s_email__c = 'test88888888@nxp.com';
         insert user;
+        
+       
         ApexPages.StandardController stdController = new ApexPages.StandardController(user);
+        
+        
         NewUserRegistrationV2Controller controller = new NewUserRegistrationV2Controller(stdController);
         controller.init();
-    }
+        
+    } 
 }

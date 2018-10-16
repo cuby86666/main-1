@@ -14,23 +14,39 @@
 @Last Modified By     : Baji
 @Last Modified Date   : 16 Feb, 2017
 @Description : Obsoleted BU 511 related test data
+********************************************************************************************
+
+Last Modified By     : Naveen Nayak 
+Last Modified Date   : 13 July, 2018
+Description : Changing Custom Object name New_User_Registration__C
 ********************************************************************************************/
+/********************************************************************************************
+
+Last Modified By     : Harish Gowda 
+Last Modified Date   : 30 July, 2018
+Description : Improve the code coverage for New user registration trigger Handler class.
+********************************************************************************************/
+
 @isTest
 public class NewUserRegistrationTest{
 
- 
-public static New_User_Registeration__c NewRequest=new New_User_Registeration__c();
-public static list<New_User_Registeration__c> listNewRequest=new list<New_User_Registeration__c>();
+public static New_User_Registration__c NewRequest=new New_User_Registration__c();
+public static list<New_User_Registration__c> listNewRequest=new list<New_User_Registration__c>();
 public static User testUser; 
 public static map<id,string> mapApprovalResult=new map<id,string>();
-Private Static Final string TYPE_New_User_Reg='New_User_Registeration';
-Private Static Final String TYPE_Apttus_New_User_Reg='Apttus_New_User_Registeration';
+Private Static Final string TYPE_New_User_Reg='New_User_Registration';
+Private Static Final String TYPE_Apttus_New_User_Reg='Apttus_New_User_Registration';
+Private Static Final String TYPE_Brainshark_New_User_Reg='Brainshark_New_User_Registration';
 Public static Id newUserReg_Id;
 Public static Id apptusNewUserReg_Id;
 Public static pageReference pageRef{get;set;}
-//To create test user   
+
+//To create test user 
+
 public static user createNewUser()
 {
+    
+    
    Profile theProfile = [Select p.Name, p.Id From Profile p where Name = 'NXP Sales Cloud User'];
    testUser = new User
         (
@@ -46,18 +62,20 @@ public static user createNewUser()
          username='test@nxp.com'+'.test',
          Signed_Aria__c=True
          );
+         
+        
         return testUser;
-    
-
 }
+
+
 //To create test record for newUserRegistration object.
-public static New_User_Registeration__c createNewUserRegistration(string catagory,id recordTypeId,id testUserId)
+public static New_User_Registration__c createNewUserRegistration(string catagory,id recordTypeId,id testUserId)
 {
 
-    NewRequest=new New_User_Registeration__c();
+    NewRequest=new New_User_Registration__c();
     NewRequest.First_Name__c='Test';
     NewRequest.Last_Name__c='test';
-    NewRequest.Email_Address__c='shridevi.badiger@nxp.com';
+    NewRequest.Email_Address__c='harish.gowda@nxp.com';
     NewRequest.Region__c='EMEA';
     NewRequest.Country__c='India';
     NewRequest.Job_Title__c='test';
@@ -76,7 +94,9 @@ public static New_User_Registeration__c createNewUserRegistration(string catagor
     return NewRequest;
 }
 
+ 
 // to create test Approval process which in turn creates process instances.
+
 public static void createApprovalProcess(id registrationRequestId)
 {
      Approval.ProcessSubmitRequest request = new Approval.ProcessSubmitRequest(); 
@@ -95,11 +115,15 @@ public static void createApprovalProcess(id registrationRequestId)
      Approval.ProcessResult result2 = Approval.process(request2 ); 
      // Verify the results
      system.debug(':Result Status::'+result2); 
-     listNewRequest=[select Status__c from New_User_Registeration__c where id in: listNewRequest];
+     listNewRequest=[select Status__c from New_User_Registration__c where id in: listNewRequest];
      system.debug(':request::'+listNewRequest); 
+     
     //return result2.getInstanceStatus();
+    
     mapApprovalResult.put(result2.getEntityId(),result2.getInstanceStatus());
 }
+
+
 
 @isTest 
 public static void newRequestRejectionEmailTest()
@@ -107,30 +131,39 @@ public static void newRequestRejectionEmailTest()
       testUser=createNewUser();
       insert testUser;
       List<recordType> listRecordType=[Select Id, Name,DeveloperName From RecordType 
-                        Where IsActive=true AND (SobjectType = 'New_User_Registeration__c' and 
-                        (DeveloperName =:TYPE_New_User_Reg OR DeveloperName =:TYPE_Apttus_New_User_Reg))];
+                        Where IsActive=true AND (SobjectType = 'New_User_Registration__c' and 
+                        (DeveloperName =:TYPE_New_User_Reg OR DeveloperName =:TYPE_Apttus_New_User_Reg OR DeveloperName =:TYPE_Brainshark_New_User_Reg ))];
   
       System.debug('listRecordType::'+listRecordType);
-      listNewRequest.add(createNewUserRegistration('Box',listRecordType[0].id,testUser.id));
-      listNewRequest.add(createNewUserRegistration('Brainshark',listRecordType[1].id,testUser.id));
+      listNewRequest.add(createNewUserRegistration('Salesforce',listRecordType[0].id,testUser.id));
+      listNewRequest.add(createNewUserRegistration('Apptus',listRecordType[1].id,testUser.id));
+      listNewRequest.add(createNewUserRegistration('Brainshark',listRecordType[2].id,testUser.id));
       insert listNewRequest;
+      list<Messaging.SingleEmailMessage> mails = new list<Messaging.SingleEmailMessage>();
       Test.startTest();
-      for(New_User_Registeration__c request:listNewRequest)
+      for(New_User_Registration__c request:listNewRequest)
         createApprovalProcess(request.id);
 
-      for(New_User_Registeration__c request:listNewRequest)
+      for(New_User_Registration__c request:listNewRequest)
       {
         System.assert(mapApprovalResult.get(request.id)==request.Status__c); 
         System.debug('id:'+request.id+'---result:'+mapApprovalResult.get(request.id)+'---status:'+request.Status__c);
+         Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
+         mail.setSubject( 'Brainshark New user registration request has been rejected.' );
+         mail.setHtmlBody('test email Sent');
+         mails.add(mail);
       }
       Test.stopTest();
+      
   }
+  
  //Added by shridevi- SIR 848
-public static String processRequest(New_User_Registeration__c request)
+ 
+public static String processRequest(New_User_Registration__c request)
 {
 
     date trainingDate=Date.newInstance(2010, 07, 15);
-    NewUserRegisterationController newUser=new NewUserRegisterationController();
+    NewUserRegistrationController newUser=new NewUserRegistrationController();
     newUser.user=request;
     newUser.user.Available_Date_for_Training__c=trainingDate;
     // newUser.user.Are_you_a_DW_Approver__c='No';
@@ -145,17 +178,20 @@ public static String processRequest(New_User_Registeration__c request)
         return pageRef.getUrl();
 
 }
+
+
 //Added by Shridevi- SIR 848- Separating the Box,Brainshark,GoToMeeting,Training App registartion pages.
+
 @isTest 
 public static void newAUserRegistrationControllerTest()
 {
-    NewUserRegisterationController registration=new NewUserRegisterationController();
+    NewUserRegistrationController registration=new NewUserRegistrationController();
     testUser=createNewUser();
     insert testUser;
     String stringUrl;
-    listNewRequest=new list<New_User_Registeration__c>();
+    listNewRequest=new list<New_User_Registration__c>();
     list<recordType> listRecordType=[Select Id, Name,DeveloperName From RecordType 
-                                    Where IsActive=true AND (SobjectType = 'New_User_Registeration__c' and 
+                                    Where IsActive=true AND (SobjectType = 'New_User_Registration__c' and 
                                     (DeveloperName =:TYPE_New_User_Reg OR DeveloperName =:TYPE_Apttus_New_User_Reg))];
     System.debug('listRecordType::'+listRecordType);
     listNewRequest.add(createNewUserRegistration('Box',listRecordType[1].id,testUser.id));
@@ -190,8 +226,7 @@ public static void newAUserRegistrationControllerTest()
     System.assert(registration.step1==false);
     System.assert(registration.step2==true);
          
-      
-    for(New_User_Registeration__c request:listNewRequest)
+    for(New_User_Registration__c request:listNewRequest)
     {
     
         System.debug('test Owner id::'+request.ownerId);
@@ -209,13 +244,18 @@ public static void newAUserRegistrationControllerTest()
           System.assert(string.valueOf(stringUrl)=='/newuser/NewUserRegisteration?userRequestparam=GoToMeeting');
          
          }
+         
+        
+         
        /* if(request.RequestforAccountin__c=='Training App')
           {
             System.assert(string.valueOf(stringUrl)=='/newuser/NewUserRegisteration?userRequestparam=Training+App');
           
           }*/
-    }
+          
+        
+  }   
  
-}
+} 
 
 }

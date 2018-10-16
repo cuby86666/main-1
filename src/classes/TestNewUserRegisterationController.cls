@@ -28,7 +28,7 @@ Public class TestNewUserRegisterationController
    @isTest
     public static void testClass()
     {
-        NewUserRegisterationController nurc = new NewUserRegisterationController();
+        NewUserRegistrationController nurc = new NewUserRegistrationController();
         nurc.user.First_Name__c = 'test';
         nurc.user.Last_Name__c = 'test';
         nurc.user.Email_Address__c = 'test@test.com';
@@ -46,7 +46,7 @@ Public class TestNewUserRegisterationController
         nurc.goToStep2();        
         System.assert(Apexpages.hasMessages(ApexPages.severity.Error));
         List<Apexpages.Message> lstMessages = ApexPages.getMessages();
-        System.assert(lstMessages[0].getSummary() == NewUserRegisterationController.NO_APP_SELECTED_ERROR);
+        System.assert(lstMessages[0].getSummary() == NewUserRegistrationController.NO_APP_SELECTED_ERROR);
         
         nurc.user.RequestforAccountin__c = 'Box.Net';
         nurc.selectApps();        

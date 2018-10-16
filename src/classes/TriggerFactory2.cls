@@ -4,6 +4,8 @@ public class TriggerFactory2
         Call this method from your trigger, passing in an instance of a trigger handler which implements ITriggerHandler.
         This method will fire the appropriate methods on the handler depending on the trigger context.
     */
+    
+   
      public static void createHandler(Schema.sObjectType soType)
     {
 
@@ -57,14 +59,16 @@ public class TriggerFactory2
         }
     }
      private static ITrigger getHandler(Schema.sObjectType soType)
-    {
+    { 
+      
 
-        if (soType == New_User_Registeration__c.sObjectType)
+        if (soType == New_User_Registration__c.sObjectType)
         {
             return new NewUserRegistrationTriggerHandler();
         }
          
         return null;
-    }
+   } 
+   
 
 }

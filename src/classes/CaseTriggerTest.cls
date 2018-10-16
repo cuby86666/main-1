@@ -19,7 +19,12 @@ Description :      Test Class for triggers on Case object
 @Modified Date:     27 jul 2016
 @Description:       Entitlemet Based Routing
 **********************************************************************************************************/
-
+/***************************************************************************************************
+@Modified By :      Gunjan Singh
+@Modified Date:     11 Sep 2018
+@Description:       SFDC-2078 Web-to-Case form without Login - Enhancement (Creating contact along with case)
+                    Created method createContact() to create Contact, along with Case if contact doesnot exist
+**********************************************************************************************************/
 @isTest
 private class CaseTriggerTest 
 {
@@ -243,7 +248,7 @@ private class CaseTriggerTest
                               Twitter__c = 'test_twt', State_Province__c = 'test_state', Product_Type_Number__c = 'test',
                               Subject = 'test_subject', My_Question_is_Related__c = 'test', Description = 'test_subject',
                               Product_application__c = 'test', Expected_annual_unit_volume__c = 'test',
-                              Project_Stage__c = 'Development',Web_Region__c = 'Test_region',  origin = 'Web',Case_Owner_Name__c='test',SuppliedEmail = 'test@test.com')); 
+                              Project_Stage__c = 'Development',Web_Region__c = 'Test_region',  origin = 'Web',Case_Owner_Name__c='test',Web_First_Name__c='Test',Web_Last_Name__c='Test',SuppliedEmail = 'test@test.com')); 
         }
         
         if(lstCases.size() > 0)
@@ -384,7 +389,7 @@ private class CaseTriggerTest
                                 Company__c = 'test_Company', Linkedin__c = 'test_lnk', Community_Web_Country__c = 'test_country',
                                 Twitter__c = 'test_twt', State_Province__c = 'test_state', Product_Type_Number__c = 'test',
                                 Subject = 'test_subject', My_Question_is_Related__c = 'test', Description = 'test_subject',
-                                Product_application__c = 'test', Expected_annual_unit_volume__c = 'test',
+                                Product_application__c = 'test', Web_First_Name__c='Test',Web_Last_Name__c='Test', Expected_annual_unit_volume__c = 'test',
                                 Project_Stage__c = 'Development', Web_Region__c = 'Test_region', origin = 'Self Service Portal'));
         }
         
@@ -522,7 +527,7 @@ private class CaseTriggerTest
                                 Company__c = 'Parent'+i, Linkedin__c = 'test_lnk', Community_Web_Country__c = 'test_country',
                                 Twitter__c = 'test_twt', State_Province__c = 'test_state', Product_Type_Number__c = 'test',
                                 Subject = 'test_subject', My_Question_is_Related__c = 'test', Description = 'test_subject',
-                                Product_application__c = 'test', Expected_annual_unit_volume__c = 'test',
+                                Product_application__c = 'test', Expected_annual_unit_volume__c = 'test', Web_First_Name__c='Test', Web_Last_Name__c='Test',
                                 Project_Stage__c = 'Development', Web_Region__c = 'Test_region', origin = 'Web',SuppliedEmail = 'test@test.com'));
         }
         
@@ -647,7 +652,7 @@ private class CaseTriggerTest
                               email__c = 'test'+i+'@prakhartest'+i+'.com', JobTitle__c = 'Other', Facebook__c = 'test_fb',
                               Company__c = 'test_Company', Linkedin__c = 'test_lnk', Community_Web_Country__c = 'test_country',
                               Twitter__c = 'test_twt', State_Province__c = 'test_state', Product_Type_Number__c = 'Type'+i,
-                              Subject = 'test_subject', My_Question_is_Related__c = 'test', Description = 'test_subject',
+                              Subject = 'test_subject', My_Question_is_Related__c = 'test', Description = 'test_subject',Web_First_Name__c='Test', Web_Last_Name__c='Test',
                               Product_application__c = 'test', Expected_annual_unit_volume__c = 'test', Web_Country__c = 'America',
                               Project_Stage__c = 'Development', Web_Region__c = 'Test_region'+i, origin = 'Self Service Portal',MAG__c = 'MAG1'));
         }
@@ -712,6 +717,8 @@ private class CaseTriggerTest
         
           Account objParentAccount = createParentAccount();
           insert objParentAccount;
+          Account objNxpCommunityAccount = createNxpCommunityAccountRecord();
+          insert objNxpCommunityAccount;
           system.assert(objParentAccount.id!=null);
           System.runAs(new User(Id = UserInfo.getUserId()))
           {
@@ -728,7 +735,7 @@ private class CaseTriggerTest
                               Company__c = 'test_Company', Linkedin__c = 'test_lnk', Community_Web_Country__c = 'test_country',
                               Twitter__c = 'test_twt', State_Province__c = 'test_state', Product_Type_Number__c = 'test',
                               Subject = 'test_subject', My_Question_is_Related__c = 'test', Description = 'test_subject',
-                              Product_application__c = 'test', Expected_annual_unit_volume__c = 'test',
+                              Product_application__c = 'test', Expected_annual_unit_volume__c = 'test', Web_First_Name__c='Test',Web_Last_Name__c='Test',
                               Project_Stage__c = 'Development', Web_Region__c = 'Test_region',  origin = 'Self Service Portal',Case_Owner_Name__c='test', EntitlementId=objEntitlement.id ); 
  
                 Insert objCase;
@@ -772,6 +779,8 @@ private class CaseTriggerTest
         
           Account objParentAccount = createParentAccount();
           insert objParentAccount;
+          Account objNxpCommunityAccount = createNxpCommunityAccountRecord();
+          insert objNxpCommunityAccount;
           system.assert(objParentAccount.id!=null);
           System.runAs(new User(Id = UserInfo.getUserId()))
           {
@@ -790,7 +799,7 @@ private class CaseTriggerTest
           Test.StartTest();
           Case objCase = new Case();
                 objCase= new Case(RecordTypeID = tsCommunity.Id, Status= 'New', Priority = 'Medium', 
-                              Product_Category__c = 'RF', Product_Sub__c = 'Mixers', 
+                              Product_Category__c = 'RF', Product_Sub__c = 'Mixers', Web_First_Name__c='Test', Web_Last_Name__c='Test', 
                               email__c = 'test1@test.com', JobTitle__c = 'Other', Facebook__c = 'test_fb',
                               Company__c = 'test_Company', Linkedin__c = 'test_lnk', Community_Web_Country__c = 'test_country',
                               Twitter__c = 'test_twt', State_Province__c = 'test_state', Product_Type_Number__c = 'test',
@@ -837,6 +846,8 @@ private class CaseTriggerTest
         
           Account objParentAccount = createParentAccount();
           insert objParentAccount;
+          Account objNxpCommunityAccount = createNxpCommunityAccountRecord();
+          insert objNxpCommunityAccount;
           system.assert(objParentAccount.id!=null);
           System.runAs(new User(Id = UserInfo.getUserId()))
           {
@@ -845,7 +856,7 @@ private class CaseTriggerTest
           Test.StartTest();
           Case objCase = new Case();
                 objCase= new Case(RecordTypeID = tsCommunity.Id, Status= 'New', Priority = 'Medium', 
-                              Product_Category__c = 'RF', Product_Sub__c = 'Mixers', 
+                              Product_Category__c = 'RF', Product_Sub__c = 'Mixers', Web_First_Name__c='Test', Web_Last_Name__c='Test',
                               email__c = 'test1@test.com', JobTitle__c = 'Other', Facebook__c = 'test_fb',
                               Company__c = 'test_Company', Linkedin__c = 'test_lnk', Community_Web_Country__c = 'test_country',
                               Twitter__c = 'test_twt', State_Province__c = 'test_state', Product_Type_Number__c = 'test',
@@ -892,6 +903,8 @@ private class CaseTriggerTest
         
           Account objParentAccount = createParentAccount();
           insert objParentAccount;
+          Account objNxpCommunityAccount = createNxpCommunityAccountRecord();
+          insert objNxpCommunityAccount;
           system.assert(objParentAccount.id!=null);
           System.runAs(new User(Id = UserInfo.getUserId()))
           {
@@ -900,7 +913,7 @@ private class CaseTriggerTest
          Test.StartTest();
           Case objCase = new Case();
                 objCase= new Case(RecordTypeID = tsCommunity.Id, Status= 'New', Priority = 'Medium', 
-                              Product_Category__c = 'RF', Product_Sub__c = 'Mixers', 
+                              Product_Category__c = 'RF', Product_Sub__c = 'Mixers', Web_First_Name__c='Test',Web_Last_Name__c='Test',
                               email__c = 'test1@test.com', JobTitle__c = 'Other', Facebook__c = 'test_fb',
                               Company__c = 'test_Company', Linkedin__c = 'test_lnk', Community_Web_Country__c = 'test_country',
                               Twitter__c = 'test_twt', State_Province__c = 'test_state', Product_Type_Number__c = 'test',
@@ -965,7 +978,11 @@ private class CaseTriggerTest
     public static list<Entitlement> createEntitlements()
     {
         Account objParentAccount = createParentAccount();
-          insert objParentAccount;
+        insert objParentAccount;
+        
+        Account objNxpCommunityAccount = createNxpCommunityAccountRecord();
+        insert objNxpCommunityAccount;
+        
         list<Entitlement> listEntitlement=new list<Entitlement>();
         listEntitlement.add(new Entitlement(AccountId=objParentAccount.id, Name='testingname1', Startdate=system.today(),Type='Free',Entitlement_Sub_Type__c='development project',Priority__c='critical'));
         listEntitlement.add(new Entitlement(AccountId=objParentAccount.id, Name='testingname2', Startdate=system.today(),Type='Free',Entitlement_Sub_Type__c='development project',Priority__c='medium'));
@@ -979,7 +996,10 @@ private class CaseTriggerTest
     public static list<Case_priority_Criteria__C> createCasePriorityCriteria()
     {
         Account objParentAccount = createParentAccount();
-          insert objParentAccount;
+        insert objParentAccount;
+        
+        Account objNxpCommunityAccount = createNxpCommunityAccountRecord();
+        insert objNxpCommunityAccount;
         list<Case_priority_Criteria__C> listCPC=new list<Case_priority_Criteria__C>();
         listCPC.add(new Case_priority_Criteria__C(Object__c='Case', Field__c='Priority',Field_Value__c='High',Score__c=400));
         listCPC.add(new Case_priority_Criteria__C(Object__c='Entitlement', Field__c='Type',Field_Value__c='Free',Score__c=500));
@@ -1007,6 +1027,10 @@ private class CaseTriggerTest
                                              Region__c='TestRegion', Sales_Area__c ='TestArea', Industry_Segment__c = 'TestSegment', 
                                              Sub_Segment__c='TestSubSegment', Country__c = 'TestCountry');
            insert childAcc;
+           
+           Account objNxpCommunityAccount = createNxpCommunityAccountRecord();
+           insert objNxpCommunityAccount;
+           
            contact testContact=new Contact(AccountID=childAcc.Id, FirstName = 'test1', LastName = 'test',
                                         Title = 'title', Phone = '8123978919', email = 'test@test.com'); 
         
@@ -1026,18 +1050,18 @@ private class CaseTriggerTest
         System.debug(listEntitlement);
            list<case> listCases=new list<case>();
            listCases.add(new case(RecordTypeID = tsCommunity.Id,contactId=testContact.id,EntitlementId=listEntitlement[0].id,Status= 'New', Priority = 'Medium',Product__c='Discretes and Logic',
-                                   Product_Category__c = 'Bipolar transistors', Product_Sub__c = 'General purpose bipolar transistors', Subject = 'test_subject',Description = 'test_subject',Web_Region__c = 'Test_region',  origin = 'Self Service Portal'));
+                                   Product_Category__c = 'Bipolar transistors',Web_First_Name__c='Test',Web_Last_Name__c='Test',SuppliedEmail = 'test@test.com', Product_Sub__c = 'General purpose bipolar transistors', Subject = 'test_subject',Description = 'test_subject',Web_Region__c = 'Test_region',  origin = 'Self Service Portal'));
            listCases.add(new case(RecordTypeID = tsCommunity.Id,contactId=testContact.id,EntitlementId=listEntitlement[1].id,Status= 'New', Priority = 'High',Product__c='Audio and Media Processing',
-                                   Product_Category__c = 'Media processors', Product_Sub__c = 'Digital radio processors.', Subject = 'test_subject',Description = 'test_subject',Web_Region__c = 'Test_region',  origin = 'Self Service Portal'));
+                                   Product_Category__c = 'Media processors', Web_First_Name__c='Test',Web_Last_Name__c='Test',SuppliedEmail = 'test@test.com',Product_Sub__c = 'Digital radio processors.', Subject = 'test_subject',Description = 'test_subject',Web_Region__c = 'Test_region',  origin = 'Self Service Portal'));
            listCases.add(new case(RecordTypeID = tsCommunity.Id,Internal_Priority__c='Low',contactId=testContact.id,EntitlementId=listEntitlement[2].id, Status= 'Pending Customer Reply', Priority = 'Low',Product__c='Audio and Media Processing',
-                                   Product_Category__c = 'Media processors', Product_Sub__c = '',My_Question_is_Related__c='test', Contact_Title__c='test',Web_Country__c='United States of America',Subject = 'test_subject',Description = 'test_subject',Web_Region__c = 'Test_region',  origin = 'Self Service Portal'));
+                                   Product_Category__c = 'Media processors', Product_Sub__c = '',My_Question_is_Related__c='test', Web_First_Name__c='Test',Web_Last_Name__c='Test',SuppliedEmail = 'test@test.com',Contact_Title__c='test',Web_Country__c='United States of America',Subject = 'test_subject',Description = 'test_subject',Web_Region__c = 'Test_region',  origin = 'Self Service Portal'));
                
            listCases.add(new case(RecordTypeID = tsCommunity.Id, Status= 'New', Priority = 'high', 
-                                  Subject = 'test_subject',Description = 'test_subject',Web_Region__c = 'Test_region',  origin = 'Self Service Portal'));
+                                  Subject = 'test_subject',Web_First_Name__c='Test',Web_Last_Name__c='Test',SuppliedEmail = 'test@test.com',Description = 'test_subject',Web_Region__c = 'Test_region',  origin = 'Self Service Portal'));
            listCases.add(new case(RecordTypeID = tsCommunity.Id, Status= 'New', Priority = 'high', EntitlementId=listEntitlement[4].id,
-                                  Subject = 'test_subject',Description = 'test_subject',Web_Region__c = 'Test_region',  origin = 'Self Service Portal'));
+                                  Subject = 'test_subject',Web_First_Name__c='Test',Web_Last_Name__c='Test',SuppliedEmail = 'test@test.com',Description = 'test_subject',Web_Region__c = 'Test_region',  origin = 'Self Service Portal'));
                
-           listCases.add(new case(RecordTypeID = tsCommunity.Id,Status= 'Pending Customer Reply', Priority = 'Medium',
+           listCases.add(new case(RecordTypeID = tsCommunity.Id,Status= 'Pending Customer Reply', Priority = 'Medium',Web_First_Name__c='Test',Web_Last_Name__c='Test',SuppliedEmail = 'test@test.com',
                                    Subject = 'test_subject',Description = 'CONTEXT::'+listEntitlement[4].Entitlement_Pattern__c,Web_Region__c = 'Test_region',  origin = 'Forum',Product__c='Audio and Media Processing',
                                    Product_Category__c = 'Media processors', Product_Sub__c = 'Digital radio processors.'));
            
@@ -1166,7 +1190,7 @@ private class CaseTriggerTest
         For(integer i=1; i< 5; i++)
         {
            lstCases.add(new Case(RecordTypeID = tsCommunity.Id,contactId=lstContacts[0].id, Status= 'New', Priority = 'Medium', 
-                              Product_Category__c = 'RF', Product_Sub__c = 'Mixers', 
+                              Product_Category__c = 'RF', Product_Sub__c = 'Mixers',Web_First_Name__c='Test',Web_Last_Name__c='Test', 
                               email__c = 'test'+i+'@test.com', JobTitle__c = 'Other', Facebook__c = 'test_fb',
                               Company__c = 'test_Company', Linkedin__c = 'test_lnk', Community_Web_Country__c = 'test_country',
                               Twitter__c = 'test_twt', State_Province__c = 'test_state', Product_Type_Number__c = 'test',
@@ -1198,6 +1222,8 @@ private class CaseTriggerTest
           insert objParentAccount;
           system.assert(objParentAccount.id!=null);
           
+          Account objNxpCommunityAccount = createNxpCommunityAccountRecord();
+          insert objNxpCommunityAccount;
           
           Entitlement objEntitlement = new Entitlement(AccountId=objParentAccount.id, Name='testingname',Route_To_Case_Owner__c= null, Route_to_Assigned_to__c=null,Used_number_of_Hours__c=10,Total_Number_of_Hours__c=20,Remaining_Hours__c=10, Startdate=system.today());
           insert objEntitlement;
@@ -1206,7 +1232,7 @@ private class CaseTriggerTest
           Test.StartTest();
           Case objCase = new Case();
                 objCase= new Case(RecordTypeID = tsCommunity.Id, Status= 'New', Priority = 'Medium', 
-                              Product_Category__c = 'RF', Product_Sub__c = 'Mixers', 
+                              Product_Category__c = 'RF', Product_Sub__c = 'Mixers', Web_First_Name__c='Test',Web_Last_Name__c='Test',
                               email__c = 'test1@test.com', JobTitle__c = 'Other', Facebook__c = 'test_fb',
                               Company__c = 'test_Company', Linkedin__c = 'test_lnk', Community_Web_Country__c = 'test_country',
                               Twitter__c = 'test_twt', State_Province__c = 'test_state', Product_Type_Number__c = 'test',
@@ -1242,7 +1268,9 @@ private class CaseTriggerTest
           insert objParentAccount;
           system.assert(objParentAccount.id!=null);
           
-          
+           Account objNxpCommunityAccount = createNxpCommunityAccountRecord();
+           insert objNxpCommunityAccount;
+           
           Entitlement objEntitlement = new Entitlement(AccountId=objParentAccount.id,Used_number_of_Hours__c=null, Name='testingname',Route_To_Case_Owner__c= null, Route_to_Assigned_to__c=null,Total_Number_of_Hours__c=20,Remaining_Hours__c=10, Startdate=system.today());
           insert objEntitlement;
 
@@ -1250,7 +1278,7 @@ private class CaseTriggerTest
           Test.StartTest();
           Case objCase = new Case();
                 objCase= new Case(RecordTypeID = tsCommunity.Id, Status= 'New', Priority = 'Medium', 
-                              Product_Category__c = 'RF', Product_Sub__c = 'Mixers', 
+                              Product_Category__c = 'RF', Product_Sub__c = 'Mixers', Web_First_Name__c='Test',Web_Last_Name__c='Test',
                               email__c = 'test1@test.com', JobTitle__c = 'Other', Facebook__c = 'test_fb',
                               Company__c = 'test_Company', Linkedin__c = 'test_lnk', Community_Web_Country__c = 'test_country',
                               Twitter__c = 'test_twt', State_Province__c = 'test_state', Product_Type_Number__c = 'test',

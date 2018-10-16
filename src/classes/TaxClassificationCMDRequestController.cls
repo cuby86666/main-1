@@ -133,6 +133,7 @@ public with sharing class TaxClassificationCMDRequestController
                     lstTaxClassifications.add(new Tax_Classification__c(CMD_Request__c = objCMDRequest.Id, Country__c = 'HU - Hungary', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
                     lstTaxClassifications.add(new Tax_Classification__c(CMD_Request__c = objCMDRequest.Id, Country__c = 'ID - Indonesia', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
                     lstTaxClassifications.add(new Tax_Classification__c(CMD_Request__c = objCMDRequest.Id, Country__c = 'IE - Ireland', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
+                    lstTaxClassifications.add(new Tax_Classification__c(CMD_Request__c = objCMDRequest.Id, Country__c = 'IN - India', Tax_Category__c = 'JOSG', Tax_Classification__c = '1'));
                     lstTaxClassifications.add(new Tax_Classification__c(CMD_Request__c = objCMDRequest.Id, Country__c = 'IN - India', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
                     lstTaxClassifications.add(new Tax_Classification__c(CMD_Request__c = objCMDRequest.Id, Country__c = 'IT - Italy', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
                     lstTaxClassifications.add(new Tax_Classification__c(CMD_Request__c = objCMDRequest.Id, Country__c = 'JP - Japan', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
@@ -234,7 +235,8 @@ public with sharing class TaxClassificationCMDRequestController
                 }    
                 //Tax Classifcation for Sales Org US 63
                 else if((objCMDRequest.Sales_Organisation__c != null || objCMDRequest.Sales_Organisation__c == '') && objCMDRequest.Sales_Organisation__c.trim() == SALES_ORG_US63)
-                {                  
+                {   
+                    lstTaxClassifications.add(new Tax_Classification__c(CMD_Request__c = objCMDRequest.Id, Country__c = 'IN - India', Tax_Category__c = 'JOSG', Tax_Classification__c = '1'));
                     lstTaxClassifications.add(new Tax_Classification__c(CMD_Request__c = objCMDRequest.Id, Country__c = 'IN - India', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
                     lstTaxClassifications.add(new Tax_Classification__c(CMD_Request__c = objCMDRequest.Id, Country__c = 'US - USA', Tax_Category__c = 'UTXJ', Tax_Classification__c = '1'));
                 }
@@ -268,6 +270,7 @@ public with sharing class TaxClassificationCMDRequestController
                 //Tax Classifcation for Sales Org TW61
                 else if((objCMDRequest.Sales_Organisation__c != null || objCMDRequest.Sales_Organisation__c == '') && objCMDRequest.Sales_Organisation__c.trim() == SALES_ORG_TW61)
                 {     
+                   
                     lstTaxClassifications.add(new Tax_Classification__c(CMD_Request__c = objCMDRequest.Id, Country__c = 'TW - Taiwan', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
                 }
                 /***1606 Release SIR 915 - END***/
@@ -307,6 +310,7 @@ public with sharing class TaxClassificationCMDRequestController
                 }
                 else if((objCMDRequest.Sales_Organisation__c != null || objCMDRequest.Sales_Organisation__c == '') && objCMDRequest.Sales_Organisation__c.trim() == SALES_ORG_IN61)
                  {
+                    lstTaxClassifications.add(new Tax_Classification__c(CMD_Request__c = objCMDRequest.Id, Country__c = 'IN - India', Tax_Category__c = 'JOSG', Tax_Classification__c = '1')); 
                     lstTaxClassifications.add(new Tax_Classification__c(CMD_Request__c = objCMDRequest.Id, Country__c = 'IN - India', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
                  }
                 else if((objCMDRequest.Sales_Organisation__c != null || objCMDRequest.Sales_Organisation__c == '') && objCMDRequest.Sales_Organisation__c.trim() == SALES_ORG_MX61)
@@ -323,9 +327,11 @@ public with sharing class TaxClassificationCMDRequestController
                 else if((objCMDRequest.Sales_Organisation__c != null || objCMDRequest.Sales_Organisation__c == '') && (objCMDRequest.Sales_Organisation__c.trim() == SALES_ORG_NL61 ))
                 {     
                     lstTaxClassifications.add(new Tax_Classification__c(CMD_Request__c = objCMDRequest.Id, Country__c = 'CN - China', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
+                    lstTaxClassifications.add(new Tax_Classification__c(CMD_Request__c = objCMDRequest.Id, Country__c = 'KR - South Korea', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
                     lstTaxClassifications.add(new Tax_Classification__c(CMD_Request__c = objCMDRequest.Id, Country__c = 'NL - Netherlands', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
                     lstTaxClassifications.add(new Tax_Classification__c(CMD_Request__c = objCMDRequest.Id, Country__c = 'NL - Netherlands', Tax_Category__c = 'ZWRC', Tax_Classification__c = '1'));
-                    lstTaxClassifications.add(new Tax_Classification__c(CMD_Request__c = objCMDRequest.Id, Country__c = 'PH - Philippines', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));      
+                    lstTaxClassifications.add(new Tax_Classification__c(CMD_Request__c = objCMDRequest.Id, Country__c = 'PH - Philippines', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
+                    
                 }              
                 else if((objCMDRequest.Sales_Organisation__c != null || objCMDRequest.Sales_Organisation__c == '') && (objCMDRequest.Sales_Organisation__c.trim() == SALES_ORG_NL68))
                 {     
@@ -339,6 +345,7 @@ public with sharing class TaxClassificationCMDRequestController
                     lstTaxClassifications.add(new Tax_Classification__c(CMD_Request__c = objCMDRequest.Id, Country__c = 'CA - Canada', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
                     lstTaxClassifications.add(new Tax_Classification__c(CMD_Request__c = objCMDRequest.Id, Country__c = 'CN - China', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
                     lstTaxClassifications.add(new Tax_Classification__c(CMD_Request__c = objCMDRequest.Id, Country__c = 'CZ - Czech Republic', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
+                    lstTaxClassifications.add(new Tax_Classification__c(CMD_Request__c = objCMDRequest.Id, Country__c = 'IN - India', Tax_Category__c = 'JOSG', Tax_Classification__c = '1'));
                     lstTaxClassifications.add(new Tax_Classification__c(CMD_Request__c = objCMDRequest.Id, Country__c = 'IN - India', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
                     lstTaxClassifications.add(new Tax_Classification__c(CMD_Request__c = objCMDRequest.Id, Country__c = 'MX - Mexico', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
                     lstTaxClassifications.add(new Tax_Classification__c(CMD_Request__c = objCMDRequest.Id, Country__c = 'RO - Romania', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
@@ -369,10 +376,12 @@ public with sharing class TaxClassificationCMDRequestController
                 }
                  else if((objCMDRequest.Sales_Organisation__c != null || objCMDRequest.Sales_Organisation__c == '') && objCMDRequest.Sales_Organisation__c.trim() == SALES_ORG_IN62)
                 {     
+                    lstTaxClassifications.add(new Tax_Classification__c(CMD_Request__c = objCMDRequest.Id, Country__c = 'IN - India', Tax_Category__c = 'JOSG', Tax_Classification__c = '1'));
                     lstTaxClassifications.add(new Tax_Classification__c(CMD_Request__c = objCMDRequest.Id, Country__c = 'IN - India', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
                 }
                 else if((objCMDRequest.Sales_Organisation__c != null || objCMDRequest.Sales_Organisation__c == '') && objCMDRequest.Sales_Organisation__c.trim() == SALES_ORG_IN63)
                 {     
+                    lstTaxClassifications.add(new Tax_Classification__c(CMD_Request__c = objCMDRequest.Id, Country__c = 'IN - India', Tax_Category__c = 'JOSG', Tax_Classification__c = '1'));
                     lstTaxClassifications.add(new Tax_Classification__c(CMD_Request__c = objCMDRequest.Id, Country__c = 'IN - India', Tax_Category__c = 'MWST', Tax_Classification__c = '1'));
                 }
                 else if((objCMDRequest.Sales_Organisation__c != null || objCMDRequest.Sales_Organisation__c == '') && objCMDRequest.Sales_Organisation__c.trim() == SALES_ORG_JP61)

@@ -42,7 +42,7 @@ public without sharing class CMD_Request_Controller_Ext_Status_Update {
     }
     
     public pageReference updateCRMCMDRequestStatus(){
-        theRequest.Request_Status__c = 'Request Completed';
+        theRequest.Request_Status__c = 'Completed';
         
         update theRequest;
         

@@ -70,15 +70,15 @@ public with sharing class ProductTrigger {
     	    if (olis.size() > 0) {
     	    	// To prevent claim value calculation if triggered from Product object change.
     	    	OpportunityProductClaimValue.isUpdatable = false;
-    	    	
+
             	update olis;
-            	
+
             	OpportunityProductClaimValue.isUpdatable = true;
             	
             	List<SObject> oppties = (List<SObject>)dlrs.RollupService.rollup(olis);
 				
 				if (oppties != null && oppties.size() > 0) {
-					update oppties;	
+				update oppties;	
 				}	
         	}
         }	

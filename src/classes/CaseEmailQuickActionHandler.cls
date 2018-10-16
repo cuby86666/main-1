@@ -1,3 +1,10 @@
+/*****************************************************************************
+@Modified By :  Gunjan Singh
+@Modified Date: 30th July 2018
+Description :   Showing email template in feed on click of Reply All Button for SFDC-1584
+******************************************************************************/
+
+
 global class CaseEmailQuickActionHandler implements QuickAction.QuickActionDefaultsHandler {
     // Empty constructor
     global CaseEmailQuickActionHandler() {
@@ -29,12 +36,23 @@ global class CaseEmailQuickActionHandler implements QuickAction.QuickActionDefau
             bccSilentObservers = '';
             if(c.EntitlementId != null){
                 getInvitees(c.EntitlementId);
-            }
-            emailMessage.FromAddress = 'tech.support@nxp.com';//UserInfo.getUserEmail();
+            }           
             emailMessage.ToAddress = c.ContactEmail;
             emailMessage.Subject = c.Subject;
             emailMessage.CcAddress = ccInviteEmailAddresses;
             emailMessage.BccAddress = bccSilentObservers;
+            emailMessage.FromName = 'NXP Technical Support';
+            emailMessage.ValidatedFromAddress = 'tech.support@nxp.com';
+            emailMessage.FromAddress = 'tech.support@nxp.com'; //UserInfo.getUserEmail();
+            
+          /*  LIST<String> fromList = sendEmailDefaults.getFromAddressList();
+            if(fromList != null){
+                for(Integer i = fromList.size() - 1; i >= 0; i--){
+                        if(!fromList.get(i).equals(emailMessage.FromName)){
+                            fromList.remove(i);
+                        }
+                }
+            }*/
             
             /* 
             Set Template related fields 
@@ -47,14 +65,20 @@ global class CaseEmailQuickActionHandler implements QuickAction.QuickActionDefau
             of an email and we load the 'Default_reply_template' template
             */
             
-            if (sendEmailDefaults.getInReplyToId() == null) {
+            //Added as part of SFDC-1584
+            sendEmailDefaults.setTemplateId(getTemplateIdHelper(Label.CommunityEmailTemplateName));
+            sendEmailDefaults.setInsertTemplateBody(true);
+            sendEmailDefaults.setIgnoreTemplateSubject(false);
+            
+           // Commented as part of SFDC-1584
+           /* if (sendEmailDefaults.getInReplyToId() == null) {
                 sendEmailDefaults.setTemplateId(getTemplateIdHelper(Label.CommunityEmailTemplateName));
                 sendEmailDefaults.setInsertTemplateBody(true);
                 sendEmailDefaults.setIgnoreTemplateSubject(false);
             } else {
                 sendEmailDefaults.setInsertTemplateBody(false);
                 sendEmailDefaults.setIgnoreTemplateSubject(true);
-            }
+            } */
         }
         System.debug('defaults after '+sendEmailDefaults);
     }
@@ -72,8 +96,8 @@ global class CaseEmailQuickActionHandler implements QuickAction.QuickActionDefau
         return templateId;
     }
 
-	private void getInvitees(Id entitlementId){
-		//Query all entitlement contacts against this entitlement
+    private void getInvitees(Id entitlementId){
+        //Query all entitlement contacts against this entitlement
         for( Entitlement_Contact__c eContact: [SELECT Entitlement__r.CreatedBy.Email,Contact__r.Email from Entitlement_Contact__c where status__c = :CommunityConstantsUtility.ACCEPTED_STATUS and Entitlement__c = :entitlementId and Type__c != :CommunityConstantsUtility.ENTITLEMENTCONTACT_SILENT]){               
                //if it is blank just copy
                if(String.isBlank(ccInviteEmailAddresses) ){

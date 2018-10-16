@@ -3,6 +3,11 @@ created by: Shridevi Badiger
 Created Date:24-May-2017
 Description:As part of SIR SFDC-207-To calculate the case priority.
 */
+/*
+created by: Harish Gowda N
+Created Date:3-October-2018
+Description:As part of SIR SFDC-1757-Job for CSL seems to be not executed .
+*/
 
 global with sharing class contactServiceLevelCriteriaBatch implements Database.Batchable<sObject>{
 
@@ -33,14 +38,27 @@ global Datetime  date2= (System.today().adddays(1));
                
                listEmail.add('%'+((string)CSLCRec.Criteria_Field_Value__c)+'%');
             } 
+            for(Contact ConRec:listContact)
+            {
+               
+               
+            } 
             System.debug(listEmail);
          if(listEmail!=null && listEmail.size()!=null)
             {
                 listContact=[select id,contact_service_level__c,email from contact where email like:listEmail];
                 System.debug(listContact);
                 if(listContact.size()!=0 && listContact!=null)
+                
+                For(Contact recCon : listContact){
+                if(recCon .Contact_Service_Level__c != ''){
+                recCon.Contact_Service_Level__c = '' ;
+                }
+                }
+                ContactClass.CSLIdentification(listContact) ;
                 update listContact;
             }
+            
         system.debug(listContact);
     }
     
