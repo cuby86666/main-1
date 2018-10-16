@@ -5,7 +5,7 @@ Description:Satisfaction Survey Changes
 *******************************************************************************************************-->
 
 <apex:page id="thepage" sidebar="false" showHeader="false" standardStylesheets="false" controller="CommunityLiveAgentChatSurveyController">
- <div id="thepage" style="overflow:auto;height:450px;"> 
+ <div id="thepage" style="overflow:auto;"> 
   <head>
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>

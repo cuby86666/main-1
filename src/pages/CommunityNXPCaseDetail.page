@@ -3,6 +3,13 @@
 @ Last Modified date:29 Dec 2017
 @ Description       : As part of SIR 943-Made the latest public case comment visible.
 ----------------------------------------------------------------------------------------------------------------------->
+<!--
+/*****************************************************************************
+@Modified By :  Gunjan Singh
+@Modified Date: 25 July 2018
+Description :   Showing attachment section along with Delete option as part SFDC-1765/SFDC-2077
+****************************************************************************************************/
+-->
 <apex:page sidebar="false" standardStylesheets="false"  showChat="false" showHeader="false" applyBodyTag="false" applyHtmlTag="false" controller="CommunityNXPCaseDetailController" action="{!assignCaseRecord}">
     <html lang="en">
         <!--[if lte IE 9]>
@@ -16,6 +23,11 @@
             </p>
         </div>
         <![endif]-->
+        
+        <apex:form >
+            <apex:pageMessages />    
+        </apex:form>
+        
         <apex:stylesheet value="{!URLFOR($Resource.communityContextSearchStyles)}"/>
              
         <apex:composition template="CommunityNXPContextTemplate" >
@@ -26,48 +38,51 @@
                     <div id="nxp-wrapper">
                         <div class="container">
                             <!-- ===== ===== =====  Start Main ===== ===== ===== -->
+                            <h2 class="invitee-intro-title">
+                               
+                            </h2>
                             <div class="row case-document">
                                 <div class="col-lg-10 col-lg-offset-1">
                                     <!-- Owner Panel -->
                                     <div class="panel panel-default">
                                         <div class="panel-heading owner">
-                                            <h1 class="panel-title">{!$Label.CommunityCase} {!caseRecord.CaseNumber}</h1>
+                                            <h2 class="panel-title">{!$Label.CommunityCase} {!caseRecord.CaseNumber}</h2>
                                         </div>
                                         <!-- Case Information -->
                                         <div class="panel-body case-info">
                                             <div class="col-xs-12">
-                                                <h2 class="panel-body-title">{!$label.CommunityCaseInformationLabel}</h2>
+                                                <h3 class="panel-body-title">{!$label.CommunityCaseInformationLabel}</h3>
                                             </div>
                                             <div class="col-sm-6">
                                                 <dl class="panel-info">
-                                                    <dt class="panel-title">{!$Label.CommunityCaseNumber}</dt>
-                                                    <dd class="panel-info-content" id="">{!caseRecord.CaseNumber}</dd>
-                                                    <dt class="panel-title">{!$Label.CommunityStatus}</dt>
-                                                    <dd class="panel-info-content" id="">{!caseRecord.Status}</dd>
-                                                    <dt class="panel-title">{!$Label.CommunityOpenedDate}</dt>
-                                                    <dd class="panel-info-content" id="">{!caseRecord.createdDate}</dd>
+                                                    <dt style="font-size:13px" class="panel-title">{!$Label.CommunityCaseNumber}</dt>
+                                                    <dd style="font-size:15px" class="panel-info-content" id="">{!caseRecord.CaseNumber}</dd>
+                                                    <dt style="font-size:13px" class="panel-title">{!$Label.CommunityStatus}</dt>
+                                                    <dd style="font-size:15px" class="panel-info-content" id="">{!caseRecord.Status}</dd>
+                                                    <dt style="font-size:13px" class="panel-title">{!$Label.CommunityOpenedDate}</dt>
+                                                    <dd style="font-size:15px" class="panel-info-content" id="">{!caseRecord.createdDate}</dd>
                                                 </dl>
                                             </div>
                                             <div class="col-sm-6">
                                                 <dl class="panel-info">
-                                                    <dt class="panel-title">{!$Label.CommunityEntitlementName}</dt>
-                                                    <dd class="panel-info-content" id="">{!caseRecord.Entitlement.Name}</dd>
-                                                    <dt class="panel-title">{!$label.CommunityPriority}</dt>
-                                                    <dd class="panel-info-content" id="">{!caseRecord.Priority}</dd>
-                                                    <dt class="panel-title">{!$Label.CommunityClosedDate}</dt>
-                                                    <dd class="panel-info-content" id="">{!caseRecord.ClosedDate}</dd>
+                                                    <dt style="font-size:13px" class="panel-title">{!$Label.CommunityEntitlementName}</dt>
+                                                    <dd style="font-size:15px" class="panel-info-content" id="">{!caseRecord.Entitlement.Name}</dd>
+                                                    <dt style="font-size:13px" class="panel-title">{!$label.CommunityPriority}</dt>
+                                                    <dd style="font-size:15px" class="panel-info-content" id="">{!caseRecord.Priority}</dd>
+                                                    <dt style="font-size:13px" class="panel-title">{!$Label.CommunityClosedDate}</dt>
+                                                    <dd style="font-size:15px" class="panel-info-content" id="">{!caseRecord.ClosedDate}</dd>
                                                 </dl>
                                             </div>
                                             <!-- End Case Info -->
                                             <div class="col-xs-12">
-                                                <h2 class="panel-body-title">{!$Label.CommunitySubjectInformation}</h2>
+                                                <h3 class="panel-body-title">{!$Label.CommunitySubjectInformation}</h3>
                                             </div>
                                             <div class="col-sm-12">
                                                 <dl class="panel-info">
-                                                    <dt class="panel-title">{!$Label.CommunitySubject}</dt>
-                                                    <dd class="panel-info-content" id="">{!caseRecord.Subject}</dd>
-                                                    <dt class="panel-title">{!$Label.CommunityDescription}</dt>
-                                                    <dd class="panel-info-content" id="">{!caseRecord.Description}</dd>
+                                                    <dt style="font-size:13px" class="panel-title">{!$Label.CommunitySubject}</dt>
+                                                    <dd style="font-size:15px" class="panel-info-content" id="">{!caseRecord.Subject}</dd>
+                                                    <dt style="font-size:13px" class="panel-title">{!$Label.CommunityDescription}</dt>
+                                                    <dd style="font-size:15px" class="panel-info-content" id="">{!caseRecord.Description}</dd>
                                                     <!------ Added by Shridevi,SFDC-943-Display the case comment if the comment is marked as public----->
                                                     <!--apex:outputPanel rendered="{!if(caseRecord.casecomments.size>0,true,false)}">
                                                     <dt class="panel-title">Comment</dt>
@@ -85,31 +100,31 @@
                                         <!-- Additional Information -->
                                         <div class="panel-body additional-info">
                                             <div class="col-xs-12">
-                                                <h2 class="panel-body-title">{!$Label.CommunityDescriptionInformation}</h2>
+                                                <h3 class="panel-body-title">{!$Label.CommunityDescriptionInformation}</h3>
                                             </div>
                                             <div class="col-sm-6">
                                                 <dl class="panel-info">
-                                                    <dt class="panel-title">{!$Label.CommunityTopic}</dt>
-                                                    <dd class="panel-info-content" id="">{!caseRecord.My_Question_is_Related__c}</dd>
-                                                    <dt class="panel-title">{!$Label.CommunitySubTopic}</dt>
-                                                    <dd class="panel-info-content" id="">{!caseRecord.Sub_Topic__c}</dd>
-                                                    <dt class="panel-title">{!$Label.CommunityProductTypeNumber}</dt>
-                                                    <dd class="panel-info-content" id="">{!caseRecord.Product_Type_Number__c}</dd>
+                                                    <dt style="font-size:13px" class="panel-title">{!$Label.CommunityTopic}</dt>
+                                                    <dd style="font-size:15px" class="panel-info-content" id="">{!caseRecord.My_Question_is_Related__c}</dd>
+                                                    <dt style="font-size:13px" class="panel-title">{!$Label.CommunitySubTopic}</dt>
+                                                    <dd style="font-size:15px" class="panel-info-content" id="">{!caseRecord.Sub_Topic__c}</dd>
+                                                    <dt style="font-size:13px" class="panel-title">{!$Label.CommunityProductTypeNumber}</dt>
+                                                    <dd style="font-size:15px" class="panel-info-content" id="">{!caseRecord.Product_Type_Number__c}</dd>
                                                     <apex:outputPanel layout="none" rendered="{!caseRecord.Hours_spent_by_Support_person__c!=null && caseRecord.Hours_spent_by_Support_person__c!=0}">
-                                                    <dt class="panel-title">{!$Label.CommunityHoursSpent}</dt>
-                                                    <dd class="panel-info-content" id="">{!caseRecord.Hours_spent_by_Support_person__c}</dd>
+                                                    <dt style="font-size:13px" class="panel-title">{!$Label.CommunityHoursSpent}</dt>
+                                                    <dd style="font-size:15px" class="panel-info-content" id="">{!caseRecord.Hours_spent_by_Support_person__c}</dd>
                                                     </apex:outputPanel>
                                                 </dl>
                                             </div>
                                             <!-- End Case Info -->
                                             <div class="col-sm-6">
                                                 <dl class="panel-info">
-                                                    <dt class="panel-title">{!$Label.CommunityProductLevel}</dt>
-                                                    <dd class="panel-info-content" id="">{!caseRecord.Product__c}</dd>
-                                                    <dt class="panel-title">{!$Label.CommunityProductLevel2}</dt>
-                                                    <dd class="panel-info-content" id="">{!caseRecord.Product_Category__c}</dd>
-                                                    <dt class="panel-title">{!$Label.CommunityProductLevel3}</dt>
-                                                    <dd class="panel-info-content" id="">{!caseRecord.Product_sub__c}</dd>
+                                                    <dt style="font-size:13px" class="panel-title">{!$Label.CommunityProductLevel}</dt>
+                                                    <dd style="font-size:15px" class="panel-info-content" id="">{!caseRecord.Product__c}</dd>
+                                                    <dt style="font-size:13px" class="panel-title">{!$Label.CommunityProductLevel2}</dt>
+                                                    <dd style="font-size:15px" class="panel-info-content" id="">{!caseRecord.Product_Category__c}</dd>
+                                                    <dt style="font-size:13px" class="panel-title">{!$Label.CommunityProductLevel3}</dt>
+                                                    <dd style="font-size:15px" class="panel-info-content" id="">{!caseRecord.Product_sub__c}</dd>
                                                 </dl>
                                             </div>
                                              <!------ Added by Shridevi,SFDC-943-Display the case comment if the comment is marked as public----->
@@ -130,7 +145,7 @@
                                         </div>
                                         <div class="panel-body additional-info">
                                             <div class="col-xs-12">
-                                                <h2 class="panel-body-title">{!$Label.CommunityEmailInformation}</h2>
+                                                <h3 class="panel-body-title">{!$Label.CommunityEmailInformation}</h3>
                                             </div>
                                             <apex:repeat value="{!lstEmailMsgs}" var="emailMsg" >
                                                 <!-- First Context--->
@@ -151,7 +166,7 @@
                                                                 </div>
                                                             </div>
                                                             <!-- Hidden Panel -->
-                                                            <div class="hidden-panel clearfix">
+                                                            <div style='padding-top:25px' class="hidden-panel clearfix">
                                                                 
                                                                 <div class="col-sm-4 col-md-3">
                                                                     <dt class="panel-title">
@@ -194,8 +209,69 @@
                                                 
                                                 </apex:repeat> -->
                                         </div>
-                                        <apex:outputPanel rendered="{!if(lstAttachment.size >0 , true, false)}" layout="none">
-                                            <div class="panel-body additional-info">
+                                        <apex:form id="form">
+                                      <!-- Added as part of SFDC-1765 -->  
+                                        <style type="text/css">
+                                        .customPopup {
+                                            border-radius: 3px;
+                                            box-sizing: border-box;
+                                            background: rgb(242, 242, 245);
+                                            color: black;
+                                            border-style: solid;
+                                            border-width: 2px;
+                                            left: 20%;
+                                            padding: 10px;
+                                            position: absolute;
+                                            z-index: 9999;
+                                            /* These are the 3 css properties you will need to tweak so the popup displays in the center of the screen. First set the width.
+                                            Then set margin-left to negative half of what the width is. You can also add the height property for a fixed size pop up.*/
+                                            width: 300px;
+                                            top: 70%;
+                                        }
+                                        
+                                        .disabledTextBox {
+                                            background-color:white;
+                                            box-sizing: border-box;
+                                            border: 1px solid;
+                                            color: black;
+                                            cursor: default;
+                                            width: 90px;
+                                            display: table;
+                                            padding: 2px 1px;
+                                            text-align:right;
+                                        }
+                                        
+                                        .closeButton {
+                                            float: right;
+                                        }
+                                        </style>
+                                        
+                                         <apex:actionRegion >   
+                                         <apex:outputPanel id="popup">
+                                             <apex:outputPanel id="popInnerOutputPnl" styleClass="customPopup" layout="block" rendered="{!displayPopUp}">
+                                             <br/><br/>
+                                                 {!$Label.ConfirmationMessage} <br/><br/><br/>
+                                                 <apex:commandButton value="Ok" action="{!deleteAttachment}"> </apex:commandButton> &nbsp;&nbsp;&nbsp; 
+                                                 <apex:commandButton value="Cancel" title="Close the popup" styleClass="closeButton"  action="{!closePopup}"  reRender="popup"> </apex:commandButton>
+                                                 &nbsp;&nbsp;&nbsp;
+                                             </apex:outputPanel>
+                                         </apex:outputPanel>
+             
+             
+                                         <apex:outputPanel id="popupAuth">
+                                             <apex:outputPanel id="popInnerOutputPnl1" styleClass="customPopup" layout="block" rendered="{!displayPopUp}">
+                                             <br/><br/>
+                                                 {!$Label.InfoMessage}<br/><br/><br/>
+                                                 <apex:commandButton value="Ok" title="Close the popup" styleClass="closeButton"  action="{!closePopup}" reRender="popupAuth"> </apex:commandButton>
+                                                 &nbsp;&nbsp;&nbsp;
+                                             </apex:outputPanel>
+                                         </apex:outputPanel>
+                                         </apex:actionRegion>
+                                         
+                                       <!-- End of code added as part of SFDC-1765 -->
+                                       
+                                        <apex:outputPanel rendered="{!if(lstAttachment.size >0 , true, false)}" layout="none" id="attachments">
+                                            <div class="panel-body additional-info" >
                                                 <div class="col-xs-12">
                                                     <h2 class="panel-body-title">{!$Label.CommunityAttachmentInformation}</h2>
                                                 </div>
@@ -203,9 +279,80 @@
                                                     <br/>
                                                     <div class="col-md-12 col-xs-12">
                                                         <div class="form-group">
-                                                            <div class="col-md-6 col-xs-6">
+                                                            <div class="col-md-3 col-xs-3">
                                                                 <span class="pull-left">
-                                                                    <apex:outputLink value="{!URLFOR($Action.Attachment.Download, rec.id)}" target="popup" onclick="window.open('{!URLFOR($Action.Attachment.Download, rec.id)}','popup','width=1000,height=300'); return false;">{!rec.name}</apex:outputLink>
+                                                              
+                                                               <!-- Added as part of SFDC-1765 --> 
+                                                                   <apex:actionRegion >
+                                                                   
+                                                                       <apex:outputPanel >
+                                                                           <apex:commandLink value="Delete" rendered="{!if((rec.createdBy.Email != $User.Email && rec.createdBy.Email = caseRecord.Assigned_to__r.Email)  && (caseRecord.status != 'Close') , true, false)}"  action="{!showPopup}" reRender="popupAuth">
+                                                                           </apex:commandLink>
+                                                                      </apex:outputPanel> 
+                                                                      
+                                                                      <apex:outputPanel >
+                                                                        <apex:variable var="list" value="{!''}{!lstEntitlContEmail}" />
+                                                                        <apex:commandLink value="Delete" rendered="{!if(rec.createdBy.Email = $User.Email && ($User.Email != caseRecord.Email_Contact__c) && CONTAINS(list,$User.Email) && (caseRecord.status != 'Close') , true, false)}"  action="{!showPopup}" reRender="popup">
+                                                                        <apex:param name="var" value="{!rec.id}" assignTo="{!deleteAttachId}"/>
+                                                                        </apex:commandLink>
+                                                                      </apex:outputPanel>
+                                                                      
+                                                                      <apex:outputPanel >
+                                                                        <apex:variable var="list" value="{!''}{!lstEntitlContEmail}" />
+                                                                        <apex:commandLink value="Delete" rendered="{!if(rec.createdBy.Email != $User.Email && ($User.Email != caseRecord.Email_Contact__c) && CONTAINS(list,$User.Email) && (rec.createdBy.Email != caseRecord.Email_Contact__c) && (rec.createdBy.Email != caseRecord.Assigned_to__r.Email) && (caseRecord.status != 'Close') , true, false)}"  action="{!showPopup}" reRender="popupAuth">
+                                                                        </apex:commandLink>
+                                                                      </apex:outputPanel> 
+                                                                       
+                                                                      <apex:outputPanel >
+                                                                        <apex:variable var="list" value="{!''}{!lstEntitlContEmail}" />
+                                                                        <apex:commandLink value="Delete" rendered="{!if(rec.createdBy.Email != $User.Email && CONTAINS(list,$User.Email) && (rec.createdBy.Email = caseRecord.Email_Contact__c) && (caseRecord.status != 'Close') , true, false)}"  action="{!showPopup}" reRender="popupAuth">
+                                                                        </apex:commandLink>
+                                                                      </apex:outputPanel> 
+                                                                      
+                                                                       <apex:outputPanel id="refresh">
+                                                                         <apex:variable var="list" value="{!''}{!lstEntitlContEmail}" />
+                                                                           <apex:commandLink value="Delete" rendered="{!if((caseRecord.Email_Contact__c = $User.Email) && (!CONTAINS(list,$User.Email)) && (caseRecord.status != 'Close') && (rec.createdBy.Email != caseRecord.Assigned_to__r.Email), true, false)}" action="{!showPopup}" reRender="popup">
+                                                                                  <apex:param name="var" value="{!rec.id}" assignTo="{!deleteAttachId}"/>
+                                                                           </apex:commandLink>  
+                                                                       </apex:outputPanel>
+                                                                       
+                                                                       <apex:outputPanel id="refresh1">
+                                                                         <apex:variable var="list" value="{!''}{!lstEntitlContEmail}" />
+                                                                           <apex:commandLink value="Delete" rendered="{!if((caseRecord.Email_Contact__c = $User.Email) && (CONTAINS(list,$User.Email)) && (caseRecord.status != 'Close') && (rec.createdBy.Email != caseRecord.Assigned_to__r.Email), true, false)}" action="{!showPopup}" reRender="popup">
+                                                                                  <apex:param name="var" value="{!rec.id}" assignTo="{!deleteAttachId}"/>
+                                                                           </apex:commandLink>  
+                                                                       </apex:outputPanel>
+                                                                 
+                                                                      <apex:outputPanel >
+                                                                        <apex:variable var="list" value="{!''}{!lstEntitlContEmail}" />
+                                                                        <apex:commandLink value="Delete" rendered="{!if(rec.createdBy.Email = $User.Email && !CONTAINS(list,$User.Email) && (rec.createdBy.Email != caseRecord.Email_Contact__c) && (caseRecord.status != 'Close') && (folderCreatedBy = $User.Email) , true, false)}"  action="{!showPopup}" reRender="popup" >
+                                                                             <apex:param name="var" value="{!rec.id}" assignTo="{!deleteAttachId}"/>
+                                                                        </apex:commandLink>
+                                                                      </apex:outputPanel>
+                                                                      
+                                                                      <apex:outputPanel >
+                                                                        <apex:variable var="list" value="{!''}{!lstEntitlContEmail}" />
+                                                                        <apex:commandLink value="Delete" rendered="{!if(rec.createdBy.Email != $User.Email && (caseRecord.Email_Contact__c != $User.Email) && CONTAINS(list,rec.createdBy.Email) && !CONTAINS(list,$User.Email) && (caseRecord.status != 'Close') && (folderCreatedBy = $User.Email) , true, false)}"  action="{!showPopup}" reRender="popupAuth" >
+                                                                        </apex:commandLink>
+                                                                      </apex:outputPanel>
+                                                                      
+                                                                       &nbsp;&nbsp;&nbsp;                                                                     
+                                                                      <!--Modified as part of SFDC-2077 -->
+                                                                      <apex:outputLink rendered="{!if(($Profile.Name != 'NXP Customer Community Login User') || (caseRecord.Email_Contact__c = $User.Email), true, false)}" value="{!URLFOR($Action.Attachment.Download, rec.id)}" id="AttacLink" target="popup" onclick="window.open('{!URLFOR($Action.Attachment.Download, rec.id)}','popup','width=1000,height=300'); return false;">{!rec.name}</apex:outputLink> 
+                                                                  
+                                                                      <apex:outputPanel rendered="{!if((caseRecord.Email_Contact__c != $User.Email) && ($Profile.Name = 'NXP Customer Community Login User'), true, false)}">
+                                                                        <apex:outputfield value="{!rec.name}" id="recName"/>
+                                                                      </apex:outputPanel>
+                                                                    
+                                                                   </apex:actionRegion>
+                                                                   
+                                                               
+                                                                </span>
+                                                                <!-- End of code added as part of SFDC-1765 -->
+                                                            </div>
+                                                            <div class="col-md-3 col-xs-3">
+                                                                <span class="pull-left">
+                                                                    <apex:outputfield value="{!rec.createdBy.FirstName}" id="createdByName"/>
                                                                 </span>
                                                             </div>
                                                             <div class="col-md-3 col-xs-3">
@@ -218,12 +365,52 @@
                                                     </div>
                                                 </apex:repeat>
                                             </div>
-                                        </apex:outputPanel>
+                                            
+                                           </apex:outputPanel>
+                                           
+                                            <!-- Added as part of SFDC-1765 -->
+                                           <apex:variable var="list" value="{!''}{!lstEntitlContEmail}" />
+                                           <apex:outputPanel rendered="{!if(((createdBy= $User.Email) || CONTAINS(list,createdBy) || CONTAINS(list,$User.Email)) && (caseRecord.status != 'Close'), true, false)}">
+                                            
+                                            <div class="panel-body additional-info" >
+                                                <div class="col-sm-4">
+                                                <h2 class="panel-body-title">
+                                                    {!$Label.CommunityCaseAttachment}
+                                                </h2>
+                                                <br/> {!$Label.CommunityFiveAttachments}
+                                                <hr/>
+                                                <apex:outputPanel id="attach" layout="none">
+                                                    <apex:repeat value="{!caseAttachments}" var="caseAttachment">
+                                                        <apex:inputFile value="{!caseAttachment.body}" filename="{!caseAttachment.name}"/>
+                                                        <br/>
+                                                    </apex:repeat>
+                                                    
+                                                </apex:outputPanel>
+                                              
+                                              <apex:actionRegion >
+                                                  <apex:outputPanel id="refresh">
+                                                      <apex:commandLink value="Upload Attachments" action="{!uploadAttachment}">
+                                                      </apex:commandLink> 
+                                                  </apex:outputPanel>                            
+                                              </apex:actionRegion> 
+                                              
+                                               <!-- End of code added as part of SFDC-1765 -->                           
+       
+                                           </div>
+                                         </div>
+   
+                                         </apex:outputPanel>
+                                  
+                                        </apex:form> 
+    
+                                        
+                                        
                                         <!-- Footer -->
                                         <div class="panel-footer">
                                             <div class="text-right">
                                                 <a href="{!URLFOR($Page.CommunityContextPage)}"><span class="icon-arrow-left3"></span> Back to Case List</a>
                                                 <script>
+                                                    
                                                     $(document).ready(function() {
                                                         // Displays Hidden Panel when down arrow is clicked
                                                         $(".reveal-arrow").click(function(event) {
@@ -243,7 +430,8 @@
                                                     });
                                                 </script>
                                                 <script type="text/javascript">
-                                                    $(function() {
+                                                
+                                                   $(function() {
                                                         var pgurl = window.location.href.substr(window.location.href.lastIndexOf("/")+1);
                                                         $(".tabBar li").each(function() {
                                                             if($(this).children('a').attr("href") == pgurl )
@@ -268,7 +456,29 @@
                         <!-- /.contianer -->
                     </div>
                     <!-- /#nxp-wrapper -->
+                    
+                     <!-- Added as part of SFDC-1765 -->
                     <script type="text/javascript">
+                       
+                        // Start of function to scroll the page on same location after deleting the attachment
+                        function storePagePosition() {
+                              var page_y = window.pageYOffset;
+                              localStorage.setItem("page_y", page_y);
+                        }
+
+                        window.addEventListener("scroll", storePagePosition);
+                        var currentPageY;
+                        try {
+                          currentPageY = localStorage.getItem("page_y");
+                          if (currentPageY === undefined) {
+                            localStorage.setItem("page_y") = 0;
+                          }
+                          window.scrollTo( 0, currentPageY );
+                        } catch (e) {
+                            alert(e);
+                        }
+                        // End of function to scroll the page on same location after deleting the attachment
+                        //End of code added as part of SFDC-1765 
                         $(function() {
                             var pgurl = window.location.href.substr(window.location.href.lastIndexOf("/")+1);
                             $(".tabBar li").each(function() {
@@ -284,4 +494,5 @@
         </apex:composition>
         
     </html>
+   
 </apex:page>

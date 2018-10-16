@@ -20,7 +20,13 @@ Description: SIR-524-Implement search and sort functionalities for the cases.
         <![endif]-->
         <head>
         <apex:stylesheet value="{!URLFOR($Resource.communityContextSearchStyles)}"/>
-    
+            <style>
+                h2{font-size: 18px;
+                line-height: 1.2em;
+                font-weight: 700;
+                color: #e66a08;
+                padding-top: 0;}
+            </style>
     </head>
     <body>
         <div id="nxp-wrapper">
@@ -29,8 +35,8 @@ Description: SIR-524-Implement search and sort functionalities for the cases.
                 <apex:define name="body">
                     <div class="container">
                         <div class="context-intro row">
-                            <div class="col-xs-12 col-lg-10 col-lg-offset-1">
-                                <h1>{!$Label.CommunityViewCasesTitle}</h1>
+                            <div class="col-xs-12  col-lg-12" style="margin-left:110px">
+                                <h2>{!$Label.CommunityViewCasesTitle}</h2>
                                 <!-- <p class="lead">{!$Label.CommunityCaseText}</p> -->
 
                                 <!--   <p class="lead"><strong>{!$Label.CommunityGroup}</strong> {!$Label.CommunityCaseText}<br/>
@@ -54,16 +60,16 @@ Description: SIR-524-Implement search and sort functionalities for the cases.
                             </div> -->
                         <!-- /.row -->
                         <!-- Three column instructions -->
-                        <div class="context-instructions row">
+                        <div class="context-instructions row" style="margin-left:90px;margin-right:90px">
                             <!-- <div class="col-xs-12 col-lg-10 col-lg-offset-1">
                                     <h3>{!$Label.CommunityThreeExample}</h3>
                                 </div>-->
-                            <div class="col-xs-12 col-sm-4 col-lg-3 col-lg-offset-1">
-                                <h2>{!$Label.CommunityViewcases}</h2>
+                            <div class="col-xs-12 col-sm-4 col-lg-4  ">
+                                <h3>{!$Label.CommunityViewcases}</h3>
                                 <!--  <p>{!$Label.CommunityUnfold} <strong>{!$Label.CommunityContext}</strong>.</p> -->
 
                                 <ul class="boxes">
-                                    <li>
+                                    <li style="font-size:15px">
                                         <apex:outputText escape="false" value="{!$Label.CommunityNewProject}" />&nbsp;
                                         <!--   <img src="{!URLFOR($Resource.CommunityContextStyles,'/images/addFolder.png')}" height="50px" width="150px"/>-->
                                         {!$Label.CommunityCreateContext}
@@ -80,7 +86,7 @@ Description: SIR-524-Implement search and sort functionalities for the cases.
                                 </ul>
                             </div>
                             <div class="col-xs-12 col-sm-4 col-lg-4">
-                                <h2>{!$Label.CommunityNewCaseText}</h2>
+                                <h3>{!$Label.CommunityNewCaseText}</h3>
                                 <!-- <p>{!$Label.CommunitySelectMessage} <strong>{!$Label.CommunityContext}</strong> {!$Label.CommunityNewContext}</p>-->
                                 <ul class="boxes">
                                     <li>{!$Label.CommunityShareContext}
@@ -97,12 +103,12 @@ Description: SIR-524-Implement search and sort functionalities for the cases.
                                 </ul>
 
                             </div>
-                            <div class="col-xs-12 col-sm-4 col-lg-3">
-                                <h2>{!$Label.CommunityThirdCaseText}</h2>
+                            <div class="col-xs-12 col-sm-4 col-lg-4">
+                                <h3>{!$Label.CommunityThirdCaseText}</h3>
                                 <!--  <p>{!$Label.CommunityGoMessage} <strong>{!$Label.CommunityContext}</strong> {!$Label.CommunityNewContext}</p>-->
 
                                 <ul class="boxes">
-                                    <li>{!$Label.CommunitySelectContextMessage}
+                                    <li style="font-size:15px">{!$Label.CommunitySelectContextMessage}
                                         <!--  <img src="{!URLFOR($Resource.CommunityContextStyles,'/images/invitePeople.png')}" height="35px" width="120px"/> -->
                                         {!$Label.Communitybutton}
                                     </li>
@@ -118,28 +124,28 @@ Description: SIR-524-Implement search and sort functionalities for the cases.
                                 </div>
                                 </div>-->
                         <!-- /.row -->
-                        <div class="row addContext">
-                            <div class="col-lg-6 col-lg-offset-1">
-                                <ul class="color-key-list">
+                        <div class="row addContext" style="margin-left:90px;margin-right:90px">
+                            <div class="col-lg-6 ">
+                                <ul style="font-size:15px" class="color-key-list">
                                     <li class="item"><span class="owner-block"></span>{!$Label.CommunityOwner}</li>
                                     <li class="item"><span class="participant-block"></span>{!$Label.CommunityParticipant}</li>
                                     <li class="item"><span class="observer-block"></span>{!$Label.CommunityObserver}</li>
                                 </ul>
                             </div>
 
-                            <div class="col-lg-4 text-right">
+                            <div class="col-lg-6 text-right">
 
-                                <a class="addContext-link" style="{!if($Label.CommunityShowCreateContext=='Yes', 'visibility:visible', 'visibility:hidden')}" href="{!URLFOR($Page.CommunityNXPCreateContext)}">{!$Label.CommunityNewContextButtonTitle} <span class="icon icon-plus"></span></a>
+                                <a class="addContext-link" style="{!if($Label.CommunityShowCreateContext=='Yes', 'visibility:visible', 'visibility:hidden')};font-size:18px" href="{!URLFOR($Page.CommunityNXPCreateContext)}">{!$Label.CommunityNewContextButtonTitle} <span class="icon icon-plus"></span></a>
                             </div>
 
                         </div>
                       
                         <div class="row addContext">
-                            <div class="col-lg-6 col-lg-offset-1">
+                            <div class="col-lg-2 col-lg-offset-1">
                             </div>
 
                             <apex:outputPanel layout="none" rendered="{!if(entitlementContactsList.size ==1, true, false)}">
-                                <div class="col-lg-4 text-right">
+                                <div class="col-lg-12 text-right">
                                     <a class="btn btn-lg btn-orange" href="{!URLFOR($Page.CommunityNXPCreateCaseWizard)}"><span class="icon-plus"></span> {!$Label.CommunityNewCaseButton}</a>
                                 </div>
                             </apex:outputPanel>
@@ -152,8 +158,8 @@ Description: SIR-524-Implement search and sort functionalities for the cases.
                            <div class="row addContext">
                              <div class="col-lg-6 col-lg-offset-1">
                              </div>
-                             <div class="col-lg-4 text-right">
-                               <apex:outputPanel layout="block" id="searchButtonPanel">
+                             <div class="col-lg-12 text-right" >
+                               <apex:outputPanel layout="block" id="searchButtonPanel" style="margin-right:100px">
                                  <apex:form >
                                     <apex:inputText id="searchText" value="{!searchText}" html-placeholder="Search..."/>
                                     <apex:commandButton value="Search" style="width:18px;border:1px;"   image="{!$Resource.SearchIcon}" action="{!SearchCases}" rerender="searchResult2" status="status"/>
@@ -188,7 +194,7 @@ Description: SIR-524-Implement search and sort functionalities for the cases.
                                                  <apex:column headerClass="column-header-style"  width="200" styleClass="{! IF((mod(i,2)) == 0,'column-style-even-row','column-style-odd-row')}">
                                                   
                                                       <apex:facet name="header">
-                                                        <apex:commandLink action="{!sortCases}" style="color:#626567;" value="Case Number{!IF(sortField=='CaseNumber',IF(Order='ASC','▼','▲'),'')}" reRender="searchResult2">
+                                                        <apex:commandLink action="{!sortCases}" style="color:#626567;" value="Case Number{!IF(sortField=='CaseNumber',IF(Order='ASC','?','?'),'')}" reRender="searchResult2">
                                                              <apex:param name="sortField" value="CaseNumber" assignTo="{!sortField}" />
                                                              <apex:param name="Order" value="{!IF(Order == 'DESC', 'ASC','DESC')}" assignTo="{!Order}" />
                                                               
@@ -205,7 +211,7 @@ Description: SIR-524-Implement search and sort functionalities for the cases.
                                                     <apex:column headerClass="column-header-style-1"  width="200"   styleClass="{! IF((mod(i,2)) == 0,'column-style-even-row-1','column-style-odd-row-1')}">
                                                       
                                                      <apex:facet name="header">
-                                                        <apex:commandLink action="{!sortCases}" style="color:#626567;" value="Folder{!IF(sortField=='Entitlement.name',IF(Order='ASC','▼','▲'),'')}" reRender="searchResult2">
+                                                        <apex:commandLink action="{!sortCases}" style="color:#626567;" value="Folder{!IF(sortField=='Entitlement.name',IF(Order='ASC','?','?'),'')}" reRender="searchResult2">
                                                              <apex:param name="sortField" value="Entitlement.name" assignTo="{!sortField}" />
                                                              <apex:param name="Order" value="{!IF(Order == 'DESC', 'ASC','DESC')}" assignTo="{!Order}" />
                                                         </apex:commandLink>
@@ -219,7 +225,7 @@ Description: SIR-524-Implement search and sort functionalities for the cases.
                                                  <apex:column headerClass="column-header-style" width="200"    styleClass="{! IF((mod(i,2)) == 0,'column-style-even-row','column-style-odd-row')}">
                                                      <!--<div class="hide-col">-->
                                                      <apex:facet name="header">
-                                                        <apex:commandLink action="{!sortCases}" style="color:#626567;" value="Subject{!IF(sortField=='Subject',IF(Order='ASC','▼','▲'),'')}" reRender="searchResult2">
+                                                        <apex:commandLink action="{!sortCases}" style="color:#626567;" value="Subject{!IF(sortField=='Subject',IF(Order='ASC','?','?'),'')}" reRender="searchResult2">
                                                              <apex:param name="sortField" value="Subject" assignTo="{!sortField}" />
                                                              <apex:param name="Order" value="{!IF(Order == 'DESC', 'ASC','DESC')}" assignTo="{!Order}" />
                                                         </apex:commandLink>
@@ -236,7 +242,7 @@ Description: SIR-524-Implement search and sort functionalities for the cases.
                                                  <apex:column headerClass="column-header-style-2" width="200"     styleClass="{! IF((mod(i,2)) == 0,'column-style-even-row-2','column-style-odd-row-2')}">
                                                   
                                                    <apex:facet name="header">
-                                                        <apex:commandLink action="{!sortCases}" style="color:#626567;" value="Status{!IF(sortField=='Status',IF(Order='ASC','▼','▲'),'')}" reRender="searchResult2">
+                                                        <apex:commandLink action="{!sortCases}" style="color:#626567;" value="Status{!IF(sortField=='Status',IF(Order='ASC','?','?'),'')}" reRender="searchResult2">
                                                              <apex:param name="sortField" value="Status" assignTo="{!sortField}" />
                                                              <apex:param name="Order" value="{!IF(Order == 'DESC', 'ASC','DESC')}" assignTo="{!Order}" />
                                                         </apex:commandLink>
@@ -248,7 +254,7 @@ Description: SIR-524-Implement search and sort functionalities for the cases.
                                                  <apex:column headerClass="column-header-style-2"  width="200"  styleClass="{! IF((mod(i,2)) == 0,'column-style-even-row-2','column-style-odd-row-2')}">       
                                                     
                                                    <apex:facet name="header">
-                                                        <apex:commandLink action="{!sortCases}" style="color:#626567 ;" value="Created Date{!IF(sortField=='CreatedDate',IF(Order='ASC','▼','▲'),'')}" reRender="searchResult2">
+                                                        <apex:commandLink action="{!sortCases}" style="color:#626567 ;" value="Created Date{!IF(sortField=='CreatedDate',IF(Order='ASC','?','?'),'')}" reRender="searchResult2">
                                                              <apex:param name="sortField" value="CreatedDate" assignTo="{!sortField}" />
                                                              <apex:param name="Order" value="{!IF(Order == 'DESC', 'ASC','DESC')}" assignTo="{!Order}" />
                                                         </apex:commandLink>
@@ -305,14 +311,14 @@ Description: SIR-524-Implement search and sort functionalities for the cases.
                                                         <h2 class="context-header">{!ent.Entitlement__r.Name} 
 
                                                             <span class="panel-head-count"></span>
-                                                            <a style="{!if(AND(ent.type__c=='Owner',casesPresenceMap[ent.entitlement__c]==0),'display:block', 'display:none')}" href="{!URLFOR($Page.CommunityNXPUpdateDeleteContext)}?entitlementId={!ent.Entitlement__c}" >Edit</a>
+                                                            <a style="{!if(AND(ent.type__c=='Owner',casesPresenceMap[ent.entitlement__c]==0),'display:block', 'display:none')};font-size:18px" href="{!URLFOR($Page.CommunityNXPUpdateDeleteContext)}?entitlementId={!ent.Entitlement__c}" >Edit</a>
                                                             
                                                            <!---------added by shridevi as part of SIR 270-----------------------------------------------------> 
                                                            <br/> <apex:outputPanel layout="none" rendered="{!if(ent.Entitlement__r.Additional_Description__c!=null, true, false)}">
                                                               <div style="display: inline-block;position: relative;min-width: 300px;">
                                                                 <a class="dropdown-toggle" type="button" style="font-size:14px" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" >{!$Label.AdditionalDescription}<span class="caret"></span></a>
                                                                   <ul  class="dropdown-menu invitee-list" aria-labelledby="dropdownMenu1">
-                                                                      <div style=" white-space:pre-wrap;">{!ent.Entitlement__r.Additional_Description__c}</div>
+                                                                      <div style=" white-space:pre-wrap;padding-left:15px">{!ent.Entitlement__r.Additional_Description__c}</div>
                                                                  </ul>
                                                               </div>
                                                              </apex:outputPanel>
@@ -326,7 +332,7 @@ Description: SIR-524-Implement search and sort functionalities for the cases.
                                                             <apex:outputPanel layout="none" rendered="{!if(ent.Entitlement__r.name!=$Label.CommunityOthersname, true, false)}">
                                                                 <a class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">{!$Label.CommunityShowinvitees}<span class="caret"></span></a>
                                                             </apex:outputPanel>
-                                                            <ul class="dropdown-menu invitee-list" aria-labelledby="dropdownMenu1">
+                                                            <ul style="padding-left: 30px;padding-right: 30px" class="dropdown-menu invitee-list" aria-labelledby="dropdownMenu1">
                                                                 <li>
                                                                     <ul>
                                                                         <li class="invitee-list-title observer">{!$Label.CommunityParticipant}</li>
@@ -382,13 +388,13 @@ Description: SIR-524-Implement search and sort functionalities for the cases.
                                                             </ul>
                                                         </div>
                                                     </div>
-                                                    <div class="panel-custom-body row">
+                                                    <div style='padding-right:25px' class="panel-custom-body row">
                                                         <div>
-                                                            <h2 style='margin-left: 15px;'> <font color='grey'>{!$Label.Reference_Id}:</font> {!ent.Entitlement__r.Entitlement_Pattern__c} </h2>
+                                                            <h3 style='padding-left:35px'> <font color='grey'>{!$Label.Reference_Id}:</font> {!ent.Entitlement__r.Entitlement_Pattern__c} </h3>
                                                         </div>                                                        
                                                         <div class="hours-span col-md-6 col-sm-4 clearfix">
                                                             <apex:outputPanel layout="none" rendered="{!if( AND(ent.Entitlement__r.Name!=$Label.CommunityOthersname, ent.Entitlement__r.Type !='Free'),true, false)}">
-                                                                <a href="#" class="hours-inner">
+                                                                <a href="#" class="hours-inner" style="padding-left:15px">
                                                                     <span class="hours-min">{!ent.Entitlement__r.Used_number_of_Hours__c}</span>
                                                                     <!-- span class="hours-max">/</span -->
                                                                     <span class="hours-max">{!ent.Entitlement__r.Total_Number_of_Hours__c}</span> {!$Label.CommunityHours}
@@ -398,7 +404,7 @@ Description: SIR-524-Implement search and sort functionalities for the cases.
                                                         </div>
                                                         <!-- /.hours-span -->
                                                         <!--Buttons-->
-                                                        <div class="col-sm-7 col-md-5 panel-btn-group">
+                                                        <div class="col-sm-7 col-md-5 panel-btn-group" style="padding-left:30px">
                                                             <!--button type="button" class="btn btn-lg btn-orange hours-btn"><span class="icon-clock"></span> Buy more Hours</button-->
 
                                                             <apex:outputPanel layout="none" rendered="{!if(AND(ent.Entitlement__r.Name!=$Label.CommunityOthersname, ent.Entitlement__r.Status!='Inactive',ent.Entitlement__r.Status!='Expired', ent.Status__c !='Pending', ent.Type__c !='Observer'),true, false)}">

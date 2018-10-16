@@ -1,11 +1,15 @@
 <!-- Modified By Baji on March 03, 2017 to add information message for user all the time on page -->
-<apex:page standardController="CMD_Request__c" extensions="SAPCMDMassUpdateController" tabStyle="CMD_Request__c" 
+<!-- <apex:page standardController="CMD_Request__c" extensions="SAPCMDMassUpdateController" tabStyle="CMD_Request__c" 
   standardStylesheets="true" sidebar="false" id="thePage">
+  
+-->
+<apex:page standardController="CMD_Request__c" >
 <!--
 <apex:pageBlock id="pageBlockView" mode="maindetail" >
   <apex:detail relatedList="true" title="true" inlineEdit="true" />
 </apex:pageBlock>
 -->
+<!-- Strat - Story 1862
 <style>
 .tableHeader { color:White; background-color:#1798C1; }
 .indexColumn { font-weight:bold; color:#1798C1; align=right; }    
@@ -75,7 +79,12 @@ html>body tbody.thePage:j_id1:pageBlockEditLegalName:detailTable:tb {
 <apex:pageMessages />
 
  <apex:outputText value="{!actor}" escape="false"></apex:outputText>
+ 
+ End Story 1862 -->
 <!--ZA----------------------------->    
+
+<!-- Strat Story 1862
+
 <apex:pageBlock id="pageBlockEditZA" mode="edit" rendered="{!(CMD_Request__c.Mass_Update_Type__c=='ZA')}"> 
 <apex:pageBlockButtons >
         <apex:commandButton value="SAP CMD Funloc Lookup" action="{!refresh}"/>
@@ -125,7 +134,12 @@ html>body tbody.thePage:j_id1:pageBlockEditLegalName:detailTable:tb {
                                        "
                                 styleClass="{!funloc.rowStyleClass}"
                                 tabindex="{!funloc.index}">
+                                
+ End Story 1862-->                                
 <!--                  <apex:actionSupport event="onblur" action="{!refresh}" reRender="detailTable"/> -->
+
+<!-- Start Story 1862
+
                 </apex:inputText>
                 <apex:facet name="footer">
                     <apex:commandLink rendered="{!blEnableEdit}" action="{!addRow}" reRender="detailTable" style="text-decoration:none;">
@@ -149,11 +163,17 @@ html>body tbody.thePage:j_id1:pageBlockEditLegalName:detailTable:tb {
                     </apex:commandLink>
                 </apex:facet>
             </apex:column> 
+            
+   End Story 1862-->           
   <!------------------------------ Added by Shridevi, as part of SIR 215-------------------------------------------------------->     
+     <!-- Start Story 1862
+     
             <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
                 <apex:facet name="header">SAP CMD Record Type</apex:facet>
                 <apex:outputText value="{!funloc.SapCMDRecordType}" style="{!IF(funloc.isDupe,'color:Red;','')}"/>
-            </apex:column>   
+            </apex:column>  
+            
+       End Story 1862-->           
  <!----------------------------------------------------------------------------------------------------------------------------->           
        
 <!--
@@ -166,6 +186,9 @@ html>body tbody.thePage:j_id1:pageBlockEditLegalName:detailTable:tb {
                                  rendered="{!AND(ISBLANK(funloc.sapCMD),(funloc.funloc!=''))}"/>
             </apex:column>    
 -->
+
+<!-- Start Story 1862
+
             <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
                 <apex:facet name="header">Legal Name</apex:facet>
                 <apex:outputText value="{!funloc.oldLegalName}" style="{!IF(funloc.isDupe,'color:Red;','')}"/>
@@ -179,7 +202,11 @@ html>body tbody.thePage:j_id1:pageBlockEditLegalName:detailTable:tb {
                 <apex:facet name="header">Country</apex:facet>
                 <apex:outputText value="{!funloc.oldCountry}" style="{!IF(funloc.isDupe,'color:Red;','')}"/>
             </apex:column>   SAP_CMD_Account_Group__c 
--->
+            
+End Story 1862-->    
+<!-- Start Story 1862
+
+
           <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
                 <apex:facet name="header">ZA Person (Existing)</apex:facet>
                 <apex:outputText value="{!funloc.oldZA}" style="{!IF(funloc.isDupe,'color:Red;','')}"/>
@@ -189,7 +216,9 @@ html>body tbody.thePage:j_id1:pageBlockEditLegalName:detailTable:tb {
                 <apex:selectList value="{!funloc.newZA}" size="1" 
                                  styleClass="{!funloc.rowStyleClass}" 
                                  style="{!IF(funloc.isDupe,'color:Red;','')}">
+End Story 1862-->                                     
                                  <!--rendered="{!(funloc.sapCMD!='')}">-->
+<!-- Start Story 1862                              
                     <apex:selectOption itemLabel="" itemValue=""/>
                     <apex:selectOptions value="{!ZAOptions}"/>
               </apex:selectList>
@@ -203,7 +232,9 @@ html>body tbody.thePage:j_id1:pageBlockEditLegalName:detailTable:tb {
                 <apex:commandLink action="{!replicateColumn}" 
                 reRender="detailTable" 
                 style="color:Blue;">
+End Story 1862-->                  
                 <!--rendered="{!(funloc.sapCMD!='')}">-->
+<!-- Start Story 1862                  
                     <apex:param name="rowToBeReplicated" 
                                 value="{!funloc.index}" 
                                 assignTo="{!rowToBeReplicated}"/>
@@ -216,9 +247,11 @@ html>body tbody.thePage:j_id1:pageBlockEditLegalName:detailTable:tb {
             </apex:column>
         </apex:dataTable>
     </apex:actionRegion>
-</apex:pageBlock>    
+</apex:pageBlock>  
+End Story 1862-->  
 <!--ZA----------------------------->    
 <!---ZS---------------------------------------->
+<!-- Start Story 1862
 <apex:pageBlock id="pageBlockEditZS" mode="edit" rendered="{!(CMD_Request__c.Mass_Update_Type__c=='ZS')}"> 
     <apex:pageBlockButtons >
         <apex:commandButton value="SAP CMD Funloc Lookup" action="{!refresh}"/>
@@ -268,7 +301,10 @@ html>body tbody.thePage:j_id1:pageBlockEditLegalName:detailTable:tb {
                                        "
                                 styleClass="{!funloc.rowStyleClass}"
                                 tabindex="{!funloc.index}">
+End story 1862 -->                                
 <!--                  <apex:actionSupport event="onblur" action="{!refresh}" reRender="detailTable"/> -->
+<!-- Start Story 1862
+
                 </apex:inputText>
                 <apex:facet name="footer">
                     <apex:commandLink rendered="{!blEnableEdit}" action="{!addRow}" reRender="detailTable" style="text-decoration:none;">
@@ -291,12 +327,15 @@ html>body tbody.thePage:j_id1:pageBlockEditLegalName:detailTable:tb {
                         <apex:outputText value="x5" styleClass="indexColumn"/>
                     </apex:commandLink>
                 </apex:facet>
-            </apex:column>   
-  <!------------------------------ Added by Shridevi as part of SIR 215-------------------------------------------------------->     
+            </apex:column> 
+End story 1862 -->              
+  <!------------------------------ Added by Shridevi as part of SIR 215-------------------------------------------------------->    
+  <!-- Start Story 1862
             <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
                 <apex:facet name="header">SAP CMD Record Type</apex:facet>
                 <apex:outputText value="{!funloc.SapCMDRecordType }" style="{!IF(funloc.isDupe,'color:Red;','')}"/>
             </apex:column>   
+     End story 1862 -->         
  <!----------------------------------------------------------------------------------------------------------------------------->           
     
 <!--
@@ -309,6 +348,7 @@ html>body tbody.thePage:j_id1:pageBlockEditLegalName:detailTable:tb {
                                  rendered="{!AND(ISBLANK(funloc.sapCMD),(funloc.funloc!=''))}"/>
             </apex:column>    
 -->
+ <!-- Start Story 1862
             <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
                 <apex:facet name="header">Legal Name</apex:facet>
                 <apex:outputText value="{!funloc.oldLegalName}" style="{!IF(funloc.isDupe,'color:Red;','')}"/>
@@ -324,6 +364,7 @@ html>body tbody.thePage:j_id1:pageBlockEditLegalName:detailTable:tb {
                 <apex:outputText value="{!funloc.oldCountry}" style="{!IF(funloc.isDupe,'color:Red;','')}"/>
             </apex:column>    
 -->
+ <!-- Start Story 1862
             <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
                 <apex:facet name="header">ZS Person (Existing)</apex:facet>
                 <apex:outputText value="{!funloc.oldZS}" style="{!IF(funloc.isDupe,'color:Red;','')}"/>
@@ -334,6 +375,7 @@ html>body tbody.thePage:j_id1:pageBlockEditLegalName:detailTable:tb {
                                  styleClass="{!funloc.rowStyleClass}" 
                                  style="{!IF(funloc.isDupe,'color:Red;','')}">
                                  <!--rendered="{!(funloc.sapCMD!='')}">-->
+ <!-- Start Story 1862                                 
                     <apex:selectOption itemLabel="" itemValue=""/>
                     <apex:selectOptions value="{!ZSOptions}"/>
               </apex:selectList>
@@ -348,6 +390,7 @@ html>body tbody.thePage:j_id1:pageBlockEditLegalName:detailTable:tb {
                 reRender="detailTable" 
                 style="color:Blue;">
                 <!--rendered="{!(funloc.sapCMD!='')}">-->
+ <!-- Start Story 1862                
                     <apex:param name="rowToBeReplicated" 
                                 value="{!funloc.index}" 
                                 assignTo="{!rowToBeReplicated}"/>
@@ -362,7 +405,8 @@ html>body tbody.thePage:j_id1:pageBlockEditLegalName:detailTable:tb {
     </apex:actionRegion>
 </apex:pageBlock>       
 <!--ZS---------------------------------------->
-<!--Address---------------------------->    
+<!--Address---------------------------->  
+ <!-- Start Story 1862
 <apex:pageBlock id="pageBlockEditLegalName" mode="edit" rendered="{!(CMD_Request__c.Mass_Update_Type__c=='Address')}"> 
 
     <apex:pageBlockButtons >
@@ -416,6 +460,7 @@ html>body tbody.thePage:j_id1:pageBlockEditLegalName:detailTable:tb {
                                 styleClass="{!funloc.rowStyleClass}"
                                 tabindex="{!funloc.index}">
 <!--                  <apex:actionSupport event="onblur" action="{!refresh}" reRender="detailTable"/> -->
+ <!-- Start Story 1862
                 </apex:inputText>
                 <apex:facet name="footer">
                     <apex:commandLink action="{!addRow}" reRender="detailTable" style="text-decoration:none;">
@@ -434,6 +479,7 @@ html>body tbody.thePage:j_id1:pageBlockEditLegalName:detailTable:tb {
                                  rendered="{!AND(ISBLANK(funloc.sapCMD),(funloc.funloc!=''))}"/>
             </apex:column>
 -->
+ <!-- Start Story 1862
             <div style="overflow: scroll;">
             <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
                 <apex:facet name="header">SAP CMD</apex:facet>
@@ -450,7 +496,8 @@ html>body tbody.thePage:j_id1:pageBlockEditLegalName:detailTable:tb {
                     </apex:commandLink>
                 </apex:facet>
             </apex:column>
-  <!------------------------------ Added by Shridevi as part of SIR 215-------------------------------------------------------->     
+  <!------------------------------ Added by Shridevi as part of SIR 215-------------------------------------------------------->   
+   <!-- Start Story 1862
             <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
                 <apex:facet name="header">SAP CMD Record Type</apex:facet>
                 <apex:outputText value="{!funloc.SapCMDRecordType }" style="{!IF(funloc.isDupe,'color:Red;','')}"/>
@@ -477,14 +524,17 @@ html>body tbody.thePage:j_id1:pageBlockEditLegalName:detailTable:tb {
                 <apex:outputText value="{!funloc.oldCountry}" style="{!IF(funloc.isDupe,'color:Red;','')}"/>
             </apex:column>  
 -->
+ <!-- Start Story 1862
             <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
                 <apex:facet name="header">Legal Name (New)</apex:facet>
                 <apex:inputText value="{!funloc.newLegalName}" 
                                  styleClass="{!funloc.rowStyleClass}" 
                                 style="{!IF(funloc.isDupe,'color:Red;','')}"/>
                                  <!--rendered="{!(funloc.sapCMD!='')}"/>-->
+ <!-- Start Story 1862                                 
             </apex:column>
-          <!------------------------------ Added by Shridevi as part of SIR 215-------------------------------------------------------->     
+          <!------------------------------ Added by Shridevi as part of SIR 215-------------------------------------------------------->    
+ <!-- Start Story 1862          
               
               <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
                 <apex:facet name="header">Name 1 (Service Provider)</apex:facet>
@@ -492,8 +542,10 @@ html>body tbody.thePage:j_id1:pageBlockEditLegalName:detailTable:tb {
                                  styleClass="{!funloc.rowStyleClass}" 
                                 style="{!IF(funloc.isDupe,'color:Red;','')}"/>
                                  <!--rendered="{!(funloc.sapCMD!='')}"/>-->
+ <!-- Start Story 1862                                 
             </apex:column>    
-           <!----------------------------------------------------------------------------------------------------------------------------->           
+           <!----------------------------------------------------------------------------------------------------------------------------->   
+ <!-- Start Story 1862           
  
             <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
                 <apex:facet name="header">Name 2 (New)</apex:facet>
@@ -501,6 +553,7 @@ html>body tbody.thePage:j_id1:pageBlockEditLegalName:detailTable:tb {
                                  styleClass="{!funloc.rowStyleClass}" 
                                 style="{!IF(funloc.isDupe,'color:Red;','')}"/>
                                  <!--rendered="{!(funloc.sapCMD!='')}"/>-->
+ <!-- Start Story 1862                                 
             </apex:column>   
             <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
                 <apex:facet name="header">Name 3 (New)</apex:facet>
@@ -508,6 +561,7 @@ html>body tbody.thePage:j_id1:pageBlockEditLegalName:detailTable:tb {
                                  styleClass="{!funloc.rowStyleClass}" 
                                 style="{!IF(funloc.isDupe,'color:Red;','')}"/>
                                  <!--rendered="{!(funloc.sapCMD!='')}"/>-->
+ <!-- Start Story 1862                                 
             </apex:column>   
             <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
                 <apex:facet name="header">Name 4 (New)</apex:facet>
@@ -515,6 +569,7 @@ html>body tbody.thePage:j_id1:pageBlockEditLegalName:detailTable:tb {
                                  styleClass="{!funloc.rowStyleClass}" 
                                 style="{!IF(funloc.isDupe,'color:Red;','')}"/>
                                  <!--rendered="{!(funloc.sapCMD!='')}"/>-->
+ <!-- Start Story 1862                                 
             </apex:column>   
             <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
                 <apex:facet name="header">Street (New)</apex:facet>
@@ -522,6 +577,7 @@ html>body tbody.thePage:j_id1:pageBlockEditLegalName:detailTable:tb {
                                  styleClass="{!funloc.rowStyleClass}" 
                                 style="{!IF(funloc.isDupe,'color:Red;','')}"/>
                                  <!--rendered="{!(funloc.sapCMD!='')}"/>-->
+ <!-- Start Story 1862                                 
             </apex:column>   
               
             <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
@@ -530,6 +586,7 @@ html>body tbody.thePage:j_id1:pageBlockEditLegalName:detailTable:tb {
                                  styleClass="{!funloc.rowStyleClass}" 
                                 style="{!IF(funloc.isDupe,'color:Red;','')}"/>
                                  <!--rendered="{!(funloc.sapCMD!='')}"/>-->
+ <!-- Start Story 1862                                 
             </apex:column>   
             <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
                 <apex:facet name="header">State/Province (New)</apex:facet>
@@ -537,6 +594,7 @@ html>body tbody.thePage:j_id1:pageBlockEditLegalName:detailTable:tb {
                                  styleClass="{!funloc.rowStyleClass}" 
                                 style="{!IF(funloc.isDupe,'color:Red;','')}"/>
                                  <!--rendered="{!(funloc.sapCMD!='')}"/>-->
+ <!-- Start Story 1862                                 
             </apex:column>   
             <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
                 <apex:facet name="header">Country (New)</apex:facet>
@@ -544,6 +602,7 @@ html>body tbody.thePage:j_id1:pageBlockEditLegalName:detailTable:tb {
                                  styleClass="{!funloc.rowStyleClass}" 
                                  style="{!IF(funloc.isDupe,'color:Red;','')}">
                                  <!--rendered="{!(funloc.sapCMD!='')}">-->
+ <!-- Start Story 1862                                 
                     <apex:selectOption itemLabel="" itemValue=""/>
                     <apex:selectOptions value="{!CountryOptions}"/>
               </apex:selectList>
@@ -554,6 +613,7 @@ html>body tbody.thePage:j_id1:pageBlockEditLegalName:detailTable:tb {
                                  styleClass="{!funloc.rowStyleClass}" 
                                 style="{!IF(funloc.isDupe,'color:Red;','')}"/>
                                  <!--rendered="{!(funloc.sapCMD!='')}"/>-->
+ <!-- Start Story 1862                                 
             </apex:column>   
             <apex:column onmousemove="this.parentNode.style.backgroundColor='#FCA577'" onmouseout="this.parentNode.style.backgroundColor =''">
                 <apex:facet name="header">
@@ -565,6 +625,7 @@ html>body tbody.thePage:j_id1:pageBlockEditLegalName:detailTable:tb {
                 reRender="detailTable" 
                 style="color:Blue;">
                 <!--rendered="{!(funloc.sapCMD!='')}">-->
+ <!-- Start Story 1862                
                     <apex:param name="rowToBeReplicated" 
                                 value="{!funloc.index}" 
                                 assignTo="{!rowToBeReplicated}"/>
@@ -580,6 +641,7 @@ html>body tbody.thePage:j_id1:pageBlockEditLegalName:detailTable:tb {
     </apex:actionRegion>
 </apex:pageBlock>    
 <!---Address------------------------------>
+ <!-- Start Story 1862
 </apex:form>
 <!--
  <script type="text/javascript">      

@@ -1,5 +1,5 @@
 <!--/*********************************************************************************************************
-Name            :    NewUserRegisteration
+Name            :    NewUserRegistration
 Author          :    
 Date            :    1 Jun, 2011
 Description     :    This vf page is used to Register New user. 
@@ -12,10 +12,15 @@ Modified By     :    Shridevi Badiger
 Modified Date   :    23 June 2016
 Description     :    SIR-848-For separating new User registration page for Box, Brainshark, GotoMeeting and Training App.
 
+Modified By     :    Naveen Nayak
+Modified Date   :    12 July 2018
+Description     :    Story#-1553-change the spelling error " New User Registeration " TO " New User Registration"
+
 *********************************************************************************************************/-->
 
-<apex:page applyHtmlTag="true"  controller="NewUserRegisterationController" sidebar="false" showHeader="true">
- <head>
+<apex:page applyHtmlTag="true"  controller="NewUserRegistrationController" sidebar="false" showHeader="true"> 
+
+ <head> 
     <style>
         .startStyle{
                     width:350px;
@@ -68,27 +73,26 @@ Description     :    SIR-848-For separating new User registration page for Box, 
                   <a href="https://nxp.box.com/s/y4pukl7x9n0ff18mvqnqmjkvs5cdft2m"  target="_blank" > BU_BL_MAG_WhoIsWho</a>
              </apex:panelGrid>
         </apex:pageBlockSectionItem>
+        
    <!----------------------------------------------------------------------------------------------------------->  
-        <apex:outputField value="{!user.RequestforAccountin__c}"/>
+   
+      <apex:outputField value="{!user.RequestforAccountin__c}"/>
      </apex:pageBlockSection>
-     
-  
-    
     <apex:pageBlockSection columns="1" id="pbsMoreFields">
         <apex:pageBlockSectionItem rendered="{!IF(CONTAINS(user.RequestforAccountin__c, 'Salesforce'), true, false)}">
-            <apex:outputlabel value="{!$ObjectType.New_User_Registeration__c.Fields.Are_you_a_DW_Approver__c.label}"></apex:outputlabel>
+            <apex:outputlabel value="{!$ObjectType.New_User_Registration__c.Fields.Are_you_a_DW_Approver__c.label}"></apex:outputlabel>
             <apex:inputField value="{!user.Are_you_a_DW_Approver__c}" />
         </apex:pageBlockSectionItem>       
         <apex:pageBlockSectionItem rendered="{!IF(CONTAINS(user.RequestforAccountin__c, 'Salesforce'), true, false)}">
-            <apex:outputlabel value="{!$ObjectType.New_User_Registeration__c.Fields.Specify_Mags__c.label}"></apex:outputlabel>
+            <apex:outputlabel value="{!$ObjectType.New_User_Registration__c.Fields.Specify_Mags__c.label}"></apex:outputlabel>
             <apex:inputField value="{!user.Specify_Mags__c}" />
         </apex:pageBlockSectionItem>        
         <apex:pageBlockSectionItem rendered="{!IF(CONTAINS(user.RequestforAccountin__c, 'Salesforce'), true, false)}">
-            <apex:outputlabel value="{!$ObjectType.New_User_Registeration__c.Fields.Available_Date_for_Training__c.label}"></apex:outputlabel>
+            <apex:outputlabel value="{!$ObjectType.New_User_Registration__c.Fields.Available_Date_for_Training__c.label}"></apex:outputlabel>
             <apex:inputField value="{!user.Available_Date_for_Training__c}"/>
         </apex:pageBlockSectionItem>        
         <apex:pageBlockSectionItem rendered="{!IF(CONTAINS(user.RequestforAccountin__c, 'Salesforce'), true, false)}">
-            <apex:outputlabel value="{!$ObjectType.New_User_Registeration__c.Fields.Special_Requirements_in_Salesforce__c.label}"></apex:outputlabel>
+            <apex:outputlabel value="{!$ObjectType.New_User_Registration__c.Fields.Special_Requirements_in_Salesforce__c.label}"></apex:outputlabel>
             <apex:inputField value="{!user.Special_Requirements_in_Salesforce__c}"/>
         </apex:pageBlockSectionItem>
     </apex:pageBlockSection>   
@@ -119,19 +123,19 @@ Description     :    SIR-848-For separating new User registration page for Box, 
                 <apex:outputField value="{!user.RequestforAccountin__c}"/>
             </apex:pageBlockSectionItem>
             <apex:pageBlockSectionItem rendered="{! IF(CONTAINS(user.RequestforAccountin__c, 'Salesforce'), true, false)}" >
-                 <apex:outputlabel value="{!$ObjectType.New_User_Registeration__c.Fields.Are_you_a_DW_Approver__c.label}"></apex:outputlabel>
+                 <apex:outputlabel value="{!$ObjectType.New_User_Registration__c.Fields.Are_you_a_DW_Approver__c.label}"></apex:outputlabel>
                  <apex:outputField value="{!user.Are_you_a_DW_Approver__c}"/>
             </apex:pageBlockSectionItem>       
             <apex:pageBlockSectionItem rendered="{! IF(CONTAINS(user.RequestforAccountin__c, 'Salesforce'), true, false)}" >
-                 <apex:outputlabel value="{!$ObjectType.New_User_Registeration__c.Fields.Specify_Mags__c.label}" ></apex:outputlabel>
+                 <apex:outputlabel value="{!$ObjectType.New_User_Registration__c.Fields.Specify_Mags__c.label}" ></apex:outputlabel>
                  <apex:outputField value="{!user.Specify_Mags__c}" />
             </apex:pageBlockSectionItem>        
             <apex:pageBlockSectionItem rendered="{! IF(CONTAINS(user.RequestforAccountin__c, 'Salesforce'), true, false)}" >
-                 <apex:outputlabel value="{!$ObjectType.New_User_Registeration__c.Fields.Available_Date_for_Training__c.label}" ></apex:outputlabel>
+                 <apex:outputlabel value="{!$ObjectType.New_User_Registration__c.Fields.Available_Date_for_Training__c.label}" ></apex:outputlabel>
                  <apex:outputField value="{!user.Available_Date_for_Training__c}" />
             </apex:pageBlockSectionItem>        
             <apex:pageBlockSectionItem rendered="{! IF(CONTAINS(user.RequestforAccountin__c, 'Salesforce'), true, false)}" >
-                 <apex:outputlabel value="{!$ObjectType.New_User_Registeration__c.Fields.Special_Requirements_in_Salesforce__c.label}" ></apex:outputlabel>
+                 <apex:outputlabel value="{!$ObjectType.New_User_Registration__c.Fields.Special_Requirements_in_Salesforce__c.label}" ></apex:outputlabel>
                  <apex:outputField value="{!user.Special_Requirements_in_Salesforce__c}" />
             </apex:pageBlockSectionItem>  
         </apex:pageblockSection>
@@ -148,6 +152,5 @@ Description     :    SIR-848-For separating new User registration page for Box, 
         <center><apex:commandButton value="New Registration"   action="{!register}" oncomplete="window.top.location='{!pg}'"  /></center>
     </apex:pageBlock>
  </div>  
-  </apex:form>
- 
+  </apex:form> 
 </apex:page>

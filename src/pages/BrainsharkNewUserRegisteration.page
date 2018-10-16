@@ -50,11 +50,14 @@ Description     :    This vf page is used to Register New user For Brainshark.
           <apex:inputField value="{!user.Are_You_A_Manager__c}"/>
           <apex:inputField value="{!user.Anticipate_Creating_Content__c}"/>
           <apex:inputField value="{!user.Are_You_On_Sales_Incentive_Plan__c}"/>
+          If Yes Please add SIP in the related groups.
+          <apex:inputField value="{!user.Are_You_A_New_Hire__c}"/>
+          If Yes Please add GSM New Hire in the related groups.
           <apex:inputField value="{!user.Main_Function_Area__c}"/>
           <apex:inputField value="{!user.NXP_Role__c}" label="Role"/>
           <apex:inputField value="{!user.Reason_for_Request__c}"/>
           <apex:inputField value="{!user.Related_Groups__c}"/>
-          <!--<apex:inputField value="{!user.WBI_Id__c}"/>-->
+         
       </apex:pageBlockSection>
        <center>
          <!-- <apex:commandButton value="Back" action="{!backToStep1}"/> -->
@@ -78,11 +81,11 @@ Description     :    This vf page is used to Register New user For Brainshark.
             <apex:outputField value="{!user.Are_You_A_Manager__c}"/>
             <apex:outputField value="{!user.Anticipate_Creating_Content__c}"/>
             <apex:outputField value="{!user.Are_You_On_Sales_Incentive_Plan__c}"/>
+            <apex:outputField value="{!user.Are_You_A_New_Hire__c}"/>
             <apex:outputField value="{!user.Main_Function_Area__c}"/>
             <apex:outputField value="{!user.NXP_Role__c}" label="Role"/>
             <apex:outputField value="{!user.Reason_for_Request__c}"/>
-            <apex:outputField value="{!user.Related_Groups__c}"/>
-           <!-- <apex:outputField value="{!user.WBI_Id__c}"/> -->
+            <apex:outputField value="{!user.Related_Groups__c}"/>        
             
         </apex:pageblockSection>
             <center>

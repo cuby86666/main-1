@@ -4,15 +4,16 @@
 @Description: 1602 Release SIR 663 - SFDC user registration enhancement
 -->
 <!-- 1602 Release SIR633 - Modified by Scarlett -->
-<!-- <apex:page standardController="New_User_Registeration__c" extensions="NewUserRegistrationV2Controller" action="{!init}" sidebar="false" showHeader="false"> -->
-<apex:page standardController="New_User_Registeration__c" extensions="NewUserRegistrationV2Controller" action="{!init}" sidebar="false" showHeader="true">
-<!-- 1602 Release SIR633 - Modified by Scarlett END-->
-    <script type="text/javascript">
+<apex:page standardController="New_User_Registration__c" extensions="NewUserRegistrationV2Controller" action="{!init}" sidebar="false" showHeader="false"> 
+
+<!-- 1602 Release SIR633 - Modified by Scarlett END -->
+
+       <script type="text/javascript">
         function selectAllCheckboxes(obj,receivedInputID){
-            var divCheckBox = document.getElementsByClassName('NewUserReg');
+            var divCheckBox = document.getElementsByClassName('NewUserReg'); 
             for(var i=0; i<divCheckBox.length; i++) {
                 if (divCheckBox[i].id.indexOf(receivedInputID)!=-1) {
-                	var inputCheckBox = divCheckBox[i].getElementsByTagName('input');
+                    var inputCheckBox = divCheckBox[i].getElementsByTagName('input');
                     for(var j=0; j<inputCheckBox.length; j++) {
                         inputCheckBox[j].checked = obj.checked;
                     }
@@ -20,30 +21,35 @@
             }
         }
     
-    	function getWelcomeUrl() {
-        	var siteName = '{!$Site.Domain}';
+        function getWelcomeUrl() {
+            var siteName = '{!$Site.Domain}';
             if (siteName == '')
                 return 'http://' + window.location.hostname + '/apex/Landing_Page';
             else
                 return 'http://' + '{!$Site.Domain}' + '/welcome';
         }
     
-    	function getNewUserRegistrationUrl() {
-        	var siteName = '{!$Site.Domain}';
+        function getNewUserRegistrationUrl() {
+            var siteName = '{!$Site.Domain}';
             if (siteName == '')
                 return window.location.href;
             else
                 return 'http://' + '{!$Site.Domain}' + '/newuser2';
         }
-    </script>
+    </script> 
+
 <!--1602 Release SIR 663 - Moidfied by Scarlett-->
+
     <style type="text/css">
         .bPageHeader {
             display:none;
         }
-	</style>
+    </style>
+    
+    
 <!--1602 Release SIR 663 - Moidfied by Scarlett - END -->
     <!--/////////////////////////////////////////////////////////////////////////////////////-->
+    
     <apex:pageblock rendered="{!newUserMode}">
         <table>
             <tr>
@@ -51,8 +57,10 @@
                 <td><apex:outputtext value="User Registration Form for Salesforce" style="font-size: 200%;" /></td>
             </tr>
         </table>
+        
         <!--<apex:sectionHeader subtitle="User Registration Form for Salesforce" rendered="{!newUserMode}" />-->
-    </apex:pageblock>
+        
+   </apex:pageblock>
     <apex:form >
         <apex:pageMessages />
     <apex:pageBlock title="General Information" rendered="{!AND(newUserMode,NOT(success))}">
@@ -64,42 +72,50 @@
             <apex:inputField value="{!user.Region__c}" required="true" />
             <apex:inputfield value="{!user.Phone_Number__c}" />
             <apex:inputField value="{!user.Country__c}" required="true" />
-            <apex:inputField value="{!user.Job_Title__c}" required="true" /> <!--1602 Release SIR 663 - Modifiedy by Scarlett-->         
-            <apex:inputfield value="{!user.Main_Function_Area__c}" required="true" />
+            <apex:inputField value="{!user.Job_Title__c}" required="true" />   <!--1602 Release SIR 663 - Modifiedy by Scarlett--> 
+            
+           <apex:inputfield value="{!user.Main_Function_Area__c}" required="true" />
             <apex:inputField value="{!user.Manager_Name__c}" required="true" />
             <apex:inputfield value="{!user.NXP_Role__c}" required="true" />
             <apex:inputfield value="{!user.Manager_s_email__c}" required="true" />
-<!--1602 Release SIR 663 - Modifiedy by Scarlett-->            
-            <apex:pageBlockSectionItem HelpText="{!$ObjectType.New_User_Registeration__c.fields.Reason_for_Request__c.inlineHelpText}">
-			<!--{!$ObjectType.New_User_Registeration__c.fields.Reason_for_Request__c.label}-->
-                <apex:outputLabel value="{!$ObjectType.New_User_Registeration__c.fields.Reason_for_Request__c.label}" for="name">
-            	</apex:outputLabel>
-				<apex:inputField value="{!user.Reason_for_Request__c}" required="true" />
-			</apex:pageBlockSectionItem>
-			<apex:inputField value="{!user.Colleagues_email__c}" required="true"/>              
+            
+            
+            
+<!--1602 Release SIR 663 - Modifiedy by Scarlett-->    
+
+            <apex:pageBlockSectionItem HelpText="{!$ObjectType.New_User_Registration__c.fields.Reason_for_Request__c.inlineHelpText}"> 
+            
+            <!--{!$ObjectType.New_User_Registration__c.fields.Reason_for_Request__c.label}-->
+        
+                <apex:outputLabel value="{!$ObjectType.New_User_Registration__c.fields.Reason_for_Request__c.label}" for="name">
+                </apex:outputLabel>
+                <apex:inputField value="{!user.Reason_for_Request__c}" required="true" />
+            </apex:pageBlockSectionItem>
+            <apex:inputField value="{!user.Colleagues_email__c}" required="true"/> 
+            
 <!--1602 Release SIR 663 - Modifiedy by Scarlett - END-->        
             
-        </apex:pageBlockSection>
+       </apex:pageBlockSection>
     </apex:pageBlock>
 
     <apex:pageBlock title="{!IF(newUserMode,'Data Accessibility (optional)','')}" rendered="{!NOT(success)}">
     <table id="myTable" class="list" border="0" cellpadding="0" cellspacing="0">
-	    <tr class="headerRow">
+        <tr class="headerRow">
             <th />
-    		<apex:repeat value="{!lstBUSettings}" var="col">
+            <apex:repeat value="{!lstBUSettings}" var="col">
                 <th>
                     <apex:inputCheckbox value="{!col.IsSelected}" onclick="selectAllCheckboxes(this,'{!col.Key}');" disabled="{!checkBoxDisabled}" />
                     {!col.BUName}
                 </th>
-    		</apex:repeat>
-    	</tr>
+            </apex:repeat>
+        </tr>
         <apex:repeat value="{!lstRegionSettings}" var="row">
             <tr>
             <th>
                 <apex:inputCheckbox value="{!row.IsSelected}" onclick="selectAllCheckboxes(this,'{!row.Key}');" disabled="{!checkBoxDisabled}" />
                 {!row.RegionName}
             </th>
-        	<apex:repeat value="{!row.lstGroups}" var="col">
+            <apex:repeat value="{!row.lstGroups}" var="col">
                 <td>
                     <div class="NewUserReg" id="{!col.IdKey}">
                     <center>
@@ -111,10 +127,12 @@
             </tr>
         </apex:repeat>
     </table>
-	<!--<apex:commandButton action="{!updateUserGroup}" value="Update User Group Settings" rendered="{!AND(NOT(newUserMode),NOT(checkBoxDisabled))}" />-->
+    
+    <!--<apex:commandButton action="{!updateUserGroup}" value="Update User Group Settings" rendered="{!AND(NOT(newUserMode),NOT(checkBoxDisabled))}" />-->
+    
         <apex:pageBlockSection columns="2" rendered="{!AND(newUserMode,NOT(success))}">
         <apex:pageblockSectionItem >
-            <apex:outputLabel value="{!$ObjectType.New_User_Registeration__c.fields.Global_Key_Account__c.label}" for="name">
+            <apex:outputLabel value="{!$ObjectType.New_User_Registration__c.fields.Global_Key_Account__c.label}" for="name">
             </apex:outputLabel>
             <apex:inputField value="{!user.Global_Key_Account__c}" />
         </apex:pageblockSectionItem>
@@ -135,5 +153,5 @@
         <apex:commandButton value="New Registration" onclick="window.top.location=getNewUserRegistrationUrl();return false;" rendered="{!success}" />
     </center>    
     </apex:pageBlock>
-    </apex:form>
+    </apex:form> 
 </apex:page>

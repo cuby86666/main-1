@@ -151,7 +151,7 @@ Description     :    SFDC-1171-Brainshark New User Registration form-- Click her
                                 <div>
                                     <div>
                                         <h3 class="nxp-darkorange" style="text-align:center;vertical-align: middle;">Customer Master Data</h3>
-                                        <a href="/cmd" title="CMD" target="blank"> 
+                                        <a href="{!$label.CMD_Redirect_URL_From_Landing_Page}" title="CMD" target="blank"> 
                                             <div style="text-align:center;vertical-align: middle;">
 <!--                                                <img src="{!URLFOR($Resource.LandingPageStyle, 'img/NXP_logo.jpg')}" alt="Register with Extranet" width="80"  />  -->
                                                 <img src="{!URLFOR($Resource.CMD_Logo)}" alt="Make CMD Request" width="80"  /> 

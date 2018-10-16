@@ -10,7 +10,7 @@
 -->
 
 
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <!-- <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script> -->
 
     <!-- START OF HEADER -->
     <apex:composition template="CommunityNXPContextTemplate" >
@@ -27,7 +27,7 @@
       
          <apex:actionFunction name="updateDeleteContext" action="{!updateContextName}"/>   
            <div class="col-sm-12">
-             <p class="lead">
+             <p style="padding-top:15px;font-size:15px" class="lead">
   {!$Label.CommunityUpdateDeleteText}
                                                         </p>
               <div class="form-group">
@@ -37,24 +37,29 @@
  
             <div class="col-sm-6">
               <div class="form-group">
-                <label>{!$Label.CommunityContextnameLabel}<span class="text-required">*</span>
+                <label><h4>{!$Label.CommunityContextnameLabel}<span class="text-required">*</span>
                 <a class="info-tooltip" ref="#" data-toggle="tooltip" data-placement="left" title="{!$Label.CommunityContextNameHelpText}">&#63;</a>
-                </label>
+              </h4>  </label>
               
                  <apex:inputField styleClass="form-control" value="{!currentContext.Name}" html-placeholder="{!$Label.CommunityContextnameLabel}" required="true"/>
               </div><!-- /.form-group -->
               </div>
       <br/>  
-      
+<style>
+
+
+
+    
+   
+</style>
         <div class="col-xs-12"> 
           <div class="form-group">    
     
-       <apex:selectRadio styleClass="radio" id="del" layout="pageDirection" value="{!deleteContext}">
+       <apex:selectRadio layout="pageDirection"  style="radio" id="del"  value="{!deleteContext}">
            <apex:selectOption itemLabel="{!$Label.CommunityUpdate}" itemValue="no"/>
-           <apex:selectOption id="dell"
-           itemLabel="{!$Label.CommunityDelete}"  itemValue="yes"/>
-          
+           <apex:selectOption id="dell" itemLabel="{!$Label.CommunityDelete}"  itemValue="yes"/>
        </apex:selectRadio>
+        
        </div> 
        </div>      
                           <div class="col-xs-12">

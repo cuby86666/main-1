@@ -1,0 +1,28 @@
+<apex:page standardController="Lead" >
+    <script src="/canvas/sdk/js/43.0/publisher.js" type="text/javascript"/>
+    <apex:includeLightning />
+	<div id="messages" ></div>
+    <div id="lightning" ></div>
+	
+    <script>
+    	var vfCancelAndClose = function(event){
+            console.log("call close");
+            //Sfdc.canvas.publisher.publish({ name : "publisher.close", payload : { refresh:"true" }});
+            window.top.location.href='/<apex:outputText value="{!id}"/>';
+        }
+    	var vfEventHandlerFunction = function(event){
+            var message = event.getParam("message");
+            console.log("message "+message);
+            document.getElementById("messages").innerHTML = message;
+        }
+        $Lightning.use("c:SendLeadToDistiApp", function() {
+          $Lightning.createComponent("c:SendLeadsToDisti",
+          { label : "Send To Disti",
+           recordId : '<apex:outputText value="{!id}"/>' },
+          "lightning",
+          function(cmp) {
+            $A.eventService.addHandler({ "event": "c:CancelAndClose", "handler" : vfCancelAndClose});  
+          });
+        });
+    </script>
+</apex:page>

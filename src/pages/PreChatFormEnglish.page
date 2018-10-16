@@ -1,7 +1,12 @@
+<!--*****************************************************************
+Last Modified By:Manikanta
+Last Modified Date:23-jul-2018
+Description: SFDC-1505-Chat to Lead Conversion.
+*********************************************************************-->
+
 <apex:page showHeader="false" >
 
-<apex:image url="{!$Resource.NXPLogo}"  style="centre" /><br></br>
-
+    <apex:image url="{!$Resource.NXPLogo}"  style="centre" /><br/><br/>
 
 <script type="text/javascript">
 (function() {
@@ -21,6 +26,10 @@ function validateForm(){
  var ln=document.forms["prechatForm"]["liveagent.prechat:ContactLastName"].value;
  var com=document.forms["prechatForm"]["liveagent.prechat:ContactCompany"].value;
  var con=document.forms["prechatForm"]["liveagent.prechat:ContactCountry"].value;
+ var chk=document.forms["prechatForm"]["liveagent.prechat:Permission to share with Distributor"].checked;
+ var chckk=document.forms["prechatForm"]["liveagent.prechat:Permission for use with Marketing Purposes"].checked;
+   
+ 
  var answer=document.getElementById("mySelect");
 
  var filter = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -100,7 +109,7 @@ label {float:left;width:25%;margin-right:2.5em;padding-top:0.2em;text-align:left
 }
 </style>
 
-<h1>Please fill below details </h1><br></br>
+<h1>Please fill below details </h1><br/>
 
 <h2>(All fields marked * are compulsory)</h2>
 
@@ -134,8 +143,30 @@ label {float:left;width:25%;margin-right:2.5em;padding-top:0.2em;text-align:left
 <label for="email">Company:*</label><input type='text' name='liveagent.prechat:ContactCompany' style="width:175px"/><br />
 <input type="hidden" name="liveagent.prechat.save:ContactCompany" value="Company__c" /> 
 
+<script type="text/javascript">
+function ShowHideDiv2() {
+    var country = document.getElementById("mySelect");
+    var chck = document.getElementById("chck");
+    var chckkk = document.getElementById("chckkk");
+   
+    
+    if (country.value  ==  "AUSTRIA"  ||  country.value  ==  "BELGIUM"  ||  country.value  ==  "BULGARIA"  ||  country.value  ==  "CROATIA"  ||  country.value  ==  "CYPRUS"  ||  country.value  ==  "CZECH REPUBLIC"  ||  country.value  ==  "DENMARK"  ||  country.value  ==  "ESTONIA"  ||  country.value  ==  "FINLAND"  ||  country.value  ==  "FRANCE"  ||  country.value  ==  "GERMANY"  ||  country.value  ==  "GREECE"  ||  country.value  ==  "HUNGARY"  ||  country.value  ==  "IRELAND"  ||  country.value  ==  "ITALY"  ||  country.value  ==  "LATVIA"  ||  country.value  ==  "LITHUANIA"  ||  country.value  ==  "LUXEMBOURG"  ||  country.value  ==  "MALTA"  ||  country.value  ==  "NETHERLANDS"  ||  country.value  ==  "POLAND"  ||  country.value  ==  "PORTUGAL"  ||  country.value  ==  "ROMANIA"  ||  country.value  ==  "SLOVAKIA"  ||  country.value  ==  "SLOVENIA"  ||  country.value  ==  "SPAIN"  ||  country.value  ==  "SWEDEN"  ||  country.value  ==  "UNITED KINGDOM") {
+     document.getElementById("ch1").checked = false;
+    document.getElementById("ch2").checked = false;
+        chck.style.display = "block";
+       chckkk.style.display = "block";
+            }
+            else{
+            chck.style.display = "none";
+                chckkk.style.display = "none";
+            }
+} 
+               
+</script>
 
-<label for="country">Country:*</label><select name='liveagent.prechat:ContactCountry' id="mySelect" style="width:180px">
+
+<label for="country">Country:*</label>
+<select name='liveagent.prechat:ContactCountry' id="mySelect" style="width:180px" onchange = "ShowHideDiv2()">
  <option>None</option>
  <option>  AFGHANISTAN  </option>
  <option>   ALBANIA  </option>
@@ -360,7 +391,7 @@ label {float:left;width:25%;margin-right:2.5em;padding-top:0.2em;text-align:left
  <option>   UKRAINE  </option>
  <option>   UNITED ARAB EMIRATES     </option>
  <option>   UNITED KINGDOM   </option>
- <option>   UNITED STATES    </option>
+ <option>   USA    </option>
  <option>   UPPER VOLTA  </option>
  <option>   URUGUAY  </option>
  <option>   VATICAN CITY     </option>
@@ -377,24 +408,56 @@ label {float:left;width:25%;margin-right:2.5em;padding-top:0.2em;text-align:left
  <option>   ZIMBABWE     </option>
 
 </select>
-<br/>
+
+    <!--
+<input type='hidden' name='liveagent.prechat:ContactCountry' />-->
+                        <input type="hidden" name="liveagent.prechat.save:ContactCountry" value="Country__c" /> 
+                        
 
 
-<input type='hidden' name='liveagent.prechat:ContactCountry' />
-                        <input type="hidden" name="liveagent.prechat.save:ContactCountry" value="Country__c" />
 <input type="hidden" name="liveagent.prechat.query:Email"
 value="Contact,Contact.Email" />
 <input type="hidden" name="liveagent.prechat.save:Email" value="Email__c" size="40" />
+<br/>
+
+    
+<div id="chck" style="display: none">
+
+<input name='liveagent.prechat:Permission for use with Marketing Purposes' type="checkbox"  value="true"  id="ch1" >
+
+    <b>I would like to receive important technical updates and information on new products, training, and more from NXP</b> </input> <br/>
+    <input type="hidden" name="liveagent.prechat.save:Permission to share with Distributor" value="Permission_to_share_with_Distributor__c" />    
+  
+
+
+    </div>
+    
+   
+<div id="chckkk" style="display: none"> 
+    
+<input name='liveagent.prechat:Permission to share with Distributor' type="checkbox"  value="true"  id="ch2" > 
+    <b>I give my permission to share my information with Authorized NXP Distribution Partners</b> </input> 
+
+<input type="hidden" name="liveagent.prechat.save:Permission for use with Marketing Purposes" value="Permission_for_use_with_Marketing_Purpos__c" /> 
+
+    
+    </div>
+
+<br/>
+
+
+
+
+
 
 <!-- find contact and save to trenscript -->
 
 <!-- <input type="hidden" name="liveagent.prechat.findorcreate.map:Contact" value="FirstName,First Name;LastName,Last Name;Company,Company;Country,Country;Email,Email" /> -->
 
-<input type="hidden" name="liveagent.prechat.findorcreate.map:Contact" value="FirstName,ContactFirstName;LastName,ContactLastName;Company,ContactCompany;Country,ContactCountry;Email,ContactEmail" /> 
+<input type="hidden" name="liveagent.prechat.findorcreate.map:Contact" value="FirstName,ContactFirstName;LastName,ContactLastName;Company,ContactCompany;Country,ContactCountry;Email,ContactEmail;Disti1__c,Permission to share with Distributor;Disti2__c,Permission for use with Marketing Purposes" /> 
 <!-- <input type="hidden" name="liveagent.prechat.findorcreate.map:Contact" value="FirstName,ContactFirstName;LastName,ContactLastName;Company,ContactCompany__c;Country,ContactCommunity_web_country__c;Email,ContactEmail" /> -->
 
  
-
 <input type="hidden" name="liveagent.prechat.findorcreate.map.doFind:Contact" value="Email,true" />
 
 <input type="hidden" name="liveagent.prechat.findorcreate.map.isExactMatch:Contact" value="Email,true" />
@@ -410,14 +473,39 @@ value="Contact,Contact.Email" />
 <script type="text/javascript">
 
    function setName() {
+       // var chk=document.forms["prechatForm"]["liveagent.prechat:Permission to share with Distributor"].checked;
+       //var chckk=document.forms["prechatForm"]["liveagent.prechat:Permission for use with Marketing Purposes"].checked;
+       //var x=document.forms["prechatForm"]["liveagent.prechat:ContactEmail"].value;
+       //var con=document.forms["prechatForm"]["liveagent.prechat:ContactCountry"].value;
+       //var conn = con;
 
+           
+       
     document.getElementById("prechat_field_name").value = 
 
         document.getElementById("firstName").value + " " + document.getElementById("lastName").value;
+            
+       //Updcontact(chk,chckk,conn,x); 
+            
 
     }
 
 </script>
 </fieldset>
 </form>
+
+<apex:form >
+  <!-- 
+<apex:actionFunction name="Updcontact" action="{!updatecontact1}" rerender="" >
+    
+     <apex:param name="chk"  assignTo="{!chk}"  value=""/>
+     <apex:param name="chckk"  assignTo="{!chckk}"  value=""/>
+    <apex:param name="conn"  assignTo="{!conn}"  value=""/>
+     <apex:param name="x"  assignTo="{!x}"  value=""/>
+        
+    
+</apex:actionFunction> -->
+    
+    </apex:form>
+    
 </apex:page>
