@@ -22,6 +22,10 @@
         <name>AuraDefinitionBundle</name>
     </types>
     <types>
+    	<members>OpportunityProgram__c.Opportunity_Program_Name_Uniqueness</members>
+    	<name>DuplicateRule</name>
+  	</types>
+    <types>
         <members>OpportunityProgram__c-Opportunity Program Layout</members>
         <name>Layout</name>
     </types>
@@ -29,5 +33,5 @@
         <members>OpportunityProgram__c.Maintain_Multi_Oppties_Scheds</members>
         <name>WebLink</name>
     </types>
-	<version>44.0</version>
+    <version>44.0</version>
 </Package>
