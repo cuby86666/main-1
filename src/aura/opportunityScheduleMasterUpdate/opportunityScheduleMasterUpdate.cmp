@@ -1,0 +1,385 @@
+<aura:component implements="force:hasRecordId" controller="OpportunityScheduleMasterController">
+	<aura:attribute name="ErrorMessage" type="String"/> <!-- Exception -->					
+    <aura:attribute name="UserTheme" type="String"/>					
+    <aura:attribute name="toggleCompDisplay" type="Boolean"/>					
+    <aura:attribute name="recordId" type="String"/>  					
+    <aura:attribute name="hasErrors" type="Boolean"					
+        description="Indicate if there were failures when validating the Opportunity Schedule Information." />					
+    <aura:attribute name="opp1" type="Opportunity"/>  					
+    <aura:attribute name="flagDirect" type="Boolean"/>			
+    <aura:attribute name="lstPositions" type="OpportunitySchedulingWrapper.OpportunityScheduleView[]" />    					
+    <aura:attribute name="OpptySchldCount" type="Integer" />  					
+    <aura:attribute name="OpptySchldCountInit" type="Integer" />  					
+    <aura:attribute name="flagDelCmitmntButton" type="Boolean" />  					
+    <aura:attribute name="flagAlert" type="Boolean" /> 					
+    <aura:attribute name="flagCancelAlert" type="Boolean" /> 	<!-- Alert to confirm Cancel if there is unsaved chnages -->				
+    <aura:attribute name="OldProdDate" type="Date"/>
+    <aura:attribute name="flagSaveSuccess" type="Boolean" />					
+    <aura:attribute name="isChanged" type="Boolean"					
+        description="Indicate if there is change in the values and is still saved" />	    				
+    <aura:attribute name="isEmptyOpptySched" type="Boolean"					
+        description="Indicate if there were failures when validating the Opportunity Schedule Information." />					
+    <aura:attribute name="isQuantityDecimalOrNegative" type="Boolean"					
+        description="Indicate if there were failures when validating the Opportunity Schedule Information." />					
+    <aura:attribute name="hasErrors1" type="Boolean"					
+        description="Indicate if there were failures when validating the Opportunity Schedule Information." />					
+ 	<aura:attribute name="isExceptionFlag" type="Boolean" />					
+    <aura:attribute name="flagNonTmmaDisabling" type="Boolean" /> <!-- Added for TMMA-->					
+    <aura:attribute name="flagNonTmmaDelDisabling" type="Boolean" /> <!-- Added for tmma Del-->					
+    <aura:attribute name="isSpinner" type="Boolean" />					
+    <aura:attribute name="checkChange" default="false" type="Boolean" />    
+    <aura:attribute name="isError" default="false" type="Boolean" />    <!-- Added for Exception error-->
+    <aura:attribute name="OldCloseDate" type="Date"/>
+    <!-- Componenet Handlers-->					
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />					
+    <aura:handler name="change" value="{!v.opp1.Production_Date__c}" action="{!c.handleValueChange}"/>
+    <aura:handler name="change" value="{!v.toggleCompDisplay}" action="{!c.doInitact}"/>				
+
+ <!-- Spinner Bloc Starts -->
+   <aura:if isTrue="{!v.isSpinner}">					
+    <div class="slds-spinner_container">					
+     <div role="status" class="slds-spinner slds-spinner--medium slds-spinner--brand">					
+      <span class="slds-assistive-text">Loading</span>					
+      <div class="slds-spinner__dot-a"></div>					
+      <div class="slds-spinner__dot-b"></div>					
+     </div>					
+    </div>					
+   </aura:if>	
+ <!-- Spinner Bloc Ends -->
+    					
+<!-- Edit Opportunity Schedules Display Starts-->
+  <aura:if isTrue="{!v.toggleCompDisplay}">
+   <ui:scrollerWrapper >						
+    <div class="container slds-scrollable"  style="height: 50rem;">
+    <form class="slds-form--stacked slds-scrollable"> 					
+     <aura:if isTrue="{!(v.UserTheme == 'Theme4t')}">	
+      <h1 class="slds-page-header__title slds-m-right--small slds-truncate slds-align-left">Opportunity Schedule</h1>					
+     </aura:if>					
+          					
+     <aura:if isTrue="{!(v.UserTheme != 'Theme4t')}">					
+      <legend id="FFform" class="slds-text-heading--small"><h1 class="slds-page-header__title slds-m-right--small slds-truncate slds-align-left">Opportunity Schedule</h1></legend>     					
+     </aura:if>     <!--Added-->
+        
+     <div class="borderdiv">
+         
+      <!-- Display form Exception errors, if any -->	
+      <aura:if isTrue="{!v.isExceptionFlag}">					
+       <div class="recordSaveError">					
+        <ui:message title="Error" severity="error" closable="true">					
+         Error has occurred due to the following reason:
+         <br/>
+         <ui:outputText value="{!v.ErrorMessage}"/>					
+         <br/>					
+         Please raise an issue by clicking “Help Desk” button on the Opportunity Detail page including the above error message.					
+        </ui:message>					
+       </div>					
+      </aura:if>					
+         					
+     <!--Cancel Save alert  Start -->					
+      <aura:if isTrue="{!v.flagCancelAlert}">					
+       <div role="alertdialog" tabindex="-1" aria-labelledby="prompt-heading-id" aria-describedby="prompt-message-wrapper" class="slds-modal slds-fade-in-open slds-modal--prompt">					
+        <div class="slds-modal__container">					
+         <div class="slds-modal__header slds-theme--error slds-theme--alert-texture">					
+          <h2 class="slds-text-heading--medium" id="prompt-heading-id">Save the changes</h2>					
+         </div>					
+        <div class="slds-modal__content slds-p-around--medium">					
+         <div>					
+          <p>There are changes that haven't saved. Are you sure you want to cancel?					
+          <br></br>					
+              Click "Yes" to proceed, else click "No"					
+          </p>					
+         </div>					
+        </div>					
+        <div class="slds-modal__footer slds-theme--default">					
+         <div class="slds-grid slds-grid--align-center">					
+          <div class="slds-p-horizontal--small slds-size--1-of-2">    					
+           <div class="slds-form-element">					
+            <div class="slds-form-element__control">					
+             <ui:button label="Yes" aura:id="cancelYes" class="slds-button slds-button--neutral"					
+              labelClass="label" press="{!c.backOppty}"/>					
+            </div>					
+           </div>					
+          </div>					
+          <div class="slds-p-horizontal--small slds-size--1-of-2">    					
+           <div class="slds-form-element">					
+            <div class="slds-form-element__control">					
+             <ui:button label="No" aura:id="cancelNo" class="slds-button slds-button--neutral"					
+              labelClass="label" press="{!c.cancelAlertClose}"/>					
+            </div>					
+           </div>					
+          </div>					
+         </div>					
+        </div>					
+       </div>					
+      </div>					
+      <div class="slds-backdrop slds-backdrop--open"></div>					
+     </aura:if>					         					
+    <!--Cancel Save alert  Ends -->					
+         					
+    <!--Prod Date Change alert  Start -->					
+    <aura:if isTrue="{!v.flagAlert}">					
+     <div role="alertdialog" aria-busy="true" aria-live="assertive" tabindex="-1" aria-labelledby="prompt-heading-id" aria-describedby="prompt-message-wrapper" class="slds-modal slds-fade-in-open slds-modal--prompt">					
+      <div class="slds-modal__container">					
+       <div class="slds-modal__header slds-theme--error slds-theme--alert-texture">					
+        <h2 class="slds-text-heading--medium" id="prompt-heading-id">Production Date changed</h2>					
+       </div>					
+       <div class="slds-modal__content slds-p-around--medium">					
+        <div>					
+         <p>If Production Date is changed then the Opportunity Scheduled Date will be updated automatically. Are you sure you want to proceed?					
+         <br></br>					
+         Click "Yes" to proceed, else click "No"					
+         </p>					
+        </div>					
+       </div>					
+       <div class="slds-modal__footer slds-theme--default">					
+        <div class="slds-grid slds-grid--align-center">					
+         <div class="slds-p-horizontal--small slds-size--1-of-2">    					
+          <div class="slds-form-element">					
+           <div class="slds-form-element__control">					
+            <ui:button label="Yes" aura:id="chngProdDateYes" class="slds-button slds-button--neutral"					
+             labelClass="label" press="{!c.changeProdDate}"/>					
+           </div>					
+          </div>					
+         </div>					
+        					
+         <div class="slds-p-horizontal--small slds-size--1-of-2">    					
+          <div class="slds-form-element">					
+           <div class="slds-form-element__control">					
+            <ui:button label="No" aura:id="chngProdDateNo" class="slds-button slds-button--neutral"					
+             labelClass="label" press="{!c.changeProdDateAlertClose}"/>					
+           </div>					
+          </div>					
+         </div>					
+        </div>					
+       </div>					
+      </div>					
+     </div>					
+     <div class="slds-backdrop slds-backdrop--open"></div>					
+    </aura:if>	
+    <!-- Prod Date Change alert  Ends -->					
+    				
+    <!-- Opportunity Schedule Success message display starts-->					
+    <aura:if isTrue="{!v.flagSaveSuccess}">					
+     <div class="recordSaveSuccess">					
+      <ui:message title="Success" severity="confirm" closable="true">					
+       Opportunity Schedules have been saved successfully.					
+      </ui:message>					
+     </div>					
+    </aura:if>					
+    <!-- Opportunity Schedule Success message display Ends-->					
+					
+    <!-- Opportunity Schedule Error message display starts-->         					
+    <aura:if isTrue="{!v.hasErrors1}">					
+     <div class="recordSaveError">					
+      <ui:message title="Error" severity="error" closable="true">					
+        The new Opportunity Schedule can't be saved.					
+        Please review and correct the errors.					
+      </ui:message>					
+     </div>					
+    </aura:if>					
+    <!-- Opportunity Schedule Error message display ends-->					
+					
+    <!-- Display if Value changed and not saved -->					
+    <aura:if isTrue="{!v.isChanged}">					
+     <div class="recordSaveError">					
+      <ui:message title="Save the changes" severity="warning" closable="true">					
+       Please save the changes.					
+      </ui:message>					
+     </div>					
+    </aura:if>					
+    <!-- Display if Value changed and not saved -->	
+    
+    <!--Edit Oppty Schedules Header Fieldset Starts -->         
+    <div class="slds-grid slds-wrap">      					
+     <div class="slds-col--padded slds-size--1-of-1 slds-medium-size--1-of-2">					
+      <div class="slds-form-element">					
+       <div class="slds-form-element__control">           
+        <ui:inputDate aura:id="expclosedate" label="Expected Close Date"					
+         class="slds-input"					
+         labelClass="slds-form-element__label"					
+         value="{!v.opp1.CloseDate}"	focus="{!c.changeCloseDate}" change="{!c.changeCloseDate}"	blur="{!c.changeCloseDate}" 			
+         displayDatePicker="true"
+         keyup="{!c.restrictManualEntryOfCloseDate}" keypress="{!c.restrictManualEntryOfCloseDate}" cut="{!c.restrictManualEntryOfCloseDate}"  paste="{!c.restrictManualEntryOfCloseDate}" updateOn="paste, cut"/>              					         
+       </div>					
+      </div>	
+     </div>   
+     <div class="slds-col--padded slds-size--1-of-1 slds-medium-size--1-of-2">					
+      <div class="slds-form-element">					
+       <div class="slds-form-element__control">
+        <ui:inputDate aura:id="proddate" label="Production Date"					
+         class="slds-input"					
+         labelClass="slds-form-element__label"					
+         value="{!v.opp1.Production_Date__c}" focus="{!c.changeProdDateAlert}"  change="{!c.changeProdDateAlert}" blur="{!c.changeProdDateAlert}" 
+         displayDatePicker="true"
+         keyup="{!c.restrictManualEntryOfProdDate}" keypress="{!c.restrictManualEntryOfProdDate}" cut="{!c.restrictManualEntryOfProdDate}"  paste="{!c.restrictManualEntryOfProdDate}" updateOn="paste, cut"/>    
+       </div>				
+      </div>					
+     </div>	            
+    </div>					
+					
+    <div class="slds-grid slds-wrap">					       					
+     <div class="slds-col--padded slds-size--1-of-1 slds-medium-size--1-of-2">					
+      <div class="slds-form-element">					
+       <div class="slds-form-element__control">					
+        <ui:inputNumber aura:id="OppClmVal" label="Oppty Claim Value (USD)"					
+         class="slds-input"	disabled="true"				
+         labelClass="slds-form-element__label"					
+         value="{!v.opp1.Claim_Value_USD__c}"/>					
+       </div>					
+      </div>					
+     </div>					
+     <div class="slds-col--padded slds-size--1-of-1 slds-medium-size--1-of-2">					
+      <div class="slds-form-element">					
+       <div class="slds-form-element__control">					
+        <ui:inputNumber aura:id="OppClmValLt" label="Oppty LT Value (USD)"					
+         class="slds-input"	disabled="true"				
+         labelClass="slds-form-element__label"					
+         value="{!v.opp1.LT_Value_USD__c}"/>					
+       </div>					
+      </div>					
+     </div>					
+    </div>					
+    <br/>
+    <br/>
+    <!--Edit Oppty Schedules Header Fieldset Starts --> 
+    
+    <!--Edit Oppty Schedules Button Section Starts-->     
+    <!--Edit Oppty Schedules - Classic, Lightning Button Section Starts-->		          					          					
+    <aura:if isTrue="{!(v.UserTheme != 'Theme4t')}">
+     	<lightning:layout horizontalAlign="center">
+            <lightning:layoutItem padding="around-small">
+                <lightning:button aura:id="addQtr" label="Add QTR" title="Add QTR" onclick="{!c.addQuater}"/>
+            </lightning:layoutItem>
+         	<lightning:layoutItem padding="around-small">
+                <lightning:button aura:id="prev" label="Previous" title="Previous" onclick="{!c.prev}"/>
+            </lightning:layoutItem>
+         	<lightning:layoutItem padding="around-small">
+                <lightning:button aura:id="cancel" label="Cancel" title="Cancel" onclick="{!c.backOpptySch}"/>
+            </lightning:layoutItem>
+            <lightning:layoutItem padding="around-small">
+                <lightning:button aura:id="saveclose" label="Save and Close" title="Save and Close" onclick="{!c.saveClose}"/>
+            </lightning:layoutItem>
+         	<lightning:layoutItem padding="around-small">
+                <lightning:button aura:id="saveSch" variant="brand" label="Save" title="Save" onclick="{!c.save}"/>
+            </lightning:layoutItem>
+     	</lightning:layout>
+    </aura:if>   					
+   <!--Edit Oppty Schedules - Classic, Lightning Button Section Ends-->
+   <!--Edit Oppty Schedules Button Section Ends-->
+   <br/>					
+   <br/> 					
+  					
+   <!-- Display form validation errors, if any -->					
+   <aura:if isTrue="{!v.isEmptyOpptySched}">					
+    <div class="recordSaveError">					
+     <ui:message title="Error" severity="error" closable="true">					
+      Please add the quantity for at least one Quarter.					
+     </ui:message>					
+    </div>					
+   </aura:if>					
+         					
+   <!-- Display form validation errors, if no is negative or decimal -->					
+   <aura:if isTrue="{!v.isQuantityDecimalOrNegative}">					
+    <div class="recordSaveError">					
+     <ui:message title="Error" severity="error" closable="true">					
+      Quantity values cannot be decimal or negative value.					
+      Please correct the value to be positive whole number.					
+     </ui:message>					
+    </div>					
+   </aura:if>					
+   
+   <!-- Oppty Sched Table Starts -->	      
+   <div class="slds-grid slds-grid--align-center">							
+    <div class="divTable">	
+         
+      <div class="divTableHeading">					
+      <div class="divTableRow">										
+       <div class="divTableHead inputNumStyle">&nbsp;</div>					
+       <div class="divTableHead inputNumStyle">					
+        <div class="slds-truncate" title="Schedule Date"><div class="slds-text-heading--label">Sched Date</div></div>					
+       </div>					
+       <div class="divTableHead inputNumStyle">					
+        <div class="slds-truncate" title="Oppty Sched Qty"><div class="slds-text-heading--label">Oppty Sched Qty</div></div>					
+       </div>					
+       <aura:if isTrue="{!(v.UserTheme != 'Theme4t')}">					
+       <div class="divTableHead">					
+        <div class="slds-truncate" title="Comments"><div class="slds-text-heading--label">Comments</div></div>					
+       </div>					
+       </aura:if>					
+      </div>										
+      </div>  					
+      
+      <div class="divTableBody">					
+      <!-- To Check if list is not empty-->					
+      <aura:if isTrue="{!!empty(v.lstPositions)}">               					
+       <aura:iteration var="position" items="{!v.lstPositions}" indexVar="index">           
+         <div class="divTableRow">					
+          <div class="divTableCell">					
+           <aura:if isTrue="{!(v.OpptySchldCount) != 1}">					
+            <aura:if isTrue="{!v.flagNonTmmaDelDisabling}">					
+             <aura:if isTrue="{!((v.OpptySchldCount)-1) == index}">					
+              <aura:if isTrue="{!(v.UserTheme != 'Theme4t')}">					
+              <ui:button aura:id="delOppSch" press="{!c.deleteOpptySched}">Delete					
+               <span data-index="{!i}"></span>					
+              </ui:button> <!-- label="Delete"-->					
+              </aura:if>					
+              <aura:if isTrue="{!(v.UserTheme == 'Theme4t')}">					
+               <lightning:buttonIcon aura:id="cancel" class="slds-icon__container--circle iconStyleCloseDel" iconName="utility:delete" variant="border-filled" 					
+                                       onclick="{!c.deleteOpptySched}" alternativeText="Delete Quarter"  title="Delete Quarter"/>					
+               <br/>
+               <span class="iconLabel" dir="ltr">Delete</span>
+               <span class="assistiveText"></span>
+              </aura:if>					
+             </aura:if>					
+            </aura:if> 					
+                                   					
+            <aura:if isTrue="{!v.flagDelCmitmntButton}">					
+             <aura:if isTrue="{!v.opp1.StageName == 'Commitment'}">					
+              <aura:if isTrue="{!((v.OpptySchldCount)-1) == index}">					
+               <aura:if isTrue="{!(v.UserTheme != 'Theme4t')}">					
+               <ui:button aura:id="delOppSchCmmt" press="{!c.deleteOpptySched}">Delete					
+                <span data-index="{!i}"></span>					
+               </ui:button>	<!-- label="Delete" -->				
+               </aura:if>					
+               <aura:if isTrue="{!(v.UserTheme == 'Theme4t')}">					
+                <lightning:buttonIcon aura:id="cancel" class="slds-icon__container--circle iconStyleCloseDel" iconName="utility:delete" variant="border-filled" 					
+                                       onclick="{!c.deleteOpptySched}" alternativeText="Delete Quarter"  title="Delete Quarter"/>					
+                <br/>
+                <span class="iconLabel" dir="ltr">Delete</span>
+                <span class="assistiveText"></span>
+               </aura:if>					
+              </aura:if>					
+             </aura:if>  					
+            </aura:if>       					
+           </aura:if>					
+          </div>  					
+          <div class="divTableCell"><ui:outputText value="{!position.quarterdate}"/></div>					
+           <aura:if isTrue="{!(!v.flagNonTmmaDisabling)}">					
+           <div class="divTableCell"><ui:inputNumber class="inputNumStyle" value="{!position.quantities}" keyup="{!c.alertIsChanged}"/></div>					
+           </aura:if>					
+           <aura:if isTrue="{!v.flagNonTmmaDisabling}">					
+           <div class="divTableCell"><ui:outputNumber value="{!position.quantities}"/></div>					
+           </aura:if> 					
+           <aura:if isTrue="{!(v.UserTheme != 'Theme4t')}">					
+            <aura:if isTrue="{!(!v.flagNonTmmaDisabling)}">					
+             <div class="divTableCell"><ui:inputText value="{!position.comment}" keyup="{!c.alertIsChanged}"/></div>					
+            </aura:if>					
+            <aura:if isTrue="{!v.flagNonTmmaDisabling}">					
+            <div class="divTableCell"><ui:outputText value="{!position.comment}"/></div>					
+            </aura:if>					
+           </aura:if>					
+         </div>					           					
+       </aura:iteration>					
+      </aura:if>					
+     </div>					
+    </div>					
+   </div>					
+   <!-- Oppty Sched Table ends -->					
+        					
+     </div>					           					
+    </form>
+   </div>
+   </ui:scrollerWrapper>
+  </aura:if>					
+<!-- Edit Opportunity Schedules Display Ends-->					
+</aura:component>

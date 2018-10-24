@@ -1,44 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
-	<fullName>1018 - SFDC-1771</fullName>
+	<fullName>1118 - SFDC-1001</fullName><!-- assign security for opportunityScheduleMaster visualforce page -->
 	<types>
-    	<members>ApplicationDomain</members>
-    	<members>CommonUtils</members>
-    	<members>LeadConvertControllerTest</members>
-    	<members>LeadConvertROMHandlerTest</members>
-        <members>MnStages</members>
-        <members>ModelNDesignRegistrationsProcessJobTest</members>
-        <members>Opportunities</members>
-        <members>OpportunitiesTest</members>
-        <members>OpportunityApprovalTest</members>
-        <members>OpportunityLineItems</members>
-        <members>OpportunityLineItemsSelector</members>
-        <members>OpportunityProductClaimValue</members>
-        <members>OpportunityScheduleController</members>
-        <members>OpportunitySchedulesSelector</members>
-        <members>OpportunitySchedulingWrapper</members>
-        <members>OpportunityService</members>
-        <members>OpportunityServiceTest</members>
-        <members>OpportunityTmmaOverrideSettingsSelector</members>
-        <members>ProductTriggerTest</members>
-        <name>ApexClass</name>
+    	<members>AccountsSelector</members>
+    	<members>OpportunitiesSelector</members>
+    	<members>OpportunityProductSchedulesSelector</members>
+    	<members>OpportunityScheduleMasterController</members>
+    	<members>OpportunityScheduleMasterControllerTest</members>
+    	<members>OpportunitySchedulesSelector</members>
+    	<members>OpportunityService</members>
+    	<name>ApexClass</name>
     </types>
     <types>
-        <members>opportunityScheduleAction</members>
+        <members>opportunityScheduleMaster</members>
+        <name>ApexPage</name>
+    </types>
+    <types>
+        <members>opportunityScheduleMaster</members>
+        <members>opportunityScheduleMasterSelect</members>
+        <members>opportunityScheduleMasterUpdate</members>
         <name>AuraDefinitionBundle</name>
     </types>
     <types>
-    	<members>Opportunity.Design_Reg_Production_Date__c</members>
-    	<members>OpportunityLineItem.Close_Date_EQ_Win_Date__c</members>
-    	<members>OpportunityLineItem.DR_Prod_Date_LT_Win_Date__c</members>
-    	<members>OpportunityLineItem.Opportunity_TMMA_Override__c</members>
-    	<members>OpportunityLineItem.Prod_Date_LT_Win_Date__c</members>
-    	<members>OpportunitySchedule__c.Sched_Qty_NE_Frozen_Qty__c</members>
-        <name>CustomField</name>
+        <members>OpportunityProgram__c-Opportunity Program Layout</members>
+        <name>Layout</name>
     </types>
     <types>
-    	<members>Admin</members>
-        <name>Profile</name>
+        <members>OpportunityProgram__c.Maintain_Multi_Oppties_Scheds</members>
+        <name>WebLink</name>
     </types>
-    <version>43.0</version>
+	<version>44.0</version>
 </Package>

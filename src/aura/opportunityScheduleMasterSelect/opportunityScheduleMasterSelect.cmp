@@ -1,0 +1,49 @@
+<aura:component implements="force:hasRecordId" controller="OpportunityScheduleMasterController">
+    <aura:attribute name="columns" type="List"/>
+    <aura:attribute name="data" type="OpportunityScheduleMasterController.OpportunityWrapper[]"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+    
+    <!-- HEADER -->
+    <div class="slds-page-header">
+        <div class="slds-page-header__row">
+            <div class="slds-page-header__col-title">
+                <div class="slds-media">
+                    <div class="slds-media__figure">
+                        <span class="slds-icon_container slds-icon-standard-opportunity" title="Opportunity">
+                            <lightning:icon iconName="standard:opportunity" alternativeText="Opportunity" />
+                            <span class="slds-assistive-text">Opportunity</span>
+                        </span>
+                    </div>
+                    <div class="slds-media__body">
+                        <div class="slds-page-header__name">
+                            <div class="slds-page-header__name-title">
+                                <h1>
+                                    <span class="slds-page-header__title slds-truncate" title="Maintain Multi-Opportunities Schedules">Maintain Multi-Opportunities Schedules</span>
+                                </h1>
+                            </div>
+                        </div>
+                        <p class="slds-page-header__name-meta">Please select a master opportunity.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+	<!-- / HEADER -->
+    <!-- BODY -->
+    <div style="height: 300px">
+        <lightning:datatable
+        	aura:id="datatable"
+            columns="{!v.columns}"
+            data="{!v.data}"
+            keyField="id"
+            maxRowSelection="1"/>
+    </div>
+    <!-- / BODY -->
+    <!-- FOOTER -->
+    <footer>
+    	<lightning:button label="Cancel" title="Cancel" name="cancel" onclick="{!c.handleClick}"/>
+        <lightning:button variant="brand" label="Next" title="Next" name="next" onclick="{!c.handleClick}" />
+    </footer>
+    <!-- / FOOTER -->
+</aura:component>

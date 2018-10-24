@@ -1,0 +1,44 @@
+<apex:page standardController="OpportunityProgram__c">
+	<apex:includeLightning />
+ 
+    <div id="lightning"/>  
+
+    <script>        
+    	var progId = "{!$CurrentPage.parameters.progId}";
+    	var opptyId = "{!$CurrentPage.parameters.opptyId}";
+    	var recordId;
+        var cmpName;
+        
+        if (progId) {
+        	recordId = progId;
+            cmpName = "c:opportunityScheduleMasterSelect";
+        } else if (opptyId) {
+        	recordId = opptyId;
+            cmpName = "c:opportunityScheduleMasterUpdate";
+        }
+    
+    	if (recordId && cmpName) {
+            $Lightning.use("c:opportunityScheduleMaster", function() {     
+                $Lightning.createComponent(
+                    cmpName,       
+                    {"recordId": recordId},       
+                    "lightning", 
+                    function(component) {
+                        $A.eventService.addHandler({
+                            event: 'force:navigateToURL',
+                            handler: function (event) {
+                                if (typeof sforce != 'undefined' && sforce.one) {
+                                    // VF page in S1 or Lightning Exp
+                                    // VF page in Classic
+                                    sforce.one.navigateToURL(event.getParams().url);
+                                } else {
+                                    window.parent.location.href = event.getParams().url;
+                                }
+                            }
+                        });
+                    }
+                );
+            }); 
+        }
+	</script>       
+</apex:page>

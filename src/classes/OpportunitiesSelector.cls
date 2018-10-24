@@ -20,12 +20,15 @@ public class OpportunitiesSelector extends ApplicationSelector {
 			Opportunity.AccountId,
 			Opportunity.Account_Region_TEXT__c,
 			Opportunity.CloseDate,
+			Opportunity.CreatedDate,
 			Opportunity.Name,
 			Opportunity.OwnerId,
 			Opportunity.RecordTypeId,
 			Opportunity.StageName,
 			Opportunity.BL_Approver_1__c, 
 			Opportunity.BL_Approver_2__c,
+			Opportunity.BL__c,
+			Opportunity.Bypass_Validation_Sched_Start_Date__c,
 			Opportunity.Claim_Value__c,
 			Opportunity.Claim_Value_USD_SYS__c,
 			Opportunity.Design_Reg_Status__c,
@@ -91,6 +94,21 @@ public class OpportunitiesSelector extends ApplicationSelector {
 	public List<Opportunity> selectByLegacyId(Set<String> legacyIds) {
 		p('selectByLegacyId');
 		return (List<Opportunity>)Database.query(newQueryFactory().setCondition('Legacy_Id__c in :legacyIds').toSOQL());
+	}
+	
+	public List<Opportunity> selectByProgramIdAndOwnerIdWithAccountAndOwner(Set<Id> progIds, Set<Id> ownerIds) {
+		p('selectByProgramIdAndOwnerIdWithAccountAndOwner');
+		fflib_QueryFactory opptiesQueryFactory = getOpptiesWithAccountAndOwnerQueryFactory();
+		
+		Set<String> openStages = Opportunities.OPEN_STAGES;
+		
+		String condition = 'Program__c in :progIds and ' +
+						   'OwnerId in :ownerIds and ' +
+						   '(StageName in :openStages and Design_Win_Approval_Process__c != \'Pending\') and ' +
+						   '(RecordType.DeveloperName = \'' + RecordType.SFDC_OPPTY + '\' or ' +
+						   '(RecordType.DeveloperName = \'' + RecordType.MODEL_N_OPPTY + '\' and Account.Customer_Category__c = \'Tier 4 - TMMA\'))';
+					  
+		return (List<Opportunity>)Database.query(opptiesQueryFactory.setCondition(condition).toSOQL());
 	}
 	
 	public List<Opportunity> selectByIdWithProducts(Set<Id> ids) {

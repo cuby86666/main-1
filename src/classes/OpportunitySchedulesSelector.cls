@@ -7,6 +7,7 @@ public class OpportunitySchedulesSelector extends ApplicationSelector {
 	public List<Schema.SObjectField> getSObjectFieldList() {
 		return new List<Schema.SObjectField> {
 			OpportunitySchedule__c.Id,
+			OpportunitySchedule__c.Comment__c,
 			OpportunitySchedule__c.Frozen_Oppty_Sched_Qty__c,
 			OpportunitySchedule__c.Opportunity__c,
 			OpportunitySchedule__c.Oppty_Sched_Qty__c, 
@@ -27,11 +28,11 @@ public class OpportunitySchedulesSelector extends ApplicationSelector {
 		p('selectByOpptyIdGroupByOpptyId');
 		Map<Id, List<OpportunitySchedule__c>> result = new Map<Id, List<OpportunitySchedule__c>>();
         
-        for (OpportunitySchedule__c opptySched : selectByOpptyId(opptyIds)) {
-            if (result.containsKey(opptySched.Opportunity__c)) {
-            	result.get(opptySched.Opportunity__c).add(opptySched);
+        for (OpportunitySchedule__c os : selectByOpptyId(opptyIds)) {
+            if (result.containsKey(os.Opportunity__c)) {
+            	result.get(os.Opportunity__c).add(os);
             } else {
-            	result.put(opptySched.Opportunity__c, new List<OpportunitySchedule__c> {opptySched});
+            	result.put(os.Opportunity__c, new List<OpportunitySchedule__c> {os});
             }
         }
         

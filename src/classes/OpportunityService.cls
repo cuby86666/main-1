@@ -308,11 +308,7 @@ public with sharing class OpportunityService {
 		return oppty.Distributor_Name__c + '-' + oppty.End_Customer_Region__c;
 	}
 	
-	private static Boolean isMnRecordType(Opportunity oppty) {
-		return oppty.RecordTypeId == OpportunitiesSelector.getMnRecordTypeId();
-    }
-    
-    public static void shiftOpportunitySchedules(List<OpportunitySchedule__c> opptyScheds, Date prodDate) {
+	public static void shiftOpportunitySchedules(List<OpportunitySchedule__c> opptyScheds, Date prodDate) {
     	p('shiftOpportunitySchedules');
     	if (opptyScheds != null && opptyScheds.size() > 0) {
     		List<Date> schedDates = generateOpportunityScheduleDates(prodDate, opptyScheds.size());
@@ -341,6 +337,16 @@ public with sharing class OpportunityService {
     	
     	return result; 
     } 
+    
+    public static Boolean isSfdcRecordType(Opportunity oppty) {
+		p('isSfdcRecordType');
+		return oppty.RecordTypeId == OpportunitiesSelector.getSfdcRecordTypeId();
+    }
+    
+    public static Boolean isMnRecordType(Opportunity oppty) {
+    	p('isMnRecordType');
+		return oppty.RecordTypeId == OpportunitiesSelector.getMnRecordTypeId();
+    }
 	
 	private static void p(String msg) {
 		CommonUtils.p(OpportunityService.class, '//-v', msg);

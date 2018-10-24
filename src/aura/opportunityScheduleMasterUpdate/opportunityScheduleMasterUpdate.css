@@ -1,0 +1,125 @@
+.THIS .uiInputDate .datePicker-openIcon {	
+position: absolute;	
+left: 95%;	
+top: 50%;	
+}	
+.THIS .uiInputDateTime .timePicker-openIcon {	
+position: absolute;	
+left: 95%;	
+top: 70%;	
+}	
+	
+	
+.THIS .uiInputDefaultError li {	
+list-style: none;	
+}	
+	
+.THIS .slds-input::-ms-clear {	
+    display: none; 	
+    width:0; 	
+    height:0;	
+}	
+	
+.THIS .iconStyleAddQtr{
+    background: #FCB95B;
+    color: #FFFFFF;
+ }
+
+.THIS .iconStyleReEstb{
+    background: #65CAE4;
+    color: #FFFFFF;
+ }
+.THIS .iconStyleCloseDel{
+    background: #EF6E64;
+    color: #FFFFFF;
+ }
+.THIS .iconStyleSave{
+    background: #00C6B7;
+    color: #FFFFFF;
+ }
+.THIS .iconLabel{
+    color: rgb(84, 105, 141);
+    display: block;
+    font-size: .625rem;
+    font-weight: 400;
+    font-weight: 400;
+    margin-top: .125rem;
+    text-align: center;
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+ }
+
+.THIS .borderdiv{	
+    border: 1px solid #d3d3d3;	
+    outline-color: #d3d3d3; 	
+    outline-style: single;	
+}	
+
+@media screen and (max-width: 767px) {
+ .THIS .inputNumStyle{
+   width: 110px; 
+   text-align:center;     
+  }
+}
+
+/* DivTable.com */	
+	
+.THIS .divTable{	
+    border-top: 1px solid #D3D3D3;	
+    border-color: #D3D3D3;	
+	display: table;
+	width: 100%;
+}	
+.THIS .divTableRow {	
+	display: table-row;
+}	
+.THIS .divTableHeading {	
+	display: table-header-group;
+    text-align:center;	
+    overflow: auto;	
+    overflow-x: auto;	
+    overflow-y: auto;	
+    position: relative;	
+    float: center;	
+}	
+.THIS .divTableCell{	
+    border-bottom: 1px solid #D3D3D3;	
+    border-color: #D3D3D3;	
+	display: table-cell;
+	padding: 3px 10px;
+    text-align:center;	
+    overflow: auto;	
+    overflow-x: auto;	
+    overflow-y: auto;	
+    position: relative;	
+    float: center;	
+}	
+.THIS .divTableHead {	
+	border-bottom: 1px solid #D3D3D3;
+	display: table-cell;
+	padding: 3px 10px;
+}	
+	
+.THIS .divTableHeading {	
+	display: table-header-group;
+}	
+.THIS .divTableFoot {	
+	background-color: #EEE;
+	display: table-footer-group;
+	font-weight: bold;
+}	
+.THIS .divTableBody {	
+	display: table-row-group;
+}	
+	
+.THIS .divTableBody > div:nth-of-type(even) {	
+    background: #F5F6FA;	
+}	
+	
+.THIS .divTableBody > div:hover {	
+    background: #EBF4FA;	
+}
