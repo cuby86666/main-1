@@ -1,8 +1,8 @@
 @isTest
 private class OpportunityScheduleMasterControllerTest {
 	
-	private static final String TEST_USER_PROFILE = 'Standard User';
-    private static final String TEST_USER_EMAIL = 'testuser@testorg.com.test';
+	private static final String TEST_USER_PROFILE = 'System Administrator';
+	private static final String TEST_USER = 't_user_1';
     private static final String CBG_AUTOMOTIVE = 'Automotive';
     private static final String CBG_NON_AUTOMOTIVE = 'Non-Automotive';
     private static final String CBG_DEFAULT = CBG_NON_AUTOMOTIVE; // @default
@@ -18,7 +18,7 @@ private class OpportunityScheduleMasterControllerTest {
     private static final Double UP_CM = UNIT_PRICE * COMP_MULT;
     private static final Double ONE_YEAR_PIECES = 1500;
     private static final Double LOCKED_EXCHANGE_RATE = 1.5;
-    private static final Date PRODUCTION_DATE = Date.today().addDays(15);
+    private static final Date PRODUCTION_DATE = Date.today();
         
     private static List<OpportunityLineItem> opptyProds = new List<OpportunityLineItem>();
     private static List<OpportunityLineItem> opptyProdsMn = new List<OpportunityLineItem>();
@@ -89,11 +89,7 @@ private class OpportunityScheduleMasterControllerTest {
         Profile p = [SELECT Id FROM Profile WHERE Name = :TEST_USER_PROFILE];
         
         // insert a test user
-        User u = new User(Alias = 'test', Email = TEST_USER_EMAIL, 
-            EmailEncodingKey = 'UTF-8', LastName = 'Testing', LanguageLocaleKey = 'en_US', 
-            LocaleSidKey = 'en_US', TimeZoneSidKey = 'America/Los_Angeles',
-            ProfileId = p.Id, UserName = TEST_USER_EMAIL);
-        insert u;
+        User u = createUser(TEST_USER, TEST_USER, p.Id, false);
         
         // insert approvers
         List<Approvers_Matrix__c> amcs = new List<Approvers_Matrix__c>();
@@ -141,14 +137,37 @@ private class OpportunityScheduleMasterControllerTest {
     	
     	insert prog;
         
-        Test.startTest();
-        createOpportunityProducts(OpportunitiesSelector.getSfdcRecordTypeId(), prog.Id, u, fxRates, a, prods);
-        Test.stopTest();
-        
-        createOpportunityProducts(OpportunitiesSelector.getMnRecordTypeId(), prog.Id, u, fxRates, a, prods);
+        System.runAs(u) {
+        	Test.startTest();
+	        createOpportunityProducts(OpportunitiesSelector.getSfdcRecordTypeId(), prog.Id, fxRates, a, prods);
+	        Test.stopTest();
+	        
+	        createOpportunityProducts(OpportunitiesSelector.getMnRecordTypeId(), prog.Id, fxRates, a, prods);	
+        }
     }
     
-    static void createOpportunityProducts(Id recordTypeId, Id progId, User u, Map<String, FX_Rates__c> fxRates, Account a, List<Product2> prods) {
+    static User createUser(String alias, String lastName, ID profileID, Boolean signedARIA) {
+    	User user = newUser(alias, lastName, profileID, signedARIA); 
+    	insert user;
+        
+        return user;	
+    }
+    
+    static User newUser(String alias, String lastName, ID profileID, Boolean signedARIA) {
+    	String email = CommonUtils.generateGUID() + '@nxp.com.test123';
+    	
+    	User user = new User(EmailEncodingKey = 'UTF-8', LanguageLocaleKey = 'en_US', LocaleSidKey = 'en_US', TimeZoneSidKey = 'America/Los_Angeles');
+		user.Alias = alias;
+		user.LastName = lastName;
+		user.ProfileId = profileID;
+		user.Email = email;
+		user.UserName = email;
+		user.Signed_ARIA__c = signedARIA;
+		        
+        return user;	
+    }
+    
+    static void createOpportunityProducts(Id recordTypeId, Id progId, Map<String, FX_Rates__c> fxRates, Account a, List<Product2> prods) {
         // Insert an opportunity
         Opportunity o;
         String ccyCode; 
@@ -161,12 +180,12 @@ private class OpportunityScheduleMasterControllerTest {
         	ccyCode = CCY_CODE_USD;
         }
         
-        Date prodDate = (recordTypeId == OpportunitiesSelector.getMnRecordTypeId()) ? PRODUCTION_DATE.addMonths(3).addDays(7) : PRODUCTION_DATE;  
+        Date prodDate = (recordTypeId == OpportunitiesSelector.getMnRecordTypeId()) ? PRODUCTION_DATE.addMonths(3) : PRODUCTION_DATE;  
         
         o.RecordTypeId = recordTypeId;
         o.Program__c = progId;
         o.Production_Date__c = prodDate;
-        o.CloseDate = prodDate - 60;
+        o.CloseDate = prodDate.addMonths(-2);
         o.Locked_Exchange_Rate__c = LOCKED_EXCHANGE_RATE; // Enabled for MN type, hidden for SFDC type. Admin can edit it no matter what type it is.
         o.One_Year_Pieces__c = ONE_YEAR_PIECES;
         o.Currency__c = fxRates.get(ccyCode).Id; // Locked_Exchange_Rate__c will be set to this by workflow.
@@ -180,13 +199,6 @@ private class OpportunityScheduleMasterControllerTest {
         
         System.debug('//J ========== after insert oppty');
         
-        // Insert an OpportunityShare record
-        OpportunityShare os = new OpportunityShare();
-        os.OpportunityId = o.Id; 
-        os.OpportunityAccessLevel = 'Edit';
-        os.UserOrGroupId = u.Id;
-        insert os;
-         
         List<PricebookEntry> pbes = [select Id from PricebookEntry where Product2Id in :prods and CurrencyIsoCode = :ccyCode];
         
         // Insert opportunity products
@@ -231,7 +243,11 @@ private class OpportunityScheduleMasterControllerTest {
     	    	    	
     	Opportunity oppty = oppties.get(opptyProdMn.OpportunityId);
     	
-    	OpportunityScheduleMasterController.updateOpptiesScheds(opptyMaster);
+    	User user = [select Id from User where Alias = :TEST_USER];
+    	
+    	System.runAs(user) {
+    		OpportunityScheduleMasterController.updateOpptiesScheds(opptyMaster);	
+    	}
     	
     	oppties = new Map<Id, Opportunity>(new OpportunitiesSelector().selectById(new Set<Id> {opptyMaster.Id, oppty.Id}));
     	

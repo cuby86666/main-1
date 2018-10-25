@@ -486,7 +486,6 @@ public with sharing class OpportunityScheduleMasterController {
     			opptySchedsCreated.add(opptySched);	
     		}
     	}
-
 		
     	try {
     		update opptiesUpdated.values();
