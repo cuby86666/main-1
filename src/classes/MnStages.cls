@@ -220,7 +220,7 @@ public class MnStages extends ApplicationDomain {
 			Database.UpsertResult opptyUpsertResult = opptiesUpsertResults.get(i);
 			Database.UpsertResult opptyProdUpsertResult = opptyProdsUpsertResults.get(i);
 			
-			if (mnStage.Status__c == STATUS_INVALID && opptyUpsertResult.isSuccess()) {
+			if (mnStage.Status__c == STATUS_INVALID && opptyUpsertResult.isSuccess() && opptyUpsertResult.isCreated()) {
 				opptyIdsDeleted.add(opptyUpsertResult.getId());	
 			}
 			
@@ -234,7 +234,7 @@ public class MnStages extends ApplicationDomain {
 				mnStage.Message__c = (mnStage.Message__c == '') ? processErrors(opptyProdUpsertResult.getErrors()) : mnStage.Message__c;
 				
 				// If oppty prod is not created successfully, oppty should be deleted if already created.
-				if (opptyUpsertResult.isSuccess()) {
+				if (opptyUpsertResult.isSuccess() && opptyUpsertResult.isCreated() && opptyProdUpsertResult.isCreated()) {
 					opptyIdsDeleted.add(opptyUpsertResult.getId());	
 				}
 			}
