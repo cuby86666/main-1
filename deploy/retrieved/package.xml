@@ -23,6 +23,14 @@
         <name>AuraDefinitionBundle</name>
     </types>
     <types>
+        <members>Bypass_Validation_Field.Oppty_Owner</members>
+        <name>CustomMetadata</name>
+    </types>
+    <types>
+        <members>Opportunity_Program_Record_Page</members>
+        <name>FlexiPage</name>
+    </types>
+    <types>
         <members>OpportunityProgram__c-Opportunity Program Layout</members>
         <name>Layout</name>
     </types>
