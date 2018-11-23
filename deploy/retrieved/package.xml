@@ -1,38 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
-	<fullName>1118 - SFDC-1001</fullName><!-- assign security for opportunityScheduleMaster visualforce page -->
+	<fullName>1218</fullName>
 	<types>
-    	<members>AccountsSelector</members>
-    	<members>MnStages</members>
-    	<members>OpportunitiesSelector</members>
-    	<members>OpportunityProductSchedulesSelector</members>
-    	<members>OpportunityScheduleMasterController</members>
-    	<members>OpportunityScheduleMasterControllerTest</members>
-    	<members>OpportunitySchedulesSelector</members>
-    	<members>OpportunityService</members>
+    	<members>SAP_CMD_Request_Trigger</members>
     	<name>ApexClass</name>
-    </types>
-    <types>
-        <members>opportunityScheduleMaster</members>
-        <name>ApexPage</name>
-    </types>
-    <types>
-        <members>opportunityScheduleMaster</members>
-        <members>opportunityScheduleMasterSelect</members>
-        <members>opportunityScheduleMasterUpdate</members>
-        <name>AuraDefinitionBundle</name>
-    </types>
-    <types>
-        <members>Opportunity_Program_Record_Page</members>
-        <name>FlexiPage</name>
-    </types>
-    <types>
-        <members>OpportunityProgram__c-Opportunity Program Layout</members>
-        <name>Layout</name>
-    </types>
-    <types>
-        <members>OpportunityProgram__c.Maintain_Multi_Oppties_Scheds</members>
-        <name>WebLink</name>
     </types>
     <version>44.0</version>
 </Package>

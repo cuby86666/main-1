@@ -1,0 +1,49 @@
+<aura:component implements="force:hasRecordId" controller="OpportunityProductController">
+    <aura:attribute name="progName" type="String"/>
+    <aura:attribute name="columns" type="List"/>
+    <aura:attribute name="data" type="OpportunityProductController.OpportunityProductWrapper[]"/>
+    <aura:attribute name="errors" type="Object"/>
+        
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+        
+    <!-- HEADER -->
+    <div class="slds-page-header">
+        <div class="slds-page-header__row">
+            <div class="slds-page-header__col-title">
+                <div class="slds-media">
+                    <div class="slds-media__figure">
+                        <span class="slds-icon_container slds-icon-standard-opportunity" title="Opportunity">
+                            <lightning:icon iconName="standard:opportunity" alternativeText="Opportunity" />
+                            <span class="slds-assistive-text">Opportunity</span>
+                        </span>
+                    </div>
+                    <div class="slds-media__body">
+                        <div class="slds-page-header__name">
+                            <div class="slds-page-header__name-title">
+                                <h1>
+                                    <span class="slds-page-header__title slds-truncate" title="Edit Products">
+                                        Edit products for <lightning:formattedUrl value="{!'/' + v.recordId}" tooltip="{!'Go back to ' + v.progName}" label="{!v.progName}" target="_top"/>
+                                    </span>
+                                </h1>
+                            </div>
+                        </div>
+                        <p class="slds-page-header__name-meta">Hover over the cells; click the pencil icon or press the Enter key to edit.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+	<!-- / HEADER -->
+    <!-- BODY -->
+    <div style="height: 400px">
+        <lightning:datatable
+        	aura:id="datatable"
+            columns="{!v.columns}"
+            data="{!v.data}"
+            keyField="id"
+            hideCheckboxColumn="true"
+            onsave="{!c.handleSave}"
+            errors="{!v.errors}"/>
+    </div>
+    <!-- / BODY -->
+</aura:component>

@@ -13,11 +13,11 @@ public with sharing class OpportunityScheduleMasterController {
 	} 
 
 	@AuraEnabled
-    public static List<OpportunityScheduleMasterController.OpportunityWrapper> getOpportunities(Id progId) {
+    public static List<OpportunityWrapper> getOpportunities(Id progId) {
     	p('getOpportunities');
-    	List<OpportunityScheduleMasterController.OpportunityWrapper> result = new List<OpportunityWrapper>();
+    	List<OpportunityWrapper> result = new List<OpportunityWrapper>();
     	
-    	List<Opportunity> oppties = new OpportunitiesSelector().selectByProgramIdAndOwnerIdWithAccountAndOwner(new Set<Id> {progId}, new Set<Id> {UserInfo.getUserId()});
+    	List<Opportunity> oppties = new OpportunitiesSelector().selectByProgramIdAndOwnerIdWithAccountAndOwnerAndProducts(new Set<Id> {progId}, new Set<Id> {UserInfo.getUserId()});
     	
     	for (Opportunity o : oppties) {
     		OpportunityWrapper ow = new OpportunityWrapper();
@@ -445,7 +445,7 @@ public with sharing class OpportunityScheduleMasterController {
     @TestVisible
     private static void updateOpptiesScheds(Opportunity opptyMaster) {
     	p('updateOpptiesScheds');
-    	Map<Id, Opportunity> oppties = new Map<Id, Opportunity>(new OpportunitiesSelector().selectByProgramIdAndOwnerIdWithAccountAndOwner(new Set<Id> {opptyMaster.Program__c}, new Set<Id> {UserInfo.getUserId()})); 
+    	Map<Id, Opportunity> oppties = new Map<Id, Opportunity>(new OpportunitiesSelector().selectByProgramIdAndOwnerIdWithAccountAndOwnerAndProducts(new Set<Id> {opptyMaster.Program__c}, new Set<Id> {UserInfo.getUserId()})); 
     	Map<Id, Opportunity> opptiesUpdated = new Map<Id, Opportunity>(oppties);
     	
     	opptiesUpdated.remove(opptyMaster.Id);

@@ -21,6 +21,7 @@ public class OpportunitiesSelector extends ApplicationSelector {
 			Opportunity.Account_Region_TEXT__c,
 			Opportunity.CloseDate,
 			Opportunity.CreatedDate,
+			Opportunity.CurrencyIsoCode,
 			Opportunity.Name,
 			Opportunity.OwnerId,
 			Opportunity.RecordTypeId,
@@ -96,9 +97,14 @@ public class OpportunitiesSelector extends ApplicationSelector {
 		return (List<Opportunity>)Database.query(newQueryFactory().setCondition('Legacy_Id__c in :legacyIds').toSOQL());
 	}
 	
-	public List<Opportunity> selectByProgramIdAndOwnerIdWithAccountAndOwner(Set<Id> progIds, Set<Id> ownerIds) {
-		p('selectByProgramIdAndOwnerIdWithAccountAndOwner');
+	public List<Opportunity> selectByProgramIdAndOwnerIdWithAccountAndOwnerAndProducts(Set<Id> progIds, Set<Id> ownerIds) {
+		p('selectByProgramIdAndOwnerIdWithAccountAndOwnerAndProducts');
 		fflib_QueryFactory opptiesQueryFactory = getOpptiesWithAccountAndOwnerQueryFactory();
+		
+		fflib_QueryFactory opptyLineItemsQueryFactory = 
+			new OpportunityLineItemsSelector().addQueryFactorySubselect(opptiesQueryFactory, CommonUtils.getChildRelationshipName(getSObjectType(), OpportunityLineItem.sObjectType));
+			
+		new OpportunitiesSelector().configureQueryFactoryFields(opptyLineItemsQueryFactory, OpportunityLineItem.OpportunityId.getDescribe().getRelationshipName());
 		
 		Set<String> openStages = Opportunities.OPEN_STAGES;
 		

@@ -87,7 +87,7 @@ public class SAP_CMD_Request_Trigger {
    // Update SAP CMD - funloc under multiple Sales Orgs - to update General Data at once
    public static void Update_SAPCMD_GeneralData(list<SAP_CMD__c> lstSapCmd)
     { 
-       List<SAP_CMD__c> allSapCmdToBeUpdated = new List<SAP_CMD__c>();
+       Set<SAP_CMD__c> allSapCmdToBeUpdated = new Set<SAP_CMD__c>();
        set<string> setSapCmdFunloc = new set<string>();
        
        for(SAP_CMD__c sc : lstSapCmd){
@@ -176,6 +176,6 @@ public class SAP_CMD_Request_Trigger {
        }
    }
   }   
-     update allSapCmdToBeUpdated;
+     update new List<SAP_CMD__c>(allSapCmdToBeUpdated);
     }           
 }
