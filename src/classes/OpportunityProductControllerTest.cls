@@ -1,6 +1,6 @@
 @isTest
-private class OpportunityScheduleMasterControllerTest {
-	
+private class OpportunityProductControllerTest {
+
 	private static final String TEST_USER_PROFILE = 'System Administrator';
 	private static final String TEST_USER = 't_user_1';
     private static final String CBG_AUTOMOTIVE = 'Automotive';
@@ -15,7 +15,6 @@ private class OpportunityScheduleMasterControllerTest {
     private static final Double EXCH_RATE_EUR = 0.9;
     private static final Decimal UNIT_PRICE = 2;
     private static final Double COMP_MULT = 5;
-    private static final Double UP_CM = UNIT_PRICE * COMP_MULT;
     private static final Double ONE_YEAR_PIECES = 1500;
     private static final Double LOCKED_EXCHANGE_RATE = 1.5;
     private static final Date PRODUCTION_DATE = Date.today();
@@ -46,7 +45,7 @@ private class OpportunityScheduleMasterControllerTest {
         MAG_LIFETIME = claimValueMagSetting.MAG__c;     
         
         List<OpportunityLineItem> olis =
-            [select Id, OpportunityId, Claim_Value_USD__c,
+            [select Id, UnitPrice, OpportunityId, Claim_Value_USD__c,
             		Price_Erosion_Rate__c, Share__c, MAG__c,
                     Prod_Lost_Cancelled__c, Lost_Cancelled_Claim_Value_USD__c, Lost_Cancelled_LT_Value_USD__c,
                     Opportunity.RecordTypeId, Opportunity.Production_Date__c,
@@ -229,7 +228,7 @@ private class OpportunityScheduleMasterControllerTest {
     }
     
     @isTest
-    static void testGetOpportunities() {
+    static void testGetOpportunityProducts() {
     	User user = [select Id from User where Alias = :TEST_USER];
     	
     	System.runAs(user) {
@@ -243,75 +242,51 @@ private class OpportunityScheduleMasterControllerTest {
 	    	
 	    	update oppty;
 	    	
-	    	OpportunityScheduleMasterController.OpportunityWrapper opptyWrapper = OpportunityScheduleMasterController.getOpportunities(opptyProg.Id).get(0);
+	    	OpportunityProductController.OpportunityProductWrapper opptyProdWrapper = OpportunityProductController.getOpportunityProducts(opptyProg.Id).get(0);
 	    	
-	    	System.assertEquals(oppty.Id, opptyWrapper.id);	
+	    	System.assertEquals(oppty.Name, opptyProdWrapper.opptyName);	
     	}
     }
     
     @isTest
-    static void testUpdateOpptiesScheds() {
-    	Map<Id, Opportunity> oppties = new Map<Id, Opportunity>(new OpportunitiesSelector().selectById(new Set<Id> {opptyProd.OpportunityId, opptyProdMn.OpportunityId})); 
-    	
-    	Opportunity opptyMaster = oppties.get(opptyProd.OpportunityId);
-    	
-    	Date closeDate = opptyMaster.CloseDate;
-    	Date prodDate = opptyMaster.Production_Date__c;
-    	    	    	
-    	Opportunity oppty = oppties.get(opptyProdMn.OpportunityId);
-    	
+    static void testUpdateOpportunityProducts() {
     	User user = [select Id from User where Alias = :TEST_USER];
     	
     	System.runAs(user) {
-    		OpportunityScheduleMasterController.updateOpptiesScheds(opptyMaster);	
-    	}
-    	
-    	oppties = new Map<Id, Opportunity>(new OpportunitiesSelector().selectById(new Set<Id> {opptyMaster.Id, oppty.Id}));
-    	
-    	opptyMaster = oppties.get(opptyMaster.Id);
-    	oppty = oppties.get(oppty.Id);
-    	
-    	System.assertEquals(closeDate, opptyMaster.CloseDate);
-    	System.assertEquals(closeDate, oppty.CloseDate);
-    	System.assertEquals(prodDate, opptyMaster.Production_Date__c);
-    	System.assertEquals(prodDate, oppty.Production_Date__c);
-    	System.assertEquals(true, oppty.TMMA_Override__c); 
-    	System.assertEquals(false, oppty.Bypass_Validation_Sched_Start_Date__c); 
-    	
-    	Map<Id, List<OpportunitySchedule__c>> opptySchedsByOpptyId = new OpportunitySchedulesSelector().selectByOpptyIdGroupByOpptyId(oppties.keySet());
-    	
-    	List<OpportunitySchedule__c> opptyMasterScheds = opptySchedsByOpptyId.get(opptyMaster.Id);
-    	List<OpportunitySchedule__c> opptyScheds = opptySchedsByOpptyId.get(oppty.Id);
-    	    	
-    	System.assertEquals(opptyMasterScheds.size(), opptyScheds.size());
-    	
-    	for (Integer i = 0; i < opptyMasterScheds.size(); i++) {
-    		OpportunitySchedule__c opptyMasterSched = opptyMasterScheds.get(i);
-    		OpportunitySchedule__c opptySched = opptyScheds.get(i);
-   		
-    		System.assertEquals(opptyMasterSched.Sched_Date__c, opptySched.Sched_Date__c);
-    		System.assertEquals(opptyMasterSched.Oppty_Sched_Qty__c, opptySched.Oppty_Sched_Qty__c);
-    		System.assertEquals(opptyMasterSched.Frozen_Oppty_Sched_Qty__c, opptySched.Frozen_Oppty_Sched_Qty__c);
-    		System.assertEquals(opptyMasterSched.Comment__c, opptySched.Comment__c);
-    		System.assertEquals(oppty.CurrencyIsoCode, opptySched.CurrencyIsoCode);
-    	}
-    	
-    	Map<Id, List<OpportunityProductSchedule__c>> opptyProdSchedsByOpptyId = new OpportunityProductSchedulesSelector().selectByOpptyIdGroupByOpptyId(oppties.keySet());
-    	
-    	List<OpportunityProductSchedule__c> opptyProdMasterScheds = opptyProdSchedsByOpptyId.get(opptyMaster.Id);
-    	List<OpportunityProductSchedule__c> opptyProdScheds = opptyProdSchedsByOpptyId.get(oppty.Id);
-   	
-    	System.assertEquals(opptyProdMasterScheds.size(), opptyProdScheds.size());
-    	
-    	for (Integer i = 0; i < opptyProdMasterScheds.size(); i++) {
-    		OpportunityProductSchedule__c opptyProdMasterSched = opptyProdMasterScheds.get(i);
-    		OpportunityProductSchedule__c opptyProdSched = opptyProdScheds.get(i);
-   		
-    		System.assertEquals(opptyProdMasterSched.Sched_Date__c, opptyProdSched.Sched_Date__c);
-    		System.assertEquals(opptyProdMasterSched.Oppty_Sched_Qty__c, opptyProdSched.Oppty_Sched_Qty__c);
-    		System.assertEquals(opptyProdMasterSched.Frozen_Oppty_Sched_Qty__c, opptyProdSched.Frozen_Oppty_Sched_Qty__c);
-    		System.assertEquals(oppty.CurrencyIsoCode, opptyProdSched.CurrencyIsoCode);
+    		OpportunityProgram__c opptyProg = new OpportunityProgram__c();
+	    	opptyProg.Name = 'Test';
+	    	
+	    	insert opptyProg;
+	    	
+	    	Opportunity oppty = getOpportunity(opptyProd.OpportunityId);	
+	    	oppty.Program__c = opptyProg.Id;
+	    	
+	    	update oppty;
+	    	
+	    	Decimal newPrice = opptyProd.UnitPrice + 5.5; 
+	    	
+	    	OpportunityProductController.OpportunityProductWrapper opptyProdWrapper = new OpportunityProductController.OpportunityProductWrapper();
+	    	opptyProdWrapper.id = opptyProd.Id;
+	    	opptyProdWrapper.price = newPrice;
+	    	
+	    	OpportunityProductController.updateOpportunityProducts(JSON.serialize(new List<OpportunityProductController.OpportunityProductWrapper> {opptyProdWrapper}));
+	    	
+	    	opptyProd = ((List<OpportunityLineItem>)new OpportunityLineItemsSelector().selectSObjectsById(new Set<Id> {opptyProd.Id})).get(0);    
+	    	
+	    	System.assertEquals(newPrice, opptyProd.UnitPrice);	
+	    	
+	    	// Test error condition
+	    	opptyProdWrapper = new OpportunityProductController.OpportunityProductWrapper();
+	    	opptyProdWrapper.id = opptyProd.Id;
+	    	opptyProdWrapper.share = 10; // Share * 100 must be less than 1000. The data type for Share is Percent(3, 0).
+	    	
+	    	try {
+	    		OpportunityProductController.updateOpportunityProducts(JSON.serialize(new List<OpportunityProductController.OpportunityProductWrapper> {opptyProdWrapper}));
+	    		System.assert(false);	
+	    	} catch (Exception e) {
+	    		System.assert(true);	
+	    	}
     	}
     }
-	
+
 }

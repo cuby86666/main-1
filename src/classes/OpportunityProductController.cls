@@ -65,6 +65,7 @@ public with sharing class OpportunityProductController {
     
     @AuraEnabled
     public static void updateOpportunityProducts(String changedValues) {
+    	p('updateOpportunityProducts');
     	List<OpportunityLineItem> opptyProdsUpdated = new List<OpportunityLineItem>();
 
     	for (OpportunityProductWrapper opw : (List<OpportunityProductWrapper>)JSON.deserialize(changedValues, List<OpportunityProductWrapper>.class)) {
