@@ -30,6 +30,7 @@
     <aura:attribute name="checkChange" default="false" type="Boolean" />    
     <aura:attribute name="isError" default="false" type="Boolean" />    <!-- Added for Exception error-->
     <aura:attribute name="OldCloseDate" type="Date"/>
+    <aura:attribute name="progName" type="String"/>
     <!-- Componenet Handlers-->					
     <aura:handler name="init" value="{!this}" action="{!c.doInit}" />					
     <aura:handler name="change" value="{!v.opp1.Production_Date__c}" action="{!c.handleValueChange}"/>

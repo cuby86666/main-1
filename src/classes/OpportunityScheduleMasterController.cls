@@ -2,8 +2,10 @@ public with sharing class OpportunityScheduleMasterController {
 	
 	public class OpportunityWrapper {
 		@AuraEnabled public String id { get; set; }
-		@AuraEnabled public String name { get; set; }
+		@AuraEnabled public String opptyName { get; set; }
+		@AuraEnabled public String opptyUrl { get; set; }
 		@AuraEnabled public String acctName { get; set; }
+		@AuraEnabled public String acctUrl { get; set; }
 		@AuraEnabled public String stage { get; set; }
 		@AuraEnabled public Datetime createdDate { get; set; }
 		@AuraEnabled public Date closeDate { get; set; }
@@ -22,8 +24,10 @@ public with sharing class OpportunityScheduleMasterController {
     	for (Opportunity o : oppties) {
     		OpportunityWrapper ow = new OpportunityWrapper();
     		ow.id = o.Id;
-    		ow.name = o.Name;
+    		ow.opptyName = o.Name;
+    		ow.opptyUrl = '/' + o.Id;
     		ow.acctName = o.Account.Name;
+    		ow.acctUrl = '/' + o.Account.Id;
     		ow.stage = o.StageName;
     		ow.createdDate = o.CreatedDate;
     		ow.closeDate = o.CloseDate;

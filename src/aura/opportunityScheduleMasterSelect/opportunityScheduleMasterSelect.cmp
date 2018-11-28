@@ -1,4 +1,5 @@
 <aura:component implements="force:hasRecordId" controller="OpportunityScheduleMasterController">
+    <aura:attribute name="progName" type="String"/>
     <aura:attribute name="columns" type="List"/>
     <aura:attribute name="data" type="OpportunityScheduleMasterController.OpportunityWrapper[]"/>
     
@@ -19,7 +20,9 @@
                         <div class="slds-page-header__name">
                             <div class="slds-page-header__name-title">
                                 <h1>
-                                    <span class="slds-page-header__title slds-truncate" title="Maintain Multi-Opportunities Schedules">Maintain Multi-Opportunities Schedules</span>
+                                    <span class="slds-page-header__title slds-truncate" title="Maintain Schedules">
+                                    	Maintain Schedules for <lightning:formattedUrl value="{!'/' + v.recordId}" tooltip="{!'Go back to ' + v.progName}" label="{!v.progName}" target="_top"/>
+                                    </span>
                                 </h1>
                             </div>
                         </div>
@@ -31,7 +34,7 @@
     </div>
 	<!-- / HEADER -->
     <!-- BODY -->
-    <div style="height: 300px">
+    <div style="height: 400px">
         <lightning:datatable
         	aura:id="datatable"
             columns="{!v.columns}"
@@ -41,7 +44,7 @@
     </div>
     <!-- / BODY -->
     <!-- FOOTER -->
-    <footer>
+    <footer style="text-align: center">
     	<lightning:button label="Cancel" title="Cancel" name="cancel" onclick="{!c.handleClick}"/>
         <lightning:button variant="brand" label="Next" title="Next" name="next" onclick="{!c.handleClick}" />
     </footer>

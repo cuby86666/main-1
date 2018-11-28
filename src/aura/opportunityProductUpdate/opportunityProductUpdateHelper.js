@@ -34,24 +34,8 @@
             } else if (state === "ERROR") {
                 var errors = response.getError();
                 var message = JSON.parse(errors[0]["message"]);
-                /*
-                cmp.set("v.errors", 
-                        {
-                            rows: {
-                                "00k1l0000031ppcAAA": {
-                                    title: 'We found 2 errors.',
-                                    messages: [
-                                        'Enter a valid amount.',
-                                        'Verify the email address and try again.'
-                                    ],
-                                    fieldNames: ['price', 'priceErosionRate']
-                                }
-                            }
-                        }
-                       );
-				*/
+                
                 cmp.set("v.errors", message);
-                //alert(errors[0]["message"]);
             }
         });
         

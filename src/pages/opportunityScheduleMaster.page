@@ -5,6 +5,7 @@
 
     <script>        
     	var progId = "{!$CurrentPage.parameters.progId}";
+    	var progName = "{!$CurrentPage.parameters.progName}";
     	var opptyId = "{!$CurrentPage.parameters.opptyId}";
     	var recordId;
         var cmpName;
@@ -21,7 +22,10 @@
             $Lightning.use("c:opportunityScheduleMaster", function() {     
                 $Lightning.createComponent(
                     cmpName,       
-                    {"recordId": recordId},       
+                    {
+                    	"recordId": recordId,
+                    	"progName": progName
+                    },       
                     "lightning", 
                     function(component) {
                         $A.eventService.addHandler({

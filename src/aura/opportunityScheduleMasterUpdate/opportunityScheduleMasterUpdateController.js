@@ -356,9 +356,10 @@
    prev: function(cmp, event, helper) {
        var urlEvent = $A.get("e.force:navigateToURL");
        var progId = cmp.get("v.opp1.Program__c");
+       var progName = cmp.get("v.progName");
        
        urlEvent.setParams({
-           "url": "/apex/opportunityScheduleMaster?progId=" + progId  
+           "url": "/apex/opportunityScheduleMaster?progId=" + progId + "&progName=" + progName  
        });
        
        urlEvent.fire();

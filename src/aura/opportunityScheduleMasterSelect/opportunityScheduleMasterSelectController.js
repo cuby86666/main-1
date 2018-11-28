@@ -1,8 +1,8 @@
 ({
 	init: function(cmp, event, helper) {
         cmp.set("v.columns", [
-            {label: "Opportunity Name", fieldName: "name", type: "text"},
-            {label: "Account Name", fieldName: "acctName", type: "text"},
+            {label: "Opportunity", fieldName: "opptyUrl", type: "url", typeAttributes: {label: {fieldName: "opptyName"}, tooltip: {fieldName: "opptyName"}, target: "_blank"}},
+            {label: "Account", fieldName: "acctUrl", type: "url", typeAttributes: {label: {fieldName: "acctName"}, tooltip: {fieldName: "acctName"}, target: "_blank"}},
             {label: "Stage", fieldName: "stage", type: "text"},
             {label: "Created Date", fieldName: "createdDate", type: "date-local", typeAttributes: {month: "2-digit", day: "2-digit"}},
             {label: "Expected Close Date", fieldName: "closeDate", type: "date-local", typeAttributes: {month: "2-digit", day: "2-digit"}},
@@ -38,9 +38,10 @@
         			}
                     
                     var urlEvent = $A.get("e.force:navigateToURL");
+                    var progName = cmp.get("v.progName");
                     
                     urlEvent.setParams({
-                        "url": "/apex/opportunityScheduleMaster?opptyId=" + opptyId  
+                        "url": "/apex/opportunityScheduleMaster?opptyId=" + opptyId + "&progName=" + progName  
                     });
                     
                     urlEvent.fire();

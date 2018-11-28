@@ -1,9 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
-	<fullName>1218</fullName>
+	<fullName>1218 - SFDC-2386</fullName><!-- Assign security for opportunityProduct vf page -->
 	<types>
+    	<members>OpportunitiesSelector</members>
+    	<members>OpportunityLineItemsSelector</members>
+    	<members>OpportunityProductController</members>
+    	<members>OpportunityProductControllerTest</members>
+    	<members>OpportunityScheduleMasterController</members>
+    	<members>OpportunityScheduleMasterControllerTest</members>
     	<members>SAP_CMD_Request_Trigger</members>
     	<name>ApexClass</name>
+    </types>
+    <types>
+    	<members>opportunityProduct</members>
+    	<members>opportunityScheduleMaster</members>
+    	<name>ApexPage</name>
+    </types>
+    <types>
+    	<members>opportunityProduct</members>
+    	<members>opportunityProductUpdate</members>
+    	<members>opportunityScheduleMasterSelect</members>
+    	<members>opportunityScheduleMasterUpdate</members>
+    	<name>AuraDefinitionBundle</name>
+    </types>
+    <types>
+    	<members>Opportunity_Program_Record_Page</members>
+    	<members>Opportunity_Record_Page</members>
+    	<name>FlexiPage</name>
+    </types>
+    <types>
+    	<members>eRebate__c-ODM Fullfillment Rebate Layout</members>
+    	<members>eRebate__c-OEM %2F EMS Rebate Layout</members>
+    	<members>eRebate__c-Rebate Layout</members>
+    	<members>OpportunityProgram__c-Opportunity Program Layout</members>
+    	<name>Layout</name>
+    </types>
+    <types>
+    	<members>Opportunity.Oppty_Sched</members>
+    	<members>OpportunityProgram__c.Edit_Products</members>
+    	<members>OpportunityProgram__c.Maintain_Multi_Oppties_Scheds</members>
+    	<name>WebLink</name>
     </types>
     <version>44.0</version>
 </Package>
