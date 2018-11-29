@@ -21,7 +21,7 @@
                             <div class="slds-page-header__name-title">
                                 <h1>
                                     <span class="slds-page-header__title slds-truncate" title="Maintain Schedules">
-                                    	Maintain Schedules for <lightning:formattedUrl value="{!'/' + v.recordId}" tooltip="{!'Go back to ' + v.progName}" label="{!v.progName}" target="_top"/>
+                                    	Maintain schedules for <lightning:formattedUrl value="{!'/' + v.recordId}" tooltip="{!'Go back to ' + v.progName}" label="{!v.progName}" target="_top"/>
                                     </span>
                                 </h1>
                             </div>
