@@ -95,7 +95,7 @@
         action.setCallback(this, function(response) {
 			var state = response.getState();
             if (state == "SUCCESS") {
-                //redirect to maintain oppty sched page of new oppty
+                //redirect to maintain schedules page of new oppty
                 var newOpptyId = response.getReturnValue();
                 var envType = component.get("v.envType");
                 window.location.href = "/apex/opportunitySchedule?isdtp=" + envType + "&id=" + newOpptyId;

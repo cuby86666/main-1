@@ -28,7 +28,7 @@
  	<aura:if isTrue="{!and(v.isProcessing, v.func == 'clone')}">
         <div class="recordSaveSuccess">					
           <ui:message title="Clone operation is processing, please wait..." severity="info" closable="false">
-              When clone operation is completed, browser will redirect to Maintain Oppty Sched of new opportunity. <br/>
+              When clone operation is completed, browser will redirect to Maintain Schedules of new opportunity. <br/>
               Please review the Expected Close Date, Production Date and Opportunity Schedule of new Opportunity.
           </ui:message>					
      </div>					

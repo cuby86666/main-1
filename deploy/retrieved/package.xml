@@ -14,9 +14,12 @@
     <types>
     	<members>opportunityProduct</members>
     	<members>opportunityScheduleMaster</members>
+    	<members>opptyLockMessage</members>
+    	<members>opptyProdLockMessage</members>
     	<name>ApexPage</name>
     </types>
     <types>
+    	<members>opportunityCloneCmp</members>
     	<members>opportunityProduct</members>
     	<members>opportunityProductUpdate</members>
     	<members>opportunityScheduleMasterSelect</members>
