@@ -29,7 +29,7 @@
                                 </h1>
                             </div>
                         </div>
-                        <p class="slds-text-heading--medium">Please select a master opportunity.</p>
+                        <p class="slds-text-heading--medium">Select a master opportunity.</p>
                     </div>
                 </div>
             </div>
@@ -47,9 +47,11 @@
     </div>
     <!-- / BODY -->
     <!-- FOOTER -->
-    <footer style="text-align: center">
-    	<lightning:button label="Cancel" title="Cancel" name="cancel" onclick="{!c.handleClick}"/>
-        <lightning:button variant="brand" label="Next" title="Next" name="next" onclick="{!c.handleClick}" />
-    </footer>
+    <div class="slds-docked-form-footer slds-is-relative">
+    	<div class="slds-grid slds-grid_align-center">
+    		<lightning:button label="Cancel" title="Cancel" name="cancel" onclick="{!c.handleClick}"/>
+        	<lightning:button variant="brand" label="Next" title="Next" name="next" onclick="{!c.handleClick}" />
+    	</div>
+    </div>
     <!-- / FOOTER -->
 </aura:component>
