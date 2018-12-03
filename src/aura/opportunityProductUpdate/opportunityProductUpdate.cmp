@@ -21,13 +21,16 @@
                         <div class="slds-page-header__name">
                             <div class="slds-page-header__name-title">
                                 <h1>
-                                    <span class="slds-page-header__title slds-truncate" title="Edit Products">
-                                        Edit products for <lightning:formattedUrl value="{!'/' + v.recordId}" tooltip="{!'Go back to ' + v.progName}" label="{!v.progName}" target="_top"/>
+                                    <span class="slds-page-header__title slds-truncate">
+                                    	<lightning:breadcrumbs>
+        									<lightning:breadcrumb label="{!v.progName}" title="{!'Go back to ' + v.progName}" href="{!'/' + v.recordId}"/>
+        									<lightning:breadcrumb label="Edit Products" title="Refresh" href="javascript:location.reload();"/>
+    									</lightning:breadcrumbs>
                                     </span>
                                 </h1>
                             </div>
                         </div>
-                        <p class="slds-page-header__name-meta">Hover over the cells; click the pencil icon or press the Enter key to edit.</p>
+                        <p class="slds-text-heading--medium">Hover over the cells and click the pencil icon to edit.</p>
                     </div>
                 </div>
             </div>
