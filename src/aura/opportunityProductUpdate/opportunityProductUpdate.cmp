@@ -24,7 +24,7 @@
                                     <span class="slds-page-header__title slds-truncate">
                                     	<lightning:breadcrumbs>
         									<lightning:breadcrumb label="{!v.progName}" title="{!'Go back to ' + v.progName}" href="{!'/' + v.recordId}"/>
-        									<lightning:breadcrumb label="Edit Products" title="Refresh" href="javascript:location.reload();"/>
+        									<lightning:breadcrumb label="Edit Products"/>
     									</lightning:breadcrumbs>
                                     </span>
                                 </h1>
