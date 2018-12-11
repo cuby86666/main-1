@@ -39,6 +39,10 @@
     	<name>Layout</name>
     </types>
     <types>
+    	<members>Temporary_MSO_CHINA_CMD_Upload</members>
+    	<name>PermissionSet</name>
+    </types>
+    <types>
     	<members>Opportunity.Oppty_Sched</members>
     	<members>OpportunityProgram__c.Edit_Products</members>
     	<members>OpportunityProgram__c.Maintain_Multi_Oppties_Scheds</members>
