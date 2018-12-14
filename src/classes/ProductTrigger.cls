@@ -66,7 +66,7 @@ public with sharing class ProductTrigger {
   
     @future
     private static void updateOpptiesAndOpptyProds(Set<Id> prodIds) {
-    	for (List<OpportunityLineItem> olis : [select OpportunityId from OpportunityLineItem where PricebookEntry.Product2.Id in :prodIds]) {
+    	for (List<OpportunityLineItem> olis : [select OpportunityId, Program__c from OpportunityLineItem where PricebookEntry.Product2.Id in :prodIds]) {
     	    if (olis.size() > 0) {
     	    	// To prevent claim value calculation if triggered from Product object change.
     	    	OpportunityProductClaimValue.isUpdatable = false;
@@ -75,11 +75,11 @@ public with sharing class ProductTrigger {
 
             	OpportunityProductClaimValue.isUpdatable = true;
             	
-            	List<SObject> oppties = (List<SObject>)dlrs.RollupService.rollup(olis);
+            	List<SObject> parents = (List<SObject>)dlrs.RollupService.rollup(olis);
 				
-				if (oppties != null && oppties.size() > 0) {
-				update oppties;	
-				}	
+				if (parents != null && parents.size() > 0) {
+					update parents;	
+				}
         	}
         }	
     }
