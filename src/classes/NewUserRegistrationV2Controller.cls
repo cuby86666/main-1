@@ -18,7 +18,7 @@ public class NewUserRegistrationV2Controller {
     }
     
     //BU settings class
-    public class BUSettings {
+    public class BUSettings implements Comparable {
         public List<GroupSettings> lstGroups { get; set; }
         public String BUName { get; set;}
         public String BUCode { get; set; }
@@ -27,6 +27,10 @@ public class NewUserRegistrationV2Controller {
         public String getKey() {
             return BUCode.replaceAll(' ','');
         }
+        
+        public Integer compareTo(Object compareTo) {
+			return BUCode.compareTo(((BUSettings)compareTo).BUCode);
+		}
     }
     
     //Region settings class
@@ -133,6 +137,8 @@ public class NewUserRegistrationV2Controller {
             }
             lstBUSettings.add(tmpBU);
         }
+        
+        lstBUSettings.sort();
    
         if (!newUserMode) LoadUserGroup(user.User_Groups__c); 
     }

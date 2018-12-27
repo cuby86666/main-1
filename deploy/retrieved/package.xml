@@ -1,12 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
 	<fullName>ye2018 - SFDC-2376</fullName>
-	<!-- Add user to permission set Bypass_Validation -->
 	<types>
+		<members>BeforeInsert_FunlocTest</members>
+		<members>NewUserRegistrationV2Controller</members>
     	<members>ProductTrigger</members>
     	<name>ApexClass</name>
     </types>
-	<types>
+    <types>
+    	<members>BeforeInsert_Funloc</members>
+    	<name>ApexTrigger</name>
+    </types>
+    <types>
+    	<members>eRebate_Payout_Line_Item__c.MAG_Code__c</members>
+		<members>Model_N__c.BU__c</members>
+		<members>Model_N__c.MAGS__c</members>
 		<members>Opportunity.BL_SIP_Cross_Selling__c</members>
 		<members>Opportunity.Missing_BL_SIP_Cross_Selling_Reason__c</members>
 		<members>OpportunityProgram__c.BL_SIP_Cross_Selling__c</members>
@@ -18,6 +26,10 @@
     	<members>OpptyBlCrossSellingOpptyProgram</members>
     	<members>OpptyMissingBlCrossSelling</members>
     	<name>CustomLabel</name>
+    </types>
+    <types>
+    	<members>New_User_Registration__c</members>
+    	<name>CustomObject</name>
     </types>
     <types>
     	<members>Bypass_Validation</members>
@@ -44,6 +56,7 @@
     	<name>Flow</name>
     </types>
     <types>
+    	<members>BU</members>
     	<members>MAG</members>
     	<name>GlobalValueSet</name>
     </types>
@@ -100,7 +113,6 @@
     </types>
     <types>
     	<members>Opportunity.NPI_Check</members>
-    	<!-- <members>Product2.Editable_Check</members> -->
     	<name>ValidationRule</name>
     </types>
     <version>44.0</version>
