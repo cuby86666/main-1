@@ -279,7 +279,7 @@
 	</target>
 	
 	<!-- mail -->
-	<target name="mail">
+	<target name="mail" if="mail.check" depends="mail-check">
 		<exec executable="blat"
 	          vmlauncher="false"
 	          failonerror="true">
@@ -298,6 +298,17 @@
 			<arg value="-attach"/>
 			<arg value="${package.filepath}"/>
 		</exec>
+	</target>
+	
+	<target name="mail-check">
+		<condition property="mail.check">
+			<or>
+				<equals arg1="${mail.target}" arg2="Production"/>
+				<equals arg1="${mail.target}" arg2="Full"/>
+				<equals arg1="${mail.target}" arg2="Data"/>
+				<equals arg1="${mail.target}" arg2="GSAS"/>
+			</or>
+		</condition>
 	</target>
 	
 	<!-- test -->

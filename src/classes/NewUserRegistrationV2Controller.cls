@@ -97,6 +97,8 @@ public class NewUserRegistrationV2Controller {
                 lstBUs.add(obj);
         }
         
+        lstBUs.sort();
+        
         lstAllGroupSettings = new List<GroupSettings>();
         lstRegionSettings = new List<RegionSettings>();
         
@@ -118,8 +120,10 @@ public class NewUserRegistrationV2Controller {
                 tmpGroup.IsSelected = false;
                 lstAllGroupSettings.add(tmpGroup);
                 tmpReg.lstGroups.add(tmpGroup);
-                system.debug('Group::'+ lstAllGroupSettings);
             }
+            
+            System.debug('////// Group::'+ lstAllGroupSettings);
+            
             lstRegionSettings.add(tmpReg);
         }
         

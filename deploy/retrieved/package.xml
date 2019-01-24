@@ -1,119 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
-	<fullName>ye2018 - SFDC-2376</fullName>
+	<fullName>SFDC-2525, SFDC-2527</fullName>
 	<types>
-		<members>BeforeInsert_FunlocTest</members>
 		<members>NewUserRegistrationV2Controller</members>
-    	<members>ProductTrigger</members>
     	<name>ApexClass</name>
     </types>
     <types>
-    	<members>BeforeInsert_Funloc</members>
-    	<name>ApexTrigger</name>
-    </types>
-    <types>
-    	<members>eRebate_Payout_Line_Item__c.MAG_Code__c</members>
-		<members>Model_N__c.BU__c</members>
-		<members>Model_N__c.MAGS__c</members>
-		<members>Opportunity.BL_SIP_Cross_Selling__c</members>
-		<members>Opportunity.Missing_BL_SIP_Cross_Selling_Reason__c</members>
-		<members>OpportunityProgram__c.BL_SIP_Cross_Selling__c</members>
-    	<members>Opportunity_Claim_Value_MAG_Setting__mdt.MAG__c</members>
+		<members>Customer_Project__c.Disti_Self_Sufficient__c</members>
     	<name>CustomField</name>
     </types>
     <types>
-    	<members>OpptyBlCrossSelling</members>
-    	<members>OpptyBlCrossSellingOpptyProgram</members>
-    	<members>OpptyMissingBlCrossSelling</members>
-    	<name>CustomLabel</name>
-    </types>
-    <types>
-    	<members>New_User_Registration__c</members>
-    	<name>CustomObject</name>
-    </types>
-    <types>
-    	<members>Bypass_Validation</members>
-    	<name>CustomPermission</name>
-    </types>
-	<types>
-		<members>dlrs__LookupRollupSummary2.Oppty_Program_BL_Concat</members>
-		<members>dlrs__LookupRollupSummary2.Oppty_Program_BL_Concat_API</members>
-		<members>dlrs__LookupRollupSummary2.Oppty_Program_BU_Concat</members>
-		<members>dlrs__LookupRollupSummary2.Oppty_Program_BU_Concat_API</members>
-    	<members>Opportunity_Claim_Value_MAG_Setting.RB8</members>
-    	<members>Opportunity_Claim_Value_MAG_Setting.RG8</members>
-    	<members>Opportunity_Claim_Value_MAG_Setting.RL5</members>
-    	<members>Opportunity_Claim_Value_MAG_Setting.RMU</members>
-    	<members>Opportunity_Claim_Value_MAG_Setting.RNE</members>
-    	<members>Opportunity_Claim_Value_MAG_Setting.RNF</members>
-    	<members>Opportunity_Claim_Value_MAG_Setting.RNH</members>
-    	<members>Opportunity_Claim_Value_MAG_Setting.RNS</members>
-    	<members>Opportunity_Claim_Value_MAG_Setting.RP3</members>
-    	<name>CustomMetadata</name>
-    </types>
-    <types>
-    	<members>OpptySubmissionFlow</members>
-    	<name>Flow</name>
-    </types>
-    <types>
-    	<members>BU</members>
-    	<members>MAG</members>
-    	<name>GlobalValueSet</name>
-    </types>
-    <types>
-    	<members>BU_516</members>
-    	<members>BU_517</members>
-    	<members>BU_518</members>
-    	<members>BU_519</members>
-    	<members>BU_522</members>
-    	<members>BU_523</members>
-    	<members>BU_528</members>
-    	<members>BU_529</members>
-    	<members>BU_54F</members>
-    	<name>Group</name>
-    </types>
-    <types>
-    	<members>OpportunityProgram__c-Opportunity Program Layout</members>
-    	<name>Layout</name>
-    </types>
-    <types>
-    	<members>Bypass_Validation</members>
-    	<members>Tibco_Permission</members>
-    	<name>PermissionSet</name>
-    </types>
-    <types>
-    	<members>Opportunity.BU_516</members>
-    	<members>Opportunity.BU_517</members>
-    	<members>Opportunity.BU_518</members>
-    	<members>Opportunity.BU_519</members>
-    	<members>Opportunity.BU_522</members>
-    	<members>Opportunity.BU_523</members>
-    	<members>Opportunity.BU_528</members>
-    	<members>Opportunity.BU_529</members>
-    	<members>Opportunity.BU_54F</members>
-    	<members>OpportunityProgram__c.BU_516</members>
-    	<members>OpportunityProgram__c.BU_517</members>
-    	<members>OpportunityProgram__c.BU_518</members>
-    	<members>OpportunityProgram__c.BU_519</members>
-    	<members>OpportunityProgram__c.BU_522</members>
-    	<members>OpportunityProgram__c.BU_523</members>
-    	<members>OpportunityProgram__c.BU_528</members>
-    	<members>OpportunityProgram__c.BU_529</members>
-    	<members>OpportunityProgram__c.BU_54F</members>
-    	<members>eRebate__c.BU_516</members>
-    	<members>eRebate__c.BU_517</members>
-    	<members>eRebate__c.BU_518</members>
-    	<members>eRebate__c.BU_519</members>
-    	<members>eRebate__c.BU_522</members>
-    	<members>eRebate__c.BU_523</members>
-    	<members>eRebate__c.BU_528</members>
-    	<members>eRebate__c.BU_529</members>
-    	<members>eRebate__c.BU_54F</members>
-    	<name>SharingCriteriaRule</name>
-    </types>
-    <types>
-    	<members>Opportunity.NPI_Check</members>
-    	<name>ValidationRule</name>
+		<members>Opportunities_with_Customer_Projects_w_o_Milestone</members>
+    	<members>Opportunities_with_Customer_Projects_w_o_Supp_Team</members>
+    	<name>ReportType</name>
     </types>
     <version>44.0</version>
 </Package>
