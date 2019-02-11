@@ -1,18 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
-	<fullName>SFDC-2525, SFDC-2527</fullName>
+	<fullName>SFDC-2457, SFDC-2526</fullName>
 	<types>
-		<members>NewUserRegistrationV2Controller</members>
-    	<name>ApexClass</name>
-    </types>
-    <types>
-		<members>Customer_Project__c.Disti_Self_Sufficient__c</members>
+		<members>Customer_Project__c.Enablement_Status_Reason__c</members>
+		<members>Customer_Project__c.Enablement_Types__c</members>
+		<members>New_User_Registration__c.BU__c</members>
+		<members>New_User_Registration__c.BL__c</members>
+		<members>New_User_Registration__c.Specify_Mags__c</members>
+		<members>Opportunity.BU_Description__c</members>
+		<members>Opportunity.BU_Short_Name__c</members>
+		<members>Product2.Alternative_BG__c</members>
+		<members>Product2.Alternative_BU__c</members>
+		<members>Product2.Alternative_BL__c</members>
     	<name>CustomField</name>
     </types>
     <types>
+		<members>Customer_Project__c-Customer Project Layout</members>
+		<name>Layout</name>
+    </types>
+    <types>
+		<members>CAS_Customer_Application_Support</members>
+		<members>CAS_Program_Manager</members>
+		<members>Opportunity</members>
+		<members>Opportunity_Read_Only</members>
+		<members>Tibco_Permission</members>
+    	<name>PermissionSet</name>
+    </types>
+    <types>
+		<members>Customer_Project_with_Activities</members>
+		<members>Customer_Projects_with_Historical_Trending</members>
 		<members>Opportunities_with_Customer_Projects_w_o_Milestone</members>
-    	<members>Opportunities_with_Customer_Projects_w_o_Supp_Team</members>
+		<members>Opportunities_with_Customer_Projects_w_o_Supp_Team</members>
     	<name>ReportType</name>
+    </types>
+    <types>
+		<members>Customer_Project__c.Enablement_Status_Reason_Mandatory</members>
+    	<name>ValidationRule</name>
     </types>
     <version>44.0</version>
 </Package>
