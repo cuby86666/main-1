@@ -1,41 +1,97 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
-	<fullName>SFDC-2457, SFDC-2526</fullName>
+	<!--   
+	<fullName>SFDC-2387</fullName>
 	<types>
-		<members>Customer_Project__c.Enablement_Status_Reason__c</members>
-		<members>Customer_Project__c.Enablement_Types__c</members>
-		<members>New_User_Registration__c.BU__c</members>
-		<members>New_User_Registration__c.BL__c</members>
-		<members>New_User_Registration__c.Specify_Mags__c</members>
-		<members>Opportunity.BU_Description__c</members>
-		<members>Opportunity.BU_Short_Name__c</members>
-		<members>Product2.Alternative_BG__c</members>
-		<members>Product2.Alternative_BU__c</members>
-		<members>Product2.Alternative_BL__c</members>
-    	<name>CustomField</name>
+		<members>Opportunity.Application__c</members>
+		<members>Opportunity.Automakers__c</members>
+		<members>Opportunity.Industry_Segment__c</members>
+		<members>Opportunity.Sub_Segment__c</members>
+		<name>CustomField</name>
     </types>
     <types>
-		<members>Customer_Project__c-Customer Project Layout</members>
+    	<members>Opportunity-NXP Dev Oppty Layout</members>
+		<members>Opportunity-NXP Opportunity Layout</members>
 		<name>Layout</name>
     </types>
     <types>
-		<members>CAS_Customer_Application_Support</members>
-		<members>CAS_Program_Manager</members>
-		<members>Opportunity</members>
-		<members>Opportunity_Read_Only</members>
-		<members>Tibco_Permission</members>
-    	<name>PermissionSet</name>
+		<members>Opportunity.Model_N_Oppty</members>
+		<members>Opportunity.SFDC_Oppty</members>
+		<name>RecordType</name>
+    </types>
+      -->
+    <!--  
+    <fullName>Case-00197841, Case-00199154</fullName>
+    <types>
+    	<members>CMD_Request__c.Global_Account__c</members>
+		<members>CMD_Request__c.Matl_Det_Grp_SP__c</members>
+		<members>SAP_CMD__c.Global_Account__c</members>
+		<members>SAP_CMD__c.Matl_Det_Grp_SP__c</members>
+		<name>CustomField</name>
     </types>
     <types>
-		<members>Customer_Project_with_Activities</members>
-		<members>Customer_Projects_with_Historical_Trending</members>
-		<members>Opportunities_with_Customer_Projects_w_o_Milestone</members>
-		<members>Opportunities_with_Customer_Projects_w_o_Supp_Team</members>
-    	<name>ReportType</name>
+    	<members>CMD_Request__c.Edit_SFDC_Child_Account</members>
+    	<members>CMD_Request__c.Edit_SFDC_Parent_Account</members>
+    	<members>CMD_Request__c.New_SFDC_Child_Account</members>
+    	<members>CMD_Request__c.New_SFDC_Parent_Account</members>
+    	<members>CMD_Request__c.SAP_Funloc_Edit_Request</members>
+    	<members>CMD_Request__c.SAP_MANU_Funloc_Edit_request</members>
+    	<members>CMD_Request__c.SAP_Mass_Update_Request</members>
+    	<members>CMD_Request__c.SAP_New_Funloc_Request</members>
+		<members>CMD_Request__c.SAP_New_MANU_Funloc_request</members>
+		<members>CMD_Request__c.SAP_New_SBE_Funloc_request</members>
+		<members>CMD_Request__c.SAP_SBE_Funloc_Edit_request</members>
+		<members>SAP_CMD__c.Z001_SoldTo_ShipTo_BillTo_Payer</members>
+		<members>SAP_CMD__c.Z002_Ship_To</members>
+		<members>SAP_CMD__c.Z003_Payer</members>
+		<members>SAP_CMD__c.Z004_Bill_To</members>
+		<members>SAP_CMD__c.Z005_SoldTo_BillTo_Payer</members>
+		<members>SAP_CMD__c.Z010_Intermediate_Consignee</members>
+		<members>SAP_CMD__c.Z011_Sold_To</members>
+		<members>SAP_CMD__c.Z012_Sold_to_Ship_To</members>
+		<members>SAP_CMD__c.Z013_Payer_Bill_To</members>
+		<members>SAP_CMD__c.ZORG_Organizational_Customers</members>
+		<members>SAP_CMD__c.ZOthers_Non_Commercial_Entities</members>
+		<name>RecordType</name>
+    </types>
+     -->
+    <!--  
+    <fullName>Case-00199541</fullName>
+    <types>
+    	<members>CMD_Request__c.Customer_Service_ZA__c</members>
+    	<members>Partner_Function__c.Partner_Function_Type__c</members>
+    	<members>Partner_Function__c.Person_Name__c</members>
+		<name>CustomField</name>
     </types>
     <types>
-		<members>Customer_Project__c.Enablement_Status_Reason_Mandatory</members>
-    	<name>ValidationRule</name>
+    	<members>CMD_Request__c.SAP_Funloc_Edit_Request</members>
+    	<members>CMD_Request__c.SAP_New_Funloc_Request</members>
+    	<members>Partner_Function__c.ZA_ZS</members>
+    	<name>RecordType</name>
     </types>
+     -->
+    <!--   
+    <fullName>Case-00200326</fullName>
+    <types>
+    	<members>Account.Sales_Area__c</members>
+    	<members>CMD_Request__c.Sales_Area__c</members>
+    	<members>Consolidated_Account_Code__c.Base_Sub_Region__c</members>
+    	<members>Customer__c.Sales_Area__c</members>
+    	<name>CustomField</name>
+    </types>
+    <types>
+    	<members>Account.Child_Account</members>
+    	<members>Account.Parent_Account</members>
+    	<members>Account.Partner_Portal_Account</members>
+    	<members>Account.Pre_Account</members>
+    	<members>Account.PreAccount</members>
+    	<members>CMD_Request__c.Edit_SFDC_Child_Account</members>
+    	<members>CMD_Request__c.New_SFDC_Child_Account</members>
+    	<members>Customer__c.Division</members>
+    	<members>Customer__c.Location</members>
+    	<members>Customer__c.Global_Enterprise</members>
+    	<name>RecordType</name>
+    </types>
+      -->
     <version>44.0</version>
 </Package>
