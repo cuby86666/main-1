@@ -1,39 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
-	<!--   
-	<fullName>SFDC-2387</fullName>
+	<!--  
+	<fullName>SFDC-2605</fullName>
 	<types>
-		<members>Opportunity.Application__c</members>
-		<members>Opportunity.Automakers__c</members>
-		<members>Opportunity.Industry_Segment__c</members>
-		<members>Opportunity.Sub_Segment__c</members>
+		<members>OpportunityProgram__c.Product_Count__c</members>
+		<members>OpportunityProgram__c.Quantity__c</members>
+		<name>CustomField</name>
+    </types>
+	<types>
+		<members>dlrs__LookupRollupSummary2.Oppty_Program_Product_Count</members>
+		<members>dlrs__LookupRollupSummary2.Oppty_Program_Quantity</members>
+		<name>CustomMetadata</name>
+    </types>
+     -->
+    <!--   
+    <fullName>Case-00200835</fullName>
+    <types>
+    	<members>CMD_Request__c.Payment_Credit_Memo__c</members>
+		<members>CMD_Request__c.Terms_of_Payment__c</members>
+		<members>CMD_Request__c.Terms_of_Payment_Sales__c</members>
+		<members>SAP_CMD__c.Payment_Credit_Memo__c</members>
+		<members>SAP_CMD__c.Terms_of_payment__c</members>
+		<members>SAP_CMD__c.Terms_of_Payment_Sales__c</members>
 		<name>CustomField</name>
     </types>
     <types>
-    	<members>Opportunity-NXP Dev Oppty Layout</members>
-		<members>Opportunity-NXP Opportunity Layout</members>
-		<name>Layout</name>
-    </types>
-    <types>
-		<members>Opportunity.Model_N_Oppty</members>
-		<members>Opportunity.SFDC_Oppty</members>
-		<name>RecordType</name>
-    </types>
-      -->
-    <!--  
-    <fullName>Case-00197841, Case-00199154</fullName>
-    <types>
-    	<members>CMD_Request__c.Global_Account__c</members>
-		<members>CMD_Request__c.Matl_Det_Grp_SP__c</members>
-		<members>SAP_CMD__c.Global_Account__c</members>
-		<members>SAP_CMD__c.Matl_Det_Grp_SP__c</members>
-		<name>CustomField</name>
-    </types>
-    <types>
-    	<members>CMD_Request__c.Edit_SFDC_Child_Account</members>
-    	<members>CMD_Request__c.Edit_SFDC_Parent_Account</members>
-    	<members>CMD_Request__c.New_SFDC_Child_Account</members>
-    	<members>CMD_Request__c.New_SFDC_Parent_Account</members>
     	<members>CMD_Request__c.SAP_Funloc_Edit_Request</members>
     	<members>CMD_Request__c.SAP_MANU_Funloc_Edit_request</members>
     	<members>CMD_Request__c.SAP_Mass_Update_Request</members>
@@ -54,30 +45,13 @@
 		<members>SAP_CMD__c.ZOthers_Non_Commercial_Entities</members>
 		<name>RecordType</name>
     </types>
-     -->
-    <!--  
-    <fullName>Case-00199541</fullName>
-    <types>
-    	<members>CMD_Request__c.Customer_Service_ZA__c</members>
-    	<members>Partner_Function__c.Partner_Function_Type__c</members>
-    	<members>Partner_Function__c.Person_Name__c</members>
-		<name>CustomField</name>
-    </types>
-    <types>
-    	<members>CMD_Request__c.SAP_Funloc_Edit_Request</members>
-    	<members>CMD_Request__c.SAP_New_Funloc_Request</members>
-    	<members>Partner_Function__c.ZA_ZS</members>
-    	<name>RecordType</name>
-    </types>
-     -->
-    <!--   
-    <fullName>Case-00200326</fullName>
+     -->  
+    <fullName>Case-00203374</fullName>
     <types>
     	<members>Account.Sales_Area__c</members>
     	<members>CMD_Request__c.Sales_Area__c</members>
     	<members>Consolidated_Account_Code__c.Base_Sub_Region__c</members>
-    	<members>Customer__c.Sales_Area__c</members>
-    	<name>CustomField</name>
+		<name>CustomField</name>
     </types>
     <types>
     	<members>Account.Child_Account</members>
@@ -87,11 +61,7 @@
     	<members>Account.PreAccount</members>
     	<members>CMD_Request__c.Edit_SFDC_Child_Account</members>
     	<members>CMD_Request__c.New_SFDC_Child_Account</members>
-    	<members>Customer__c.Division</members>
-    	<members>Customer__c.Location</members>
-    	<members>Customer__c.Global_Enterprise</members>
     	<name>RecordType</name>
     </types>
-      -->
-    <version>44.0</version>
+    <version>45.0</version>
 </Package>
